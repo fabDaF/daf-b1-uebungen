@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1016R – Kulturelle Unterschiede am Arbeitsplatz</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #1a1a1a;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 28px 32px 22px;
+  color: white;
+}
+.header h1 { font-size: 1.45rem; font-weight: 700; letter-spacing: 0.01em; }
+.header p  { font-size: 0.92rem; opacity: 0.85; margin-top: 4px; }
+.badge { display: inline-block; background: rgba(255,255,255,0.22); border-radius: 12px; padding: 2px 12px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; margin-right: 8px; }
+
+/* ===== NAV ===== */
+.nav {
+  display: flex;
+  overflow-x: auto;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0 12px;
+  gap: 4px;
+}
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 16px 8px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #888;
+  transition: all 0.15s;
+  white-space: nowrap;
+  margin-top: 6px;
+}
+.nav-btn:hover { background: #fff; color: #667eea; border-color: #e0e0e0; }
+.nav-btn.active {
+  background: #fff;
+  color: #667eea;
+  border-color: #e0e0e0;
+  font-weight: 700;
+  border-bottom: 2px solid #fff;
+  margin-bottom: -1px;
+}
+.nav-emoji { font-size: 1.3rem; margin-bottom: 3px; }
+.nav-label { font-size: 0.75rem; }
+
+/* ===== SECTIONS ===== */
+.section { display: none; padding: 28px 32px 32px; }
+.section.aktiv { display: block; }
+
+/* ===== TAB-BANNER ===== */
+.tab-banner {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 22px;
+}
+
+/* ===== VORENTLASTUNG ===== */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+.vocab-card {
+  background: #f8f9ff;
+  border: 1px solid #dde;
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.vocab-card .de { font-size: 1.05rem; font-weight: 700; color: #3949ab; }
+.vocab-card .en { font-size: 0.82rem; color: #888; margin-top: 4px; }
+.vocab-card .example { font-size: 0.8rem; color: #555; margin-top: 6px; font-style: italic; }
+
+.pre-box {
+  background: #e8f4fd;
+  border-left: 4px solid #667eea;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: #1a1a2e;
+}
+.pre-box h3 { color: #3949ab; font-size: 1rem; margin-bottom: 8px; }
+
+/* ===== LESETEXT / GESCHICHTE ===== */
+.story-text {
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.05em;
+  line-height: 1.8;
+  color: #1a1a1a;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.story-text p {
+  margin-bottom: 1em;
+  text-indent: 1.4em;
+}
+.story-text p:first-child { text-indent: 0; }
+.story-text .dialog {
+  font-style: normal;
+  text-indent: 0;
+  padding-left: 1.1em;
+  border-left: 3px solid #667eea;
+  color: #2a2a6e;
+  margin-left: 0;
+}
+.gedanke {
+  font-style: italic;
+  letter-spacing: 0.03em;
+  color: #444;
+}
+.hl {
+  background: #e1bee7;
+  border-radius: 4px;
+  padding: 0 3px;
+  color: #4a148c;
+  font-weight: 700;
+}
+.story-source {
+  margin-top: 24px;
+  color: #aaa;
+  font-size: 0.8em;
+  text-align: right;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ===== LÜCKENTEXT ===== */
+.luecke-item {
+  background: #fafbff;
+  border: 1px solid #e0e0f0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  line-height: 1.9;
+  font-size: 0.95rem;
+}
+input.blank {
+  border: 2px solid #c5cae9;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  width: 140px;
+  outline: none;
+  transition: border-color .2s;
+}
+input.blank:focus { border-color: #667eea; }
+input.blank.correct { border-color: #27ae60; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+input.blank.wrong   { border-color: #e74c3c; background: #ffebee; color: #c62828; }
+.correction-hint {
+  background: #e8f5e9; color: #2e7d32; font-weight: 700;
+  border-radius: 5px; padding: 1px 7px; margin-left: 6px;
+  font-size: 0.88rem;
+}
+.wortkasten {
+  background: #ede7f6;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  font-size: 0.88rem;
+  color: #4a148c;
+  line-height: 1.8;
+}
+.wortkasten strong { color: #6a1b9a; }
+
+/* ===== TIMER ===== */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.tc-buttons { display:flex; gap:6px; }
+.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.tc-buttons button:hover { background:#f0f0f0; color:#555; }
+.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-display { color:#667eea; font-weight:700; }
+.best-display  { color:#f39c12; font-weight:600; }
+
+/* ===== CHIPS & SATZBAU ===== */
+.chip {
+  padding: 6px 14px; border-radius: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; cursor: grab; font-size: 0.85rem;
+  font-weight: 600; user-select: none;
+  transition: transform .15s, opacity .15s;
+  white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.chip.selected { outline: 3px solid #f39c12; }
+.chip.comma-chip { padding: 8px 8px; min-width: 24px; font-weight: 700; font-size: 1.1em; }
+.drop-row .chip.comma-chip { margin-left: -4px; }
+
+.chip-bank {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 12px; background: #f8f9fa;
+  border-radius: 10px; margin-bottom: 14px; min-height: 54px;
+}
+.drop-row {
+  display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px;
+  padding: 8px 10px; border-radius: 8px;
+  border: 2px dashed #c5cae9; background: #fafbff;
+}
+.drop-row.dragover { background: #e8eaff; border-color: #667eea; }
+
+.sb-item { margin-bottom: 18px; }
+.sb-fb { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; color: #555; }
+
+/* ===== WORTSCHATZ-TAB ===== */
+.wort-item {
+  background: #fafbff;
+  border: 1px solid #e0e0f0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+}
+.wort-item .wort-prompt { font-size: 0.88rem; color: #888; margin-bottom: 6px; }
+.wort-item .wort-en { font-weight: 700; color: #3949ab; font-size: 1rem; }
+.wort-item input.blank { width: 200px; }
+
+/* ===== SCORE ===== */
+.score-bar {
+  background: #f0f2f5;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  color: #667eea;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+/* ===== FOOTER ===== */
+.author-footer {
+  text-align: center;
+  padding: 16px 20px;
+  font-size: 0.78rem;
+  color: #aaa;
+  border-top: 1px solid #f0f0f0;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* ===== SECTION-TITLE ===== */
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #3949ab;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e8eaf6;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <span class="badge">B1.1</span>
+    <span class="badge">Lektion 1016</span>
+    <span class="badge">Lesen</span>
+  </div>
+  <h1>Kulturelle Unterschiede am Arbeitsplatz</h1>
+  <p>Karim Benali · Düsseldorf · E.ON</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab(0)">
+    <span class="nav-emoji">🌅</span>
+    <span class="nav-label">Vorentlastung</span>
+  </button>
+  <button class="nav-btn" onclick="showTab(1)">
+    <span class="nav-emoji">📖</span>
+    <span class="nav-label">Geschichte</span>
+  </button>
+  <button class="nav-btn" onclick="showTab(2)">
+    <span class="nav-emoji">✏️</span>
+    <span class="nav-label">Lückentext</span>
+  </button>
+  <button class="nav-btn" onclick="showTab(3)">
+    <span class="nav-emoji">🧩</span>
+    <span class="nav-label">Satzbau</span>
+  </button>
+  <button class="nav-btn" onclick="showTab(4)">
+    <span class="nav-emoji">🔠</span>
+    <span class="nav-label">Wortschatz</span>
+  </button>
+</nav>
+
+<!-- TAB 0: VORENTLASTUNG -->
+<section class="section aktiv" id="sec-0">
+  <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='160'%3E%3Crect width='800' height='160' fill='%23e8eaf6'/%3E%3Ctext x='400' y='90' text-anchor='middle' fill='%23667eea' font-size='18' font-family='Arial'%3E🌍 Kulturelle Unterschiede am Arbeitsplatz%3C/text%3E%3C/svg%3E" alt="Vorentlastung Banner">
+
+  <h2 class="section-title">🌅 Vorentlastung — Schlüsselwörter</h2>
+
+  <div class="pre-box">
+    <h3>Was erwartet dich in dieser Geschichte?</h3>
+    Karim ist seit einigen Wochen bei E.ON in Düsseldorf. In dieser Geschichte erlebt er seinen ersten
+    interkulturellen Moment im Büroalltag — eine ganz gewöhnliche Situation, die plötzlich alles andere
+    als gewöhnlich ist. Es geht um Körpersprache, Begrüßung und die kleinen Unterschiede,
+    die den <em>Unterschied</em> machen.
+  </div>
+
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="de">der Unterschied, -e</div>
+      <div class="en">difference</div>
+      <div class="example">„Es gibt <em>kulturelle</em> Unterschiede."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">die Begrüßung, -en</div>
+      <div class="en">greeting</div>
+      <div class="example">„Die Begrüßung ist nicht überall gleich."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">die Mimik (nur Sg.)</div>
+      <div class="en">facial expression</div>
+      <div class="example">„Seine Mimik war schwer zu lesen."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">die Gestik (nur Sg.)</div>
+      <div class="en">gestures</div>
+      <div class="example">„Gestik kann Missverständnisse erzeugen."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">die Körpersprache (nur Sg.)</div>
+      <div class="en">body language</div>
+      <div class="example">„Körpersprache ist kulturell geprägt."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">die Zusammenarbeit (nur Sg.)</div>
+      <div class="en">cooperation, teamwork</div>
+      <div class="example">„Die Zusammenarbeit funktioniert gut."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">der Kollege, -n</div>
+      <div class="en">colleague</div>
+      <div class="example">„Der Kollege, den er trifft, ist aus Japan."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">die Gewohnheit, -en</div>
+      <div class="en">habit, custom</div>
+      <div class="example">„Alte Gewohnheiten ändern sich langsam."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">die Globalisierung (nur Sg.)</div>
+      <div class="en">globalisation</div>
+      <div class="example">„Globalisierung verändert die Arbeitswelt."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">beruflich</div>
+      <div class="en">professional, work-related</div>
+      <div class="example">„ein beruflicher Hintergrund aus Marokko"</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">wahrnehmen (nimmt wahr)</div>
+      <div class="en">to perceive, to notice</div>
+      <div class="example">„Er nimmt den Unterschied wahr."</div>
+    </div>
+    <div class="vocab-card">
+      <div class="de">anerkennen (erkennt an)</div>
+      <div class="en">to acknowledge, to respect</div>
+      <div class="example">„Sie anerkennen seinen beruflichen Hintergrund."</div>
+    </div>
+  </div>
+
+  <div class="pre-box">
+    <h3>🇬🇧 English preview</h3>
+    Karim has been working at E.ON for a few weeks. In a team meeting, he observes how differently his
+    colleagues greet each other and express themselves — Hiroshi from Tokyo bows slightly, Elena from
+    Bulgaria shakes his hand firmly, and Stefan from Cologne greets him with three words and a nod.
+    Karim notices something he had only read about before: body language and cultural habits are deeply
+    ingrained, and what feels natural to one person can seem strange to another.
+    But instead of feeling lost, Karim feels something else — curious.
+  </div>
+</section>
+
+<!-- TAB 1: GESCHICHTE -->
+<section class="section" id="sec-1">
+  <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='160'%3E%3Crect width='800' height='160' fill='%23e8eaf6'/%3E%3Ctext x='400' y='90' text-anchor='middle' fill='%23667eea' font-size='18' font-family='Arial'%3E📖 Die Begrüßung%3C/text%3E%3C/svg%3E" alt="Geschichte Banner">
+
+  <div class="story-text" lang="de">
+
+    <p>Das Konferenzzimmer im zwölften Stock hatte eine Glaswand, durch die man die Rheinbrücke sehen konnte. Karim hatte das noch nicht bemerkt, weil er bisher immer an dem langen Tisch gesessen hatte, den Rücken zur Stadt. Heute war er früher da.</p>
+
+    <p>Er stellte seinen Kaffee ab und wartete. Das Fenster zog ihn an — der Fluss war grau und breit, die Brücke ein dunkles Gitter im Morgenlicht. <span class="gedanke">Casablanca hatte kein Grau wie dieses. Casablanca hatte Blau.</span></p>
+
+    <p>Die Tür öffnete sich. Hiroshi Tanaka, der <span class="hl">Kollege</span>, der seit drei Monaten aus Tokio entsandt war, betrat den Raum. Er trug wie immer ein weißes Hemd, perfekt gebügelt. Er nickte leicht — nicht nur den Kopf, sondern den ganzen Oberkörper, kurz, präzise, fast unmerklich. Karim hatte das schon öfter gesehen, aber er hatte nie gewusst, ob er nicken, die Hand geben oder einfach zurücklächeln sollte.</p>
+
+    <p>Er lächelte. Hiroshi lächelte ebenfalls. Die Situation war vorbei, bevor sie richtig begonnen hatte.</p>
+
+    <p>Dann kam Elena Stojanovic. Elena, die <span class="hl">Kollegin</span>, die aus Sofia nach Düsseldorf gekommen war und deren Deutsch schneller wurde, als Karim es für möglich gehalten hatte. Sie ging direkt auf ihn zu und gab ihm die Hand — fest, kurz, einmal. Kein zweites Mal. Sie sagte:</p>
+
+    <p class="dialog">„Morgen, Karim. Kaffee schon gehabt?"</p>
+
+    <p>Das war der ganze Satz. Elena stellte sich neben ihn, schaute ebenfalls durch das Fenster, und schwieg.</p>
+
+    <p><span class="gedanke">In Casablanca wäre das keine Begrüßung gewesen.</span> In Casablanca gab es „Labas?" und eine Antwort und eine weitere Frage, und erst wenn beide wussten, dass dem anderen gut ging, begann das eigentliche Gespräch. Hier war die <span class="hl">Begrüßung</span> ein einzelner Satz, der auch keiner sein konnte.</p>
+
+    <p>Stefan Meier kam als Letzter, drei Minuten vor Beginn, mit einem Stapel Ausdrucke unter dem Arm. Stefan, der <span class="hl">Kollege</span>, dem Karim die meisten seiner Fragen über Düsseldorf, über E.ON, über die Unterschiede zwischen Projekt A und Projekt B gestellt hatte. Stefan hob kurz die Hand — eine Art Welle, die auch ein Gruß sein konnte — und sagte:</p>
+
+    <p class="dialog">„Schön, dass ihr schon da seid."</p>
+
+    <p>Er meinte es nicht ironisch. Das hatte Karim inzwischen gelernt.</p>
+
+    <p>Sie setzten sich. Das Meeting begann. Auf der Folie stand: <em>„Globalisierung und interkulturelle <span class="hl">Zusammenarbeit</span>"</em>.</p>
+
+    <p>Karim musste kurz lächeln. Vor einer Woche hatte er einen Artikel gelesen, in dem stand, dass <span class="hl">Globalisierung</span> das Wort des Jahrhunderts sei. Er dachte an Hiroshis Nicken, Elenas Händedruck, Stefans halbe Welle. <span class="gedanke">Vielleicht stimmt das sogar.</span></p>
+
+    <p>Stefan begann zu sprechen. Er erklärte, wie unterschiedlich die <span class="hl">Körpersprache</span> in verschiedenen Kulturen sei — dass ein Nicken in Bulgarien Nein bedeuten könne, dass ein Lächeln in Japan nicht immer Freude ausdrücke, dass <span class="hl">Mimik</span> und <span class="hl">Gestik</span>, die uns selbstverständlich erscheinen, für andere völlig fremde Zeichen sein könnten.</p>
+
+    <p>Hiroshi hörte zu. Elena machte Notizen. Karim beobachtete die anderen und dachte: <span class="gedanke">Ich habe das heute Morgen schon einmal erlebt. Ohne Folien.</span></p>
+
+    <p>Als das Meeting endete, räumten alle ihre Sachen zusammen. Hiroshi nickte. Elena sagte „Bis später." Stefan sagte gar nichts, weil er schon an der Tür war.</p>
+
+    <p>Karim nahm seinen Kaffeebecher und schaute noch einmal durch das Fenster. Die Brücke war jetzt heller, die Sonne hatte sich ein Stück bewegt. <span class="gedanke">Der <span class="hl">Unterschied</span> zwischen Menschen ist nicht das Problem</span>, dachte er. <span class="gedanke">Er ist das Interessante.</span></p>
+
+    <p class="story-source">© Frank Burkert — Karim Benali, Düsseldorf, Lektion 1016R</p>
+  </div>
+</section>
+
+<!-- TAB 2: LÜCKENTEXT -->
+<section class="section" id="sec-2">
+  <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='160'%3E%3Crect width='800' height='160' fill='%23ede7f6'/%3E%3Ctext x='400' y='90' text-anchor='middle' fill='%23764ba2' font-size='18' font-family='Arial'%3E✏️ Lückentext%3C/text%3E%3C/svg%3E" alt="Lückentext Banner">
+
+  <h2 class="section-title">✏️ Lückentext</h2>
+
+  <div class="wortkasten">
+    <strong>Wortkasten:</strong> Unterschied · Begrüßung · Körpersprache · Kollege · Zusammenarbeit · Globalisierung · Mimik · Gestik · Gewohnheit · wahrnehmen · anerkennen · beruflich
+  </div>
+
+  <div class="timer-controls">
+    <div class="tc-buttons">
+      <button onclick="showLueckeLoesung()">💡 Lösungen</button>
+      <button onclick="timerResetOne(2); resetLuecke()">↺ Neustart</button>
+    </div>
+    <div class="tc-times">
+      <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
+      <span>🏆 <span class="best-display" id="best-2">–</span></span>
+    </div>
+  </div>
+
+  <div class="score-bar" id="luecke-score">0 / 12 richtig</div>
+
+  <div id="luecke-container"></div>
+</section>
+
+<!-- TAB 3: SATZBAU -->
+<section class="section" id="sec-3">
+  <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='160'%3E%3Crect width='800' height='160' fill='%23e8eaf6'/%3E%3Ctext x='400' y='90' text-anchor='middle' fill='%23667eea' font-size='18' font-family='Arial'%3E🧩 Satzbau%3C/text%3E%3C/svg%3E" alt="Satzbau Banner">
+
+  <h2 class="section-title">🧩 Satzbau — Sätze ordnen</h2>
+
+  <div class="timer-controls">
+    <div class="tc-buttons">
+      <button onclick="showSbLoesung()">💡 Lösungen</button>
+      <button onclick="timerResetOne(3); resetSatzbau()">↺ Neustart</button>
+    </div>
+    <div class="tc-times">
+      <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
+      <span>🏆 <span class="best-display" id="best-3">–</span></span>
+    </div>
+  </div>
+
+  <div class="score-bar" id="sb-score">0 / 8 richtig</div>
+
+  <div id="sb-container"></div>
+</section>
+
+<!-- TAB 4: WORTSCHATZ -->
+<section class="section" id="sec-4">
+  <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='160'%3E%3Crect width='800' height='160' fill='%23e8f5e9'/%3E%3Ctext x='400' y='90' text-anchor='middle' fill='%2327ae60' font-size='18' font-family='Arial'%3E🔠 Wortschatz-Training%3C/text%3E%3C/svg%3E" alt="Wortschatz Banner">
+
+  <h2 class="section-title">🔠 Wortschatz-Training</h2>
+  <p style="font-size:0.88rem;color:#888;margin-bottom:16px;">Tippe: Artikel + Wort (+ Plural bei Nomen). Beispiel: <em>der Kollege, -n</em></p>
+
+  <div class="timer-controls">
+    <div class="tc-buttons">
+      <button onclick="showWortLoesung()">💡 Lösungen</button>
+      <button onclick="timerResetOne(4); resetWort()">↺ Neustart</button>
+    </div>
+    <div class="tc-times">
+      <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
+      <span>🏆 <span class="best-display" id="best-4">–</span></span>
+    </div>
+  </div>
+
+  <div class="score-bar" id="wort-score">0 / 12 richtig</div>
+
+  <div id="wort-container"></div>
+</section>
+
+<!-- FOOTER -->
+<div class="author-footer">
+  <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+  <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+/* ===== TAB NAVIGATION ===== */
+function showTab(n) {
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('aktiv'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('sec-' + n).classList.add('aktiv');
+  document.querySelectorAll('.nav-btn')[n].classList.add('active');
+}
+
+/* ===== TIMER SYSTEM ===== */
+var TIMER_PREFIX = 'B1_1016R_';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
+
+function timerAutoStart(n) {
+  if (timerStarted[n]) return;
+  timerStarted[n] = true;
+  timerRunning[n] = true;
+  timerIntervals[n] = setInterval(function() {
+    if (!timerRunning[n]) return;
+    timerSeconds[n]++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }, 1000);
+}
+
+function timerStop(n) {
+  if (!timerRunning[n]) return;
+  timerRunning[n] = false;
+  clearInterval(timerIntervals[n]);
+  var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '99999');
+  if (timerSeconds[n] < best) {
+    localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+    var el = document.getElementById('best-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }
+}
+
+function timerResetOne(n) {
+  clearInterval(timerIntervals[n]);
+  timerStarted[n] = false;
+  timerRunning[n] = false;
+  timerSeconds[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '0:00';
+}
+
+function fmtTime(s) {
+  return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + (s%60);
+}
+
+function loadBestTimes() {
+  [2,3,4].forEach(function(n) {
+    var b = localStorage.getItem(TIMER_PREFIX + n);
+    if (b) {
+      var el = document.getElementById('best-' + n);
+      if (el) el.textContent = fmtTime(parseInt(b));
+    }
+  });
+}
+
+/* ===== DRAG & DROP ===== */
+var sbDragged = null;
+
+/* ===== LÜCKENTEXT DATA ===== */
+var LUECKEN_DATA = [
+  { pre: 'Karim bemerkt den kulturellen ', blank: 'Unterschied', post: ' sofort, als Hiroshi ihn mit einem kurzen Nicken begrüßt.' },
+  { pre: 'Die ', blank: 'Begrüßung', post: ' ist in Deutschland oft kürzer als in anderen Kulturen.' },
+  { pre: 'Stefan erklärt, dass ', blank: 'Mimik', post: ' und Gestik in verschiedenen Kulturen sehr unterschiedlich sind.' },
+  { pre: 'Auch die ', blank: 'Gestik', post: ', die wir als selbstverständlich empfinden, kann anderen fremd wirken.' },
+  { pre: 'Hiroshis ', blank: 'Körpersprache', post: ' ist für Karim zunächst schwer einzuschätzen.' },
+  { pre: 'Die ', blank: 'Zusammenarbeit', post: ' im Team funktioniert trotz der Unterschiede gut.' },
+  { pre: 'Durch die ', blank: 'Globalisierung', post: ' arbeiten Menschen aus sehr unterschiedlichen Kulturen zusammen.' },
+  { pre: 'Alte ', blank: 'Gewohnheit', post: 'en ändern sich langsam, auch am Arbeitsplatz.' },
+  { pre: 'Karim lernt, die Unterschiede wahrzunehmen und ', blank: 'anzuerkennen', post: '.' },
+  { pre: 'Der ', blank: 'Kollege', post: ', der aus Tokio entsandt wurde, heißt Hiroshi.' },
+  { pre: 'Elenas ', blank: 'beruflich', post: 'er Hintergrund liegt in Sofia — sie kam vor einem Jahr nach Düsseldorf.' },
+  { pre: 'Karim nimmt jeden kulturellen Unterschied bewusst ', blank: 'wahr', post: '.' }
+];
+
+function buildLuecke() {
+  var c = document.getElementById('luecke-container');
+  c.innerHTML = '';
+  LUECKEN_DATA.forEach(function(item, i) {
+    var div = document.createElement('div');
+    div.className = 'luecke-item';
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'blank';
+    inp.placeholder = '';
+    inp.dataset.answer = item.blank.toLowerCase();
+    inp.dataset.idx = i;
+    inp.setAttribute('oninput', 'liveCheckLuecke(this)');
+    div.innerHTML = item.pre;
+    div.appendChild(inp);
+    div.innerHTML += item.post;
+    c.appendChild(div);
+  });
+  updateLueckeScore();
+}
+
+function liveCheckLuecke(inp) {
+  timerAutoStart(2);
+  var val = inp.value.trim().toLowerCase();
+  var ans = inp.dataset.answer;
+  inp.classList.remove('correct','wrong');
+  if (val.length === 0) { updateLueckeScore(); return; }
+  if (val === ans) { inp.classList.add('correct'); }
+  else if (ans.indexOf(val) === 0) { /* prefix ok */ }
+  else { inp.classList.add('wrong'); }
+  updateLueckeScore();
+  checkLueckeAllOk();
+}
+
+function updateLueckeScore() {
+  var ok = document.querySelectorAll('#luecke-container input.correct').length;
+  document.getElementById('luecke-score').textContent = ok + ' / ' + LUECKEN_DATA.length + ' richtig';
+}
+
+function checkLueckeAllOk() {
+  var inputs = document.querySelectorAll('#luecke-container input');
+  var allOk = true;
+  inputs.forEach(function(inp) { if (!inp.classList.contains('correct')) allOk = false; });
+  if (allOk) timerStop(2);
+}
+
+function showLueckeLoesung() {
+  document.querySelectorAll('#luecke-container input').forEach(function(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    if (!inp.classList.contains('correct')) {
+      var hint = document.createElement('span');
+      hint.className = 'correction-hint';
+      hint.textContent = inp.dataset.answer;
+      inp.insertAdjacentElement('afterend', hint);
+      inp.value = inp.dataset.answer;
+      inp.classList.add('correct');
+      inp.classList.remove('wrong');
+    }
+  });
+  updateLueckeScore();
+}
+
+function resetLuecke() {
+  document.querySelectorAll('#luecke-container input').forEach(function(inp) {
+    inp.value = '';
+    inp.classList.remove('correct','wrong');
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+  });
+  updateLueckeScore();
+}
+
+/* ===== SATZBAU DATA ===== */
+var SB_DATA = [
+  { answer: ['karim', 'bemerkt', 'den', 'unterschied', ',', 'der', 'ihn', 'neugierig', 'macht'] },
+  { answer: ['hiroshi', ',', 'der', 'aus', 'tokio', 'kommt', ',', 'nickt', 'kurz'] },
+  { answer: ['die', 'körpersprache', ',', 'die', 'stefan', 'erklärt', ',', 'ist', 'kulturell', 'geprägt'] },
+  { answer: ['elena', 'gibt', 'ihm', 'die', 'hand', ',', 'die', 'er', 'fest', 'erwidert'] },
+  { answer: ['die', 'zusammenarbeit', ',', 'die', 'sie', 'aufgebaut', 'haben', ',', 'funktioniert', 'gut'] },
+  { answer: ['globalisierung', 'ist', 'das', 'wort', ',', 'das', 'karim', 'heute', 'versteht'] },
+  { answer: ['der', 'kollege', ',', 'dem', 'karim', 'vertraut', ',', 'heißt', 'stefan'] },
+  { answer: ['karim', 'nimmt', 'jeden', 'unterschied', 'wahr', ',', 'den', 'er', 'beobachtet'] }
+];
+
+function buildSatzbau() {
+  var c = document.getElementById('sb-container');
+  c.innerHTML = '';
+  SB_DATA.forEach(function(item, idx) {
+    var shuffled = fisherYates(item.answer.slice());
+    var div = document.createElement('div');
+    div.className = 'sb-item';
+
+    var bank = document.createElement('div');
+    bank.className = 'chip-bank';
+    bank.id = 'sb-bank-' + idx;
+    bank.setAttribute('ondragover', 'allowDrop(event)');
+    bank.setAttribute('ondrop', 'dropToBank(event,' + idx + ')');
+    bank.addEventListener('click', function(e) {
+      if (e.target.classList.contains('chip')) { bank.appendChild(e.target); colorSbRow(idx); timerAutoStart(3); }
+    });
+
+    shuffled.forEach(function(word) {
+      var chip = document.createElement('span');
+      chip.className = 'chip' + (word === ',' ? ' comma-chip' : '');
+      chip.textContent = word;
+      chip.dataset.orig = word;
+      chip.draggable = true;
+      chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        e.dataTransfer.setData('text/plain','');
+      });
+      chip.addEventListener('dragend', function() { colorSbRow(idx); });
+      chip.addEventListener('click', function() {
+        var row = document.getElementById('sb-row-' + idx);
+        row.appendChild(chip);
+        updateSbCaps(idx);
+        colorSbRow(idx);
+        timerAutoStart(3);
+      });
+      bank.appendChild(chip);
+    });
+
+    var row = document.createElement('div');
+    row.className = 'drop-row';
+    row.id = 'sb-row-' + idx;
+    row.setAttribute('ondragover', 'allowDrop(event)');
+    row.setAttribute('ondrop', 'dropToRow(event,' + idx + ')');
+    row.addEventListener('click', function(e) {
+      if (e.target.classList.contains('chip')) {
+        bank.appendChild(e.target);
+        updateSbCaps(idx);
+        colorSbRow(idx);
+      }
+    });
+
+    var fb = document.createElement('div');
+    fb.className = 'sb-fb';
+    fb.id = 'sb-fb-' + idx;
+
+    div.appendChild(bank);
+    div.appendChild(row);
+    div.appendChild(fb);
+    c.appendChild(div);
+  });
+  updateSbScore();
+}
+
+function allowDrop(e) { e.preventDefault(); }
+
+function dropToRow(e, idx) {
+  e.preventDefault();
+  if (!sbDragged) return;
+  document.getElementById('sb-row-' + idx).appendChild(sbDragged);
+  sbDragged = null;
+  updateSbCaps(idx);
+  colorSbRow(idx);
+  timerAutoStart(3);
+}
+
+function dropToBank(e, idx) {
+  e.preventDefault();
+  if (!sbDragged) return;
+  document.getElementById('sb-bank-' + idx).appendChild(sbDragged);
+  sbDragged = null;
+  updateSbCaps(idx);
+  colorSbRow(idx);
+}
+
+function updateSbCaps(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c, i) {
+    var orig = c.dataset.orig;
+    c.textContent = (i === 0 && orig !== ',' && orig !== '.') ?
+      orig.charAt(0).toUpperCase() + orig.slice(1) : orig;
+  });
+}
+
+function colorSbRow(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  var data = SB_DATA[idx];
+  chips.forEach(function(chip, i) {
+    chip.classList.remove('correct','wrong');
+    if (i < data.answer.length) {
+      chip.classList.add(chip.dataset.orig.toLowerCase() === data.answer[i] ? 'correct' : 'wrong');
+    } else {
+      chip.classList.add('wrong');
+    }
+  });
+  updateSbScore();
+  checkSbAllOk();
+}
+
+function updateSbScore() {
+  var total = SB_DATA.length;
+  var ok = 0;
+  SB_DATA.forEach(function(item, idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    if (!row) return;
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    if (chips.length === item.answer.length) {
+      var allOk = chips.every(function(chip, i) {
+        return chip.dataset.orig.toLowerCase() === item.answer[i];
+      });
+      if (allOk) ok++;
+    }
+  });
+  document.getElementById('sb-score').textContent = ok + ' / ' + total + ' richtig';
+}
+
+function checkSbAllOk() {
+  var allDone = true;
+  SB_DATA.forEach(function(item, idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    if (!row) { allDone = false; return; }
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    if (chips.length !== item.answer.length) { allDone = false; return; }
+    chips.forEach(function(chip, i) {
+      if (chip.dataset.orig.toLowerCase() !== item.answer[i]) allDone = false;
+    });
+  });
+  if (allDone) timerStop(3);
+}
+
+function showSbLoesung() {
+  SB_DATA.forEach(function(item, idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    if (!bank || !row) return;
+    var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+    row.innerHTML = '';
+    item.answer.forEach(function(word) {
+      var chip = allChips.find(function(c) { return c.dataset.orig.toLowerCase() === word && !c.parentElement.id.startsWith('sb-row'); });
+      if (!chip) chip = allChips.find(function(c) { return c.dataset.orig.toLowerCase() === word; });
+      if (chip) { row.appendChild(chip); }
+    });
+    updateSbCaps(idx);
+    colorSbRow(idx);
+  });
+}
+
+function resetSatzbau() {
+  SB_DATA.forEach(function(item, idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    if (!bank || !row) return;
+    var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+    row.innerHTML = '';
+    var shuffled = fisherYates(allChips);
+    shuffled.forEach(function(chip) {
+      chip.classList.remove('correct','wrong');
+      chip.textContent = chip.dataset.orig;
+      bank.appendChild(chip);
+    });
+  });
+  updateSbScore();
+}
+
+/* ===== WORTSCHATZ DATA ===== */
+var WORT_DATA = [
+  { en: 'difference', answer: 'der unterschied, -e' },
+  { en: 'greeting', answer: 'die begrüßung, -en' },
+  { en: 'facial expression', answer: 'die mimik' },
+  { en: 'gestures', answer: 'die gestik' },
+  { en: 'body language', answer: 'die körpersprache' },
+  { en: 'cooperation / teamwork', answer: 'die zusammenarbeit' },
+  { en: 'colleague', answer: 'der kollege, -n' },
+  { en: 'habit / custom', answer: 'die gewohnheit, -en' },
+  { en: 'globalisation', answer: 'die globalisierung' },
+  { en: 'professional', answer: 'beruflich' },
+  { en: 'to perceive / to notice', answer: 'wahrnehmen' },
+  { en: 'to acknowledge / to respect', answer: 'anerkennen' }
+];
+
+function buildWort() {
+  var c = document.getElementById('wort-container');
+  c.innerHTML = '';
+  WORT_DATA.forEach(function(item, i) {
+    var div = document.createElement('div');
+    div.className = 'wort-item';
+    var prompt = document.createElement('div');
+    prompt.className = 'wort-prompt';
+    prompt.textContent = 'Auf Deutsch:';
+    var en = document.createElement('div');
+    en.className = 'wort-en';
+    en.textContent = item.en;
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'blank';
+    inp.placeholder = '';
+    inp.dataset.answer = item.answer;
+    inp.setAttribute('oninput', 'liveCheckWort(this)');
+    div.appendChild(prompt);
+    div.appendChild(en);
+    div.appendChild(inp);
+    c.appendChild(div);
+  });
+  updateWortScore();
+}
+
+function liveCheckWort(inp) {
+  timerAutoStart(4);
+  var val = inp.value.trim().toLowerCase();
+  var ans = inp.dataset.answer;
+  inp.classList.remove('correct','wrong');
+  if (val.length === 0) { updateWortScore(); return; }
+  if (val === ans) { inp.classList.add('correct'); }
+  else if (ans.indexOf(val) === 0) { /* prefix */ }
+  else { inp.classList.add('wrong'); }
+  updateWortScore();
+  checkWortAllOk();
+}
+
+function updateWortScore() {
+  var ok = document.querySelectorAll('#wort-container input.correct').length;
+  document.getElementById('wort-score').textContent = ok + ' / ' + WORT_DATA.length + ' richtig';
+}
+
+function checkWortAllOk() {
+  var inputs = document.querySelectorAll('#wort-container input');
+  var allOk = true;
+  inputs.forEach(function(inp) { if (!inp.classList.contains('correct')) allOk = false; });
+  if (allOk) timerStop(4);
+}
+
+function showWortLoesung() {
+  document.querySelectorAll('#wort-container input').forEach(function(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    if (!inp.classList.contains('correct')) {
+      var hint = document.createElement('span');
+      hint.className = 'correction-hint';
+      hint.textContent = inp.dataset.answer;
+      inp.insertAdjacentElement('afterend', hint);
+      inp.value = inp.dataset.answer;
+      inp.classList.add('correct');
+      inp.classList.remove('wrong');
+    }
+  });
+  updateWortScore();
+}
+
+function resetWort() {
+  document.querySelectorAll('#wort-container input').forEach(function(inp) {
+    inp.value = '';
+    inp.classList.remove('correct','wrong');
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+  });
+  updateWortScore();
+}
+
+/* ===== HELPERS ===== */
+function fisherYates(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
+}
+
+/* ===== INIT ===== */
+window.addEventListener('DOMContentLoaded', function() {
+  buildLuecke();
+  buildSatzbau();
+  buildWort();
+  loadBestTimes();
+});
+</script>
+</body>
+</html>

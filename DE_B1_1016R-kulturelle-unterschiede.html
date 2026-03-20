@@ -44,6 +44,12 @@ body {
 .nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
 .nav-emoji { font-size: 1.3em; line-height: 1.2; }
 .nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
 
 /* ===== SECTIONS ===== */
 .section { display: none; padding: 28px 32px 32px; }
@@ -231,17 +237,20 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; color: #c62828
 
 .satzbau-item { margin-bottom: 22px; }
 
-/* ===== WORTSCHATZ-TAB ===== */
-.wort-item {
-  background: #fafbff;
-  border: 1px solid #e0e0f0;
-  border-radius: 10px;
-  padding: 14px 18px;
-  margin-bottom: 12px;
-}
-.wort-item .wort-prompt { font-size: 0.88rem; color: #888; margin-bottom: 6px; }
-.wort-item .wort-en { font-weight: 700; color: #3949ab; font-size: 1rem; }
-.wort-item input.blank { width: 200px; }
+/* ===== WORTSCHATZ-TAB (Skill-Standard) ===== */
+.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 140px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 130px; }
+.vocab-inputs input.plural { width: 140px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+@media (max-width: 600px) { .vocab-item { flex-direction: column; align-items: flex-start; } }
 
 /* ===== SCORE ===== */
 .score-bar {
@@ -256,13 +265,7 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; color: #c62828
 }
 
 /* ===== FOOTER ===== */
-.author-footer {
-  text-align: center;
-  padding: 16px 20px;
-  font-size: 0.78rem;
-  color: #aaa;
-  border-top: 1px solid #f0f0f0;
-}
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
 .author-footer a { color: #aaa; }
 .author-name { font-weight: 700; }
 
@@ -288,28 +291,28 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; color: #c62828
 </div>
 
 <!-- NAV -->
-<nav class="nav">
-  <button class="nav-btn active" onclick="showTab(0)">
+<div class="nav">
+  <div class="nav-btn active" onclick="showTab(0)">
     <span class="nav-emoji">🌅</span>
     <span class="nav-label">Vorentlastung</span>
-  </button>
-  <button class="nav-btn" onclick="showTab(1)">
+  </div>
+  <div class="nav-btn" onclick="showTab(1)">
     <span class="nav-emoji">📖</span>
     <span class="nav-label">Geschichte</span>
-  </button>
-  <button class="nav-btn" onclick="showTab(2)">
+  </div>
+  <div class="nav-btn" onclick="showTab(2)">
     <span class="nav-emoji">✏️</span>
     <span class="nav-label">Lückentext</span>
-  </button>
-  <button class="nav-btn" onclick="showTab(3)">
+  </div>
+  <div class="nav-btn" onclick="showTab(3)">
     <span class="nav-emoji">🧩</span>
     <span class="nav-label">Satzbau</span>
-  </button>
-  <button class="nav-btn" onclick="showTab(4)">
+  </div>
+  <div class="nav-btn" onclick="showTab(4)">
     <span class="nav-emoji">🔠</span>
     <span class="nav-label">Wortschatz</span>
-  </button>
-</nav>
+  </div>
+</div>
 
 <!-- TAB 0: VORENTLASTUNG -->
 <section class="section aktiv" id="sec-0">
@@ -494,12 +497,11 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; color: #c62828
   <img class="tab-banner" src="https://images.pexels.com/photos/226612/pexels-photo-226612.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Aufgeschlagenes Buch — Wortschatz-Training">
 
   <h2 class="section-title">🔠 Wortschatz-Training</h2>
-  <p style="font-size:0.88rem;color:#888;margin-bottom:16px;">Tippe: Artikel + Wort (+ Plural bei Nomen). Beispiel: <em>der Kollege, -n</em></p>
 
   <div class="timer-controls">
     <div class="tc-buttons">
-      <button onclick="showWortLoesung()">💡 Lösungen</button>
-      <button onclick="timerResetOne(4); resetWort()">↺ Neustart</button>
+      <button onclick="showVocabLoesung()">💡 Lösungen</button>
+      <button onclick="timerResetOne(4); resetVocab()">↺ Neustart</button>
     </div>
     <div class="tc-times">
       <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
@@ -507,9 +509,11 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; color: #c62828
     </div>
   </div>
 
-  <div class="score-bar" id="wort-score">0 / 12 richtig</div>
+  <div class="hilfe-box">
+    <strong>Aufgabe:</strong> Übersetze die Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural!
+  </div>
 
-  <div id="wort-container"></div>
+  <div id="vocabContainer"></div>
 </section>
 
 <!-- FOOTER -->
@@ -983,98 +987,135 @@ function resetLuecke() {
 }
 
 
-/* ===== WORTSCHATZ DATA ===== */
-var WORT_DATA = [
-  { en: 'difference', answer: 'der unterschied, -e' },
-  { en: 'greeting', answer: 'die begrüßung, -en' },
-  { en: 'facial expression', answer: 'die mimik' },
-  { en: 'gestures', answer: 'die gestik' },
-  { en: 'body language', answer: 'die körpersprache' },
-  { en: 'cooperation / teamwork', answer: 'die zusammenarbeit' },
-  { en: 'colleague', answer: 'der kollege, -n' },
-  { en: 'habit / custom', answer: 'die gewohnheit, -en' },
-  { en: 'globalisation', answer: 'die globalisierung' },
-  { en: 'professional', answer: 'beruflich' },
-  { en: 'to perceive / to notice', answer: 'wahrnehmen' },
-  { en: 'to acknowledge / to respect', answer: 'anerkennen' }
+/* ===== WORTSCHATZ DATA (Skill-Standard) ===== */
+var WORTSCHATZ = [
+  { id:1,  type:'n', en:'difference',            artikel:'der', de:'Unterschied',   plural:'Unterschiede' },
+  { id:2,  type:'n', en:'greeting',              artikel:'die', de:'Begrüßung',     plural:'Begrüßungen' },
+  { id:3,  type:'n', en:'facial expression',     artikel:'die', de:'Mimik',         plural:'—' },
+  { id:4,  type:'n', en:'gestures',              artikel:'die', de:'Gestik',        plural:'—' },
+  { id:5,  type:'n', en:'body language',         artikel:'die', de:'Körpersprache', plural:'—' },
+  { id:6,  type:'n', en:'cooperation / teamwork',artikel:'die', de:'Zusammenarbeit',plural:'—' },
+  { id:7,  type:'n', en:'colleague',             artikel:'der', de:'Kollege',       plural:'Kollegen' },
+  { id:8,  type:'n', en:'habit / custom',        artikel:'die', de:'Gewohnheit',    plural:'Gewohnheiten' },
+  { id:9,  type:'n', en:'globalisation',         artikel:'die', de:'Globalisierung',plural:'—' },
+  { id:10, type:'v', en:'professional (adj.)',   de:'beruflich' },
+  { id:11, type:'v', en:'to perceive / notice',  de:'wahrnehmen' },
+  { id:12, type:'v', en:'to acknowledge / respect', de:'anerkennen' }
 ];
 
-function buildWort() {
-  var c = document.getElementById('wort-container');
+function initVocab() {
+  var c = document.getElementById('vocabContainer');
   c.innerHTML = '';
-  WORT_DATA.forEach(function(item, i) {
+  var items = WORTSCHATZ.slice();
+  // Fisher-Yates mischen
+  for (var i = items.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+  }
+  items.forEach(function(item) {
     var div = document.createElement('div');
-    div.className = 'wort-item';
-    var prompt = document.createElement('div');
-    prompt.className = 'wort-prompt';
-    prompt.textContent = 'Auf Deutsch:';
-    var en = document.createElement('div');
-    en.className = 'wort-en';
-    en.textContent = item.en;
-    var inp = document.createElement('input');
-    inp.type = 'text';
-    inp.className = 'blank';
-    inp.placeholder = '';
-    inp.dataset.answer = item.answer;
-    inp.setAttribute('oninput', 'liveCheckWort(this)');
-    div.appendChild(prompt);
-    div.appendChild(en);
-    div.appendChild(inp);
+    div.className = 'vocab-item';
+
+    var enSpan = document.createElement('span');
+    enSpan.className = 'vocab-en';
+    enSpan.textContent = item.en;
+
+    var arrow = document.createElement('span');
+    arrow.className = 'vocab-arrow';
+    arrow.textContent = '→';
+
+    var inputs = document.createElement('div');
+    inputs.className = 'vocab-inputs';
+
+    if (item.type === 'n') {
+      var artInp = document.createElement('input');
+      artInp.className = 'art';
+      artInp.placeholder = 'Artikel';
+      artInp.dataset.answer = item.artikel.toLowerCase();
+      artInp.dataset.id = item.id;
+      artInp.addEventListener('input', function() { vocabLiveCheck(this); });
+
+      var wortInp = document.createElement('input');
+      wortInp.className = 'wort';
+      wortInp.placeholder = 'Deutsch';
+      wortInp.dataset.answer = item.de.toLowerCase();
+      wortInp.dataset.id = item.id;
+      wortInp.addEventListener('input', function() { vocabLiveCheck(this); });
+
+      inputs.appendChild(artInp);
+      inputs.appendChild(wortInp);
+
+      if (item.plural !== '—') {
+        var pluralInp = document.createElement('input');
+        pluralInp.className = 'plural';
+        pluralInp.placeholder = 'Plural';
+        pluralInp.dataset.answer = item.plural.toLowerCase();
+        pluralInp.dataset.id = item.id;
+        pluralInp.addEventListener('input', function() { vocabLiveCheck(this); });
+        inputs.appendChild(pluralInp);
+      }
+    } else {
+      var vInp = document.createElement('input');
+      vInp.className = 'wort';
+      vInp.placeholder = 'Deutsch';
+      vInp.dataset.answer = item.de.toLowerCase();
+      vInp.dataset.id = item.id;
+      vInp.addEventListener('input', function() { vocabLiveCheck(this); });
+      inputs.appendChild(vInp);
+    }
+
+    div.appendChild(enSpan);
+    div.appendChild(arrow);
+    div.appendChild(inputs);
     c.appendChild(div);
   });
-  updateWortScore();
 }
 
-function liveCheckWort(inp) {
+function vocabLiveCheck(inp) {
   timerAutoStart(4);
   var val = inp.value.trim().toLowerCase();
-  var ans = inp.dataset.answer;
-  inp.classList.remove('correct','wrong');
-  if (val.length === 0) { updateWortScore(); return; }
+  var ans = inp.dataset.answer.toLowerCase();
+  inp.classList.remove('correct', 'wrong');
+  // Hint entfernen
+  var hint = inp.nextElementSibling;
+  if (hint && hint.classList.contains('vocab-hint')) hint.remove();
+  if (val.length === 0) { checkVocabAllDone(); return; }
   if (val === ans) { inp.classList.add('correct'); }
-  else if (ans.indexOf(val) === 0) { /* prefix */ }
+  else if (ans.indexOf(val) === 0) { /* Prefix — neutral */ }
   else { inp.classList.add('wrong'); }
-  updateWortScore();
-  checkWortAllOk();
+  checkVocabAllDone();
 }
 
-function updateWortScore() {
-  var ok = document.querySelectorAll('#wort-container input.correct').length;
-  document.getElementById('wort-score').textContent = ok + ' / ' + WORT_DATA.length + ' richtig';
-}
-
-function checkWortAllOk() {
-  var inputs = document.querySelectorAll('#wort-container input');
+function checkVocabAllDone() {
+  var inputs = document.querySelectorAll('#vocabContainer input');
   var allOk = true;
   inputs.forEach(function(inp) { if (!inp.classList.contains('correct')) allOk = false; });
-  if (allOk) timerStop(4);
+  if (allOk && inputs.length > 0) timerStop(4);
 }
 
-function showWortLoesung() {
-  document.querySelectorAll('#wort-container input').forEach(function(inp) {
-    var next = inp.nextElementSibling;
-    if (next && next.classList.contains('correction-hint')) next.remove();
+function showVocabLoesung() {
+  document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+    var hint = inp.nextElementSibling;
+    if (hint && hint.classList.contains('vocab-hint')) hint.remove();
     if (!inp.classList.contains('correct')) {
-      var hint = document.createElement('span');
-      hint.className = 'correction-hint';
-      hint.textContent = inp.dataset.answer;
-      inp.insertAdjacentElement('afterend', hint);
+      var h = document.createElement('span');
+      h.className = 'vocab-hint';
+      h.textContent = inp.dataset.answer;
+      inp.insertAdjacentElement('afterend', h);
       inp.value = inp.dataset.answer;
       inp.classList.add('correct');
       inp.classList.remove('wrong');
     }
   });
-  updateWortScore();
 }
 
-function resetWort() {
-  document.querySelectorAll('#wort-container input').forEach(function(inp) {
+function resetVocab() {
+  document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
     inp.value = '';
-    inp.classList.remove('correct','wrong');
-    var next = inp.nextElementSibling;
-    if (next && next.classList.contains('correction-hint')) next.remove();
+    inp.classList.remove('correct', 'wrong');
+    var hint = inp.nextElementSibling;
+    if (hint && hint.classList.contains('vocab-hint')) hint.remove();
   });
-  updateWortScore();
 }
 
 /* ===== HELPERS ===== */
@@ -1091,11 +1132,9 @@ function highlightVocabInText() {
   var storyText = document.querySelector('.story-text') || document.querySelector('.lese-text');
   if (!storyText) return;
   var words = [];
-  if (typeof WORT_DATA !== 'undefined' && WORT_DATA.length) {
-    words = WORT_DATA.map(function(item) {
-      var ans = item.answer || '';
-      var core = ans.replace(/^(der|die|das)\s+/i, '').split(',')[0].trim();
-      return core;
+  if (typeof WORTSCHATZ !== 'undefined' && WORTSCHATZ.length) {
+    words = WORTSCHATZ.map(function(item) {
+      return item.de || '';
     });
   }
   words = words.filter(function(w) { return w && w.length > 3; });
@@ -1138,7 +1177,7 @@ function highlightVocabInText() {
 window.addEventListener('DOMContentLoaded', function() {
   buildLuecke();
   initSatzbau();
-  buildWort();
+  initVocab();
   loadBestTimes();
   highlightVocabInText();
 });

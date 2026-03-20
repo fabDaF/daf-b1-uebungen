@@ -41,35 +41,25 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 
 h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia, serif; }
 
-/* ── Entdeckungs-Tab ── */
-.entdeck-box { background: #f3e5f5; border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; border-left: 5px solid #9c27b0; font-size: 0.97em; line-height: 1.8; }
-.entdeck-box h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05em; }
-.hl { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+/* ── Hervorhebung im Lesetext ── */
+.hl { background: #e8eaf6; border-radius: 3px; padding: 0 3px; color: #1a237e; font-weight: 700; }
 
-.mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
-.mc-step.active { display: block; }
-.mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 0.97em; }
-.mc-options { display: flex; flex-direction: column; gap: 8px; }
-.mc-btn { padding: 10px 16px; border: 2px solid #c5cae9; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; font-size: 0.92em; transition: all 0.2s; }
-.mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
-.mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
-.mc-btn.wrong   { border-color: #e53935; background: #ffebee; color: #c62828; }
-.mc-feedback { margin-top: 10px; font-size: 0.88em; min-height: 1.3em; }
-.mc-feedback.ok  { color: #2e7d32; font-weight: 700; }
-.mc-feedback.err { color: #c62828; }
-
-.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
-.pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background 0.3s; }
-.pdot.done { background: #667eea; }
-
-.regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 16px; }
-.regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.05em; }
-.regel-karte table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
-.regel-karte th { background: #3949ab; color: white; padding: 8px 12px; text-align: left; }
-.regel-karte td { padding: 8px 12px; border-bottom: 1px solid #c5cae9; }
-.regel-karte tr:nth-child(even) td { background: rgba(255,255,255,0.5); }
+/* ── Dialog-Beispiele ── */
+.beispiel-block { margin: 18px 0 10px 0; }
+.beispiel-block .label { font-size: 0.78em; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.beispiel-negativ { background: #fff3f3; border-left: 4px solid #e53935; border-radius: 0 8px 8px 0; padding: 10px 16px; font-style: italic; color: #444; font-size: 0.94em; line-height: 1.6; }
+.beispiel-positiv { background: #f1f8f1; border-left: 4px solid #43a047; border-radius: 0 8px 8px 0; padding: 10px 16px; font-style: italic; color: #444; font-size: 0.94em; line-height: 1.6; }
+.beispiel-negativ .label { color: #c62828; }
+.beispiel-positiv .label { color: #2e7d32; }
 .rk-note { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; border-left: 3px solid #7c4dff; font-size: 0.9em; color: #333; }
 .rk-note b { color: #3949ab; }
+
+/* ── Lesetext ── */
+.lese-text { font-family: Georgia, 'Times New Roman', serif; font-size: 1.0em; line-height: 1.85; color: #2c2c2c; max-width: 720px; margin: 0 auto; text-align: justify; hyphens: auto; }
+.lese-text h3 { font-family: Georgia, serif; font-size: 1.15em; color: #3949ab; margin: 24px 0 10px 0; border-bottom: 2px solid #e8eaf6; padding-bottom: 4px; }
+.lese-text p { margin-bottom: 1.1em; text-indent: 1.4em; }
+.lese-text p:first-of-type { text-indent: 0; }
+.lese-text .hl { background: #e8eaf6; border-radius: 3px; padding: 0 3px; color: #1a237e; font-weight: 700; }
 
 /* ── Lückentext ── */
 .wortkasten { background: #e8eaf6; border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.88em; color: #3949ab; line-height: 2; }
@@ -110,7 +100,9 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
 .satzbau-feedback.incorrect { color: #e74c3c; }
 
 /* ── Wortschatz ── */
-.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+#vocabContainer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 700px) { #vocabContainer { grid-template-columns: 1fr; } }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
 .vocab-arrow { color: #ccc; font-size: 1.2em; }
 .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -144,104 +136,94 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
 <div class="container">
     <div class="header">
         <h1>Das Vorstellungsgespräch</h1>
-        <p style="font-family: Georgia, serif;">B1 – Lektion 1011X &nbsp;|&nbsp; Konjunktiv II &amp; Berufssprache</p>
+        <p style="font-family: Georgia, serif;">B1 – Lektion 1011X &nbsp;|&nbsp; Wortschatz &amp; Kommunikation</p>
         <div class="big-emoji">💼</div>
     </div>
 
     <div class="nav">
-        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔍</span><span class="nav-label">Entdecken</span></div>
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📖</span><span class="nav-label">Lesen</span></div>
         <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
         <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🔀</span><span class="nav-label">Zuordnung</span></div>
         <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
         <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">📚</span><span class="nav-label">Wortschatz</span></div>
     </div>
 
-    <!-- ──────────────────────────────────────────────── TAB 0: ENTDECKEN -->
+    <!-- ──────────────────────────────────────────────── TAB 0: LESEN -->
     <div class="section active" id="sec-0">
         <img class="tab-banner"
              src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800"
              alt="Vorstellungsgespräch — zwei Personen im Büro">
         <div class="sec-inner">
-            <h2>🔍 Konjunktiv II entdecken</h2>
+            <h2>📖 Das Bewerbungsverfahren und das Vorstellungsgespräch</h2>
 
-            <div class="entdeck-box">
-                <h3>Schau dir diese Sätze an:</h3>
-                <p>Im Vorstellungsgespräch spricht man besonders höflich. Vergleiche:</p>
-                <br>
-                <p>😐 <em>„Können Sie mir von Ihrer Erfahrung erzählen?"</em> — Direkt, etwas abrupt</p>
-                <p>😊 <em>„<span class="hl">Könnten</span> Sie mir von Ihrer Erfahrung erzählen?"</em> — Höflich, professionell</p>
-                <br>
-                <p>😐 <em>„Ich will gerne meine Stärken beschreiben."</em> — Klingt zu direkt</p>
-                <p>😊 <em>„Ich <span class="hl">würde</span> gerne meine Stärken beschreiben."</em> — Zurückhaltend und professionell</p>
-                <br>
-                <p>Die hervorgehobenen Verbformen heißen <strong>Konjunktiv II</strong>. Entdecke die Regel Schritt für Schritt!</p>
-            </div>
+            <div class="lese-text">
+                <h3>Das Bewerbungsverfahren</h3>
+                <p>
+                    Wenn man eine neue Stelle sucht, muss man sich bewerben. Dazu braucht man mehrere Unterlagen.
+                    Der <span class="hl">Lebenslauf</span> ist, ebenso wie die <span class="hl">Zeugnisse</span> und die <span class="hl">Berufserfahrung</span>, sehr wichtig für eine Bewerbung.
+                    Im Lebenslauf sollte man persönliche Daten, die Berufserfahrung, die Ausbildung, aber auch die <span class="hl">persönlichen Fähigkeiten</span> angeben.
+                    Persönliche Fähigkeiten sind zum Beispiel Intelligenz oder Ernsthaftigkeit.
+                </p>
+                <p>
+                    Außerdem gehört ein <span class="hl">Anschreiben</span> zur Bewerbung. Das Anschreiben begleitet den Lebenslauf und stellt eine wichtige Bewerbungsunterlage dar.
+                    Um eine neue Arbeitsstelle zu finden, sollte man zunächst einige <span class="hl">Stellenanzeigen</span> durchlesen.
+                    Ein gutes <span class="hl">Zeugnis</span> ist ebenfalls wichtig, wenn man eine Stelle sucht.
+                    Arbeitslos zu sein ist eine sehr komplizierte Situation — deshalb lohnt es sich, die eigene Bewerbung sorgfältig vorzubereiten.
+                </p>
 
-            <div class="progress-dots">
-                <div class="pdot" id="pdot0"></div>
-                <div class="pdot" id="pdot1"></div>
-                <div class="pdot" id="pdot2"></div>
-                <div class="pdot" id="pdot3"></div>
-            </div>
+                <h3>Berufe und Tätigkeiten</h3>
+                <p>
+                    In einem Unternehmen gibt es viele verschiedene Berufe und Positionen.
+                    Der <span class="hl">Vertriebsleiter</span> leitet die Vertriebsabteilung.
+                    Der <span class="hl">Entwickler</span> ist ein sehr interessanter Beruf, insbesondere wenn es um die Entwicklung neuer Produkte geht.
+                    Ein <span class="hl">Büroleiter</span> hat viele Aufgaben, unter anderem auch die Mitarbeiter zu koordinieren.
+                    Der <span class="hl">Geschäftsführer</span> leitet das gesamte Unternehmen und hat eine große Verantwortung.
+                </p>
+                <p>
+                    Der Geschäftsführer hat oft einen <span class="hl">Stellvertreter</span>, der seine Aufgaben übernimmt, wenn er nicht da ist.
+                    Ein <span class="hl">Praktikant</span> sammelt berufliche Erfahrung schon während seiner Studienzeit.
+                    Wenn jemand im Urlaub ist, muss er von einer anderen Person <span class="hl">vertreten</span> werden.
+                    Manche Menschen bevorzugen es, <span class="hl">freiberuflich</span> zu arbeiten, denn dadurch haben sie mehr Freiheit.
+                </p>
+                <p>
+                    Im Bankwesen gibt es den Beruf des <span class="hl">Bankkaufmanns</span> und der <span class="hl">Bankkauffrau</span> — beide arbeiten am Schalter in der Bank.
+                    Das <span class="hl">Handwerk</span> ist die Tätigkeit, die von einem Tischler, einem Schneider oder einem Friseur ausgeübt wird. Man braucht Zeit, um ein Handwerk zu erlernen und Erfahrung zu sammeln.
+                </p>
+                <p>
+                    Für viele Berufe ist es wichtig, dass man eine Sprache <span class="hl">fließend in Wort und Schrift</span> beherrscht.
+                    Manche Menschen erlernen einen Beruf durch eine Ausbildung, andere <span class="hl">studieren</span> an einer Universität.
+                    Eduard hat zum Beispiel den Beruf des Arztes <span class="hl">erlernt</span>, während Maria Mathematik an der Uni studiert.
+                </p>
 
-            <div class="mc-step active" id="mc-step0">
-                <h4>Schritt 1: Wofür benutzt man den Konjunktiv II?</h4>
-                <div class="mc-options">
-                    <button class="mc-btn" onclick="mcCheck(0, this, false)">Um vergangene Ereignisse zu beschreiben</button>
-                    <button class="mc-btn" onclick="mcCheck(0, this, true)">Um höfliche Bitten, Wünsche und hypothetische Situationen auszudrücken</button>
-                    <button class="mc-btn" onclick="mcCheck(0, this, false)">Um Befehle zu formulieren</button>
+                <h3>Das Vorstellungsgespräch</h3>
+                <p>
+                    Wenn die Bewerbung erfolgreich war, wird man zu einem Vorstellungsgespräch eingeladen.
+                    Im Gespräch gibt es zwei Rollen: den <span class="hl">Befragten</span> und den <span class="hl">Befrager</span>.
+                    Der Befragte ist der Kandidat — er muss möglichst präzise alle Fragen beantworten.
+                    Der Befrager ist im Allgemeinen ein Mitarbeiter der Personalabteilung.
+                    Man spricht auch von dem <span class="hl">Interviewten</span> und dem <span class="hl">Interviewer</span> — der Interviewer hat eine komplizierte Aufgabe, denn es ist nicht leicht, andere zu bewerten.
+                </p>
+                <p>
+                    Im Gespräch wird oft nach den <strong>Stärken und Schwächen</strong> gefragt. Der <span class="hl">berufliche Hintergrund</span> spielt dabei eine wichtige Rolle. Wie antwortet man auf diese Frage? Hier sind zwei Möglichkeiten im Vergleich:
+                </p>
+
+                <div class="beispiel-block">
+                    <div class="label beispiel-negativ" style="background:none; border:none; padding:0; color:#c62828;">✗ So nicht:</div>
+                    <div class="beispiel-negativ">
+                        „Meine Stärken und Schwächen? Ich kann gut Deutsch sprechen und habe viel Erfahrung. Aber Schwächen habe ich mit Sicherheit keine!"
+                    </div>
                 </div>
-                <div class="mc-feedback" id="mcfb0"></div>
-            </div>
 
-            <div class="mc-step" id="mc-step1">
-                <h4>Schritt 2: Welcher Satz klingt höflicher im Vorstellungsgespräch?</h4>
-                <div class="mc-options">
-                    <button class="mc-btn" onclick="mcCheck(1, this, false)">„Ich will über mein Gehalt verhandeln."</button>
-                    <button class="mc-btn" onclick="mcCheck(1, this, true)">„Ich würde gerne über das Gehalt sprechen."</button>
-                    <button class="mc-btn" onclick="mcCheck(1, this, false)">„Ich muss mehr Gehalt bekommen."</button>
+                <div class="beispiel-block">
+                    <div class="label beispiel-positiv" style="background:none; border:none; padding:0; color:#2e7d32;">✓ Besser so:</div>
+                    <div class="beispiel-positiv">
+                        „Zu meinen Stärken gehören meine langjährige <span class="hl">Berufserfahrung</span> und meine Fähigkeit, gut im Team zu arbeiten. Eine Schwäche ist, dass ich manchmal zu perfektionistisch bin — aber ich arbeite daran, Aufgaben besser zu priorisieren."
+                    </div>
                 </div>
-                <div class="mc-feedback" id="mcfb1"></div>
-            </div>
 
-            <div class="mc-step" id="mc-step2">
-                <h4>Schritt 3: Welche Verbform ist Konjunktiv II?</h4>
-                <div class="mc-options">
-                    <button class="mc-btn" onclick="mcCheck(2, this, false)">„Sie können die Stelle haben." — „können" ist Konjunktiv II</button>
-                    <button class="mc-btn" onclick="mcCheck(2, this, true)">„Könnten Sie mir bitte sagen, …" — „könnten" ist Konjunktiv II</button>
-                    <button class="mc-btn" onclick="mcCheck(2, this, false)">„Sie hat die Stelle bekommen." — „hat" ist Konjunktiv II</button>
-                </div>
-                <div class="mc-feedback" id="mcfb2"></div>
-            </div>
-
-            <div class="mc-step" id="mc-step3">
-                <h4>Schritt 4: Wie bildet man Konjunktiv II bei Modalverben?</h4>
-                <div class="mc-options">
-                    <button class="mc-btn" onclick="mcCheck(3, this, false)">Man benutzt das Präteritum: „konnte", „durfte", „musste"</button>
-                    <button class="mc-btn" onclick="mcCheck(3, this, true)">Man nimmt den Präteritumstamm + Umlaut: „könnte", „dürfte", „müsste"</button>
-                    <button class="mc-btn" onclick="mcCheck(3, this, false)">Man benutzt immer „würde" + Infinitiv</button>
-                </div>
-                <div class="mc-feedback" id="mcfb3"></div>
-            </div>
-
-            <div class="regel-karte" id="regelkarte">
-                <h3>📋 Zusammenfassung: Konjunktiv II</h3>
-                <table>
-                    <thead>
-                        <tr><th>Verb</th><th>Präteritum</th><th>Konjunktiv II</th><th>Beispiel</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>sein</td><td>war</td><td>wäre</td><td>„Wäre das möglich?"</td></tr>
-                        <tr><td>haben</td><td>hatte</td><td>hätte</td><td>„Hätten Sie noch Fragen?"</td></tr>
-                        <tr><td>können</td><td>konnte</td><td>könnte</td><td>„Könnten Sie …?"</td></tr>
-                        <tr><td>dürfen</td><td>durfte</td><td>dürfte</td><td>„Dürfte ich fragen …?"</td></tr>
-                        <tr><td>müssen</td><td>musste</td><td>müsste</td><td>„Ich müsste noch …"</td></tr>
-                        <tr><td>alle anderen Verben</td><td>—</td><td>würde + Infinitiv</td><td>„Ich würde gerne …"</td></tr>
-                    </tbody>
-                </table>
-                <div class="rk-note">
-                    <b>Merkregel:</b> Modalverben bilden den Konjunktiv II mit Präteritumstamm + Umlaut (a→ä, u→ü, o→ö) + Konjunktivendung (<em>-e, -est, -e, -en, -et, -en</em>). Alle anderen Verben benutzen meistens <b>würde + Infinitiv</b>.
-                </div>
+                <p>
+                    Eine gute Antwort nennt also eine echte Stärke, die zur Stelle passt, und zeigt bei der Schwäche, dass man selbstreflektiert ist und aktiv daran arbeitet. So wirkt man glaubwürdig und professionell.
+                </p>
             </div>
         </div>
     </div>
@@ -252,7 +234,7 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
              src="https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?auto=compress&cs=tinysrgb&w=800"
              alt="Person schreibt am Schreibtisch">
         <div class="sec-inner">
-            <h2>✏️ Lückentext — Konjunktiv II einsetzen</h2>
+            <h2>✏️ Lückentext — Bewerbungswortschatz einsetzen</h2>
             <div class="control-bar">
                 <div class="btn-row">
                     <button class="btn" onclick="lueckeShow()">Lösungen</button>
@@ -266,13 +248,14 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
 
             <div class="wortkasten">
                 <strong>Wortkasten:</strong>
-                <span>wäre</span> <span>wären</span> <span>hätte</span> <span>hätten</span>
-                <span>könnte</span> <span>könnten</span> <span>dürfte</span> <span>dürften</span>
-                <span>müsste</span> <span>würde</span> <span>würden</span>
+                <span>Lebenslauf</span> <span>Zeugnis</span> <span>Berufserfahrung</span>
+                <span>Anschreiben</span> <span>Stellenanzeige</span> <span>Fähigkeiten</span>
+                <span>studieren</span> <span>erlernen</span> <span>fließend</span>
+                <span>Praktikant</span> <span>freiberuflich</span> <span>vertreten</span>
             </div>
 
             <div class="hilfe-box">
-                <strong>Aufgabe:</strong> Ergänze den Konjunktiv II. Achte auf Höflichkeit und Kontext — Fragen beginnen oft mit dem Verb!
+                <strong>Aufgabe:</strong> Ergänze das passende Wort aus dem Wortkasten. Achte auf Groß- und Kleinschreibung!
             </div>
 
             <div id="luecke-container"></div>
@@ -298,7 +281,7 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
             </div>
 
             <div class="hilfe-box">
-                <strong>Aufgabe:</strong> Ordne die Ausdrücke zu: Was macht man <em>vor dem Gespräch</em> (Bewerbung), was <em>im Gespräch</em> selbst? Klicke einen Ausdruck an, dann klicke auf die passende Kategorie.
+                <strong>Aufgabe:</strong> Ordne die Wörter zu: Was gehört zu den <em>Bewerbungsunterlagen</em>, was zum <em>Vorstellungsgespräch</em>? Klicke ein Wort an, dann klicke auf die passende Kategorie.
             </div>
 
             <div class="zuo-bank" id="zuo-bank"
@@ -454,52 +437,20 @@ function shuffle(arr) {
     return a;
 }
 
-// ─── Entdeckungs-Tab ───────────────────────────────────────────────────────
-var mcDone = [false, false, false, false];
-
-function mcCheck(step, btn, correct) {
-    var btns = btn.parentElement.querySelectorAll('.mc-btn');
-    btns.forEach(function(b) { b.disabled = true; b.classList.remove('correct', 'wrong'); });
-    var fb = document.getElementById('mcfb' + step);
-    if (correct) {
-        btn.classList.add('correct');
-        fb.textContent = '✓ Richtig! Weiter zum nächsten Schritt.';
-        fb.className = 'mc-feedback ok';
-        mcDone[step] = true;
-        document.getElementById('pdot' + step).classList.add('done');
-        setTimeout(function() {
-            var next = document.getElementById('mc-step' + (step + 1));
-            if (next) { next.classList.add('active'); }
-            else { document.getElementById('regelkarte').style.display = 'block'; }
-        }, 700);
-    } else {
-        btn.classList.add('wrong');
-        fb.textContent = '✗ Nicht ganz — schau nochmal genau hin!';
-        fb.className = 'mc-feedback err';
-        setTimeout(function() {
-            btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong', 'correct'); });
-            fb.textContent = '';
-            fb.className = 'mc-feedback';
-        }, 1400);
-    }
-}
-
 // ─── Lückentext ────────────────────────────────────────────────────────────
 var LUECKEN_DATA = [
-    { segs: [{t:'„'}, {b:'Könnten', s:120}, {t:' Sie mir kurz von Ihrem Werdegang berichten?"'}] },
-    { segs: [{t:'Ich '}, {b:'würde', s:90}, {t:' gerne erfahren, wie hoch das Gehalt ausfällt.'}] },
-    { segs: [{t:'„'}, {b:'Dürfte', s:90}, {t:' ich fragen, welche Qualifikationen Sie für diese Stelle voraussetzen?"'}] },
-    { segs: [{t:'„'}, {b:'Hätten', s:90}, {t:' Sie Interesse, meine Ausbildung anzurechnen?"'}] },
-    { segs: [{t:'„'}, {b:'Wären', s:90}, {t:' Sie gelegentlich bereit, auch am Wochenende einzuspringen?"'}] },
-    { segs: [{t:'Ich '}, {b:'würde', s:90}, {t:' meine Stärken gerne kurz vorstellen.'}] },
-    { segs: [{t:'„'}, {b:'Könnten', s:120}, {t:' Sie uns ein konkretes Beispiel aus Ihrer Berufspraxis nennen?"'}] },
-    { segs: [{t:'„'}, {b:'Würden', s:90}, {t:' Sie uns erzählen, warum Sie sich auf diese Stelle beworben haben?"'}] },
-    { segs: [{t:'Ich '}, {b:'würde', s:90}, {t:' gerne über die Gehaltsvorstellungen sprechen.'}] },
-    { segs: [{t:'„'}, {b:'Hätten', s:90}, {t:' Sie noch Fragen an uns?"'}] },
-    { segs: [{t:'„'}, {b:'Wären', s:90}, {t:' Sie auch für eine Teilzeitstelle offen?"'}] },
-    { segs: [{t:'Ich '}, {b:'könnte', s:90}, {t:' Ihnen meinen Lebenslauf gerne vorlegen.'}] },
-    { segs: [{t:'„'}, {b:'Müsste', s:90}, {t:' man für diese Stelle Überstunden einplanen?"'}] },
-    { segs: [{t:'„'}, {b:'Könnten', s:120}, {t:' Sie uns beschreiben, was Sie in Ihrer Ausbildung gelernt haben?"'}] },
+    { segs: [{t:'Der '}, {b:'Lebenslauf', s:130}, {t:' ist, ebenso wie die Zeugnisse und die Berufserfahrung, sehr wichtig für eine Bewerbung.'}] },
+    { segs: [{t:'Für diese Stelle muss man besondere '}, {b:'Fähigkeiten', s:120}, {t:' vorweisen können.'}] },
+    { segs: [{t:'Ein gutes '}, {b:'Zeugnis', s:100}, {t:' ist wichtig, wenn du eine Arbeitsstelle suchst.'}] },
+    { segs: [{t:'Das '}, {b:'Anschreiben', s:120}, {t:' begleitet den Lebenslauf und stellt eine wichtige Bewerbungsunterlage dar.'}] },
+    { segs: [{t:'Um eine neue Arbeitsstelle zu finden, sollte man einige '}, {b:'Stellenanzeige', s:140}, {t:'n durchlesen.'}] },
+    { segs: [{t:'Wer langjährige '}, {b:'Berufserfahrung', s:150}, {t:' vorweisen kann, hat gute Chancen auf dem Arbeitsmarkt.'}] },
+    { segs: [{t:'Sie beherrscht Englisch '}, {b:'fließend', s:90}, {t:' in Wort und Schrift.'}] },
+    { segs: [{t:'Eduard hat den Beruf des Arztes '}, {b:'erlernt', s:90}, {t:'.'}] },
+    { segs: [{t:'Ich werde Mathematik an der Uni '}, {b:'studieren', s:100}, {t:'.'}] },
+    { segs: [{t:'Der '}, {b:'Praktikant', s:110}, {t:' sammelt berufliche Erfahrung schon während seiner Studienzeit.'}] },
+    { segs: [{t:'Wenn du im Urlaub bist, musst du von einer anderen Person '}, {b:'vertreten', s:100}, {t:' werden.'}] },
+    { segs: [{t:'Ich bevorzuge es, '}, {b:'freiberuflich', s:120}, {t:' zu arbeiten, denn dadurch habe ich mehr Freiheit.'}] },
 ];
 
 function liveCheck(inp) {
@@ -578,20 +529,20 @@ function lueckeReset() {
 
 // ─── Zuordnung ─────────────────────────────────────────────────────────────
 var ZUO_ITEMS = [
-    { word: 'die Bewerbung ausarbeiten', cat: 'bew' },
-    { word: 'den Lebenslauf verfassen', cat: 'bew' },
-    { word: 'die Unterlagen einreichen', cat: 'bew' },
-    { word: 'Zeugnisse beifügen', cat: 'bew' },
-    { word: 'ein Anschreiben formulieren', cat: 'bew' },
-    { word: 'Referenzen angeben', cat: 'bew' },
-    { word: 'Stärken überzeugend darlegen', cat: 'job' },
-    { word: 'Erfahrungen gezielt einbringen', cat: 'job' },
-    { word: 'Schwächen offen eingestehen', cat: 'job' },
-    { word: 'Qualifikationen nachweisen', cat: 'job' },
-    { word: 'das Gehalt verhandeln', cat: 'job' },
-    { word: 'Fragen kompetent beantworten', cat: 'job' },
-    { word: 'den ersten Eindruck hinterlassen', cat: 'job' },
-    { word: 'Interesse am Unternehmen zeigen', cat: 'job' },
+    { word: 'der Lebenslauf',           cat: 'bew' },
+    { word: 'das Zeugnis',              cat: 'bew' },
+    { word: 'das Anschreiben',          cat: 'bew' },
+    { word: 'die Stellenanzeige',       cat: 'bew' },
+    { word: 'die Berufserfahrung',      cat: 'bew' },
+    { word: 'persönliche Fähigkeiten',  cat: 'bew' },
+    { word: 'der Befragte',             cat: 'job' },
+    { word: 'der Befrager',             cat: 'job' },
+    { word: 'der Interviewte',          cat: 'job' },
+    { word: 'der Interviewer',          cat: 'job' },
+    { word: 'Stärken nennen',           cat: 'job' },
+    { word: 'Schwächen eingestehen',    cat: 'job' },
+    { word: 'beruflicher Hintergrund',  cat: 'job' },
+    { word: 'Fragen beantworten',       cat: 'job' },
 ];
 
 var zuoSelected = null;
@@ -719,46 +670,43 @@ function zuoReset() {
 // ─── Satzbau (Skill: satzbau-drag-drop) ───────────────────────────────────
 var satzbauData = [
     {
-        parts: ['könnten', 'Sie', 'mir', 'von', 'Ihrer', 'Berufserfahrung', 'erzählen'],
-        valid: [['könnten', 'Sie', 'mir', 'von', 'Ihrer', 'Berufserfahrung', 'erzählen']],
-        punct: '?'
-    },
-    {
-        parts: ['ich', 'würde', 'gerne', 'meine', 'Stärken', 'kurz', 'vorstellen'],
-        valid: [['ich', 'würde', 'gerne', 'meine', 'Stärken', 'kurz', 'vorstellen']],
+        parts: ['der', 'Lebenslauf', 'ist', 'wichtig', 'für', 'eine', 'Bewerbung'],
+        valid: [['der', 'Lebenslauf', 'ist', 'wichtig', 'für', 'eine', 'Bewerbung']],
         punct: '.'
     },
     {
-        parts: ['dürfte', 'ich', 'nach', 'den', 'Gehaltsvorstellungen', 'fragen'],
-        valid: [['dürfte', 'ich', 'nach', 'den', 'Gehaltsvorstellungen', 'fragen']],
-        punct: '?'
+        parts: ['ein', 'gutes', 'Zeugnis', 'ist', 'wichtig', ',', 'wenn', 'du', 'eine', 'Stelle', 'suchst'],
+        valid: [['ein', 'gutes', 'Zeugnis', 'ist', 'wichtig', ',', 'wenn', 'du', 'eine', 'Stelle', 'suchst']],
+        punct: '.'
     },
     {
-        parts: ['hätten', 'Sie', 'Interesse', 'an', 'meiner', 'Bewerbung'],
-        valid: [['hätten', 'Sie', 'Interesse', 'an', 'meiner', 'Bewerbung']],
-        punct: '?'
+        parts: ['das', 'Anschreiben', 'ergänzt', 'den', 'Lebenslauf'],
+        valid: [['das', 'Anschreiben', 'ergänzt', 'den', 'Lebenslauf']],
+        punct: '.'
     },
     {
-        parts: ['wären', 'Sie', 'bereit', ',', 'die', 'Ausbildung', 'anzurechnen'],
-        valid: [['wären', 'Sie', 'bereit', ',', 'die', 'Ausbildung', 'anzurechnen']],
-        punct: '?'
+        parts: ['sie', 'beherrscht', 'Englisch', 'fließend', 'in', 'Wort', 'und', 'Schrift'],
+        valid: [['sie', 'beherrscht', 'Englisch', 'fließend', 'in', 'Wort', 'und', 'Schrift']],
+        punct: '.'
     },
     {
-        parts: ['würden', 'Sie', 'uns', 'Ihre', 'Qualifikationen', 'vorlegen'],
-        valid: [['würden', 'Sie', 'uns', 'Ihre', 'Qualifikationen', 'vorlegen']],
-        punct: '?'
+        parts: ['der', 'Praktikant', 'sammelt', 'Erfahrung', 'während', 'der', 'Studienzeit'],
+        valid: [['der', 'Praktikant', 'sammelt', 'Erfahrung', 'während', 'der', 'Studienzeit']],
+        punct: '.'
     },
     {
-        parts: ['könnten', 'Sie', 'eine', 'Schwäche', 'von', 'sich', 'nennen'],
-        valid: [['könnten', 'Sie', 'eine', 'Schwäche', 'von', 'sich', 'nennen']],
-        punct: '?'
+        parts: ['der', 'Befragte', 'muss', 'alle', 'Fragen', 'präzise', 'beantworten'],
+        valid: [['der', 'Befragte', 'muss', 'alle', 'Fragen', 'präzise', 'beantworten']],
+        punct: '.'
     },
     {
-        parts: ['ich', 'würde', 'gerne', 'über', 'das', 'Studium', 'sprechen'],
-        valid: [
-            ['ich', 'würde', 'gerne', 'über', 'das', 'Studium', 'sprechen'],
-            ['gerne', 'würde', 'ich', 'über', 'das', 'Studium', 'sprechen']
-        ],
+        parts: ['ich', 'werde', 'Mathematik', 'an', 'der', 'Uni', 'studieren'],
+        valid: [['ich', 'werde', 'Mathematik', 'an', 'der', 'Uni', 'studieren']],
+        punct: '.'
+    },
+    {
+        parts: ['der', 'berufliche', 'Hintergrund', 'spielt', 'eine', 'wichtige', 'Rolle'],
+        valid: [['der', 'berufliche', 'Hintergrund', 'spielt', 'eine', 'wichtige', 'Rolle']],
         punct: '.'
     },
 ];
@@ -1029,20 +977,32 @@ function resetSatzbau() { initSatzbau(); }
 
 // ─── Wortschatz ────────────────────────────────────────────────────────────
 var WORTSCHATZ = [
-    { id:1,  type:'n', en:'the job application',          artikel:'die', de:'Bewerbung',             plural:'Bewerbungen'            },
-    { id:2,  type:'n', en:'the CV / résumé',               artikel:'der', de:'Lebenslauf',            plural:'Lebensläufe'            },
-    { id:3,  type:'n', en:'the (job) position / vacancy',  artikel:'die', de:'Stelle',                plural:'Stellen'                },
-    { id:4,  type:'n', en:'the job interview',              artikel:'das', de:'Vorstellungsgespräch',  plural:'Vorstellungsgespräche'  },
-    { id:5,  type:'n', en:'the strength / strong point',   artikel:'die', de:'Stärke',                plural:'Stärken'                },
-    { id:6,  type:'n', en:'the weakness',                   artikel:'die', de:'Schwäche',              plural:'Schwächen'              },
-    { id:7,  type:'n', en:'the salary',                     artikel:'das', de:'Gehalt',                plural:'Gehälter'               },
-    { id:8,  type:'n', en:'the qualification',              artikel:'die', de:'Qualifikation',         plural:'Qualifikationen'        },
-    { id:9,  type:'n', en:'the (professional) experience',  artikel:'die', de:'Erfahrung',             plural:'Erfahrungen'            },
-    { id:10, type:'n', en:'the (vocational) training',      artikel:'die', de:'Ausbildung',            plural:'Ausbildungen'           },
-    { id:11, type:'n', en:'the (university) studies',       artikel:'das', de:'Studium',               plural:'Studien'                },
-    { id:12, type:'n', en:'the applicant (m.)',              artikel:'der', de:'Bewerber',              plural:'Bewerber'               },
-    { id:13, type:'n', en:'the profession / occupation',    artikel:'der', de:'Beruf',                 plural:'Berufe'                 },
-    { id:14, type:'v', en:'to apply for a job',             de:'sich bewerben'                                                        },
+    { id:1,  type:'n', en:'the CV / résumé',                        artikel:'der', de:'Lebenslauf',             plural:'Lebensläufe'            },
+    { id:2,  type:'n', en:'the certificate / reference',            artikel:'das', de:'Zeugnis',               plural:'Zeugnisse'              },
+    { id:3,  type:'n', en:'the professional experience',            artikel:'die', de:'Berufserfahrung',        plural:'Berufserfahrungen'      },
+    { id:4,  type:'n', en:'the personal skills / abilities',        artikel:'die', de:'Fähigkeiten',           plural:'Fähigkeiten'            },
+    { id:5,  type:'n', en:'the cover letter',                       artikel:'das', de:'Anschreiben',           plural:'Anschreiben'            },
+    { id:6,  type:'n', en:'the job advertisement',                  artikel:'die', de:'Stellenanzeige',        plural:'Stellenanzeigen'        },
+    { id:7,  type:'n', en:'the interviewee / person being asked',   artikel:'der', de:'Befragte',              plural:'Befragten'              },
+    { id:8,  type:'n', en:'the interviewer / person asking',        artikel:'der', de:'Befrager',              plural:'Befrager'               },
+    { id:9,  type:'n', en:'the interviewee (formal)',               artikel:'der', de:'Interviewte',           plural:'Interviewten'           },
+    { id:10, type:'n', en:'the interviewer (formal)',               artikel:'der', de:'Interviewer',           plural:'Interviewer'            },
+    { id:11, type:'n', en:'the professional background',            artikel:'der', de:'Hintergrund',           plural:'Hintergründe'           },
+    { id:12, type:'n', en:'the intern / trainee',                   artikel:'der', de:'Praktikant',            plural:'Praktikanten'           },
+    { id:13, type:'n', en:'the deputy / substitute',                artikel:'der', de:'Stellvertreter',        plural:'Stellvertreter'         },
+    { id:14, type:'n', en:'the craftwork / trade',                  artikel:'das', de:'Handwerk',              plural:'Handwerke'              },
+    { id:15, type:'v', en:'to study (at university)',               de:'studieren'                                                             },
+    { id:16, type:'v', en:'to learn / acquire a skill',             de:'erlernen'                                                              },
+    { id:17, type:'v', en:'to represent / stand in for',            de:'vertreten'                                                             },
+    { id:18, type:'a', en:'freelance / self-employed',              de:'freiberuflich'                                                         },
+    { id:19, type:'a', en:'fluent (in speech and writing)',         de:'fließend in Wort und Schrift'                                          },
+    { id:20, type:'v', en:'to be unemployed',                       de:'arbeitslos sein'                                                       },
+    { id:21, type:'n', en:'the sales manager',                      artikel:'der', de:'Vertriebsleiter',        plural:'Vertriebsleiter'        },
+    { id:22, type:'n', en:'the developer',                          artikel:'der', de:'Entwickler',             plural:'Entwickler'             },
+    { id:23, type:'n', en:'the office manager',                     artikel:'der', de:'Büroleiter',             plural:'Büroleiter'             },
+    { id:24, type:'n', en:'the managing director / CEO',            artikel:'der', de:'Geschäftsführer',        plural:'Geschäftsführer'        },
+    { id:25, type:'n', en:'the bank clerk (m.)',                    artikel:'der', de:'Bankkaufmann',           plural:'Bankkaufleute'          },
+    { id:26, type:'n', en:'the bank clerk (f.)',                    artikel:'die', de:'Bankkauffrau',           plural:'Bankkaufleute'          },
 ];
 
 function initVocab() {

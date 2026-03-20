@@ -86,6 +86,7 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1028S | S | Wie umweltbewusst bist du? | ✅ Fertig |
 | 1031X | X | Identität und Sprachkultur | ✅ Fertig |
 | 1032G | G | Mehr über Lokaladverbien | ✅ Fertig |
+| 1033R | R | Berlin – eine multikulturelle Stadt | ✅ Fertig |
 
 ---
 

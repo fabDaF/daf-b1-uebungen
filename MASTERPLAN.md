@@ -283,14 +283,147 @@ Skill: `lesetext-hervorhebung`
 
 ---
 
-## 6. Arbeitsreihenfolge beim Erstellen einer neuen Datei
+### Autor-Prompt — Verbindliche Schreibhaltung für alle Karim-Texte
+
+Bevor eine einzige Zeile der Geschichte geschrieben wird, nimmt Claude diese Haltung ein:
+
+> **Ich bin Autor, nicht Texter.**
+> Ich schreibe keine Übungstexte. Ich schreibe Literatur, die zufällig auch eine Grammatikfunktion hat.
+> Karim ist kein Platzhalter. Er ist ein Mensch mit Geschichte, Körper, Erinnerungen, Zweifeln.
+> Ich beobachte ihn von innen und von außen gleichzeitig.
+
+**Stilprinzipien (nicht verhandelbar):**
+
+1. **Leise Beobachtung** — keine Dramatik, keine Ausrufezeichen des Lebens. Was zählt, sind kleine, präzise Details: das Licht im Büro, das Geräusch einer Schublade, der Geruch von Kaffee.
+
+2. **Innere Stimme als Kontrast** — Karim denkt mehr als er spricht. Gedanken stehen als `.gedanke` (kursiv, gesperrt). Sie kommentieren das Äußere, nicht erklären es.
+
+3. **Kein Klischee, keine Migrationsgeschichte** — Karim ist nicht "der Fremde". Er ist jemand, der anders sozialisiert wurde und das mit Neugier beobachtet — nicht mit Schmerz, nicht mit Bewunderung, sondern mit wacher Aufmerksamkeit.
+
+4. **Grammatikthema organisch** — das Grammatikthema darf nicht spürbar sein. Es muss so natürlich vorkommen, dass ein Leser es übersieht. Erst die Übung macht es sichtbar.
+
+5. **Quasthoff-Sprache** — alle Verb-Nomen-Verbindungen aus dem Kollokationswörterbuch. Kein Satz, der sich nach "Schulbuch" anfühlt.
+
+6. **Narrative Kontinuität** — jede Geschichte schließt an die vorherige an. Den letzten Satz der vorherigen Geschichte kennen und einen unsichtbaren Bogen ziehen.
+
+7. **Länge und Rhythmus** — Absätze sind kurz (3–5 Sätze). Dann ein längerer. Dann wieder kurz. Kein gleichförmiger Takt.
+
+8. **Erzählperspektive** — Enge personale Perspektive (nahe am "Er"-Erzähler, aber mit Zugang zu Karims Gedanken). Kein auktorialer Kommentar.
+
+---
+
+## 6. Tab-Banner und Bilder — Verbindliche Regeln
+
+⛔ **JEDE DaF-HTML-Datei braucht echte Bilder. Kein Commit ohne Bilder. Keine Ausnahme.**
+
+SVG-Platzhalter (wie `data:image/svg+xml,...`) sind **VERBOTEN** in fertigen Dateien.
+Sie dürfen nur während der Entwicklung als temporärer Platzhalter existieren —
+**vor dem Commit müssen sie durch echte Pexels-Fotos ersetzt werden.**
+
+### Verbindliches CSS (muss in jeder Datei stehen)
+
+```css
+.tab-banner {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+@media (max-width: 600px) {
+  .tab-banner { max-height: 120px; }
+}
+```
+
+### HTML-Position (KRITISCH)
+
+Das Banner kommt **direkt nach dem `<section>`-Open-Tag**, **vor** allem anderen:
+
+```html
+<section class="section" id="sec-0">
+  <img class="tab-banner" src="https://images.pexels.com/photos/ID/pexels-photo-ID.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Beschreibung">
+  <!-- Danach: Timer, Übungsinhalt -->
+</section>
+```
+
+### Mindestanzahl Tab-Banner
+
+| Typ | Tabs | Tab-Banner |
+|-----|------|------------|
+| R (Lesetext) | 5 | 5 Banner — je eines pro Tab |
+| G (Grammatik) | 5 | 5 Banner |
+| X (Extra/Kommunikation) | 4–5 | 4–5 Banner |
+| V (Vokabular) | 6 | 6 Banner + Vokabelkarten mit Fotos |
+
+### Pexels-Bild-URL-Schema
+
+```
+https://images.pexels.com/photos/PEXELS_ID/pexels-photo-PEXELS_ID.jpeg?auto=compress&cs=tinysrgb&w=800
+```
+
+Pexels-ID aus URL extrahieren: `https://www.pexels.com/photo/beschreibung-1234567/` → ID = `1234567`
+
+### Suchstrategie (auf Englisch suchen!)
+
+| Tab-Thema | Pexels-Suchbegriff |
+|-----------|--------------------|
+| Vorentlastung (Themen-spezifisch) | Thema auf Englisch, z.B. `office meeting multicultural` |
+| Geschichte / Lesetext | `reading book cozy` oder thematisch |
+| Lückentext | `writing studying notebook` |
+| Satzbau | `puzzle pieces building blocks` |
+| Wortschatz | `books dictionary alphabet` |
+| Grammatik-Entdecken | `magnifying glass research curious` |
+| Grammatik-Regel | `blackboard notes rules` |
+
+### Bilder suchen — via Chrome-MCP (Batch)
+
+```javascript
+(async () => {
+  const searches = [
+    ['office meeting multicultural', 'Tab 0: Vorentlastung'],
+    ['reading book cozy', 'Tab 1: Geschichte'],
+    ['writing studying notebook', 'Tab 2: Lückentext'],
+    ['puzzle pieces', 'Tab 3: Satzbau'],
+    ['books dictionary', 'Tab 4: Wortschatz'],
+  ];
+  const results = await Promise.all(searches.map(async ([q, desc]) => {
+    const resp = await fetch('https://www.pexels.com/search/' + encodeURIComponent(q) + '/?orientation=landscape');
+    const text = await resp.text();
+    const ids = [...new Set([...text.matchAll(/\/photos\/(\d{5,10})\//g)].map(m => m[1]))].slice(0, 4);
+    return desc + ': ' + ids.join(', ');
+  }));
+  return results.join('\n');
+})()
+```
+
+### ⛔ Pflicht: Visuelle Prüfung JEDES Bildes im Browser
+
+Pexels-Keywords sind unzuverlässig. Kein Bild darf ungesehen eingebaut werden.
+
+**Nach dem Einbau:** Seite im Browser öffnen, jeden Tab anklicken, Banner-Bild ansehen.
+- Passt es thematisch? Ist es hell genug? Landscape-Format? Kein Wasserzeichen?
+- Falsche Bilder sofort ersetzen — neue Pexels-ID wählen.
+
+### Selbst-Check (Bilder)
+
+- [ ] SVG-Platzhalter entfernt? (kein `data:image/svg+xml` in fertiger Datei)
+- [ ] Jeder Tab hat ein `<img class="tab-banner">` als erstes Element?
+- [ ] Alle Bilder sind Pexels-URLs oder Base64 (kein SVG)?
+- [ ] `.tab-banner` CSS mit `max-height: 180px` + `object-fit: cover` vorhanden?
+- [ ] Jedes Bild visuell im Browser geprüft?
+
+---
+
+## 7. Arbeitsreihenfolge beim Erstellen einer neuen Datei
 
 1. **Diesen Masterplan lesen** (diese Datei)
 2. **Lingoda-PDF lesen** (`pdftotext` → vollständigen Inhalt extrahieren)
 3. **Passende Skills lesen** (siehe Tabelle oben, Abschnitt 0)
-4. **Bilder suchen** (WebSearch mit `site:pexels.com/photo`)
+4. **Bilder suchen** — Batch-Suche via Chrome-MCP (siehe Abschnitt 6 oben)
 5. **Datei aufbauen** — Tab für Tab, alle Skill-Muster einhalten
-6. **Selbst-Check vor Browser-Test:**
+6. **Bilder einbauen** — echte Pexels-URLs, kein SVG-Platzhalter
+7. **Selbst-Check vor Browser-Test:**
    - [ ] Emojis über Text in Nav-Buttons?
    - [ ] Klasse `active` (nicht `aktiv`) für Nav-Button?
    - [ ] Kein Prüfen-Button?
@@ -302,13 +435,15 @@ Skill: `lesetext-hervorhebung`
    - [ ] Copyright-Footer unverändert?
    - [ ] Karim-Geschichte: Gedanken als `.gedanke`?
    - [ ] Vokabeln als `.hl` im Lesetext markiert?
-7. **Browser-Test** — `daf-browser-test` Skill ausführen
-8. **Fehler beheben und erneut testen** — so oft wie nötig, bis 0 Fehler
-9. **Git commit & push** — direkt im Anschluss, ohne Nachfrage
+   - [ ] ⛔ SVG-Platzhalter entfernt, echte Pexels-Bilder eingebaut?
+   - [ ] Jeder Tab hat ein thematisch passendes Banner-Bild?
+8. **Browser-Test** — `daf-browser-test` Skill ausführen
+9. **Fehler beheben und erneut testen** — so oft wie nötig, bis 0 Fehler
+10. **Git commit & push** — direkt im Anschluss, ohne Nachfrage
 
 ---
 
-## 7. GitHub — Repositories
+## 8. GitHub — Repositories
 
 | Niveau | Repo | GitHub Pages |
 |--------|------|--------------|

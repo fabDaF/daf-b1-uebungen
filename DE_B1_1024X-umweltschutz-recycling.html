@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1024X · Umweltschutz und Recycling</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+.container {
+    max-width: 950px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+.header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 28px 32px 22px;
+    text-align: center;
+}
+.header h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 1.55rem; font-weight: 700; margin-bottom: 5px; }
+.header p { font-size: 0.9rem; opacity: 0.85; font-family: Georgia, 'Times New Roman', serif; }
+
+/* ===== NAV ===== */
+.nav { display: flex; background: #f0f2f5; border-bottom: 2px solid #ddd; overflow-x: auto; }
+.nav-btn {
+    flex: 1; padding: 13px 10px; border: none; background: transparent; cursor: pointer;
+    font-size: 0.82rem; font-weight: 600; color: #888; transition: all .2s;
+    white-space: nowrap; border-right: 1px solid #ddd; border-bottom: 3px solid transparent; min-width: 0;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8e0f7; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; border-bottom: 3px solid #667eea; }
+
+/* ===== TAB BANNER ===== */
+.tab-banner-placeholder {
+    width: 100%; height: 120px;
+    background: linear-gradient(135deg, #667eea22, #764ba222);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; border-radius: 10px; margin-bottom: 22px;
+    border: 2px dashed #c5cae9;
+}
+
+/* ===== SECTION ===== */
+.section { display: none; padding: 28px 32px; }
+.section.active { display: block; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+
+/* ===== TIMER ===== */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.btn-row { display:flex; gap:6px; }
+.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn:hover { background:#f0f0f0; color:#555; }
+.timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+
+/* ===== ZUORDNUNG (Tab 0 — Müllarten) ===== */
+.zuord-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.zuord-bank {
+    background: #f8f8f8; border-radius: 10px; padding: 14px;
+    min-height: 60px; display: flex; flex-wrap: wrap; gap: 8px;
+    border: 2px dashed #c5cae9;
+}
+.zuord-cat {
+    background: #f3f4ff; border: 2px dashed #c5cae9; border-radius: 10px;
+    padding: 12px; min-height: 70px;
+    transition: background .2s;
+}
+.zuord-cat.dragover { background: #e8eaff; border-color: #667eea; }
+.zuord-cat-title {
+    font-weight: 700; font-size: 0.88em; color: #667eea;
+    margin-bottom: 8px; text-align: center;
+}
+.zuord-drop {
+    min-height: 50px; display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 6px;
+}
+.chip-z {
+    background: white; border: 2px solid #667eea; color: #667eea;
+    padding: 6px 12px; border-radius: 16px; cursor: move; font-weight: 500;
+    font-size: 0.85em; transition: all 0.2s; user-select: none; white-space: nowrap;
+}
+.chip-z.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip-z.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip-z.selected  { outline: 3px solid #f39c12; }
+
+/* ===== LÜCKENTEXT ===== */
+.luecken-text {
+    background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 12px;
+    padding: 20px 24px; font-size: 1.0em; line-height: 2.0; margin-bottom: 20px;
+}
+input.luecken-inp {
+    border: 2px solid #c5cae9; border-radius: 6px; padding: 3px 8px;
+    font-size: 0.9rem; font-family: inherit; outline: none;
+    transition: border-color .2s, background .2s; background: white; margin: 0 2px;
+    width: 120px;
+}
+input.luecken-inp:focus { border-color: #667eea; }
+input.luecken-inp.ok { border-color: #27ae60; background: #e8f5e9; }
+input.luecken-inp.no { border-color: #e74c3c; background: #ffebee; }
+.wortkasten {
+    background: #fafbff; border: 1.5px dashed #c5cae9; border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 20px; font-size: 0.93em; color: #555; line-height: 1.8;
+}
+.wortkasten strong { color: #667eea; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+
+/* ===== ZUORDNUNG Tab 2 (Bedeutungen) ===== */
+.bed-layout { display: flex; flex-direction: column; gap: 14px; }
+.bed-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 54px; margin-bottom: 16px; }
+.bed-zone {
+    display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px;
+    background: #f8f9ff; border: 2px dashed #c5cae9; border-radius: 10px;
+    min-height: 60px;
+}
+.bed-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.bed-def { flex: 1; font-size: 0.9em; color: #555; line-height: 1.5; padding: 4px 0; }
+.bed-slot { min-width: 130px; min-height: 40px; display: flex; align-items: center; }
+
+/* ===== SATZBAU ===== */
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px; padding: 14px;
+    background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px; padding: 14px;
+    background: white; border: 2px dashed #ccc; border-radius: 10px;
+    min-height: 56px; align-items: center; margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white; border: 2px solid #667eea; color: #667eea;
+    padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500;
+    font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { outline: 3px solid #f39c12; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; }
+
+/* ===== WORTSCHATZ ===== */
+.ws-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; }
+.ws-card { background: #f8f9ff; border: 1.5px solid #dde3ff; border-radius: 12px; padding: 16px 18px; }
+.ws-en { font-size: 0.88em; color: #888; margin-bottom: 8px; font-style: italic; }
+.ws-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ws-inp { border: 2px solid #c5cae9; border-radius: 8px; padding: 5px 10px; font-size: 0.9rem; font-family: inherit; outline: none; transition: border-color .2s, background .2s; background: white; }
+.ws-inp:focus { border-color: #667eea; }
+.ws-inp.ok { border-color: #27ae60; background: #e8f5e9; }
+.ws-inp.no { border-color: #e74c3c; background: #ffebee; }
+.ws-inp.art  { width: 70px; }
+.ws-inp.wort { width: 185px; }
+.ws-inp.plural { width: 140px; }
+.ws-label { font-size: 0.75em; color: #aaa; }
+
+/* ===== AUTHOR FOOTER ===== */
+.author-footer { text-align: center; margin-top: 40px; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 1.2rem; }
+    .section { padding: 18px 16px; }
+    .zuord-layout { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>♻️ Umweltschutz und Recycling</h1>
+    <p>B1 · Lektion 1024X · Extra-Übungen</p>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button class="nav-btn active" onclick="showSection(0)">🗑️ Müllarten</button>
+    <button class="nav-btn" onclick="showSection(1)">✏️ Lückentext</button>
+    <button class="nav-btn" onclick="showSection(2)">🔀 Zuordnung</button>
+    <button class="nav-btn" onclick="showSection(3)">🧩 Satzbau</button>
+    <button class="nav-btn" onclick="showSection(4)">🔠 Wortschatz</button>
+  </div>
+
+  <!-- TAB 0: MÜLLARTEN — WOHIN MIT DEM MÜLL? -->
+  <div class="section active" id="sec-0">
+    <div class="tab-banner-placeholder">🗑️</div>
+    <div class="section-title">🗑️ Wohin mit dem Müll?</div>
+    <div class="section-sub">Ziehe oder klicke die Gegenstände in die richtige Mülltonne.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showZuordLoesung()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(0); resetZuord()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-0">0:00</span></span>
+        <span>&#127942; Best: <span id="best-0">--:--</span></span>
+      </div>
+    </div>
+
+    <!-- Chip-Bank -->
+    <div class="zuord-bank" id="muell-bank"
+         ondragover="event.preventDefault()"
+         ondrop="dropZuord(event, 'bank')">
+    </div>
+
+    <!-- Mülltonnen-Grid -->
+    <div class="zuord-layout" id="muell-zones"></div>
+
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 1: LÜCKENTEXT -->
+  <div class="section" id="sec-1">
+    <div class="tab-banner-placeholder">✏️</div>
+    <div class="section-title">✏️ Lückentext</div>
+    <div class="section-sub">Ergänze die fehlenden Wörter.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(1); resetLuecken()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-1">0:00</span></span>
+        <span>&#127942; Best: <span id="best-1">--:--</span></span>
+      </div>
+    </div>
+    <div class="wortkasten">
+      <strong>Wortkasten:</strong> Rohstoffe &nbsp;·&nbsp; Müllkippe &nbsp;·&nbsp; Wegwerfen &nbsp;·&nbsp; Container &nbsp;·&nbsp; Mülltonnen &nbsp;·&nbsp; Privathaushalt &nbsp;·&nbsp; gesammelt &nbsp;·&nbsp; getrennt &nbsp;·&nbsp; finanzielle &nbsp;·&nbsp; Restmüll &nbsp;·&nbsp; Müllverbrennungsanlagen &nbsp;·&nbsp; zahlen
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 2: ZUORDNUNG — Was passt zusammen? -->
+  <div class="section" id="sec-2">
+    <div class="tab-banner-placeholder">🔀</div>
+    <div class="section-title">🔀 Was passt zusammen?</div>
+    <div class="section-sub">Ziehe oder klicke den richtigen Begriff zur passenden Beschreibung.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showBedLoesung()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(2); resetBed()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-2">0:00</span></span>
+        <span>&#127942; Best: <span id="best-2">--:--</span></span>
+      </div>
+    </div>
+    <div class="bed-bank" id="bed-bank"></div>
+    <div class="bed-layout" id="bed-zones"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div class="section" id="sec-3">
+    <div class="tab-banner-placeholder">🧩</div>
+    <div class="section-title">🧩 Satzbau</div>
+    <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showAllSbSolutions()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(3); resetSatzbau()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-3">0:00</span></span>
+        <span>&#127942; Best: <span id="best-3">--:--</span></span>
+      </div>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 4: WORTSCHATZ -->
+  <div class="section" id="sec-4">
+    <div class="tab-banner-placeholder">🔠</div>
+    <div class="section-title">🔠 Wortschatz</div>
+    <div class="section-sub">Tippe das deutsche Wort mit Artikel und Plural.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showWsLoesung()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(4); resetWortschatz()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-4">0:00</span></span>
+        <span>&#127942; Best: <span id="best-4">--:--</span></span>
+      </div>
+    </div>
+    <div class="ws-grid" id="wsGrid"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ===== TAB NAVIGATION =====
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('sec-' + n).classList.add('active');
+    document.querySelectorAll('.nav-btn')[n].classList.add('active');
+}
+
+// ===== TIMER =====
+var TIMER_PREFIX = 'b1_1024x_best_';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+function fmtTime(s) { return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + (s%60); }
+function loadBestTimes() {
+    [0,1,2,3,4].forEach(function(i) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) { var el = document.getElementById('best-' + i); if (el) el.textContent = fmtTime(parseInt(v)); }
+    });
+}
+
+// ===== TAB 0: MÜLLARTEN ZUORDNUNG =====
+var draggedZChip = null;
+
+var MUELL_CATS = [
+    { id: 'papier',  label: '📄 Papiermüll',   color: '#1565c0', bg: '#e3f2fd' },
+    { id: 'gelbe',   label: '🟡 Gelbe Tonne',   color: '#f9a825', bg: '#fffde7' },
+    { id: 'bio',     label: '🌿 Bioabfall',      color: '#2e7d32', bg: '#e8f5e9' },
+    { id: 'rest',    label: '⬛ Restmüll',       color: '#37474f', bg: '#eceff1' }
+];
+
+var MUELL_ITEMS = [
+    { text: 'Zeitung', cat: 'papier' },
+    { text: 'Briefumschlag', cat: 'papier' },
+    { text: 'Pappe', cat: 'papier' },
+    { text: 'Karton', cat: 'papier' },
+    { text: 'Plastikflasche', cat: 'gelbe' },
+    { text: 'Joghurtbecher', cat: 'gelbe' },
+    { text: 'Getränkedose', cat: 'gelbe' },
+    { text: 'Alu-Folie', cat: 'gelbe' },
+    { text: 'Bananenschale', cat: 'bio' },
+    { text: 'Brotreste', cat: 'bio' },
+    { text: 'Teebeutel', cat: 'bio' },
+    { text: 'Eierschalen', cat: 'bio' },
+    { text: 'Keramik', cat: 'rest' },
+    { text: 'Asche', cat: 'rest' },
+    { text: 'Porzellan', cat: 'rest' },
+    { text: 'schmutzige Verpackung', cat: 'rest' }
+];
+
+function makeZChip(item) {
+    var chip = document.createElement('div');
+    chip.className = 'chip-z';
+    chip.textContent = item.text;
+    chip.dataset.cat = item.cat;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        draggedZChip = chip;
+        timerAutoStart(0);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        draggedZChip = null;
+        colorAllZChips();
+    });
+    chip.addEventListener('click', function() {
+        if (chip.classList.contains('selected')) {
+            chip.classList.remove('selected');
+            return;
+        }
+        document.querySelectorAll('.chip-z.selected').forEach(function(c){ c.classList.remove('selected'); });
+        chip.classList.add('selected');
+    });
+    return chip;
+}
+
+function initZuord() {
+    var bank = document.getElementById('muell-bank');
+    bank.innerHTML = '';
+
+    // Shuffle items
+    var items = MUELL_ITEMS.slice();
+    for (var i = items.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i+1));
+        var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+    }
+    items.forEach(function(item) { bank.appendChild(makeZChip(item)); });
+
+    // Register bank as drop zone
+    bank.ondragover = function(e) { e.preventDefault(); };
+    bank.ondrop = function(e) {
+        e.preventDefault();
+        if (draggedZChip) { bank.appendChild(draggedZChip); draggedZChip = null; colorAllZChips(); }
+    };
+    bank.onclick = function(e) {
+        if (e.target === bank) {
+            var sel = document.querySelector('.chip-z.selected');
+            if (sel) { bank.appendChild(sel); sel.classList.remove('selected'); colorAllZChips(); }
+        }
+    };
+
+    // Build category zones
+    var grid = document.getElementById('muell-zones');
+    grid.innerHTML = '';
+    MUELL_CATS.forEach(function(cat) {
+        var catDiv = document.createElement('div');
+        catDiv.className = 'zuord-cat';
+        catDiv.style.background = cat.bg;
+        catDiv.style.borderColor = cat.color;
+
+        var title = document.createElement('div');
+        title.className = 'zuord-cat-title';
+        title.style.color = cat.color;
+        title.textContent = cat.label;
+
+        var drop = document.createElement('div');
+        drop.className = 'zuord-drop';
+        drop.id = 'muell-drop-' + cat.id;
+        drop.dataset.cat = cat.id;
+
+        drop.ondragover = function(e) { e.preventDefault(); catDiv.classList.add('dragover'); };
+        drop.ondragleave = function() { catDiv.classList.remove('dragover'); };
+        drop.ondrop = function(e) {
+            e.preventDefault();
+            catDiv.classList.remove('dragover');
+            if (draggedZChip) { drop.appendChild(draggedZChip); draggedZChip = null; colorAllZChips(); timerAutoStart(0); checkZuordAllOk(); }
+        };
+        drop.onclick = function() {
+            var sel = document.querySelector('.chip-z.selected');
+            if (sel) { drop.appendChild(sel); sel.classList.remove('selected'); colorAllZChips(); timerAutoStart(0); checkZuordAllOk(); }
+        };
+
+        catDiv.appendChild(title);
+        catDiv.appendChild(drop);
+        grid.appendChild(catDiv);
+    });
+}
+
+function colorAllZChips() {
+    document.querySelectorAll('#sec-0 .chip-z').forEach(function(chip) {
+        var drop = chip.closest('.zuord-drop');
+        chip.classList.remove('correct', 'incorrect');
+        if (drop) {
+            chip.classList.add(chip.dataset.cat === drop.dataset.cat ? 'correct' : 'incorrect');
+        }
+    });
+}
+
+function checkZuordAllOk() {
+    var chips = document.querySelectorAll('#sec-0 .chip-z');
+    var bankChips = document.querySelectorAll('#muell-bank .chip-z');
+    if (bankChips.length > 0) return;
+    var allOk = chips.length > 0 && Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+    if (allOk) timerStop(0);
+}
+
+function showZuordLoesung() {
+    MUELL_ITEMS.forEach(function(item) {
+        var drop = document.getElementById('muell-drop-' + item.cat);
+        var chip = document.querySelector('#sec-0 .chip-z[data-cat="' + item.cat + '"]');
+        // find by text
+        var allChips = document.querySelectorAll('#sec-0 .chip-z');
+        allChips.forEach(function(c) {
+            if (c.textContent === item.text) {
+                drop.appendChild(c);
+            }
+        });
+    });
+    colorAllZChips();
+}
+
+function resetZuord() { initZuord(); }
+
+// ===== TAB 1: LÜCKENTEXT =====
+var LUECKEN_SEGS = [
+    {t: 'Damit wertvolle '},
+    {b: 'Rohstoffe', s: 'l'},
+    {t: ' nicht einfach auf der '},
+    {b: 'Müllkippe', s: 'l'},
+    {t: ' landen, wird Müll schon vor dem '},
+    {b: 'Wegwerfen', s: 'l'},
+    {t: ' getrennt. Dafür gibt es '},
+    {b: 'Container', s: 'l'},
+    {t: ' in verschiedenen Farben und '},
+    {b: 'Mülltonnen', s: 'l'},
+    {t: '. Jeder '},
+    {b: 'Privathaushalt', s: 'xl'},
+    {t: ' in Deutschland hat in der Regel verschiedene Mülltonnen zu Hause, in denen der Müll sorgfältig '},
+    {b: 'gesammelt', s: 'l'},
+    {t: ' und '},
+    {b: 'getrennt', s: 'l'},
+    {t: ' wird. Dies hat auch '},
+    {b: 'finanzielle', s: 'l'},
+    {t: ' Vorteile. Je weniger '},
+    {b: 'Restmüll', s: 'l'},
+    {t: ' übrig bleibt, desto weniger haben die '},
+    {b: 'Müllverbrennungsanlagen', s: 'xl'},
+    {t: ' zu verfeuern. Deshalb muss man auch weniger '},
+    {b: 'zahlen', s: 'm'},
+    {t: '.'}
+];
+
+var sizeMap = { s: '60px', m: '100px', l: '150px', xl: '210px' };
+
+function initLuecken() {
+    var div = document.getElementById('lueckenText');
+    div.innerHTML = '';
+    var html = '';
+    LUECKEN_SEGS.forEach(function(seg) {
+        if (seg.t !== undefined) {
+            html += seg.t;
+        } else {
+            html += '<input type="text" class="luecken-inp" data-ans="' + seg.b + '" '
+                + 'style="width:' + (sizeMap[seg.s] || '100px') + '" '
+                + 'oninput="liveCheckLuecke(this)" placeholder="">';
+        }
+    });
+    div.innerHTML = html;
+}
+
+function liveCheckLuecke(inp) {
+    timerAutoStart(1);
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.ans || '').toLowerCase();
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (val === ans) { inp.classList.add('ok'); }
+    else if (ans.indexOf(val) === 0) { /* valid prefix */ }
+    else { inp.classList.add('no'); }
+    checkLueckenAllOk();
+}
+
+function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#sec-1 input.luecken-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i){ return i.classList.contains('ok'); });
+    if (allOk) timerStop(1);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#sec-1 input.luecken-inp').forEach(function(inp) {
+        var next = inp.nextElementSibling;
+        if (next && next.classList.contains('correction-hint')) next.remove();
+        if (!inp.classList.contains('ok')) {
+            var hint = document.createElement('span');
+            hint.className = 'correction-hint';
+            hint.textContent = inp.dataset.ans;
+            inp.insertAdjacentElement('afterend', hint);
+        }
+        inp.value = inp.dataset.ans;
+        inp.classList.add('ok'); inp.classList.remove('no');
+    });
+}
+
+function resetLuecken() { initLuecken(); }
+
+// ===== TAB 2: BEDEUTUNGEN ZUORDNUNG =====
+var draggedBChip = null;
+
+var BED_DATA = [
+    { term: 'der Hausmüll', def: 'Müll, der in Privathaushalten produziert wird.', id: 'hausmuell' },
+    { term: 'der Sperrmüll', def: 'Müll, der wegen seiner Größe nicht in die Mülltonne passt.', id: 'sperrmuell' },
+    { term: 'der Schrott', def: 'Altmetall, das wiederverwertet werden kann.', id: 'schrott' },
+    { term: 'der Sondermüll', def: 'Giftige Abfälle, die für die Umwelt gefährlich sind.', id: 'sondermuell' },
+    { term: 'die Altkleidung', def: 'Kleider, Schuhe und andere Textilien, die nicht mehr genutzt werden.', id: 'altkleidung' },
+    { term: 'der Restmüll', def: 'Abfälle, die aus Stoffen bestehen, die nicht wiederverwertet werden können.', id: 'restmuell' }
+];
+
+function makeBChip(item) {
+    var chip = document.createElement('div');
+    chip.className = 'chip-z';
+    chip.textContent = item.term;
+    chip.dataset.id = item.id;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        draggedBChip = chip;
+        timerAutoStart(2);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        draggedBChip = null;
+        colorAllBChips();
+    });
+    chip.addEventListener('click', function() {
+        if (chip.classList.contains('selected')) { chip.classList.remove('selected'); return; }
+        document.querySelectorAll('#sec-2 .chip-z.selected').forEach(function(c){ c.classList.remove('selected'); });
+        chip.classList.add('selected');
+    });
+    return chip;
+}
+
+function initBed() {
+    var bank = document.getElementById('bed-bank');
+    bank.innerHTML = '';
+    var items = BED_DATA.slice();
+    for (var i = items.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i+1));
+        var tmp = items[i]; items[i] = items[j]; items[j] = tmp;
+    }
+    items.forEach(function(item) { bank.appendChild(makeBChip(item)); });
+
+    bank.ondragover = function(e) { e.preventDefault(); };
+    bank.ondrop = function(e) {
+        e.preventDefault();
+        if (draggedBChip) { bank.appendChild(draggedBChip); draggedBChip = null; colorAllBChips(); }
+    };
+    bank.onclick = function(e) {
+        if (e.target === bank) {
+            var sel = document.querySelector('#sec-2 .chip-z.selected');
+            if (sel) { bank.appendChild(sel); sel.classList.remove('selected'); colorAllBChips(); }
+        }
+    };
+
+    var layout = document.getElementById('bed-zones');
+    layout.innerHTML = '';
+    BED_DATA.forEach(function(item) {
+        var zone = document.createElement('div');
+        zone.className = 'bed-zone';
+        zone.id = 'bed-zone-' + item.id;
+        zone.dataset.id = item.id;
+
+        var slot = document.createElement('div');
+        slot.className = 'bed-slot';
+        slot.id = 'bed-slot-' + item.id;
+
+        var def = document.createElement('div');
+        def.className = 'bed-def';
+        def.textContent = item.def;
+
+        zone.ondragover = function(e) { e.preventDefault(); zone.classList.add('dragover'); };
+        zone.ondragleave = function() { zone.classList.remove('dragover'); };
+        zone.ondrop = function(e) {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            if (draggedBChip) {
+                // Move existing chip back to bank if slot occupied
+                var existing = slot.querySelector('.chip-z');
+                if (existing) { document.getElementById('bed-bank').appendChild(existing); }
+                slot.appendChild(draggedBChip);
+                draggedBChip = null;
+                colorAllBChips();
+                timerAutoStart(2);
+                checkBedAllOk();
+            }
+        };
+        zone.onclick = function() {
+            var sel = document.querySelector('#sec-2 .chip-z.selected');
+            if (sel) {
+                var existing = slot.querySelector('.chip-z');
+                if (existing) { document.getElementById('bed-bank').appendChild(existing); }
+                slot.appendChild(sel);
+                sel.classList.remove('selected');
+                colorAllBChips();
+                timerAutoStart(2);
+                checkBedAllOk();
+            }
+        };
+
+        zone.appendChild(slot);
+        zone.appendChild(def);
+        layout.appendChild(zone);
+    });
+}
+
+function colorAllBChips() {
+    document.querySelectorAll('#sec-2 .bed-slot .chip-z').forEach(function(chip) {
+        var slot = chip.closest('.bed-slot');
+        var zone = chip.closest('.bed-zone');
+        chip.classList.remove('correct', 'incorrect');
+        if (zone) {
+            chip.classList.add(chip.dataset.id === zone.dataset.id ? 'correct' : 'incorrect');
+        }
+    });
+}
+
+function checkBedAllOk() {
+    var bankChips = document.querySelectorAll('#bed-bank .chip-z');
+    if (bankChips.length > 0) return;
+    var allSlots = document.querySelectorAll('.bed-slot .chip-z');
+    var allOk = allSlots.length === BED_DATA.length && Array.from(allSlots).every(function(c){ return c.classList.contains('correct'); });
+    if (allOk) timerStop(2);
+}
+
+function showBedLoesung() {
+    BED_DATA.forEach(function(item) {
+        var slot = document.getElementById('bed-slot-' + item.id);
+        var chip = document.querySelector('#sec-2 .chip-z[data-id="' + item.id + '"]');
+        if (chip) { slot.appendChild(chip); }
+    });
+    colorAllBChips();
+}
+
+function resetBed() { initBed(); }
+
+// ===== TAB 3: SATZBAU =====
+var satzbauData = [
+    {
+        parts: ['viele', 'Rohstoffe', 'können', 'wiederverwertet', 'werden'],
+        valid: [['viele', 'Rohstoffe', 'können', 'wiederverwertet', 'werden']],
+        punct: '.'
+    },
+    {
+        parts: ['wenn', 'wir', 'den', 'Müll', 'richtig', 'trennen', ',', 'schonen', 'wir', 'die', 'Umwelt'],
+        valid: [['wenn', 'wir', 'den', 'Müll', 'richtig', 'trennen', ',', 'schonen', 'wir', 'die', 'Umwelt']],
+        punct: '.'
+    },
+    {
+        parts: ['Altpapier', 'kann', 'man', 'zu', 'neuem', 'Papier', 'verarbeiten'],
+        valid: [['Altpapier', 'kann', 'man', 'zu', 'neuem', 'Papier', 'verarbeiten']],
+        punct: '.'
+    },
+    {
+        parts: ['beim', 'Recyclingprozess', 'werden', 'Rohstoffe', 'aus', 'Abfällen', 'gewonnen'],
+        valid: [['beim', 'Recyclingprozess', 'werden', 'Rohstoffe', 'aus', 'Abfällen', 'gewonnen']],
+        punct: '.'
+    },
+    {
+        parts: ['jeder', 'kann', 'einen', 'Beitrag', 'zum', 'Umweltschutz', 'leisten'],
+        valid: [['jeder', 'kann', 'einen', 'Beitrag', 'zum', 'Umweltschutz', 'leisten']],
+        punct: '.'
+    },
+    {
+        parts: ['nicht', 'jeder', 'Abfall', 'ist', 'wertloser', 'Müll'],
+        valid: [['nicht', 'jeder', 'Abfall', 'ist', 'wertloser', 'Müll']],
+        punct: '.'
+    },
+    {
+        parts: ['der', 'Müll', 'wird', 'sorgfältig', 'gesammelt', 'und', 'getrennt'],
+        valid: [['der', 'Müll', 'wird', 'sorgfältig', 'gesammelt', 'und', 'getrennt']],
+        punct: '.'
+    }
+];
+
+// ===== SATZBAU FUNCTIONS =====
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === ';') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) { c.textContent = orig; }
+        else { c.textContent = (i === 0) ? sbCapitalize(orig) : orig; }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    if (word === ',') chip.classList.add('punct-chip');
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(3);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    chip.addEventListener('click', function() {
+        if (chip.classList.contains('selected')) { chip.classList.remove('selected'); return; }
+        document.querySelectorAll('.chip.selected').forEach(function(c){ c.classList.remove('selected'); });
+        chip.classList.add('selected');
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) { zone.insertBefore(sbDragged, cursor); zone.removeChild(cursor); }
+        else { zone.appendChild(sbDragged); }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+    zone.addEventListener('click', function(e) {
+        if (e.target === zone || e.target.classList.contains('chip')) {
+            var selected = document.querySelector('.chip.selected');
+            if (selected && e.target === zone) {
+                zone.appendChild(selected);
+                selected.classList.remove('selected');
+                var row = document.getElementById('sb-row-' + idx);
+                sbUpdateCapitalization(row);
+                sbCheckAuto(idx);
+            }
+        }
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c){ return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(order); });
+    chips.forEach(function(c) { c.classList.remove('correct', 'incorrect'); c.classList.add(ok ? 'correct' : 'incorrect'); });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+        row.classList.remove('correct','incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect'; fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct','incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function(){ sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct','incorrect');
+    fb.textContent = ''; fb.className = 'satzbau-feedback';
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp; }
+    parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container'; bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder'; row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback'; fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp; }
+        parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button'); solveBtn.className = 'btn'; solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function(){ sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+
+        var resetBtn = document.createElement('button'); resetBtn.className = 'btn'; resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function(){ sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+
+        btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function showAllSbSolutions() { satzbauData.forEach(function(_, i){ sbShowSolution(i); }); }
+function resetSatzbau() { initSatzbau(); }
+
+// ===== TAB 4: WORTSCHATZ =====
+var WORTSCHATZ = [
+    { en: 'the waste / garbage', art: 'der', de: 'Abfall', plural: 'Abfälle' },
+    { en: 'waste separation', art: 'die', de: 'Mülltrennung', plural: 'Mülltrennungen' },
+    { en: 'the raw material', art: 'der', de: 'Rohstoff', plural: 'Rohstoffe' },
+    { en: 'the valuable material', art: 'der', de: 'Wertstoff', plural: 'Wertstoffe' },
+    { en: 'the recycling process', art: 'der', de: 'Recyclingprozess', plural: 'Recyclingprozesse' },
+    { en: 'the waste dump / landfill', art: 'die', de: 'Müllkippe', plural: 'Müllkippen' },
+    { en: 'the garbage can', art: 'der', de: 'Mülleimer', plural: 'Mülleimer' },
+    { en: 'the glass container', art: 'der', de: 'Altglascontainer', plural: 'Altglascontainer' },
+    { en: 'the bulky waste', art: 'der', de: 'Sperrmüll', plural: '' },
+    { en: 'the hazardous waste', art: 'der', de: 'Sondermüll', plural: '' },
+    { en: 'to recycle / reuse', art: '', de: 'wiederverwerten', plural: '' },
+    { en: 'to dispose of / to get rid of', art: '', de: 'entsorgen', plural: '' }
+];
+
+function initWortschatz() {
+    var grid = document.getElementById('wsGrid');
+    grid.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'ws-card';
+        var isVerb = item.art === '';
+        var html = '<div class="ws-en">' + item.en + '</div>';
+        html += '<div class="ws-inputs">';
+        if (!isVerb) {
+            html += '<input class="ws-inp art" type="text" placeholder="Artikel" data-ans="' + item.art + '" oninput="liveCheckWs(this,4)">';
+            html += '<input class="ws-inp wort" type="text" placeholder="Nomen" data-ans="' + item.de + '" oninput="liveCheckWs(this,4)">';
+            if (item.plural) {
+                html += '<input class="ws-inp plural" type="text" placeholder="Plural" data-ans="' + item.plural + '" oninput="liveCheckWs(this,4)">';
+            }
+        } else {
+            html += '<span class="ws-label" style="margin-right:4px;">Verb:</span>';
+            html += '<input class="ws-inp wort" type="text" placeholder="Verb" data-ans="' + item.de + '" oninput="liveCheckWs(this,4)">';
+        }
+        html += '</div>';
+        card.innerHTML = html;
+        grid.appendChild(card);
+    });
+}
+
+function liveCheckWs(inp, tabN) {
+    timerAutoStart(tabN);
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.ans || '').toLowerCase();
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (val === ans) { inp.classList.add('ok'); }
+    else if (ans.indexOf(val) === 0) { /* prefix */ }
+    else { inp.classList.add('no'); }
+    checkWsAllOk(tabN);
+}
+
+function checkWsAllOk(tabN) {
+    var inputs = document.querySelectorAll('#sec-' + tabN + ' .ws-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i){ return i.classList.contains('ok'); });
+    if (allOk) timerStop(tabN);
+}
+
+function showWsLoesung() {
+    document.querySelectorAll('#sec-4 .ws-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no');
+    });
+}
+function resetWortschatz() { initWortschatz(); }
+
+// ===== INIT =====
+initZuord();
+initLuecken();
+initBed();
+initSatzbau();
+initWortschatz();
+loadBestTimes();
+</script>
+</body>
+</html>

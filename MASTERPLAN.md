@@ -451,3 +451,69 @@ Pexels-Keywords sind unzuverlässig. Kein Bild darf ungesehen eingebaut werden.
 | A2.1 | (eigenes Repo) | (eigene URL) |
 
 **Push-Regel:** Nach jedem abgeschlossenen Arbeitspaket wird **sofort** gepusht — ohne Rückfrage, ohne Verzögerung.
+
+### GitHub-Token — Wo er zu finden ist
+
+Das GitHub-Token (PAT) steht in der git-config des Cowork-Repos:
+
+```
+/sessions/eager-great-dirac/mnt/Cowork/htmlS/B1.1/.git/config
+```
+
+Abrufen:
+```bash
+grep "ghp_" /sessions/eager-great-dirac/mnt/Cowork/htmlS/B1.1/.git/config
+```
+
+In der Remote-URL des Push-Verzeichnisses setzen:
+```bash
+cd /tmp/b1push
+git remote set-url origin https://ghp_TOKEN@github.com/fabDaF/daf-b1-uebungen.git
+git push origin main
+```
+
+⚠️ `/tmp/b1push/` ist das temporäre Push-Verzeichnis. Es wird bei Session-Start neu geklont falls nötig:
+```bash
+git clone https://ghp_TOKEN@github.com/fabDaF/daf-b1-uebungen.git /tmp/b1push
+```
+
+---
+
+## 9. Bekannte Bugs und Lösungen
+
+### Bug 1: Satzbau-Chip bewegt sich nicht (Event-Bubbling)
+
+**Symptom:** Chip-Click in Bank → Chip wandert in Row, aber bubbelt sofort zurück.
+**Ursache:** `bank.addEventListener('click', ...)` feuert nach dem `chip.addEventListener('click', ...)`.
+**Fix:** `e.stopPropagation()` im Chip-Click-Handler:
+
+```javascript
+chip.addEventListener('click', function(e) {
+  e.stopPropagation(); // ← PFLICHT
+  var row = document.getElementById('sb-row-' + idx);
+  row.appendChild(chip);
+  updateSbCaps(idx);
+  colorSbRow(idx);
+  timerAutoStart(3);
+});
+```
+
+### Bug 2: Header nicht zentriert
+
+**Symptom:** `.header` linksbündig.
+**Fix:** `text-align: center` in `.header {}` ergänzen.
+
+### Bug 3: Nav-Buttons nicht über volle Breite
+
+**Symptom:** Tabs clustern links, viel Leerraum rechts.
+**Fix:** `flex: 1` in `.nav-btn {}` ergänzen.
+
+### Bug 4: Vokabel-Hervorhebung fehlt
+
+**Symptom:** `.vocab-hl`-Elemente = 0, obwohl Lesetext vorhanden.
+**Ursache:** `highlightVocabInText()` nicht implementiert oder nicht aufgerufen.
+**Fix:** Funktion + Aufruf aus `lesetext-hervorhebung` SKILL.md einbauen.
+Bei `WORT_DATA` mit `.answer`-Feld (nicht `.wort`): Kernwort so extrahieren:
+```javascript
+var core = ans.replace(/^(der|die|das)\s+/i, '').split(',')[0].trim();
+```

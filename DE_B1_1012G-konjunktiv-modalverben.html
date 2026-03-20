@@ -195,23 +195,12 @@ input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
 .satzbau-feedback.incorrect { color: #e74c3c; }
 
 /* ── Timer & Controls ── */
-.timer-bar {
-  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  background: #f8f9ff; border-radius: 10px;
-  padding: 10px 16px; margin-bottom: 16px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  font-size: 0.85rem; color: #666;
-}
-.timer-display { font-weight: 700; color: #667eea; font-size: 1rem; }
-.best-display  { color: #f39c12; font-weight: 600; }
-.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.btn {
-  padding: 7px 16px; border: none; border-radius: 8px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white; cursor: pointer; font-size: 0.82rem; font-weight: 600;
-  transition: opacity .2s;
-}
-.btn:hover { opacity: 0.88; }
+.timer-bar { display:flex; align-items:center; gap:12px; background:white; border-radius:10px; padding:10px 16px; margin-bottom:16px; box-shadow:0 2px 6px rgba(0,0,0,0.07); font-size:0.85rem; color:#666; }
+.timer-display { font-weight:700; color:#667eea; font-size:1rem; }
+.best-display  { color:#f39c12; font-weight:600; }
+.btn-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid #eee; }
+.btn-row button { background:none; border:1px solid #c0b0e8; border-radius:16px; padding:5px 16px; cursor:pointer; font-size:.88rem; color:#5a3e9e; transition:background .2s; }
+.btn-row button:hover { background:#f0edf8; }
 .score-box { font-size: 0.82rem; color: #888; margin-bottom: 10px; }
 .score-box span { font-weight: 700; color: #667eea; }
 
@@ -381,12 +370,12 @@ input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
          alt="Person schreibt">
 
     <div class="timer-bar">
-      <div class="btn-row">
-        <button class="btn" onclick="showLoesung(1)">💡 Lösungen</button>
-        <button class="btn" onclick="resetLuecke(1)">↺ Neu starten</button>
-      </div>
-      <span>⏱ <span class="timer-display" id="timer-1">0:00</span></span>
-      <span>🏆 <span class="best-display" id="best-1">--:--</span></span>
+      <span>&#9201; <span class="timer-display" id="timer-1">0:00</span></span>
+      <span>&#127942; <span class="best-display" id="best-1">–</span></span>
+    </div>
+    <div class="btn-row">
+      <button onclick="timerResetOne(1); resetLuecke(1)">&#8635; Neustart</button>
+      <button onclick="showLoesung(1)">&#128161; Lösungen</button>
     </div>
 
     <div class="hilfe-box">
@@ -408,12 +397,12 @@ input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
          alt="Kalender und Vergangenheit">
 
     <div class="timer-bar">
-      <div class="btn-row">
-        <button class="btn" onclick="showLoesung(2)">💡 Lösungen</button>
-        <button class="btn" onclick="resetLuecke(2)">↺ Neu starten</button>
-      </div>
-      <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
-      <span>🏆 <span class="best-display" id="best-2">--:--</span></span>
+      <span>&#9201; <span class="timer-display" id="timer-2">0:00</span></span>
+      <span>&#127942; <span class="best-display" id="best-2">–</span></span>
+    </div>
+    <div class="btn-row">
+      <button onclick="timerResetOne(2); resetLuecke(2)">&#8635; Neustart</button>
+      <button onclick="showLoesung(2)">&#128161; Lösungen</button>
     </div>
 
     <div class="hilfe-box">
@@ -430,13 +419,14 @@ input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
          alt="Kategorien sortieren">
 
     <div class="timer-bar">
-      <div class="btn-row">
-        <button class="btn" onclick="showZuoLoesung()">💡 Lösungen</button>
-        <button class="btn" onclick="resetZuo()">↺ Neu starten</button>
-      </div>
-      <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
-      <span>🏆 <span class="best-display" id="best-3">--:--</span></span>
+      <span>&#9201; <span class="timer-display" id="timer-3">0:00</span></span>
+      <span>&#127942; <span class="best-display" id="best-3">–</span></span>
       <span class="score-box">Richtig: <span id="zuo-score">0</span> / <span id="zuo-total">0</span></span>
+    </div>
+    <div class="btn-row">
+      <button onclick="timerResetOne(3); resetZuo()">&#8635; Neustart</button>
+      <button onclick="showZuoLoesung()">&#128161; Lösungen</button>
+    </div>
     </div>
 
     <div class="hilfe-box">
@@ -480,12 +470,12 @@ input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
          alt="Wörter ordnen">
 
     <div class="timer-bar">
-      <div class="btn-row">
-        <button class="btn" onclick="showAllSbLoesung()">💡 Lösungen</button>
-        <button class="btn" onclick="resetAllSb()">↺ Neu starten</button>
-      </div>
-      <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
-      <span>🏆 <span class="best-display" id="best-4">--:--</span></span>
+      <span>&#9201; <span class="timer-display" id="timer-4">0:00</span></span>
+      <span>&#127942; <span class="best-display" id="best-4">–</span></span>
+    </div>
+    <div class="btn-row">
+      <button onclick="resetAllSb()">&#8635; Neustart</button>
+      <button onclick="showAllSbLoesung()">&#128161; Lösungen</button>
     </div>
 
     <div class="hilfe-box">

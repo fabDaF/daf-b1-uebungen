@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1.1 Deutsch – Kursübersicht</title>
+    <style>
+        :root {
+            --primary-color: #3949ab;
+            --primary-dark: #1a237e;
+            --secondary-color: #283593;
+            --accent-light: #e8eaf6;
+            --text-dark: #1a237e;
+            --text-light: #f5f7ff;
+            --bg-light: #f4f6fb;
+            --border-color: #c5cae9;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            font-size: 18px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--bg-light) 0%, #e8eaf6 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--text-light);
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -10%;
+            width: 300px; height: 300px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative; z-index: 1;
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.92;
+            position: relative; z-index: 1;
+            font-family: Georgia, serif;
+        }
+        .header .level-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.35);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 4px 16px;
+            border-radius: 20px;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+
+        /* ── CONTAINER ── */
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ── STATS BAR ── */
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat-pill {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        /* ── SEARCH ── */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+        .search-box {
+            width: 100%;
+            max-width: 480px;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(57,73,171,0.12);
+        }
+
+        /* ── EINHEIT-BLOCK ── */
+        .einheit { margin-bottom: 1.5rem; }
+        .einheit-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            border-bottom: 3px solid var(--primary-color);
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+            background: var(--accent-light);
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .einheit-header:hover { background: #dde1f8; }
+        .einheit-pfeil {
+            margin-left: auto;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        .einheit.geschlossen .einheit-pfeil { transform: rotate(-90deg); }
+        .einheit-body {
+            overflow: hidden;
+            max-height: 2000px;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            padding-top: 1.2rem;
+            padding-bottom: 0.5rem;
+        }
+        .einheit.geschlossen .einheit-body {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .einheit-nr {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+        .einheit-titel {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        /* ── KARTEN-GRID ── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        /* ── KARTE ── */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.4rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color);
+        }
+        .card.todo { opacity: 0.55; }
+        .card.todo:hover { opacity: 0.75; transform: none; }
+
+        .card-typ {
+            display: inline-block;
+            font-size: 0.7em;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-bottom: 6px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .typ-X { background: #e3f2fd; color: #1565c0; }
+        .typ-G { background: #fce4ec; color: #c62828; }
+        .typ-R { background: #e8f5e9; color: #2e7d32; }
+        .typ-S { background: #fff8e1; color: #f57f17; }
+        .typ-W { background: #f3e5f5; color: #6a1b9a; }
+        .typ-V { background: #e0f7fa; color: #006064; }
+
+        .card-title {
+            font-size: 0.97rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+            color: var(--text-dark);
+            flex: 1;
+        }
+        .card-code {
+            font-size: 0.72rem;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        /* ── TEST-BADGE ── */
+        .test-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-top: 6px;
+            width: fit-content;
+        }
+        .test-badge.bestanden {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+        .test-badge.fehler {
+            background: #fce4ec;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--accent-light);
+        }
+        .card-oeffnen {
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 0.88rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: color 0.2s;
+        }
+        .card-oeffnen::after { content: '→'; transition: transform 0.3s ease; }
+        .card:hover .card-oeffnen::after { transform: translateX(4px); }
+        .card-todo-label {
+            font-size: 0.78rem;
+            color: #bbb;
+            font-style: italic;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: var(--secondary-color);
+            color: var(--text-light);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* ── NO RESULTS ── */
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8rem; }
+            .container { padding: 1rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📚 B1.1 Deutsch</h1>
+    <p style="font-family: Georgia, serif;">Interaktive Übungsmaterialien für Niveau B1.1</p>
+    <div class="level-badge">B1.1 · Lingoda</div>
+</div>
+
+<div class="container">
+
+    <div class="stats-bar">
+        <span class="stat-pill" id="stat-gesamt">⏳ Lade...</span>
+        <span class="stat-pill" id="stat-fertig">✅ 0 fertig</span>
+        <span class="stat-pill" id="stat-todo">🔲 0 ausstehend</span>
+    </div>
+
+    <div class="search-container">
+        <input type="text" class="search-box" id="searchInput"
+               placeholder="🔍 Lektion suchen..." oninput="filterCards()">
+    </div>
+
+    <div id="no-results" class="no-results">Keine Lektionen gefunden.</div>
+    <div id="einheiten-container"></div>
+
+</div>
+
+<div class="footer">
+    © Frank Burkert · DaF-Materialien B1.1 · <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com" style="color:rgba(255,255,255,0.75);">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+<script>
+// ── LEKTIONSDATEN ─────────────────────────────────────────────────────────
+var LEKTIONEN = [
+    // ── Einheit 101: Beruf & Arbeit ──────────────────────────────────────
+    { code:'1011X', typ:'X', thema:'Das Vorstellungsgespräch', einheit:'101', fertig:true,  url:'DE_B1_1011X-vorstellungsgespraech.html' },
+    { code:'1012G', typ:'G', thema:'Konjunktiv II — Modalverben', einheit:'101', fertig:false, url:'' },
+    { code:'1013R', typ:'R', thema:'Neue Berufe', einheit:'101', fertig:false, url:'' },
+    { code:'1014X', typ:'X', thema:'Einen Vertrag verhandeln', einheit:'101', fertig:false, url:'' },
+    { code:'1015G', typ:'G', thema:'Temporaladverbien', einheit:'101', fertig:false, url:'' },
+    { code:'1016R', typ:'R', thema:'Kulturelle Unterschiede am Arbeitsplatz', einheit:'101', fertig:false, url:'' },
+    { code:'1017X', typ:'X', thema:'Besprechungen in der Firma', einheit:'101', fertig:false, url:'' },
+    { code:'1018S', typ:'S', thema:'Ein Gespräch mit dem Vorgesetzten führen', einheit:'101', fertig:false, url:'' },
+
+    // ── Einheit 102: Umwelt & Natur ──────────────────────────────────────
+    { code:'1021X', typ:'X', thema:'Umweltprobleme und Umweltschutz', einheit:'102', fertig:false, url:'' },
+    { code:'1022G', typ:'G', thema:'Präpositionen', einheit:'102', fertig:false, url:'' },
+    { code:'1023R', typ:'R', thema:'Luftverschmutzung', einheit:'102', fertig:false, url:'' },
+    { code:'1024X', typ:'X', thema:'Umweltschutz und Recycling', einheit:'102', fertig:false, url:'' },
+    { code:'1025G', typ:'G', thema:'Adjektive', einheit:'102', fertig:false, url:'' },
+    { code:'1026R', typ:'R', thema:'Vom Menschen ausgelöste Katastrophen', einheit:'102', fertig:false, url:'' },
+    { code:'1027X', typ:'X', thema:'Naturkatastrophen', einheit:'102', fertig:false, url:'' },
+    { code:'1028S', typ:'S', thema:'Wie umweltbewusst bist du?', einheit:'102', fertig:false, url:'' },
+
+    // ── Einheit 103: Kultur & Identität ──────────────────────────────────
+    { code:'1031X', typ:'X', thema:'Identität und Sprachkultur', einheit:'103', fertig:false, url:'' },
+    { code:'1032G', typ:'G', thema:'Lokaladverbien', einheit:'103', fertig:false, url:'' },
+    { code:'1033R', typ:'R', thema:'Berlin als multikulturelle Stadt', einheit:'103', fertig:false, url:'' },
+    { code:'1034X', typ:'X', thema:'Multikulturalismus', einheit:'103', fertig:false, url:'' },
+    { code:'1035G', typ:'G', thema:'Infinitivkonstruktionen', einheit:'103', fertig:false, url:'' },
+    { code:'1036R', typ:'R', thema:'Deutsche Traditionen', einheit:'103', fertig:false, url:'' },
+    { code:'1037X', typ:'X', thema:'Globalisierung', einheit:'103', fertig:false, url:'' },
+    { code:'1038S', typ:'S', thema:'Die kulturelle Vielfalt', einheit:'103', fertig:false, url:'' },
+
+    // ── Einheit 104: Digital & Medien ─────────────────────────────────────
+    { code:'1041X', typ:'X', thema:'Privatsphäre in einer vernetzten Welt', einheit:'104', fertig:false, url:'' },
+    { code:'1042G', typ:'G', thema:'Pronomen', einheit:'104', fertig:false, url:'' },
+    { code:'1043R', typ:'R', thema:'Partnersuche online', einheit:'104', fertig:false, url:'' },
+    { code:'1044X', typ:'X', thema:'Online einkaufen', einheit:'104', fertig:false, url:'' },
+    { code:'1045G', typ:'G', thema:'Negation', einheit:'104', fertig:false, url:'' },
+    { code:'1046R', typ:'R', thema:'Mit Fake News umgehen', einheit:'104', fertig:false, url:'' },
+    { code:'1047X', typ:'X', thema:'Sprache im Journalismus', einheit:'104', fertig:false, url:'' },
+    { code:'1048S', typ:'S', thema:'Über Online-Sicherheit und Datenschutz diskutieren', einheit:'104', fertig:false, url:'' },
+
+    // ── Einheit 105: Stadt & Land ─────────────────────────────────────────
+    { code:'1051X', typ:'X', thema:'Landflucht', einheit:'105', fertig:false, url:'' },
+    { code:'1052G', typ:'G', thema:'Genitiv', einheit:'105', fertig:false, url:'' },
+    { code:'1053R', typ:'R', thema:'Kulturelle Angebote in der Großstadt', einheit:'105', fertig:false, url:'' },
+    { code:'1054X', typ:'X', thema:'Eine Wohnung mieten', einheit:'105', fertig:false, url:'' },
+    { code:'1055G', typ:'G', thema:'Infinitiv mit zu', einheit:'105', fertig:false, url:'' },
+    { code:'1056R', typ:'R', thema:'Das Leben auf dem Land', einheit:'105', fertig:false, url:'' },
+    { code:'1057X', typ:'X', thema:'Heimweh', einheit:'105', fertig:false, url:'' },
+    { code:'1058S', typ:'S', thema:'Der beste Ort zum Leben', einheit:'105', fertig:false, url:'' },
+
+    // ── Einheit 106: Geschichte ───────────────────────────────────────────
+    { code:'1061X', typ:'X', thema:'Historische Ereignisse', einheit:'106', fertig:false, url:'' },
+    { code:'1062G', typ:'G', thema:'Verb lassen', einheit:'106', fertig:false, url:'' },
+    { code:'1063R', typ:'R', thema:'Der Fall der Berliner Mauer', einheit:'106', fertig:false, url:'' },
+    { code:'1064X', typ:'X', thema:'Historische Persönlichkeiten', einheit:'106', fertig:false, url:'' },
+    { code:'1065G', typ:'G', thema:'Verb werden', einheit:'106', fertig:false, url:'' },
+    { code:'1066R', typ:'R', thema:'Immanuel Kant', einheit:'106', fertig:false, url:'' },
+    { code:'1067X', typ:'X', thema:'Chronologisch erzählen', einheit:'106', fertig:false, url:'' },
+    { code:'1068S', typ:'S', thema:'Über historische Fakten sprechen', einheit:'106', fertig:false, url:'' },
+];
+
+var EINHEITEN = [
+    { nr: '101', titel: 'Beruf & Arbeit',   emoji: '💼' },
+    { nr: '102', titel: 'Umwelt & Natur',   emoji: '🌿' },
+    { nr: '103', titel: 'Kultur & Identität', emoji: '🌍' },
+    { nr: '104', titel: 'Digital & Medien', emoji: '💻' },
+    { nr: '105', titel: 'Stadt & Land',     emoji: '🏙️' },
+    { nr: '106', titel: 'Geschichte',       emoji: '🏛️' },
+];
+
+// ── DOM AUFBAUEN ──────────────────────────────────────────────────────────
+function buildDashboard() {
+    var container = document.getElementById('einheiten-container');
+    container.innerHTML = '';
+
+    EINHEITEN.forEach(function(einheit) {
+        var lektionen = LEKTIONEN.filter(function(l) { return l.einheit === einheit.nr; });
+        var fertigCount = lektionen.filter(function(l) { return l.fertig; }).length;
+
+        var div = document.createElement('div');
+        div.className = 'einheit';
+        div.dataset.einheit = einheit.nr;
+
+        div.innerHTML =
+            '<div class="einheit-header" onclick="toggleEinheit(this)">' +
+                '<span class="einheit-nr">Einheit ' + einheit.nr + '</span>' +
+                '<span class="einheit-titel">' + einheit.emoji + ' ' + einheit.titel + '</span>' +
+                '<span style="margin-left:auto;font-size:0.78rem;color:#888;margin-right:8px;">' + fertigCount + '/' + lektionen.length + ' fertig</span>' +
+                '<span class="einheit-pfeil">▼</span>' +
+            '</div>' +
+            '<div class="einheit-body"><div class="cards-grid" id="grid-' + einheit.nr + '"></div></div>';
+
+        container.appendChild(div);
+
+        var grid = document.getElementById('grid-' + einheit.nr);
+        lektionen.forEach(function(l) {
+            var card = document.createElement('div');
+            card.className = 'card' + (l.fertig ? '' : ' todo');
+            card.dataset.search = (l.code + ' ' + l.thema).toLowerCase();
+            card.dataset.einheit = einheit.nr;
+
+            var badge = l.fertig
+                ? '<span class="test-badge bestanden">✅ HTML fertig</span>'
+                : '<span class="test-badge" style="background:#f5f5f5;color:#bbb;border:1px solid #e0e0e0;">🔲 ausstehend</span>';
+
+            var actions = l.fertig
+                ? '<a class="card-oeffnen" href="' + l.url + '" target="_blank">Öffnen</a>'
+                : '<span class="card-todo-label">noch nicht erstellt</span>';
+
+            card.innerHTML =
+                '<div class="card-code">B1.1 · ' + l.code + '</div>' +
+                '<span class="card-typ typ-' + l.typ + '">' + l.typ + '</span>' +
+                '<div class="card-title">' + l.thema + '</div>' +
+                badge +
+                '<div class="card-actions">' + actions + '</div>';
+
+            grid.appendChild(card);
+        });
+    });
+
+    updateStats();
+}
+
+function updateStats() {
+    var gesamt = LEKTIONEN.length;
+    var fertig = LEKTIONEN.filter(function(l) { return l.fertig; }).length;
+    var todo = gesamt - fertig;
+    document.getElementById('stat-gesamt').textContent = '📋 ' + gesamt + ' Lektionen';
+    document.getElementById('stat-fertig').textContent = '✅ ' + fertig + ' fertig';
+    document.getElementById('stat-todo').textContent = '🔲 ' + todo + ' ausstehend';
+}
+
+function toggleEinheit(header) {
+    var einheit = header.parentElement;
+    einheit.classList.toggle('geschlossen');
+}
+
+function filterCards() {
+    var query = document.getElementById('searchInput').value.toLowerCase().trim();
+    var allCards = document.querySelectorAll('.card');
+    var visible = 0;
+    allCards.forEach(function(card) {
+        var match = !query || card.dataset.search.indexOf(query) >= 0;
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+    });
+    document.getElementById('no-results').style.display = (visible === 0 && query) ? 'block' : 'none';
+
+    // Einheiten einblenden die mindestens eine sichtbare Karte haben
+    document.querySelectorAll('.einheit').forEach(function(einheit) {
+        var nr = einheit.dataset.einheit;
+        var grid = document.getElementById('grid-' + nr);
+        var hasVisible = grid && Array.from(grid.querySelectorAll('.card')).some(function(c) { return c.style.display !== 'none'; });
+        einheit.style.display = (hasVisible || !query) ? '' : 'none';
+        if (hasVisible && query) einheit.classList.remove('geschlossen');
+    });
+}
+
+buildDashboard();
+</script>
+</body>
+</html>

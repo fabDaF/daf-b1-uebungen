@@ -77,7 +77,15 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1017X | X | Besprechungen in der Firma | ✅ Fertig |
 | 1018S | S | Ein Gespräch mit dem Vorgesetzten | ✅ Fertig |
 | 1021X | X | Umweltprobleme und Umweltschutz | ✅ Fertig |
-| 1022G | G | (folgt) | 🔄 In Arbeit |
+| 1022G | G | Zweiteilige Präpositionen | ✅ Fertig |
+| 1023R | R | Luftverschmutzung | ✅ Fertig |
+| 1024X | X | Umweltschutz und Recycling | ✅ Fertig |
+| 1025G | G | Mehr über die Adjektive | ✅ Fertig |
+| 1026R | R | Vom Menschen ausgelöste Katastrophen | ✅ Fertig |
+| 1027X | X | Naturkatastrophen | ✅ Fertig |
+| 1028S | S | Wie umweltbewusst bist du? | ✅ Fertig |
+| 1031X | X | Identität und Sprachkultur | ✅ Fertig |
+| 1032G | G | Mehr über Lokaladverbien | ✅ Fertig |
 
 ---
 

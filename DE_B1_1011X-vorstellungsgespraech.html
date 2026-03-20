@@ -124,25 +124,6 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
 .vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
 @media (max-width: 600px) { .vocab-item { flex-direction: column; align-items: flex-start; } }
 
-/* ── Konjugation ── */
-.konj-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.konj-tab-btn { padding: 6px 14px; border: 2px solid #c5cae9; border-radius: 20px; background: white; cursor: pointer; font-size: 0.85em; color: #667eea; font-weight: 600; transition: all 0.2s; }
-.konj-tab-btn:hover { border-color: #667eea; background: #f0f3ff; }
-.konj-tab-btn.active { background: #667eea; border-color: #667eea; color: white; }
-.konj-panel { display: none; }
-.konj-panel.active { display: block; }
-.konj-block { background: #fafbff; border-radius: 12px; padding: 20px 22px; border: 1px solid #e0e8ff; }
-.konj-block h3 { color: #3949ab; margin-bottom: 8px; font-size: 1em; }
-.konj-hint { font-size: 0.85em; color: #666; margin-bottom: 14px; }
-.konj-table { width: 100%; border-collapse: collapse; }
-.konj-table th { background: #3949ab; color: white; padding: 8px 14px; text-align: left; font-size: 0.88em; }
-.konj-table td { padding: 8px 14px; border-bottom: 1px solid #e8eaf6; font-size: 0.92em; }
-.konj-table td.person { color: #555; font-weight: 600; width: 160px; }
-.konj-given { color: #3949ab; font-weight: 700; }
-.konj-inp { border: none; border-bottom: 2px solid #667eea; background: transparent; font-size: 0.92em; font-family: inherit; color: #1a237e; font-weight: 600; outline: none; padding: 0 4px; width: 140px; transition: border-color 0.2s; }
-.konj-inp.correct { border-bottom-color: #27ae60; color: #27ae60; }
-.konj-inp.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
-
 /* Footer */
 .author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
 .author-footer a { color: #aaa; }
@@ -173,7 +154,6 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
         <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🔀</span><span class="nav-label">Zuordnung</span></div>
         <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
         <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">📚</span><span class="nav-label">Wortschatz</span></div>
-        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">📊</span><span class="nav-label">Konjugation</span></div>
     </div>
 
     <!-- ──────────────────────────────────────────────── TAB 0: ENTDECKEN -->
@@ -392,33 +372,6 @@ h2 { font-size: 1.3em; color: #3949ab; margin-bottom: 16px; font-family: Georgia
             </div>
 
             <div id="vocabContainer"></div>
-        </div>
-    </div>
-
-    <!-- ──────────────────────────────────────────────── TAB 5: KONJUGATION -->
-    <div class="section" id="sec-5">
-        <img class="tab-banner"
-             src="https://images.pexels.com/photos/4778611/pexels-photo-4778611.jpeg?auto=compress&cs=tinysrgb&w=800"
-             alt="Notizen und Bücher auf Schreibtisch">
-        <div class="sec-inner">
-            <h2>📊 Konjugationstabelle — Konjunktiv II</h2>
-            <div class="control-bar">
-                <div class="btn-row">
-                    <button class="btn" onclick="konjShow()">Lösungen</button>
-                    <button class="btn" onclick="konjReset(); resetTimer(5);">Neu starten</button>
-                </div>
-                <div class="timer-display">
-                    <span>⏱ <span id="timer-5">0:00</span></span>
-                    <span>🏆 <span id="best-5">--:--</span></span>
-                </div>
-            </div>
-
-            <div class="hilfe-box">
-                <strong>Aufgabe:</strong> Ergänze die fehlenden Konjunktiv-II-Formen. Die grauen Formen sind schon vorgegeben.
-            </div>
-
-            <div class="konj-tabs" id="konj-tabs"></div>
-            <div id="konj-panels"></div>
         </div>
     </div>
 
@@ -1217,225 +1170,12 @@ function resetVocab() {
         });
 }
 
-// ─── Konjugation ───────────────────────────────────────────────────────────
-var KONJ_VERBS = [
-    {
-        name: 'sein', label: 'Konjunktiv II von „sein" (wäre)',
-        hint: '💡 Bildung: war → wär- + Endung',
-        rows: [
-            { person: 'ich',           given: null,    answer: 'wäre'   },
-            { person: 'du',            given: null,    answer: 'wärst'  },
-            { person: 'er / sie / es', given: 'wäre',  answer: null     },
-            { person: 'wir',           given: null,    answer: 'wären'  },
-            { person: 'ihr',           given: null,    answer: 'wärt'   },
-            { person: 'sie / Sie',     given: 'wären', answer: null     },
-        ]
-    },
-    {
-        name: 'haben', label: 'Konjunktiv II von „haben" (hätte)',
-        hint: '💡 Bildung: hatt- → hätt- + Endung',
-        rows: [
-            { person: 'ich',           given: null,     answer: 'hätte'   },
-            { person: 'du',            given: null,     answer: 'hättest' },
-            { person: 'er / sie / es', given: 'hätte',  answer: null      },
-            { person: 'wir',           given: null,     answer: 'hätten'  },
-            { person: 'ihr',           given: null,     answer: 'hättet'  },
-            { person: 'sie / Sie',     given: 'hätten', answer: null      },
-        ]
-    },
-    {
-        name: 'werden', label: 'Konjunktiv II von „werden" (würde)',
-        hint: '💡 Bildung: wurd- → würd- + Endung',
-        rows: [
-            { person: 'ich',           given: null,     answer: 'würde'   },
-            { person: 'du',            given: null,     answer: 'würdest' },
-            { person: 'er / sie / es', given: 'würde',  answer: null      },
-            { person: 'wir',           given: null,     answer: 'würden'  },
-            { person: 'ihr',           given: null,     answer: 'würdet'  },
-            { person: 'sie / Sie',     given: 'würden', answer: null      },
-        ]
-    },
-    {
-        name: 'können', label: 'Konjunktiv II von „können" (könnte)',
-        hint: '💡 Bildung: konn- → könn- (Umlaut) + Endung',
-        rows: [
-            { person: 'ich',           given: null,      answer: 'könnte'   },
-            { person: 'du',            given: null,      answer: 'könntest' },
-            { person: 'er / sie / es', given: 'könnte',  answer: null       },
-            { person: 'wir',           given: null,      answer: 'könnten'  },
-            { person: 'ihr',           given: null,      answer: 'könntet'  },
-            { person: 'sie / Sie',     given: 'könnten', answer: null       },
-        ]
-    },
-    {
-        name: 'dürfen', label: 'Konjunktiv II von „dürfen" (dürfte)',
-        hint: '💡 Bildung: durf- → dürf- (Umlaut) + Endung',
-        rows: [
-            { person: 'ich',           given: null,      answer: 'dürfte'   },
-            { person: 'du',            given: null,      answer: 'dürftest' },
-            { person: 'er / sie / es', given: 'dürfte',  answer: null       },
-            { person: 'wir',           given: null,      answer: 'dürften'  },
-            { person: 'ihr',           given: null,      answer: 'dürftet'  },
-            { person: 'sie / Sie',     given: 'dürften', answer: null       },
-        ]
-    },
-    {
-        name: 'müssen', label: 'Konjunktiv II von „müssen" (müsste)',
-        hint: '💡 Bildung: muss- → müss- (Umlaut) + -te',
-        rows: [
-            { person: 'ich',           given: null,      answer: 'müsste'   },
-            { person: 'du',            given: null,      answer: 'müsstest' },
-            { person: 'er / sie / es', given: 'müsste',  answer: null       },
-            { person: 'wir',           given: null,      answer: 'müssten'  },
-            { person: 'ihr',           given: null,      answer: 'müsstet'  },
-            { person: 'sie / Sie',     given: 'müssten', answer: null       },
-        ]
-    },
-    {
-        name: 'würde+Inf.', label: 'Konjunktiv II mit „würde" + Infinitiv',
-        hint: '💡 Für alle anderen Verben: würde/würdest/… + Infinitiv am Satzende',
-        rows: [
-            { person: 'ich',           given: null,           answer: 'würde fragen'   },
-            { person: 'du',            given: null,           answer: 'würdest fragen' },
-            { person: 'er / sie / es', given: 'würde fragen', answer: null             },
-            { person: 'wir',           given: null,           answer: 'würden fragen'  },
-            { person: 'ihr',           given: null,           answer: 'würdet fragen'  },
-            { person: 'sie / Sie',     given: 'würden fragen',answer: null             },
-        ]
-    },
-];
-
-function konjBuildPanel(idx) {
-    var verb = KONJ_VERBS[idx];
-    var panel = document.createElement('div');
-    panel.className = 'konj-panel' + (idx === 0 ? ' active' : '');
-    panel.id = 'konj-panel-' + idx;
-
-    var block = document.createElement('div');
-    block.className = 'konj-block';
-
-    var h3 = document.createElement('h3');
-    h3.textContent = verb.label;
-    block.appendChild(h3);
-
-    var hintDiv = document.createElement('div');
-    hintDiv.className = 'konj-hint';
-    hintDiv.textContent = verb.hint;
-    block.appendChild(hintDiv);
-
-    var table = document.createElement('table');
-    table.className = 'konj-table';
-    var thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th>Person</th><th>Konjunktiv II</th></tr>';
-    table.appendChild(thead);
-    var tbody = document.createElement('tbody');
-
-    verb.rows.forEach(function(row) {
-        var tr = document.createElement('tr');
-        var tdP = document.createElement('td');
-        tdP.className = 'person';
-        tdP.textContent = row.person;
-        tr.appendChild(tdP);
-
-        var tdV = document.createElement('td');
-        if (row.answer === null) {
-            var span = document.createElement('span');
-            span.className = 'konj-given';
-            span.textContent = row.given;
-            tdV.appendChild(span);
-        } else {
-            var inp = document.createElement('input');
-            inp.type = 'text';
-            inp.className = 'konj-inp';
-            inp.dataset.answer = row.answer;
-            inp.placeholder = '…';
-            inp.oninput = function() {
-                timerAutoStart(5);
-                konjLiveCheck(this);
-                konjCheckAllOk();
-            };
-            tdV.appendChild(inp);
-        }
-        tr.appendChild(tdV);
-        tbody.appendChild(tr);
-    });
-
-    table.appendChild(tbody);
-    block.appendChild(table);
-    panel.appendChild(block);
-    return panel;
-}
-
-function konjLiveCheck(inp) {
-    var val = inp.value.trim().toLowerCase();
-    var ans = (inp.dataset.answer || '').toLowerCase();
-    inp.classList.remove('correct', 'wrong');
-    if (val.length === 0) return;
-    if (val === ans) { inp.classList.add('correct'); return; }
-    if (ans.indexOf(val) === 0) return;
-    inp.classList.add('wrong');
-}
-
-function konjCheckAllOk() {
-    var all = document.querySelectorAll('.konj-inp');
-    var ok = true;
-    all.forEach(function(inp) { if (!inp.classList.contains('correct')) ok = false; });
-    if (ok && all.length > 0) timerStop(5);
-}
-
-function konjInit() {
-    var container = document.getElementById('konj-panels');
-    var tabContainer = document.getElementById('konj-tabs');
-    container.innerHTML = '';
-    tabContainer.innerHTML = '';
-
-    KONJ_VERBS.forEach(function(v, i) {
-        container.appendChild(konjBuildPanel(i));
-
-        var btn = document.createElement('button');
-        btn.className = 'konj-tab-btn' + (i === 0 ? ' active' : '');
-        btn.textContent = v.name;
-        btn.setAttribute('data-idx', i);
-        btn.addEventListener('click', function() {
-            konjShowPanel(parseInt(this.getAttribute('data-idx')), this);
-        });
-        tabContainer.appendChild(btn);
-    });
-}
-
-function konjShowPanel(idx, btn) {
-    document.querySelectorAll('.konj-panel').forEach(function(p) { p.classList.remove('active'); });
-    var panel = document.getElementById('konj-panel-' + idx);
-    if (panel) panel.classList.add('active');
-    document.querySelectorAll('.konj-tab-btn').forEach(function(b) { b.classList.remove('active'); });
-    if (btn) btn.classList.add('active');
-}
-
-function konjShow() {
-    timerStop(5);
-    document.querySelectorAll('.konj-inp').forEach(function(inp) {
-        var next = inp.nextElementSibling;
-        if (next && next.classList.contains('correction-hint')) next.remove();
-        inp.value = inp.dataset.answer;
-        inp.classList.add('correct');
-        inp.classList.remove('wrong');
-        var hint = document.createElement('span');
-        hint.className = 'correction-hint';
-        hint.textContent = inp.dataset.answer;
-        inp.insertAdjacentElement('afterend', hint);
-    });
-}
-
-function konjReset() {
-    konjInit();
-}
 
 // ─── Init ──────────────────────────────────────────────────────────────────
 lueckeInit();
 zuoInit();
 initSatzbau();
 initVocab();
-konjInit();
 loadBestTimes();
 </script>
 </body>

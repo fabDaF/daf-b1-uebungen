@@ -338,8 +338,8 @@
 // ── LEKTIONSDATEN ─────────────────────────────────────────────────────────
 var LEKTIONEN = [
     // ── Einheit 101: Beruf & Arbeit ──────────────────────────────────────
-    { code:'1011X', typ:'X', thema:'Das Vorstellungsgespräch', einheit:'101', fertig:true,  url:'DE_B1_1011X-vorstellungsgespraech.html' },
-    { code:'1012G', typ:'G', thema:'Konjunktiv II — Modalverben', einheit:'101', fertig:false, url:'' },
+    { code:'1011X', typ:'X', thema:'Das Vorstellungsgespräch', einheit:'101', fertig:true,  url:'DE_B1_1011X-vorstellungsgespraech.html', tested:'20.03.2026', tabs:'5/5' },
+    { code:'1012G', typ:'G', thema:'Konjunktiv II — Modalverben', einheit:'101', fertig:true,  url:'DE_B1_1012G-konjunktiv-modalverben.html', tested:'20.03.2026', tabs:'5/5' },
     { code:'1013R', typ:'R', thema:'Neue Berufe', einheit:'101', fertig:false, url:'' },
     { code:'1014X', typ:'X', thema:'Einen Vertrag verhandeln', einheit:'101', fertig:false, url:'' },
     { code:'1015G', typ:'G', thema:'Temporaladverbien', einheit:'101', fertig:false, url:'' },
@@ -438,9 +438,11 @@ function buildDashboard() {
             card.dataset.search = (l.code + ' ' + l.thema).toLowerCase();
             card.dataset.einheit = einheit.nr;
 
-            var badge = l.fertig
-                ? '<span class="test-badge bestanden">✅ HTML fertig</span>'
-                : '<span class="test-badge" style="background:#f5f5f5;color:#bbb;border:1px solid #e0e0e0;">🔲 ausstehend</span>';
+            var badge = !l.fertig
+                ? '<span class="test-badge" style="background:#f5f5f5;color:#bbb;border:1px solid #e0e0e0;">🔲 ausstehend</span>'
+                : l.tested
+                ? '<div class="test-badge bestanden">✅ Geprüft <span class="badge-detail">· ' + l.tabs + ' Tabs · ' + l.tested + '</span></div>'
+                : '<span class="test-badge bestanden">✅ HTML fertig</span>';
 
             var actions = l.fertig
                 ? '<a class="card-oeffnen" href="' + l.url + '" target="_blank">Öffnen</a>'

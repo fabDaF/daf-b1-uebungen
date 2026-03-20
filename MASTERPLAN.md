@@ -72,7 +72,7 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1012G | G | Konjunktiv II der Modalverben | ✅ Fertig |
 | 1013R | R | Neue Berufe | ✅ Fertig |
 | 1014X | X | Einen Vertrag verhandeln | ✅ Fertig |
-| 1015G | G | Temporaladverbien | 🔧 In Arbeit |
+| 1015G | G | Temporaladverbien | ✅ Fertig |
 
 ---
 

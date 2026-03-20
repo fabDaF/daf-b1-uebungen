@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1033R · Berlin – eine multikulturelle Stadt</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ── CONTAINER ── */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    overflow: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 28px 32px 22px;
+    text-align: center;
+}
+.header h1 { font-size: 1.55rem; font-weight: 700; margin-bottom: 6px; }
+.header p  { font-size: 0.92rem; opacity: 0.88; }
+
+/* ── NAV ── */
+.nav {
+    display: flex;
+    background: #f8f8ff;
+    border-bottom: 2px solid #e0e0f0;
+    overflow-x: auto;
+}
+.nav-btn {
+    flex: 1;
+    padding: 12px 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #888;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    border-right: 1px solid #e0e0f0;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover  { background: #f0edf8; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; border-bottom-color: #667eea; }
+
+/* ── SECTIONS ── */
+.section { display: none; padding: 28px 32px; }
+.section.active { display: block; }
+
+/* ── SECTION TITLES ── */
+.section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+.section-sub {
+    color: #888;
+    font-size: 0.92em;
+    margin-bottom: 20px;
+}
+
+/* ── TAB BANNER ── */
+.tab-banner {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* ── VORENTLASTUNG ── */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+.vocab-card {
+    background: #f8f9ff;
+    border: 1px solid #dde3ff;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en   { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def  { color: #555; font-size: 0.92em; line-height: 1.5; }
+
+/* ── LESETEXT ── */
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text h3 {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: #667eea;
+    margin: 20px 0 6px;
+    text-indent: 0;
+}
+.story-text .dialog {
+    font-style: normal;
+    text-indent: 0;
+    padding-left: 1.1em;
+    border-left: 3px solid #667eea;
+    color: #2a2a6e;
+    margin-left: 0;
+}
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+
+/* ── VOKABEL-HERVORHEBUNG ── */
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+
+/* ── RICHTIG/FALSCH ── */
+.rf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.rf-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    font-size: 0.95em;
+    cursor: pointer;
+    border: 1.5px solid #ddd;
+}
+.rf-item:hover { background: #f3e5f5; }
+.rf-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.rf-btn {
+    padding: 4px 14px;
+    border-radius: 14px;
+    border: 1.5px solid #9b59b6;
+    background: #fff;
+    color: #6c3483;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; flex-shrink: 0; }
+.rf-result.ok  { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-text { flex: 1; }
+.rf-title {
+    font-size: 1.0em;
+    color: #555;
+    margin-bottom: 12px;
+    font-weight: 600;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ── TIMER-BAR ── */
+.timer-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    font-size: 0.85rem;
+    color: #666;
+}
+.timer-display { font-weight: 700; color: #667eea; font-size: 1rem; }
+.best-display  { color: #f39c12; font-weight: 600; }
+
+.btn-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+.btn-row button {
+    background: none;
+    border: 1px solid #c0b0e8;
+    border-radius: 16px;
+    padding: 5px 16px;
+    cursor: pointer;
+    font-size: .88rem;
+    color: #5a3e9e;
+    transition: background .2s;
+}
+.btn-row button:hover { background: #f0edf8; }
+
+/* ── LÜCKENTEXT ── */
+.luecke-item {
+    background: #fafbff;
+    border: 1px solid #e0e4f0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    font-size: 0.97em;
+    line-height: 2;
+}
+input.luecken-inp {
+    border: 2px solid #c5cae9;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s, background .2s;
+    background: white;
+    margin: 0 2px;
+}
+input.luecken-inp:focus { border-color: #667eea; }
+input.luecken-inp.ok    { border-color: #27ae60; background: #e8f5e9; }
+input.luecken-inp.no    { border-color: #e74c3c; background: #ffebee; }
+.correction-hint {
+    font-size: 0.78rem;
+    color: #27ae60;
+    font-weight: 700;
+    margin-left: 4px;
+    white-space: nowrap;
+}
+.wortkasten {
+    background: #f3e5f5;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #4a148c;
+}
+.wortkasten strong { color: #6a1b9a; }
+
+/* ── SATZBAU ── */
+.satzbau-item { margin-bottom: 24px; }
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    min-height: 56px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: move;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { background: #e8eaff; border-color: #3949ab; }
+.sb-punkt {
+    font-size: 1.1em; font-weight: 700; color: #27ae60;
+    margin-left: 2px; align-self: center; user-select: none;
+}
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* ── WORTSCHATZ ── */
+.wort-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 12px;
+}
+.wort-card {
+    background: #fafbff;
+    border: 1px solid #e0e4f0;
+    border-radius: 10px;
+    padding: 16px;
+}
+.wort-en { font-size: 0.95em; color: #555; margin-bottom: 10px; }
+.wort-inputs { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.wort-inputs input {
+    border: 2px solid #c5cae9;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    background: white;
+    transition: border-color .2s, background .2s;
+}
+.wort-inputs input:focus { border-color: #667eea; }
+.wort-inputs input.ok    { border-color: #27ae60; background: #e8f5e9; }
+.wort-inputs input.no    { border-color: #e74c3c; background: #ffebee; }
+input.art-inp   { width: 52px; }
+input.wort-inp  { width: 160px; }
+input.plural-inp { width: 110px; }
+.wort-slash { color: #aaa; font-size: 0.9em; }
+
+/* ── AUTHOR FOOTER ── */
+.author-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 16px;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 1.2rem; }
+    .section { padding: 18px 16px; }
+    .wort-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+    <h1>🏙️ Berlin – eine multikulturelle Stadt</h1>
+    <p>B1 · Lektion 1033R · Lesen &amp; Verstehen</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <button class="nav-btn active" onclick="showSection(0)">📖 Vorentlastung</button>
+    <button class="nav-btn" onclick="showSection(1)">📄 Lesetext</button>
+    <button class="nav-btn" onclick="showSection(2)">❓ Verständnis</button>
+    <button class="nav-btn" onclick="showSection(3)">✏️ Lückentext</button>
+    <button class="nav-btn" onclick="showSection(4)">🧩 Satzbau</button>
+    <button class="nav-btn" onclick="showSection(5)">📚 Wortschatz</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB 0 — VORENTLASTUNG
+════════════════════════════════════════════════════════════ -->
+<div class="section active" id="sec-0">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/109629/pexels-photo-109629.jpeg?auto=compress&cs=tinysrgb&w=900"
+         alt="Berlin Stadtansicht">
+    <div class="section-title">📖 Vorentlastung</div>
+    <div class="section-sub">Lerne diese Wörter, bevor du den Text liest.</div>
+
+    <!-- Fotokarten 2-spaltig -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <figure style="margin:0;text-align:center;">
+            <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600"
+                 alt="Multikulturelles Treffen"
+                 style="width:100%;height:200px;border-radius:10px;object-fit:cover;">
+            <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">
+                die Vielfalt — viele Kulturen zusammen
+            </figcaption>
+        </figure>
+        <figure style="margin:0;text-align:center;">
+            <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=600"
+                 alt="Menschen aus verschiedenen Kulturen"
+                 style="width:100%;height:200px;border-radius:10px;object-fit:cover;">
+            <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">
+                die Integration — gemeinsam in einer Gesellschaft
+            </figcaption>
+        </figure>
+    </div>
+
+    <!-- Vokabelkarten -->
+    <div class="vocab-grid" id="vocabGrid"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB 1 — LESETEXT
+════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-1">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/109629/pexels-photo-109629.jpeg?auto=compress&cs=tinysrgb&w=900"
+         alt="Berlin Brandenburger Tor">
+    <div class="section-title">📄 Berlin – eine multikulturelle Stadt</div>
+
+    <div class="story-text" lang="de">
+
+        <h3>Eine geheimnisvolle Stadt</h3>
+
+        <p>Berlin ist eine geheimnisvolle Stadt. Nichts ist hier so, wie es zunächst scheint. Nichts ist hier echt, jeder ist er selbst und gleichzeitig ein anderer. Wladimir Kaminer, der russisch-deutsche Schriftsteller, beschrieb diese Eigenheit Berlins in einer seiner berühmten Kurzgeschichten.</p>
+
+        <figure style="margin:18px 0;text-align:center;">
+            <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600"
+                 alt="Menschen in einer multikulturellen Stadt"
+                 style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+            <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">
+                Viele Kulturen, eine Stadt — Berlin ist Heimat für Menschen aus aller Welt.
+            </figcaption>
+        </figure>
+
+        <p>In einer seiner Geschichten berichtet er von einem türkischen Imbiss in Berlin. In dem Imbiss arbeiteten in Wirklichkeit Bulgaren, die sich als Türken ausgaben. Dann kam eine Gruppe echter Türken in den Laden, bestellte auf Türkisch — und verstand kein Wort. Die bulgaris­chen Angestellten merkten sofort, dass etwas nicht stimmte. Schließlich bestellten sie selbst ihr Essen — in einem griechischen Restaurant, das von Vietnamesen betrieben wurde.</p>
+
+        <p class="dialog">„So ist Berlin", schreibt Kaminer. „Jeder gibt sich als jemand anderes aus, und trotzdem funktioniert alles."</p>
+
+        <h3>Und die Deutschen?</h3>
+
+        <p>Berlin hat etwa 3,5 Millionen Einwohner. Davon sind mehr als 500.000 Ausländer ohne deutschen Pass. Der Ausländeranteil liegt bei etwa 24,5 Prozent — fast jeder vierte Berliner hat also keinen deutschen Pass. Dabei leben die meisten Ausländer in den Bezirken Mitte, Neukölln und Treptow-Köpenick.</p>
+
+        <figure style="margin:18px 0;text-align:center;">
+            <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=600"
+                 alt="Diverse Gruppe von Menschen"
+                 style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+            <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">
+                Berlin zählt mehr als 500.000 Menschen ohne deutschen Pass.
+            </figcaption>
+        </figure>
+
+        <h3>So ist die Statistik</h3>
+
+        <p>Der Berliner Durchschnitts­bürger ist 43 Jahre alt. Der jüngste Bezirk ist Friedrichshain-Kreuz­berg, der älteste Steglitz-Zehlendorf. Die meisten Einwohner hat der Bezirk Pankow.</p>
+
+        <h3>Gastarbeiter und Gastarbeiterinnen</h3>
+
+        <p>Seit den 1950er Jahren ist Deutschland ein Einwanderungsland. Die Regierung warb damals ausländische Arbeitskräfte an, weil die Wirtschaft dringend Menschen brauchte. Viele dieser Gastarbeiter blieben und gründeten Familien. So entstand eine Parallelgesellschaft, in der Menschen verschiedener Kulturen nebeneinander, aber nicht immer miteinander lebten.</p>
+
+        <h3>Die Berliner Mauer</h3>
+
+        <p>Am 9. und 10. November 1989 fiel die Berliner Mauer. Mit der Reisefreiheit begann für die Stadt eine neue Phase der Integration. Die Berliner Stadtpolitik verfolgte seitdem eine aktive Integrationspolitik — mit unterschiedlichem Erfolg.</p>
+
+        <h3>Integrationsprozesse und Parallelgesellschaften</h3>
+
+        <p>Manche Kritiker sprechen von Berlin als „der Stadt der Parallelgesellschaften". Mehr als drei Viertel der Berliner wünschen sich aber eine multikulturelle Gesellschaft — und sehen den Multikulturalismus als Bereicherung. Trotzdem gibt es noch viel Arbeit: Integration braucht gegenseitige Akzeptanz in Kultur, Religion und Weltanschauung. Das ist ein konfliktreicher Prozess. Wer hat Recht und wer irrt sich? Das werden wir vielleicht in zwanzig Jahren wissen.</p>
+
+    </div>
+    <div class="story-source">Quelle: B1 – Lektion 1033R – Berlin, multikulturelle Metropole</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB 2 — VERSTÄNDNIS (Richtig / Falsch)
+════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-2">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=900"
+         alt="Fragen zum Text">
+    <div class="section-title">❓ Verständnisfragen</div>
+
+    <div class="timer-bar">
+        <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-2">–</span></span>
+    </div>
+
+    <p class="rf-title">Richtig oder Falsch? Klicke auf R oder F.</p>
+
+    <div class="rf-list" id="rfList"></div>
+
+    <div class="btn-row">
+        <button onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
+        <button onclick="showRFLoesung()">💡 Lösungen</button>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB 3 — LÜCKENTEXT
+════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-3">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=900"
+         alt="Schreiben und Üben">
+    <div class="section-title">✏️ Lückentext</div>
+    <div class="section-sub">Ergänze die fehlenden Wörter.</div>
+
+    <div class="timer-bar">
+        <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-3">–</span></span>
+    </div>
+
+    <div class="wortkasten">
+        <strong>Wortkasten:</strong>
+        Ausländeranteil · Einwanderungsland · Gastarbeiter · Integration · Metropole ·
+        Multikulturalismus · Parallelgesellschaft · Reisefreiheit · Vielfalt · ausgeben
+    </div>
+
+    <div id="lueckeContainer"></div>
+
+    <div class="btn-row">
+        <button onclick="showLueckeLoesung()">💡 Lösungen</button>
+        <button onclick="timerResetOne(3); resetLuecke()">↺ Neustart</button>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB 4 — SATZBAU
+════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-4">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/3184336/pexels-photo-3184336.jpeg?auto=compress&cs=tinysrgb&w=900"
+         alt="Satzbau Übung">
+    <div class="section-title">🧩 Satzbau</div>
+    <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge.</div>
+
+    <div class="timer-bar">
+        <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-4">–</span></span>
+    </div>
+
+    <div id="satzbauContainer"></div>
+
+    <div class="btn-row">
+        <button onclick="showAllSbSolutions()">💡 Alle lösen</button>
+        <button onclick="timerResetOne(4); initSatzbau()">↺ Neustart</button>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB 5 — WORTSCHATZ
+════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-5">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/1256840/pexels-photo-1256840.jpeg?auto=compress&cs=tinysrgb&w=900"
+         alt="Wortschatz lernen">
+    <div class="section-title">📚 Wortschatz</div>
+    <div class="section-sub">Tippe das deutsche Wort (mit Artikel und Plural).</div>
+
+    <div class="timer-bar">
+        <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-5">–</span></span>
+    </div>
+
+    <div class="wort-grid" id="vocabContainer"></div>
+
+    <div class="btn-row">
+        <button onclick="showWortLoesung()">💡 Lösungen</button>
+        <button onclick="timerResetOne(5); initWortschatz()">↺ Neustart</button>
+    </div>
+</div>
+
+<!-- AUTHOR FOOTER -->
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// DATEN
+// ══════════════════════════════════════════════════════════════
+
+var VORENTLASTUNG = [
+    { term: 'der Multikulturalismus, (kein Plural)', en: 'multiculturalism', def: 'Das Zusammenleben von Menschen verschiedener Kulturen in einer Gesellschaft.' },
+    { term: 'die Metropole, -n',      en: 'metropolis',      def: 'Eine sehr große, wichtige Stadt.' },
+    { term: 'die Vielfalt, (kein Plural)', en: 'diversity', def: 'Viele verschiedene Kulturen, Sprachen oder Ideen an einem Ort.' },
+    { term: 'die Integration, -en',   en: 'integration',     def: 'Das Eingliedern von Menschen in eine neue Gesellschaft.' },
+    { term: 'die Reisefreiheit, (kein Plural)', en: 'freedom of travel', def: 'Das Recht, in andere Länder zu reisen oder zu ziehen.' },
+    { term: 'die Parallelgesellschaft, -en', en: 'parallel society', def: 'Eine Gruppe, die neben der Mehrheitsgesellschaft lebt, aber kaum Kontakt zu ihr hat.' },
+    { term: 'der Gastarbeiter, -',    en: 'guest worker',    def: 'Ein Arbeitnehmer, der aus dem Ausland ins Land kommt, um zu arbeiten.' },
+    { term: 'das Einwanderungsland, -länder', en: 'country of immigration', def: 'Ein Land, in das viele Menschen aus anderen Ländern einwandern.' },
+    { term: 'der Ausländeranteil, -e', en: 'proportion of foreigners', def: 'Der prozentuale Anteil von Ausländern an der Gesamtbevölkerung.' },
+    { term: 'sich ausgeben als',       en: 'to pose as / to pretend to be', def: 'So tun, als ob man jemand anderes ist.' }
+];
+
+var RF_DATA = [
+    { q: 'Wladimir Kaminer ist ein russisch-deutscher Schriftsteller.',             ans: true  },
+    { q: 'In einem türkischen Imbiss arbeiteten in Wirklichkeit Bulgaren.',         ans: true  },
+    { q: 'Der Ausländeranteil in Berlin beträgt ca. 24,5 Prozent.',                 ans: true  },
+    { q: 'Die meisten Ausländer in Berlin wohnen im Bezirk Pankow.',                ans: false },
+    { q: 'Deutschland begann schon in den 1950er Jahren, Arbeitskräfte anzuwerben.',ans: true  },
+    { q: 'Die Berliner Mauer fiel im Jahr 1990.',                                   ans: false },
+    { q: 'Die meisten Berliner wollen keine multikulturelle Gesellschaft.',          ans: false },
+    { q: 'Integration ist laut dem Text ein einfacher Prozess.',                    ans: false }
+];
+
+var LUECKEN_DATA = [
+    { segs: [{t:'Berlin gilt als bedeutende '},{b:'Metropole',s:'l'},{t:' in der Mitte Europas.'}], hint:'' },
+    { segs: [{t:'Der '},{b:'Multikulturalismus',s:'xl'},{t:' ist ein zentrales Thema in Berlin.'}], hint:'' },
+    { segs: [{t:'Die kulturelle '},{b:'Vielfalt',s:'m'},{t:' macht Berlin zu einer besonderen Stadt.'}], hint:'' },
+    { segs: [{t:'Seit den 1950er Jahren ist Deutschland ein '},{b:'Einwanderungsland',s:'xl'},{t:'.'}], hint:'' },
+    { segs: [{t:'Die Regierung warb damals '},{b:'Gastarbeiter',s:'l'},{t:' aus dem Ausland an.'}], hint:'' },
+    { segs: [{t:'Der '},{b:'Ausländeranteil',s:'l'},{t:' in Berlin liegt bei etwa 24,5 Prozent.'}], hint:'' },
+    { segs: [{t:'Viele Menschen lebten nebeneinander in einer '},{b:'Parallelgesellschaft',s:'xl'},{t:'.'}], hint:'' },
+    { segs: [{t:'Mit dem Mauerfall begann die Phase der '},{b:'Reisefreiheit',s:'l'},{t:' für alle Berliner.'}], hint:'' },
+    { segs: [{t:'Die Stadt verfolgt eine aktive Integrationspolitik zur '},{b:'Integration',s:'l'},{t:' aller Bürger.'}], hint:'' },
+    { segs: [{t:'Die Bulgaren gaben sich in dem Imbiss als Türken '},{b:'aus',s:'s'},{t:'.'}], hint:'sich ausgeben als' },
+    { segs: [{t:'Mehr als drei Viertel der Berliner begrüßen den '},{b:'Multikulturalismus',s:'xl'},{t:'.'}], hint:'' },
+    { segs: [{t:'Integration ist ein konfliktreicher Prozess, der gegenseitige Akzeptanz erfordert.'}], hint:'' }
+];
+
+// Lückentext hat nur 11 echte Lücken (letzter Satz ist ohne Lücke — als Leseanker)
+// Korrektur: Nur Sätze mit Lücken (b-Felder) werden gezählt
+
+var satzbauData = [
+    {
+        parts: ['Berlin', 'ist', 'eine', 'multikulturelle', 'Metropole', 'in', 'Europa'],
+        valid: [['Berlin', 'ist', 'eine', 'multikulturelle', 'Metropole', 'in', 'Europa']],
+        punct: '.'
+    },
+    {
+        parts: ['die', 'Bulgaren', 'gaben', 'sich', 'als', 'Türken', 'aus'],
+        valid: [['die', 'Bulgaren', 'gaben', 'sich', 'als', 'Türken', 'aus']],
+        punct: '.'
+    },
+    {
+        parts: ['der', 'Ausländeranteil', 'liegt', 'bei', 'etwa', '24', ',', '5', 'Prozent'],
+        valid: [['der', 'Ausländeranteil', 'liegt', 'bei', 'etwa', '24', ',', '5', 'Prozent']],
+        punct: '.'
+    },
+    {
+        parts: ['viele', 'Gastarbeiter', 'blieben', 'und', 'gründeten', 'Familien'],
+        valid: [['viele', 'Gastarbeiter', 'blieben', 'und', 'gründeten', 'Familien']],
+        punct: '.'
+    },
+    {
+        parts: ['am', '9', '.', 'November', '1989', 'fiel', 'die', 'Berliner', 'Mauer'],
+        valid: [['am', '9', '.', 'November', '1989', 'fiel', 'die', 'Berliner', 'Mauer']],
+        punct: '.'
+    },
+    {
+        parts: ['Integration', 'braucht', 'gegenseitige', 'Akzeptanz', 'in', 'Kultur', 'und', 'Religion'],
+        valid: [['Integration', 'braucht', 'gegenseitige', 'Akzeptanz', 'in', 'Kultur', 'und', 'Religion']],
+        punct: '.'
+    },
+    {
+        parts: ['mehr', 'als', 'drei', 'Viertel', 'der', 'Berliner', 'wünschen', 'sich', 'eine', 'multikulturelle', 'Gesellschaft'],
+        valid: [['mehr', 'als', 'drei', 'Viertel', 'der', 'Berliner', 'wünschen', 'sich', 'eine', 'multikulturelle', 'Gesellschaft']],
+        punct: '.'
+    }
+];
+
+var WORTSCHATZ = [
+    { type:'n', artikel:'der', de:'Multikulturalismus', plural:'–',       en:'multiculturalism' },
+    { type:'n', artikel:'die', de:'Metropole',          plural:'Metropolen', en:'metropolis' },
+    { type:'n', artikel:'die', de:'Vielfalt',           plural:'–',       en:'diversity' },
+    { type:'n', artikel:'die', de:'Integration',        plural:'Integrationen', en:'integration' },
+    { type:'n', artikel:'die', de:'Reisefreiheit',      plural:'–',       en:'freedom of travel' },
+    { type:'n', artikel:'die', de:'Parallelgesellschaft', plural:'Parallelgesellschaften', en:'parallel society' },
+    { type:'n', artikel:'der', de:'Gastarbeiter',       plural:'Gastarbeiter', en:'guest worker' },
+    { type:'n', artikel:'das', de:'Einwanderungsland',  plural:'Einwanderungsländer', en:'country of immigration' },
+    { type:'n', artikel:'der', de:'Ausländeranteil',    plural:'Ausländeranteile', en:'proportion of foreigners' },
+    { type:'v', de:'sich ausgeben als', en:'to pose as / pretend to be' }
+];
+
+// ══════════════════════════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════════════════════════
+var TIMER_PREFIX = 'b1_1033r_best_';
+var timerStarted  = [false,false,false,false,false,false];
+var timerRunning  = [false,false,false,false,false,false];
+var timerSeconds  = [0,0,0,0,0,0];
+var timerIntervals= [null,null,null,null,null,null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+function fmtTime(s) {
+    return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + (s%60);
+}
+function loadBestTimes() {
+    for (var i = 2; i <= 5; i++) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
+    }
+}
+
+// ══════════════════════════════════════════════════════════════
+// TAB-NAVIGATION
+// ══════════════════════════════════════════════════════════════
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s,i) {
+        s.classList.toggle('active', i === n);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i) {
+        b.classList.toggle('active', i === n);
+    });
+}
+
+// ══════════════════════════════════════════════════════════════
+// VORENTLASTUNG — Vokabelkarten
+// ══════════════════════════════════════════════════════════════
+function initVorentlastung() {
+    var grid = document.getElementById('vocabGrid');
+    grid.innerHTML = '';
+    VORENTLASTUNG.forEach(function(v) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + v.term + '</div>'
+            + '<div class="vocab-en">' + v.en + '</div>'
+            + '<div class="vocab-def">' + v.def + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+// ══════════════════════════════════════════════════════════════
+// RICHTIG / FALSCH
+// ══════════════════════════════════════════════════════════════
+function initRF() {
+    var list = document.getElementById('rfList');
+    list.innerHTML = '';
+    RF_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'rf-item';
+        div.innerHTML =
+            '<span class="rf-text">' + item.q + '</span>' +
+            '<div class="rf-btns">' +
+                '<button class="rf-btn" id="rfR-' + idx + '" onclick="checkRF(' + idx + ',true)">R</button>' +
+                '<button class="rf-btn" id="rfF-' + idx + '" onclick="checkRF(' + idx + ',false)">F</button>' +
+            '</div>' +
+            '<span class="rf-result" id="rfRes-' + idx + '"></span>';
+        list.appendChild(div);
+    });
+}
+function checkRF(idx, isR) {
+    timerAutoStart(2);
+    var btnR = document.getElementById('rfR-' + idx);
+    var btnF = document.getElementById('rfF-' + idx);
+    var res  = document.getElementById('rfRes-' + idx);
+    btnR.classList.remove('sel-r','sel-f');
+    btnF.classList.remove('sel-r','sel-f');
+    if (isR) {
+        btnR.classList.add('sel-r');
+    } else {
+        btnF.classList.add('sel-f');
+    }
+    var correct = (isR === RF_DATA[idx].ans);
+    res.textContent = correct ? '✓' : '✗';
+    res.className = 'rf-result ' + (correct ? 'ok' : 'err');
+    checkRFAllOk();
+}
+function checkRFAllOk() {
+    var allOk = RF_DATA.every(function(item, i) {
+        var res = document.getElementById('rfRes-' + i);
+        return res && res.classList.contains('ok');
+    });
+    if (allOk) timerStop(2);
+}
+function showRFLoesung() {
+    RF_DATA.forEach(function(item, idx) {
+        checkRF(idx, item.ans);
+    });
+}
+function resetRF() { initRF(); }
+
+// ══════════════════════════════════════════════════════════════
+// LÜCKENTEXT
+// ══════════════════════════════════════════════════════════════
+function initLuecke() {
+    var container = document.getElementById('lueckeContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecke-item';
+        var html = '';
+        item.segs.forEach(function(seg) {
+            if (seg.t) {
+                html += seg.t;
+            } else if (seg.b !== undefined) {
+                var w = seg.s === 's' ? '50' : seg.s === 'm' ? '90' : seg.s === 'l' ? '130' : '180';
+                html += '<input class="luecken-inp" data-ans="' + seg.b + '" style="width:' + w + 'px" oninput="liveCheckLuecke(this)">';
+            }
+        });
+        if (item.hint) {
+            html += ' <em style="color:#aaa;font-size:0.82em;">(' + item.hint + ')</em>';
+        }
+        div.innerHTML = html;
+        container.appendChild(div);
+    });
+}
+function liveCheckLuecke(inp) {
+    timerAutoStart(3);
+    var val = inp.value.trim();
+    var ans = inp.dataset.ans || '';
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (val.toLowerCase() === ans.toLowerCase()) {
+        inp.classList.add('ok');
+    } else if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+        // valid prefix — neutral
+    } else {
+        inp.classList.add('no');
+    }
+    checkLueckeAllOk();
+}
+function checkLueckeAllOk() {
+    var inputs = document.querySelectorAll('#lueckeContainer input.luecken-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('ok');
+    });
+    if (allOk) timerStop(3);
+}
+function showLueckeLoesung() {
+    document.querySelectorAll('#lueckeContainer input.luecken-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans;
+        inp.classList.remove('no');
+        inp.classList.add('ok');
+    });
+}
+function resetLuecke() { initLuecke(); }
+
+// ══════════════════════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════════════════════
+var sbDragged = null;
+var sbSelected = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === '.') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    // Click-to-place
+    chip.addEventListener('click', function() {
+        if (sbSelected === chip) {
+            chip.classList.remove('selected');
+            sbSelected = null;
+            return;
+        }
+        if (sbSelected) sbSelected.classList.remove('selected');
+        sbSelected = chip;
+        chip.classList.add('selected');
+    });
+    return chip;
+}
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+    zone.addEventListener('click', function(e) {
+        if (e.target === zone && sbSelected) {
+            zone.appendChild(sbSelected);
+            sbSelected.classList.remove('selected');
+            sbSelected = null;
+            var row = document.getElementById('sb-row-' + idx);
+            sbUpdateCapitalization(row);
+            sbCheckAuto(idx);
+        }
+    });
+}
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(4);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(4);
+}
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== '.') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+function showAllSbSolutions() {
+    satzbauData.forEach(function(_, i) { sbShowSolution(i); });
+}
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row,  idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn-row-btn';
+        solveBtn.style.cssText = 'background:none;border:1px solid #c0b0e8;border-radius:16px;padding:4px 14px;cursor:pointer;font-size:.85rem;color:#5a3e9e;';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn-row-btn';
+        resetBtn.style.cssText = 'background:none;border:1px solid #c0b0e8;border-radius:16px;padding:4px 14px;cursor:pointer;font-size:.85rem;color:#5a3e9e;';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+// ══════════════════════════════════════════════════════════════
+// WORTSCHATZ
+// ══════════════════════════════════════════════════════════════
+function initWortschatz() {
+    var container = document.getElementById('vocabContainer');
+    container.innerHTML = '';
+    WORTSCHATZ.forEach(function(item, idx) {
+        var card = document.createElement('div');
+        card.className = 'wort-card';
+        if (item.type === 'n') {
+            card.innerHTML =
+                '<div class="wort-en">' + item.en + '</div>' +
+                '<div class="wort-inputs">' +
+                    '<input class="art-inp" type="text" placeholder="Artikel"' +
+                        ' data-ans="' + item.artikel + '"' +
+                        ' oninput="liveCheckWort(this,' + idx + ')">' +
+                    '<input class="wort-inp" type="text" placeholder="Nomen"' +
+                        ' data-ans="' + item.de + '"' +
+                        ' oninput="liveCheckWort(this,' + idx + ')">' +
+                    '<span class="wort-slash">/</span>' +
+                    '<input class="plural-inp" type="text" placeholder="Plural"' +
+                        ' data-ans="' + item.plural + '"' +
+                        ' oninput="liveCheckWort(this,' + idx + ')">' +
+                '</div>';
+        } else {
+            card.innerHTML =
+                '<div class="wort-en">' + item.en + '</div>' +
+                '<div class="wort-inputs">' +
+                    '<input class="wort-inp" style="width:200px" type="text" placeholder="Verb/Ausdruck"' +
+                        ' data-ans="' + item.de + '"' +
+                        ' oninput="liveCheckWort(this,' + idx + ')">' +
+                '</div>';
+        }
+        container.appendChild(card);
+    });
+}
+function liveCheckWort(inp, cardIdx) {
+    timerAutoStart(5);
+    var val = inp.value.trim();
+    var ans = inp.dataset.ans || '';
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (val.toLowerCase() === ans.toLowerCase()) {
+        inp.classList.add('ok');
+    } else if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+        // valid prefix
+    } else {
+        inp.classList.add('no');
+    }
+    checkWortAllOk();
+}
+function checkWortAllOk() {
+    var inputs = document.querySelectorAll('#vocabContainer input');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('ok');
+    });
+    if (allOk) timerStop(5);
+}
+function showWortLoesung() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        inp.value = inp.dataset.ans;
+        inp.classList.remove('no');
+        inp.classList.add('ok');
+    });
+}
+
+// ══════════════════════════════════════════════════════════════
+// VOKABEL-HERVORHEBUNG IM LESETEXT
+// ══════════════════════════════════════════════════════════════
+function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text') || document.querySelector('.lese-text');
+    if (!storyText) return;
+    var words = [];
+    if (typeof VORENTLASTUNG !== 'undefined' && VORENTLASTUNG.length) {
+        words = VORENTLASTUNG.map(function(item) {
+            var term = item.term.replace(/^(der|die|das)\s+/i, '');
+            return term.split(',')[0].trim();
+        });
+    } else if (typeof WORTSCHATZ !== 'undefined' && WORTSCHATZ.length) {
+        words = WORTSCHATZ.map(function(item) { return item.de; });
+    }
+    words = words.filter(function(w) { return w && w.length > 3; });
+    if (words.length === 0) return;
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+                replaced = replaced.replace(regex, '\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHighlight = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHighlight = !isHighlight; return; }
+                    if (isHighlight) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHighlight = !isHighlight;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
+    }
+    walkAndHighlight(storyText);
+}
+
+// ══════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════
+initVorentlastung();
+initRF();
+initLuecke();
+initSatzbau();
+initWortschatz();
+loadBestTimes();
+highlightVocabInText();
+</script>
+</body>
+</html>

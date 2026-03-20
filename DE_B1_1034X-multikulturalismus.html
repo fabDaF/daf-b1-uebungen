@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1034X · Multikulturalismus</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ── CONTAINER ── */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* ── HEADER ── */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header .subtitle { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+
+/* ── NAV ── */
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* ── TAB BANNER ── */
+.tab-banner {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+/* ── SECTION TITLES ── */
+.section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+/* ── HILFE-BOX ── */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* ── CONTROL-BAR ── */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+
+/* ── WORTSCHATZ ── */
+.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 160px; }
+.vocab-inputs input.plural { width: 150px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+@media (max-width: 600px) { .vocab-item { flex-direction: column; align-items: flex-start; } }
+
+/* ── ZUORDNUNG ── */
+.zuord-container { display: flex; gap: 20px; flex-wrap: wrap; }
+.zuord-bank {
+    flex: 0 0 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 60px;
+    margin-bottom: 16px;
+}
+.zuord-cats { display: flex; gap: 16px; flex: 1; flex-wrap: wrap; }
+.zuord-cat {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 10px;
+    border: 2px dashed #ccc;
+    padding: 14px;
+    min-height: 160px;
+}
+.zuord-cat-title {
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-align: center;
+}
+.zuord-cat[data-cat="multi"] { border-color: #667eea; background: #f8f8ff; }
+.zuord-cat[data-cat="multi"] .zuord-cat-title { background: #667eea; color: white; }
+.zuord-cat[data-cat="inter"] { border-color: #764ba2; background: #f9f8ff; }
+.zuord-cat[data-cat="inter"] .zuord-cat-title { background: #764ba2; color: white; }
+.zuord-cat-chips { display: flex; flex-wrap: wrap; gap: 8px; min-height: 40px; }
+.zuord-chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 7px 13px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.88em;
+    transition: all 0.2s;
+    user-select: none;
+}
+.zuord-chip:hover { background: #f0edf8; }
+.zuord-chip.correct { background: #27ae60; border-color: #27ae60; color: white; cursor: default; }
+.zuord-chip.wrong   { background: #e74c3c; border-color: #e74c3c; color: white; }
+.zuord-score { font-weight: 700; color: #667eea; font-size: 1em; margin-top: 12px; }
+
+/* ── LÜCKENTEXT ── */
+.luecken-satz {
+    background: #f8f9ff;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    font-size: 0.95em;
+    line-height: 1.8;
+}
+.luecken-inp {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 2px 6px;
+    outline: none;
+    min-width: 100px;
+    transition: all 0.2s;
+}
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.wortkasten {
+    background: #f0f4ff;
+    border: 1px solid #c0b0e8;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88em;
+    color: #555;
+    line-height: 2;
+}
+.wortkasten strong { color: #667eea; }
+
+/* ── SATZBAU ── */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    min-height: 56px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: move;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { background: #667eea; color: white; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; cursor: move; }
+.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.satzbau-item:last-child { border-bottom: none; }
+#satzbauContainer { padding-top: 8px; }
+
+/* ── STÄDTE-TAB ── */
+.staedte-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+}
+.stadt-card {
+    background: #f8f9ff;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+    padding: 14px 16px;
+    font-size: 0.9em;
+}
+.stadt-name { font-weight: 700; color: #667eea; font-size: 1em; margin-bottom: 4px; }
+.stadt-desc { color: #555; font-size: 0.88em; line-height: 1.5; }
+
+/* ── FOOTER ── */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h1>Multikulturalismus</h1>
+    <p class="subtitle" style="font-family: Georgia, serif;">B1.1 · Lektion 1034X · Kommunikation</p>
+    <div class="big-emoji">🌍</div>
+</div>
+
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📚</span><span class="nav-label">Wortschatz</span></div>
+    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🔀</span><span class="nav-label">Zuordnung</span></div>
+    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🏙️</span><span class="nav-label">Städte</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 0: WORTSCHATZ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section active" id="sec-0">
+<img class="tab-banner" src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Multikulturelle Gesellschaft">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">📚 Wortschatz — Multikulturalismus</h2>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="showVocabLoesung()">💡 Lösungen</button>
+            <button class="btn" onclick="resetVocab(); resetTimer(0);">↺ Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-0">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-0">--:--</span></span>
+        </div>
+    </div>
+    <div class="hilfe-box">
+        <strong>Aufgabe:</strong> Übersetze die Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural eingeben!
+    </div>
+    <div id="vocabContainer"></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 1: ZUORDNUNG -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-1">
+<img class="tab-banner" src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Kommunikation zwischen Kulturen">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">🔀 Zuordnung — Multikulturalismus oder Interkulturalität?</h2>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="resetZuordnung(); resetTimer(1);">↺ Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-1">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-1">--:--</span></span>
+        </div>
+    </div>
+    <div class="hilfe-box">
+        <strong>Aufgabe:</strong> Ordne die Aussagen zu: Gehört die Aussage zum <strong>Multikulturalismus</strong> (verschiedene Kulturen leben <em>nebeneinander</em>) oder zur <strong>Interkulturalität</strong> (Kulturen kommunizieren <em>miteinander</em>)?
+    </div>
+    <div class="zuord-container">
+        <div class="zuord-bank" id="zuord-bank"></div>
+        <div class="zuord-cats">
+            <div class="zuord-cat" data-cat="multi" id="cat-multi">
+                <div class="zuord-cat-title">🏘️ Multikulturalismus<br><small style="font-weight:400">nebeneinander leben</small></div>
+                <div class="zuord-cat-chips" id="cat-chips-multi"></div>
+            </div>
+            <div class="zuord-cat" data-cat="inter" id="cat-inter">
+                <div class="zuord-cat-title">🤝 Interkulturalität<br><small style="font-weight:400">miteinander kommunizieren</small></div>
+                <div class="zuord-cat-chips" id="cat-chips-inter"></div>
+            </div>
+        </div>
+    </div>
+    <div class="zuord-score" id="zuord-score"></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 2: LÜCKENTEXT -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-2">
+<img class="tab-banner" src="https://images.pexels.com/photos/3184340/pexels-photo-3184340.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Zusammenarbeit">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">✏️ Lückentext — Multikulturalismus</h2>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="showLueckenLoesung()">💡 Lösungen</button>
+            <button class="btn" onclick="resetLuecken(); resetTimer(2);">↺ Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-2">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-2">--:--</span></span>
+        </div>
+    </div>
+    <div class="wortkasten">
+        <strong>Wortkasten:</strong> Toleranz · Respekt · Integration · Vielfalt · Moral · Tradition · Gleichheit · Akzeptanz · Multikulturalismus · Interkulturalität · Sitte · Brauch
+    </div>
+    <div id="lueckenContainer"></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 3: SATZBAU -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-3">
+<img class="tab-banner" src="https://images.pexels.com/photos/3184336/pexels-photo-3184336.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Diskussion">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">🧩 Satzbau — Sätze ordnen</h2>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="sbSolveAll()">💡 Lösungen</button>
+            <button class="btn" onclick="resetSatzbau(); resetTimer(3);">↺ Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-3">--:--</span></span>
+        </div>
+    </div>
+    <div class="hilfe-box">
+        <strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge. Klicke einen Chip an und dann auf die Zielzeile — oder ziehe Chips per Drag &amp; Drop.
+    </div>
+    <div id="satzbauContainer"></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 4: STÄDTE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-4">
+<img class="tab-banner" src="https://images.pexels.com/photos/1271619/pexels-photo-1271619.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Multikulturelle Städte">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">🏙️ Multikulturelle Großstädte</h2>
+    <div class="hilfe-box">
+        <strong>Hintergrund:</strong> Diese Städte gelten als besonders multikulturell oder interkulturell. Überlege: Ist die Stadt eher multikulturell (verschiedene Kulturen leben nebeneinander) oder interkulturell (aktiver Austausch zwischen Kulturen)?
+    </div>
+    <div class="staedte-grid" id="staedteGrid"></div>
+    <div style="margin-top: 28px; padding: 16px; background: #f0f4ff; border-radius: 10px; font-size: 0.9em; color: #555; line-height: 1.7;">
+        <strong style="color:#667eea;">💬 Diskussion:</strong><br>
+        Welche dieser Städte kennst du? Beschreibe sie mit den Wörtern aus diesem Thema:
+        <em>multikulturell, interkulturell, Toleranz, Respekt, Akzeptanz, kulturelle Vielfalt, Tradition, Sitte, Brauch</em>.
+    </div>
+</div>
+</div>
+
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ─── TIMER ────────────────────────────────────────────────────────────────────
+var TIMER_PREFIX = 'b1_1034x_best_';
+var timers = [null, null, null, null, null];
+var elapsed = [0, 0, 0, 0, 0];
+var timerRunning = [false, false, false, false, false];
+
+function fmtTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function loadBestTimes() {
+    for (var i = 0; i < 5; i++) {
+        var b = localStorage.getItem(TIMER_PREFIX + i);
+        var el = document.getElementById('best-' + i);
+        if (el) el.textContent = b ? fmtTime(parseInt(b)) : '--:--';
+    }
+}
+
+function timerAutoStart(n) {
+    if (timerRunning[n]) return;
+    timerRunning[n] = true;
+    timers[n] = setInterval(function() {
+        elapsed[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(elapsed[n]);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timers[n]);
+    timerRunning[n] = false;
+    var prev = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (elapsed[n] < prev) {
+        localStorage.setItem(TIMER_PREFIX + n, elapsed[n]);
+        var best = document.getElementById('best-' + n);
+        if (best) best.textContent = fmtTime(elapsed[n]);
+    }
+}
+
+function resetTimer(n) {
+    clearInterval(timers[n]);
+    timerRunning[n] = false;
+    elapsed[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '00:00';
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+// ─── WORTSCHATZ ───────────────────────────────────────────────────────────────
+var WORTSCHATZ = [
+    { id:1,  type:'n', en:'multiculturalism',   artikel:'der', de:'Multikulturalismus',   plural:'—' },
+    { id:2,  type:'n', en:'interculturalism',   artikel:'die', de:'Interkulturalität',    plural:'—' },
+    { id:3,  type:'n', en:'tolerance',          artikel:'die', de:'Toleranz',             plural:'—' },
+    { id:4,  type:'n', en:'respect',            artikel:'der', de:'Respekt',              plural:'—' },
+    { id:5,  type:'n', en:'tradition',          artikel:'die', de:'Tradition',            plural:'Traditionen' },
+    { id:6,  type:'n', en:'custom / habit',     artikel:'die', de:'Sitte',                plural:'Sitten' },
+    { id:7,  type:'n', en:'custom / practice',  artikel:'der', de:'Brauch',               plural:'Bräuche' },
+    { id:8,  type:'n', en:'moral',              artikel:'die', de:'Moral',                plural:'—' },
+    { id:9,  type:'n', en:'acceptance',         artikel:'die', de:'Akzeptanz',            plural:'—' },
+    { id:10, type:'n', en:'equality',           artikel:'die', de:'Gleichheit',           plural:'—' },
+    { id:11, type:'v', en:'multicultural',      de:'multikulturell' },
+    { id:12, type:'v', en:'intercultural',      de:'interkulturell' },
+];
+
+function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+}
+
+function initVocab() {
+    var container = document.getElementById('vocabContainer');
+    container.innerHTML = '';
+    var items = shuffle(WORTSCHATZ);
+    items.forEach(function(w) {
+        var div = document.createElement('div');
+        div.className = 'vocab-item';
+        div.dataset.id = w.id;
+
+        var en = document.createElement('span');
+        en.className = 'vocab-en';
+        en.textContent = w.en;
+
+        var arrow = document.createElement('span');
+        arrow.className = 'vocab-arrow';
+        arrow.textContent = '→';
+
+        var inputs = document.createElement('div');
+        inputs.className = 'vocab-inputs';
+
+        if (w.type === 'n') {
+            var art = document.createElement('input');
+            art.type = 'text';
+            art.className = 'art';
+            art.placeholder = 'Artikel';
+            art.dataset.ans = w.artikel;
+            art.oninput = function() { vocabLiveCheck(this); timerAutoStart(0); };
+
+            var wort = document.createElement('input');
+            wort.type = 'text';
+            wort.className = 'wort';
+            wort.placeholder = 'Deutsch';
+            wort.dataset.ans = w.de;
+            wort.oninput = function() { vocabLiveCheck(this); timerAutoStart(0); };
+
+            inputs.appendChild(art);
+            inputs.appendChild(wort);
+
+            if (w.plural !== '—') {
+                var pl = document.createElement('input');
+                pl.type = 'text';
+                pl.className = 'plural';
+                pl.placeholder = 'Plural';
+                pl.dataset.ans = w.plural;
+                pl.oninput = function() { vocabLiveCheck(this); timerAutoStart(0); };
+                inputs.appendChild(pl);
+            }
+        } else {
+            var wortOnly = document.createElement('input');
+            wortOnly.type = 'text';
+            wortOnly.className = 'wort';
+            wortOnly.placeholder = 'Deutsch';
+            wortOnly.dataset.ans = w.de;
+            wortOnly.oninput = function() { vocabLiveCheck(this); timerAutoStart(0); };
+            inputs.appendChild(wortOnly);
+        }
+
+        div.appendChild(en);
+        div.appendChild(arrow);
+        div.appendChild(inputs);
+        container.appendChild(div);
+    });
+}
+
+function vocabLiveCheck(inp) {
+    var ans = inp.dataset.ans.trim().toLowerCase();
+    var val = inp.value.trim().toLowerCase();
+    if (val === '') { inp.classList.remove('correct', 'wrong'); return; }
+    if (ans.startsWith(val)) {
+        inp.classList.remove('wrong');
+        if (val === ans) {
+            inp.classList.add('correct');
+            checkVocabAllDone();
+        }
+    } else {
+        inp.classList.remove('correct');
+        inp.classList.add('wrong');
+    }
+}
+
+function checkVocabAllDone() {
+    var allInputs = document.querySelectorAll('#vocabContainer input');
+    var allOk = Array.from(allInputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(0);
+}
+
+function showVocabLoesung() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        if (!inp.classList.contains('correct')) {
+            var hint = document.createElement('span');
+            hint.className = 'vocab-hint';
+            hint.textContent = inp.dataset.ans;
+            inp.parentNode.appendChild(hint);
+        }
+    });
+}
+
+function resetVocab() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
+    document.querySelectorAll('.vocab-hint').forEach(function(h) { h.remove(); });
+}
+
+// ─── ZUORDNUNG ────────────────────────────────────────────────────────────────
+var ZUORD_DATA = [
+    { id:1,  text:'Verschiedene Kulturen leben in einer Stadt nebeneinander.',    cat:'multi' },
+    { id:2,  text:'Menschen verschiedener Kulturen kommunizieren miteinander.',   cat:'inter' },
+    { id:3,  text:'Jede Gruppe behält ihre eigene Sprache und Tradition.',        cat:'multi' },
+    { id:4,  text:'Kontakte zwischen Nationalitäten sind interkulturell.',        cat:'inter' },
+    { id:5,  text:'Berlin ist eine multikulturelle Metropole in Europa.',         cat:'multi' },
+    { id:6,  text:'Das Ziel der EU-Politik ist die interkulturelle Gesellschaft.',cat:'inter' },
+    { id:7,  text:'Verschiedene Religionen existieren in einem Land.',            cat:'multi' },
+    { id:8,  text:'Respekt und Toleranz ermöglichen den Dialog zwischen Kulturen.',cat:'inter' },
+    { id:9,  text:'Parallelgesellschaften entstehen, wenn Gruppen sich isolieren.',cat:'multi' },
+    { id:10, text:'Akzeptanz und Verständnis verbinden verschiedene Kulturen.',   cat:'inter' },
+    { id:11, text:'Multikulturalismus bedeutet: viele Kulturen, eine Gesellschaft.',cat:'multi' },
+    { id:12, text:'Interkulturalität bedeutet mehr als nur Koexistenz.',          cat:'inter' },
+];
+
+var zuordSelectedChip = null;
+
+function initZuordnung() {
+    var bank = document.getElementById('zuord-bank');
+    bank.innerHTML = '';
+    document.getElementById('cat-chips-multi').innerHTML = '';
+    document.getElementById('cat-chips-inter').innerHTML = '';
+    document.getElementById('zuord-score').textContent = '';
+
+    var items = shuffle(ZUORD_DATA);
+    items.forEach(function(d) {
+        bank.appendChild(makeZuordChip(d, true));
+    });
+}
+
+function makeZuordChip(d, inBank) {
+    var chip = document.createElement('div');
+    chip.className = 'zuord-chip';
+    chip.textContent = d.text;
+    chip.dataset.id = d.id;
+    chip.dataset.cat = d.cat;
+    chip.dataset.inbank = inBank ? '1' : '0';
+
+    chip.addEventListener('click', function() {
+        if (chip.classList.contains('correct')) return;
+
+        if (chip.dataset.inbank === '1') {
+            // Select chip from bank
+            if (zuordSelectedChip) zuordSelectedChip.classList.remove('selected');
+            zuordSelectedChip = chip;
+            chip.classList.add('selected');
+        } else {
+            // Click in category → move back to bank
+            if (!chip.classList.contains('correct')) {
+                chip.classList.remove('wrong');
+                chip.dataset.inbank = '1';
+                document.getElementById('zuord-bank').appendChild(chip);
+                timerAutoStart(1);
+            }
+        }
+    });
+
+    return chip;
+}
+
+function setupCatClick() {
+    ['cat-multi', 'cat-inter'].forEach(function(catId) {
+        var catEl = document.getElementById(catId);
+        var chipsEl = document.getElementById('cat-chips-' + catEl.dataset.cat);
+        catEl.addEventListener('click', function(e) {
+            if (!zuordSelectedChip) return;
+            if (e.target.classList.contains('zuord-chip')) return; // click on chip itself
+
+            var chip = zuordSelectedChip;
+            var correct = chip.dataset.cat === catEl.dataset.cat;
+            chip.classList.remove('selected');
+            chip.dataset.inbank = '0';
+            zuordSelectedChip = null;
+
+            if (correct) {
+                chip.classList.add('correct');
+            } else {
+                chip.classList.add('wrong');
+                // Move back to bank after 800ms
+                setTimeout(function() {
+                    chip.classList.remove('wrong');
+                    chip.dataset.inbank = '1';
+                    document.getElementById('zuord-bank').appendChild(chip);
+                }, 800);
+            }
+            chipsEl.appendChild(chip);
+            timerAutoStart(1);
+            checkZuordDone();
+        });
+    });
+}
+
+function checkZuordDone() {
+    var allChips = document.querySelectorAll('.zuord-chip');
+    var correct = Array.from(allChips).filter(function(c) { return c.classList.contains('correct'); });
+    var scoreEl = document.getElementById('zuord-score');
+    scoreEl.textContent = correct.length + ' / ' + ZUORD_DATA.length + ' richtig zugeordnet';
+    if (correct.length === ZUORD_DATA.length) {
+        scoreEl.textContent += ' ✅ Alle richtig!';
+        timerStop(1);
+    }
+}
+
+function resetZuordnung() {
+    initZuordnung();
+}
+
+// ─── LÜCKENTEXT ───────────────────────────────────────────────────────────────
+var LUECKEN_DATA = [
+    { before: 'In einer großen Stadt gibt es immer Vertreter von vielen verschiedenen Kulturen. Das nennt man ', blank: 'Multikulturalismus', after: '.' },
+    { before: 'Um in einer multikulturellen Gesellschaft zu leben, muss man ', blank: 'Toleranz', after: ' und Respekt zeigen.' },
+    { before: 'Kontakte zwischen Menschen verschiedener Kulturen und Nationalitäten sind inter', blank: 'kulturell', after: '.' },
+    { before: 'Das Ziel der europäischen Politik ist die interkulturelle Gesellschaft mit kultureller ', blank: 'Vielfalt', after: '.' },
+    { before: 'Freiheit, ', blank: 'Gleichheit', after: ' und Solidarität sind die Hauptprinzipien der modernen Gesellschaft.' },
+    { before: 'Die ', blank: 'Tradition', after: ' unseres Familienfestes besteht bereits seit drei Generationen.' },
+    { before: 'Bräuche sind Gewohnheiten in einer begrenzten Gruppe, während ', blank: 'Sitten', after: ' in einem größeren sozialen Zusammenhang gelten.' },
+    { before: 'In einer multikulturellen Gesellschaft muss eine soziale ', blank: 'Toleranz', after: ' entwickelt werden.' },
+    { before: 'Das Ziel der Politik ist, Verständnis, ', blank: 'Akzeptanz', after: ' und Vertrauen aufzubauen.' },
+    { before: '„Wirkliche Brüder behandeln einander mit Vertrauen und ', blank: 'Respekt', after: '."' },
+    { before: 'Man darf nie die ', blank: 'Moral', after: ' vergessen!' },
+    { before: 'Die ', blank: 'Integration', after: ' verschiedener Kulturen braucht Zeit und gegenseitiges Verständnis.' },
+];
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(d, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecken-satz';
+
+        var textBefore = document.createTextNode(d.before);
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'luecken-inp';
+        inp.dataset.ans = d.blank;
+        inp.style.width = Math.max(80, d.blank.length * 11) + 'px';
+        inp.oninput = function() { liveCheckLuecke(this); timerAutoStart(2); };
+
+        var textAfter = document.createTextNode(d.after);
+
+        div.appendChild(textBefore);
+        div.appendChild(inp);
+        div.appendChild(textAfter);
+        container.appendChild(div);
+    });
+}
+
+function liveCheckLuecke(inp) {
+    var ans = inp.dataset.ans.trim().toLowerCase();
+    var val = inp.value.trim().toLowerCase();
+    if (val === '') { inp.classList.remove('ok', 'no'); return; }
+    if (ans.startsWith(val)) {
+        inp.classList.remove('no');
+        if (val === ans) {
+            inp.classList.add('ok');
+            checkLueckenAllDone();
+        } else {
+            inp.classList.remove('ok');
+        }
+    } else {
+        inp.classList.remove('ok');
+        inp.classList.add('no');
+    }
+}
+
+function checkLueckenAllDone() {
+    var all = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    var done = Array.from(all).every(function(i) { return i.classList.contains('ok'); });
+    if (done) timerStop(2);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        if (!inp.classList.contains('ok')) {
+            inp.value = inp.dataset.ans;
+            inp.classList.add('ok');
+        }
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'no');
+    });
+}
+
+// ─── SATZBAU ──────────────────────────────────────────────────────────────────
+var satzbauData = [
+    {
+        parts: ['In', 'einer', 'multikulturellen', 'Gesellschaft', 'muss', 'man', 'Toleranz', 'zeigen'],
+        valid: [['In', 'einer', 'multikulturellen', 'Gesellschaft', 'muss', 'man', 'Toleranz', 'zeigen']],
+        punct: '.'
+    },
+    {
+        parts: ['das', 'Ziel', 'der', 'Politik', 'ist', 'die', 'interkulturelle', 'Gesellschaft'],
+        valid: [['das', 'Ziel', 'der', 'Politik', 'ist', 'die', 'interkulturelle', 'Gesellschaft']],
+        punct: '.'
+    },
+    {
+        parts: ['Interkulturalität', 'bedeutet', 'die', 'Kommunikation', 'zwischen', 'verschiedenen', 'Kulturen'],
+        valid: [['Interkulturalität', 'bedeutet', 'die', 'Kommunikation', 'zwischen', 'verschiedenen', 'Kulturen']],
+        punct: '.'
+    },
+    {
+        parts: ['Freiheit', ',', 'Gleichheit', 'und', 'Solidarität', 'sind', 'Hauptprinzipien'],
+        valid: [['Freiheit', ',', 'Gleichheit', 'und', 'Solidarität', 'sind', 'Hauptprinzipien']],
+        punct: '.'
+    },
+    {
+        parts: ['viele', 'Bräuche', 'und', 'Sitten', 'sind', 'Teil', 'einer', 'lebendigen', 'Tradition'],
+        valid: [['viele', 'Bräuche', 'und', 'Sitten', 'sind', 'Teil', 'einer', 'lebendigen', 'Tradition']],
+        punct: '.'
+    },
+    {
+        parts: ['Respekt', 'und', 'Akzeptanz', 'verbinden', 'verschiedene', 'Kulturen', 'miteinander'],
+        valid: [['Respekt', 'und', 'Akzeptanz', 'verbinden', 'verschiedene', 'Kulturen', 'miteinander']],
+        punct: '.'
+    },
+    {
+        parts: ['man', 'darf', 'nie', 'die', 'Moral', 'vergessen'],
+        valid: [['man', 'darf', 'nie', 'die', 'Moral', 'vergessen']],
+        punct: '!'
+    },
+];
+
+var sbDragged = null;
+var sbClickSelected = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === ';') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(3);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+
+    // Click-to-place
+    chip.addEventListener('click', function() {
+        if (sbClickSelected === chip) {
+            chip.classList.remove('selected');
+            sbClickSelected = null;
+            return;
+        }
+        if (sbClickSelected) sbClickSelected.classList.remove('selected');
+        sbClickSelected = chip;
+        chip.classList.add('selected');
+    });
+
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+
+    // Click-to-place: click on zone (not on chip) places selected chip
+    zone.addEventListener('click', function(e) {
+        if (!sbClickSelected) return;
+        if (e.target.classList.contains('chip')) return;
+        zone.appendChild(sbClickSelected);
+        sbClickSelected.classList.remove('selected');
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbClickSelected = null;
+        timerAutoStart(3);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var solution = satzbauData[idx].valid[0];
+
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function sbSolveAll() {
+    satzbauData.forEach(function(_, i) { sbShowSolution(i); });
+}
+
+function resetSatzbau() { initSatzbau(); }
+
+// ─── STÄDTE ───────────────────────────────────────────────────────────────────
+var STAEDTE = [
+    { name: 'Istanbul', desc: 'Brücke zwischen Europa und Asien — zwei Kontinente, eine Stadt.' },
+    { name: 'Moskau', desc: 'Größte Stadt Europas mit vielen Nationalitäten und Kulturen.' },
+    { name: 'Berlin', desc: 'Multikulturelle Metropole — 24,5% Ausländeranteil, 190 Nationalitäten.' },
+    { name: 'London', desc: 'Weltstadt mit über 300 gesprochenen Sprachen.' },
+    { name: 'New York', desc: '„Melting Pot" — Millionen Einwanderer aus aller Welt.' },
+    { name: 'Tokio', desc: 'Modernes Japan trifft auf internationale Einflüsse.' },
+    { name: 'Washington', desc: 'Politisches Zentrum mit großer kultureller Diversität.' },
+    { name: 'Mailand', desc: 'Mode- und Wirtschaftsmetropole — ein Treffpunkt der Kulturen.' },
+    { name: 'Madrid', desc: 'Spanische Metropole mit lebhafter Einwanderergemeinschaft.' },
+    { name: 'Shanghai', desc: 'Wirtschaftszentrum Asiens mit internationalem Flair.' },
+];
+
+function initStaedte() {
+    var grid = document.getElementById('staedteGrid');
+    grid.innerHTML = '';
+    STAEDTE.forEach(function(s) {
+        var card = document.createElement('div');
+        card.className = 'stadt-card';
+        card.innerHTML = '<div class="stadt-name">🌆 ' + s.name + '</div><div class="stadt-desc">' + s.desc + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadBestTimes();
+initVocab();
+initZuordnung();
+setupCatClick();
+initLuecken();
+initSatzbau();
+initStaedte();
+</script>
+</body>
+</html>

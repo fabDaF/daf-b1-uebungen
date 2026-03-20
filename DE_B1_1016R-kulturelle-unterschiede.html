@@ -731,7 +731,8 @@ function buildSatzbau() {
         e.dataTransfer.setData('text/plain','');
       });
       chip.addEventListener('dragend', function() { colorSbRow(idx); });
-      chip.addEventListener('click', function() {
+      chip.addEventListener('click', function(e) {
+        e.stopPropagation();
         var row = document.getElementById('sb-row-' + idx);
         row.appendChild(chip);
         updateSbCaps(idx);

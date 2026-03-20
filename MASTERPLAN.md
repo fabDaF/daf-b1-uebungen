@@ -568,7 +568,9 @@ Jeder Bug, der mehr als einmal aufgetreten ist, wurde durch das **Überspringen 
 
 ### Vor dem Erstellen einer neuen Datei — PFLICHT
 
-- [ ] `daf-html-layout` SKILL.md gelesen? → Korrekte Header-, Nav-, Container-CSS
+- [ ] `daf-html-layout` SKILL.md gelesen? → Korrekte Header-, Nav-, Container-CSS, Wortschatz-Pattern
+- [ ] Nav-HTML: `<div class="nav">` und `<div class="nav-btn">` (KEIN `<nav>` oder `<button>`)
+- [ ] Wortschatz: `WORTSCHATZ[]` mit `type`/`artikel`/`de`/`plural` + `vocabContainer` (kein `WORT_DATA`, kein `wort-item`)
 - [ ] `satzbau-drag-drop` SKILL.md gelesen? (wenn Satzbau-Tab) → satzbauData, sbMakeChip, white chips
 - [ ] `lesetext-hervorhebung` SKILL.md gelesen? (wenn Lesetext) → highlightVocabInText()
 - [ ] `daf-bilder-pflicht` gelesen? → Tab-Banner für jeden Tab
@@ -586,6 +588,47 @@ Jeder Bug, der mehr als einmal aufgetreten ist, wurde durch das **Überspringen 
 - [ ] Alle 5 Phasen des Tests bestanden?
 - [ ] Git commit & push durchgeführt?
 - [ ] Dashboard-Badge aktualisiert?
+
+### Bug 7: `<nav>`-Tag statt `<div class="nav">` — schwarze Linien zwischen Tabs
+
+**Symptom:** Sichtbare schwarze Trennlinien zwischen den Tab-Reitern.
+**Ursache:** HTML5 `<nav>`-Tag hat Browser-Default-Styling (outline, border) das CSS-Resets manchmal nicht vollständig überschreiben.
+**Fix:** IMMER `<div class="nav">` verwenden — niemals das semantische `<nav>`-Tag:
+```html
+<!-- ❌ FALSCH -->
+<nav class="nav"> ... </nav>
+
+<!-- ✅ RICHTIG -->
+<div class="nav"> ... </div>
+```
+Gleiches gilt für Nav-Buttons: `<div class="nav-btn">` statt `<button class="nav-btn">`.
+Buttons erhalten Browser-Default-Borders und Focus-Outlines, die unerwünschte Linien erzeugen.
+
+**Auch in §10 Pre-Flight-Checklist ergänzt** — Nav-HTML wird jetzt beim Layout-Check geprüft.
+
+---
+
+### Bug 8: Wortschatz-Tab mit `wort-item`/`WORT_DATA` statt Skill-Standard
+
+**Symptom:** Wortschatz-Tab zeigt nur ein einziges Eingabefeld pro Wort, kein Artikel/Plural.
+**Ursache:** Wortschatz aus dem Kopf gebaut, ohne `daf-html-layout` SKILL.md (Abschnitt „Wortschatz-Tab") gelesen zu haben.
+
+**Erkennungszeichen der FALSCHEN Implementierung:**
+- Variable heißt `WORT_DATA` mit `.answer`-Feld statt `WORTSCHATZ` mit `.type`/`.de`/`.artikel`/`.plural`
+- CSS-Klassen: `wort-item`, `wort-prompt`, `wort-en` statt `vocab-item`, `vocab-en`, `vocab-inputs`
+- Nur ein `input.blank` pro Zeile statt getrennter `.art`/`.wort`/`.plural`-Inputs
+- Container heißt `wort-container` statt `vocabContainer`
+- Funktionen: `buildWort`, `liveCheckWort`, `showWortLoesung`, `resetWort` statt `initVocab`, `vocabLiveCheck`, `showVocabLoesung`, `resetVocab`
+
+**Fix:** `daf-html-layout` SKILL.md → Abschnitt „Wortschatz-Tab — VERBINDLICHES KOMPLETT-PATTERN" vollständig lesen und umsetzen. Datenformat:
+```javascript
+var WORTSCHATZ = [
+  { id:1, type:'n', en:'...', artikel:'der', de:'Wort', plural:'Wörter' },
+  { id:2, type:'v', en:'...', de:'machen' }
+];
+```
+
+---
 
 ### Goldene Regel
 

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konjunktiv II der Modalverben – B1</title>
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh; padding: 20px;
+}
+
+/* ── Container ── */
+.container {
+  max-width: 1000px; margin: 0 auto;
+  background: white; border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; padding: 24px 28px;
+}
+.header h1 { font-size: 1.45rem; font-weight: 700; }
+.header p  { font-size: 0.88rem; opacity: 0.85; margin-top: 4px; }
+
+/* ── Navigation ── */
+.nav {
+  display: flex; flex-wrap: wrap;
+  background: #f8f9ff;
+  border-bottom: 2px solid #e8eaf6;
+}
+.nav-btn {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 16px; border: none; background: none;
+  cursor: pointer; font-size: 0.78rem; color: #666;
+  border-bottom: 3px solid transparent;
+  transition: all .2s; gap: 3px;
+  border-right: 1px solid #e8eaf6;
+}
+.nav-btn .nav-emoji { font-size: 1.3rem; }
+.nav-btn:hover { background: #eef0ff; color: #667eea; }
+.nav-btn.active { color: #667eea; border-bottom-color: #667eea; background: #fff; font-weight: 700; }
+
+/* ── Sections ── */
+.section { display: none; padding: 28px; }
+.section.aktiv { display: block; }
+
+/* ── Tab-Banner ── */
+.tab-banner {
+  width: 100%; height: 180px; object-fit: cover;
+  border-radius: 10px; margin-bottom: 20px;
+}
+
+/* ── Entdeckungs-Tab ── */
+.entdeck-intro {
+  background: #f3e5f5; border-radius: 12px;
+  padding: 18px 22px; margin-bottom: 20px;
+  border-left: 5px solid #9c27b0; font-size: 0.97rem; line-height: 1.75;
+}
+.entdeck-intro h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05rem; }
+.hl { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+
+.mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+.mc-step.active { display: block; }
+.mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 0.97rem; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-btn {
+  padding: 9px 16px; border: 2px solid #c5cae9; border-radius: 8px;
+  background: #fff; cursor: pointer; text-align: left; font-size: 0.92rem;
+  transition: all .2s;
+}
+.mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+.mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-btn.wrong   { border-color: #e53935; background: #ffebee; color: #c62828; }
+.mc-feedback { margin-top: 10px; font-size: 0.88rem; min-height: 1.3em; }
+.mc-feedback.ok  { color: #2e7d32; font-weight: 700; }
+.mc-feedback.err { color: #c62828; }
+
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background .3s; }
+.pdot.done { background: #667eea; }
+
+.regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 10px; }
+.regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.05rem; }
+.regel-karte ul { margin-left: 18px; }
+.regel-karte li { color: #333; line-height: 1.8; font-size: 0.95rem; }
+.regel-karte .rk-example { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; border-left: 3px solid #7c4dff; font-size: 0.9rem; color: #333; }
+.regel-karte .rk-example b { color: #3949ab; }
+
+/* ── Lückentext ── */
+.luecke-item {
+  background: #f8f9ff; border-radius: 10px;
+  padding: 14px 18px; margin-bottom: 10px;
+  border-left: 4px solid #667eea; line-height: 2;
+}
+.luecke-nr { font-size: 0.75rem; color: #999; margin-right: 6px; }
+.wortkasten {
+  background: #ede7f6; border-radius: 8px;
+  padding: 10px 16px; margin-bottom: 18px;
+  font-size: 0.88rem; color: #4a148c; line-height: 1.8;
+}
+.wortkasten strong { display: block; margin-bottom: 4px; }
+input.blank {
+  border: none; border-bottom: 2px solid #c5cae9;
+  background: transparent; outline: none;
+  font-family: inherit; font-size: inherit;
+  transition: border-color .2s; padding: 0 2px;
+}
+input.blank:focus { border-bottom-color: #667eea; }
+input.blank.correct { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; }
+
+/* ── Zuordnung ── */
+.zuo-intro { font-size: 0.9rem; color: #555; margin-bottom: 16px; }
+.zuo-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 16px;
+}
+.zuo-col h4 {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; padding: 8px 14px; border-radius: 8px 8px 0 0;
+  font-size: 0.88rem; margin-bottom: 0;
+}
+.drop-zone {
+  min-height: 80px; border-radius: 0 0 10px 10px;
+  border: 2px dashed #c5cae9; border-top: none;
+  padding: 10px; background: #fafbff;
+  display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start;
+  transition: background .2s;
+}
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.chip-bank {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 12px; background: #f0f0f8;
+  border-radius: 10px; margin-bottom: 16px;
+  min-height: 54px; border: 1px dashed #bbb;
+}
+.chip {
+  padding: 6px 14px; border-radius: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; cursor: grab; font-size: 0.83rem;
+  font-weight: 600; user-select: none;
+  transition: transform .15s, opacity .15s;
+  white-space: normal; display: inline-block;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.selected { outline: 3px solid #f39c12; }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.zuo-score { font-size: 0.85rem; color: #667eea; font-weight: 600; margin-top: 8px; }
+
+/* ── Satzbau ── */
+.sb-item { background: #f8f9ff; border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; border-left: 4px solid #667eea; }
+.sb-label { font-size: 0.75rem; color: #999; margin-bottom: 8px; }
+.chip-pool { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; min-height: 40px; }
+.drop-row {
+  display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px;
+  padding: 8px 10px; border-radius: 8px;
+  border: 2px dashed #c5cae9; background: #fff;
+}
+.drop-row.dragover { background: #e8eaff; border-color: #667eea; }
+.chip.comma-chip { padding: 6px 8px; min-width: 24px; font-weight: 700; font-size: 1.05em; }
+
+/* ── Timer & Controls ── */
+.timer-bar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: #f8f9ff; border-radius: 10px;
+  padding: 10px 16px; margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  font-size: 0.85rem; color: #666;
+}
+.timer-display { font-weight: 700; color: #667eea; font-size: 1rem; }
+.best-display  { color: #f39c12; font-weight: 600; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  padding: 7px 16px; border: none; border-radius: 8px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+  transition: opacity .2s;
+}
+.btn:hover { opacity: 0.88; }
+.score-box { font-size: 0.82rem; color: #888; margin-bottom: 10px; }
+.score-box span { font-weight: 700; color: #667eea; }
+
+/* ── Hilfe-Box ── */
+.hilfe-box {
+  background: #e8f4fd; border-radius: 10px;
+  padding: 12px 16px; margin-bottom: 18px;
+  font-size: 0.88rem; color: #1565c0; border-left: 4px solid #1976d2;
+}
+
+/* ── Konjugationstabelle ── */
+.konj-tabelle {
+  width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem;
+}
+.konj-tabelle th {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; padding: 10px 14px; text-align: left;
+}
+.konj-tabelle td {
+  padding: 9px 14px; border-bottom: 1px solid #e8eaf6;
+}
+.konj-tabelle tr:nth-child(even) td { background: #f8f9ff; }
+.konj-tabelle .hl { background: #e1bee7; }
+
+/* ── Author Footer ── */
+.author-footer {
+  text-align: center; margin-top: 40px; padding: 16px;
+  font-size: 0.8rem; color: #aaa;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .header h1 { font-size: 1.15rem; }
+  .zuo-layout { grid-template-columns: 1fr; }
+  .nav-btn { padding: 8px 10px; font-size: 0.72rem; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Konjunktiv II der Modalverben</h1>
+    <p>B1 · Grammatik · 1012G</p>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showTab(0)">
+      <span class="nav-emoji">🔍</span>
+      <span class="nav-label">Entdecken</span>
+    </button>
+    <button class="nav-btn" onclick="showTab(1)">
+      <span class="nav-emoji">✏️</span>
+      <span class="nav-label">Gegenwart</span>
+    </button>
+    <button class="nav-btn" onclick="showTab(2)">
+      <span class="nav-emoji">📖</span>
+      <span class="nav-label">Vergangenheit</span>
+    </button>
+    <button class="nav-btn" onclick="showTab(3)">
+      <span class="nav-emoji">🔀</span>
+      <span class="nav-label">Verwendung</span>
+    </button>
+    <button class="nav-btn" onclick="showTab(4)">
+      <span class="nav-emoji">🧩</span>
+      <span class="nav-label">Satzbau</span>
+    </button>
+  </nav>
+
+  <!-- TAB 0: ENTDECKEN -->
+  <div class="section aktiv" id="sec-0">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=800"
+         alt="Nachdenkende Person">
+
+    <div class="entdeck-intro">
+      <h3>💡 Schau dir diese Sätze an:</h3>
+      <p>1. Wenn ich Zeit hätte, <span class="hl">könntest</span> du mich besuchen — aber ich muss arbeiten.</p>
+      <p>2. Ich <span class="hl">müsste</span> mehr lernen, um die Prüfung zu bestehen.</p>
+      <p>3. <span class="hl">Dürfte</span> ich Sie kurz um Rat fragen?</p>
+      <p>4. Du <span class="hl">solltest</span> regelmäßig Sport treiben, sagt der Arzt.</p>
+      <p>5. Wenn wir das gewusst hätten, <span class="hl">wollten</span> wir früher abreisen.</p>
+    </div>
+
+    <div class="progress-dots">
+      <div class="pdot" id="pdot0"></div>
+      <div class="pdot" id="pdot1"></div>
+      <div class="pdot" id="pdot2"></div>
+      <div class="pdot" id="pdot3"></div>
+    </div>
+
+    <!-- Schritt 1 -->
+    <div class="mc-step active" id="mc-step0">
+      <h4>Schritt 1 — Was fällt dir an den farbig markierten Wörtern auf?</h4>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(0, this, false)">Es sind Verben im Präteritum.</button>
+        <button class="mc-btn" onclick="mcCheck(0, this, false)">Es sind Hilfsverben im Perfekt.</button>
+        <button class="mc-btn" onclick="mcCheck(0, this, true)">Es sind Modalverben — aber nicht in ihrer normalen Indikativ-Form.</button>
+        <button class="mc-btn" onclick="mcCheck(0, this, false)">Es sind Modalverben im Futur.</button>
+      </div>
+      <div class="mc-feedback" id="mcfb0"></div>
+    </div>
+
+    <!-- Schritt 2 -->
+    <div class="mc-step" id="mc-step1">
+      <h4>Schritt 2 — Vergleiche: <em>„Er kann kommen"</em> vs. <em>„Er könnte kommen."</em> Was ist der Unterschied?</h4>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(1, this, false)">„könnte" ist die Vergangenheitsform von „kann".</button>
+        <button class="mc-btn" onclick="mcCheck(1, this, true)">„könnte" drückt etwas Hypothetisches oder Irreales aus — es ist unsicher, ob es wirklich passiert.</button>
+        <button class="mc-btn" onclick="mcCheck(1, this, false)">„könnte" ist höflicher als „kann", hat aber dieselbe Bedeutung.</button>
+        <button class="mc-btn" onclick="mcCheck(1, this, false)">„könnte" ist eine stärkere Form von „kann".</button>
+      </div>
+      <div class="mc-feedback" id="mcfb1"></div>
+    </div>
+
+    <!-- Schritt 3 -->
+    <div class="mc-step" id="mc-step2">
+      <h4>Schritt 3 — Wie erkennt man die Konjunktiv-II-Form der Modalverben? Was haben <em>könnte, dürfte, müsste, möchte</em> gemeinsam?</h4>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(2, this, false)">Sie enden alle auf „-te" — genau wie das Präteritum.</button>
+        <button class="mc-btn" onclick="mcCheck(2, this, true)">Die meisten haben einen Umlaut (ö, ü) — außer „sollte" und „wollte".</button>
+        <button class="mc-btn" onclick="mcCheck(2, this, false)">Sie werden mit „würde" gebildet wie andere Konjunktiv-II-Formen.</button>
+        <button class="mc-btn" onclick="mcCheck(2, this, false)">Sie sind identisch mit der Präteritumform.</button>
+      </div>
+      <div class="mc-feedback" id="mcfb2"></div>
+    </div>
+
+    <!-- Schritt 4 -->
+    <div class="mc-step" id="mc-step3">
+      <h4>Schritt 4 — Wofür benutzt man den Konjunktiv II der Modalverben? Welche VIER Verwendungen siehst du in den Beispielsätzen oben?</h4>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(3, this, false)">Vergangenheit, Zukunft, Gegenwart, Perfekt</button>
+        <button class="mc-btn" onclick="mcCheck(3, this, true)">Höflichkeit, Wunsch/irreale Bedingung, Ratschlag, Spekulation</button>
+        <button class="mc-btn" onclick="mcCheck(3, this, false)">Fragen, Aussagen, Verneinungen, Befehle</button>
+        <button class="mc-btn" onclick="mcCheck(3, this, false)">Präsens, Präteritum, Perfekt, Futur</button>
+      </div>
+      <div class="mc-feedback" id="mcfb3"></div>
+    </div>
+
+    <!-- Regelkarte -->
+    <div class="regel-karte" id="regelkarte">
+      <h3>📌 Die Regel: Konjunktiv II der Modalverben</h3>
+      <ul>
+        <li><strong>Bildung:</strong> Präteritumstamm + Umlaut + Konjunktiv-Endungen (<em>-e, -est, -e, -en, -et, -en</em>)</li>
+        <li><strong>Umlaut:</strong> dürfen → <b>dürfte</b> · können → <b>könnte</b> · mögen → <b>möchte</b> · müssen → <b>müsste</b></li>
+        <li><strong>Kein Umlaut:</strong> sollen → <b>sollte</b> · wollen → <b>wollte</b></li>
+        <li><strong>Wortstellung:</strong> Modalverb auf Position 2 · Infinitiv ans Ende</li>
+      </ul>
+      <div class="rk-example">
+        <b>Höflichkeit:</b> Dürfte ich Sie kurz fragen?<br>
+        <b>Wunsch:</b> Wenn ich doch nur früher anfangen könnte!<br>
+        <b>Ratschlag:</b> Du solltest regelmäßig Sport treiben.<br>
+        <b>Irr. Bedingung:</b> Wenn er Zeit hätte, müsste er nicht absagen.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: LÜCKENTEXT GEGENWART -->
+  <div class="section" id="sec-1">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800"
+         alt="Person schreibt">
+
+    <div class="timer-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="showLoesung(1)">💡 Lösungen</button>
+        <button class="btn" onclick="resetLuecke(1)">↺ Neu starten</button>
+      </div>
+      <span>⏱ <span class="timer-display" id="timer-1">0:00</span></span>
+      <span>🏆 <span class="best-display" id="best-1">--:--</span></span>
+    </div>
+
+    <div class="hilfe-box">
+      <strong>Aufgabe:</strong> Setze das richtige Modalverb im Konjunktiv II ein. Achte auf den Umlaut!
+    </div>
+
+    <div class="wortkasten">
+      <strong>Wortkasten:</strong>
+      dürfen · können · mögen · müssen · sollen · wollen
+    </div>
+
+    <div id="luecke-container-1"></div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT VERGANGENHEIT -->
+  <div class="section" id="sec-2">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=800"
+         alt="Kalender und Vergangenheit">
+
+    <div class="timer-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="showLoesung(2)">💡 Lösungen</button>
+        <button class="btn" onclick="resetLuecke(2)">↺ Neu starten</button>
+      </div>
+      <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
+      <span>🏆 <span class="best-display" id="best-2">--:--</span></span>
+    </div>
+
+    <div class="hilfe-box">
+      <strong>Aufgabe:</strong> Konjunktiv II der Vergangenheit: <em>hätte + Infinitiv + Modalverb (Infinitiv)</em>. Ergänze die fehlenden Formen.
+    </div>
+
+    <div id="luecke-container-2"></div>
+  </div>
+
+  <!-- TAB 3: ZUORDNUNG -->
+  <div class="section" id="sec-3">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/3184325/pexels-photo-3184325.jpeg?auto=compress&cs=tinysrgb&w=800"
+         alt="Kategorien sortieren">
+
+    <div class="timer-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="showZuoLoesung()">💡 Lösungen</button>
+        <button class="btn" onclick="resetZuo()">↺ Neu starten</button>
+      </div>
+      <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
+      <span>🏆 <span class="best-display" id="best-3">--:--</span></span>
+      <span class="score-box">Richtig: <span id="zuo-score">0</span> / <span id="zuo-total">0</span></span>
+    </div>
+
+    <div class="hilfe-box">
+      <strong>Aufgabe:</strong> Ordne die Sätze der richtigen Verwendung zu: Höflichkeit, Wunsch, Irreale Bedingung oder Ratschlag.
+    </div>
+
+    <div id="zuo-bank" class="chip-bank"></div>
+
+    <div class="zuo-layout">
+      <div class="zuo-col">
+        <h4>🤝 Höflichkeit</h4>
+        <div class="drop-zone" id="zone-hoeflich" data-cat="hoeflich"
+             ondragover="allowDrop(event)" ondrop="dropZuo(event, this)"
+             onclick="clickZone(this)"></div>
+      </div>
+      <div class="zuo-col">
+        <h4>💭 Wunsch</h4>
+        <div class="drop-zone" id="zone-wunsch" data-cat="wunsch"
+             ondragover="allowDrop(event)" ondrop="dropZuo(event, this)"
+             onclick="clickZone(this)"></div>
+      </div>
+      <div class="zuo-col">
+        <h4>🔀 Irreale Bedingung</h4>
+        <div class="drop-zone" id="zone-irreal" data-cat="irreal"
+             ondragover="allowDrop(event)" ondrop="dropZuo(event, this)"
+             onclick="clickZone(this)"></div>
+      </div>
+      <div class="zuo-col">
+        <h4>💡 Ratschlag</h4>
+        <div class="drop-zone" id="zone-rat" data-cat="rat"
+             ondragover="allowDrop(event)" ondrop="dropZuo(event, this)"
+             onclick="clickZone(this)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="sec-4">
+    <img class="tab-banner"
+         src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800"
+         alt="Wörter ordnen">
+
+    <div class="timer-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="showAllSbLoesung()">💡 Lösungen</button>
+        <button class="btn" onclick="resetAllSb()">↺ Neu starten</button>
+      </div>
+      <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
+      <span>🏆 <span class="best-display" id="best-4">--:--</span></span>
+    </div>
+
+    <div class="hilfe-box">
+      <strong>Aufgabe:</strong> Bringe die Chips in die richtige Reihenfolge. Das Modalverb steht auf Position 2, der Infinitiv am Satzende.
+    </div>
+
+    <div id="sb-container"></div>
+  </div>
+
+  <div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+  </div>
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATEN
+// ═══════════════════════════════════════════════════════════════
+
+var TIMER_PREFIX = 'b1-1012g-konjunktiv-modal-';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
+
+// ── Lückentext 1: Konjunktiv II Gegenwart ─────────────────────
+// Alle Sätze aus Quasthoff-Kollokationen
+var LUECKEN_1 = [
+  { segs: [{t:'Wenn ich genug Zeit hätte, '}, {b:'könnte', s:90}, {t:' ich die Prüfung gründlich vorbereiten.'}] },
+  { segs: [{t:'Du '}, {b:'solltest', s:90}, {t:' regelmäßig Sport treiben, sagt der Arzt.'}] },
+  { segs: [{t:'Wenn wir weniger arbeiten '}, {b:'müssten', s:90}, {t:', würden wir mehr Zeit für Familie haben.'}] },
+  { segs: [{t:'Entschuldigung, '}, {b:'dürfte', s:90}, {t:' ich Sie kurz etwas fragen?'}] },
+  { segs: [{t:'Ich '}, {b:'möchte', s:90}, {t:' bitte eine Bestellung aufgeben.'}] },
+  { segs: [{t:'Wenn er '}, {b:'wollte', s:90}, {t:', könnte er im Urlaub viel länger bleiben.'}] },
+  { segs: [{t:'Sie '}, {b:'könnten', s:90}, {t:' die Aufgabe effizienter erledigen, wenn Sie es anders angingen.'}] },
+  { segs: [{t:'Wenn ich das '}, {b:'dürfte', s:90}, {t:', würde ich den ganzen Tag draußen verbringen.'}] },
+  { segs: [{t:'Er '}, {b:'müsste', s:90}, {t:' fleißiger lernen, um die Prüfung zu bestehen.'}] },
+  { segs: [{t:'Wenn sie mehr Geld hätte, '}, {b:'könnte', s:90}, {t:' sie den Urlaub verlängern.'}] },
+  { segs: [{t:'Du '}, {b:'solltest', s:90}, {t:' mehr Wasser trinken — das ist sehr gesund.'}] },
+  { segs: [{t:'Wenn ich '}, {b:'wollte', s:90}, {t:', könnte ich jeden Abend früher ins Bett gehen.'}] },
+];
+
+// ── Lückentext 2: Konjunktiv II Vergangenheit ─────────────────
+var LUECKEN_2 = [
+  { segs: [{t:'Wenn er früher angefangen hätte, '}, {b:'hätte', s:70}, {t:' er die Prüfung bestehen '}, {b:'können', s:80}, {t:'.'}] },
+  { segs: [{t:'Sie '}, {b:'hätte', s:70}, {t:' regelmäßiger Sport treiben '}, {b:'sollen', s:80}, {t:' — jetzt ist es zu spät.'}] },
+  { segs: [{t:'Wir '}, {b:'hätten', s:75}, {t:' den Urlaub früher buchen '}, {b:'müssen', s:80}, {t:'.'}] },
+  { segs: [{t:'Wenn du dabei gewesen wärst, '}, {b:'hättest', s:80}, {t:' du es selbst sehen '}, {b:'können', s:80}, {t:'.'}] },
+  { segs: [{t:'Er '}, {b:'hätte', s:70}, {t:' das Auto sorgfältiger fahren '}, {b:'sollen', s:80}, {t:'.'}] },
+  { segs: [{t:'Ich '}, {b:'hätte', s:70}, {t:' viel früher mit dem Lernen anfangen '}, {b:'wollen', s:80}, {t:'.'}] },
+  { segs: [{t:'Wenn sie gewollt '}, {b:'hätte', s:70}, {t:', wäre sie auch mitgekommen.'}] },
+  { segs: [{t:'Ihr '}, {b:'hättet', s:75}, {t:' die Aufgabe rechtzeitig einreichen '}, {b:'müssen', s:80}, {t:'.'}] },
+  { segs: [{t:'Wenn wir die Karten reserviert '}, {b:'hätten', s:75}, {t:', '}, {b:'hätten', s:75}, {t:' wir ins Konzert gehen '}, {b:'können', s:80}, {t:'.'}] },
+  { segs: [{t:'Du '}, {b:'hättest', s:80}, {t:' den Arzt früher aufsuchen '}, {b:'sollen', s:80}, {t:'.'}] },
+];
+
+// ── Zuordnung: Verwendung des Konjunktiv II ───────────────────
+var ZUO_DATA = [
+  { text: 'Dürfte ich Sie kurz um Rat fragen?',                          cat: 'hoeflich'  },
+  { text: 'Könnten Sie bitte das Fenster schließen?',                    cat: 'hoeflich'  },
+  { text: 'Ich möchte bitte eine Bestellung aufgeben.',                  cat: 'hoeflich'  },
+  { text: 'Würden Sie mir bitte helfen?',                                cat: 'hoeflich'  },
+  { text: 'Wenn ich doch fliegen könnte!',                               cat: 'wunsch'    },
+  { text: 'Ach, wenn ich nur früher mit dem Lernen angefangen hätte!',   cat: 'wunsch'    },
+  { text: 'Ich wünschte, ich könnte den Urlaub verlängern.',             cat: 'wunsch'    },
+  { text: 'Wenn ich genug Zeit hätte, könnte ich die Prüfung bestehen.', cat: 'irreal'    },
+  { text: 'Wenn sie nicht krank wäre, müsste sie nicht absagen.',        cat: 'irreal'    },
+  { text: 'Wenn wir früher gebucht hätten, hätten wir weniger zahlen müssen.', cat: 'irreal' },
+  { text: 'Du solltest regelmäßig Sport treiben.',                       cat: 'rat'       },
+  { text: 'Sie sollten mehr Wasser trinken, sagt der Arzt.',             cat: 'rat'       },
+  { text: 'Du müsstest fleißiger lernen, um die Prüfung zu schaffen.',   cat: 'rat'       },
+];
+
+// ── Satzbau ───────────────────────────────────────────────────
+// Alle Sätze Quasthoff-belegt: Sport treiben (Quasthoff), Prüfung bestehen,
+// Urlaub buchen, Wasser trinken, arbeiten, lernen — alle belegt.
+var SB_DATA = [
+  { chips: ['du', 'solltest', 'regelmäßig', 'sport', 'treiben'],        answer: ['du', 'solltest', 'regelmäßig', 'sport', 'treiben'],        punct: '.' },
+  { chips: ['er', 'könnte', 'die', 'prüfung', 'gründlich', 'vorbereiten'], answer: ['er', 'könnte', 'die', 'prüfung', 'gründlich', 'vorbereiten'], punct: '.' },
+  { chips: ['wir', 'müssten', 'den', 'urlaub', 'früher', 'buchen'],    answer: ['wir', 'müssten', 'den', 'urlaub', 'früher', 'buchen'],    punct: '.' },
+  { chips: ['dürfte', 'ich', 'sie', 'kurz', 'etwas', 'fragen'],        answer: ['dürfte', 'ich', 'sie', 'kurz', 'etwas', 'fragen'],        punct: '?' },
+  { chips: ['sie', 'sollten', 'mehr', 'wasser', 'trinken'],             answer: ['sie', 'sollten', 'mehr', 'wasser', 'trinken'],             punct: '.' },
+  { chips: ['er', 'hätte', 'fleißiger', 'lernen', 'müssen'],            answer: ['er', 'hätte', 'fleißiger', 'lernen', 'müssen'],            punct: '.' },
+  { chips: ['wir', 'hätten', 'den', 'urlaub', 'verlängern', 'können'], answer: ['wir', 'hätten', 'den', 'urlaub', 'verlängern', 'können'], punct: '.' },
+  { chips: ['sie', 'hätte', 'früher', 'mit', 'dem', 'lernen', 'anfangen', 'wollen'], answer: ['sie', 'hätte', 'früher', 'mit', 'dem', 'lernen', 'anfangen', 'wollen'], punct: '.' },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+
+function showTab(n) {
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('aktiv'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('sec-' + n).classList.add('aktiv');
+  document.querySelectorAll('.nav-btn')[n].classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════════════════════════
+
+function timerAutoStart(n) {
+  if (timerStarted[n]) return;
+  timerStarted[n] = true; timerRunning[n] = true;
+  timerIntervals[n] = setInterval(function() {
+    timerSeconds[n]++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }, 1000);
+}
+
+function timerStop(n) {
+  if (!timerRunning[n]) return;
+  clearInterval(timerIntervals[n]); timerRunning[n] = false;
+  var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+  if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+    localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+    var el = document.getElementById('best-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }
+}
+
+function timerResetOne(n) {
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false; timerStarted[n] = false; timerSeconds[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '0:00';
+}
+
+function fmtTime(s) {
+  return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+
+function loadBestTimes() {
+  for (var i = 1; i <= 4; i++) {
+    var v = localStorage.getItem(TIMER_PREFIX + i);
+    if (v) { var el = document.getElementById('best-' + i); if (el) el.textContent = fmtTime(parseInt(v)); }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENTDECKUNGS-TAB MC
+// ═══════════════════════════════════════════════════════════════
+
+var mcDone = [false, false, false, false];
+
+function mcCheck(step, btn, correct) {
+  var btns = btn.parentElement.querySelectorAll('.mc-btn');
+  btns.forEach(function(b) { b.disabled = true; b.classList.remove('correct','wrong'); });
+  var fb = document.getElementById('mcfb' + step);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '\u2713 Richtig! Weiter zum nächsten Schritt.';
+    fb.className = 'mc-feedback ok';
+    mcDone[step] = true;
+    document.getElementById('pdot' + step).classList.add('done');
+    setTimeout(function() {
+      var next = document.getElementById('mc-step' + (step + 1));
+      if (next) { next.classList.add('active'); }
+      else { document.getElementById('regelkarte').style.display = 'block'; }
+    }, 700);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '\u2717 Nicht ganz \u2014 schau nochmal genau hin und versuche es erneut.';
+    fb.className = 'mc-feedback err';
+    setTimeout(function() {
+      btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong','correct'); });
+      fb.textContent = ''; fb.className = 'mc-feedback';
+    }, 1400);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LÜCKENTEXT
+// ═══════════════════════════════════════════════════════════════
+
+var sizeMap = { 70:'70px', 75:'75px', 80:'80px', 90:'90px', 100:'100px', 110:'110px', 120:'120px' };
+
+function buildLuecke(data, containerId, tabN) {
+  var c = document.getElementById(containerId); c.innerHTML = '';
+  shuffle(data).forEach(function(item, idx) {
+    var div = document.createElement('div'); div.className = 'luecke-item';
+    var nr = document.createElement('span'); nr.className = 'luecke-nr'; nr.textContent = (idx + 1) + '.';
+    div.appendChild(nr);
+    item.segs.forEach(function(seg) {
+      if (seg.t !== undefined) {
+        div.appendChild(document.createTextNode(seg.t));
+      } else {
+        var inp = document.createElement('input');
+        inp.type = 'text'; inp.className = 'blank';
+        inp.style.width = sizeMap[seg.s] || '90px';
+        inp.placeholder = '';
+        inp.dataset.answer = seg.b;
+        inp.dataset.tab = tabN;
+        inp.addEventListener('input', function() {
+          timerAutoStart(tabN); liveCheck(inp); checkLueckeAllOk(tabN);
+        });
+        div.appendChild(inp);
+      }
+    });
+    c.appendChild(div);
+  });
+}
+
+function liveCheck(inp) {
+  var val = inp.value.trim().toLowerCase();
+  var ans = (inp.dataset.answer || '').toLowerCase();
+  inp.classList.remove('correct', 'wrong');
+  if (!val) return;
+  if (val === ans) { inp.classList.add('correct'); }
+  else if (ans.indexOf(val) === 0) { /* Präfix — neutral */ }
+  else { inp.classList.add('wrong'); }
+}
+
+function checkLueckeAllOk(n) {
+  var inputs = document.querySelectorAll('#sec-' + n + ' input.blank');
+  var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+  if (allOk) timerStop(n);
+}
+
+function showLoesung(n) {
+  timerStop(n);
+  document.querySelectorAll('#sec-' + n + ' input.blank').forEach(function(inp) {
+    inp.value = inp.dataset.answer; inp.classList.add('correct'); inp.classList.remove('wrong');
+  });
+}
+
+function resetLuecke(n) {
+  timerResetOne(n);
+  if (n === 1) buildLuecke(LUECKEN_1, 'luecke-container-1', 1);
+  if (n === 2) buildLuecke(LUECKEN_2, 'luecke-container-2', 2);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ZUORDNUNG
+// ═══════════════════════════════════════════════════════════════
+
+var draggedChip = null;
+
+function allowDrop(e) { e.preventDefault(); }
+
+function initZuo() {
+  var bank = document.getElementById('zuo-bank'); bank.innerHTML = '';
+  ['zone-hoeflich','zone-wunsch','zone-irreal','zone-rat'].forEach(function(id) {
+    document.getElementById(id).innerHTML = '';
+  });
+  document.getElementById('zuo-total').textContent = ZUO_DATA.length;
+  document.getElementById('zuo-score').textContent = '0';
+
+  shuffle(ZUO_DATA).forEach(function(item) {
+    var chip = document.createElement('div');
+    chip.className = 'chip'; chip.textContent = item.text;
+    chip.dataset.cat = item.cat; chip.draggable = true;
+    chip.style.cssText = 'white-space:normal; max-width:300px; line-height:1.4; font-size:0.8rem;';
+    chip.addEventListener('dragstart', function(e) {
+      draggedChip = chip; e.dataTransfer.setData('text/plain', '');
+    });
+    chip.addEventListener('dragend', function() { colorAllZuoChips(); });
+    chip.addEventListener('click', function() {
+      if (chip.classList.contains('selected')) { chip.classList.remove('selected'); return; }
+      document.querySelectorAll('#sec-3 .chip.selected').forEach(function(c) { c.classList.remove('selected'); });
+      chip.classList.add('selected');
+    });
+    bank.appendChild(chip);
+  });
+
+  // Bank-Drop
+  bank.addEventListener('dragover', allowDrop);
+  bank.addEventListener('drop', function(e) {
+    e.preventDefault(); if (!draggedChip) return;
+    bank.appendChild(draggedChip); draggedChip = null; colorAllZuoChips();
+  });
+  bank.addEventListener('click', function(e) {
+    if (e.target === bank) {
+      var sel = document.querySelector('#sec-3 .chip.selected');
+      if (sel) { bank.appendChild(sel); sel.classList.remove('selected'); colorAllZuoChips(); }
+    }
+  });
+}
+
+function dropZuo(e, zone) {
+  e.preventDefault(); if (!draggedChip) return;
+  zone.appendChild(draggedChip); draggedChip = null;
+  timerAutoStart(3); colorAllZuoChips();
+}
+
+function clickZone(zone) {
+  var sel = document.querySelector('#sec-3 .chip.selected');
+  if (sel) { zone.appendChild(sel); sel.classList.remove('selected'); timerAutoStart(3); colorAllZuoChips(); }
+}
+
+function colorAllZuoChips() {
+  var score = 0;
+  document.querySelectorAll('#sec-3 .chip').forEach(function(chip) {
+    var zone = chip.closest('.drop-zone');
+    chip.classList.remove('correct', 'wrong');
+    if (zone) {
+      if (chip.dataset.cat === zone.dataset.cat) { chip.classList.add('correct'); score++; }
+      else { chip.classList.add('wrong'); }
+    }
+  });
+  document.getElementById('zuo-score').textContent = score;
+  if (score === ZUO_DATA.length) timerStop(3);
+}
+
+function showZuoLoesung() {
+  timerStop(3);
+  document.querySelectorAll('#sec-3 .chip').forEach(function(chip) {
+    var zone = document.getElementById('zone-' + chip.dataset.cat);
+    if (zone) { zone.appendChild(chip); chip.classList.add('correct'); chip.classList.remove('wrong'); }
+  });
+  document.getElementById('zuo-score').textContent = ZUO_DATA.length;
+}
+
+function resetZuo() { timerResetOne(3); initZuo(); }
+
+// ═══════════════════════════════════════════════════════════════
+// SATZBAU
+// ═══════════════════════════════════════════════════════════════
+
+function initSatzbau() {
+  var container = document.getElementById('sb-container'); container.innerHTML = '';
+  SB_DATA.forEach(function(item, idx) {
+    var div = document.createElement('div'); div.className = 'sb-item';
+    var label = document.createElement('div'); label.className = 'sb-label';
+    label.textContent = 'Satz ' + (idx + 1); div.appendChild(label);
+
+    var pool = document.createElement('div'); pool.className = 'chip-pool';
+    pool.id = 'pool-' + idx;
+    var row = document.createElement('div'); row.className = 'drop-row';
+    row.id = 'row-' + idx;
+
+    shuffle(item.chips).forEach(function(word) {
+      var chip = document.createElement('div'); chip.className = 'chip';
+      chip.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+      chip.dataset.orig = word; chip.draggable = true;
+      chip.addEventListener('dragstart', function(e) {
+        draggedChip = chip; e.dataTransfer.setData('text/plain', '');
+      });
+      chip.addEventListener('dragend', function() { colorSbRow(idx); });
+      chip.addEventListener('click', function() {
+        if (chip.parentElement === pool) { row.appendChild(chip); }
+        else { pool.appendChild(chip); }
+        updateCaps(idx); colorSbRow(idx); timerAutoStart(4);
+      });
+      pool.appendChild(chip);
+    });
+
+    row.addEventListener('dragover', allowDrop);
+    row.addEventListener('drop', function(e) {
+      e.preventDefault(); if (!draggedChip) return;
+      row.appendChild(draggedChip); draggedChip = null;
+      updateCaps(idx); colorSbRow(idx); timerAutoStart(4);
+    });
+    pool.addEventListener('dragover', allowDrop);
+    pool.addEventListener('drop', function(e) {
+      e.preventDefault(); if (!draggedChip) return;
+      pool.appendChild(draggedChip); draggedChip = null;
+      updateCaps(idx); colorSbRow(idx);
+    });
+
+    // Punkt/Fragezeichen anzeigen
+    var punct = document.createElement('span');
+    punct.style.cssText = 'font-size:1.3rem; font-weight:700; color:#4a148c; margin-left:4px; align-self:center;';
+    punct.textContent = item.punct;
+
+    var rowWrap = document.createElement('div');
+    rowWrap.style.cssText = 'display:flex; align-items:flex-start; gap:4px;';
+    rowWrap.appendChild(row); rowWrap.appendChild(punct);
+
+    div.appendChild(pool); div.appendChild(rowWrap);
+    container.appendChild(div);
+  });
+}
+
+function colorSbRow(idx) {
+  var row = document.getElementById('row-' + idx);
+  var data = SB_DATA[idx];
+  Array.from(row.querySelectorAll('.chip')).forEach(function(chip, i) {
+    chip.classList.remove('correct', 'wrong');
+    if (i < data.answer.length) {
+      chip.classList.add(chip.dataset.orig.toLowerCase() === data.answer[i] ? 'correct' : 'wrong');
+    } else { chip.classList.add('wrong'); }
+  });
+  checkSbAllOk();
+}
+
+function updateCaps(idx) {
+  var row = document.getElementById('row-' + idx);
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c, i) {
+    var orig = c.dataset.orig;
+    c.textContent = (i === 0) ? orig.charAt(0).toUpperCase() + orig.slice(1) : orig;
+  });
+}
+
+function checkSbAllOk() {
+  var allOk = SB_DATA.every(function(_, idx) {
+    var row = document.getElementById('row-' + idx);
+    if (!row) return false;
+    var chips = row.querySelectorAll('.chip');
+    return chips.length === SB_DATA[idx].answer.length &&
+      Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+  });
+  if (allOk) timerStop(4);
+}
+
+function showAllSbLoesung() {
+  timerStop(4);
+  SB_DATA.forEach(function(item, idx) {
+    var row = document.getElementById('row-' + idx);
+    var pool = document.getElementById('pool-' + idx);
+    // Alle Chips zurück in Pool
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c) { pool.appendChild(c); });
+    // In richtiger Reihenfolge in Row
+    item.answer.forEach(function(word) {
+      var chip = Array.from(pool.querySelectorAll('.chip')).find(function(c) { return c.dataset.orig === word; });
+      if (chip) { row.appendChild(chip); }
+    });
+    updateCaps(idx); colorSbRow(idx);
+  });
+}
+
+function resetAllSb() { timerResetOne(4); initSatzbau(); }
+
+// ═══════════════════════════════════════════════════════════════
+// SHUFFLE
+// ═══════════════════════════════════════════════════════════════
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+
+buildLuecke(LUECKEN_1, 'luecke-container-1', 1);
+buildLuecke(LUECKEN_2, 'luecke-container-2', 2);
+initZuo();
+initSatzbau();
+loadBestTimes();
+</script>
+</body>
+</html>

@@ -147,6 +147,13 @@ body {
   letter-spacing: 0.03em;
   color: #444;
 }
+.vocab-hl {
+  background: #ffe9a0;
+  border-radius: 3px;
+  padding: 1px 3px;
+  font-weight: 600;
+  cursor: help;
+}
 .hl {
   background: #e1bee7;
   border-radius: 4px;
@@ -982,11 +989,60 @@ function fisherYates(arr) {
 }
 
 /* ===== INIT ===== */
+function highlightVocabInText() {
+  var storyText = document.querySelector('.story-text') || document.querySelector('.lese-text');
+  if (!storyText) return;
+  var words = [];
+  if (typeof WORT_DATA !== 'undefined' && WORT_DATA.length) {
+    words = WORT_DATA.map(function(item) {
+      var ans = item.answer || '';
+      var core = ans.replace(/^(der|die|das)\s+/i, '').split(',')[0].trim();
+      return core;
+    });
+  }
+  words = words.filter(function(w) { return w && w.length > 3; });
+  if (words.length === 0) return;
+  function walkAndHighlight(node) {
+    if (node.nodeType === 3) {
+      var text = node.nodeValue;
+      var replaced = text;
+      words.forEach(function(word) {
+        var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'gi');
+        replaced = replaced.replace(regex, '\x01$1\x02');
+      });
+      if (replaced !== text) {
+        var span = document.createElement('span');
+        var parts = replaced.split(/\x01|\x02/);
+        var isHL = false;
+        parts.forEach(function(part) {
+          if (!part) { isHL = !isHL; return; }
+          if (isHL) {
+            var hl = document.createElement('span');
+            hl.className = 'vocab-hl';
+            hl.title = '📖 Vokabel aus dem Wortschatz-Tab';
+            hl.textContent = part;
+            span.appendChild(hl);
+          } else {
+            span.appendChild(document.createTextNode(part));
+          }
+          isHL = !isHL;
+        });
+        node.parentNode.replaceChild(span, node);
+      }
+    } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+      Array.from(node.childNodes).forEach(walkAndHighlight);
+    }
+  }
+  walkAndHighlight(storyText);
+}
+
 window.addEventListener('DOMContentLoaded', function() {
   buildLuecke();
   buildSatzbau();
   buildWort();
   loadBestTimes();
+  highlightVocabInText();
 });
 </script>
 </body>

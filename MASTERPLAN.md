@@ -75,7 +75,8 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1015G | G | Temporaladverbien | ✅ Fertig |
 | 1016R | R | Kulturelle Unterschiede am Arbeitsplatz | ✅ Fertig |
 | 1017X | X | Besprechungen in der Firma | ✅ Fertig |
-| 1018S | S | (folgt) | 🔄 In Arbeit |
+| 1018S | S | Ein Gespräch mit dem Vorgesetzten | ✅ Fertig |
+| 1021X | X | (folgt) | 🔄 In Arbeit |
 
 ---
 

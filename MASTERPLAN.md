@@ -76,7 +76,8 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1016R | R | Kulturelle Unterschiede am Arbeitsplatz | ✅ Fertig |
 | 1017X | X | Besprechungen in der Firma | ✅ Fertig |
 | 1018S | S | Ein Gespräch mit dem Vorgesetzten | ✅ Fertig |
-| 1021X | X | (folgt) | 🔄 In Arbeit |
+| 1021X | X | Umweltprobleme und Umweltschutz | ✅ Fertig |
+| 1022G | G | (folgt) | 🔄 In Arbeit |
 
 ---
 

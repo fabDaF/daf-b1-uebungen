@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporaladverbien – Interaktive DaF-Übung (B1)</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* ENTDECKUNGS-TAB */
+.entdeck-intro { background: #f3e5f5; border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; border-left: 5px solid #9c27b0; font-size: 0.97rem; line-height: 1.85; }
+.entdeck-intro h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05rem; }
+.hl { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+.mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+.mc-step.active { display: block; }
+.mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 0.97rem; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-btn { padding: 9px 16px; border: 2px solid #c5cae9; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; font-size: 0.92rem; transition: all .2s; }
+.mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+.mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-btn.wrong   { border-color: #e53935; background: #ffebee; color: #c62828; }
+.mc-feedback { margin-top: 10px; font-size: 0.88rem; min-height: 1.3em; }
+.mc-feedback.ok  { color: #2e7d32; font-weight: 700; }
+.mc-feedback.err { color: #c62828; }
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background .3s; }
+.pdot.done { background: #667eea; }
+.regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 10px; }
+.regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.05rem; }
+.regel-karte .rk-example { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 10px; border-left: 3px solid #7c4dff; font-size: 0.9rem; color: #333; }
+.regel-karte .rk-example b { color: #3949ab; }
+
+/* REGEL-TAB */
+.regel-h2 { color: #3949ab; font-size: 1.15rem; margin-bottom: 16px; }
+.regel-tabelle { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.92rem; }
+.regel-tabelle th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 14px; text-align: left; }
+.regel-tabelle td { padding: 9px 14px; border-bottom: 1px solid #e8eaf6; }
+.regel-tabelle tr:nth-child(even) td { background: #f3f4ff; }
+.regel-tabelle .adverb { font-weight: 700; color: #4a148c; }
+.haeufigkeit-box { background: #f3e5f5; border-radius: 10px; padding: 16px 20px; margin-top: 8px; }
+.haeufigkeit-box h4 { color: #6a1b9a; margin-bottom: 12px; font-size: 0.97rem; }
+.haeufigkeit-skala { display: flex; flex-direction: column; gap: 8px; }
+.haeufigkeit-item { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+.haeufigkeit-bar { height: 10px; border-radius: 5px; background: linear-gradient(90deg, #667eea, #764ba2); }
+.haeufigkeit-label { min-width: 100px; font-weight: 600; color: #4a148c; }
+.haeufigkeit-pct { color: #888; font-size: 0.82rem; }
+
+/* LÜCKENTEXT */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.luecke-item { margin-bottom: 14px; line-height: 2.2; font-size: 0.95rem; }
+input.blank { border: 2px solid #c5cae9; border-radius: 6px; padding: 3px 8px; font-size: 0.9rem; font-family: inherit; outline: none; transition: border-color .2s, background .2s; background: white; margin: 0 2px; }
+input.blank:focus { border-color: #667eea; }
+input.blank.correct { border-color: #27ae60; background: #e8f5e9; }
+input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+.wortkasten { background: #e8eaf6; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 0.88rem; color: #333; }
+.wortkasten strong { color: #3949ab; }
+
+/* SATZBAU */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 22px; }
+.timer-bar { display: flex; align-items: center; gap: 12px; background: white; border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.07); font-size: 0.85rem; color: #666; }
+.timer-disp { font-weight: 700; color: #667eea; font-size: 1rem; }
+.best-disp  { color: #f39c12; font-weight: 600; }
+
+/* ZUORDNUNG */
+.chip-pool { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 22px; }
+.zuo-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .zuo-layout { grid-template-columns: 1fr; } }
+.zuo-cat { border-radius: 10px; padding: 14px; }
+.zuo-cat h4 { font-size: 0.88rem; margin-bottom: 8px; }
+.drop-zone { min-height: 70px; border-radius: 8px; border: 2px dashed #c5cae9; padding: 8px; background: #fafbff; display: flex; flex-wrap: wrap; gap: 6px; transition: background .2s; }
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.zuo-cat.gegenwart { background: #e3f2fd; }
+.zuo-cat.gegenwart h4 { color: #1565c0; }
+.zuo-cat.gegenwart .drop-zone { border-color: #90caf9; }
+.zuo-cat.vergangenheit { background: #fce4ec; }
+.zuo-cat.vergangenheit h4 { color: #880e4f; }
+.zuo-cat.vergangenheit .drop-zone { border-color: #f48fb1; }
+.zuo-cat.zukunft { background: #e8f5e9; }
+.zuo-cat.zukunft h4 { color: #1b5e20; }
+.zuo-cat.zukunft .drop-zone { border-color: #a5d6a7; }
+.zuo-cat.haeufigkeit { background: #fff3e0; }
+.zuo-cat.haeufigkeit h4 { color: #e65100; }
+.zuo-cat.haeufigkeit .drop-zone { border-color: #ffcc80; }
+.zuo-chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 7px 13px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.88em; user-select: none; white-space: nowrap; }
+.zuo-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.zuo-chip.wrong   { background: #e74c3c; border-color: #e74c3c; color: white; }
+.score-box { font-size: 0.82rem; color: #888; margin-bottom: 10px; }
+.score-box span { font-weight: 700; color: #667eea; }
+
+/* FOOTER */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Temporaladverbien</h1>
+        <p style="font-family: Georgia, serif;">B1 – Lektion 1015G &nbsp;|&nbsp; Grammatik &amp; Üben</p>
+        <div class="big-emoji">⏰</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔍</span><span class="nav-label">Entdecken</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">📋</span><span class="nav-label">Regel</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🎯</span><span class="nav-label">Zuordnung</span></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TAB 0 — ENTDECKEN
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="section active" id="sec-0">
+        <div style="padding: 28px 30px;">
+            <div class="entdeck-intro">
+                <h3>🔍 Lies die Sätze — was fällt dir auf?</h3>
+                <p>Karim sitzt <span class="hl">momentan</span> in seinem neuen Büro bei E.ON.</p>
+                <p>Er hat <span class="hl">gestern</span> seinen Vertrag unterschrieben.</p>
+                <p>Seine Kollegin sagt: „<span class="hl">Bald</span> lernst du das ganze Team kennen."</p>
+                <p>Er rief <span class="hl">vorhin</span> seine Mutter in Casablanca an.</p>
+                <p><span class="hl">Manchmal</span> vermisst er den Geruch des Atlantiks.</p>
+                <p>Aber <span class="hl">jetzt</span> ist er hier — und das fühlt sich richtig an.</p>
+            </div>
+
+            <div class="progress-dots">
+                <div class="pdot" id="pdot0"></div>
+                <div class="pdot" id="pdot1"></div>
+                <div class="pdot" id="pdot2"></div>
+                <div class="pdot" id="pdot3"></div>
+            </div>
+
+            <div class="mc-step active" id="mc-step0">
+                <h4>Frage 1: Was sagen diese markierten Wörter aus?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(0,this,false)">Sie beschreiben, wie etwas passiert (Modaladverbien).</button>
+                    <button class="mc-btn" onclick="mcCheck(0,this,true)">Sie sagen, wann, wie lange oder wie oft etwas passiert.</button>
+                    <button class="mc-btn" onclick="mcCheck(0,this,false)">Sie geben den Ort eines Geschehens an.</button>
+                </div>
+                <div class="mc-feedback" id="mcfb0"></div>
+            </div>
+
+            <div class="mc-step" id="mc-step1">
+                <h4>Frage 2: „Gestern" und „vorhin" — was haben sie gemeinsam?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(1,this,false)">Sie beziehen sich auf die Zukunft.</button>
+                    <button class="mc-btn" onclick="mcCheck(1,this,false)">Sie beziehen sich auf die Gegenwart.</button>
+                    <button class="mc-btn" onclick="mcCheck(1,this,true)">Sie beziehen sich auf die Vergangenheit.</button>
+                </div>
+                <div class="mc-feedback" id="mcfb1"></div>
+            </div>
+
+            <div class="mc-step" id="mc-step2">
+                <h4>Frage 3: „Bald" und „später" — in welche Gruppe gehören sie?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(2,this,false)">Vergangenheit</button>
+                    <button class="mc-btn" onclick="mcCheck(2,this,false)">Gegenwart</button>
+                    <button class="mc-btn" onclick="mcCheck(2,this,true)">Zukunft</button>
+                </div>
+                <div class="mc-feedback" id="mcfb2"></div>
+            </div>
+
+            <div class="mc-step" id="mc-step3">
+                <h4>Frage 4: „Manchmal" — was beantwortet dieses Wort?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(3,this,false)">Wann? → es gibt einen genauen Zeitpunkt</button>
+                    <button class="mc-btn" onclick="mcCheck(3,this,true)">Wie oft? → es geht um die Häufigkeit</button>
+                    <button class="mc-btn" onclick="mcCheck(3,this,false)">Wie lange? → es geht um die Dauer</button>
+                </div>
+                <div class="mc-feedback" id="mcfb3"></div>
+            </div>
+
+            <div class="regel-karte" id="regelkarte">
+                <h3>📌 Die Regel</h3>
+                <p style="color:#333; line-height:1.75; font-size:0.94rem;">
+                    <strong>Temporaladverbien</strong> (Zeitadverbien) geben an, <em>wann</em>, <em>wie lange</em> oder <em>wie oft</em> etwas passiert.<br>
+                    Sie lassen sich in vier Gruppen einteilen:
+                </p>
+                <div class="rk-example"><b>Gegenwart:</b> jetzt, heute, momentan, gerade, eben, sofort, inzwischen …</div>
+                <div class="rk-example"><b>Vergangenheit:</b> gestern, früher, vorhin, neulich, damals, bereits, seither …</div>
+                <div class="rk-example"><b>Zukunft:</b> bald, morgen, gleich, später, demnächst, danach, nachher …</div>
+                <div class="rk-example"><b>Häufigkeit:</b> immer, oft, manchmal, selten, nie, täglich, montags …</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TAB 1 — REGEL
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-1">
+        <div style="padding: 28px 30px;">
+            <h2 class="regel-h2">📋 Temporaladverbien im Überblick</h2>
+
+            <table class="regel-tabelle">
+                <thead>
+                    <tr><th>Gruppe</th><th>Frage</th><th>Beispiele</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Gegenwart</strong></td>
+                        <td>Wann? (jetzt)</td>
+                        <td><span class="adverb">jetzt, heute, momentan, gerade, eben, sofort, nun, inzwischen, augenblicklich</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vergangenheit</strong></td>
+                        <td>Wann? (früher)</td>
+                        <td><span class="adverb">gestern, früher, vorhin, neulich, damals, bereits, einmal, seither, vorgestern</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Zukunft</strong></td>
+                        <td>Wann? (später)</td>
+                        <td><span class="adverb">bald, morgen, gleich, später, demnächst, danach, nachher, übermorgen, ab sofort</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Häufigkeit</strong></td>
+                        <td>Wie oft?</td>
+                        <td><span class="adverb">immer, oft, häufig, manchmal, selten, nie, täglich, montags, zweimal, gelegentlich</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="haeufigkeit-box">
+                <h4>📊 Häufigkeitsskala (von 0% bis 100%)</h4>
+                <div class="haeufigkeit-skala">
+                    <div class="haeufigkeit-item">
+                        <span class="haeufigkeit-label">nie</span>
+                        <div class="haeufigkeit-bar" style="width:5px;"></div>
+                        <span class="haeufigkeit-pct">0 %</span>
+                    </div>
+                    <div class="haeufigkeit-item">
+                        <span class="haeufigkeit-label">fast nie</span>
+                        <div class="haeufigkeit-bar" style="width:30px;"></div>
+                        <span class="haeufigkeit-pct">~10 %</span>
+                    </div>
+                    <div class="haeufigkeit-item">
+                        <span class="haeufigkeit-label">selten</span>
+                        <div class="haeufigkeit-bar" style="width:60px;"></div>
+                        <span class="haeufigkeit-pct">~20 %</span>
+                    </div>
+                    <div class="haeufigkeit-item">
+                        <span class="haeufigkeit-label">manchmal</span>
+                        <div class="haeufigkeit-bar" style="width:120px;"></div>
+                        <span class="haeufigkeit-pct">~40 %</span>
+                    </div>
+                    <div class="haeufigkeit-item">
+                        <span class="haeufigkeit-label">oft / häufig</span>
+                        <div class="haeufigkeit-bar" style="width:230px;"></div>
+                        <span class="haeufigkeit-pct">~80 %</span>
+                    </div>
+                    <div class="haeufigkeit-item">
+                        <span class="haeufigkeit-label">fast immer</span>
+                        <div class="haeufigkeit-bar" style="width:260px;"></div>
+                        <span class="haeufigkeit-pct">~90 %</span>
+                    </div>
+                    <div class="haeufigkeit-item">
+                        <span class="haeufigkeit-label">immer</span>
+                        <div class="haeufigkeit-bar" style="width:290px;"></div>
+                        <span class="haeufigkeit-pct">100 %</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:22px; background:#e8eaf6; border-radius:10px; padding:16px 20px;">
+                <h4 style="color:#3949ab; margin-bottom:10px;">💡 Wortstellung</h4>
+                <p style="font-size:0.92rem; color:#333; line-height:1.75;">
+                    Temporaladverbien können am Satzanfang, in der Mitte oder am Ende stehen.<br>
+                    Am Satzanfang steht das Verb direkt danach (Verbzweitstellung):<br>
+                    <em style="color:#3949ab;">„<strong>Morgen</strong> fährt Karim zum ersten Meeting."</em><br>
+                    <em style="color:#3949ab;">„<strong>Gestern</strong> hat er seinen Vertrag unterschrieben."</em>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TAB 2 — LÜCKENTEXT
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-2">
+        <div style="padding: 28px 30px;">
+            <h2 style="color:#3949ab; margin-bottom:16px;">✏️ Lückentext</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showLueckeLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetLuecke(); timerResetOne(2);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-2">0:00</span></span>
+                    <span>🏆 <span id="best-2">--:--</span></span>
+                </div>
+            </div>
+            <div class="wortkasten">
+                <strong>Wortkasten:</strong> jetzt &nbsp;·&nbsp; gestern &nbsp;·&nbsp; bald &nbsp;·&nbsp; vorhin &nbsp;·&nbsp; manchmal &nbsp;·&nbsp; täglich &nbsp;·&nbsp; morgen &nbsp;·&nbsp; früher &nbsp;·&nbsp; inzwischen &nbsp;·&nbsp; oft &nbsp;·&nbsp; danach &nbsp;·&nbsp; selten
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Ergänze die Sätze mit dem passenden Temporaladverb aus dem Wortkasten.
+            </div>
+            <div id="lueckeContainer"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TAB 3 — SATZBAU
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-3">
+        <div style="padding: 28px 30px;">
+            <h2 style="color:#3949ab; margin-bottom:16px;">🧩 Satzbau</h2>
+            <div class="timer-bar">
+                <span>⏱ <span class="timer-disp" id="timer-3">0:00</span></span>
+                <span>🏆 <span class="best-disp" id="best-3">--:--</span></span>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge. Ziehe die Chips in die gepunktete Zeile.
+            </div>
+            <div id="satzbauContainer"></div>
+            <div style="display:flex; gap:8px; margin-top:16px; padding-top:12px; border-top:1px solid #eee;">
+                <button class="btn" onclick="resetSatzbau(); timerResetOne(3);">↺ Alles neu starten</button>
+                <button class="btn" onclick="showAllSbLoesungen()">Lösungen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         TAB 4 — ZUORDNUNG
+    ══════════════════════════════════════════════════════════════════════ -->
+    <div class="section" id="sec-4">
+        <div style="padding: 28px 30px;">
+            <h2 style="color:#3949ab; margin-bottom:16px;">🎯 Zuordnung</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="resetZuo(); timerResetOne(4);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-4">0:00</span></span>
+                    <span>🏆 <span id="best-4">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Ordne die Temporaladverbien in die richtige Gruppe. Ziehe jeden Chip in die passende Kategorie.
+            </div>
+            <div class="score-box">Richtig: <span id="zuo-score">0</span> / <span id="zuo-total">0</span></div>
+            <div class="chip-pool" id="zuo-pool"
+                 ondragover="allowDrop(event)"
+                 ondrop="dropToPool(event)"></div>
+            <div class="zuo-layout">
+                <div class="zuo-cat gegenwart">
+                    <h4>🕐 Gegenwart</h4>
+                    <div class="drop-zone" id="zone-gegenwart" data-cat="gegenwart"
+                         ondragover="allowDrop(event)" ondrop="dropZuo(event,this)"></div>
+                </div>
+                <div class="zuo-cat vergangenheit">
+                    <h4>📜 Vergangenheit</h4>
+                    <div class="drop-zone" id="zone-vergangenheit" data-cat="vergangenheit"
+                         ondragover="allowDrop(event)" ondrop="dropZuo(event,this)"></div>
+                </div>
+                <div class="zuo-cat zukunft">
+                    <h4>🚀 Zukunft</h4>
+                    <div class="drop-zone" id="zone-zukunft" data-cat="zukunft"
+                         ondragover="allowDrop(event)" ondrop="dropZuo(event,this)"></div>
+                </div>
+                <div class="zuo-cat haeufigkeit">
+                    <h4>🔁 Häufigkeit</h4>
+                    <div class="drop-zone" id="zone-haeufigkeit" data-cat="haeufigkeit"
+                         ondragover="allowDrop(event)" ondrop="dropZuo(event,this)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TIMER
+// ═══════════════════════════════════════════════════════════════
+var TIMER_PREFIX = 'B1_1015G_';
+var timerStarted  = [false,false,false,false,false];
+var timerRunning  = [false,false,false,false,false];
+var timerSeconds  = [0,0,0,0,0];
+var timerIntervals = [null,null,null,null,null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true; timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function(){
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-'+n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]); timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX+n)||'999999');
+    if (timerSeconds[n]>0 && timerSeconds[n]<best) {
+        localStorage.setItem(TIMER_PREFIX+n, timerSeconds[n]);
+        var el = document.getElementById('best-'+n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n]=false; timerStarted[n]=false; timerSeconds[n]=0;
+    var el = document.getElementById('timer-'+n);
+    if (el) el.textContent='0:00';
+}
+function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+(s%60); }
+function loadBestTimes(){
+    [2,3,4].forEach(function(n){
+        var v=localStorage.getItem(TIMER_PREFIX+n);
+        if(v){ var el=document.getElementById('best-'+n); if(el) el.textContent=fmtTime(parseInt(v)); }
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENTDECKUNGS-TAB — MC
+// ═══════════════════════════════════════════════════════════════
+function mcCheck(step, btn, correct) {
+    var btns = btn.parentElement.querySelectorAll('.mc-btn');
+    btns.forEach(function(b){ b.disabled=true; b.classList.remove('correct','wrong'); });
+    var fb = document.getElementById('mcfb'+step);
+    if (correct) {
+        btn.classList.add('correct');
+        fb.textContent = '\u2713 Richtig! Weiter zum nächsten Schritt.';
+        fb.className = 'mc-feedback ok';
+        document.getElementById('pdot'+step).classList.add('done');
+        setTimeout(function(){
+            var next = document.getElementById('mc-step'+(step+1));
+            if(next){ next.classList.add('active'); }
+            else { document.getElementById('regelkarte').style.display='block'; }
+        }, 700);
+    } else {
+        btn.classList.add('wrong');
+        fb.textContent = '\u2717 Nicht ganz \u2014 schau nochmal genau hin.';
+        fb.className = 'mc-feedback err';
+        setTimeout(function(){
+            btns.forEach(function(b){ b.disabled=false; b.classList.remove('wrong','correct'); });
+            fb.textContent=''; fb.className='mc-feedback';
+        }, 1400);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LÜCKENTEXT
+// ═══════════════════════════════════════════════════════════════
+var LUECKEN_DATA = [
+    { segs:[{t:'Karim sitzt '},{b:'jetzt',s:'m'},{t:' in seinem neuen Büro und liest die erste E-Mail.'}] },
+    { segs:[{t:'Er hat '},{b:'gestern',s:'m'},{t:' den Vertrag bei E.ON unterschrieben.'}] },
+    { segs:[{t:'Seine Kollegin sagt: \u201e'},{b:'Bald',s:'m'},{t:' zeige ich dir alles.\u201c'}] },
+    { segs:[{t:'Er hat '},{b:'vorhin',s:'m'},{t:' kurz mit seiner Mutter in Casablanca telefoniert.'}] },
+    { segs:[{t:'Karim geht '},{b:'täglich',s:'m'},{t:' eine halbe Stunde zu Fuß zur Arbeit.'}] },
+    { segs:[{t:'Er trinkt '},{b:'morgen',s:'m'},{t:' zum ersten Mal Kaffee mit dem ganzen Team.'}] },
+    { segs:[{t:'In Casablanca hat er '},{b:'früher',s:'m'},{t:' immer auf dem Balkon gearbeitet.'}] },
+    { segs:[{t:'Das Leben in Düsseldorf ist '},{b:'inzwischen',s:'l'},{t:' etwas leichter geworden.'}] },
+    { segs:[{t:'Er geht '},{b:'oft',s:'s'},{t:' am Rhein spazieren, wenn er nachdenken muss.'}] },
+    { segs:[{t:'Er isst zu Mittag und '},{b:'danach',s:'m'},{t:' macht er einen kurzen Spaziergang.'}] },
+    { segs:[{t:'Karim kocht '},{b:'manchmal',s:'m'},{t:' Harira — die Suppe, die ihn an Casablanca erinnert.'}] },
+    { segs:[{t:'Er vermisst das Meer nur '},{b:'selten',s:'m'},{t:' — die Arbeit lässt wenig Zeit zum Nachdenken.'}] }
+];
+
+function lueckeInit(){
+    var c = document.getElementById('lueckeContainer');
+    c.innerHTML='';
+    LUECKEN_DATA.forEach(function(ex){
+        var div=document.createElement('div'); div.className='luecke-item';
+        ex.segs.forEach(function(seg){
+            if(seg.t !== undefined){
+                div.appendChild(document.createTextNode(seg.t));
+            } else {
+                var inp=document.createElement('input');
+                inp.type='text'; inp.className='blank';
+                inp.placeholder='';
+                inp.dataset.answer=seg.b.toLowerCase();
+                var w={s:'70px',m:'100px',l:'140px',xl:'200px'};
+                inp.style.width=w[seg.s]||'100px';
+                inp.addEventListener('input',function(){
+                    timerAutoStart(2); liveCheck(inp); checkLueckeAllOk();
+                });
+                inp.addEventListener('blur',function(){ showHint(inp); });
+                div.appendChild(inp);
+            }
+        });
+        c.appendChild(div);
+    });
+}
+
+function liveCheck(inp){
+    var val=inp.value.trim().toLowerCase();
+    var ans=(inp.dataset.answer||'').toLowerCase();
+    inp.classList.remove('correct','wrong');
+    if(val.length===0) return;
+    if(val===ans){ inp.classList.add('correct'); }
+    else if(ans.indexOf(val)===0){ /* gültiger Prefix — neutral */ }
+    else { inp.classList.add('wrong'); }
+}
+
+function showHint(inp){
+    var next=inp.nextElementSibling;
+    if(next && next.classList.contains('correction-hint')) next.remove();
+    if(!inp.classList.contains('correct')){
+        var hint=document.createElement('span');
+        hint.className='correction-hint';
+        hint.textContent=inp.dataset.answer;
+        inp.insertAdjacentElement('afterend',hint);
+    }
+    inp.value=inp.dataset.answer;
+    inp.classList.add('correct'); inp.classList.remove('wrong');
+}
+
+function checkLueckeAllOk(){
+    var inputs=document.querySelectorAll('#sec-2 input.blank');
+    var allOk=inputs.length>0 && Array.from(inputs).every(function(i){ return i.classList.contains('correct'); });
+    if(allOk) timerStop(2);
+}
+
+function showLueckeLoesung(){
+    document.querySelectorAll('#sec-2 input.blank').forEach(function(inp){ showHint(inp); });
+}
+
+function resetLuecke(){
+    document.querySelectorAll('#sec-2 input.blank').forEach(function(inp){
+        inp.value=''; inp.classList.remove('correct','wrong');
+        var next=inp.nextElementSibling;
+        if(next && next.classList.contains('correction-hint')) next.remove();
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SATZBAU
+// ═══════════════════════════════════════════════════════════════
+var satzbauData = [
+    {
+        parts:['karim','fährt','morgen','zum','ersten','Meeting'],
+        valid:[['karim','fährt','morgen','zum','ersten','Meeting'],['morgen','fährt','karim','zum','ersten','Meeting']],
+        punct:'.'
+    },
+    {
+        parts:['vorhin','hat','er','eine','E-Mail','geschrieben'],
+        valid:[['vorhin','hat','er','eine','E-Mail','geschrieben'],['er','hat','vorhin','eine','E-Mail','geschrieben']],
+        punct:'.'
+    },
+    {
+        parts:['sie','isst','täglich','einen','Apfel','zum','Frühstück'],
+        valid:[['sie','isst','täglich','einen','Apfel','zum','Frühstück'],['täglich','isst','sie','einen','Apfel','zum','Frühstück']],
+        punct:'.'
+    },
+    {
+        parts:['wir','haben','damals','in','Berlin','gewohnt'],
+        valid:[['wir','haben','damals','in','Berlin','gewohnt'],['damals','haben','wir','in','Berlin','gewohnt']],
+        punct:'.'
+    },
+    {
+        parts:['bald','beginnt','der','neue','Kurs'],
+        valid:[['bald','beginnt','der','neue','Kurs'],['der','neue','Kurs','beginnt','bald']],
+        punct:'.'
+    },
+    {
+        parts:['er','ruft','manchmal','seine','Schwester','an'],
+        valid:[['er','ruft','manchmal','seine','Schwester','an'],['manchmal','ruft','er','seine','Schwester','an']],
+        punct:'.'
+    },
+    {
+        parts:['ich','habe','gerade','den','Bericht','gelesen'],
+        valid:[['ich','habe','gerade','den','Bericht','gelesen'],['gerade','habe','ich','den','Bericht','gelesen']],
+        punct:'.'
+    }
+];
+
+var sbDragged = null;
+
+function getSbCursor(){
+    var c=document.getElementById('sb-insert-cursor');
+    if(!c){
+        c=document.createElement('div'); c.id='sb-insert-cursor';
+        c.style.cssText='width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone,clientX){
+    var chips=Array.from(zone.querySelectorAll('.chip'));
+    for(var i=0;i<chips.length;i++){
+        var r=chips[i].getBoundingClientRect();
+        if(clientX<r.left+r.width/2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str){ return str.charAt(0).toUpperCase()+str.slice(1); }
+
+function sbUpdateCapitalization(row){
+    var chips=Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c,i){
+        var orig=c.dataset.orig;
+        var isProper=orig.charAt(0)===orig.charAt(0).toUpperCase()&&orig.charAt(0)!==orig.charAt(0).toLowerCase();
+        c.textContent=isProper?orig:(i===0?sbCapitalize(orig):orig);
+    });
+}
+
+function sbMakeChip(word){
+    var chip=document.createElement('div');
+    chip.className='chip'; chip.textContent=word; chip.dataset.orig=word; chip.draggable=true;
+    chip.addEventListener('dragstart',function(e){
+        sbDragged=chip; timerAutoStart(3);
+        e.dataTransfer.setData('text/plain','');
+        setTimeout(function(){ chip.style.opacity='0.4'; },0);
+    });
+    chip.addEventListener('dragend',function(){
+        chip.style.opacity=''; sbDragged=null;
+        var c=document.getElementById('sb-insert-cursor');
+        if(c&&c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone,idx){
+    zone.addEventListener('dragover',function(e){
+        e.preventDefault(); if(!sbDragged) return;
+        var cursor=getSbCursor(); var before=getSbInsertPos(zone,e.clientX);
+        if(before) zone.insertBefore(cursor,before); else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave',function(e){
+        if(!zone.contains(e.relatedTarget)){
+            var c=document.getElementById('sb-insert-cursor');
+            if(c&&c.parentNode===zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop',function(e){
+        e.preventDefault(); if(!sbDragged) return;
+        var cursor=document.getElementById('sb-insert-cursor');
+        if(cursor&&cursor.parentNode===zone){ zone.insertBefore(sbDragged,cursor); zone.removeChild(cursor); }
+        else { zone.appendChild(sbDragged); }
+        sbDragged=null;
+        var row=document.getElementById('sb-row-'+idx);
+        sbUpdateCapitalization(row); sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx){
+    var row=document.getElementById('sb-row-'+idx);
+    var chips=Array.from(row.querySelectorAll('.chip'));
+    var order=chips.map(function(c){ return c.dataset.orig; });
+    var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(v)===JSON.stringify(order); });
+    chips.forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
+    var existing=row.querySelector('.sb-punkt');
+    if(existing) existing.parentNode.removeChild(existing);
+    if(ok){
+        var punkt=document.createElement('span'); punkt.className='sb-punkt';
+        punkt.textContent=satzbauData[idx].punct||'.'; row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx){
+    var bank=document.getElementById('sb-bank-'+idx);
+    var row=document.getElementById('sb-row-'+idx);
+    var fb=document.getElementById('sb-fb-'+idx);
+    if(bank.querySelectorAll('.chip').length>0){
+        row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+        row.classList.remove('correct','incorrect'); fb.textContent=''; return;
+    }
+    setTimeout(function(){
+        timerAutoStart(3); var ok=sbColorRow(idx);
+        if(ok){
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className='satzbau-feedback correct'; fb.textContent='\u2713 Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className='satzbau-feedback incorrect'; fb.textContent='\u2717 Falsche Reihenfolge \u2013 verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone(){
+    var allOk=satzbauData.every(function(_,i){
+        var row=document.getElementById('sb-row-'+i);
+        return row&&row.classList.contains('correct');
+    });
+    if(allOk) timerStop(3);
+}
+
+function sbShowSolution(idx){
+    var bank=document.getElementById('sb-bank-'+idx);
+    var row=document.getElementById('sb-row-'+idx);
+    var solution=satzbauData[idx].valid[0];
+    var allChips={};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig]=c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig]=c; });
+    while(bank.firstChild) bank.removeChild(bank.firstChild);
+    while(row.firstChild) row.removeChild(row.firstChild);
+    solution.forEach(function(word,i){
+        var chip=allChips[word];
+        if(chip){ chip.textContent=(i===0)?sbCapitalize(word):word; chip.classList.remove('correct','incorrect'); row.appendChild(chip); }
+    });
+    var fb=document.getElementById('sb-fb-'+idx);
+    fb.textContent=''; setTimeout(function(){ sbCheckAuto(idx); },100);
+}
+
+function sbResetOne(idx){
+    var bank=document.getElementById('sb-bank-'+idx);
+    var row=document.getElementById('sb-row-'+idx);
+    var fb=document.getElementById('sb-fb-'+idx);
+    while(bank.firstChild) bank.removeChild(bank.firstChild);
+    while(row.firstChild) row.removeChild(row.firstChild);
+    row.classList.remove('correct','incorrect'); fb.textContent=''; fb.className='satzbau-feedback';
+    var existing=row.querySelector('.sb-punkt');
+    if(existing) existing.parentNode.removeChild(existing);
+    var parts=satzbauData[idx].parts.slice();
+    for(var i=parts.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp; }
+    parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau(){
+    var container=document.getElementById('satzbauContainer');
+    container.innerHTML='';
+    satzbauData.forEach(function(ex,idx){
+        var item=document.createElement('div'); item.className='satzbau-item';
+        var bank=document.createElement('div'); bank.className='chips-container'; bank.id='sb-bank-'+idx;
+        var row=document.createElement('div'); row.className='sentence-builder'; row.id='sb-row-'+idx;
+        var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb-fb-'+idx;
+        var parts=ex.parts.slice();
+        for(var i=parts.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp; }
+        parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+        sbRegisterZone(bank,idx); sbRegisterZone(row,idx);
+        var btnRow=document.createElement('div'); btnRow.style.cssText='display:flex;gap:8px;margin-top:6px;';
+        var solveBtn=document.createElement('button'); solveBtn.className='btn'; solveBtn.textContent='Lösen';
+        solveBtn.setAttribute('data-idx',idx);
+        solveBtn.addEventListener('click',function(){ sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn=document.createElement('button'); resetBtn.className='btn'; resetBtn.textContent='\u21ba Neustart';
+        resetBtn.setAttribute('data-idx',idx);
+        resetBtn.addEventListener('click',function(){ sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function resetSatzbau(){ initSatzbau(); }
+function showAllSbLoesungen(){ satzbauData.forEach(function(_,i){ sbShowSolution(i); }); }
+
+// ═══════════════════════════════════════════════════════════════
+// ZUORDNUNG
+// ═══════════════════════════════════════════════════════════════
+var ZUO_DATA = [
+    {word:'jetzt',      cat:'gegenwart'},
+    {word:'heute',      cat:'gegenwart'},
+    {word:'momentan',   cat:'gegenwart'},
+    {word:'gerade',     cat:'gegenwart'},
+    {word:'sofort',     cat:'gegenwart'},
+    {word:'gestern',    cat:'vergangenheit'},
+    {word:'früher',     cat:'vergangenheit'},
+    {word:'vorhin',     cat:'vergangenheit'},
+    {word:'neulich',    cat:'vergangenheit'},
+    {word:'damals',     cat:'vergangenheit'},
+    {word:'bald',       cat:'zukunft'},
+    {word:'morgen',     cat:'zukunft'},
+    {word:'später',     cat:'zukunft'},
+    {word:'demnächst',  cat:'zukunft'},
+    {word:'danach',     cat:'zukunft'},
+    {word:'manchmal',   cat:'haeufigkeit'},
+    {word:'oft',        cat:'haeufigkeit'},
+    {word:'selten',     cat:'haeufigkeit'},
+    {word:'täglich',    cat:'haeufigkeit'},
+    {word:'nie',        cat:'haeufigkeit'}
+];
+
+var zuoDragged = null;
+
+function allowDrop(e){ e.preventDefault(); }
+
+function dropZuo(e,zone){
+    e.preventDefault(); if(!zuoDragged) return;
+    zone.appendChild(zuoDragged); zuoDragged=null;
+    colorAllZuoChips(); timerAutoStart(4);
+}
+
+function dropToPool(e){
+    e.preventDefault(); if(!zuoDragged) return;
+    document.getElementById('zuo-pool').appendChild(zuoDragged);
+    zuoDragged=null; colorAllZuoChips();
+}
+
+function colorZuoChip(chip){
+    var zone=chip.closest('.drop-zone');
+    if(zone){ chip.classList.remove('correct','wrong'); chip.classList.add(chip.dataset.cat===zone.dataset.cat?'correct':'wrong'); }
+    else { chip.classList.remove('correct','wrong'); }
+}
+
+function colorAllZuoChips(){
+    document.querySelectorAll('#sec-4 .zuo-chip').forEach(function(chip){ colorZuoChip(chip); });
+    updateZuoScore(); checkZuoAllOk();
+}
+
+function updateZuoScore(){
+    var chips=document.querySelectorAll('#sec-4 .zuo-chip');
+    var correct=Array.from(chips).filter(function(c){ return c.classList.contains('correct'); }).length;
+    document.getElementById('zuo-score').textContent=correct;
+    document.getElementById('zuo-total').textContent=ZUO_DATA.length;
+}
+
+function checkZuoAllOk(){
+    var chips=document.querySelectorAll('#sec-4 .zuo-chip');
+    var allOk=chips.length>0&&Array.from(chips).every(function(c){ return c.classList.contains('correct'); });
+    if(allOk) timerStop(4);
+}
+
+function initZuo(){
+    var pool=document.getElementById('zuo-pool');
+    pool.innerHTML='';
+    ['zone-gegenwart','zone-vergangenheit','zone-zukunft','zone-haeufigkeit'].forEach(function(id){
+        var z=document.getElementById(id); if(z) z.innerHTML='';
+    });
+    var shuffled=ZUO_DATA.slice();
+    for(var i=shuffled.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var tmp=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=tmp; }
+    shuffled.forEach(function(item){
+        var chip=document.createElement('div');
+        chip.className='zuo-chip'; chip.textContent=item.word; chip.dataset.cat=item.cat; chip.draggable=true;
+        chip.addEventListener('dragstart',function(e){ zuoDragged=chip; e.dataTransfer.setData('text/plain',''); });
+        chip.addEventListener('dragend',function(){ colorAllZuoChips(); });
+        pool.appendChild(chip);
+    });
+    document.getElementById('zuo-total').textContent=ZUO_DATA.length;
+    document.getElementById('zuo-score').textContent='0';
+}
+
+function resetZuo(){ initZuo(); }
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+lueckeInit();
+initSatzbau();
+initZuo();
+loadBestTimes();
+</script>
+</body>
+</html>

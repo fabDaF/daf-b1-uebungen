@@ -122,39 +122,43 @@ input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
 .zuo-intro { font-size: 0.9rem; color: #555; margin-bottom: 16px; }
 .zuo-layout {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px; margin-bottom: 16px;
+  gap: 10px; margin-bottom: 16px;
 }
 .zuo-col h4 {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white; padding: 8px 14px; border-radius: 8px 8px 0 0;
-  font-size: 0.88rem; margin-bottom: 0;
+  background: #ede9f8;
+  color: #5a3e9e; padding: 7px 14px; border-radius: 8px 8px 0 0;
+  font-size: 0.84rem; font-weight: 700; margin-bottom: 0;
+  border: 1px solid #d0c8f0; border-bottom: none;
 }
 .drop-zone {
-  min-height: 80px; border-radius: 0 0 10px 10px;
-  border: 2px dashed #c5cae9; border-top: none;
-  padding: 10px; background: #fafbff;
-  display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start;
-  transition: background .2s;
+  min-height: 70px; border-radius: 0 0 8px 8px;
+  border: 1px solid #d0c8f0; border-top: none;
+  padding: 8px; background: #faf9ff;
+  display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start;
+  transition: background .15s;
 }
-.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.drop-zone.dragover { background: #edeaff; border-color: #9e8ed8; }
 .chip-bank {
-  display: flex; flex-wrap: wrap; gap: 8px;
-  padding: 12px; background: #f0f0f8;
-  border-radius: 10px; margin-bottom: 16px;
-  min-height: 54px; border: 1px dashed #bbb;
+  display: flex; flex-wrap: wrap; gap: 7px;
+  padding: 10px; background: white;
+  border-radius: 10px; margin-bottom: 14px;
+  min-height: 48px; border: 1px solid #e8e4f5;
 }
+/* Zuordnungs-Chips: weiß mit lila Rahmen — schlank und filigran */
 .chip {
-  padding: 6px 14px; border-radius: 20px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white; cursor: grab; font-size: 0.83rem;
-  font-weight: 600; user-select: none;
-  transition: transform .15s, opacity .15s;
-  white-space: normal; display: inline-block;
+  padding: 5px 12px; border-radius: 16px;
+  background: white; border: 1.5px solid #8b7ed8;
+  color: #5a3e9e; cursor: grab; font-size: 0.8rem;
+  font-weight: 500; user-select: none;
+  transition: box-shadow .15s, transform .1s, opacity .15s;
+  white-space: normal; display: inline-block; line-height: 1.35;
+  box-shadow: 0 1px 3px rgba(102,86,234,0.08);
 }
-.chip:active { cursor: grabbing; transform: scale(1.04); }
-.chip.selected { outline: 3px solid #f39c12; }
-.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
-.chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.chip:hover { box-shadow: 0 2px 8px rgba(102,86,234,0.18); transform: translateY(-1px); }
+.chip:active { cursor: grabbing; transform: scale(1.02); }
+.chip.selected { outline: 2px solid #f39c12; outline-offset: 2px; background: #fffbf0; }
+.chip.correct { background: #f0fff4 !important; border-color: #27ae60 !important; color: #1a7a40 !important; box-shadow: 0 1px 4px rgba(39,174,96,0.15) !important; }
+.chip.wrong   { background: #fff5f5 !important; border-color: #e74c3c !important; color: #b03030 !important; box-shadow: 0 1px 4px rgba(231,76,60,0.15) !important; }
 .zuo-score { font-size: 0.85rem; color: #667eea; font-weight: 600; margin-top: 8px; }
 
 /* ── Satzbau Standard-Pattern ── */
@@ -739,7 +743,7 @@ function initZuo() {
     var chip = document.createElement('div');
     chip.className = 'chip'; chip.textContent = item.text;
     chip.dataset.cat = item.cat; chip.draggable = true;
-    chip.style.cssText = 'white-space:normal; max-width:300px; line-height:1.4; font-size:0.8rem;';
+    chip.style.cssText = 'max-width:260px;';
     chip.addEventListener('dragstart', function(e) {
       draggedChip = chip; e.dataTransfer.setData('text/plain', '');
     });

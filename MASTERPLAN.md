@@ -87,6 +87,7 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1031X | X | Identität und Sprachkultur | ✅ Fertig |
 | 1032G | G | Mehr über Lokaladverbien | ✅ Fertig |
 | 1033R | R | Berlin – eine multikulturelle Stadt | ✅ Fertig |
+| 1034X | X | Multikulturalismus | ✅ Fertig |
 
 ---
 

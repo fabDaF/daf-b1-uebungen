@@ -1,0 +1,293 @@
+# DaF — Masterplan für interaktive HTML-Übungsdateien
+## Gültig für: B1.1 (und alle weiteren Niveaus sofern nicht anders angegeben)
+
+Dieses Dokument ist die **einzige verbindliche Referenz** für alle HTML-Übungsdateien.
+Es wird **vor jeder Arbeit** an einer HTML-Datei gelesen — ohne Ausnahme.
+
+---
+
+## 0. Vor dem Start — Pflichtlektüre
+
+Bevor eine einzige Zeile Code geschrieben wird, sind folgende Skills zu lesen:
+
+| Skill | Wann |
+|-------|------|
+| `daf-grammatik-uebungen` | Bei jeder G-Datei |
+| `daf-html-layout` | Bei jeder neuen oder migrierten Datei |
+| `satzbau-drag-drop` | Wenn Satzbau-Tab enthalten |
+| `daf-uebungsformen` | Immer |
+| `daf-bilder-pflicht` | Immer (jede Datei braucht Bilder) |
+| `textgestaltung-daf` | Wenn Lesetext / Geschichte-Tab enthalten |
+| `lesetext-hervorhebung` | Wenn Lesetext enthalten |
+| `daf-browser-test` | Nach Fertigstellung — testen bis 0 Fehler |
+
+**Danach:** Browser-Test durchführen. Solange wiederholen, bis keine Fehler mehr gemeldet werden.
+
+---
+
+## 1. Nomenklatur
+
+### Dateiname-Schema
+
+```
+DE_B1_LLLLx-thema.html
+     ^^  ^^^^
+     ||  ||||__ x = Datei-Typ (V, X, G, R, S, W)
+     ||  |||___ Lektionsnummer innerhalb der Einheit (1–8)
+     ||  ||____ Einheitsnummer (01–07)
+     ||  |_____ Kurs (1 = B1.1)
+     ||________ Niveau (B1)
+     |_________ Sprache
+```
+
+Beispiel: `DE_B1_1011X-vorstellungsgespraech.html`
+
+### Quellmaterial
+Lingoda-PDFs unter: `Cowork/lingoda/B 1.1/`
+
+### Dashboard
+**Es gibt genau ein gültiges Dashboard:**
+```
+/sessions/eager-great-dirac/mnt/htmlS/dashboard.html
+```
+auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
+
+⛔ Alle anderen Dashboard-Dateien (`b1-1-dashboard.html`, `a2-1-dashboard.html` etc.) sind **obsolet** und werden **nie** verwendet oder verlinkt.
+
+---
+
+## 2. Übersicht aller B1.1-Lektionen
+
+| Einheit | Thema | Lektionen |
+|---------|-------|-----------|
+| 101x | Bewerbung & Arbeit | 1011X 1012G 1013R 1014X 1015G |
+| 102x | (folgt) | — |
+| ... | ... | ... |
+
+### Fertigstellungsstatus B1.1
+
+| Lektion | Typ | Thema | Status |
+|---------|-----|-------|--------|
+| 1011X | X | Das Vorstellungsgespräch | ✅ Fertig |
+| 1012G | G | Konjunktiv II der Modalverben | ✅ Fertig |
+| 1013R | R | Neue Berufe | ✅ Fertig |
+| 1014X | X | Einen Vertrag verhandeln | ✅ Fertig |
+| 1015G | G | Temporaladverbien | 🔧 In Arbeit |
+
+---
+
+## 3. Datei-Typen und Tab-Struktur
+
+### G — Grammatik (`*G*.html`)
+
+**Zweck:** Grammatikregel entdecken, verstehen, üben.
+
+| Tab | Emoji | Name | Inhalt |
+|-----|-------|------|--------|
+| 0 | 🔍 | Entdecken | Beispielsätze, Regel ableiten |
+| 1 | 📋 | Regel | Regelkarte, Paradigmentabelle |
+| 2 | ✏️ | Lückentext | Grammatik-Lückentext, Live-Feedback, Timer |
+| 3 | 🧩 | Satzbau | Sätze mit Grammatikfokus ordnen, Timer |
+| 4 | 🎯 | Multiple Choice | A/B/C-Auswahl oder Richtig/Falsch |
+
+Skill: `daf-grammatik-uebungen`
+
+### X — Extra-Übungen (`*X*.html`)
+
+**Zweck:** Vertiefung, Anwendung, situative Dialoge.
+
+Tab-Struktur je nach Inhalt variabel — Referenz: `DE_B1_1011X-vorstellungsgespraech.html`
+
+### R — Lesetext (`*R*.html`)
+
+**Zweck:** Lesetext mit Vorentlastung, Verstehensaufgaben, Wortschatz.
+
+| Tab | Emoji | Name | Inhalt |
+|-----|-------|------|--------|
+| 0 | 🌅 | Vorentlastung | Schlüsselwörter, Bilder, englische Vorabinfo |
+| 1 | 📖 | Geschichte | Lesetext (formatiert nach `textgestaltung-daf`) |
+| 2 | ❓ | Verständnis | Richtig/Falsch + Fragen |
+| 3 | ✏️ | Lückentext | Sätze aus dem Text mit Lücken |
+| 4 | 🧩 | Satzbau | Sätze zerlegt, Timer |
+| 5 | 🔠 | Wortschatz | Tippen: Artikel + Wort + Plural, Timer |
+
+Skill: `textgestaltung-daf`, `lesetext-hervorhebung`
+
+### V — Vokabular (`*V*.html`)
+
+| Tab | Emoji | Name | Inhalt |
+|-----|-------|------|--------|
+| 0 | 📸 | Wörter | Foto-Vokabelkarten (10–12): Artikel · Wort · Plural · EN · Beispielsatz |
+| 1 | 💬 | Redemittel | Frage-und-Antwort Drag & Drop |
+| 2 | ✏️ | Lückentext | 2 Lückentexte, Live-Feedback, Timer |
+| 3 | 📖 | Text & Fragen | Lesetext + Richtig/Falsch |
+| 4 | 🧩 | Satzbau | 6–8 Sätze, Drag & Drop, Timer |
+| 5 | 🔠 | Wortschatz | Tippen: Artikel + Wort + Plural, Timer |
+
+### S — Speaking (`*S*.html`)
+
+Erwartete Elemente: Dialogkarten, Redemittel-Chips, Rollenspiel-Szenarios.
+Tab-Struktur wird beim ersten S-File definiert.
+
+### W — Wiederholung (`*W*.html`)
+
+Gemischte Aufgaben aus allen Lektionen, Selbsteinschätzung.
+Tab-Struktur wird beim ersten W-File definiert.
+
+---
+
+## 4. Verbindliche Qualitätsregeln
+
+### Layout
+- Lila Hintergrund-Gradient (`#667eea` → `#764ba2`) — Skill: `daf-html-layout`
+- Weißer Container, max. 1000px, Schatten
+- Nav-Buttons: Emoji **über** Text (`nav-emoji` + `nav-label`, `flex-direction: column`)
+- Aktiver Nav-Button: Klasse `active` (**nicht** `aktiv`)
+- Sichtbare Section: Klasse `aktiv`
+
+### Lücken-Inputs — Placeholder IMMER leer
+
+⛔ `placeholder="___"` ist **verboten**. Keine Striche, Punkte oder Füllzeichen.
+
+```html
+<!-- ❌ FALSCH -->
+<input placeholder="___">
+<!-- ✅ RICHTIG -->
+<input placeholder="">
+```
+
+### Live-Feedback
+
+Gilt für alle Tipp-Felder — kein Prüfen-Button, niemals.
+
+| Zustand | Farbe |
+|---------|-------|
+| Leer | grau (neutral) |
+| Prefix korrekt | lila |
+| Vollständig korrekt | grün (`.ok`) |
+| Falsch | rot (`.no`) |
+
+Reihenfolge in JS: erst `val === ans`, dann `ans.startsWith(val)`.
+
+### Timer
+
+- Tabs mit Tipp- oder Drag-Übungen bekommen einen Timer
+- Timer-Zeile: `⏱ Zeit · 🏆 Bestzeit · ↺ Neustart · 💡 Lösungen` — alles in **einer Zeile** (`.btn-row`)
+- Startet bei erster Interaktion (`timerAutoStart`), stoppt wenn alle korrekt
+- Bestzeit in `localStorage` (Key: `TIMER_PREFIX-best-N`)
+
+### Satzbau
+
+Verbindlich: Skill `satzbau-drag-drop`
+- Variable: `sbDragged`
+- IDs: `sb-bank-N` / `sb-row-N` / `sb-fb-N`
+- Fisher-Yates-Shuffle
+- 500ms-Timeout vor Farb-Feedback
+
+### ⛔ ABSOLUTES VERBOT — Satznummerierung
+
+**Niemals** Satznummern anzeigen. Keine Ausnahmen. Kein `Satz 1`, `Satz 2`, keine `(idx+1)`-Labels, keine `.num`-Spans, keine `.sb-label` mit Zahlen.
+
+```javascript
+// ❌ VERBOTEN — in keiner Form:
+label.textContent = 'Satz ' + (idx + 1);
+lbl.textContent = 'Satz ' + ex.id;
+wrapper.appendChild(label); // wenn label eine Nummer enthält
+```
+
+Kein Mensch braucht diesen Hinweis. Er stört und wirkt amateurhaft.
+
+### Bilder (Pexels)
+
+URL-Schema:
+```
+https://images.pexels.com/photos/ID/pexels-photo-ID.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop
+```
+
+**⚠️ Pflicht: Base64-Einbettung**
+Alle Pexels-Bilder müssen als Base64-Data-URLs eingebettet sein. Externe URLs sind nicht zulässig — Dateien müssen offline-fähig sein.
+
+Workflow: Pexels-URL → Browser-Fetch via Chrome-Extension → Base64 → in HTML einbetten.
+Skill: `daf-bilder-pflicht`, `pexels-bild-check`
+
+### Copyright-Footer
+
+```html
+<span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+<a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+```
+
+⛔ **Niemals ändern.** Keine Verbesserungen, keine Varianten. Nur auf explizite schriftliche Anweisung.
+
+---
+
+## 5. Karim Benali — Narrative Figur (B1.1)
+
+Karim ist die wiederkehrende Erzählfigur in allen B1.1-Lesetexten und Geschichten.
+
+**Biografie:**
+- 31 Jahre alt, aus Casablanca, Marokko
+- Wirtschaftsingenieur, spricht Arabisch, Französisch, Englisch und nun Deutsch
+- Neu in Düsseldorf, hat bei E.ON eine Stelle als Projektkoordinator bekommen
+- Ruhige, beobachtende Persönlichkeit — kein Klischee, kein Kitsch
+
+**Stand der Geschichte:**
+- 1011X: Bewerbung und Vorstellungsgespräch bei E.ON — „Der richtige Mann"
+- 1013R: Sein erster Abend in Düsseldorf — liest einen Artikel über neue Berufe
+- 1014X: Gehaltsverhandlung — „Das Angebot"
+- 1015G: (folgt — erster Arbeitstag? Kollegen? Moment in der Stadt?)
+
+**Ton:**
+- Leise Beobachtung, innere Stimme kursiv + gesperrt (`.gedanke`)
+- Keine konkreten Zahlen (kein Gehalt, kein Datum)
+- Keine Klischees über Marokko oder Migration
+- Grammatikthema muss **organisch** im Text vorkommen — nicht aufgesetzt
+
+**CSS für Gedanken/innere Stimme:**
+```css
+.gedanke {
+  font-style: italic;
+  letter-spacing: 0.03em;
+  color: #444;
+}
+```
+
+**Vokabel-Hervorhebung im Text:**
+Alle Lernvokabeln mit `<span class="hl">Wort</span>` markieren.
+Skill: `lesetext-hervorhebung`
+
+---
+
+## 6. Arbeitsreihenfolge beim Erstellen einer neuen Datei
+
+1. **Diesen Masterplan lesen** (diese Datei)
+2. **Lingoda-PDF lesen** (`pdftotext` → vollständigen Inhalt extrahieren)
+3. **Passende Skills lesen** (siehe Tabelle oben, Abschnitt 0)
+4. **Bilder suchen** (WebSearch mit `site:pexels.com/photo`)
+5. **Datei aufbauen** — Tab für Tab, alle Skill-Muster einhalten
+6. **Selbst-Check vor Browser-Test:**
+   - [ ] Emojis über Text in Nav-Buttons?
+   - [ ] Klasse `active` (nicht `aktiv`) für Nav-Button?
+   - [ ] Kein Prüfen-Button?
+   - [ ] Kein `placeholder="___"`?
+   - [ ] Live-Feedback korrekt (erst `===`, dann `startsWith`)?
+   - [ ] Timer-Zeile vollständig und in einer Linie?
+   - [ ] Satzbau nach Skill (`satzbau-drag-drop`)?
+   - [ ] ⛔ Keine Satznummern (`Satz 1`, `Satz 2`, `idx+1`)?
+   - [ ] Copyright-Footer unverändert?
+   - [ ] Karim-Geschichte: Gedanken als `.gedanke`?
+   - [ ] Vokabeln als `.hl` im Lesetext markiert?
+7. **Browser-Test** — `daf-browser-test` Skill ausführen
+8. **Fehler beheben und erneut testen** — so oft wie nötig, bis 0 Fehler
+9. **Git commit & push** — direkt im Anschluss, ohne Nachfrage
+
+---
+
+## 7. GitHub — Repositories
+
+| Niveau | Repo | GitHub Pages |
+|--------|------|--------------|
+| B1.1 | `fabDaF/daf-b1-uebungen` | `fabdaf.github.io/daf-b1-uebungen/` |
+| A2.1 | (eigenes Repo) | (eigene URL) |
+
+**Push-Regel:** Nach jedem abgeschlossenen Arbeitspaket wird **sofort** gepusht — ohne Rückfrage, ohne Verzögerung.

@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 · 1028S · Wie umweltbewusst bist du?</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* TAB BANNER */
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+@media (max-width: 600px) { .tab-banner { max-height: 120px; } }
+
+/* HILFE-BOX */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+
+/* CONTROL-BAR */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-val { color: #667eea; font-weight: 700; }
+.best-val { color: #f39c12; font-weight: 600; }
+
+/* AUSSPRACHE TAB */
+.aussprache-intro { background: #f3e5f5; border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; border-left: 5px solid #9c27b0; font-size: 0.97rem; line-height: 1.75; }
+.aussprache-intro h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05rem; }
+.umlaut-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.umlaut-table th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 14px; text-align: left; font-size: 0.9rem; }
+.umlaut-table td { padding: 10px 14px; border-bottom: 1px solid #e8eaf6; font-size: 0.92rem; }
+.umlaut-table tr:nth-child(even) { background: #f8f9ff; }
+.umlaut-hl { background: #e1bee7; border-radius: 4px; padding: 0 5px; color: #4a148c; font-weight: 700; }
+.wortpaar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.wortpaar-card { background: #fafbff; border: 2px solid #c5cae9; border-radius: 10px; padding: 14px 18px; text-align: center; }
+.wortpaar-card .ohne { font-size: 1.1rem; color: #888; margin-bottom: 6px; }
+.wortpaar-card .mit { font-size: 1.1rem; color: #667eea; font-weight: 700; }
+.wortpaar-card .arrow { color: #ccc; font-size: 1.3rem; margin: 0 8px; }
+
+/* LÜCKENTEXT */
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 8px; font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s, background 0.2s; min-width: 90px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.8rem; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.luecke-item { background: #fafbff; border-radius: 10px; border-left: 4px solid #667eea; padding: 12px 16px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.8; }
+
+/* ZUORDNUNG */
+.zuo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 700px) { .zuo-container { grid-template-columns: 1fr; } .wortpaar-grid { grid-template-columns: 1fr; } }
+.zuo-chip-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f9fa; border-radius: 10px; margin-bottom: 16px; min-height: 56px; }
+.zuo-chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 7px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.88rem; user-select: none; transition: all 0.2s; white-space: nowrap; }
+.zuo-chip:hover { background: #e8ecff; }
+.zuo-chip.selected { outline: 3px solid #f39c12; }
+.zuo-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.zuo-chip.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+.drop-zone { min-height: 80px; border: 2px dashed #c5cae9; border-radius: 10px; padding: 10px 12px; background: #fafbff; transition: background 0.2s; }
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.drop-zone-label { font-size: 0.85rem; color: #667eea; font-weight: 700; margin-bottom: 6px; }
+.drop-zone-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 36px; }
+
+/* SATZBAU */
+.satzbau-item { margin-bottom: 20px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* WORTSCHATZ */
+#vocabContainer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (max-width: 700px) { #vocabContainer { grid-template-columns: 1fr; } .vocab-item { flex-direction: column; align-items: flex-start; } }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 140px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 130px; }
+.vocab-inputs input.plural { width: 140px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+
+/* FOOTER */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Wie umweltbewusst bist du?</h1>
+        <p style="font-family: Georgia, serif;">B1.1 &nbsp;·&nbsp; Lektion 1028S &nbsp;·&nbsp; Sprechen &amp; Üben</p>
+        <div class="big-emoji">♻️</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🗣️</span><span class="nav-label">Aussprache</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🗑️</span><span class="nav-label">Müll &amp; Recycling</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🌍</span><span class="nav-label">Umweltprobleme</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- TAB 0: AUSSPRACHE -->
+    <div class="section active" id="sec-0">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/7512876/pexels-photo-7512876.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Recycling und Umwelt">
+
+            <div class="aussprache-intro">
+                <h3>🗣️ Aussprache: Umlautvokale ü, ö, ä</h3>
+                In dieser Lektion üben wir die deutschen Umlautvokale <span class="umlaut-hl">ü</span>, <span class="umlaut-hl">ö</span> und <span class="umlaut-hl">ä</span>.
+                Diese Laute kommen im Deutschen sehr häufig vor — besonders beim Thema Umwelt!
+            </div>
+
+            <h2 style="color:#667eea; margin-bottom:14px; font-size:1.1rem;">📖 Wortpaare: ohne Umlaut → mit Umlaut</h2>
+            <div class="wortpaar-grid">
+                <div class="wortpaar-card">
+                    <div class="ohne">schon</div>
+                    <div style="color:#ccc; font-size:1.1rem;">→</div>
+                    <div class="mit">sch<span class="umlaut-hl">ö</span>n</div>
+                </div>
+                <div class="wortpaar-card">
+                    <div class="ohne">Buch</div>
+                    <div style="color:#ccc; font-size:1.1rem;">→</div>
+                    <div class="mit">B<span class="umlaut-hl">ü</span>cher</div>
+                </div>
+                <div class="wortpaar-card">
+                    <div class="ohne">waschen</div>
+                    <div style="color:#ccc; font-size:1.1rem;">→</div>
+                    <div class="mit">W<span class="umlaut-hl">ä</span>sche</div>
+                </div>
+                <div class="wortpaar-card">
+                    <div class="ohne">Abfall</div>
+                    <div style="color:#ccc; font-size:1.1rem;">→</div>
+                    <div class="mit">Abf<span class="umlaut-hl">ä</span>lle</div>
+                </div>
+                <div class="wortpaar-card">
+                    <div class="ohne">Müll</div>
+                    <div style="color:#ccc; font-size:1.1rem;">→</div>
+                    <div class="mit">M<span class="umlaut-hl">ü</span>lls<span class="umlaut-hl">ä</span>cke</div>
+                </div>
+                <div class="wortpaar-card">
+                    <div class="ohne">Baum</div>
+                    <div style="color:#ccc; font-size:1.1rem;">→</div>
+                    <div class="mit">B<span class="umlaut-hl">ä</span>ume</div>
+                </div>
+            </div>
+
+            <h2 style="color:#667eea; margin-bottom:14px; font-size:1.1rem;">🌱 Schlüsselwörter mit Umlauten</h2>
+            <table class="umlaut-table">
+                <tr><th>Deutsch</th><th>Umlaut</th><th>Englisch</th></tr>
+                <tr><td><span class="umlaut-hl">Ü</span>kologie</td><td>ö</td><td>ecology</td></tr>
+                <tr><td>M<span class="umlaut-hl">ü</span>ll</td><td>ü</td><td>waste / garbage</td></tr>
+                <tr><td>Atmosph<span class="umlaut-hl">ä</span>re</td><td>ä</td><td>atmosphere</td></tr>
+                <tr><td>umweltfreundlich (<span class="umlaut-hl">ü</span>)</td><td>ü</td><td>environmentally friendly</td></tr>
+                <tr><td>Abf<span class="umlaut-hl">ä</span>lle</td><td>ä</td><td>waste / garbage (pl.)</td></tr>
+                <tr><td>B<span class="umlaut-hl">ä</span>ume</td><td>ä</td><td>trees</td></tr>
+            </table>
+
+            <div class="hilfe-box">
+                <strong>Tipp:</strong> <span class="umlaut-hl">ü</span> = Lippen wie bei „u", aber Zunge wie bei „i" &nbsp;|&nbsp;
+                <span class="umlaut-hl">ö</span> = Lippen wie bei „o", aber Zunge wie bei „e" &nbsp;|&nbsp;
+                <span class="umlaut-hl">ä</span> = ähnlich wie englisches „a" in „bad"
+            </div>
+
+            <h2 style="color:#667eea; margin-bottom:14px; font-size:1.1rem;">✏️ Pluralformen bilden</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showAussprLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetAussprache()">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-0">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-0">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">Ergänze den Plural. Achte auf die Umlautvokale!</div>
+            <div id="ausspracheContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: MÜLL & RECYCLING -->
+    <div class="section" id="sec-1">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/6591436/pexels-photo-6591436.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mülltrennung und Recycling">
+
+            <h2 style="color:#667eea; margin-bottom:14px; font-size:1.1rem;">🗑️ Müllarten kennen</h2>
+
+            <div class="hilfe-box">
+                <strong>Müllarten in Deutschland:</strong>
+                das Altpapier &nbsp;·&nbsp; der Sperrmüll &nbsp;·&nbsp; der Elektroschrott &nbsp;·&nbsp; der Bioabfall &nbsp;·&nbsp; der Kunststoff &nbsp;·&nbsp; der Restmüll &nbsp;·&nbsp; das Altglas &nbsp;·&nbsp; der Schrott
+            </div>
+
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showMuellLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetMuell()">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-1">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-1">--:--</span></span>
+                </div>
+            </div>
+
+            <div class="hilfe-box"><strong>Aufgabe:</strong> In welche Tonne / welchen Container gehört dieser Abfall? Ordne zu!</div>
+
+            <div class="zuo-chip-bank" id="muell-bank">
+                <!-- filled by JS -->
+            </div>
+
+            <div id="muell-zones">
+                <!-- filled by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: UMWELTPROBLEME -->
+    <div class="section" id="sec-2">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/7001364/pexels-photo-7001364.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Luftverschmutzung Fabrik">
+
+            <h2 style="color:#667eea; margin-bottom:14px; font-size:1.1rem;">🌍 Umweltprobleme</h2>
+
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showUmweltLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetUmwelt()">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-2">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-2">--:--</span></span>
+                </div>
+            </div>
+
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Ergänze die Lückensätze mit dem richtigen Umweltproblem aus dem Kasten.</div>
+
+            <div class="hilfe-box" style="background:#e8f4fd; border-color:#3498db;">
+                <strong>Wörterkasten:</strong> Luftverschmutzung &nbsp;·&nbsp; Wasserverschmutzung &nbsp;·&nbsp; Artensterben &nbsp;·&nbsp; Vermüllung &nbsp;·&nbsp; Abholzung &nbsp;·&nbsp; Überfischung &nbsp;·&nbsp; Bodenerosion &nbsp;·&nbsp; Wasserverschwendung
+            </div>
+
+            <div id="umweltContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: SATZBAU -->
+    <div class="section" id="sec-3">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/247763/pexels-photo-247763.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Umwelt Fabrik">
+
+            <h2>🧩 Satzbau</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="sbShowAllSolutions()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetSatzbau(); timerResetOne(3);">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-3">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-3">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge. Ziehe die Chips in das gestrichelte Feld.</div>
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: WORTSCHATZ -->
+    <div class="section" id="sec-4">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/6503036/pexels-photo-6503036.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wörterbuch Vokabeln lernen">
+
+            <h2>🔠 Wortschatz</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showVocabLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetVocab(); timerResetOne(4);">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-4">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-4">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Übersetze die Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+            <div id="vocabContainer"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+// ─── Tab Navigation ───────────────────────────────────────────────────────
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) { b.classList.toggle('active', i === idx); });
+}
+
+// ─── Timer System ─────────────────────────────────────────────────────────
+var TIMER_PREFIX = 'b1_1028s_best_';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function fmtTime(s) {
+    return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+
+function loadBestTimes() {
+    for (var i = 0; i <= 4; i++) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
+    }
+}
+
+// ─── TAB 0: AUSSPRACHE — Plural-Lückentext ───────────────────────────────
+var AUSSPR_DATA = [
+    { segs: [{t: 'Abfall → '}, {b: 'Abfälle', s: 'l'}], hint: 'Umlaut + e' },
+    { segs: [{t: 'Baum → '}, {b: 'Bäume', s: 'm'}], hint: 'Umlaut + e' },
+    { segs: [{t: 'Müllsack → '}, {b: 'Müllsäcke', s: 'l'}], hint: 'Umlaut + e' },
+    { segs: [{t: 'Supermarkt → '}, {b: 'Supermärkte', s: 'l'}], hint: 'Umlaut + e' },
+    { segs: [{t: 'Wald → '}, {b: 'Wälder', s: 'm'}], hint: 'Umlaut + er' },
+    { segs: [{t: 'Haus → '}, {b: 'Häuser', s: 'm'}], hint: 'Umlaut + er' },
+];
+
+function buildAusspr() {
+    var cont = document.getElementById('ausspracheContainer');
+    cont.innerHTML = '';
+    AUSSPR_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecke-item';
+        item.segs.forEach(function(seg) {
+            if (seg.t) {
+                div.appendChild(document.createTextNode(seg.t));
+            } else {
+                var inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'blank';
+                inp.placeholder = '';
+                inp.dataset.answer = seg.b;
+                inp.style.width = (seg.s === 's' ? '60px' : seg.s === 'm' ? '100px' : seg.s === 'l' ? '140px' : '180px');
+                inp.addEventListener('input', function() {
+                    timerAutoStart(0);
+                    liveCheckBlank(inp);
+                    checkAussprAllOk();
+                });
+                inp.addEventListener('blur', function() {
+                    showHintBlank(inp);
+                });
+                div.appendChild(inp);
+            }
+        });
+        cont.appendChild(div);
+    });
+}
+
+function liveCheckBlank(inp) {
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.answer || '').toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('correct');
+    } else if (ans.indexOf(val) === 0) {
+        // valid prefix — neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function showHintBlank(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    if (!inp.classList.contains('correct')) {
+        var hint = document.createElement('span');
+        hint.className = 'correction-hint';
+        hint.textContent = inp.dataset.answer;
+        inp.insertAdjacentElement('afterend', hint);
+    }
+    inp.value = inp.dataset.answer;
+    inp.classList.add('correct');
+    inp.classList.remove('wrong');
+}
+
+function checkAussprAllOk() {
+    var inputs = document.querySelectorAll('#sec-0 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(0);
+}
+
+function showAussprLoesung() {
+    document.querySelectorAll('#sec-0 input.blank').forEach(function(inp) {
+        showHintBlank(inp);
+    });
+}
+
+function resetAussprache() {
+    timerResetOne(0);
+    document.querySelectorAll('#sec-0 input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+        var next = inp.nextElementSibling;
+        if (next && next.classList.contains('correction-hint')) next.remove();
+    });
+}
+
+// ─── TAB 1: MÜLL & RECYCLING — Zuordnung ─────────────────────────────────
+var MUELL_DATA = [
+    { text: 'Altpapier', cat: 'Blaue Tonne' },
+    { text: 'Zeitung', cat: 'Blaue Tonne' },
+    { text: 'Plastikflasche', cat: 'Gelbe Tonne' },
+    { text: 'Kunststoffverpackung', cat: 'Gelbe Tonne' },
+    { text: 'Bananenschale', cat: 'Biotonne' },
+    { text: 'Kaffeesatz', cat: 'Biotonne' },
+    { text: 'Glasflasche', cat: 'Altglas' },
+    { text: 'Weinflasche', cat: 'Altglas' },
+    { text: 'Joghurtbecher', cat: 'Restmüll' },
+    { text: 'Zigarettenkippe', cat: 'Restmüll' },
+];
+
+var MUELL_ZONES = ['Blaue Tonne', 'Gelbe Tonne', 'Biotonne', 'Altglas', 'Restmüll'];
+
+var zuoDragged = null;
+var zuoSelected = null;
+
+function buildMuell() {
+    var bank = document.getElementById('muell-bank');
+    var zonesDiv = document.getElementById('muell-zones');
+    bank.innerHTML = '';
+    zonesDiv.innerHTML = '';
+
+    // shuffle chips
+    var items = MUELL_DATA.slice();
+    for (var i = items.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = items[i]; items[i] = items[j]; items[j] = t;
+    }
+
+    items.forEach(function(item) {
+        bank.appendChild(makeMuellChip(item.text, item.cat));
+    });
+
+    // create drop zones
+    var grid = document.createElement('div');
+    grid.style.cssText = 'display:grid; grid-template-columns:1fr 1fr; gap:12px;';
+    MUELL_ZONES.forEach(function(zoneName) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'drop-zone';
+        wrapper.dataset.cat = zoneName;
+        var label = document.createElement('div');
+        label.className = 'drop-zone-label';
+        label.textContent = zoneName;
+        var chipsDiv = document.createElement('div');
+        chipsDiv.className = 'drop-zone-chips';
+        chipsDiv.id = 'muell-zone-' + zoneName.replace(/\s/g, '');
+        wrapper.appendChild(label);
+        wrapper.appendChild(chipsDiv);
+
+        // drag events on zone
+        wrapper.addEventListener('dragover', function(e) { e.preventDefault(); wrapper.classList.add('dragover'); });
+        wrapper.addEventListener('dragleave', function() { wrapper.classList.remove('dragover'); });
+        wrapper.addEventListener('drop', function(e) {
+            e.preventDefault();
+            wrapper.classList.remove('dragover');
+            if (!zuoDragged) return;
+            chipsDiv.appendChild(zuoDragged);
+            zuoDragged = null;
+            colorAllMuellChips();
+            timerAutoStart(1);
+        });
+        wrapper.addEventListener('click', function() {
+            if (!zuoSelected) return;
+            chipsDiv.appendChild(zuoSelected);
+            zuoSelected.classList.remove('selected');
+            zuoSelected = null;
+            colorAllMuellChips();
+            timerAutoStart(1);
+        });
+        grid.appendChild(wrapper);
+    });
+
+    // bank click to place
+    bank.addEventListener('click', function() {
+        if (!zuoSelected) return;
+        bank.appendChild(zuoSelected);
+        zuoSelected.classList.remove('selected');
+        zuoSelected = null;
+        colorAllMuellChips();
+    });
+
+    zonesDiv.appendChild(grid);
+}
+
+function makeMuellChip(text, cat) {
+    var chip = document.createElement('div');
+    chip.className = 'zuo-chip';
+    chip.textContent = text;
+    chip.dataset.cat = cat;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        zuoDragged = chip;
+        e.dataTransfer.setData('text/plain', '');
+    });
+    chip.addEventListener('dragend', function() {
+        zuoDragged = null;
+    });
+    chip.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (zuoSelected === chip) {
+            chip.classList.remove('selected');
+            zuoSelected = null;
+        } else {
+            if (zuoSelected) zuoSelected.classList.remove('selected');
+            zuoSelected = chip;
+            chip.classList.add('selected');
+        }
+    });
+    return chip;
+}
+
+function colorAllMuellChips() {
+    document.querySelectorAll('#sec-1 .zuo-chip').forEach(function(chip) {
+        var zone = chip.closest('.drop-zone');
+        if (zone) {
+            chip.classList.remove('correct', 'wrong');
+            chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+        } else {
+            chip.classList.remove('correct', 'wrong');
+        }
+    });
+    checkMuellAllOk();
+}
+
+function checkMuellAllOk() {
+    var chips = document.querySelectorAll('#sec-1 .zuo-chip');
+    var allOk = chips.length > 0 && Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+    if (allOk) timerStop(1);
+}
+
+function showMuellLoesung() {
+    // move all chips to correct zones
+    document.querySelectorAll('#sec-1 .zuo-chip').forEach(function(chip) {
+        var zoneName = chip.dataset.cat;
+        var zoneChips = document.getElementById('muell-zone-' + zoneName.replace(/\s/g, ''));
+        if (zoneChips) zoneChips.appendChild(chip);
+    });
+    colorAllMuellChips();
+}
+
+function resetMuell() {
+    timerResetOne(1);
+    buildMuell();
+}
+
+// ─── TAB 2: UMWELTPROBLEME — Lückentext ──────────────────────────────────
+var UMWELT_DATA = [
+    { segs: [{t: 'Fabriken und Autos produzieren viele Schadstoffe. Das führt zur '}, {b: 'Luftverschmutzung', s: 'xl'}, {t: '.'}] },
+    { segs: [{t: 'Plastik und Chemikalien gelangen in Flüsse und Meere. Das verursacht '}, {b: 'Wasserverschmutzung', s: 'xl'}, {t: '.'}] },
+    { segs: [{t: 'Viele Tierarten sterben aus, weil Menschen ihren Lebensraum zerstören. Das nennt man '}, {b: 'Artensterben', s: 'l'}, {t: '.'}] },
+    { segs: [{t: 'Wenn zu viel Müll in der Umwelt landet, spricht man von '}, {b: 'Vermüllung', s: 'l'}, {t: '.'}] },
+    { segs: [{t: 'Wenn Wälder für Landwirtschaft oder Städte gerodet werden, heißt das '}, {b: 'Abholzung', s: 'l'}, {t: '.'}] },
+    { segs: [{t: 'Wenn zu viele Fische gefangen werden und die Bestände sinken, nennt man das '}, {b: 'Überfischung', s: 'l'}, {t: '.'}] },
+    { segs: [{t: 'Durch fehlende Vegetation wird der Boden abgetragen. Das ist '}, {b: 'Bodenerosion', s: 'l'}, {t: '.'}] },
+    { segs: [{t: 'Zu langer Laufenlassen von Wasser oder ineffiziente Bewässerung führt zu '}, {b: 'Wasserverschwendung', s: 'xl'}, {t: '.'}] },
+];
+
+function buildUmwelt() {
+    var cont = document.getElementById('umweltContainer');
+    cont.innerHTML = '';
+    UMWELT_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecke-item';
+        item.segs.forEach(function(seg) {
+            if (seg.t) {
+                div.appendChild(document.createTextNode(seg.t));
+            } else {
+                var inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'blank';
+                inp.placeholder = '';
+                inp.dataset.answer = seg.b;
+                inp.style.width = (seg.s === 's' ? '70px' : seg.s === 'm' ? '100px' : seg.s === 'l' ? '150px' : '200px');
+                inp.addEventListener('input', function() {
+                    timerAutoStart(2);
+                    liveCheckBlank(inp);
+                    checkUmweltAllOk();
+                });
+                inp.addEventListener('blur', function() {
+                    showHintBlank(inp);
+                });
+                div.appendChild(inp);
+            }
+        });
+        cont.appendChild(div);
+    });
+}
+
+function checkUmweltAllOk() {
+    var inputs = document.querySelectorAll('#sec-2 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(2);
+}
+
+function showUmweltLoesung() {
+    document.querySelectorAll('#sec-2 input.blank').forEach(function(inp) {
+        showHintBlank(inp);
+    });
+}
+
+function resetUmwelt() {
+    timerResetOne(2);
+    document.querySelectorAll('#sec-2 input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+        var next = inp.nextElementSibling;
+        if (next && next.classList.contains('correction-hint')) next.remove();
+    });
+}
+
+// ─── TAB 3: SATZBAU ───────────────────────────────────────────────────────
+var satzbauData = [
+    { parts: ['Mülltrennung', 'ist', 'für', 'die', 'Umwelt', 'sehr', 'wichtig'], valid: [['Mülltrennung', 'ist', 'für', 'die', 'Umwelt', 'sehr', 'wichtig']], punct: '.' },
+    { parts: ['Viele', 'Menschen', 'kaufen', 'unverpackte', 'Produkte'], valid: [['Viele', 'Menschen', 'kaufen', 'unverpackte', 'Produkte']], punct: '.' },
+    { parts: ['Die', 'Luftverschmutzung', 'schadet', 'der', 'Gesundheit'], valid: [['Die', 'Luftverschmutzung', 'schadet', 'der', 'Gesundheit']], punct: '.' },
+    { parts: ['Man', 'sollte', 'immer', 'einen', 'Stoffbeutel', 'mitnehmen'], valid: [['Man', 'sollte', 'immer', 'einen', 'Stoffbeutel', 'mitnehmen']], punct: '.' },
+    { parts: ['Weniger', 'Müll', 'zu', 'produzieren', 'schützt', 'die', 'Umwelt'], valid: [['Weniger', 'Müll', 'zu', 'produzieren', 'schützt', 'die', 'Umwelt']], punct: '.' },
+    { parts: ['Die', 'Abholzung', 'der', 'Wälder', 'zerstört', 'den', 'Lebensraum', 'vieler', 'Tiere'], valid: [['Die', 'Abholzung', 'der', 'Wälder', 'zerstört', 'den', 'Lebensraum', 'vieler', 'Tiere']], punct: '.' },
+    { parts: ['Umweltbewusstsein', 'beginnt', 'im', 'Alltag'], valid: [['Umweltbewusstsein', 'beginnt', 'im', 'Alltag']], punct: '.' },
+];
+
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(3);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    chip.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var bank = chip.closest('.chips-container');
+        var row = chip.closest('.sentence-builder');
+        if (bank) {
+            // chip is in bank — find its row
+            var item = bank.parentElement;
+            var targetRow = item.querySelector('.sentence-builder');
+            targetRow.appendChild(chip);
+            var idx = parseInt(item.dataset.idx);
+            sbUpdateCapitalization(targetRow);
+            sbCheckAuto(idx);
+        } else if (row) {
+            // chip is in row — send back to bank
+            var item2 = row.parentElement;
+            var targetBank = item2.querySelector('.chips-container');
+            targetBank.appendChild(chip);
+            chip.classList.remove('correct', 'incorrect');
+            var idx2 = parseInt(item2.dataset.idx);
+            sbUpdateCapitalization(row);
+            sbCheckAuto(idx2);
+        }
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbShowAllSolutions() {
+    satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        item.dataset.idx = idx;
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function resetSatzbau() { initSatzbau(); }
+
+// ─── TAB 4: WORTSCHATZ ────────────────────────────────────────────────────
+var WORTSCHATZ = [
+    { id:1,  type:'n', en:'waste / garbage',               artikel:'der', de:'Müll',              plural:'—' },
+    { id:2,  type:'n', en:'air pollution',                  artikel:'die', de:'Luftverschmutzung', plural:'—' },
+    { id:3,  type:'n', en:'recycling',                      artikel:'das', de:'Recycling',         plural:'—' },
+    { id:4,  type:'n', en:'ecology',                        artikel:'die', de:'Ökologie',          plural:'—' },
+    { id:5,  type:'n', en:'waste separation',               artikel:'die', de:'Mülltrennung',      plural:'—' },
+    { id:6,  type:'n', en:'environmental protection',       artikel:'der', de:'Umweltschutz',      plural:'—' },
+    { id:7,  type:'n', en:'deforestation',                  artikel:'die', de:'Abholzung',         plural:'—' },
+    { id:8,  type:'n', en:'species extinction',             artikel:'das', de:'Artensterben',      plural:'—' },
+    { id:9,  type:'v', en:'environmentally friendly',       de:'umweltfreundlich' },
+    { id:10, type:'v', en:'to produce',                     de:'produzieren' },
+];
+
+function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+}
+
+function initVocab() {
+    var cont = document.getElementById('vocabContainer');
+    cont.innerHTML = '';
+    shuffle(WORTSCHATZ).forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'vocab-item';
+
+        var en = document.createElement('span');
+        en.className = 'vocab-en';
+        en.textContent = item.en;
+        div.appendChild(en);
+
+        var arr = document.createElement('span');
+        arr.className = 'vocab-arrow';
+        arr.textContent = '→';
+        div.appendChild(arr);
+
+        var inputs = document.createElement('div');
+        inputs.className = 'vocab-inputs';
+
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.type = 'text'; artInp.className = 'art'; artInp.placeholder = 'Artikel';
+            artInp.dataset.answer = item.artikel;
+            artInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(artInp); checkVocabAllDone(); });
+            artInp.addEventListener('blur', function() { vocabShowHint(artInp); });
+
+            var wortInp = document.createElement('input');
+            wortInp.type = 'text'; wortInp.className = 'wort'; wortInp.placeholder = 'Deutsch';
+            wortInp.dataset.answer = item.de;
+            wortInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(wortInp); checkVocabAllDone(); });
+            wortInp.addEventListener('blur', function() { vocabShowHint(wortInp); });
+
+            inputs.appendChild(artInp);
+            inputs.appendChild(wortInp);
+
+            if (item.plural && item.plural !== '—') {
+                var plurInp = document.createElement('input');
+                plurInp.type = 'text'; plurInp.className = 'plural'; plurInp.placeholder = 'Plural';
+                plurInp.dataset.answer = item.plural;
+                plurInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(plurInp); checkVocabAllDone(); });
+                plurInp.addEventListener('blur', function() { vocabShowHint(plurInp); });
+                inputs.appendChild(plurInp);
+            } else if (item.plural === '—') {
+                var noPlur = document.createElement('span');
+                noPlur.style.cssText = 'font-size:0.82em; color:#aaa; margin-left:4px;';
+                noPlur.textContent = '(kein Plural)';
+                inputs.appendChild(noPlur);
+            }
+        } else {
+            var verbInp = document.createElement('input');
+            verbInp.type = 'text'; verbInp.className = 'wort'; verbInp.placeholder = 'Deutsch';
+            verbInp.dataset.answer = item.de;
+            verbInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(verbInp); checkVocabAllDone(); });
+            verbInp.addEventListener('blur', function() { vocabShowHint(verbInp); });
+            inputs.appendChild(verbInp);
+        }
+
+        div.appendChild(inputs);
+        cont.appendChild(div);
+    });
+}
+
+function vocabLiveCheck(inp) {
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.answer || '').toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('correct');
+    } else if (ans.indexOf(val) === 0) {
+        // valid prefix
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function vocabShowHint(inp) {
+    if (!inp.classList.contains('correct')) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct');
+        inp.classList.remove('wrong');
+    }
+}
+
+function checkVocabAllDone() {
+    var inputs = document.querySelectorAll('#sec-4 .vocab-inputs input');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(4);
+}
+
+function showVocabLoesung() {
+    document.querySelectorAll('#sec-4 .vocab-inputs input').forEach(function(inp) {
+        vocabShowHint(inp);
+    });
+}
+
+function resetVocab() {
+    document.querySelectorAll('#sec-4 .vocab-inputs input').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+        var hint = inp.parentElement.querySelector('.vocab-hint');
+        if (hint) hint.remove();
+    });
+    initVocab();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+buildAusspr();
+buildMuell();
+buildUmwelt();
+initSatzbau();
+initVocab();
+loadBestTimes();
+</script>
+</body>
+</html>

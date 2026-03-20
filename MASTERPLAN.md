@@ -517,3 +517,79 @@ Bei `WORT_DATA` mit `.answer`-Feld (nicht `.wort`): Kernwort so extrahieren:
 ```javascript
 var core = ans.replace(/^(der|die|das)\s+/i, '').split(',')[0].trim();
 ```
+
+### Bug 5: Satzbau falsch implementiert (wiederkehrender Fehler — März 2026)
+
+**Symptom:** Satzbau wurde neu gebaut, aber ohne Skill-Standard gelesen zu haben.
+Erkennungszeichen der FALSCHEN Implementierung:
+- Variable heißt `SB_DATA` statt `satzbauData`
+- Container-ID ist `sb-container` statt `satzbauContainer`
+- Chips haben `linear-gradient` statt weißem Hintergrund mit lila Rand
+- Klassen heißen `chip-bank`/`drop-row` statt `chips-container`/`sentence-builder`
+- Funktionen: `buildSatzbau`, `colorSbRow`, `updateSbCaps`, `allowDrop`, `dropToRow`
+
+**Ursache:** Satzbau aus dem Kopf implementiert statt `satzbau-drag-drop` SKILL.md gelesen.
+
+**Fix:** IMMER zuerst `/sessions/.../skills/satzbau-drag-drop/SKILL.md` lesen,
+dann vollständig nach Standard implementieren. Niemals „schnell" patchen.
+
+**Validierung:** Nach jeder Migration zwingend ausführen:
+```bash
+python3 "/sessions/eager-great-dirac/mnt/.skills/skills/satzbau-drag-drop/check-satzbau-migration.py" DATEI.html
+```
+Erst wenn `✓ ALLES OK` gemeldet wird, ist die Migration abgeschlossen.
+
+### Bug 6: Header-Design entspricht nicht dem Standard
+
+**Symptom:** Header zeigt kleine Schrift, `.badge`-Chips für B1.1/Lektion/Lesen, keine Georgia-Schrift.
+**Ursache:** Header aus dem Kopf gebaut statt `daf-html-layout` SKILL.md gelesen.
+**Korrektes Pattern:**
+```html
+<div class="header">
+  <h1>Titel der Übung</h1>
+  <p style="font-family: Georgia, serif;">B1.1 · Lektion XXXX · Typ</p>
+  <div class="big-emoji">🌍</div>
+</div>
+```
+```css
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; }
+.header p  { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+```
+**KEINE `.badge`-Spans, KEIN `font-size: 1.45rem`.**
+
+---
+
+## 10. Pre-Flight-Checklist — Nachhaltige Fehlervermeidung
+
+**Antwort auf: „Wie können wir diese Fehler nachhaltig beseitigen?"**
+
+Jeder Bug, der mehr als einmal aufgetreten ist, wurde durch das **Überspringen der Skill-Lektüre** verursacht. Die einzige nachhaltige Lösung ist eine verbindliche Pre-Flight-Routine:
+
+### Vor dem Erstellen einer neuen Datei — PFLICHT
+
+- [ ] `daf-html-layout` SKILL.md gelesen? → Korrekte Header-, Nav-, Container-CSS
+- [ ] `satzbau-drag-drop` SKILL.md gelesen? (wenn Satzbau-Tab) → satzbauData, sbMakeChip, white chips
+- [ ] `lesetext-hervorhebung` SKILL.md gelesen? (wenn Lesetext) → highlightVocabInText()
+- [ ] `daf-bilder-pflicht` gelesen? → Tab-Banner für jeden Tab
+- [ ] `textgestaltung-daf` gelesen? (wenn Lesetext) → Georgia, max-width, Blocksatz
+
+### Vor dem Bearbeiten einer bestehenden Datei — PFLICHT
+
+- [ ] Datei komplett gelesen (alle Teile — CSS, HTML, JS)?
+- [ ] Entsprechende Skill-SKILL.md gelesen?
+- [ ] `check-satzbau-migration.py` ausgeführt nach jeder Satzbau-Änderung?
+
+### Nach Fertigstellung — PFLICHT
+
+- [ ] `daf-browser-test` Skill ausgeführt?
+- [ ] Alle 5 Phasen des Tests bestanden?
+- [ ] Git commit & push durchgeführt?
+- [ ] Dashboard-Badge aktualisiert?
+
+### Goldene Regel
+
+> **Kein Code ohne Skill-Lektüre.** Die Zeit für das Lesen des Skills ist immer kürzer
+> als die Zeit für das Reparieren eines Bugs, der durch Nicht-Lesen entstand.
+> Frank hat dies vielfach korrigiert. Die Skills existieren, weil diese Fehler
+> bereits gemacht wurden. Nutze sie.

@@ -571,6 +571,8 @@ Jeder Bug, der mehr als einmal aufgetreten ist, wurde durch das **Überspringen 
 - [ ] `daf-html-layout` SKILL.md gelesen? → Korrekte Header-, Nav-, Container-CSS, Wortschatz-Pattern
 - [ ] Nav-HTML: `<div class="nav">` und `<div class="nav-btn">` (KEIN `<nav>` oder `<button>`)
 - [ ] Wortschatz: `WORTSCHATZ[]` mit `type`/`artikel`/`de`/`plural` + `vocabContainer` (kein `WORT_DATA`, kein `wort-item`)
+- [ ] Wortschatz: `#vocabContainer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }` — **ZWEISPALTIG PFLICHT**
+- [ ] Wortschatz: Responsiver Breakpoint `@media (max-width: 700px)` gesetzt?
 - [ ] `satzbau-drag-drop` SKILL.md gelesen? (wenn Satzbau-Tab) → satzbauData, sbMakeChip, white chips
 - [ ] `lesetext-hervorhebung` SKILL.md gelesen? (wenn Lesetext) → highlightVocabInText()
 - [ ] `daf-bilder-pflicht` gelesen? → Tab-Banner für jeden Tab
@@ -627,6 +629,34 @@ var WORTSCHATZ = [
   { id:2, type:'v', en:'...', de:'machen' }
 ];
 ```
+
+---
+
+### Bug 9: Wortschatz-Tab einspaltig statt zweispaltig
+
+**Symptom:** Alle Vokabelkarten stehen untereinander in einer einzigen Spalte — wirkt unübersichtlich und platzverschwendend auf breiten Bildschirmen.
+**Ursache:** `#vocabContainer` erhält kein CSS-Grid, nur `flex-direction: column` oder gar kein Layoutmodell.
+
+**Pflicht-CSS (nicht verhandelbar):**
+```css
+#vocabContainer {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+@media (max-width: 700px) {
+  #vocabContainer { grid-template-columns: 1fr; }
+  .vocab-item { flex-direction: column; align-items: flex-start; }
+}
+```
+
+**Warum 700px (nicht 600px)?** Drei Input-Felder (Artikel 70px + Wort 120px + Plural 120px + gaps) passen bei halber Container-Breite erst ab ca. 700px Viewport.
+
+**Erkennung:** Wenn nach dem Tippen eines Testwortes die zweite Spalte leer und weit rechts erscheint → Grid fehlt.
+
+**Fix:** Immer `display: grid; grid-template-columns: repeat(2, 1fr);` auf `#vocabContainer` setzen. Responsiver Breakpoint bei 700px. Input-Breiten: `.art` 70px, `.wort` 120px, `.plural` 120px.
+
+**Auch in §10 Pre-Flight-Checklist ergänzt** — Zweispaltig wird jetzt beim Wortschatz-Check geprüft.
 
 ---
 

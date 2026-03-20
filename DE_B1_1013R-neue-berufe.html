@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neue Berufe &ndash; B1 Lesen</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.0em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; padding: 28px 30px; }
+.section.active { display: block; }
+h2 { color: #333; font-size: 1.15em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; }
+h3 { color: #555; font-size: 1em; margin-bottom: 12px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn-show { background: #f0f0f0; color: #555; }
+.btn-show:hover { background: #e0e0e0; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.help-box { background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 20px; font-size: 0.9em; line-height: 1.7; color: #444; }
+.help-box strong { color: #667eea; }
+
+/* ── Vorentlastung ── */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.vocab-card { background: linear-gradient(135deg, #f8f9ff, #ede7f6); border-radius: 12px; padding: 14px 16px; border-left: 4px solid #667eea; }
+.vocab-term { font-weight: 700; color: #3949ab; font-size: 0.97em; margin-bottom: 6px; }
+.vocab-def { font-size: 0.87em; color: #444; line-height: 1.55; }
+
+/* ── Originaltext ── */
+.text-box { background: #fafbff; border-radius: 14px; padding: 24px 26px; border: 1px solid #e0e4ff; font-size: 0.97em; line-height: 1.85; color: #333; margin-bottom: 20px; font-family: Georgia, 'Times New Roman', serif; }
+.text-box p { margin-bottom: 14px; }
+.text-box p:last-child { margin-bottom: 0; }
+.text-source { font-size: 0.8em; color: #999; text-align: right; margin-top: 10px; }
+
+/* ── Genus ── */
+.genus-zones { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.genus-zone { border: 2px dashed #c5cae9; border-radius: 12px; padding: 10px; min-height: 120px; }
+.genus-zone-title { text-align: center; font-weight: 700; font-size: 0.82em; margin-bottom: 8px; padding: 4px 8px; border-radius: 8px; }
+.gz-der .genus-zone-title { background: #e3f2fd; color: #1565c0; }
+.gz-die .genus-zone-title { background: #fce4ec; color: #c62828; }
+.gz-das .genus-zone-title { background: #e8f5e9; color: #2e7d32; }
+.gz-pl .genus-zone-title { background: #fff8e1; color: #e65100; }
+.genus-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; }
+
+/* ── Chips allgemein ── */
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; display: inline-block; white-space: nowrap; }
+.chip:hover { transform: scale(1.04); box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
+.chip.placed    { background: #667eea; color: white; }
+.chip.correct   { background: #27ae60 !important; border-color: #27ae60 !important; color: white !important; }
+.chip.incorrect { background: #e74c3c !important; border-color: #e74c3c !important; color: white !important; }
+.chip.wrong     { background: #e74c3c !important; border-color: #e74c3c !important; color: white !important; }
+
+/* ── Lückentext ── */
+.ex-card { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; font-size: 0.97em; line-height: 2.4; color: #333; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 3px 7px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+input.blank.s  { min-width: 60px;  width: 60px; }
+input.blank.m  { min-width: 110px; width: 110px; }
+input.blank.l  { min-width: 160px; width: 160px; }
+input.blank.xl { min-width: 200px; width: 200px; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong   { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { color: #27ae60; font-weight: 600; font-size: 0.83em; margin-left: 5px; white-space: nowrap; }
+
+/* ── Multiple Choice ── */
+.mc-card { background: #f8f9ff; border-radius: 12px; padding: 16px 20px; margin-bottom: 14px; border-left: 4px solid #764ba2; }
+.mc-question { font-weight: 600; color: #333; font-size: 0.97em; margin-bottom: 12px; line-height: 1.5; }
+.mc-options { display: flex; flex-direction: column; gap: 7px; }
+.mc-option { padding: 9px 14px; border: 2px solid #e0e4ff; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.2s; background: white; text-align: left; }
+.mc-option:hover:not(:disabled) { border-color: #667eea; background: #f0f4ff; }
+.mc-option.correct { border-color: #27ae60; background: #e8f5e9; color: #1b5e20; font-weight: 600; }
+.mc-option.wrong   { border-color: #e74c3c; background: #ffebee; color: #b71c1c; }
+
+/* ── Satzbau (Skill-Standard) ── */
+.sb-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 18px; border-radius: 10px; border-left: 4px solid #667eea; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* ── Footer ── */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Neue Berufe</h1>
+    <p style="font-family: Georgia, serif;">B1 &middot; Lesen &middot; Arbeitswelt &amp; Digitalisierung</p>
+    <div class="big-emoji">&#128188;</div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">&#128214;</span><span class="nav-label">Vorentlastung</span></div>
+    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">&#128196;</span><span class="nav-label">Originaltext</span></div>
+    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">&#128279;</span><span class="nav-label">Genus</span></div>
+    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">&#9997;&#65039;</span><span class="nav-label">L&uuml;ckentext</span></div>
+    <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">&#9989;</span><span class="nav-label">Multiple Choice</span></div>
+    <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">&#129513;</span><span class="nav-label">Satzbau</span></div>
+  </div>
+
+  <!-- TAB 0: Vorentlastung -->
+  <div class="section active" id="sec0">
+    <h2>&#128214; Vorentlastung &ndash; Wichtige W&ouml;rter</h2>
+    <div class="help-box">Lerne diese W&ouml;rter kennen, <strong>bevor</strong> du den Text liest. Sie helfen dir, den Text besser zu verstehen.</div>
+    <div class="vocab-grid" id="vocab-container"></div>
+  </div>
+
+  <!-- TAB 1: Originaltext -->
+  <div class="section" id="sec1">
+    <h2>&#128196; Berufswahl &ndash; Berufe von gestern, Berufe von morgen</h2>
+    <p style="font-family: Georgia, serif; font-style: italic; letter-spacing: 0.03em; color: #555; font-size: 0.95em; line-height: 1.75; max-width: 720px; margin: 0 auto 20px auto; text-align: justify;">Karim sitzt an seinem ersten Abend in Düsseldorf am Küchentisch. In drei Tagen fängt er bei E.ON an. Er öffnet sein Laptop und findet einen Artikel, den ihm ein Kollege geschickt hat. Er liest.</p>
+    <div class="text-box">
+      <p>Jonas steht an seinem Schreibtisch und starrt auf den iMac. Comet, Perplexity, drei&szlig;ig Tabs &mdash; Prozesse, die laufen, ohne dass er wei&szlig;, wohin. Drau&szlig;en brennt schon das Laternenlicht. Der Asphalt ist noch warm von vielen Sommer-Sonnenstunden. Sein Abitur: 1,8. F&uuml;r Medizin reicht es nicht. F&uuml;r alles andere &mdash; vielleicht. Aber was ist alles andere?</p>
+      <p>Er liest. Data Engineer, AI Engineer, Cybersecurity-Spezialist. Berufe, die es vor zehn Jahren noch nicht gab. Start-ups poppen &uuml;ber Nacht auf und sind am n&auml;chsten Tag wieder verschwunden. Astronomische Geh&auml;lter stehen im Raum, die Nachfrage ist gro&szlig; &mdash; aber auch der Zweifel. 2023 galt der &bdquo;Prompt Engineer&ldquo; als der Beruf der Zukunft. Anthropic, Google, Microsoft, OpenAI &mdash; sie alle suchten Menschen, die die Sprache der KI beherrschten. Zwei Jahre sp&auml;ter beherrschte die KI die Sprache der Menschen. Und prompt war der Beruf keiner mehr. Die KI wurde zum Katalysator und Kaleidoskop der eigenen Gedankenwelt.</p>
+      <p>Dampfmaschinen ersetzten einst die einfache Handarbeit &mdash; aber nicht die Handwerkskunst. So die KI: Sie ersetzt den Intellekt &mdash; aber nicht den sch&ouml;pferischen Geist.</p>
+      <p>Jonas&rsquo; Mauszeiger verwandelt sich in einen Finger. Er schlie&szlig;t zwei Tabs nacheinander, &ouml;ffnet drei neue Links. Drau&szlig;en geht jemand im Laternenlicht spazieren &mdash; ein Mann mit einem Werkzeugkoffer. Jonas schaut ihm nach. Elektriker, Solartechniker, Heizungsbauer: &Uuml;ber 96.000 offene Stellen allein im Elektrohandwerk. &Uuml;berall herrscht Mangel an arbeitenden H&auml;nden. Die alte deutsche Weisheit &mdash; Handwerk hat goldenen Boden &mdash; bewahrheitet sich.</p>
+      <p>Er f&auml;hrt den iMac herunter. Grau-grau ist alle Theorie. Er tut einen tiefen Atemzug und sp&uuml;rt, dass diese Welt auf ihn wartet.</p>
+    </div>
+    <p style="font-family: Georgia, serif; font-style: italic; letter-spacing: 0.03em; color: #555; font-size: 0.95em; line-height: 1.75; max-width: 720px; margin: 20px auto 0 auto; text-align: justify;">Karim schließt den Laptop. Er denkt an Casablanca, an die siebenmal überarbeitete Bewerbung, an den Stuhl auf dem Marmorboden. Dann lächelt er. Er hat sich entschieden &mdash; und die Welt wartet tatsächlich auf ihn.</p>
+  </div>
+
+  <!-- TAB 2: Genus -->
+  <div class="section" id="sec2">
+    <h2>&#128279; Genus &ndash; Artikel zuordnen</h2>
+    <div class="help-box">Ziehe jedes Nomen in die richtige Kategorie. Sofortiges Feedback &ndash; gr&uuml;n = richtig, rot = falsch.</div>
+    <div class="genus-zones">
+      <div class="genus-zone gz-der" id="gz-der" data-cat="der" ondragover="allowDrop(event)" ondrop="dropGenus(event)">
+        <div class="genus-zone-title">der</div>
+      </div>
+      <div class="genus-zone gz-die" id="gz-die" data-cat="die" ondragover="allowDrop(event)" ondrop="dropGenus(event)">
+        <div class="genus-zone-title">die</div>
+      </div>
+      <div class="genus-zone gz-das" id="gz-das" data-cat="das" ondragover="allowDrop(event)" ondrop="dropGenus(event)">
+        <div class="genus-zone-title">das</div>
+      </div>
+      <div class="genus-zone gz-pl" id="gz-pl" data-cat="pl" ondragover="allowDrop(event)" ondrop="dropGenus(event)">
+        <div class="genus-zone-title">die (Pl.)</div>
+      </div>
+    </div>
+    <div class="genus-bank" id="genus-bank" ondragover="allowDrop(event)" ondrop="dropGenus(event)"></div>
+    <div class="btn-row">
+      <button class="btn btn-show" onclick="genusShow()">L&ouml;sungen zeigen</button>
+      <button class="btn btn-reset" onclick="genusReset()">Neu starten</button>
+    </div>
+    <div class="timer-display">
+      <span class="current-time" id="timer-2">&#9201; 0:00</span>
+      <span class="best-time" id="best-2">&#127942; --:--</span>
+    </div>
+  </div>
+
+  <!-- TAB 3: Lückentext -->
+  <div class="section" id="sec3">
+    <h2>&#9997;&#65039; L&uuml;ckentext &ndash; Wortschatz einsetzen</h2>
+    <div class="help-box">Erg&auml;nze die L&uuml;cken mit dem richtigen Wort aus dem Text. Groß- und Kleinschreibung wird ber&uuml;cksichtigt!</div>
+    <div id="luecken-container"></div>
+    <div class="btn-row">
+      <button class="btn btn-show" onclick="lueckenShow()">L&ouml;sungen zeigen</button>
+      <button class="btn btn-reset" onclick="lueckenReset()">Neu starten</button>
+    </div>
+    <div class="timer-display">
+      <span class="current-time" id="timer-3">&#9201; 0:00</span>
+      <span class="best-time" id="best-3">&#127942; --:--</span>
+    </div>
+  </div>
+
+  <!-- TAB 4: Multiple Choice -->
+  <div class="section" id="sec4">
+    <h2>&#9989; Multiple Choice &ndash; Textverst&auml;ndnis</h2>
+    <div class="help-box">W&auml;hle die richtige Antwort. Du bekommst sofort Feedback.</div>
+    <div id="mc-container"></div>
+    <div class="btn-row">
+      <button class="btn btn-reset" onclick="mcReset()">Neu starten</button>
+    </div>
+    <div class="timer-display">
+      <span class="current-time" id="timer-4">&#9201; 0:00</span>
+      <span class="best-time" id="best-4">&#127942; --:--</span>
+    </div>
+  </div>
+
+  <!-- TAB 5: Satzbau -->
+  <div class="section" id="sec5">
+    <h2>&#129513; Satzbau &ndash; S&auml;tze zusammensetzen</h2>
+    <div class="help-box">Bringe die W&ouml;rter in die richtige Reihenfolge. Ziehe die Chips in die Drop-Zone.</div>
+
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-0"></div>
+      <div class="sentence-builder" id="sb-row-0"></div>
+      <div class="satzbau-feedback" id="sb-fb-0"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-1"></div>
+      <div class="sentence-builder" id="sb-row-1"></div>
+      <div class="satzbau-feedback" id="sb-fb-1"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-2"></div>
+      <div class="sentence-builder" id="sb-row-2"></div>
+      <div class="satzbau-feedback" id="sb-fb-2"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-3"></div>
+      <div class="sentence-builder" id="sb-row-3"></div>
+      <div class="satzbau-feedback" id="sb-fb-3"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-4"></div>
+      <div class="sentence-builder" id="sb-row-4"></div>
+      <div class="satzbau-feedback" id="sb-fb-4"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-5"></div>
+      <div class="sentence-builder" id="sb-row-5"></div>
+      <div class="satzbau-feedback" id="sb-fb-5"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-6"></div>
+      <div class="sentence-builder" id="sb-row-6"></div>
+      <div class="satzbau-feedback" id="sb-fb-6"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-7"></div>
+      <div class="sentence-builder" id="sb-row-7"></div>
+      <div class="satzbau-feedback" id="sb-fb-7"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-8"></div>
+      <div class="sentence-builder" id="sb-row-8"></div>
+      <div class="satzbau-feedback" id="sb-fb-8"></div>
+    </div>
+    <div class="sb-item">
+      <div class="chips-container" id="sb-bank-9"></div>
+      <div class="sentence-builder" id="sb-row-9"></div>
+      <div class="satzbau-feedback" id="sb-fb-9"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-reset" onclick="sbReset()">Neu starten</button>
+    </div>
+    <div class="timer-display">
+      <span class="current-time" id="timer-5">&#9201; 0:00</span>
+      <span class="best-time" id="best-5">&#127942; --:--</span>
+    </div>
+  </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+var TIMER_PREFIX = 'b1-1013r-neue-berufe';
+
+/* ── Navigation ── */
+function showSection(idx) {
+  document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+  document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+/* ── Timer ── */
+var timerSeconds  = [0,0,0,0,0,0];
+var timerRunning  = [false,false,false,false,false,false];
+var timerStarted  = [false,false,false,false,false,false];
+var timerIntervals= [null,null,null,null,null,null];
+
+function padZ(n){ return n<10?'0'+n:''+n; }
+function fmtTime(s){ return Math.floor(s/60)+':'+padZ(s%60); }
+
+function timerStart(n){
+  if(timerStarted[n]) return;
+  timerStarted[n]=true; timerRunning[n]=true;
+  timerIntervals[n]=setInterval(function(){
+    timerSeconds[n]++;
+    var el=document.getElementById('timer-'+n);
+    if(el) el.textContent='\u23F1 '+fmtTime(timerSeconds[n]);
+  },1000);
+}
+function timerStop(n){
+  if(!timerRunning[n]) return;
+  clearInterval(timerIntervals[n]); timerRunning[n]=false;
+  var best=localStorage.getItem(TIMER_PREFIX+'-best-'+n);
+  var cur=timerSeconds[n];
+  if(!best||cur<parseInt(best)){
+    localStorage.setItem(TIMER_PREFIX+'-best-'+n,cur);
+    var bEl=document.getElementById('best-'+n);
+    if(bEl) bEl.textContent='\uD83C\uDFC6 '+fmtTime(cur);
+  }
+}
+function timerReset(n){
+  clearInterval(timerIntervals[n]);
+  timerSeconds[n]=0; timerRunning[n]=false; timerStarted[n]=false;
+  var el=document.getElementById('timer-'+n);
+  if(el) el.textContent='\u23F1 0:00';
+}
+function loadBestTimes(){
+  for(var i=2;i<=5;i++){
+    var best=localStorage.getItem(TIMER_PREFIX+'-best-'+i);
+    if(best){ var bEl=document.getElementById('best-'+i); if(bEl) bEl.textContent='\uD83C\uDFC6 '+fmtTime(parseInt(best)); }
+  }
+}
+
+/* ── DATA: Vorentlastung ── */
+var VOCAB_DATA = [
+  { term: 'der Zweifel, -', def: '\uD83E\uDD14 das Gef\u00fchl, dass man etwas nicht sicher wei\u00df oder nicht sicher ist, was richtig ist' },
+  { term: 'die Nachfrage (Sg.)', def: '\uD83D\uDCB0 das Interesse oder der Bedarf an einem Produkt oder einer Dienstleistung' },
+  { term: 'astronomisch', def: '\uD83D\uDE80 extrem hoch; \u00fcbertrieben gro\u00df (hier: astronomische Geh\u00e4lter = sehr hohe L\u00f6hne)' },
+  { term: 'der Katalysator, -en', def: '\u26A1 etwas, das einen Prozess stark beschleunigt oder in Gang setzt' },
+  { term: 'das Kaleidoskop, -e', def: '\uD83C\uDF08 ein Instrument mit bunten Mustern; hier: etwas, das viele verschiedene M\u00f6glichkeiten zeigt' },
+  { term: 'die Dampfmaschine, -n', def: '\u2699\uFE0F eine Maschine aus der industriellen Revolution, die Dampf als Energie nutzte' },
+  { term: 'der Intellekt (Sg.)', def: '\uD83E\uDDE0 die F\u00e4higkeit des Menschen, zu denken, zu analysieren und zu urteilen' },
+  { term: 'der sch\u00f6pferische Geist', def: '\uD83C\uDFA8 die menschliche F\u00e4higkeit, Neues zu erfinden, zu erschaffen und kreativ zu denken' },
+  { term: 'der Handwerksmeister, -', def: '\uD83D\uDD28 jemand mit dem h\u00f6chsten Abschluss in einem Handwerksberuf; sehr qualifiziert' },
+  { term: 'sich bewahrheiten', def: '\u2714\uFE0F sich als wahr herausstellen; stimmen; sich best\u00e4tigen' }
+];
+
+function buildVocab(){
+  var c=document.getElementById('vocab-container');
+  VOCAB_DATA.forEach(function(v){
+    var card=document.createElement('div'); card.className='vocab-card';
+    card.innerHTML='<div class="vocab-term">'+v.term+'</div><div class="vocab-def">'+v.def+'</div>';
+    c.appendChild(card);
+  });
+}
+
+/* ── DATA: Genus ── */
+var GENUS_DATA = [
+  { id:'g1',  word:'\uD83E\uDD14 Zweifel',          cat:'der' },
+  { id:'g2',  word:'\uD83D\uDCB0 Nachfrage',         cat:'die' },
+  { id:'g3',  word:'\u2699\uFE0F Dampfmaschine',     cat:'die' },
+  { id:'g4',  word:'\uD83E\uDDE0 Intellekt',         cat:'der' },
+  { id:'g5',  word:'\uD83D\uDD28 Handwerksmeister',  cat:'der' },
+  { id:'g6',  word:'\uD83C\uDF08 Kaleidoskop',       cat:'das' },
+  { id:'g7',  word:'\u26A1 Katalysator',             cat:'der' },
+  { id:'g8',  word:'\uD83C\uDFA8 Geist',             cat:'der' },
+  { id:'g9',  word:'\uD83D\uDCBB Start-up',          cat:'das' },
+  { id:'g10', word:'\uD83C\uDFE0 Asphalt',           cat:'der' },
+  { id:'g11', word:'\uD83D\uDCBC Beruf',             cat:'der' },
+  { id:'g12', word:'\uD83D\uDCB8 Geh\u00e4lter (Pl.)', cat:'pl' },
+  { id:'g13', word:'\uD83D\uDD26 Laternenlicht',     cat:'das' },
+  { id:'g14', word:'\uD83C\uDF1F Weisheit',          cat:'die' },
+  { id:'g15', word:'\uD83D\uDEE0\uFE0F Werkzeugkoffer', cat:'der' }
+];
+
+function allowDrop(e){ e.preventDefault(); }
+
+var genusDragging=null;
+var genusSelected=null;
+
+function buildGenus(){
+  var bank=document.getElementById('genus-bank');
+  bank.innerHTML='';
+  var shuffled=GENUS_DATA.slice().sort(function(){ return Math.random()-0.5; });
+  shuffled.forEach(function(item){
+    var chip=document.createElement('div');
+    chip.className='chip'; chip.id='gchip-'+item.id;
+    chip.draggable=true; chip.dataset.cat=item.cat; chip.textContent=item.word;
+    chip.ondragstart=function(e){
+      genusDragging=chip; e.dataTransfer.setData('text',chip.id); timerStart(2);
+    };
+    chip.addEventListener('click',function(){
+      timerStart(2);
+      if(genusSelected===chip){ chip.classList.remove('selected'); genusSelected=null; return; }
+      if(genusSelected){ genusSelected.classList.remove('selected'); }
+      chip.classList.add('selected'); genusSelected=chip;
+    });
+    bank.appendChild(chip);
+  });
+}
+
+function dropGenus(e){
+  e.preventDefault();
+  var id=e.dataTransfer.getData('text');
+  var chip=id?document.getElementById(id):genusDragging;
+  if(!chip) return;
+  var target=e.currentTarget;
+  target.appendChild(chip);
+  chip.classList.add('placed');
+  if(target.id==='genus-bank'){
+    chip.classList.remove('correct','wrong','placed');
+  } else {
+    chip.classList.remove('correct','wrong');
+    chip.classList.add(chip.dataset.cat===target.dataset.cat?'correct':'wrong');
+    checkGenusAll();
+  }
+  genusDragging=null;
+}
+
+document.addEventListener('click',function(e){
+  if(!genusSelected) return;
+  var zone=e.target.closest('.genus-zone, .genus-bank');
+  if(!zone) return;
+  zone.appendChild(genusSelected);
+  genusSelected.classList.add('placed');
+  if(zone.id==='genus-bank'){
+    genusSelected.classList.remove('correct','wrong','placed');
+  } else {
+    genusSelected.classList.remove('correct','wrong');
+    genusSelected.classList.add(genusSelected.dataset.cat===zone.dataset.cat?'correct':'wrong');
+    checkGenusAll();
+  }
+  genusSelected.classList.remove('selected');
+  genusSelected=null;
+});
+
+function checkGenusAll(){
+  var chips=document.querySelectorAll('#sec2 .chip.placed');
+  if(chips.length===GENUS_DATA.length){
+    var allOk=true;
+    chips.forEach(function(c){ if(!c.classList.contains('correct')) allOk=false; });
+    if(allOk) timerStop(2);
+  }
+}
+
+function genusShow(){
+  timerStop(2);
+  GENUS_DATA.forEach(function(item){
+    var chip=document.getElementById('gchip-'+item.id);
+    if(!chip) return;
+    var zone=document.getElementById('gz-'+item.cat);
+    if(zone){ zone.appendChild(chip); chip.classList.add('placed','correct'); chip.classList.remove('wrong'); }
+  });
+}
+function genusReset(){
+  timerReset(2); buildGenus();
+}
+
+/* ── DATA: Lückentext ── */
+var LUECKEN_DATA = [
+  { segs:[{t:'Jonas steht an seinem Schreibtisch und '},{b:'starrt',s:'m'},{t:' auf den iMac.'}] },
+  { segs:[{t:'Sein Abitur: 1,8. F\u00fcr Medizin '},{b:'reicht',s:'m'},{t:' es nicht.'}] },
+  { segs:[{t:'Start-ups poppen \u00fcber Nacht auf und sind am n\u00e4chsten Tag wieder '},{b:'verschwunden',s:'l'},{t:'.'}] },
+  { segs:[{t:'Astronomische Geh\u00e4lter stehen im Raum, die '},{b:'Nachfrage',s:'l'},{t:' ist gro\u00df \u2014 aber auch der Zweifel.'}] },
+  { segs:[{t:'2023 galt der \u201ePrompt Engineer\u201c als der Beruf der '},{b:'Zukunft',s:'m'},{t:'.'}] },
+  { segs:[{t:'Anthropic, Google, Microsoft, OpenAI suchten Menschen, die die Sprache der KI '},{b:'beherrschten',s:'l'},{t:'.'}] },
+  { segs:[{t:'Zwei Jahre sp\u00e4ter beherrschte die KI die Sprache der '},{b:'Menschen',s:'m'},{t:'.'}] },
+  { segs:[{t:'Die KI wurde zum Katalysator und '},{b:'Kaleidoskop',s:'l'},{t:' der eigenen Gedankenwelt.'}] },
+  { segs:[{t:'Dampfmaschinen ersetzten einst die einfache '},{b:'Handarbeit',s:'l'},{t:' \u2014 aber nicht die Handwerkskunst.'}] },
+  { segs:[{t:'So die KI: Sie ersetzt den Intellekt \u2014 aber nicht den '},{b:'sch\u00f6pferischen',s:'l'},{t:' Geist.'}] },
+  { segs:[{t:'Jonas\u2019 Mauszeiger verwandelt sich in einen '},{b:'Finger',s:'m'},{t:'.'}] },
+  { segs:[{t:'\u00dcberall herrscht '},{b:'Mangel',s:'m'},{t:' an arbeitenden H\u00e4nden.'}] },
+  { segs:[{t:'Die alte deutsche Weisheit \u2014 Handwerk hat goldenen '},{b:'Boden',s:'m'},{t:' \u2014 bewahrheitet sich.'}] },
+  { segs:[{t:'Grau-grau ist alle '},{b:'Theorie',s:'m'},{t:'.'}] }
+];
+
+function buildLuecken(){
+  var c=document.getElementById('luecken-container'); c.innerHTML='';
+  LUECKEN_DATA.forEach(function(item,idx){
+    var card=document.createElement('div'); card.className='ex-card';
+    var span=document.createElement('span'); span.style.lineHeight='2.4';
+    item.segs.forEach(function(seg){
+      if(seg.t){ span.appendChild(document.createTextNode(seg.t)); }
+      else {
+        var inp=document.createElement('input');
+        inp.type='text'; inp.className='blank '+seg.s;
+        inp.dataset.answer=seg.b;
+        inp.oninput=function(){ timerStart(3); liveCheck(inp); lueckenCheckAll(); };
+        span.appendChild(inp);
+      }
+    });
+    card.appendChild(span); c.appendChild(card);
+  });
+}
+
+function liveCheck(inp){
+  var val=inp.value.trim(); var ans=inp.dataset.answer||'';
+  inp.classList.remove('correct','wrong');
+  if(val.length===0) return;
+  if(val===ans){ inp.classList.add('correct'); return; }
+  if(ans.indexOf(val)===0) return;
+  inp.classList.add('wrong');
+}
+
+function lueckenCheckAll(){
+  var all=document.querySelectorAll('#luecken-container .blank');
+  var ok=true;
+  all.forEach(function(inp){ if(!inp.classList.contains('correct')) ok=false; });
+  if(ok&&all.length>0) timerStop(3);
+}
+
+function lueckenShow(){
+  timerStop(3);
+  document.querySelectorAll('#luecken-container .blank').forEach(function(inp){
+    var next=inp.nextElementSibling;
+    if(next&&next.classList.contains('correction-hint')) next.remove();
+    if(!inp.classList.contains('correct')){
+      var hint=document.createElement('span'); hint.className='correction-hint';
+      hint.textContent=inp.dataset.answer; inp.insertAdjacentElement('afterend',hint);
+    }
+    inp.value=inp.dataset.answer; inp.classList.add('correct'); inp.classList.remove('wrong');
+  });
+}
+function lueckenReset(){
+  timerReset(3);
+  document.querySelectorAll('#luecken-container .blank').forEach(function(inp){
+    inp.value=''; inp.classList.remove('correct','wrong');
+    var next=inp.nextElementSibling;
+    if(next&&next.classList.contains('correction-hint')) next.remove();
+  });
+}
+
+/* ── DATA: Multiple Choice ── */
+var MC_DATA = [
+  {
+    q:'Welches Abitur hat Jonas gemacht?',
+    opts:['1,0','1,5','1,8','2,3'],
+    correct:2
+  },
+  {
+    q:'Warum kann Jonas nicht Medizin studieren?',
+    opts:['Weil er kein Interesse an Medizin hat','Weil sein Numerus Clausus daf\u00fcr nicht reicht','Weil Medizin zu teuer ist','Weil es keine freien Studienpl\u00e4tze gibt'],
+    correct:1
+  },
+  {
+    q:'Was war der \u201ePrompt Engineer\u201c?',
+    opts:['Ein Handwerksberuf','Ein Beruf, bei dem man KI-Systeme programmiert','Ein Beruf, bei dem man einer KI pr\u00e4zise Anweisungen gab','Ein Beruf f\u00fcr Elektrotechniker'],
+    correct:2
+  },
+  {
+    q:'Welche Firmen suchten 2023 Prompt Engineers?',
+    opts:['BMW, Siemens, VW, Bosch','Amazon, Netflix, Spotify, Apple','Anthropic, Google, Microsoft, OpenAI','Facebook, Twitter, Instagram, TikTok'],
+    correct:2
+  },
+  {
+    q:'Warum brauchte man den Prompt Engineer zwei Jahre sp\u00e4ter nicht mehr?',
+    opts:['Weil die Geh\u00e4lter zu hoch waren','Weil die KI gelernt hatte, die Sprache der Menschen zu verstehen','Weil zu viele Menschen diesen Beruf erlernt hatten','Weil die Technologiefirmen pleite gingen'],
+    correct:1
+  },
+  {
+    q:'Was haben Dampfmaschinen laut Text ersetzt?',
+    opts:['Den menschlichen Intellekt','Die Handwerkskunst','Die einfache Handarbeit','Die Kreativit\u00e4t'],
+    correct:2
+  },
+  {
+    q:'Was ersetzt die KI laut Text \u2014 und was nicht?',
+    opts:['Sie ersetzt die Handarbeit, aber nicht die Kreativit\u00e4t','Sie ersetzt den Intellekt, aber nicht den sch\u00f6pferischen Geist','Sie ersetzt den Menschen, aber nicht die Maschine','Sie ersetzt die Sprache, aber nicht das Denken'],
+    correct:1
+  },
+  {
+    q:'Warum \u00fcberall herrscht Mangel an arbeitenden H\u00e4nden?',
+    opts:['Weil Handwerk zu schlecht bezahlt wird','Weil viele junge Menschen lieber studieren als eine Ausbildung machen','Weil Handwerker ins Ausland gegangen sind','Weil Maschinen alle Handwerksarbeit \u00fcbernommen haben'],
+    correct:1
+  },
+  {
+    q:'Was bedeutet die alte Weisheit \u201eHandwerk hat goldenen Boden\u201c?',
+    opts:['Handwerker sind reich geboren','Handwerksberufe sind wertvoll und sicher','Handwerker arbeiten mit Gold','Handwerk ist altmodisch'],
+    correct:1
+  },
+  {
+    q:'Womit endet der Text?',
+    opts:['Jonas beginnt ein Studium der Informatik','Jonas entscheidet sich f\u00fcr einen Handwerksberuf','Jonas f\u00e4hrt den iMac herunter und sp\u00fcrt, dass die Welt auf ihn wartet','Jonas schickt eine Bewerbung an Anthropic'],
+    correct:2
+  }
+];
+
+function buildMC(){
+  var c=document.getElementById('mc-container'); c.innerHTML='';
+  MC_DATA.forEach(function(item,idx){
+    var card=document.createElement('div'); card.className='mc-card';
+    var q=document.createElement('div'); q.className='mc-question';
+    q.textContent=(idx+1)+'. '+item.q; card.appendChild(q);
+    var opts=document.createElement('div'); opts.className='mc-options';
+    item.opts.forEach(function(opt,oi){
+      var btn=document.createElement('button'); btn.className='mc-option';
+      btn.textContent=opt;
+      btn.onclick=function(){
+        timerStart(4);
+        var btns=opts.querySelectorAll('.mc-option');
+        btns.forEach(function(b){ b.disabled=true; });
+        if(oi===item.correct){ btn.classList.add('correct'); checkMcAll(); }
+        else{ btn.classList.add('wrong'); btns[item.correct].classList.add('correct'); }
+      };
+      opts.appendChild(btn);
+    });
+    card.appendChild(opts); c.appendChild(card);
+  });
+}
+
+function checkMcAll(){
+  var cards=document.querySelectorAll('#mc-container .mc-card');
+  var allDone=true;
+  cards.forEach(function(card){
+    var hasCorrect=card.querySelector('.mc-option.correct');
+    if(!hasCorrect) allDone=false;
+  });
+  if(allDone) timerStop(4);
+}
+
+function mcReset(){ timerReset(4); buildMC(); }
+
+/* ── DATA: Satzbau (Skill-Standard) ── */
+var satzbauData = [
+  { parts:['Jonas','steht','an','seinem','Schreibtisch'],
+    valid:[['Jonas','steht','an','seinem','Schreibtisch']], punct:'.' },
+  { parts:['der','Asphalt','ist','noch','warm'],
+    valid:[['der','Asphalt','ist','noch','warm']], punct:'.' },
+  { parts:['die','Nachfrage','ist','gro\u00df','\u2014','aber','auch','der','Zweifel'],
+    valid:[['die','Nachfrage','ist','gro\u00df','\u2014','aber','auch','der','Zweifel']], punct:'.' },
+  { parts:['zwei','Jahre','sp\u00e4ter','brauchte','ihn','keiner','mehr'],
+    valid:[['zwei','Jahre','sp\u00e4ter','brauchte','ihn','keiner','mehr']], punct:'.' },
+  { parts:['die','KI','wurde','zum','Katalysator','der','eigenen','Gedankenwelt'],
+    valid:[['die','KI','wurde','zum','Katalysator','der','eigenen','Gedankenwelt']], punct:'.' },
+  { parts:['Dampfmaschinen','ersetzten','die','einfache','Handarbeit'],
+    valid:[['Dampfmaschinen','ersetzten','die','einfache','Handarbeit']], punct:'.' },
+  { parts:['die','KI','ersetzt','den','Intellekt'],
+    valid:[['die','KI','ersetzt','den','Intellekt']], punct:'.' },
+  { parts:['die','alte','Weisheit','bewahrheitet','sich','heute','wie','nie'],
+    valid:[['die','alte','Weisheit','bewahrheitet','sich','heute','wie','nie']], punct:'.' },
+  { parts:['\u00fcberall','herrscht','Mangel','an','arbeitenden','H\u00e4nden'],
+    valid:[['\u00fcberall','herrscht','Mangel','an','arbeitenden','H\u00e4nden']], punct:'.' },
+  { parts:['er','tut','einen','tiefen','Atemzug'],
+    valid:[['er','tut','einen','tiefen','Atemzug']], punct:'.' }
+];
+
+/* ── Satzbau Skill-JS ── */
+var sbDragged = null;
+
+function getSbCursor() {
+  var c = document.getElementById('sb-insert-cursor');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'sb-insert-cursor';
+    c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+  }
+  return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+  var chips = Array.from(zone.querySelectorAll('.chip'));
+  for (var i = 0; i < chips.length; i++) {
+    var r = chips[i].getBoundingClientRect();
+    if (clientX < r.left + r.width / 2) return chips[i];
+  }
+  return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  chips.forEach(function(c, i) {
+    var orig = c.dataset.orig;
+    var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+    c.textContent = isProper ? orig : (i === 0 ? sbCapitalize(orig) : orig);
+  });
+}
+
+function sbMakeChip(word) {
+  var chip = document.createElement('div');
+  chip.className = 'chip';
+  chip.textContent = word;
+  chip.dataset.orig = word;
+  chip.draggable = true;
+  chip.addEventListener('dragstart', function(e) {
+    sbDragged = chip;
+    e.dataTransfer.setData('text/plain', '');
+    setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+  });
+  chip.addEventListener('dragend', function() {
+    chip.style.opacity = '';
+    sbDragged = null;
+    var c = document.getElementById('sb-insert-cursor');
+    if (c && c.parentNode) c.parentNode.removeChild(c);
+  });
+  return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    if (!sbDragged) return;
+    var cursor = getSbCursor();
+    var before = getSbInsertPos(zone, e.clientX);
+    if (before) zone.insertBefore(cursor, before);
+    else zone.appendChild(cursor);
+  });
+  zone.addEventListener('dragleave', function(e) {
+    if (!zone.contains(e.relatedTarget)) {
+      var c = document.getElementById('sb-insert-cursor');
+      if (c && c.parentNode === zone) zone.removeChild(c);
+    }
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    if (!sbDragged) return;
+    var cursor = document.getElementById('sb-insert-cursor');
+    if (cursor && cursor.parentNode === zone) {
+      zone.insertBefore(sbDragged, cursor);
+      zone.removeChild(cursor);
+    } else {
+      zone.appendChild(sbDragged);
+    }
+    sbDragged = null;
+    sbUpdateCapitalization(document.getElementById('sb-row-' + idx));
+    sbCheckAuto(idx);
+  });
+}
+
+function sbColorRow(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  var order = chips.map(function(c) { return c.dataset.orig; });
+  var ok = satzbauData[idx].valid.some(function(v) {
+    return JSON.stringify(v) === JSON.stringify(order);
+  });
+  chips.forEach(function(c) { c.classList.remove('correct','incorrect'); c.classList.add(ok ? 'correct' : 'incorrect'); });
+  var existing = row.querySelector('.sb-punkt');
+  if (existing) existing.parentNode.removeChild(existing);
+  if (ok) {
+    var punkt = document.createElement('span');
+    punkt.className = 'sb-punkt';
+    punkt.textContent = satzbauData[idx].punct || '.';
+    row.appendChild(punkt);
+  }
+  return ok;
+}
+
+function sbCheckAuto(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var fb   = document.getElementById('sb-fb-'   + idx);
+  if (bank.querySelectorAll('.chip').length > 0) {
+    row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct','incorrect'); });
+    row.classList.remove('correct','incorrect');
+    fb.textContent = '';
+    return;
+  }
+  setTimeout(function() {
+    timerStart(5);
+    var ok = sbColorRow(idx);
+    if (ok) {
+      row.classList.add('correct'); row.classList.remove('incorrect');
+      fb.className = 'satzbau-feedback correct';
+      fb.textContent = '\u2713 Korrekt!';
+      sbCheckAllDone();
+    } else {
+      row.classList.add('incorrect'); row.classList.remove('correct');
+      fb.className = 'satzbau-feedback incorrect';
+      fb.textContent = '\u2717 Falsche Reihenfolge \u2013 verschiebe die Chips!';
+    }
+  }, 500);
+}
+
+function sbCheckAllDone() {
+  var allOk = satzbauData.every(function(_, i) {
+    var row = document.getElementById('sb-row-' + i);
+    return row && row.classList.contains('correct');
+  });
+  if (allOk) timerStop(5);
+}
+
+function initSatzbau() {
+  satzbauData.forEach(function(ex, idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    if (!bank || !row) return;
+    var parts = ex.parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+    sbRegisterZone(bank, idx);
+    sbRegisterZone(row,  idx);
+  });
+}
+
+function sbReset() { timerReset(5); initSatzbau(); }
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',function(){
+  buildVocab();
+  buildGenus();
+  buildLuecken();
+  buildMC();
+  initSatzbau();
+  loadBestTimes();
+});
+</script>
+</body>
+</html>

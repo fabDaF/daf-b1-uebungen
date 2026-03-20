@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 · 1031X · Identität und Sprachkultur</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+@media (max-width: 600px) { body { padding: 8px; } .nav { flex-wrap: wrap; } .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; } .nav-btn:last-child { border-right: 1px solid #ddd; } .tab-banner { max-height: 120px; } }
+
+/* ── HILFE-BOX ── */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+
+/* ── CONTROL-BAR ── */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-val { color: #667eea; font-weight: 700; }
+.best-val { color: #f39c12; font-weight: 600; }
+
+/* ── ZUORDNUNG ── */
+.zuo-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.zuo-category { border-radius: 10px; padding: 14px; min-height: 120px; }
+.zuo-category h3 { font-size: 0.9em; font-weight: 700; margin-bottom: 10px; text-align: center; }
+.zuo-category.staatsangehoerigkeit { background: #e3f2fd; border: 2px solid #1976d2; }
+.zuo-category.staatsangehoerigkeit h3 { color: #1976d2; }
+.zuo-category.volkszugehoerigkeit { background: #fce4ec; border: 2px solid #c2185b; }
+.zuo-category.volkszugehoerigkeit h3 { color: #c2185b; }
+.zuo-category.politisch-sozial { background: #e8f5e9; border: 2px solid #388e3c; }
+.zuo-category.politisch-sozial h3 { color: #388e3c; }
+.zuo-category.persoenlich { background: #fff8e1; border: 2px solid #f57c00; }
+.zuo-category.persoenlich h3 { color: #f57c00; }
+.zuo-category.dragover { opacity: 0.8; transform: scale(1.01); }
+.zuo-chips-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f9fa; border-radius: 10px; min-height: 56px; margin-bottom: 16px; }
+.zuo-chip { background: white; border: 2px solid #667eea; color: #333; padding: 6px 14px; border-radius: 20px; cursor: move; font-size: 0.88em; font-weight: 500; user-select: none; white-space: nowrap; transition: all 0.2s; }
+.zuo-chip:hover { background: #f0f0ff; }
+.zuo-chip.correct { background: #27ae60; border-color: #27ae60; color: white; cursor: default; }
+.zuo-chip.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+.zuo-chip.selected { outline: 3px solid #f39c12; }
+.zuo-result { margin-top: 12px; font-size: 0.9em; font-weight: 600; color: #27ae60; min-height: 1.5em; }
+@media (max-width: 600px) { .zuo-layout { grid-template-columns: 1fr; } }
+
+/* ── LÜCKENTEXT ── */
+.luecken-satz { margin-bottom: 16px; line-height: 2.2; font-size: 0.95em; background: #fafbff; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #c5cae9; }
+input.luecken-inp { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 2px 6px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+input.luecken-inp:focus { border-bottom-color: #764ba2; }
+input.luecken-inp.ok { border-bottom-color: #27ae60; background: #e8f8f0; border-radius: 4px; }
+input.luecken-inp.no { border-bottom-color: #e74c3c; background: #fdeaea; border-radius: 4px; }
+.correction-hint { font-size: 0.8em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+
+/* ── SATZBAU ── */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 22px; }
+
+/* ── WORTSCHATZ ── */
+#vocabContainer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 140px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 130px; }
+.vocab-inputs input.plural { width: 140px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+@media (max-width: 700px) { #vocabContainer { grid-template-columns: 1fr; } .vocab-item { flex-direction: column; align-items: flex-start; } }
+
+/* ── DEFINITION CARD ── */
+.def-card { background: #f3e5f5; border-left: 5px solid #9c27b0; border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; line-height: 1.7; }
+.def-card h3 { color: #6a1b9a; margin-bottom: 8px; font-size: 1.05em; }
+.def-highlight { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+
+/* ── IDENTITÄTSARTEN ── */
+.id-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.id-card { background: #f8f9ff; border: 1px solid #c5cae9; border-radius: 10px; padding: 12px 14px; text-align: center; }
+.id-card .id-emoji { font-size: 1.5em; display: block; margin-bottom: 6px; }
+.id-card .id-name { font-weight: 700; color: #3949ab; font-size: 0.88em; }
+.id-card .id-desc { font-size: 0.78em; color: #666; margin-top: 4px; line-height: 1.4; }
+@media (max-width: 600px) { .id-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── VOCAB PREVIEW (Tab 0) ── */
+.vocab-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.vocab-prev-item { background: #fafbff; border: 1px solid #e0e4ff; border-radius: 10px; padding: 12px 16px; }
+.vocab-prev-item .vp-de { font-weight: 700; color: #3949ab; font-size: 0.95em; }
+.vocab-prev-item .vp-en { font-size: 0.8em; color: #888; margin-top: 2px; }
+@media (max-width: 600px) { .vocab-preview { grid-template-columns: 1fr; } }
+
+/* ── KOLLEKTIV-INFO ── */
+.kollektiv-box { background: #e8f5e9; border-left: 5px solid #388e3c; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; line-height: 1.7; font-size: 0.9em; }
+.kollektiv-box strong { color: #1b5e20; }
+.sprach-box { background: #e3f2fd; border-left: 5px solid #1976d2; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; line-height: 1.7; font-size: 0.9em; }
+.sprach-box strong { color: #0d47a1; }
+
+/* ── AUTHOR FOOTER ── */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Identität und Sprachkultur</h1>
+        <p style="font-family: Georgia, serif;">B1.1 · Lektion 1031X · Kommunikation</p>
+        <div class="big-emoji">🌍</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔑</span><span class="nav-label">Einführung</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🗂️</span><span class="nav-label">Zuordnung</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ TAB 0: EINFÜHRUNG -->
+    <div class="section active" id="sec-0">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/5721285/pexels-photo-5721285.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Identität und Kultur — diverse Menschen">
+
+            <h2 style="color: #3949ab; margin-bottom: 16px;">🔑 Schlüsselwörter</h2>
+            <div class="hilfe-box">
+                Was weißt du schon? Lies die Wörter und überlege, was sie bedeuten könnten.
+            </div>
+
+            <div class="vocab-preview">
+                <div class="vocab-prev-item"><div class="vp-de">die Identität (Identitäten)</div><div class="vp-en">identity</div></div>
+                <div class="vocab-prev-item"><div class="vp-de">die Staatsangehörigkeit (-en)</div><div class="vp-en">citizenship, nationality</div></div>
+                <div class="vocab-prev-item"><div class="vp-de">die Volkszugehörigkeit (-en)</div><div class="vp-en">ethnic affiliation</div></div>
+                <div class="vocab-prev-item"><div class="vp-de">die Ethnie (-n)</div><div class="vp-en">ethnicity</div></div>
+                <div class="vocab-prev-item"><div class="vp-de">die Volksgruppe (-n)</div><div class="vp-en">ethnic group</div></div>
+                <div class="vocab-prev-item"><div class="vp-de">die Nationalität (-en)</div><div class="vp-en">nationality</div></div>
+                <div class="vocab-prev-item"><div class="vp-de">die Sprachidentität</div><div class="vp-en">language identity</div></div>
+                <div class="vocab-prev-item"><div class="vp-de">die ethnische Identität</div><div class="vp-en">ethnic identity</div></div>
+            </div>
+
+            <div class="def-card">
+                <h3>Was ist Identität?</h3>
+                Identität ist das, was eine Person oder Gruppe <span class="def-highlight">einzigartig</span> macht.
+                Jeder Mensch identifiziert sich auf eine <span class="def-highlight">andere Art und Weise</span>.
+                Die Identität kann sich auf die <span class="def-highlight">Kultur, Sprache, Geschichte, Religion</span> usw. beziehen.
+            </div>
+
+            <h3 style="color: #3949ab; margin-bottom: 14px;">Identitätsarten</h3>
+            <div class="id-grid">
+                <div class="id-card"><span class="id-emoji">👤</span><div class="id-name">Persönliche Identität</div><div class="id-desc">Wer bin ich als Individuum?</div></div>
+                <div class="id-card"><span class="id-emoji">🧠</span><div class="id-name">Psychische Identität</div><div class="id-desc">Inneres Erleben, Charakter</div></div>
+                <div class="id-card"><span class="id-emoji">👥</span><div class="id-name">Soziale Identität</div><div class="id-desc">Rolle in der Gesellschaft</div></div>
+                <div class="id-card"><span class="id-emoji">🗳️</span><div class="id-name">Politische Identität</div><div class="id-desc">Politische Überzeugungen</div></div>
+                <div class="id-card"><span class="id-emoji">💚</span><div class="id-name">Ich-Identität</div><div class="id-desc">Selbstbild, Selbstwahrnehmung</div></div>
+                <div class="id-card"><span class="id-emoji">❤️</span><div class="id-name">Sexuelle Identität</div><div class="id-desc">Sexuelle Orientierung</div></div>
+            </div>
+
+            <div class="kollektiv-box">
+                <strong>Die kollektive Identität (Wir-Identität)</strong> ist das Bewusstsein von Individuen, die gemeinsam einer bestimmten kollektiven Einheit oder sozialen Lebensgemeinschaft angehören. Sie besteht aus Eigenschaften, die einem <strong>Kollektiv</strong> (Volk, Nation, Glaubensgemeinschaft) zugewiesen werden.<br><br>
+                Merkmale der kollektiven Identität: die Abstammung · die Sprache · die Kultur · die Religion · die individuellen Ansichten · die soziale Organisation · die politischen Ansichten · der Lebensstil
+            </div>
+
+            <div class="sprach-box">
+                <strong>Die Sprachidentität</strong> ist die Identität durch Sprache.<br>
+                Das beeinflusst die Sprachidentität: die Staatsangehörigkeit · die Volkszugehörigkeit · das Gebiet · die beruflichen Pläne<br><br>
+                <strong>Einsprachigkeit</strong> = nur eine Sprache sprechen<br>
+                <strong>Mehrsprachigkeit</strong> = mehrere Sprachen sprechen
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ TAB 1: ZUORDNUNG -->
+    <div class="section" id="sec-1">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/6632175/pexels-photo-6632175.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Karten sortieren und zuordnen">
+
+            <h2 style="color: #3949ab; margin-bottom: 4px;">🗂️ Was passt wo?</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showZuoLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetZuo(); timerResetOne(1);">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-1">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-1">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Ziehe die Wörter in die richtige Kategorie. Klicken geht auch: erst den Chip anklicken, dann die Kategorie.
+            </div>
+
+            <div class="zuo-chips-bank" id="zuo-bank">
+                <!-- wird per JS befüllt -->
+            </div>
+
+            <div class="zuo-layout">
+                <div class="zuo-category staatsangehoerigkeit" id="zuo-staatsangehoerigkeit" data-cat="staatsangehoerigkeit"
+                     ondragover="zuoDragOver(event)" ondrop="zuoDrop(event, 'staatsangehoerigkeit')"
+                     onclick="zuoCatClick('staatsangehoerigkeit')">
+                    <h3>🏛️ Staatsangehörigkeit</h3>
+                </div>
+                <div class="zuo-category volkszugehoerigkeit" id="zuo-volkszugehoerigkeit" data-cat="volkszugehoerigkeit"
+                     ondragover="zuoDragOver(event)" ondrop="zuoDrop(event, 'volkszugehoerigkeit')"
+                     onclick="zuoCatClick('volkszugehoerigkeit')">
+                    <h3>🌍 Volkszugehörigkeit</h3>
+                </div>
+                <div class="zuo-category politisch-sozial" id="zuo-politisch-sozial" data-cat="politisch-sozial"
+                     ondragover="zuoDragOver(event)" ondrop="zuoDrop(event, 'politisch-sozial')"
+                     onclick="zuoCatClick('politisch-sozial')">
+                    <h3>🗳️ Politische / Soziale Identität</h3>
+                </div>
+                <div class="zuo-category persoenlich" id="zuo-persoenlich" data-cat="persoenlich"
+                     ondragover="zuoDragOver(event)" ondrop="zuoDrop(event, 'persoenlich')"
+                     onclick="zuoCatClick('persoenlich')">
+                    <h3>💛 Persönliche Identität</h3>
+                </div>
+            </div>
+            <div class="zuo-result" id="zuo-result"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ TAB 2: LÜCKENTEXT -->
+    <div class="section" id="sec-2">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/5386435/pexels-photo-5386435.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schreiben und Lernen">
+
+            <h2 style="color: #3949ab; margin-bottom: 4px;">✏️ Lückentext</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showLueckenLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetLuecken(); timerResetOne(2);">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-2">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-2">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Ergänze die fehlenden Wörter. Das Live-Feedback zeigt dir sofort, ob du richtig liegst.
+            </div>
+
+            <div id="lueckenContainer">
+                <!-- wird per JS befüllt -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ TAB 3: SATZBAU -->
+    <div class="section" id="sec-3">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/5095454/pexels-photo-5095454.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Puzzle und Satzbau">
+
+            <h2 style="color: #3949ab; margin-bottom: 4px;">🧩 Satzbau</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="sbShowAllSolutions()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetSatzbau(); timerResetOne(3);">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-3">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-3">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Ordne die Wörter zum richtigen Satz. Ziehe die Chips in die richtige Reihenfolge.
+            </div>
+
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ TAB 4: WORTSCHATZ -->
+    <div class="section" id="sec-4">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/226612/pexels-photo-226612.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wörterbuch und Sprache">
+
+            <h2 style="color: #3949ab; margin-bottom: 4px;">🔠 Wortschatz</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showVocabLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetVocab(); timerResetOne(4);">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-4">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-4">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Übersetze die Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural!
+            </div>
+
+            <div id="vocabContainer"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+// ─── NAVIGATION ────────────────────────────────────────────────────────────
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) { b.classList.toggle('active', i === idx); });
+}
+
+// ─── TIMER ─────────────────────────────────────────────────────────────────
+var TIMER_PREFIX = 'b1_1031x_best_';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function fmtTime(s) {
+    return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+
+function loadBestTimes() {
+    for (var i = 1; i <= 4; i++) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
+    }
+}
+
+// ─── ZUORDNUNG ─────────────────────────────────────────────────────────────
+var ZUO_DATA = [
+    { text: 'Amerikaner',     cat: 'staatsangehoerigkeit' },
+    { text: 'Deutsche',       cat: 'staatsangehoerigkeit' },
+    { text: 'Chinese',        cat: 'staatsangehoerigkeit' },
+    { text: 'Araber',         cat: 'volkszugehoerigkeit' },
+    { text: 'Demokrat',       cat: 'politisch-sozial' },
+    { text: 'Anarchist',      cat: 'politisch-sozial' },
+    { text: 'Homosexuell',    cat: 'politisch-sozial' },
+    { text: 'Heterosexuell',  cat: 'politisch-sozial' },
+    { text: 'extrovertiert',  cat: 'persoenlich' },
+    { text: 'Materialist',    cat: 'persoenlich' },
+    { text: 'Pessimist',      cat: 'persoenlich' },
+    { text: 'introvertiert',  cat: 'persoenlich' },
+];
+
+var zuoDragged = null;
+var zuoSelected = null;
+
+function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+}
+
+function initZuo() {
+    var bank = document.getElementById('zuo-bank');
+    bank.innerHTML = '';
+    // Clear categories
+    ['staatsangehoerigkeit','volkszugehoerigkeit','politisch-sozial','persoenlich'].forEach(function(cat) {
+        var zone = document.getElementById('zuo-' + cat);
+        // Remove chips from categories but keep h3
+        Array.from(zone.querySelectorAll('.zuo-chip')).forEach(function(c) { zone.removeChild(c); });
+    });
+    document.getElementById('zuo-result').textContent = '';
+
+    var shuffled = shuffle(ZUO_DATA);
+    shuffled.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'zuo-chip';
+        chip.textContent = item.text;
+        chip.dataset.cat = item.cat;
+        chip.draggable = true;
+
+        chip.addEventListener('dragstart', function(e) {
+            zuoDragged = chip;
+            e.dataTransfer.setData('text/plain', '');
+        });
+        chip.addEventListener('dragend', function() {
+            zuoDragged = null;
+            colorAllZuoChips();
+        });
+        chip.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (zuoSelected && zuoSelected === chip) {
+                zuoSelected.classList.remove('selected');
+                zuoSelected = null;
+                return;
+            }
+            if (zuoSelected) zuoSelected.classList.remove('selected');
+            zuoSelected = chip;
+            chip.classList.add('selected');
+        });
+
+        bank.appendChild(chip);
+    });
+}
+
+function zuoDragOver(e) { e.preventDefault(); }
+
+function zuoDrop(e, catId) {
+    e.preventDefault();
+    if (!zuoDragged) return;
+    var zone = document.getElementById('zuo-' + catId);
+    zone.appendChild(zuoDragged);
+    zuoDragged = null;
+    timerAutoStart(1);
+    colorAllZuoChips();
+    checkZuoAllOk();
+}
+
+function zuoCatClick(catId) {
+    if (!zuoSelected) return;
+    var zone = document.getElementById('zuo-' + catId);
+    zone.appendChild(zuoSelected);
+    zuoSelected.classList.remove('selected');
+    zuoSelected = null;
+    timerAutoStart(1);
+    colorAllZuoChips();
+    checkZuoAllOk();
+}
+
+function colorAllZuoChips() {
+    document.querySelectorAll('.zuo-chip').forEach(function(chip) {
+        var zone = chip.closest('[data-cat]');
+        if (zone && zone.id !== 'zuo-bank') {
+            chip.classList.remove('correct', 'wrong');
+            chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+        } else {
+            chip.classList.remove('correct', 'wrong');
+        }
+    });
+}
+
+function checkZuoAllOk() {
+    var chips = document.querySelectorAll('.zuo-chip');
+    var allInZone = Array.from(chips).every(function(c) {
+        return c.closest('[data-cat]') && c.closest('[data-cat]').id !== 'zuo-bank';
+    });
+    if (!allInZone) return;
+    var allOk = Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+    var result = document.getElementById('zuo-result');
+    if (allOk) {
+        result.textContent = '✓ Alle Wörter richtig zugeordnet!';
+        result.style.color = '#27ae60';
+        timerStop(1);
+    } else {
+        result.textContent = 'Noch nicht alle korrekt — prüfe die roten Chips.';
+        result.style.color = '#e74c3c';
+    }
+}
+
+function showZuoLoesung() {
+    var bank = document.getElementById('zuo-bank');
+    Array.from(bank.querySelectorAll('.zuo-chip')).forEach(function(chip) {
+        var zone = document.getElementById('zuo-' + chip.dataset.cat);
+        if (zone) zone.appendChild(chip);
+    });
+    // Move wrong chips too
+    document.querySelectorAll('.zuo-chip').forEach(function(chip) {
+        var zone = chip.closest('[data-cat]');
+        if (zone && zone.id !== 'zuo-bank' && chip.dataset.cat !== zone.dataset.cat) {
+            var correctZone = document.getElementById('zuo-' + chip.dataset.cat);
+            if (correctZone) correctZone.appendChild(chip);
+        }
+    });
+    colorAllZuoChips();
+    checkZuoAllOk();
+}
+
+function resetZuo() {
+    initZuo();
+}
+
+// ─── LÜCKENTEXT ────────────────────────────────────────────────────────────
+var LUECKEN_DATA = [
+    { before: 'Die ', blank: 'Wir-Identität', size: 'l', after: ' ist das Bewusstsein von Individuen, die gemeinsam einer sozialen Lebensgemeinschaft angehören.' },
+    { before: 'Die kollektive Identität besteht aus Eigenschaften, die einem ', blank: 'Kollektiv', size: 'm', after: ' zugewiesen werden.' },
+    { before: 'Die Volkszugehörigkeit wird durch die ', blank: 'Ethnie', size: 'm', after: ' bestimmt — also durch Sprache, Abstammung, Kultur und Geschichte.' },
+    { before: 'Wer in Deutschland wohnt, aber nicht aus Deutschland kommt, spricht normalerweise seine ', blank: 'Muttersprache', size: 'l', after: ' als zweite Sprache.' },
+    { before: 'Die ', blank: 'Sprachidentität', size: 'xl', after: ' ist die Identität, die durch die Sprache einer Person geprägt wird.' },
+    { before: 'Die ', blank: 'Staatsangehörigkeit', size: 'xl', after: ' beeinflusst, welche Sprache ein Mensch normalerweise spricht.' },
+    { before: 'Wer mehrere Sprachen spricht, nennt man ', blank: 'mehrsprachig', size: 'l', after: '. Das Gegenteil ist Einsprachigkeit.' },
+    { before: 'Die Merkmale der kollektiven Identität sind zum Beispiel die Sprache, die ', blank: 'Religion', size: 'm', after: ' und die Kultur.' },
+];
+
+var SIZE_MAP = { 's': '50px', 'm': '90px', 'l': '150px', 'xl': '200px' };
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecken-satz';
+
+        var textBefore = document.createTextNode(item.before);
+        div.appendChild(textBefore);
+
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'luecken-inp';
+        inp.placeholder = '';
+        inp.dataset.answer = item.blank;
+        inp.style.width = SIZE_MAP[item.size] || '90px';
+        inp.addEventListener('input', function() {
+            timerAutoStart(2);
+            liveCheckLuecke(inp);
+            checkLueckeAllOk();
+        });
+        div.appendChild(inp);
+
+        var textAfter = document.createTextNode(item.after);
+        div.appendChild(textAfter);
+
+        container.appendChild(div);
+    });
+}
+
+function liveCheckLuecke(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.answer;
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (val.toLowerCase() === ans.toLowerCase()) {
+        inp.classList.add('ok');
+    } else if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+        // valid prefix — neutral
+    } else {
+        inp.classList.add('no');
+    }
+}
+
+function checkLueckeAllOk() {
+    var inputs = document.querySelectorAll('#lueckenContainer input.luecken-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('ok'); });
+    if (allOk) timerStop(2);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#lueckenContainer input.luecken-inp').forEach(function(inp) {
+        // Remove existing hint
+        var next = inp.nextSibling;
+        if (next && next.nodeType === 1 && next.classList && next.classList.contains('correction-hint')) {
+            next.parentNode.removeChild(next);
+        }
+        if (!inp.classList.contains('ok')) {
+            var hint = document.createElement('span');
+            hint.className = 'correction-hint';
+            hint.textContent = inp.dataset.answer;
+            inp.insertAdjacentElement('afterend', hint);
+        }
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('no');
+        inp.classList.add('ok');
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer input.luecken-inp').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'no');
+    });
+    document.querySelectorAll('#lueckenContainer .correction-hint').forEach(function(h) { h.parentNode.removeChild(h); });
+}
+
+// ─── SATZBAU ───────────────────────────────────────────────────────────────
+var satzbauData = [
+    { parts: ['Identität', 'ist', 'ein', 'komplexes', 'und', 'vielschichtiges', 'Konzept'], valid: [['Identität', 'ist', 'ein', 'komplexes', 'und', 'vielschichtiges', 'Konzept']], punct: '.' },
+    { parts: ['Jeder', 'Mensch', 'identifiziert', 'sich', 'auf', 'eine', 'andere', 'Art'], valid: [['Jeder', 'Mensch', 'identifiziert', 'sich', 'auf', 'eine', 'andere', 'Art']], punct: '.' },
+    { parts: ['Die', 'Sprache', 'ist', 'ein', 'wichtiges', 'Merkmal', 'der', 'Identität'], valid: [['Die', 'Sprache', 'ist', 'ein', 'wichtiges', 'Merkmal', 'der', 'Identität']], punct: '.' },
+    { parts: ['Kann', 'man', 'mehr', 'als', 'eine', 'kollektive', 'Identität', 'haben'], valid: [['Kann', 'man', 'mehr', 'als', 'eine', 'kollektive', 'Identität', 'haben']], punct: '?' },
+    { parts: ['Mehrsprachigkeit', 'beeinflusst', 'die', 'Sprachidentität', 'eines', 'Menschen'], valid: [['Mehrsprachigkeit', 'beeinflusst', 'die', 'Sprachidentität', 'eines', 'Menschen']], punct: '.' },
+    { parts: ['die', 'Staatsangehörigkeit', 'und', 'die', 'Volkszugehörigkeit', 'sind', 'verschieden'], valid: [['die', 'Staatsangehörigkeit', 'und', 'die', 'Volkszugehörigkeit', 'sind', 'verschieden']], punct: '.' },
+];
+
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) { c.textContent = orig; }
+        else { c.textContent = (i === 0) ? sbCapitalize(orig) : orig; }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(3);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    chip.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var row = chip.closest('.sentence-builder');
+        var bank = chip.closest('.chips-container');
+        if (bank) {
+            // chip is in bank — find its row
+            var idx = parseInt(bank.id.replace('sb-bank-', ''));
+            var targetRow = document.getElementById('sb-row-' + idx);
+            targetRow.appendChild(chip);
+            sbUpdateCapitalization(targetRow);
+            sbCheckAuto(idx);
+        } else if (row) {
+            // chip is in row — return to bank
+            var idx2 = parseInt(row.id.replace('sb-row-', ''));
+            var targetBank = document.getElementById('sb-bank-' + idx2);
+            targetBank.appendChild(chip);
+            chip.textContent = chip.dataset.orig;
+            sbUpdateCapitalization(row);
+            sbCheckAuto(idx2);
+        }
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) { return JSON.stringify(v) === JSON.stringify(order); });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbShowAllSolutions() {
+    satzbauData.forEach(function(_, i) { sbShowSolution(i); });
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() { sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() { sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function resetSatzbau() { initSatzbau(); }
+
+// ─── WORTSCHATZ ────────────────────────────────────────────────────────────
+var WORTSCHATZ = [
+    { id:1, type:'n', en:'identity',          artikel:'die', de:'Identität',       plural:'Identitäten' },
+    { id:2, type:'n', en:'citizenship',       artikel:'die', de:'Staatsangehörigkeit', plural:'Staatsangehörigkeiten' },
+    { id:3, type:'n', en:'ethnic affiliation',artikel:'die', de:'Volkszugehörigkeit',  plural:'Volkszugehörigkeiten' },
+    { id:4, type:'n', en:'ethnicity',         artikel:'die', de:'Ethnie',          plural:'Ethnien' },
+    { id:5, type:'n', en:'ethnic group',      artikel:'die', de:'Volksgruppe',     plural:'Volksgruppen' },
+    { id:6, type:'n', en:'language identity', artikel:'die', de:'Sprachidentität', plural:'—' },
+    { id:7, type:'n', en:'multilingualism',   artikel:'die', de:'Mehrsprachigkeit',plural:'—' },
+    { id:8, type:'n', en:'monolingualism',    artikel:'die', de:'Einsprachigkeit', plural:'—' },
+    { id:9, type:'v', en:'to identify oneself', de:'sich identifizieren' },
+    { id:10,type:'v', en:'to belong to',      de:'angehören' },
+];
+
+function initVocab() {
+    var container = document.getElementById('vocabContainer');
+    container.innerHTML = '';
+    var shuffled = shuffle(WORTSCHATZ);
+    shuffled.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'vocab-item';
+
+        var enSpan = document.createElement('span');
+        enSpan.className = 'vocab-en';
+        enSpan.textContent = item.en;
+        div.appendChild(enSpan);
+
+        var arrow = document.createElement('span');
+        arrow.className = 'vocab-arrow';
+        arrow.textContent = '→';
+        div.appendChild(arrow);
+
+        var inputs = document.createElement('div');
+        inputs.className = 'vocab-inputs';
+
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.type = 'text';
+            artInp.className = 'art';
+            artInp.placeholder = 'Artikel';
+            artInp.dataset.answer = item.artikel;
+            artInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(artInp); checkVocabAllDone(); });
+            inputs.appendChild(artInp);
+
+            var wortInp = document.createElement('input');
+            wortInp.type = 'text';
+            wortInp.className = 'wort';
+            wortInp.placeholder = 'Deutsch';
+            wortInp.dataset.answer = item.de;
+            wortInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(wortInp); checkVocabAllDone(); });
+            inputs.appendChild(wortInp);
+
+            if (item.plural !== '—') {
+                var pluralInp = document.createElement('input');
+                pluralInp.type = 'text';
+                pluralInp.className = 'plural';
+                pluralInp.placeholder = 'Plural';
+                pluralInp.dataset.answer = item.plural;
+                pluralInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(pluralInp); checkVocabAllDone(); });
+                inputs.appendChild(pluralInp);
+            }
+        } else {
+            var vInp = document.createElement('input');
+            vInp.type = 'text';
+            vInp.className = 'wort';
+            vInp.placeholder = 'Deutsch';
+            vInp.dataset.answer = item.de;
+            vInp.addEventListener('input', function() { timerAutoStart(4); vocabLiveCheck(vInp); checkVocabAllDone(); });
+            inputs.appendChild(vInp);
+        }
+
+        div.appendChild(inputs);
+        container.appendChild(div);
+    });
+}
+
+function vocabLiveCheck(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.answer;
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val.toLowerCase() === ans.toLowerCase()) {
+        inp.classList.add('correct');
+    } else if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) {
+        // valid prefix — neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkVocabAllDone() {
+    var inputs = document.querySelectorAll('#vocabContainer input');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(4);
+}
+
+function showVocabLoesung() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        var next = inp.nextElementSibling;
+        if (next && next.classList && next.classList.contains('vocab-hint')) next.parentNode.removeChild(next);
+        if (!inp.classList.contains('correct')) {
+            var hint = document.createElement('span');
+            hint.className = 'vocab-hint';
+            hint.textContent = inp.dataset.answer;
+            inp.insertAdjacentElement('afterend', hint);
+        }
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('wrong');
+        inp.classList.add('correct');
+    });
+}
+
+function resetVocab() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
+    document.querySelectorAll('#vocabContainer .vocab-hint').forEach(function(h) { h.parentNode.removeChild(h); });
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+initZuo();
+initLuecken();
+initSatzbau();
+initVocab();
+loadBestTimes();
+</script>
+</body>
+</html>

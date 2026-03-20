@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1023R · Luftverschmutzung</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 950px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+
+/* ===== HEADER ===== */
+.header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 28px 32px 22px;
+    text-align: center;
+}
+.header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.header p {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* ===== NAVIGATION ===== */
+.nav {
+    display: flex;
+    background: #f0f2f5;
+    border-bottom: 2px solid #ddd;
+    overflow-x: auto;
+}
+.nav-btn {
+    flex: 1;
+    padding: 13px 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #888;
+    transition: all .2s;
+    white-space: nowrap;
+    border-right: 1px solid #ddd;
+    border-bottom: 3px solid transparent;
+    min-width: 0;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8e0f7; color: #667eea; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    border-bottom: 3px solid #667eea;
+}
+
+/* ===== TAB BANNER PLACEHOLDER ===== */
+.tab-banner-placeholder {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #667eea22, #764ba222);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    border: 2px dashed #c5cae9;
+}
+
+/* ===== SECTION ===== */
+.section { display: none; padding: 28px 32px; }
+.section.active { display: block; }
+
+/* ===== SECTION TITLES ===== */
+.section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+.section-sub {
+    color: #888;
+    font-size: 0.92em;
+    margin-bottom: 20px;
+}
+
+/* ===== VOCAB CARDS (Vorentlastung) ===== */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+.vocab-card {
+    background: #f8f9ff;
+    border: 1px solid #dde3ff;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+
+/* ===== LESETEXT / GESCHICHTE ===== */
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text .dialog {
+    font-style: normal;
+    text-indent: 0;
+    padding-left: 1.1em;
+    border-left: 3px solid #667eea;
+    color: #2a2a6e;
+    margin-left: 0;
+}
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+
+/* ===== Vokabel-Hervorhebung ===== */
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+
+/* ===== RICHTIG/FALSCH ===== */
+.rf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.rf-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    font-size: 0.95em;
+    cursor: pointer;
+    border: 1.5px solid #ddd;
+}
+.rf-item:hover { background: #f3e5f5; }
+.rf-btns { display: flex; gap: 6px; margin-left: auto; flex-shrink: 0; }
+.rf-btn {
+    padding: 4px 14px;
+    border-radius: 14px;
+    border: 1.5px solid #9b59b6;
+    background: #fff;
+    color: #6c3483;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; }
+.rf-result.ok { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-title {
+    font-size: 1.0em;
+    color: #555;
+    margin-bottom: 12px;
+    font-weight: 600;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ===== LÜCKENTEXT ===== */
+.luecken-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.luecken-item {
+    background: #f8f9ff;
+    border: 1px solid #dde3ff;
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 0.97em;
+    line-height: 1.8;
+}
+input.luecken-inp {
+    border: 2px solid #c5cae9;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s, background .2s;
+    background: white;
+    margin: 0 2px;
+    width: 120px;
+}
+input.luecken-inp:focus { border-color: #667eea; }
+input.luecken-inp.ok { border-color: #27ae60; background: #e8f5e9; }
+input.luecken-inp.no { border-color: #e74c3c; background: #ffebee; }
+.correction-hint {
+    font-size: 0.78rem;
+    color: #27ae60;
+    font-weight: 700;
+    margin-left: 4px;
+    white-space: nowrap;
+}
+.wortkasten {
+    background: #fafbff;
+    border: 1.5px dashed #c5cae9;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 0.93em;
+    color: #555;
+    line-height: 1.8;
+}
+.wortkasten strong { color: #667eea; }
+
+/* ===== SATZBAU ===== */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    min-height: 56px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: move;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { outline: 3px solid #f39c12; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; }
+
+/* ===== WORTSCHATZ-TAB ===== */
+.ws-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+.ws-card {
+    background: #f8f9ff;
+    border: 1.5px solid #dde3ff;
+    border-radius: 12px;
+    padding: 16px 18px;
+}
+.ws-en { font-size: 0.88em; color: #888; margin-bottom: 8px; font-style: italic; }
+.ws-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ws-inp {
+    border: 2px solid #c5cae9;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s, background .2s;
+    background: white;
+}
+.ws-inp:focus { border-color: #667eea; }
+.ws-inp.ok { border-color: #27ae60; background: #e8f5e9; }
+.ws-inp.no { border-color: #e74c3c; background: #ffebee; }
+.ws-inp.art { width: 70px; }
+.ws-inp.wort { width: 180px; }
+.ws-inp.plural { width: 130px; }
+.ws-label { font-size: 0.75em; color: #aaa; }
+
+/* ===== TIMER ===== */
+.timer-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.btn-row { display: flex; gap: 6px; }
+.btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.82em;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+}
+.btn:hover { background: #f0f0f0; color: #555; }
+.timer-display {
+    display: flex;
+    gap: 14px;
+    font-size: 0.82em;
+    color: #bbb;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ===== AUTHOR FOOTER ===== */
+.author-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 16px;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 1.2rem; }
+    .section { padding: 18px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>🌫️ Luftverschmutzung</h1>
+    <p>B1 · Lektion 1023R · Lesetext &amp; Übungen</p>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button class="nav-btn active" onclick="showSection(0)">🌅 Vorentlastung</button>
+    <button class="nav-btn" onclick="showSection(1)">📖 Lesetext</button>
+    <button class="nav-btn" onclick="showSection(2)">❓ Verständnis</button>
+    <button class="nav-btn" onclick="showSection(3)">✏️ Lückentext</button>
+    <button class="nav-btn" onclick="showSection(4)">🧩 Satzbau</button>
+    <button class="nav-btn" onclick="showSection(5)">🔠 Wortschatz</button>
+  </div>
+
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="section active" id="sec-0">
+    <div class="tab-banner-placeholder">🌫️</div>
+    <div class="section-title">🌅 Vorentlastung</div>
+    <div class="section-sub">Lerne diese Wörter, bevor du den Text liest.</div>
+    <div class="vocab-grid" id="vocabGrid"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="section" id="sec-1">
+    <div class="tab-banner-placeholder">📖</div>
+    <div class="section-title">📖 Unsere Luft ist in Gefahr</div>
+    <div class="story-text">
+
+      <p>Karim Mansour lebt seit drei Jahren in Düsseldorf und arbeitet als Ingenieur in einer mittelgroßen Firma. An einem Dienstagmorgen fährt er mit dem Fahrrad zur Arbeit und bemerkt, dass die Luft besonders schlecht riecht — stickig, scharf, wie abgestandener Rauch. Er hustet und denkt an seine Heimatstadt Teheran, wo die Luftverschmutzung noch viel schlimmer war.</p>
+
+      <p>Abends liest er einen langen Artikel über das Thema. Der erste Abschnitt erklärt die Gesundheitsrisiken: Luftverschmutzung schädigt Ökosysteme und das Klima, verursacht Atemwegs- und Herz-Kreislauf-Erkrankungen und ist für mehrere Tausend Todesfälle pro Jahr in Europa verantwortlich. Karim ist erschrocken — er wusste, dass schlechte Luft ungesund ist, aber die konkreten Zahlen überraschen ihn.</p>
+
+      <figure style="margin:18px 0;text-align:center;">
+        <div class="tab-banner-placeholder" style="height:160px;font-size:2.5rem;">🏭</div>
+        <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">
+          Industrie und Verkehr sind die größten Emissionsquellen in Europa
+        </figcaption>
+      </figure>
+
+      <p>Der Artikel erklärt weiter, dass Luftverschmutzung ein globales Problem ist. Luftschadstoffe aus Städten und Industriegebieten gelangen in die Atmosphäre und verursachen den Treibhauseffekt, das Ozonloch, Smog und sauren Regen. Es gibt natürliche Emissionsquellen wie Vulkanexplosionen und Waldbrände — aber der größte Schaden entsteht durch menschliche Aktivitäten: Industrie, Verkehr, Landwirtschaft und Haushalt.</p>
+
+      <p>Ein eigener Abschnitt beschäftigt sich mit dem Smog in europäischen Städten. Wenn der Wind stark genug weht, zerstreut er die Schadstoffe — wenn er aber schwach ist, sammeln sie sich über der Stadt. Viele europäische Länder haben deshalb Gesetze mit Geschwindigkeitsbeschränkungen und Fahrverboten eingeführt, um die Luftqualität zu verbessern.</p>
+
+      <figure style="margin:18px 0;text-align:center;">
+        <div class="tab-banner-placeholder" style="height:160px;font-size:2.5rem;">🏙️</div>
+        <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">
+          Smog über der Stadt — der Wind zerstreut die Schadstoffe
+        </figcaption>
+      </figure>
+
+      <p>Dann kommt Karim zu dem Abschnitt über China. Bei den Olympischen Spielen 2008 in Peking wurden kurzfristig viele Fabriken geschlossen und weniger Autos durften fahren. Die Maßnahmen halfen — aber nur vorübergehend. Heute ist die Luftqualität in Peking noch schlechter als damals, Atemwegserkrankungen sind sehr häufig. Und Peking ist nicht das schlimmste Beispiel: Der Artikel nennt auch den Iran, Saudi-Arabien und Indien als Länder mit besonders schlechter Luftqualität — die wirtschaftliche Lage eines Landes bestimmt mit, wie gut oder schlecht die Luft ist.</p>
+
+      <p>Am Ende des Artikels findet Karim einen positiven Abschnitt: Jeder kann einen Beitrag leisten. Öffentliche Verkehrsmittel nutzen, Fahrrad fahren, Energie sparen, Solarenergie verwenden — das sind einfache, aber wirksame Maßnahmen. In Europa wurde die Luftqualität in den letzten fünf Jahren um fünf Prozent verbessert. Das ist noch nicht viel, aber es zeigt: Es ist möglich. Ohne Luft können wir nicht leben — also müssen wir handeln.</p>
+
+      <p class="dialog">„Ich fahre schon mit dem Fahrrad", denkt Karim und schließt das Laptop. „Aber ich kann noch mehr tun."</p>
+
+    </div>
+    <div class="story-source">Quelle: B1 – Lektion 1023R – Luftverschmutzung</div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 2: VERSTÄNDNIS -->
+  <div class="section" id="sec-2">
+    <div class="tab-banner-placeholder">❓</div>
+    <div class="section-title">❓ Verständnis</div>
+    <p class="rf-title">Richtig oder Falsch? Lies den Text noch einmal und entscheide.</p>
+    <div class="rf-list" id="rfList"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="section" id="sec-3">
+    <div class="tab-banner-placeholder">✏️</div>
+    <div class="section-title">✏️ Lückentext</div>
+    <div class="section-sub">Ergänze die fehlenden Wörter.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(3); resetLuecken()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-3">0:00</span></span>
+        <span>&#127942; Best: <span id="best-3">--:--</span></span>
+      </div>
+    </div>
+    <div class="wortkasten">
+      <strong>Wortkasten:</strong> gefährden &nbsp;·&nbsp; Schaden &nbsp;·&nbsp; Folge &nbsp;·&nbsp; Emissionsquelle &nbsp;·&nbsp; Aktivität
+    </div>
+    <ul class="luecken-list" id="lueckenList"></ul>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="sec-4">
+    <div class="tab-banner-placeholder">🧩</div>
+    <div class="section-title">🧩 Satzbau</div>
+    <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showAllSbSolutions()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(4); resetSatzbau()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-4">0:00</span></span>
+        <span>&#127942; Best: <span id="best-4">--:--</span></span>
+      </div>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="section" id="sec-5">
+    <div class="tab-banner-placeholder">🔠</div>
+    <div class="section-title">🔠 Wortschatz</div>
+    <div class="section-sub">Tippe das deutsche Wort mit Artikel und Plural.</div>
+    <div class="timer-controls">
+      <div class="btn-row">
+        <button class="btn" onclick="showWsLoesung()">Lösungen</button>
+        <button class="btn" onclick="timerResetOne(5); resetWortschatz()">Neu starten</button>
+      </div>
+      <div class="timer-display">
+        <span>&#9201; <span id="timer-5">0:00</span></span>
+        <span>&#127942; Best: <span id="best-5">--:--</span></span>
+      </div>
+    </div>
+    <div class="ws-grid" id="wsGrid"></div>
+    <div class="author-footer">
+      <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+      <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ===== TAB NAVIGATION =====
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('sec-' + n).classList.add('active');
+    document.querySelectorAll('.nav-btn')[n].classList.add('active');
+}
+
+// ===== TIMER =====
+var TIMER_PREFIX = 'b1_1023r_best_';
+var timerStarted  = [false, false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null, null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+function fmtTime(s) {
+    return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+function loadBestTimes() {
+    [3, 4, 5].forEach(function(i) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
+    });
+}
+
+// ===== VORENTLASTUNG DATA =====
+var VORENTLASTUNG = [
+    { term: 'die Luftverschmutzung, -en', en: 'the air pollution', def: 'Wenn die Luft durch schädliche Stoffe belastet ist.' },
+    { term: 'die Emissionsquelle, -n', en: 'the source of emissions', def: 'Ein Ort oder ein Vorgang, von dem Schadstoffe in die Luft gelangen.' },
+    { term: 'der Schaden, Schäden', en: 'the damage', def: 'Ein negativer Effekt, der durch etwas Schlechtes entsteht.' },
+    { term: 'die Maßnahme, -n', en: 'the measure / action', def: 'Eine Aktion, die man ergreift, um ein Problem zu lösen.' },
+    { term: 'das Risiko, Risiken', en: 'the risk', def: 'Die Möglichkeit, dass etwas Schlechtes passiert.' },
+    { term: 'das Fahrverbot, -e', en: 'the driving ban', def: 'Ein Verbot, mit dem Auto zu fahren — z.B. bei starkem Smog.' },
+    { term: 'die Atemwegserkrankung, -en', en: 'the respiratory disease', def: 'Eine Krankheit der Lunge oder der Atemwege, z.B. Asthma.' },
+    { term: 'die Notwendigkeit, -en', en: 'the necessity', def: 'Wenn etwas unbedingt getan werden muss.' },
+    { term: 'das Gesetz, -e', en: 'the law', def: 'Eine offizielle Regel, die der Staat beschlossen hat.' },
+    { term: 'zerstreuen', en: 'to disperse / to scatter', def: 'Etwas in alle Richtungen verteilen — z.B. Schadstoffe durch Wind.' },
+    { term: 'verhindern', en: 'to prevent', def: 'Dafür sorgen, dass etwas Negatives nicht passiert.' },
+    { term: 'beitragen zu', en: 'to contribute to', def: 'Einen Teil zu etwas beitragen — gut oder schlecht.' }
+];
+
+function initVorentlastung() {
+    var grid = document.getElementById('vocabGrid');
+    grid.innerHTML = '';
+    VORENTLASTUNG.forEach(function(v) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + v.term + '</div>'
+            + '<div class="vocab-en">' + v.en + '</div>'
+            + '<div class="vocab-def">' + v.def + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+// ===== RICHTIG / FALSCH DATA =====
+var RF_DATA = [
+    { text: 'Für Luftverschmutzung sind nur Menschen verantwortlich.', correct: 'F' },
+    { text: 'Der Smog hängt mit der Stärke des Windes zusammen.', correct: 'R' },
+    { text: 'Für die Olympischen Spiele konnte die Luftverschmutzung in Peking stark reduziert werden.', correct: 'F' },
+    { text: 'Die Qualität der Luft hängt auch von der wirtschaftlichen Lage eines Landes ab.', correct: 'R' },
+    { text: 'In den letzten fünf Jahren wurde die Luftqualität auf der ganzen Welt verbessert.', correct: 'F' }
+];
+
+function initRF() {
+    var list = document.getElementById('rfList');
+    list.innerHTML = '';
+    RF_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'rf-item';
+        div.innerHTML = '<span style="flex:1">' + item.text + '</span>'
+            + '<div class="rf-btns">'
+            + '<button class="rf-btn" id="rf-r-' + idx + '" onclick="checkRF(' + idx + ',\'R\')">Richtig</button>'
+            + '<button class="rf-btn" id="rf-f-' + idx + '" onclick="checkRF(' + idx + ',\'F\')">Falsch</button>'
+            + '</div>'
+            + '<span class="rf-result" id="rf-res-' + idx + '"></span>';
+        list.appendChild(div);
+    });
+}
+
+function checkRF(idx, choice) {
+    var rBtn = document.getElementById('rf-r-' + idx);
+    var fBtn = document.getElementById('rf-f-' + idx);
+    var res = document.getElementById('rf-res-' + idx);
+    rBtn.classList.remove('sel-r', 'sel-f');
+    fBtn.classList.remove('sel-r', 'sel-f');
+    if (choice === 'R') rBtn.classList.add('sel-r');
+    else fBtn.classList.add('sel-f');
+    var correct = RF_DATA[idx].correct === choice;
+    res.textContent = correct ? '✓' : '✗';
+    res.className = 'rf-result ' + (correct ? 'ok' : 'err');
+}
+
+// ===== LÜCKENTEXT DATA =====
+var LUECKEN_DATA = [
+    {
+        segs: [
+            {t: 'Die Luftverschmutzung '},
+            {b: 'gefährdet', s: 'l'},
+            {t: ' unsere Gesundheit und unsere Umwelt.'}
+        ]
+    },
+    {
+        segs: [
+            {t: 'Die Luftverschmutzung kann wirtschaftliche '},
+            {b: 'Schäden', s: 'l'},
+            {t: ' verursachen.'}
+        ]
+    },
+    {
+        segs: [
+            {t: 'Die globalen '},
+            {b: 'Folgen', s: 'm'},
+            {t: ' der Luftverschmutzung umfassen den Treibhauseffekt und das Ozonloch.'}
+        ]
+    },
+    {
+        segs: [
+            {t: 'Es gibt natürliche '},
+            {b: 'Emissionsquellen', s: 'l'},
+            {t: ', die für schlechte Luftqualität verantwortlich sind.'}
+        ]
+    },
+    {
+        segs: [
+            {t: 'Auch die '},
+            {b: 'Aktivitäten', s: 'l'},
+            {t: ' des Menschen führen zur Verschmutzung der Luft.'}
+        ]
+    }
+];
+
+var sizeMap = { s: '60px', m: '100px', l: '150px', xl: '200px' };
+
+function initLuecken() {
+    var list = document.getElementById('lueckenList');
+    list.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var li = document.createElement('li');
+        li.className = 'luecken-item';
+        var html = '';
+        item.segs.forEach(function(seg) {
+            if (seg.t !== undefined) {
+                html += seg.t;
+            } else {
+                html += '<input type="text" class="luecken-inp" data-ans="' + seg.b + '" '
+                    + 'style="width:' + (sizeMap[seg.s] || '100px') + '" '
+                    + 'oninput="liveCheckLuecke(this)" '
+                    + 'placeholder="">';
+            }
+        });
+        li.innerHTML = html;
+        list.appendChild(li);
+    });
+}
+
+function liveCheckLuecke(inp) {
+    timerAutoStart(3);
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.ans || '').toLowerCase();
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('ok');
+    } else if (ans.indexOf(val) === 0) {
+        // valid prefix — neutral
+    } else {
+        inp.classList.add('no');
+    }
+    checkLueckenAllOk();
+}
+
+function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#sec-3 input.luecken-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('ok');
+    });
+    if (allOk) timerStop(3);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#sec-3 input.luecken-inp').forEach(function(inp) {
+        var next = inp.nextElementSibling;
+        if (next && next.classList.contains('correction-hint')) next.remove();
+        if (!inp.classList.contains('ok')) {
+            var hint = document.createElement('span');
+            hint.className = 'correction-hint';
+            hint.textContent = inp.dataset.ans;
+            inp.insertAdjacentElement('afterend', hint);
+        }
+        inp.value = inp.dataset.ans;
+        inp.classList.add('ok');
+        inp.classList.remove('no');
+    });
+}
+
+function resetLuecken() { initLuecken(); }
+
+// ===== SATZBAU DATA =====
+var satzbauData = [
+    {
+        parts: ['die', 'Luftverschmutzung', 'schadet', 'unserer', 'Gesundheit', 'und', 'dem', 'Klima'],
+        valid: [['die', 'Luftverschmutzung', 'schadet', 'unserer', 'Gesundheit', 'und', 'dem', 'Klima']],
+        punct: '.'
+    },
+    {
+        parts: ['der', 'Wind', 'zerstreut', 'die', 'Schadstoffe', 'in', 'der', 'Luft'],
+        valid: [['der', 'Wind', 'zerstreut', 'die', 'Schadstoffe', 'in', 'der', 'Luft']],
+        punct: '.'
+    },
+    {
+        parts: ['natürliche', 'Emissionsquellen', 'sind', 'Vulkanexplosionen', 'und', 'Waldbrände'],
+        valid: [['natürliche', 'Emissionsquellen', 'sind', 'Vulkanexplosionen', 'und', 'Waldbrände']],
+        punct: '.'
+    },
+    {
+        parts: ['viele', 'Länder', 'haben', 'Gesetze', 'mit', 'Fahrverboten', 'eingeführt'],
+        valid: [['viele', 'Länder', 'haben', 'Gesetze', 'mit', 'Fahrverboten', 'eingeführt']],
+        punct: '.'
+    },
+    {
+        parts: ['ohne', 'Luft', 'können', 'wir', 'nicht', 'leben'],
+        valid: [['ohne', 'Luft', 'können', 'wir', 'nicht', 'leben']],
+        punct: '.'
+    },
+    {
+        parts: ['jeder', 'kann', 'einen', 'Beitrag', 'zur', 'besseren', 'Luftqualität', 'leisten'],
+        valid: [['jeder', 'kann', 'einen', 'Beitrag', 'zur', 'besseren', 'Luftqualität', 'leisten']],
+        punct: '.'
+    }
+];
+
+// ===== SATZBAU FUNCTIONS =====
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === ';') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+
+    // Click-to-Place
+    chip.addEventListener('click', function() {
+        if (chip.classList.contains('selected')) {
+            chip.classList.remove('selected');
+            return;
+        }
+        document.querySelectorAll('.chip.selected').forEach(function(c) { c.classList.remove('selected'); });
+        chip.classList.add('selected');
+    });
+
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+
+    // Click-to-Place zone handler
+    zone.addEventListener('click', function(e) {
+        if (e.target === zone || e.target.classList.contains('chip')) {
+            var selected = document.querySelector('.chip.selected');
+            if (selected && e.target === zone) {
+                zone.appendChild(selected);
+                selected.classList.remove('selected');
+                var row = document.getElementById('sb-row-' + idx);
+                sbUpdateCapitalization(row);
+                sbCheckAuto(idx);
+            }
+        }
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+
+    setTimeout(function() {
+        timerAutoStart(4);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(4);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function showAllSbSolutions() {
+    satzbauData.forEach(function(_, i) { sbShowSolution(i); });
+}
+function resetSatzbau() { initSatzbau(); }
+
+// ===== WORTSCHATZ DATA =====
+var WORTSCHATZ = [
+    { en: 'the air pollution', art: 'die', de: 'Luftverschmutzung', plural: 'Luftverschmutzungen' },
+    { en: 'the source of emissions', art: 'die', de: 'Emissionsquelle', plural: 'Emissionsquellen' },
+    { en: 'the damage', art: 'der', de: 'Schaden', plural: 'Schäden' },
+    { en: 'the measure / action', art: 'die', de: 'Maßnahme', plural: 'Maßnahmen' },
+    { en: 'the risk', art: 'das', de: 'Risiko', plural: 'Risiken' },
+    { en: 'the driving ban', art: 'das', de: 'Fahrverbot', plural: 'Fahrverbote' },
+    { en: 'the respiratory disease', art: 'die', de: 'Atemwegserkrankung', plural: 'Atemwegserkrankungen' },
+    { en: 'the necessity', art: 'die', de: 'Notwendigkeit', plural: 'Notwendigkeiten' },
+    { en: 'the law', art: 'das', de: 'Gesetz', plural: 'Gesetze' },
+    { en: 'to disperse / to scatter', art: '', de: 'zerstreuen', plural: '' },
+    { en: 'to prevent', art: '', de: 'verhindern', plural: '' },
+    { en: 'to contribute to', art: '', de: 'beitragen', plural: '' }
+];
+
+function initWortschatz() {
+    var grid = document.getElementById('wsGrid');
+    grid.innerHTML = '';
+    WORTSCHATZ.forEach(function(item, idx) {
+        var card = document.createElement('div');
+        card.className = 'ws-card';
+        var isVerb = item.art === '';
+        var html = '<div class="ws-en">' + item.en + '</div>';
+        html += '<div class="ws-inputs">';
+        if (!isVerb) {
+            html += '<input class="ws-inp art" type="text" placeholder="Artikel" data-ans="' + item.art + '" oninput="liveCheckWs(this,5)">';
+            html += '<input class="ws-inp wort" type="text" placeholder="Nomen" data-ans="' + item.de + '" oninput="liveCheckWs(this,5)">';
+            html += '<input class="ws-inp plural" type="text" placeholder="Plural" data-ans="' + item.plural + '" oninput="liveCheckWs(this,5)">';
+        } else {
+            html += '<span class="ws-label" style="margin-right:4px;">Verb:</span>';
+            html += '<input class="ws-inp wort" type="text" placeholder="Verb" data-ans="' + item.de + '" oninput="liveCheckWs(this,5)">';
+        }
+        html += '</div>';
+        card.innerHTML = html;
+        grid.appendChild(card);
+    });
+}
+
+function liveCheckWs(inp, tabN) {
+    timerAutoStart(tabN);
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.ans || '').toLowerCase();
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('ok');
+    } else if (ans.indexOf(val) === 0) {
+        // valid prefix — neutral
+    } else {
+        inp.classList.add('no');
+    }
+    checkWsAllOk(tabN);
+}
+
+function checkWsAllOk(tabN) {
+    var inputs = document.querySelectorAll('#sec-' + tabN + ' .ws-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('ok');
+    });
+    if (allOk) timerStop(tabN);
+}
+
+function showWsLoesung() {
+    document.querySelectorAll('#sec-5 .ws-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans;
+        inp.classList.add('ok');
+        inp.classList.remove('no');
+    });
+}
+function resetWortschatz() { initWortschatz(); }
+
+// ===== VOKABEL-HIGHLIGHTING =====
+function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text') || document.querySelector('.lese-text');
+    if (!storyText) return;
+
+    var words = [];
+    if (typeof VORENTLASTUNG !== 'undefined' && VORENTLASTUNG.length) {
+        words = VORENTLASTUNG.map(function(item) {
+            var term = item.term.replace(/^(der|die|das)\s+/i, '');
+            return term.split(',')[0].trim();
+        });
+    }
+
+    words = words.filter(function(w) { return w && w.length > 3; });
+    if (words.length === 0) return;
+
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('(?<![a-zA-Z\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df])(' + escaped + ')(?![a-zA-Z\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df])', 'g');
+                replaced = replaced.replace(regex, '\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHighlight = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHighlight = !isHighlight; return; }
+                    if (isHighlight) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHighlight = !isHighlight;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
+    }
+    walkAndHighlight(storyText);
+}
+
+// ===== INIT =====
+initVorentlastung();
+initRF();
+initLuecken();
+initSatzbau();
+initWortschatz();
+loadBestTimes();
+highlightVocabInText();
+</script>
+</body>
+</html>

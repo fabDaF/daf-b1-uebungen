@@ -81,13 +81,14 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
 .correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; white-space: nowrap; }
 .hint-label { font-size: 0.75rem; color: #999; font-style: italic; margin-left: 4px; }
 
-/* TIMER (verbindlich nach Skill) */
-.timer-bar { display:flex; align-items:center; gap:12px; background:white; border-radius:10px; padding:10px 16px; margin-bottom:16px; box-shadow:0 2px 6px rgba(0,0,0,0.07); font-size:0.85rem; color:#666; }
-.timer-display { font-weight:700; color:#667eea; font-size:1rem; }
-.best-display { color:#f39c12; font-weight:600; }
-.btn-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid #eee; }
-.btn-row button { background:none; border:1px solid #c0b0e8; border-radius:16px; padding:5px 16px; cursor:pointer; font-size:.88rem; color:#5a3e9e; transition:background .2s; }
-.btn-row button:hover { background:#f0edf8; }
+/* TIMER-CONTROLS — eine Zeile: Buttons links, Zeit/Bestzeit rechts */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.tc-buttons { display:flex; gap:6px; }
+.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.tc-buttons button:hover { background:#f0f0f0; color:#555; }
+.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-display { color:#667eea; font-weight:700; }
+.best-display  { color:#f39c12; font-weight:600; }
 
 /* SATZBAU (verbindlich nach Skill) */
 .chips-container { display:flex; flex-wrap:wrap; gap:8px; padding:14px; background:#f8f8f8; border-radius:10px; min-height:56px; margin-bottom:10px; }
@@ -292,17 +293,18 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
       <h2>✏️ Lückentext — Temporaladverbien</h2>
       <p class="intro">Tippe das passende Adverb in die Lücke. Du bekommst sofort Feedback.</p>
 
-      <div class="timer-bar">
-        <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-2">–</span></span>
+      <div class="timer-controls">
+        <div class="tc-buttons">
+          <button onclick="showLueckeLoesung()">💡 Lösungen</button>
+          <button onclick="timerResetOne(2); resetLuecke()">↺ Neustart</button>
+        </div>
+        <div class="tc-times">
+          <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
+          <span>🏆 <span class="best-display" id="best-2">–</span></span>
+        </div>
       </div>
 
       <div id="lueckeContainer"></div>
-
-      <div class="btn-row">
-        <button onclick="timerResetOne(2); resetLuecke()">↺ Neustart</button>
-        <button onclick="showLueckeLoesung()">💡 Lösungen</button>
-      </div>
     </div>
   </section>
 
@@ -314,17 +316,18 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
       <h2>🧩 Satzbau — Bringe die Wörter in die richtige Reihenfolge</h2>
       <p class="intro">Ziehe die Chips in die richtige Reihenfolge. Achte auf die Wortstellung!</p>
 
-      <div class="timer-bar">
-        <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-3">–</span></span>
+      <div class="timer-controls">
+        <div class="tc-buttons">
+          <button onclick="sbShowAllSolutions()">💡 Alle lösen</button>
+          <button onclick="timerResetOne(3); resetSatzbau()">↺ Neustart</button>
+        </div>
+        <div class="tc-times">
+          <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
+          <span>🏆 <span class="best-display" id="best-3">–</span></span>
+        </div>
       </div>
 
       <div id="satzbauContainer"></div>
-
-      <div class="btn-row">
-        <button onclick="timerResetOne(3); resetSatzbau()">↺ Neustart</button>
-        <button onclick="sbShowAllSolutions()">💡 Alle lösen</button>
-      </div>
     </div>
   </section>
 
@@ -336,9 +339,15 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
       <h2>🎯 Zuordnung — Sortiere die Adverbien</h2>
       <p class="intro">Klicke auf ein Wort in der Bank und dann auf die richtige Kategorie. Oder ziehe die Chips direkt.</p>
 
-      <div class="timer-bar">
-        <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-4">–</span></span>
+      <div class="timer-controls">
+        <div class="tc-buttons">
+          <button onclick="showZuoLoesung()">💡 Lösungen</button>
+          <button onclick="timerResetOne(4); resetZuo()">↺ Neustart</button>
+        </div>
+        <div class="tc-times">
+          <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
+          <span>🏆 <span class="best-display" id="best-4">–</span></span>
+        </div>
       </div>
 
       <div class="zuo-chip-pool" id="zuoBank"></div>
@@ -371,11 +380,6 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
       </div>
 
       <div class="zuo-score">Korrekt: <span id="zuoScore">0</span> / <span id="zuoTotal">0</span></div>
-
-      <div class="btn-row">
-        <button onclick="timerResetOne(4); resetZuo()">↺ Neustart</button>
-        <button onclick="showZuoLoesung()">💡 Lösungen</button>
-      </div>
     </div>
   </section>
 

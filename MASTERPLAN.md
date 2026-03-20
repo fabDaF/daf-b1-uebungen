@@ -169,12 +169,37 @@ Gilt für alle Tipp-Felder — kein Prüfen-Button, niemals.
 
 Reihenfolge in JS: erst `val === ans`, dann `ans.startsWith(val)`.
 
-### Timer
+### Timer — EINZIGES GÜLTIGES MUSTER: `.timer-controls`
 
-- Tabs mit Tipp- oder Drag-Übungen bekommen einen Timer
-- Timer-Zeile: `⏱ Zeit · 🏆 Bestzeit · ↺ Neustart · 💡 Lösungen` — alles in **einer Zeile** (`.btn-row`)
+⛔ `timer-bar` + `btn-row` als getrennte `<div>`s ist **VERBOTEN** — führt zu Buttons am Seitenende.
+
+**Alle Elemente in einer Zeile:** Buttons links (`.tc-buttons`), Zeit rechts (`.tc-times`) — in einem einzigen `<div class="timer-controls">`.
+
+```html
+<div class="timer-controls">
+  <div class="tc-buttons">
+    <button onclick="showLoesung()">💡 Lösungen</button>
+    <button onclick="timerResetOne(N); resetXxx()">↺ Neustart</button>
+  </div>
+  <div class="tc-times">
+    <span>⏱ <span class="timer-display" id="timer-N">0:00</span></span>
+    <span>🏆 <span class="best-display" id="best-N">–</span></span>
+  </div>
+</div>
+```
+
+```css
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.tc-buttons { display:flex; gap:6px; }
+.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.tc-buttons button:hover { background:#f0f0f0; color:#555; }
+.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-display { color:#667eea; font-weight:700; }
+.best-display  { color:#f39c12; font-weight:600; }
+```
+
 - Startet bei erster Interaktion (`timerAutoStart`), stoppt wenn alle korrekt
-- Bestzeit in `localStorage` (Key: `TIMER_PREFIX-best-N`)
+- Bestzeit in `localStorage` (Key: `TIMER_PREFIX + N`)
 
 ### Satzbau
 
@@ -271,7 +296,7 @@ Skill: `lesetext-hervorhebung`
    - [ ] Kein Prüfen-Button?
    - [ ] Kein `placeholder="___"`?
    - [ ] Live-Feedback korrekt (erst `===`, dann `startsWith`)?
-   - [ ] Timer-Zeile vollständig und in einer Linie?
+   - [ ] Timer: `.timer-controls` mit `.tc-buttons` links + `.tc-times` rechts? (KEIN `timer-bar`/`btn-row`!)
    - [ ] Satzbau nach Skill (`satzbau-drag-drop`)?
    - [ ] ⛔ Keine Satznummern (`Satz 1`, `Satz 2`, `idx+1`)?
    - [ ] Copyright-Footer unverändert?

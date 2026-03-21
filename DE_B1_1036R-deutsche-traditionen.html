@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1036R · Deutsche Traditionen</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ── CONTAINER ── */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    overflow: hidden;
+}
+
+/* ── HEADER ── */
+.header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 28px 32px 22px;
+    text-align: center;
+}
+.header h1 { font-size: 1.55rem; font-weight: 700; margin-bottom: 6px; }
+.header p  { font-size: 0.92rem; opacity: 0.88; }
+
+/* ── NAV ── */
+.nav {
+    display: flex;
+    background: #f8f8ff;
+    border-bottom: 2px solid #e0e0f0;
+    overflow-x: auto;
+}
+.nav-btn {
+    flex: 1;
+    padding: 12px 6px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #888;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    border-right: 1px solid #e0e0f0;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover  { background: #f0edf8; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; border-bottom-color: #667eea; }
+
+/* ── SECTIONS ── */
+.section { display: none; padding: 28px 32px; }
+.section.active { display: block; }
+
+/* ── SECTION TITLES ── */
+.section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 20px;
+}
+.section-sub {
+    color: #888;
+    font-size: 0.92em;
+    margin-bottom: 20px;
+}
+
+/* ── TAB BANNER ── */
+.tab-banner {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* ── VORENTLASTUNG ── */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+.vocab-card {
+    background: #f8f9ff;
+    border: 1px solid #dde3ff;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en   { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def  { color: #555; font-size: 0.92em; line-height: 1.5; }
+
+/* ── LESETEXT ── */
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text h3 {
+    font-size: 1.05em;
+    font-weight: 700;
+    color: #667eea;
+    margin: 20px 0 6px;
+    text-indent: 0;
+}
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+
+/* ── VOKABEL-HERVORHEBUNG ── */
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+
+/* ── RICHTIG/FALSCH ── */
+.rf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.rf-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    font-size: 0.95em;
+    cursor: pointer;
+    border: 1.5px solid #ddd;
+}
+.rf-item:hover { background: #f3e5f5; }
+.rf-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.rf-btn {
+    padding: 4px 14px;
+    border-radius: 14px;
+    border: 1.5px solid #9b59b6;
+    background: #fff;
+    color: #6c3483;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; flex-shrink: 0; }
+.rf-result.ok  { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-text { flex: 1; }
+.rf-title {
+    font-size: 1.0em;
+    color: #555;
+    margin-bottom: 12px;
+    font-weight: 600;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ── TIMER-BAR ── */
+.timer-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    font-size: 0.85rem;
+    color: #666;
+}
+.timer-display { font-weight: 700; color: #667eea; font-size: 1rem; }
+.best-display  { color: #f39c12; font-weight: 600; }
+
+.btn-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}
+.btn-row button {
+    background: none;
+    border: 1px solid #c0b0e8;
+    border-radius: 16px;
+    padding: 5px 16px;
+    cursor: pointer;
+    font-size: .88rem;
+    color: #5a3e9e;
+    transition: background .2s;
+}
+.btn-row button:hover { background: #f0edf8; }
+
+/* ── LÜCKENTEXT ── */
+.luecke-item {
+    background: #fafbff;
+    border: 1px solid #e0e4f0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    font-size: 0.97em;
+    line-height: 2;
+}
+input.luecken-inp {
+    border: 2px solid #c5cae9;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s, background .2s;
+    background: white;
+    margin: 0 2px;
+}
+input.luecken-inp:focus { border-color: #667eea; }
+input.luecken-inp.ok    { border-color: #27ae60; background: #e8f5e9; }
+input.luecken-inp.no    { border-color: #e74c3c; background: #ffebee; }
+.correction-hint {
+    font-size: 0.78rem;
+    color: #27ae60;
+    font-weight: 700;
+    margin-left: 4px;
+    white-space: nowrap;
+}
+.wortkasten {
+    background: #f3e5f5;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #4a148c;
+}
+.wortkasten strong { color: #6a1b9a; }
+
+/* ── SATZBAU ── */
+.satzbau-item { margin-bottom: 24px; }
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    min-height: 56px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: move;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { background: #e8eaff; border-color: #3949ab; }
+.sb-punkt {
+    font-size: 1.1em; font-weight: 700; color: #27ae60;
+    margin-left: 2px; align-self: center; user-select: none;
+}
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* ── WORTSCHATZ ── */
+.wort-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 12px;
+}
+.wort-card {
+    background: #fafbff;
+    border: 1px solid #e0e4f0;
+    border-radius: 10px;
+    padding: 16px;
+}
+.wort-en { font-size: 0.95em; color: #555; margin-bottom: 10px; }
+.wort-inputs { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.wort-inputs input {
+    border: 2px solid #c5cae9;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    background: white;
+    transition: border-color .2s, background .2s;
+}
+.wort-inputs input:focus { border-color: #667eea; }
+.wort-inputs input.ok    { border-color: #27ae60; background: #e8f5e9; }
+.wort-inputs input.no    { border-color: #e74c3c; background: #ffebee; }
+input.art-inp   { width: 52px; }
+input.wort-inp  { width: 160px; }
+input.plural-inp { width: 110px; }
+.wort-slash { color: #aaa; font-size: 0.9em; }
+
+/* ── AUTHOR FOOTER ── */
+.author-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 16px;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 1.2rem; }
+    .section { padding: 18px 16px; }
+    .wort-grid { grid-template-columns: 1fr; }
+}
+
+/* ── TEST-BADGE ── */
+.test-badge {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.7rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+    margin-top: 6px; width: fit-content;
+}
+.test-badge.bestanden { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+.test-badge.fehler    { background: #fce4ec; color: #c62828; border: 1px solid #ef9a9a; }
+.test-badge .badge-detail { font-weight: 400; opacity: 0.8; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🇩🇪 Deutsche Traditionen</h1>
+  <p>B1.1 · Lektion 1036R · Lesetext &amp; Wortschatz</p>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection(0)">🌅 Vorentlastung</button>
+  <button class="nav-btn" onclick="showSection(1)">📖 Lesetext</button>
+  <button class="nav-btn" onclick="showSection(2)">❓ Verständnis</button>
+  <button class="nav-btn" onclick="showSection(3)">✏️ Lückentext</button>
+  <button class="nav-btn" onclick="showSection(4)">🧩 Satzbau</button>
+  <button class="nav-btn" onclick="showSection(5)">🔠 Wortschatz</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB 0: VORENTLASTUNG -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section active" id="s0">
+  <img class="tab-banner" src="https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg?auto=compress&cs=tinysrgb&w=1000&h=200&fit=crop" alt="Deutsche Traditionen Banner">
+  <div class="section-title">🌅 Vorentlastung — Deutsche Traditionen</div>
+  <p class="section-sub">Schlüsselwörter aus dem Lesetext — lerne sie kennen, bevor du liest.</p>
+
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vocab-term">die Tradition, -en</div>
+      <div class="vocab-en">tradition</div>
+      <div class="vocab-def">Eine Gewohnheit oder ein Brauch, der von Generation zu Generation weitergegeben wird.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">der Brauch, die Bräuche</div>
+      <div class="vocab-en">custom, tradition</div>
+      <div class="vocab-def">Eine übliche Verhaltensweise, die in einer Gemeinschaft regelmäßig praktiziert wird.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">die Tugend, -en</div>
+      <div class="vocab-en">virtue</div>
+      <div class="vocab-def">Eine positive Eigenschaft oder Fähigkeit, z. B. Fleiß oder Pünktlichkeit.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">das Dirndl, -</div>
+      <div class="vocab-en">dirndl (traditional dress)</div>
+      <div class="vocab-def">Ein traditionelles deutsches und österreichisches Trachtenkleid.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">die Tracht, -en</div>
+      <div class="vocab-en">traditional costume</div>
+      <div class="vocab-def">Traditionelle Kleidung einer Region; wörtlich: das, was getragen wird (althochdeutsch).</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">die Ordnungsliebe (Sg.)</div>
+      <div class="vocab-en">love of order, tidiness</div>
+      <div class="vocab-def">Die Neigung, alles ordentlich und strukturiert zu halten — typisch deutsch laut Klischee.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">die Arbeitsmoral (Sg.)</div>
+      <div class="vocab-en">work ethic</div>
+      <div class="vocab-def">Die Einstellung zur Arbeit; gute Arbeitsmoral bedeutet: fleißig und gründlich arbeiten.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">die Gründlichkeit (Sg.)</div>
+      <div class="vocab-en">thoroughness, meticulousness</div>
+      <div class="vocab-def">Die Eigenschaft, Dinge sehr sorgfältig und vollständig zu erledigen.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">der Adventskranz, die -kränze</div>
+      <div class="vocab-en">Advent wreath</div>
+      <div class="vocab-def">Ein Kranz aus Tannenzweigen mit vier Kerzen, der in der Weihnachtszeit auf den Tisch gestellt wird.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">der Träger / die Trägerin</div>
+      <div class="vocab-en">wearer, carrier</div>
+      <div class="vocab-def">Eine Person, die etwas trägt; hier: jemand, der traditionelle Kleidung trägt.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">die Dorfgemeinschaft, -en</div>
+      <div class="vocab-en">village community</div>
+      <div class="vocab-def">Die Gemeinschaft der Menschen, die in einem Dorf zusammenleben.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">die Pünktlichkeit (Sg.)</div>
+      <div class="vocab-en">punctuality</div>
+      <div class="vocab-def">Die Eigenschaft, immer zur vereinbarten Zeit zu erscheinen — gilt als typisch deutsch.</div>
+    </div>
+  </div>
+
+  <div class="author-footer">Erstellt von <span class="author-name">fabDaF</span> · B1.1 · 1036R</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB 1: LESETEXT -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section" id="s1">
+  <img class="tab-banner" src="https://images.pexels.com/photos/1619317/pexels-photo-1619317.jpeg?auto=compress&cs=tinysrgb&w=1000&h=200&fit=crop" alt="Oktoberfest Banner">
+  <div class="section-title">📖 Lesetext — Traditionen und Vorstellungen</div>
+
+  <div class="story-text" id="storyText">
+
+    <h3>Traditionen und Vorstellungen</h3>
+    <p>Um zu verstehen, was die deutschen <span class="vocab-hl" title="tradition">Traditionen</span> sind, brauchst du kein Buch und keine Lektionen — eigentlich gar keine Hilfe. Was du brauchst, sind nur deine Assoziationen. Was fällt dir sofort ein, wenn du an die Deutschen denkst? Und an Deutschland? Was stellst du dir vor, wenn du das Wort <em>deutsche Traditionen</em> hörst?</p>
+    <p><span class="vocab-hl" title="customs and traditions">Bräuche</span> und <span class="vocab-hl" title="traditions">Traditionen</span> sind nicht nur das, was innerhalb des Landes existiert, sondern auch alle Vorstellungen außerhalb des Landes. Hast du Lust, Assoziationen zu vergleichen? Dann lies weiter!</p>
+
+    <h3>Traditionelle Kleidung</h3>
+    <p>Hast du vielleicht an die traditionelle deutsche Kleidung gedacht, die <em>Dirndl</em> heißt? In den letzten Jahren wurde die <span class="vocab-hl" title="dirndl fashion">Dirndlmode</span> in Deutschland und in Österreich unglaublich populär. Ab Anfang September kann man <span class="vocab-hl" title="dirndl (traditional dress)">Dirndl</span> an den Kellnerinnen in Cafés in ganz Deutschland sehen und in vielen Kleidungsgeschäften kaufen. Die sehen aber immer absolut unterschiedlich aus. Hast du dich mal gefragt, warum eigentlich?</p>
+    <p>Das Dirndl war ursprünglich ein bayrisches und österreichisches <span class="vocab-hl" title="traditional costume">Trachtenkleid</span>. Das Wort <em>Dirne</em> bedeutete auf Bayrisch <em>ein junges Mädel</em>. Früher hatte jede Region ihre traditionelle Kleidung, die <span class="vocab-hl" title="traditional costume">Tracht</span> hieß, wörtlich übersetzt als <em>das, was getragen wird</em> (althochdeutsch).</p>
+    <p>In alten Zeiten zeigte diese Kleidung Besitz und Wohlstand des <span class="vocab-hl" title="wearer">Trägers</span> bzw. aus welchem Dorf man stammte, welche soziale Stellung man in der <span class="vocab-hl" title="village community">Dorfgemeinschaft</span> hatte, sowie ob man verheiratet war oder nicht. Je mehr Stoff in der Tracht verwendet wurde, desto reicher war der Träger.</p>
+
+    <h3>Das Oktoberfest</h3>
+    <p>Der moderne Deutsche trägt die traditionelle Kleidung oft nur einmal im Jahr — zum Oktoberfest. Das Oktoberfest beginnt immer am Samstag nach dem 15. September und endet am ersten Sonntag im Oktober.</p>
+    <p>Da das <span class="vocab-hl" title="festival">Fest</span> aus München stammt, muss es mit dem Oberbürgermeister Münchens eröffnet werden. Mit den Worten <em>O'zapft is!</em> wird es am Samstag offiziell eröffnet. Dann kann man die besten Biersorten Deutschlands genießen.</p>
+
+    <h3>Weihnachten</h3>
+    <p>Weihnachten ist für die Deutschen das wichtigste Fest des Jahres. An diesem Tag, den 24.12., kommt die ganze Familie zusammen. Die Zeit vor Weihnachten ist vier Wochen vor dem heiligen Abend. Sie beginnt mit dem ersten Advent — meistens dem ersten Sonntag im Dezember. Dann werden Weihnachtsmärkte eröffnet, auf denen man die verschiedensten Glühweinsorten trinken kann.</p>
+    <p>Während der Weihnachtszeit wird die Wohnung mit Weihnachtsschmuck und Kerzen dekoriert und auf den Tisch wird ein <span class="vocab-hl" title="Advent wreath">Adventskranz</span> (ein Kranz aus Tannenzweigen mit vier Kerzen) gestellt.</p>
+
+    <h3>Ostern</h3>
+    <p>Noch ein für die Christen wichtiges Fest ist Ostern, das über den Zeitraum von insgesamt einer Woche gefeiert wird. Die wichtigsten Tage sind Gründonnerstag, an dem Jesus das letzte Abendmahl mit seinen Jüngern nahm, und der Karfreitag, an dem Jesus gekreuzigt wurde. Dann kommen Karsamstag, an dem man sich auf das Fest vorbereitet, und der Ostersonntag selbst. An diesem Tag schenkt man einander die bunt bemalten Ostereier. Die Eier bringt normalerweise der Osterhase, der als wichtiges Symbol für Ostern gilt.</p>
+
+    <h3>Hohe Qualität und Arbeitsmoral</h3>
+    <p>Wenn wir von deutschen <span class="vocab-hl" title="traditions">Traditionen</span> sprechen, die eng mit den Vorstellungen von Deutschland verbunden sind, dann müssen wir auch die gute <span class="vocab-hl" title="work ethic">Arbeitsmoral</span> von Deutschen erwähnen. Was der Deutsche macht, macht er immer gründlich. Wenn er beispielsweise Autos baut, dann sind sie die besten. Beste Autos höchster <span class="vocab-hl" title="quality">Qualität</span>: Audi, Mercedes, BMW, Volkswagen. Weltweit führende Technikunternehmen: Bosch, Siemens, Miele. Die Liste ist endlos.</p>
+
+    <h3>Ordnungsliebe</h3>
+    <p>Man sagt, dass zu den bekanntesten traditionellen deutschen Eigenschaften und <span class="vocab-hl" title="virtues">Tugenden</span> Fleiß, <span class="vocab-hl" title="punctuality">Pünktlichkeit</span>, <span class="vocab-hl" title="thoroughness">Gründlichkeit</span> und <span class="vocab-hl" title="love of order">Ordnungsliebe</span> gehören. Und tatsächlich gibt es wohl in kaum einer anderen Sprache so viele Sprüche über Ordnung: <em>Ordnung ist das halbe Leben, Ordnung muss sein, Ordnung erhält die Welt.</em> Und sogar — <em>Ordnung hat Gott lieb.</em> Ein weiteres Beispiel: Nur im Deutschen gibt es den Begriff <em>Termin</em>. Das ist kein einfaches Treffen, das ist das Treffen, das vorher geplant wird.</p>
+
+    <h3>Typisch, aber nicht so</h3>
+    <p>Typisch deutsche Dinge und Eigenschaften kann man noch viele aufzählen: Bratwurst, Sauerkraut, Kartoffeln, Sparsamkeit, Effizienz, viele Regeln und keine Seele... Man darf aber nicht vergessen, dass wir in erster Linie von Menschen sprechen, die immer individuell und einzigartig bleiben.</p>
+
+    <div class="story-source">Quelle: Lingoda B1.1 · Lektion 1036R</div>
+  </div>
+
+  <div class="author-footer">Erstellt von <span class="author-name">fabDaF</span> · B1.1 · 1036R</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB 2: VERSTÄNDNIS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section" id="s2">
+  <img class="tab-banner" src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1000&h=200&fit=crop" alt="Verständnis Banner">
+  <div class="section-title">❓ Verständnis — Richtig oder Falsch?</div>
+
+  <p class="rf-title">Lies die Aussagen und entscheide: Richtig (R) oder Falsch (F)?</p>
+  <div class="rf-list" id="rfList"></div>
+
+  <div class="btn-row">
+    <button onclick="rfCheck()">Auswertung</button>
+    <button onclick="rfReset()">Neu starten</button>
+    <span id="rfScore" style="font-weight:700; color:#667eea;"></span>
+  </div>
+
+  <div class="author-footer">Erstellt von <span class="author-name">fabDaF</span> · B1.1 · 1036R</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB 3: LÜCKENTEXT -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section" id="s3">
+  <img class="tab-banner" src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1000&h=200&fit=crop" alt="Lückentext Banner">
+  <div class="section-title">✏️ Lückentext — Deutsche Traditionen</div>
+
+  <div class="timer-bar">
+    ⏱ <span class="timer-display" id="timer-2">0:00</span>
+    &nbsp;|&nbsp; 🏆 Bestzeit: <span class="best-display" id="best-2">—</span>
+  </div>
+
+  <div class="wortkasten">
+    <strong>Wortkasten:</strong> Tracht · Adventskranz · Osterhase · Arbeitsmoral · Ordnungsliebe · Dirndl · Oktoberfest · Tradition · Brauch · Tugend · Gründlichkeit · Pünktlichkeit
+  </div>
+
+  <div id="lueckenContainer"></div>
+
+  <div class="btn-row">
+    <button onclick="lueckeAlleZeigen()">Lösung zeigen</button>
+    <button onclick="lueckeReset()">Neu starten</button>
+    <button onclick="timerResetOne(2)">Timer zurücksetzen</button>
+    <span id="lueckeScore" style="font-weight:700; color:#667eea;"></span>
+  </div>
+
+  <div class="author-footer">Erstellt von <span class="author-name">fabDaF</span> · B1.1 · 1036R</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB 4: SATZBAU -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section" id="s4">
+  <img class="tab-banner" src="https://images.pexels.com/photos/3184340/pexels-photo-3184340.jpeg?auto=compress&cs=tinysrgb&w=1000&h=200&fit=crop" alt="Satzbau Banner">
+  <div class="section-title">🧩 Satzbau — Sätze ordnen</div>
+
+  <div class="timer-bar">
+    ⏱ <span class="timer-display" id="timer-3">0:00</span>
+    &nbsp;|&nbsp; 🏆 Bestzeit: <span class="best-display" id="best-3">—</span>
+  </div>
+
+  <div id="satzbauContainer"></div>
+
+  <div class="btn-row">
+    <button onclick="sbShowSolution()">Lösung zeigen</button>
+    <button onclick="sbReset()">Neu starten</button>
+    <button onclick="timerResetOne(3)">Timer zurücksetzen</button>
+  </div>
+
+  <div class="author-footer">Erstellt von <span class="author-name">fabDaF</span> · B1.1 · 1036R</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- TAB 5: WORTSCHATZ -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="section" id="s5">
+  <img class="tab-banner" src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=1000&h=200&fit=crop" alt="Wortschatz Banner">
+  <div class="section-title">🔠 Wortschatz — Tippen</div>
+
+  <div class="timer-bar">
+    ⏱ <span class="timer-display" id="timer-4">0:00</span>
+    &nbsp;|&nbsp; 🏆 Bestzeit: <span class="best-display" id="best-4">—</span>
+  </div>
+
+  <p class="section-sub">Tippe Artikel, Wort und Plural. Groß-/Kleinschreibung wird geprüft.</p>
+
+  <div class="wort-grid" id="wortGrid"></div>
+
+  <div class="btn-row">
+    <button onclick="wortAlleZeigen()">Lösung zeigen</button>
+    <button onclick="wortReset()">Neu starten</button>
+    <button onclick="timerResetOne(4)">Timer zurücksetzen</button>
+    <span id="wortScore" style="font-weight:700; color:#667eea;"></span>
+  </div>
+
+  <div class="author-footer">Erstellt von <span class="author-name">fabDaF</span> · B1.1 · 1036R</div>
+</div>
+
+</div><!-- /.container -->
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   TIMER
+══════════════════════════════════════════════════════════ */
+var TIMER_PREFIX = 'b1_1036r_best_';
+var timerIntervals = {};
+var timerSeconds   = {};
+
+function fmtTime(s) {
+    var m = Math.floor(s/60);
+    var sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+function loadBestTimes() {
+    [2,3,4].forEach(function(i){
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        var el = document.getElementById('best-' + i);
+        if (el) el.textContent = v ? fmtTime(parseInt(v)) : '—';
+    });
+}
+function timerAutoStart(idx) {
+    if (timerIntervals[idx]) { clearInterval(timerIntervals[idx]); }
+    timerSeconds[idx] = 0;
+    var el = document.getElementById('timer-' + idx);
+    if (el) el.textContent = '0:00';
+    timerIntervals[idx] = setInterval(function(){
+        timerSeconds[idx]++;
+        if (el) el.textContent = fmtTime(timerSeconds[idx]);
+    }, 1000);
+}
+function timerStop(idx) {
+    if (!timerIntervals[idx]) return;
+    clearInterval(timerIntervals[idx]);
+    timerIntervals[idx] = null;
+    var best = localStorage.getItem(TIMER_PREFIX + idx);
+    if (!best || timerSeconds[idx] < parseInt(best)) {
+        localStorage.setItem(TIMER_PREFIX + idx, timerSeconds[idx]);
+        var el = document.getElementById('best-' + idx);
+        if (el) el.textContent = fmtTime(timerSeconds[idx]);
+    }
+}
+function timerResetOne(idx) {
+    if (timerIntervals[idx]) clearInterval(timerIntervals[idx]);
+    timerIntervals[idx] = null;
+    timerSeconds[idx] = 0;
+    localStorage.removeItem(TIMER_PREFIX + idx);
+    var el = document.getElementById('timer-' + idx);
+    if (el) el.textContent = '0:00';
+    var bel = document.getElementById('best-' + idx);
+    if (bel) bel.textContent = '—';
+}
+
+/* ══════════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════════ */
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s,i){
+        s.classList.toggle('active', i === n);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){
+        b.classList.toggle('active', i === n);
+    });
+    if (n === 3) timerAutoStart(2);
+    else timerStop(2);
+    if (n === 4) { timerAutoStart(3); sbRender(); }
+    else timerStop(3);
+    if (n === 5) { timerAutoStart(4); wortRender(); }
+    else timerStop(4);
+}
+
+/* ══════════════════════════════════════════════════════════
+   RICHTIG / FALSCH DATA
+══════════════════════════════════════════════════════════ */
+var RF_DATA = [
+    { text: 'Das Dirndl war ursprünglich ein bayrisches und österreichisches Trachtenkleid.',              ans: 'R' },
+    { text: 'Das Oktoberfest beginnt immer am ersten Samstag im September.',                               ans: 'F' },
+    { text: 'Weihnachten ist für die Deutschen das wichtigste Fest des Jahres.',                           ans: 'R' },
+    { text: 'Der Adventskranz besteht aus Tannenzweigen mit sechs Kerzen.',                               ans: 'F' },
+    { text: 'An Ostern schenkt man einander bunt bemalte Ostereier.',                                     ans: 'R' },
+    { text: 'Der Osterhase bringt die Ostereier laut deutschem Brauch.',                                  ans: 'R' },
+    { text: 'Das Oktoberfest stammt aus Hamburg.',                                                         ans: 'F' },
+    { text: 'Zur deutschen Arbeitsmoral gehört, dass man Dinge immer gründlich erledigt.',                ans: 'R' },
+    { text: 'Im Deutschen gibt es den Begriff „Termin" für ein spontanes, ungeplantes Treffen.',          ans: 'F' },
+    { text: 'Typisch deutsche Eigenschaften laut Text: Fleiß, Pünktlichkeit und Ordnungsliebe.',          ans: 'R' },
+];
+
+function rfRender() {
+    var list = document.getElementById('rfList');
+    list.innerHTML = '';
+    RF_DATA.forEach(function(item, i) {
+        var div = document.createElement('div');
+        div.className = 'rf-item';
+        div.innerHTML =
+            '<span class="rf-result" id="rfr-' + i + '"></span>' +
+            '<span class="rf-text">' + item.text + '</span>' +
+            '<div class="rf-btns">' +
+              '<button class="rf-btn" id="rfR-' + i + '" onclick="rfSelect(' + i + ',\'R\')">R</button>' +
+              '<button class="rf-btn" id="rfF-' + i + '" onclick="rfSelect(' + i + ',\'F\')">F</button>' +
+            '</div>';
+        list.appendChild(div);
+    });
+    document.getElementById('rfScore').textContent = '';
+}
+
+function rfSelect(i, choice) {
+    document.getElementById('rfR-' + i).classList.toggle('sel-r', choice === 'R');
+    document.getElementById('rfF-' + i).classList.toggle('sel-f', choice === 'F');
+    document.getElementById('rfR-' + i).classList.toggle('sel-r', false);
+    document.getElementById('rfF-' + i).classList.toggle('sel-f', false);
+    document.getElementById('rfR-' + i).dataset.sel = '';
+    document.getElementById('rfF-' + i).dataset.sel = '';
+    document.getElementById('rf' + choice.toUpperCase() + '-' + i).classList.add(choice === 'R' ? 'sel-r' : 'sel-f');
+    document.getElementById('rf' + choice.toUpperCase() + '-' + i).dataset.sel = choice;
+    // store on item
+    var rBtn = document.getElementById('rfR-' + i);
+    var fBtn = document.getElementById('rfF-' + i);
+    rBtn.classList.remove('sel-r'); fBtn.classList.remove('sel-f');
+    if (choice === 'R') rBtn.classList.add('sel-r');
+    else fBtn.classList.add('sel-f');
+    rBtn.dataset.chosen = (choice === 'R') ? 'R' : '';
+    fBtn.dataset.chosen = (choice === 'F') ? 'F' : '';
+}
+
+function rfCheck() {
+    var correct = 0;
+    RF_DATA.forEach(function(item, i) {
+        var rBtn = document.getElementById('rfR-' + i);
+        var fBtn = document.getElementById('rfF-' + i);
+        var chosen = rBtn.classList.contains('sel-r') ? 'R' : (fBtn.classList.contains('sel-f') ? 'F' : '');
+        var res = document.getElementById('rfr-' + i);
+        if (!chosen) { res.textContent = '?'; res.className = 'rf-result'; return; }
+        if (chosen === item.ans) { res.textContent = '✓'; res.className = 'rf-result ok'; correct++; }
+        else { res.textContent = '✗'; res.className = 'rf-result err'; }
+    });
+    document.getElementById('rfScore').textContent = correct + '/' + RF_DATA.length + ' richtig';
+}
+
+function rfReset() {
+    rfRender();
+}
+
+/* ══════════════════════════════════════════════════════════
+   LÜCKENTEXT DATA
+══════════════════════════════════════════════════════════ */
+var LUECKEN_DATA = [
+    { pre: 'Das Dirndl ist ein traditionelles deutsches', blank: 'Trachtenkleid', ans: 'Trachtenkleid', post: ', das heute sehr populär ist.' },
+    { pre: 'Die traditionelle Kleidung einer Region heißt', blank: 'Tracht', ans: 'Tracht', post: '.' },
+    { pre: 'Beim Oktoberfest trägt man die traditionelle Kleidung. Das Fest beginnt am Samstag nach dem 15. September und findet in', blank: 'München', ans: 'München', post: 'statt.' },
+    { pre: 'Das Oktoberfest wird mit den Worten „O'zapft is!" vom', blank: 'Oberbürgermeister', ans: 'Oberbürgermeister', post: 'Münchens eröffnet.' },
+    { pre: 'Zu Weihnachten stellt man einen', blank: 'Adventskranz', ans: 'Adventskranz', post: 'aus Tannenzweigen mit vier Kerzen auf den Tisch.' },
+    { pre: 'Die Zeit vor Weihnachten beginnt mit dem ersten', blank: 'Advent', ans: 'Advent', post: ', meistens dem ersten Sonntag im Dezember.' },
+    { pre: 'An Ostern schenkt man einander bunt bemalte Ostereier. Die Eier bringt der', blank: 'Osterhase', ans: 'Osterhase', post: '.' },
+    { pre: 'Die gute', blank: 'Arbeitsmoral', ans: 'Arbeitsmoral', post: 'der Deutschen zeigt sich z. B. in weltbekannten Marken wie Audi, BMW und Siemens.' },
+    { pre: 'Fleiß, Pünktlichkeit, Gründlichkeit und', blank: 'Ordnungsliebe', ans: 'Ordnungsliebe', post: 'gelten als typisch deutsche Eigenschaften.' },
+    { pre: 'Zu den bekanntesten deutschen Tugenden gehören auch Fleiß und', blank: 'Pünktlichkeit', ans: 'Pünktlichkeit', post: '.' },
+    { pre: 'Im Deutschen gibt es den Begriff', blank: 'Termin', ans: 'Termin', post: '— ein Treffen, das vorher geplant wird.' },
+    { pre: 'Bräuche und', blank: 'Traditionen', ans: 'Traditionen', post: 'sind eine Basis für jede Kultur.' },
+];
+
+function lueckeRender() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, i) {
+        var sz = Math.max(item.ans.length + 2, 8);
+        var div = document.createElement('div');
+        div.className = 'luecke-item';
+        div.innerHTML = item.pre + ' <input class="luecken-inp" id="li-' + i + '" data-ans="' + item.ans + '" size="' + sz + '" autocomplete="off"> ' + item.post;
+        container.appendChild(div);
+    });
+    document.querySelectorAll('.luecken-inp').forEach(function(inp) {
+        inp.addEventListener('input', function(){ liveCheckLuecke(inp); });
+    });
+    document.getElementById('lueckeScore').textContent = '';
+}
+
+function liveCheckLuecke(inp) {
+    var ans = inp.dataset.ans;
+    var val = inp.value;
+    if (!val) { inp.className = 'luecken-inp'; return; }
+    if (val === ans) { inp.className = 'luecken-inp ok'; checkAllLueckenDone(); }
+    else if (ans.indexOf(val) === 0) { inp.className = 'luecken-inp'; }
+    else { inp.className = 'luecken-inp no'; }
+}
+
+function checkAllLueckenDone() {
+    var all = document.querySelectorAll('.luecken-inp');
+    var done = Array.from(all).every(function(inp){ return inp.classList.contains('ok'); });
+    if (done) timerStop(2);
+}
+
+function lueckeAlleZeigen() {
+    timerStop(2);
+    document.querySelectorAll('.luecken-inp').forEach(function(inp){
+        inp.value = inp.dataset.ans;
+        inp.className = 'luecken-inp ok';
+    });
+}
+
+function lueckeReset() {
+    lueckeRender();
+    timerAutoStart(2);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SATZBAU DATA
+══════════════════════════════════════════════════════════ */
+var satzbauData = [
+    { parts: ['Das', 'Dirndl', 'ist', 'ein', 'traditionelles', 'deutsches', 'Trachtenkleid'], valid: [['Das', 'Dirndl', 'ist', 'ein', 'traditionelles', 'deutsches', 'Trachtenkleid']], punct: '.' },
+    { parts: ['Das', 'Oktoberfest', 'beginnt', 'am', 'Samstag', 'nach', 'dem', '15.', 'September'], valid: [['Das', 'Oktoberfest', 'beginnt', 'am', 'Samstag', 'nach', 'dem', '15.', 'September']], punct: '.' },
+    { parts: ['Die', 'Familie', 'kommt', 'zu', 'Weihnachten', 'zusammen'], valid: [['Die', 'Familie', 'kommt', 'zu', 'Weihnachten', 'zusammen']], punct: '.' },
+    { parts: ['Der', 'Osterhase', 'bringt', 'die', 'bunt', 'bemalten', 'Ostereier'], valid: [['Der', 'Osterhase', 'bringt', 'die', 'bunt', 'bemalten', 'Ostereier']], punct: '.' },
+    { parts: ['Die', 'Ordnungsliebe', 'ist', 'typisch', 'für', 'die', 'Deutschen'], valid: [['Die', 'Ordnungsliebe', 'ist', 'typisch', 'für', 'die', 'Deutschen']], punct: '.' },
+    { parts: ['Was', 'der', 'Deutsche', 'macht,', 'macht', 'er', 'immer', 'gründlich'], valid: [['Was', 'der', 'Deutsche', 'macht,', 'macht', 'er', 'immer', 'gründlich']], punct: '.' },
+    { parts: ['Bräuche', 'und', 'Traditionen', 'sind', 'eine', 'Basis', 'für', 'jede', 'Kultur'], valid: [['Bräuche', 'und', 'Traditionen', 'sind', 'eine', 'Basis', 'für', 'jede', 'Kultur']], punct: '.' },
+    { parts: ['Die', 'Tracht', 'zeigte', 'Besitz', 'und', 'Wohlstand', 'des', 'Trägers'], valid: [['Die', 'Tracht', 'zeigte', 'Besitz', 'und', 'Wohlstand', 'des', 'Trägers']], punct: '.' },
+];
+
+/* ══════════════════════════════════════════════════════════
+   SATZBAU ENGINE
+══════════════════════════════════════════════════════════ */
+var sbDragged = null;
+
+function sbMakeChip(word) {
+    var c = document.createElement('span');
+    c.className = 'chip';
+    c.textContent = word;
+    c.dataset.orig = word;
+    c.draggable = true;
+    c.addEventListener('dragstart', function(e){ sbDragged = c; e.dataTransfer.effectAllowed = 'move'; });
+    c.addEventListener('dragend',   function(){ sbDragged = null; });
+    c.addEventListener('click',     function(){ sbChipClick(c); });
+    return c;
+}
+
+function sbRegisterZone(zone) {
+    zone.addEventListener('dragover',  function(e){ e.preventDefault(); sbShowCursor(zone, e); });
+    zone.addEventListener('dragleave', function(){ sbRemoveCursor(zone); });
+    zone.addEventListener('drop',      function(e){
+        e.preventDefault(); sbRemoveCursor(zone);
+        if (sbDragged) { sbInsertAtCursor(zone, sbDragged); sbCheckAuto(zone); }
+    });
+    zone.addEventListener('click', function(e){
+        if (e.target === zone) {
+            var sel = document.querySelector('.chip.selected');
+            if (sel) { sbInsertAtCursor(zone, sel); sel.classList.remove('selected'); sbCheckAuto(zone); }
+        }
+    });
+}
+
+var sbInsertCursorEl = null;
+function sbShowCursor(zone, e) {
+    sbRemoveCursor(zone);
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    var insertBefore = null;
+    for (var i=0; i<chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (e.clientX < r.left + r.width/2) { insertBefore = chips[i]; break; }
+    }
+    sbInsertCursorEl = document.createElement('div');
+    sbInsertCursorEl.id = 'sb-insert-cursor';
+    sbInsertCursorEl.style.cssText = 'width:3px;background:#667eea;border-radius:2px;align-self:stretch;pointer-events:none;';
+    zone.insertBefore(sbInsertCursorEl, insertBefore);
+}
+function sbRemoveCursor(zone) {
+    var cur = zone.querySelector('#sb-insert-cursor');
+    if (cur) cur.remove();
+}
+function sbInsertAtCursor(zone, chip) {
+    var cur = zone.querySelector('#sb-insert-cursor');
+    if (cur) zone.insertBefore(chip, cur);
+    else zone.appendChild(chip);
+    sbRemoveCursor(zone);
+}
+
+function sbChipClick(chip) {
+    var allSel = document.querySelectorAll('.chip.selected');
+    if (chip.classList.contains('selected')) {
+        chip.classList.remove('selected'); return;
+    }
+    allSel.forEach(function(c){ c.classList.remove('selected'); });
+    chip.classList.add('selected');
+}
+
+function sbColorRow(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var idx = parseInt(row.id.replace('sb-row-',''));
+    if (isNaN(idx) || !satzbauData[idx]) return;
+    var valids = satzbauData[idx].valid;
+    var words  = chips.map(function(c){ return c.dataset.orig; });
+    var isCorrect = valids.some(function(v){
+        if (v.length !== words.length) return false;
+        return v.every(function(w,i){ return w === words[i]; });
+    });
+    chips.forEach(function(c){ c.classList.toggle('correct', isCorrect); c.classList.toggle('incorrect', !isCorrect && words.length > 0); });
+    row.classList.toggle('correct', isCorrect);
+    row.classList.toggle('incorrect', !isCorrect && words.length > 0);
+    return isCorrect;
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    if (chips.length > 0) {
+        var first = chips[0];
+        var orig = first.dataset.orig;
+        first.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+}
+
+function sbCheckAuto(row) {
+    sbUpdateCapitalization(row);
+    var ok = sbColorRow(row);
+    var idx = parseInt(row.id.replace('sb-row-',''));
+    var fb = document.getElementById('sb-fb-' + idx);
+    if (!fb) return;
+    var chips = row.querySelectorAll('.chip');
+    if (chips.length === 0) { fb.textContent = ''; fb.className = 'satzbau-feedback'; return; }
+    if (ok) { fb.textContent = '✓ Korrekt!'; fb.className = 'satzbau-feedback correct'; checkAllSatzbauDone(); }
+    else { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+}
+
+function checkAllSatzbauDone() {
+    var allOk = satzbauData.every(function(_, i){
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbRender() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(item, i) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + i;
+        sbRegisterZone(bank);
+
+        var shuffled = item.parts.slice().sort(function(){ return Math.random()-0.5; });
+        shuffled.forEach(function(w){ bank.appendChild(sbMakeChip(w)); });
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + i;
+        sbRegisterZone(row);
+
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = item.punct;
+        row.appendChild(punkt);
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + i;
+
+        wrapper.appendChild(bank);
+        wrapper.appendChild(row);
+        wrapper.appendChild(fb);
+        container.appendChild(wrapper);
+    });
+}
+
+function sbShowSolution() {
+    timerStop(3);
+    satzbauData.forEach(function(item, i) {
+        var bank = document.getElementById('sb-bank-' + i);
+        var row  = document.getElementById('sb-row-' + i);
+        var fb   = document.getElementById('sb-fb-' + i);
+        var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+        var punkt = row.querySelector('.sb-punkt');
+        row.innerHTML = '';
+        if (punkt) row.appendChild(punkt);
+        bank.innerHTML = '';
+        var sol = item.valid[0];
+        sol.forEach(function(w){
+            var chip = allChips.find(function(c){ return c.dataset.orig === w && c.parentElement !== row; });
+            if (!chip) chip = allChips.find(function(c){ return c.dataset.orig === w; });
+            if (chip) row.appendChild(chip);
+        });
+        sbColorRow(row);
+        if (fb) { fb.textContent = '✓ Korrekt!'; fb.className = 'satzbau-feedback correct'; }
+    });
+}
+
+function sbReset() {
+    sbRender();
+    timerAutoStart(3);
+}
+
+/* ══════════════════════════════════════════════════════════
+   WORTSCHATZ DATA
+══════════════════════════════════════════════════════════ */
+var WORT_DATA = [
+    { en: 'tradition',              art: 'die', wort: 'Tradition',       plural: 'Traditionen' },
+    { en: 'custom, tradition',      art: 'der', wort: 'Brauch',          plural: 'Bräuche' },
+    { en: 'virtue',                 art: 'die', wort: 'Tugend',          plural: 'Tugenden' },
+    { en: 'dirndl (traditional dress)', art: 'das', wort: 'Dirndl',     plural: 'Dirndl' },
+    { en: 'traditional costume',    art: 'die', wort: 'Tracht',          plural: 'Trachten' },
+    { en: 'love of order',          art: 'die', wort: 'Ordnungsliebe',   plural: '(kein Plural)' },
+    { en: 'work ethic',             art: 'die', wort: 'Arbeitsmoral',    plural: '(kein Plural)' },
+    { en: 'thoroughness',           art: 'die', wort: 'Gründlichkeit',   plural: '(kein Plural)' },
+    { en: 'Advent wreath',          art: 'der', wort: 'Adventskranz',    plural: 'Adventskränze' },
+    { en: 'punctuality',            art: 'die', wort: 'Pünktlichkeit',   plural: '(kein Plural)' },
+    { en: 'village community',      art: 'die', wort: 'Dorfgemeinschaft', plural: 'Dorfgemeinschaften' },
+    { en: 'quality',                art: 'die', wort: 'Qualität',        plural: 'Qualitäten' },
+];
+
+function wortRender() {
+    var grid = document.getElementById('wortGrid');
+    grid.innerHTML = '';
+    WORT_DATA.forEach(function(item, i) {
+        var card = document.createElement('div');
+        card.className = 'wort-card';
+        card.innerHTML =
+            '<div class="wort-en">' + item.en + '</div>' +
+            '<div class="wort-inputs">' +
+              '<input class="art-inp" data-ans="' + item.art + '" placeholder="Artikel" autocomplete="off">' +
+              '<input class="wort-inp" data-ans="' + item.wort + '" placeholder="Substantiv" autocomplete="off">' +
+              '<span class="wort-slash">/</span>' +
+              '<input class="plural-inp" data-ans="' + item.plural + '" placeholder="Plural" autocomplete="off">' +
+            '</div>';
+        grid.appendChild(card);
+    });
+    grid.querySelectorAll('input').forEach(function(inp){
+        inp.addEventListener('input', function(){ liveCheckWort(inp); });
+    });
+    document.getElementById('wortScore').textContent = '';
+}
+
+function liveCheckWort(inp) {
+    var ans = inp.dataset.ans;
+    var val = inp.value;
+    if (!val) { inp.className = inp.className.replace(/ ok| no/g,''); return; }
+    var base = inp.className.replace(/ ok| no/g,'');
+    if (val === ans) { inp.className = base + ' ok'; checkAllWortDone(); }
+    else if (ans.indexOf(val) === 0) { inp.className = base; }
+    else { inp.className = base + ' no'; }
+}
+
+function checkAllWortDone() {
+    var all = document.querySelectorAll('#wortGrid input');
+    var done = Array.from(all).every(function(inp){ return inp.classList.contains('ok'); });
+    if (done) timerStop(4);
+}
+
+function wortAlleZeigen() {
+    timerStop(4);
+    document.querySelectorAll('#wortGrid input').forEach(function(inp){
+        inp.value = inp.dataset.ans;
+        var base = inp.className.replace(/ ok| no/g,'');
+        inp.className = base + ' ok';
+    });
+}
+
+function wortReset() {
+    wortRender();
+    timerAutoStart(4);
+}
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+    loadBestTimes();
+    rfRender();
+    lueckeRender();
+    sbRender();
+    wortRender();
+});
+</script>
+</body>
+</html>

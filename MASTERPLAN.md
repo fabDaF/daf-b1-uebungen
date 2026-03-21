@@ -63,8 +63,10 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 101x | Bewerbung & Arbeit | 1011X 1012G 1013R 1014X 1015G 1016R 1017X 1018S |
 | 102x | Umwelt & Gesellschaft | 1021X 1022G 1023R 1024X 1025G 1026R 1027X 1028S |
 | 103x | Identität & Sprache | 1031X 1032G 1033R 1034X 1035G 1036R 1037X 1038S |
-| 104x | Soziale Netzwerke & Privatsphäre | 1041X 1042G 1043R 1044X |
-| 105x | Gesundheit & Gesellschaft | 1045G |
+| 104x | Soziale Netzwerke & Privatsphäre | 1041X 1042G 1043R 1044X 1045G 1046R 1047X 1048S |
+| 105x | Stadt & Land / Wohnen | 1051X 1052G 1053R 1054X 1055G 1056R 1057X 1058S |
+| 106x | Geschichte & Persönlichkeiten | 1061X 1062G 1063R 1064X 1065G 1066R 1067X 1068S |
+| 107x | Schreiben (W-Typ) | 1071W 1072W |
 
 ### Fertigstellungsstatus B1.1
 
@@ -99,6 +101,27 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1043R | R | Partnersuche online | ✅ Fertig |
 | 1044X | X | Online einkaufen | ✅ Fertig |
 | 1045G | G | Mehr über die Negation | ✅ Fertig |
+| 1046R | R | Mit Fake News umgehen | ⏳ Ausstehend |
+| 1047X | X | Sprache im Journalismus | ⏳ Ausstehend |
+| 1048S | S | Über Online-Sicherheit und Datenschutz diskutieren | ⏳ Ausstehend |
+| 1051X | X | Landflucht | ⏳ Ausstehend |
+| 1052G | G | Mehr über den Genitiv | ⏳ Ausstehend |
+| 1053R | R | Kulturelle Angebote in der Großstadt | ⏳ Ausstehend |
+| 1054X | X | Eine Wohnung mieten | ⏳ Ausstehend |
+| 1055G | G | Mehr über den Infinitiv mit zu | ⏳ Ausstehend |
+| 1056R | R | Das Leben auf dem Land | ⏳ Ausstehend |
+| 1057X | X | Heimweh | ⏳ Ausstehend |
+| 1058S | S | Der beste Ort zum Leben | ⏳ Ausstehend |
+| 1061X | X | Historische Ereignisse | ⏳ Ausstehend |
+| 1062G | G | Funktionen und Bedeutungen des Verbs werden | ⏳ Ausstehend |
+| 1063R | R | Der Fall der Berliner Mauer | ⏳ Ausstehend |
+| 1064X | X | Historische Persönlichkeiten | ⏳ Ausstehend |
+| 1065G | G | Mehr über das Verb werden | ⏳ Ausstehend |
+| 1066R | R | Immanuel Kant | ⏳ Ausstehend |
+| 1067X | X | Chronologisch erzählen | ⏳ Ausstehend |
+| 1068S | S | Über historische Fakten sprechen | ⏳ Ausstehend |
+| 1071W | W | Schreibe ein Motivationsschreiben | ⏳ Ausstehend |
+| 1072W | W | Verfasse einen Beschwerdebrief | ⏳ Ausstehend |
 
 ---
 
@@ -441,7 +464,46 @@ Pexels-Keywords sind unzuverlässig. Kein Bild darf ungesehen eingebaut werden.
 
 ---
 
-## 6a. Verbindlicher Workflow: Pexels-Bilder als Base64 einbetten
+## 6a. Gesamtablauf beim Erstellen neuer Dateien (Batch-Workflow)
+
+⛔ **Dieser Ablauf ist verbindlich für alle neu erstellten Dateien.**
+
+### Warum dieser Ablauf?
+
+Bilder erst nach visueller Prüfung herunterladen — nie vorher. Keywords auf Pexels sind unzuverlässig. Ein Bild, das erst nach dem Base64-Download als falsch erkannt wird, bedeutet: erneuter Download, erneute Integration. Das kostet Zeit und erzeugt Fehler.
+
+### Der verbindliche Ablauf in 5 Phasen:
+
+**Phase A — Dateien erstellen (mit Pexels-URLs, kein Base64)**
+- Alle neuen HTML-Dateien werden komplett fertiggestellt
+- Bilder werden als externe Pexels-URLs eingebunden (noch kein Base64)
+- URL-Format: `https://images.pexels.com/photos/ID/pexels-photo-ID.jpeg?auto=compress&cs=tinysrgb&w=800`
+- Gilt für **alle** Bildtypen: Tab-Banner, Lesetext-Bilder, Vokabelkarten, situative Fotos
+
+**Phase B — Visuelle Prüfung aller Bilder (durch Claude, via Chrome-MCP)**
+- Jede Datei wird auf GitHub Pages geöffnet
+- Jeder Tab wird angeklickt
+- Jedes Bild wird gezoomt und bewertet (Bewertungskriterien → §6b)
+- Falsche Bilder werden sofort durch bessere Pexels-IDs ersetzt (noch in der URL-Phase)
+- Erst wenn alle Bilder visuell bestätigt sind, geht es weiter
+
+**Phase C — Alle benötigten Pexels-IDs sammeln**
+- Python-Script extrahiert alle IDs aus allen neuen HTML-Dateien
+- Eine einzige Liste aller benötigten IDs → kein unnötiger Download
+
+**Phase D — Nutzer lädt Bilder herunter (einmaliger Klick)**
+- Claude bereitet den Download vor (Chrome-MCP: fetch → Blob → Button auf Seite)
+- **Nutzer klickt einmal den Download-Button**
+- JSON-Datei landet im Mac-Downloads-Ordner → VM liest sie unter `/mnt/Downloads/`
+
+**Phase E — Base64 integrieren und pushen**
+- Python-Script ersetzt alle URLs durch Base64-Data-URLs
+- Verifikation: keine externen URLs mehr in den Dateien
+- Git commit & push
+
+---
+
+## 6b. Verbindlicher Workflow: Pexels-Bilder als Base64 einbetten
 
 ⛔ **Dieser Workflow ist Pflicht.** Er wurde nach zwei Stunden Debugging am 21. März 2026 dokumentiert und darf nicht übersprungen oder abgekürzt werden. Jeder Schritt hat einen Grund.
 
@@ -496,9 +558,11 @@ Tab-ID beschaffen: `tabs_context_mcp(createIfEmpty=True)` → ergibt `tabId`
 })()
 ```
 
-### Phase 3: Download auslösen
+### Phase 3: Download auslösen — Nutzer-Klick erforderlich
 
-**Kein Nachfragen nötig.** `a.click()` löst den Download direkt aus — kein Browser-Dialog, kein Button-Klick durch den Nutzer erforderlich. Einfach ausführen:
+`a.click()` funktioniert in dieser Umgebung **nicht automatisch** (getestet 21.03.2026 — Download erscheint nicht im Downloads-Ordner). Der Nutzer muss den Download aktiv auslösen.
+
+**Workflow:** Claude bereitet einen sichtbaren Download-Button auf der Seite vor, den der Nutzer anklickt:
 
 ```javascript
 // Im Chrome-MCP javascript_tool (gleicher Tab, window._b64cache ist noch da):
@@ -615,19 +679,19 @@ for old_id, new_id in replacement_map.items():
 - ❌ Base64 direkt aus Chrome-MCP-JS-Rückgabe lesen → BLOCKED
 - ❌ `window._b64cache` über MCP-Rückgabewert auslesen → BLOCKED
 - ❌ Bilder in `/tmp/` oder `/sessions/` speichern via Browser → Chrome speichert NUR in den Downloads-Ordner
-- ❌ Download-Dialog abwarten — `a.click()` löst direkt aus, kein Klick nötig
+- ❌ `a.click()` ohne Nutzerinteraktion — funktioniert NICHT zuverlässig in dieser Umgebung (getestet 21.03.2026)
 
 ### ✅ Was FUNKTIONIERT (der goldene Pfad)
 
 1. Chrome-Tab auf eine beliebige Seite navigieren
 2. `fetch()` auf `images.pexels.com` CDN (kein Cloudflare!)
 3. Blob → FileReader → `window._b64cache`
-4. Nutzer fragen → `a.download` → JSON in Downloads
+4. **Nutzer klickt Download-Button** → JSON landet im Mac-Downloads-Ordner
 5. VM liest `/mnt/Downloads/*.json` → Python ersetzt in HTML
 
 ---
 
-## 6b. Verbindliche visuelle Prüfmethode für Bilder (Chrome-MCP)
+## 6c. Verbindliche visuelle Prüfmethode für Bilder (Chrome-MCP)
 
 ⛔ **Diese Methode ist Pflicht nach jedem Bild-Einbau oder -Austausch.** Dokumentiert am 21. März 2026 nach dem ersten systematischen Qualitätsaudit aller B1.1-Banner.
 
@@ -701,7 +765,7 @@ Für einen systematischen Durchlauf aller Dateien:
 
 ---
 
-## 6c. Zusätzliche Bildtypen neben Bannern — Verbindliche Regeln
+## 6d. Zusätzliche Bildtypen neben Bannern — Verbindliche Regeln
 
 ⛔ **Banner allein sind nicht genug.** Jede HTML-Datei braucht zusätzliche Bilder je nach Datei-Typ. Diese Regeln stammen aus den Skills `daf-bilder-pflicht`, `daf-html-layout` und `textgestaltung-daf`.
 

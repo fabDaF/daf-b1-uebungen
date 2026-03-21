@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1042G · Mehr über Pronomen</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ── CONTAINER ── */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* ── HEADER ── */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header .subtitle { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+
+/* ── NAV ── */
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* ── TAB BANNER ── */
+.tab-banner {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 0;
+}
+
+/* ── SECTION TITLES ── */
+h2.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+
+/* ── HILFE-BOX ── */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* ── CONTENT PADDING ── */
+.section-content { padding: 30px; }
+
+/* ── TIMER CONTROLS ── */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.btn-row { display:flex; gap:6px; }
+.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn:hover { background:#f0f0f0; color:#555; }
+.timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-val { color:#667eea; font-weight:700; }
+.best-val  { color:#f39c12; font-weight:600; }
+
+/* ── ENTDECKUNGS-TAB ── */
+.intro-box {
+    background: #f8f9ff;
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+.intro-box .beispiel {
+    font-size: 1.05em;
+    line-height: 2.2;
+    color: #333;
+}
+.hl { color: #764ba2; font-weight: 700; }
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; transition: background 0.3s; }
+.dot.active { background: #667eea; }
+.mc-step { display: none; margin-bottom: 20px; }
+.mc-step.visible { display: block; }
+.mc-frage { font-weight: 600; color: #333; margin-bottom: 12px; font-size: 1em; }
+.mc-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-option {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.mc-option:hover { background: #f0edf8; }
+.mc-option.correct { background: #27ae60; border-color: #27ae60; color: white; cursor: default; }
+.mc-option.wrong   { background: #e74c3c; border-color: #e74c3c; color: white; animation: shake 0.3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.mc-feedback { margin-top: 10px; font-size: 0.88em; font-weight: 600; min-height: 1.2em; }
+.mc-feedback.ok  { color: #27ae60; }
+.mc-feedback.err { color: #e74c3c; }
+.regel-karte-end { display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; padding: 20px 24px; margin-top: 20px; }
+.regel-karte-end.visible { display: block; }
+.regel-karte-end h3 { font-size: 1.1em; margin-bottom: 12px; font-family: Georgia, serif; }
+.regel-karte-end ul { margin-left: 18px; }
+.regel-karte-end li { line-height: 2; font-size: 0.95em; }
+
+/* ── REGEL-TAB ── */
+.regel-box { background: #f0f4ff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+.regel-box h3 { color: #667eea; font-size: 1.05em; margin-bottom: 12px; font-weight: 700; }
+.regel-tabelle { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-bottom: 16px; }
+.regel-tabelle th { background: #667eea; color: white; padding: 8px 12px; text-align: left; }
+.regel-tabelle td { padding: 8px 12px; border-bottom: 1px solid #e0e0f0; }
+.regel-tabelle tr:last-child td { border-bottom: none; }
+.regel-tabelle .prn { color: #764ba2; font-weight: 700; }
+.beispiel-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 14px 18px; margin-top: 10px; font-size: 0.9em; line-height: 1.9; }
+.beispiel-box .bsp-prn { color: #764ba2; font-weight: 700; }
+.refl-tabelle { width: 100%; border-collapse: collapse; font-size: 0.88em; margin-top: 12px; }
+.refl-tabelle th { background: #764ba2; color: white; padding: 7px 10px; text-align: center; }
+.refl-tabelle td { padding: 7px 10px; border-bottom: 1px solid #e0e0f0; text-align: center; }
+.refl-tabelle tr:first-child td { font-weight: 600; background: #f3e5f5; }
+.refl-tabelle .prn2 { color: #764ba2; font-weight: 700; }
+
+/* ── LÜCKENTEXT ── */
+.luecken-satz {
+    background: #f8f9ff;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    font-size: 0.95em;
+    line-height: 1.9;
+}
+.luecken-inp {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 2px 6px;
+    outline: none;
+    min-width: 80px;
+    transition: all 0.2s;
+    color: inherit;
+}
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.wortkasten {
+    background: #f0f4ff;
+    border: 1px solid #c0b0e8;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88em;
+    color: #555;
+    line-height: 2;
+}
+.wortkasten strong { color: #667eea; }
+
+/* ── SATZBAU ── */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    min-height: 56px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: move;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { background: #667eea; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.satzbau-item:last-child { border-bottom: none; }
+
+/* ── ZUORDNUNG ── */
+.zuord-bank {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 14px; background: #f8f8f8;
+    border-radius: 10px; margin-bottom: 18px; min-height: 54px;
+}
+.zuord-chip {
+    padding: 7px 14px; border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: pointer; font-size: 0.85rem;
+    font-weight: 600; user-select: none;
+    transition: transform .15s, opacity .15s;
+    white-space: nowrap; border: 2px solid transparent;
+}
+.zuord-chip:hover { transform: scale(1.04); }
+.zuord-chip.selected { border: 2px solid #f39c12; box-shadow: 0 0 0 2px #f39c12; }
+.zuord-chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; cursor: default; }
+.zuord-chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.zuord-categories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+@media (max-width: 600px) { .zuord-categories { grid-template-columns: 1fr; } }
+.zuord-cat { border: 2px dashed #ccc; border-radius: 10px; padding: 14px; min-height: 80px; cursor: pointer; transition: all 0.2s; }
+.zuord-cat:hover { border-color: #667eea; background: #f8f8ff; }
+.zuord-cat-title { font-weight: 700; color: #764ba2; margin-bottom: 8px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.05em; }
+.zuord-cat-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 32px; }
+
+/* ── AUTHOR FOOTER ── */
+.author-footer {
+    text-align: center; margin-top: 40px; padding: 16px;
+    font-size: 0.8rem; color: #aaa; border-top: 1px solid #f0f0f0;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+    <h1>Mehr über Pronomen</h1>
+    <p class="subtitle">B1.1 · Lektion 1042G · Grammatik</p>
+    <span class="big-emoji">🔤</span>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">🔍</span>
+        <span class="nav-label">Entdecken</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">📋</span>
+        <span class="nav-label">Regel</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">✏️</span>
+        <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">🧩</span>
+        <span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">🔀</span>
+        <span class="nav-label">Zuordnung</span>
+    </div>
+</nav>
+
+<!-- ═══ TAB 0 — ENTDECKEN ═══ -->
+<div class="section active" id="section0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5905702/pexels-photo-5905702.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Pronomen entdecken">
+    <div class="section-content">
+        <h2 class="section-title">Entdecke die Pronomen</h2>
+        <div class="hilfe-box"><strong>Aufgabe:</strong> Lies die Sätze und beobachte die <span class="hl">hervorgehobenen Wörter</span>. Beantworte dann die Fragen.</div>
+
+        <div class="intro-box">
+            <div class="beispiel">Ich habe viele Freunde zu meiner Geburtstagsfeier eingeladen. Nur <span class="hl">einer</span> ist gekommen.</div>
+            <div class="beispiel"><span class="hl">Jemand</span> hat gestern ein Paket vor meine Tür gestellt.</div>
+            <div class="beispiel"><span class="hl">Niemand</span> weiß, wer das Buch genommen hat.</div>
+            <div class="beispiel">Ich finde das Angebot <span class="hl">etwas</span> teuer. <span class="hl">Nichts</span> hier passt wirklich zu mir.</div>
+            <div class="beispiel">Meine Kinder haben ein Handy. <span class="hl">Dieses</span> gehört mir!</div>
+            <div class="beispiel">Ich freue <span class="hl">mich</span> auf das Wochenende. Sie stellt <span class="hl">sich</span> vor.</div>
+        </div>
+
+        <div class="progress-dots">
+            <div class="dot active" id="dot0"></div>
+            <div class="dot" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+        </div>
+
+        <!-- Step 0 -->
+        <div class="mc-step visible" id="mc-step0">
+            <p class="mc-frage">Was beschreiben <em>einer</em>, <em>jemand</em>, <em>niemand</em>, <em>etwas</em>, <em>nichts</em>?</p>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcCheck(0, this, false)">bekannte, bestimmte Personen oder Sachen</button>
+                <button class="mc-option" onclick="mcCheck(0, this, true)">unbekannte oder unbestimmte Personen oder Sachen</button>
+                <button class="mc-option" onclick="mcCheck(0, this, false)">Reflexionen auf das Subjekt</button>
+            </div>
+            <div class="mc-feedback" id="mcfb0"></div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="mc-step" id="mc-step1">
+            <p class="mc-frage">Das Wort <em>dieses</em> (= Dieses gehört mir!) ersetzt ein Nomen. Welche Art von Pronomen ist das?</p>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcCheck(1, this, false)">Indefinitpronomen</button>
+                <button class="mc-option" onclick="mcCheck(1, this, true)">Demonstrativpronomen — es zeigt auf etwas hin</button>
+                <button class="mc-option" onclick="mcCheck(1, this, false)">Reflexivpronomen</button>
+            </div>
+            <div class="mc-feedback" id="mcfb1"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="mc-step" id="mc-step2">
+            <p class="mc-frage"><em>Ich freue mich</em> — worauf bezieht sich <em>mich</em>?</p>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcCheck(2, this, false)">auf eine andere Person im Satz</button>
+                <button class="mc-option" onclick="mcCheck(2, this, true)">auf das Subjekt des Satzes (ich = mich)</button>
+                <button class="mc-option" onclick="mcCheck(2, this, false)">auf ein unbekanntes Objekt</button>
+            </div>
+            <div class="mc-feedback" id="mcfb2"></div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="mc-step" id="mc-step3">
+            <p class="mc-frage">In welchem Fall stehen Reflexivpronomen?</p>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcCheck(3, this, false)">immer im Nominativ</button>
+                <button class="mc-option" onclick="mcCheck(3, this, true)">im Akkusativ oder Dativ — je nach Verb</button>
+                <button class="mc-option" onclick="mcCheck(3, this, false)">immer im Genitiv</button>
+            </div>
+            <div class="mc-feedback" id="mcfb3"></div>
+        </div>
+
+        <!-- Regelkarte -->
+        <div class="regel-karte-end" id="regelkarte">
+            <h3>✅ Drei Arten von Pronomen</h3>
+            <ul>
+                <li><strong>Indefinitpronomen</strong> — für unbekannte/unbestimmte Personen/Sachen: <em>jemand, niemand, einer, keiner, jeder, alle, manche, mehrere, wenige, etwas, nichts</em></li>
+                <li><strong>Demonstrativpronomen</strong> — für hinweisende Ersetzung: <em>der/die/das, dieser/diese/dieses, derjenige, derselbe</em></li>
+                <li><strong>Reflexivpronomen</strong> — beziehen sich auf das Subjekt: <em>mich/mir, dich/dir, sich, uns, euch, sich</em></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ TAB 1 — REGEL ═══ -->
+<div class="section" id="section1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Grammatikregel">
+    <div class="section-content">
+        <h2 class="section-title">Die drei Pronomentypen</h2>
+
+        <!-- Indefinitpronomen -->
+        <div class="regel-box">
+            <h3>1. Indefinitpronomen (unbestimmte Fürwörter)</h3>
+            <p style="font-size:0.9em; color:#555; margin-bottom:12px;">Stehen für unbekannte oder unbestimmte Personen oder Sachen. Werden nach Kasus, Numerus und Genus dekliniert.</p>
+            <table class="regel-tabelle">
+                <tr><th>Pronomen</th><th>Bedeutung / Kontext</th><th>Beispiel</th></tr>
+                <tr><td class="prn">jemand / niemand</td><td>Person (Sg.)</td><td>Jemand hat angerufen.</td></tr>
+                <tr><td class="prn">einer / keiner</td><td>Person oder Sache (Sg.)</td><td>Nur einer ist gekommen.</td></tr>
+                <tr><td class="prn">jeder / alle</td><td>alle einzeln / zusammen</td><td>Jeder kann teilnehmen.</td></tr>
+                <tr><td class="prn">manche / mehrere / wenige</td><td>unbestimmte Menge (Pl.)</td><td>Manche haben keine Zeit.</td></tr>
+                <tr><td class="prn">etwas / nichts</td><td>Sache (Sg., unveränderlich)</td><td>Ich finde etwas Interessantes.</td></tr>
+                <tr><td class="prn">ein bisschen / ein wenig</td><td>Menge (Sg., unveränderlich)</td><td>Sie hat ein wenig Angst.</td></tr>
+            </table>
+            <div class="beispiel-box">
+                <strong>Von viel nach wenig:</strong> alle/jeder → viele → mehrere → manche → wenige → einer → keiner/niemand
+            </div>
+        </div>
+
+        <!-- Demonstrativpronomen -->
+        <div class="regel-box">
+            <h3>2. Demonstrativpronomen (hinweisende Fürwörter)</h3>
+            <p style="font-size:0.9em; color:#555; margin-bottom:12px;">Ersetzen ein Nomen und zeigen auf eine bestimmte Person oder Sache hin.</p>
+            <table class="regel-tabelle">
+                <tr><th>Pronomen</th><th>Beispiel</th></tr>
+                <tr><td class="prn">der / die / das</td><td>Ich habe viele Kleider. <span class="bsp-prn">Das</span> gefällt mir gar nicht.</td></tr>
+                <tr><td class="prn">dieser / diese / dieses</td><td><span class="bsp-prn">Dieses</span> hier gefällt mir viel besser!</td></tr>
+                <tr><td class="prn">derjenige / diejenige / dasjenige</td><td>Jemand hat mein Auto beschädigt. <span class="bsp-prn">Derjenige</span> ist einfach weggefahren.</td></tr>
+                <tr><td class="prn">derselbe / dieselbe / dasselbe</td><td>Mein Bruder und ich benutzen <span class="bsp-prn">dasselbe</span> Auto.</td></tr>
+            </table>
+        </div>
+
+        <!-- Reflexivpronomen -->
+        <div class="regel-box">
+            <h3>3. Reflexivpronomen (rückbezügliche Fürwörter)</h3>
+            <p style="font-size:0.9em; color:#555; margin-bottom:12px;">Beziehen sich auf das Subjekt. Je nach Verb im Akkusativ oder Dativ.</p>
+            <table class="refl-tabelle">
+                <tr><th>Person</th><th>Akkusativ</th><th>Dativ</th><th>Beispiel (Akk.)</th><th>Beispiel (Dat.)</th></tr>
+                <tr><td>ich</td><td class="prn2">mich</td><td class="prn2">mir</td><td>Ich wasche mich.</td><td>Ich putze mir die Zähne.</td></tr>
+                <tr><td>du</td><td class="prn2">dich</td><td class="prn2">dir</td><td>Du wäschst dich.</td><td>Du putzt dir die Zähne.</td></tr>
+                <tr><td>er/sie/es</td><td class="prn2">sich</td><td class="prn2">sich</td><td>Er wäscht sich.</td><td>Sie putzt sich die Zähne.</td></tr>
+                <tr><td>wir</td><td class="prn2">uns</td><td class="prn2">uns</td><td>Wir waschen uns.</td><td>Wir putzen uns die Zähne.</td></tr>
+                <tr><td>ihr</td><td class="prn2">euch</td><td class="prn2">euch</td><td>Ihr wascht euch.</td><td>Ihr putzt euch die Zähne.</td></tr>
+                <tr><td>sie/Sie</td><td class="prn2">sich</td><td class="prn2">sich</td><td>Sie waschen sich.</td><td>Sie putzen sich die Zähne.</td></tr>
+            </table>
+            <div class="beispiel-box" style="margin-top:12px;">
+                <strong>Zwei Bedeutungen:</strong> <em>Ich stelle mich vor</em> = ich sage meinen Namen. | <em>Ich stelle mir vor</em> = ich fantasiere über etwas.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ TAB 2 — LÜCKENTEXT ═══ -->
+<div class="section" id="section2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Lückentext Pronomen">
+    <div class="section-content">
+        <h2 class="section-title">Lückentext: Pronomen einsetzen</h2>
+
+        <div class="wortkasten">
+            <strong>Wortkasten:</strong>
+            jemand · niemand · jeder · manche · keiner · einer · etwas · nichts · sich · mich · mir · dieses · derjenige · dasselbe
+        </div>
+
+        <div class="timer-controls">
+            <div class="btn-row">
+                <button class="btn" onclick="showLueckenLoesung()">💡 Lösungen</button>
+                <button class="btn" onclick="timerResetOne(2); resetLuecken()">↺ Neustart</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span class="timer-val" id="timer-2">0:00</span></span>
+                <span>🏆 <span class="best-val" id="best-2">–</span></span>
+            </div>
+        </div>
+
+        <div id="lueckenContainer"></div>
+
+        <div class="author-footer">
+            <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+            <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ TAB 3 — SATZBAU ═══ -->
+<div class="section" id="section3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5905558/pexels-photo-5905558.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Satzbau Pronomen">
+    <div class="section-content">
+        <h2 class="section-title">Satzbau: Sätze ordnen</h2>
+
+        <div class="hilfe-box"><strong>Aufgabe:</strong> Bringe die Chips in die richtige Reihenfolge. Klicke einen Chip, dann klicke die Zielzeile.</div>
+
+        <div class="timer-controls">
+            <div class="btn-row">
+                <button class="btn" onclick="satzbauData.forEach(function(_,i){sbShowSolution(i);})">💡 Lösungen</button>
+                <button class="btn" onclick="timerResetOne(3); resetSatzbau()">↺ Neustart</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span class="timer-val" id="timer-3">0:00</span></span>
+                <span>🏆 <span class="best-val" id="best-3">–</span></span>
+            </div>
+        </div>
+
+        <div id="satzbauContainer"></div>
+
+        <div class="author-footer">
+            <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+            <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ TAB 4 — ZUORDNUNG ═══ -->
+<div class="section" id="section4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Pronomen zuordnen">
+    <div class="section-content">
+        <h2 class="section-title">Zuordnung: Welche Kategorie?</h2>
+
+        <div class="hilfe-box"><strong>Aufgabe:</strong> Klicke einen Chip, dann klicke die richtige Kategorie.</div>
+
+        <div class="timer-controls">
+            <div class="btn-row">
+                <button class="btn" onclick="showZuordLoesung()">💡 Lösungen</button>
+                <button class="btn" onclick="timerResetOne(4); resetZuord()">↺ Neustart</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span class="timer-val" id="timer-4">0:00</span></span>
+                <span>🏆 <span class="best-val" id="best-4">–</span></span>
+            </div>
+        </div>
+
+        <div class="zuord-bank" id="zuord-bank"></div>
+        <div class="zuord-categories" id="zuord-cats"></div>
+
+        <div class="author-footer">
+            <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+            <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+        </div>
+    </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === n);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === n);
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  TIMER SYSTEM
+// ═══════════════════════════════════════════════════════
+var TIMER_PREFIX = 'b1_1042g_best_';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function fmtTime(s) {
+    return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+
+function loadBestTimes() {
+    [2, 3, 4].forEach(function(i) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  ENTDECKUNGS-TAB — MC-System
+// ═══════════════════════════════════════════════════════
+var mcDone = [false, false, false, false];
+
+function mcCheck(step, btn, correct) {
+    var btns = btn.parentElement.querySelectorAll('.mc-option');
+    btns.forEach(function(b) { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+    var fb = document.getElementById('mcfb' + step);
+    if (correct) {
+        btn.classList.add('correct');
+        fb.textContent = '\u2713 Richtig! Weiter zum nächsten Schritt.';
+        fb.className = 'mc-feedback ok';
+        mcDone[step] = true;
+        document.getElementById('dot' + step).classList.add('active');
+        setTimeout(function() {
+            if (step + 1 < 4) {
+                var next = document.getElementById('mc-step' + (step + 1));
+                if (next) next.classList.add('visible');
+                var nextDot = document.getElementById('dot' + (step + 1));
+                if (nextDot) nextDot.classList.add('active');
+            } else {
+                document.getElementById('regelkarte').classList.add('visible');
+            }
+        }, 700);
+    } else {
+        btn.classList.add('wrong');
+        fb.textContent = '\u2717 Nicht ganz — schau nochmal genau hin!';
+        fb.className = 'mc-feedback err';
+        setTimeout(function() {
+            btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong', 'correct'); });
+            fb.textContent = '';
+            fb.className = 'mc-feedback';
+        }, 1400);
+    }
+}
+
+// ═══════════════════════════════════════════════════════
+//  LÜCKENTEXT (Tab 2)
+// ═══════════════════════════════════════════════════════
+var LUECKEN_DATA = [
+    { pre: '', ans: 'Jemand', post: ' hat gestern ein Paket vor meine Tür gestellt.', size: 80 },
+    { pre: 'Ich habe mein Geld vergessen. Hast du noch ', ans: 'etwas', post: '?', size: 70 },
+    { pre: 'Wir brauchen Brot. Kaufst du bitte ', ans: 'etwas', post: '?', size: 70 },
+    { pre: 'Deine Frau ist sehr geduldig. ', ans: 'Manche', post: ' wären schon gegangen.', size: 80 },
+    { pre: 'Ja, du kaufst das, aber ', ans: 'keiner', post: ' sonst hat so viel Geld.', size: 70 },
+    { pre: 'Ich habe viele Freunde, aber nur ', ans: 'manche', post: ' sind meine besten Freunde.', size: 80 },
+    { pre: 'Ich freue ', ans: 'mich', post: ' sehr auf die Ferien.', size: 60 },
+    { pre: 'Er wäscht ', ans: 'sich', post: ' jeden Morgen die Haare.', size: 60 },
+    { pre: 'Sie stellt ', ans: 'sich', post: ' dem neuen Kollegen vor.', size: 60 },
+    { pre: 'Ich stelle ', ans: 'mir', post: ' gerne etwas Schönes vor.', size: 50 },
+    { pre: 'Meine Kinder haben ein Handy. ', ans: 'Dieses', post: ' gehört mir!', size: 70 },
+    { pre: 'Jemand hat mein Auto beschädigt. ', ans: 'Derjenige', post: ' ist einfach weggefahren.', size: 100 },
+];
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecken-satz';
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'luecken-inp';
+        inp.dataset.ans = item.ans;
+        inp.dataset.ansLow = item.ans.toLowerCase();
+        inp.placeholder = '';
+        inp.style.width = item.size + 'px';
+        inp.setAttribute('autocomplete', 'off');
+        inp.setAttribute('autocorrect', 'off');
+        inp.setAttribute('spellcheck', 'false');
+        inp.addEventListener('input', function() { liveCheckLuecke(this); timerAutoStart(2); });
+        var content = document.createTextNode(item.pre);
+        div.appendChild(content);
+        div.appendChild(inp);
+        div.appendChild(document.createTextNode(item.post));
+        container.appendChild(div);
+    });
+}
+
+function liveCheckLuecke(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.ans;
+    var valL = val.toLowerCase();
+    var ansL = inp.dataset.ansLow;
+    inp.classList.remove('ok', 'no');
+    if (val.length === 0) return;
+    if (valL === ansL) {
+        inp.classList.add('ok');
+        checkLueckenAllOk();
+    } else if (ansL.startsWith(valL)) {
+        // valid prefix — neutral
+    } else {
+        inp.classList.add('no');
+    }
+}
+
+function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('ok');
+    });
+    if (allOk) timerStop(2);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans;
+        inp.classList.remove('no');
+        inp.classList.add('ok');
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'no');
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  SATZBAU (Tab 3)
+// ═══════════════════════════════════════════════════════
+var satzbauData = [
+    { parts: ['Jemand','hat','mein','Fahrrad','gestohlen'], valid:[['Jemand','hat','mein','Fahrrad','gestohlen']], punct:'.' },
+    { parts: ['Niemand','weiß','wo','er','jetzt','ist'], valid:[['Niemand','weiß','wo','er','jetzt','ist']], punct:'.' },
+    { parts: ['Jeder','kann','an','der','Konferenz','teilnehmen'], valid:[['Jeder','kann','an','der','Konferenz','teilnehmen']], punct:'.' },
+    { parts: ['Ich','freue','mich','auf','das','Konzert','heute','Abend'], valid:[['Ich','freue','mich','auf','das','Konzert','heute','Abend']], punct:'.' },
+    { parts: ['Sie','stellt','sich','dem','neuen','Kollegen','vor'], valid:[['Sie','stellt','sich','dem','neuen','Kollegen','vor']], punct:'.' },
+    { parts: ['Dieses','Buch','hat','mir','jemand','empfohlen'], valid:[['Dieses','Buch','hat','mir','jemand','empfohlen']], punct:'.' },
+    { parts: ['Manche','Menschen','mögen','keine','Veränderungen'], valid:[['Manche','Menschen','mögen','keine','Veränderungen']], punct:'.' },
+];
+
+// ── Satzbau: Mandatory SKILL pattern (satzbau-drag-drop) ──────────────────
+
+var sbDragged = null;
+
+function sbCapitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        c.textContent = (i === 0) ? sbCapitalize(c.dataset.orig) : c.dataset.orig;
+    });
+}
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) { c = document.createElement('div'); c.id = 'sb-insert-cursor'; c.style.cssText = 'width:3px;background:#667eea;border-radius:2px;min-height:28px;pointer-events:none;'; }
+    return c;
+}
+
+function getSbInsertPos(zone, x) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (x < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        e.dataTransfer.setData('text/plain', '');
+        timerAutoStart(3);
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '1';
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
+        sbDragged = null;
+    });
+    chip.addEventListener('click', function(e) {
+        e.stopPropagation();
+        timerAutoStart(3);
+        if (chip.classList.contains('selected')) {
+            chip.classList.remove('selected');
+            return;
+        }
+        var allChips = document.querySelectorAll('.chip.selected');
+        allChips.forEach(function(c) { c.classList.remove('selected'); });
+        chip.classList.add('selected');
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var cursor = document.getElementById('sb-insert-cursor');
+            if (cursor && cursor.parentNode === zone) zone.removeChild(cursor);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+    zone.addEventListener('click', function(e) {
+        if (e.target === zone || e.target.closest('.chip') === null) {
+            var sel = document.querySelector('.chip.selected');
+            if (!sel) return;
+            sel.classList.remove('selected');
+            zone.appendChild(sel);
+            var row = document.getElementById('sb-row-' + idx);
+            sbUpdateCapitalization(row);
+            sbCheckAuto(idx);
+        }
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function resetSatzbau() { initSatzbau(); }
+
+// ═══════════════════════════════════════════════════════
+//  ZUORDNUNG (Tab 4)
+// ═══════════════════════════════════════════════════════
+var ZUORD_DATA = [
+    { text: 'mich',      cat: 'reflexiv' },
+    { text: 'einer',     cat: 'indefinit' },
+    { text: 'derjenige', cat: 'demonstrativ' },
+    { text: 'diese',     cat: 'demonstrativ' },
+    { text: 'manche',    cat: 'indefinit' },
+    { text: 'der',       cat: 'demonstrativ' },
+    { text: 'euch',      cat: 'reflexiv' },
+    { text: 'keiner',    cat: 'indefinit' },
+    { text: 'dich',      cat: 'reflexiv' },
+    { text: 'jeder',     cat: 'indefinit' },
+    { text: 'dasselbe',  cat: 'demonstrativ' },
+    { text: 'uns',       cat: 'reflexiv' },
+];
+
+var ZUORD_CATS = [
+    { id: 'indefinit',    label: 'Indefinitpronomen' },
+    { id: 'demonstrativ', label: 'Demonstrativpronomen' },
+    { id: 'reflexiv',     label: 'Reflexivpronomen' },
+];
+
+var zuordSelected = null;
+
+function initZuord() {
+    var bank = document.getElementById('zuord-bank');
+    var cats = document.getElementById('zuord-cats');
+    bank.innerHTML = '';
+    cats.innerHTML = '';
+    zuordSelected = null;
+
+    var shuffled = shuffle(ZUORD_DATA.slice());
+    shuffled.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'zuord-chip';
+        chip.textContent = item.text;
+        chip.dataset.cat = item.cat;
+        chip.addEventListener('click', function(e) {
+            e.stopPropagation();
+            zuordSelectChip(chip);
+        });
+        bank.appendChild(chip);
+    });
+
+    ZUORD_CATS.forEach(function(cat) {
+        var box = document.createElement('div');
+        box.className = 'zuord-cat';
+        box.dataset.catId = cat.id;
+        var title = document.createElement('div');
+        title.className = 'zuord-cat-title';
+        title.textContent = cat.label;
+        var chipsDiv = document.createElement('div');
+        chipsDiv.className = 'zuord-cat-chips';
+        chipsDiv.id = 'zuord-drop-' + cat.id;
+        box.appendChild(title);
+        box.appendChild(chipsDiv);
+        box.addEventListener('click', function() { zuordPlaceInCat(cat.id); });
+        cats.appendChild(box);
+    });
+}
+
+function zuordSelectChip(chip) {
+    if (chip.classList.contains('correct')) return;
+    if (zuordSelected && zuordSelected !== chip) {
+        zuordSelected.classList.remove('selected');
+    }
+    if (zuordSelected === chip) {
+        chip.classList.remove('selected');
+        zuordSelected = null;
+    } else {
+        chip.classList.add('selected');
+        zuordSelected = chip;
+    }
+}
+
+function zuordPlaceInCat(catId) {
+    if (!zuordSelected) return;
+    var targetDiv = document.getElementById('zuord-drop-' + catId);
+    if (!targetDiv) return;
+    var chip = zuordSelected;
+    chip.classList.remove('selected');
+    zuordSelected = null;
+    targetDiv.appendChild(chip);
+
+    // Check correctness
+    chip.classList.remove('correct', 'wrong');
+    if (chip.dataset.cat === catId) {
+        chip.classList.add('correct');
+    } else {
+        chip.classList.add('wrong');
+        setTimeout(function() {
+            chip.classList.remove('wrong');
+            document.getElementById('zuord-bank').appendChild(chip);
+        }, 1000);
+    }
+    timerAutoStart(4);
+    checkZuordAllOk();
+}
+
+function checkZuordAllOk() {
+    var allChips = document.querySelectorAll('#zuord-cats .zuord-chip');
+    var bankChips = document.querySelectorAll('#zuord-bank .zuord-chip');
+    if (bankChips.length > 0) return;
+    var allOk = Array.from(allChips).every(function(c) { return c.classList.contains('correct'); });
+    if (allOk) timerStop(4);
+}
+
+function showZuordLoesung() {
+    ZUORD_DATA.forEach(function(item) {
+        var targetDiv = document.getElementById('zuord-drop-' + item.cat);
+        var bank = document.getElementById('zuord-bank');
+        var chips = Array.from(bank.querySelectorAll('.zuord-chip'));
+        var catChips = Array.from(document.querySelectorAll('#zuord-cats .zuord-chip'));
+        var allChips = chips.concat(catChips);
+        allChips.forEach(function(chip) {
+            if (chip.textContent === item.text) {
+                chip.classList.remove('selected', 'wrong');
+                chip.classList.add('correct');
+                targetDiv.appendChild(chip);
+            }
+        });
+    });
+}
+
+function resetZuord() {
+    var bank = document.getElementById('zuord-bank');
+    document.querySelectorAll('#zuord-cats .zuord-chip').forEach(function(chip) {
+        chip.classList.remove('correct', 'wrong', 'selected');
+        bank.appendChild(chip);
+    });
+    zuordSelected = null;
+}
+
+// ═══════════════════════════════════════════════════════
+//  SHUFFLE
+// ═══════════════════════════════════════════════════════
+function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+}
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+initLuecken();
+initSatzbau();
+initZuord();
+loadBestTimes();
+</script>
+</body>
+</html>

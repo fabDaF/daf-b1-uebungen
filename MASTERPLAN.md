@@ -88,6 +88,7 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1032G | G | Mehr über Lokaladverbien | ✅ Fertig |
 | 1033R | R | Berlin – eine multikulturelle Stadt | ✅ Fertig |
 | 1034X | X | Multikulturalismus | ✅ Fertig |
+| 1035G | G | Infinitivkonstruktionen haben zu / sein zu | ✅ Fertig |
 
 ---
 

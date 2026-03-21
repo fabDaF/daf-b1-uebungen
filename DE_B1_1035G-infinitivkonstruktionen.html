@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1035G · Infinitivkonstruktionen haben zu / sein zu</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ── CONTAINER ── */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* ── HEADER ── */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header .subtitle { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+
+/* ── NAV ── */
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* ── TAB BANNER ── */
+.tab-banner {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 0;
+}
+
+/* ── SECTION TITLES ── */
+h2.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+
+/* ── HILFE-BOX ── */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* ── CONTROL-BAR ── */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+
+/* ── ENTDECKUNGS-TAB ── */
+.intro-box {
+    background: #f8f9ff;
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+.intro-box .beispiel {
+    font-size: 1.05em;
+    line-height: 2;
+    color: #333;
+}
+.intro-box .beispiel + .beispiel { margin-top: 4px; }
+.hl { color: #764ba2; font-weight: 700; }
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; transition: background 0.3s; }
+.dot.active { background: #667eea; }
+.mc-step { display: none; margin-bottom: 20px; }
+.mc-step.visible { display: block; }
+.mc-frage { font-weight: 600; color: #333; margin-bottom: 12px; font-size: 1em; }
+.mc-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-option {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.mc-option:hover { background: #f0edf8; }
+.mc-option.correct { background: #27ae60; border-color: #27ae60; color: white; cursor: default; }
+.mc-option.wrong   { background: #e74c3c; border-color: #e74c3c; color: white; animation: shake 0.3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.mc-feedback { margin-top: 10px; font-size: 0.88em; font-weight: 600; min-height: 1.2em; }
+.mc-feedback.ok  { color: #27ae60; }
+.mc-feedback.err { color: #e74c3c; }
+.regel-karte { display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; padding: 20px 24px; margin-top: 20px; }
+.regel-karte.visible { display: block; }
+.regel-karte h3 { font-size: 1.1em; margin-bottom: 12px; font-family: Georgia, serif; }
+.regel-karte table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+.regel-karte th { text-align: left; padding: 6px 10px; background: rgba(255,255,255,0.2); border-radius: 4px; }
+.regel-karte td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.2); line-height: 1.5; }
+.regel-karte td:first-child { font-weight: 700; min-width: 120px; }
+.regel-karte .formel { font-family: monospace; font-size: 1em; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px; }
+
+/* ── REGEL-TAB ── */
+.regel-box { background: #f0f4ff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+.regel-box h3 { color: #667eea; font-size: 1.05em; margin-bottom: 12px; }
+.regel-tabelle { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-bottom: 16px; }
+.regel-tabelle th { background: #667eea; color: white; padding: 8px 12px; text-align: left; }
+.regel-tabelle td { padding: 8px 12px; border-bottom: 1px solid #e0e0f0; }
+.regel-tabelle tr:last-child td { border-bottom: none; }
+.regel-tabelle .modal { color: #764ba2; font-style: italic; }
+.regel-tabelle .konstr { color: #27ae60; font-weight: 600; }
+.beispiel-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 14px 18px; margin-top: 10px; font-size: 0.9em; line-height: 1.9; }
+.beispiel-box .alt { color: #888; }
+.beispiel-box .neu { color: #667eea; font-weight: 600; }
+.formel-zeile { background: #e8f0fe; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 10px 16px; font-family: monospace; font-size: 0.95em; color: #333; margin: 10px 0; }
+
+/* ── LÜCKENTEXT ── */
+.luecken-satz {
+    background: #f8f9ff;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    font-size: 0.95em;
+    line-height: 1.9;
+}
+.luecken-inp {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 2px 6px;
+    outline: none;
+    min-width: 80px;
+    transition: all 0.2s;
+    color: inherit;
+}
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.wortkasten {
+    background: #f0f4ff;
+    border: 1px solid #c0b0e8;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88em;
+    color: #555;
+    line-height: 2;
+}
+.wortkasten strong { color: #667eea; }
+.orig-satz { color: #888; font-size: 0.85em; margin-bottom: 4px; font-style: italic; }
+
+/* ── SATZBAU ── */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    min-height: 56px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: move;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { background: #667eea; color: white; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; cursor: move; }
+.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.satzbau-item:last-child { border-bottom: none; }
+
+/* ── MC-TAB ── */
+.mc-aufgabe {
+    background: #f8f9ff;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    border-left: 4px solid #667eea;
+}
+.mc-aufgabe.answered-correct { border-color: #27ae60; background: #f0fff4; }
+.mc-aufgabe.answered-wrong   { border-color: #e74c3c; background: #fff5f5; }
+.mc-frage-text { font-size: 0.95em; margin-bottom: 10px; color: #333; line-height: 1.6; }
+.mc-btn {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 6px 14px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.88em;
+    font-weight: 500;
+    margin: 4px;
+    transition: all 0.2s;
+}
+.mc-btn:hover { background: #f0edf8; }
+.mc-btn.correct { background: #27ae60; border-color: #27ae60; color: white; cursor: default; }
+.mc-btn.wrong   { background: #e74c3c; border-color: #e74c3c; color: white; }
+.mc-result { font-size: 0.85em; font-weight: 600; margin-top: 8px; }
+.mc-result.ok  { color: #27ae60; }
+.mc-result.err { color: #e74c3c; }
+
+/* ── FOOTER ── */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h1>haben zu &amp; sein zu</h1>
+    <p class="subtitle" style="font-family: Georgia, serif;">B1.1 · Lektion 1035G · Infinitivkonstruktionen</p>
+    <div class="big-emoji">📋</div>
+</div>
+
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔍</span><span class="nav-label">Entdecken</span></div>
+    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">📋</span><span class="nav-label">Regel</span></div>
+    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🎯</span><span class="nav-label">Multiple Choice</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 0: ENTDECKEN -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section active" id="sec-0">
+<img class="tab-banner" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Regeln und Pflichten">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">🔍 Entdecke die Regel</h2>
+
+    <div class="intro-box">
+        <div class="beispiel">Bevor Mama nach Hause kommt, <span class="hl">habe</span> ich noch die Wäsche ab<span class="hl">zu</span>hängen.</div>
+        <div class="beispiel">Die Blumen <span class="hl">sind</span> auch noch <span class="hl">zu</span> gießen!</div>
+        <div class="beispiel">Wir <span class="hl">haben</span> noch viel <span class="hl">zu erledigen</span>.</div>
+        <div class="beispiel">Die Küche <span class="hl">ist</span> auf<span class="hl">zu</span>räumen.</div>
+        <div class="beispiel">Die Gefahr <span class="hl">ist</span> nicht <span class="hl">zu unterschätzen</span>.</div>
+        <div class="beispiel">Du <span class="hl">hast</span> hier nicht <span class="hl">zu</span> singen.</div>
+    </div>
+
+    <div class="progress-dots">
+        <div class="dot active" id="dot-0"></div>
+        <div class="dot" id="dot-1"></div>
+        <div class="dot" id="dot-2"></div>
+        <div class="dot" id="dot-3"></div>
+    </div>
+
+    <div class="mc-step visible" id="step-0">
+        <div class="mc-frage">Was haben die lila markierten Wörter gemeinsam?</div>
+        <div class="mc-options">
+            <button class="mc-option" onclick="checkMC(0, this, false)">Es sind alles Modalverben.</button>
+            <button class="mc-option" onclick="checkMC(0, this, true)">Es sind konjugierte Formen von <em>haben</em> oder <em>sein</em>.</button>
+            <button class="mc-option" onclick="checkMC(0, this, false)">Es sind alles Hilfsverben im Perfekt.</button>
+        </div>
+        <div class="mc-feedback" id="fb-0"></div>
+    </div>
+
+    <div class="mc-step" id="step-1">
+        <div class="mc-frage">Was steht am Ende des Satzes — nach <em>haben/sein</em>?</div>
+        <div class="mc-options">
+            <button class="mc-option" onclick="checkMC(1, this, false)">Ein Partizip II (z.B. <em>erledigt</em>)</button>
+            <button class="mc-option" onclick="checkMC(1, this, true)">Ein Infinitiv mit <em>zu</em> (z.B. <em>zu erledigen</em>, <em>aufzuräumen</em>)</button>
+            <button class="mc-option" onclick="checkMC(1, this, false)">Ein konjugiertes Verb</button>
+        </div>
+        <div class="mc-feedback" id="fb-1"></div>
+    </div>
+
+    <div class="mc-step" id="step-2">
+        <div class="mc-frage">„Wir müssen noch viel erledigen." — Wie lautet der Satz mit <em>haben zu</em>?</div>
+        <div class="mc-options">
+            <button class="mc-option" onclick="checkMC(2, this, false)">Wir haben noch viel erledigt.</button>
+            <button class="mc-option" onclick="checkMC(2, this, false)">Wir hatten noch viel zu erledigen müssen.</button>
+            <button class="mc-option" onclick="checkMC(2, this, true)">Wir haben noch viel zu erledigen.</button>
+        </div>
+        <div class="mc-feedback" id="fb-2"></div>
+    </div>
+
+    <div class="mc-step" id="step-3">
+        <div class="mc-frage">Bei trennbaren Verben (z.B. <em>aufräumen</em>) — wo steht <em>zu</em>?</div>
+        <div class="mc-options">
+            <button class="mc-option" onclick="checkMC(3, this, false)">Vor dem ganzen Verb: <em>zu aufräumen</em></button>
+            <button class="mc-option" onclick="checkMC(3, this, true)">Zwischen Präfix und Basisverb: <em>aufzuräumen</em></button>
+            <button class="mc-option" onclick="checkMC(3, this, false)">Nach dem Verb: <em>aufräumzu</em></button>
+        </div>
+        <div class="mc-feedback" id="fb-3"></div>
+    </div>
+
+    <div class="regel-karte" id="regelkarte">
+        <h3>✅ Regel: Infinitivkonstruktionen <em>haben zu</em> und <em>sein zu</em></h3>
+        <table>
+            <tr><th>Konstruktion</th><th>Satztyp</th><th>Bedeutung</th><th>Beispiel</th></tr>
+            <tr>
+                <td><span class="formel">haben + zu + Inf.</span></td>
+                <td>Aktiv</td>
+                <td>müssen / sollen / nicht dürfen / wollen</td>
+                <td>Ich <strong>habe</strong> mein Zimmer auf<strong>zu</strong>räumen.</td>
+            </tr>
+            <tr>
+                <td><span class="formel">sein + zu + Inf.</span></td>
+                <td>Passiv</td>
+                <td>müssen / sollen / können / nicht dürfen</td>
+                <td>Die Küche <strong>ist</strong> auf<strong>zu</strong>räumen.</td>
+            </tr>
+        </table>
+        <p style="margin-top:12px; font-size:0.88em; opacity:0.9;">⚠️ Bei trennbaren Verben steht <em>zu</em> zwischen Präfix und Basisverb: auf<strong>zu</strong>räumen, ab<strong>zu</strong>hängen, ein<strong>zu</strong>halten.</p>
+    </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 1: REGEL -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-1">
+<img class="tab-banner" src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Grammatik Regel">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">📋 Die Regel — Übersicht</h2>
+
+    <div class="regel-box">
+        <h3>🔵 haben + zu + Infinitiv (Aktivsatz)</h3>
+        <div class="formel-zeile">Subjekt + haben (konj.) + … + zu + Infinitiv</div>
+        <p style="font-size:0.88em; color:#555; margin-bottom:12px;">Bei trennbaren Verben: Präfix + zu + Basisverb (z.B. <strong>aufzuräumen</strong>)</p>
+        <table class="regel-tabelle">
+            <tr><th>Modalverb-Satz</th><th>→</th><th>haben zu</th></tr>
+            <tr><td class="modal">Wir <strong>müssen</strong> noch viel erledigen.</td><td>→</td><td class="konstr">Wir <strong>haben</strong> noch viel <strong>zu erledigen</strong>.</td></tr>
+            <tr><td class="modal">Ich <strong>soll</strong> mein Zimmer aufräumen.</td><td>→</td><td class="konstr">Ich <strong>habe</strong> mein Zimmer <strong>aufzuräumen</strong>.</td></tr>
+            <tr><td class="modal">Ich <strong>möchte</strong> nichts hinzufügen.</td><td>→</td><td class="konstr">Ich <strong>habe</strong> nichts <strong>hinzuzufügen</strong>.</td></tr>
+            <tr><td class="modal">Du <strong>darfst</strong> hier <strong>nicht</strong> singen.</td><td>→</td><td class="konstr">Du <strong>hast</strong> hier <strong>nicht zu singen</strong>.</td></tr>
+            <tr><td class="modal">Eltern <strong>müssen</strong> ihre Kinder beaufsichtigen.</td><td>→</td><td class="konstr">Eltern <strong>haben</strong> ihre Kinder <strong>zu beaufsichtigen</strong>.</td></tr>
+        </table>
+    </div>
+
+    <div class="regel-box">
+        <h3>🟣 sein + zu + Infinitiv (Passivsatz)</h3>
+        <div class="formel-zeile">Subjekt + sein (konj.) + … + zu + Infinitiv</div>
+        <p style="font-size:0.88em; color:#555; margin-bottom:12px;">Bei trennbaren Verben: Präfix + zu + Basisverb (z.B. <strong>aufzuräumen</strong>)</p>
+        <table class="regel-tabelle">
+            <tr><th>Modalverb-Satz (Passiv)</th><th>→</th><th>sein zu</th></tr>
+            <tr><td class="modal">Es <strong>muss</strong> noch viel erledigt werden.</td><td>→</td><td class="konstr">Es <strong>ist</strong> noch viel <strong>zu erledigen</strong>.</td></tr>
+            <tr><td class="modal">Die Küche <strong>soll</strong> aufgeräumt werden.</td><td>→</td><td class="konstr">Die Küche <strong>ist</strong> <strong>aufzuräumen</strong>.</td></tr>
+            <tr><td class="modal">Die Tür <strong>kann</strong> per Schalter geöffnet werden.</td><td>→</td><td class="konstr">Die Tür <strong>ist</strong> per Schalter <strong>zu öffnen</strong>.</td></tr>
+            <tr><td class="modal">Die Gefahr <strong>darf nicht</strong> unterschätzt werden.</td><td>→</td><td class="konstr">Die Gefahr <strong>ist</strong> nicht <strong>zu unterschätzen</strong>.</td></tr>
+            <tr><td class="modal">Die Fluchtwege <strong>müssen</strong> frei gehalten werden.</td><td>→</td><td class="konstr">Die Fluchtwege <strong>sind</strong> stets frei <strong>zu halten</strong>.</td></tr>
+        </table>
+    </div>
+
+    <div class="hilfe-box">
+        <strong>💡 Merkhilfe:</strong> <em>haben zu</em> = Aktiv (die Person selbst muss etwas tun) &nbsp;|&nbsp; <em>sein zu</em> = Passiv (etwas muss getan werden). Beide Konstruktionen sind in <strong>formellen Kontexten</strong> häufig — z.B. in Vorschriften, Hausordnungen, Anleitungen.
+    </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 2: LÜCKENTEXT -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-2">
+<img class="tab-banner" src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Schreiben">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">✏️ Lückentext — haben zu / sein zu</h2>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="showLueckenLoesung()">💡 Lösungen</button>
+            <button class="btn" onclick="resetLuecken(); resetTimer(2);">↺ Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-2">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-2">--:--</span></span>
+        </div>
+    </div>
+    <div class="hilfe-box">
+        <strong>Aufgabe:</strong> Bilde aus dem Modalverb-Satz eine Infinitivkonstruktion mit <em>haben zu</em> oder <em>sein zu</em>. Trage die fehlenden Verbformen ein.
+    </div>
+    <div class="wortkasten">
+        <strong>Hilfe:</strong> aufzuräumen · zu erledigen · zu beaufsichtigen · zu halten · zu öffnen · hinzuzufügen · zu unterschätzen · zu singen · abzuschließen · einzuhalten · zu sagen · zu programmieren
+    </div>
+    <div id="lueckenContainer"></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 3: SATZBAU -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-3">
+<img class="tab-banner" src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Satzbau">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">🧩 Satzbau — Infinitivkonstruktionen</h2>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="sbSolveAll()">💡 Lösungen</button>
+            <button class="btn" onclick="resetSatzbau(); resetTimer(3);">↺ Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-3">--:--</span></span>
+        </div>
+    </div>
+    <div class="hilfe-box">
+        <strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge. Klicke einen Chip an und dann auf die Zielzeile — oder ziehe per Drag &amp; Drop.
+    </div>
+    <div id="satzbauContainer"></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB 4: MULTIPLE CHOICE -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="section" id="sec-4">
+<img class="tab-banner" src="https://images.pexels.com/photos/3184340/pexels-photo-3184340.jpeg?auto=compress&cs=tinysrgb&w=1000&h=400&fit=crop" alt="Quiz">
+<div style="padding: 28px 30px;">
+    <h2 class="section-title">🎯 Multiple Choice — haben zu oder sein zu?</h2>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="resetMC(); resetTimer(4);">↺ Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-4">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-4">--:--</span></span>
+        </div>
+    </div>
+    <div class="hilfe-box">
+        <strong>Aufgabe:</strong> Welche Infinitivkonstruktion passt? Wähle <em>haben zu</em> oder <em>sein zu</em> und die richtige Verbform.
+    </div>
+    <div id="mcContainer"></div>
+</div>
+</div>
+
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ─── TIMER ────────────────────────────────────────────────────────────────────
+var TIMER_PREFIX = 'b1_1035g_best_';
+var timers = [null, null, null, null, null];
+var elapsed = [0, 0, 0, 0, 0];
+var timerRunning = [false, false, false, false, false];
+
+function fmtTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function loadBestTimes() {
+    for (var i = 0; i < 5; i++) {
+        var b = localStorage.getItem(TIMER_PREFIX + i);
+        var el = document.getElementById('best-' + i);
+        if (el) el.textContent = b ? fmtTime(parseInt(b)) : '--:--';
+    }
+}
+
+function timerAutoStart(n) {
+    if (timerRunning[n]) return;
+    timerRunning[n] = true;
+    timers[n] = setInterval(function() {
+        elapsed[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(elapsed[n]);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timers[n]);
+    timerRunning[n] = false;
+    var prev = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (elapsed[n] < prev) {
+        localStorage.setItem(TIMER_PREFIX + n, elapsed[n]);
+        var best = document.getElementById('best-' + n);
+        if (best) best.textContent = fmtTime(elapsed[n]);
+    }
+}
+
+function resetTimer(n) {
+    clearInterval(timers[n]);
+    timerRunning[n] = false;
+    elapsed[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '00:00';
+}
+
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+// ─── ENTDECKUNGS-TAB ──────────────────────────────────────────────────────────
+var mcStep = 0;
+var mcAnswered = [false, false, false, false];
+
+function checkMC(stepIdx, btn, isCorrect) {
+    if (mcAnswered[stepIdx]) return;
+    mcAnswered[stepIdx] = true;
+    var fb = document.getElementById('fb-' + stepIdx);
+    var dot = document.getElementById('dot-' + stepIdx);
+
+    if (isCorrect) {
+        btn.classList.add('correct');
+        fb.className = 'mc-feedback ok';
+        fb.textContent = '✓ Richtig!';
+        dot.classList.add('active');
+        // Show next step after 700ms
+        setTimeout(function() {
+            var nextStep = document.getElementById('step-' + (stepIdx + 1));
+            if (nextStep) {
+                nextStep.classList.add('visible');
+                var nextDot = document.getElementById('dot-' + (stepIdx + 1));
+                if (nextDot) nextDot.classList.add('active');
+            } else {
+                // All done — show Regelkarte
+                document.getElementById('regelkarte').classList.add('visible');
+            }
+        }, 700);
+    } else {
+        btn.classList.add('wrong');
+        fb.className = 'mc-feedback err';
+        fb.textContent = '✗ Nicht ganz — versuch es nochmal!';
+        setTimeout(function() {
+            btn.classList.remove('wrong');
+            mcAnswered[stepIdx] = false;
+            fb.textContent = '';
+        }, 1200);
+    }
+}
+
+// ─── LÜCKENTEXT ───────────────────────────────────────────────────────────────
+var LUECKEN_DATA = [
+    // haben zu
+    { orig: 'Ich soll mein Zimmer aufräumen.', before: 'Ich ', blank1: 'habe', mid1: ' mein Zimmer ', blank2: 'aufzuräumen', after: '.' },
+    { orig: 'Wir müssen noch viel erledigen.', before: 'Wir ', blank1: 'haben', mid1: ' noch viel ', blank2: 'zu erledigen', after: '.' },
+    { orig: 'Du darfst hier nicht singen.', before: 'Du ', blank1: 'hast', mid1: ' hier nicht ', blank2: 'zu singen', after: '.' },
+    { orig: 'Eltern müssen ihre Kinder im Zoo beaufsichtigen.', before: 'Eltern ', blank1: 'haben', mid1: ' ihre Kinder im Zoo ', blank2: 'zu beaufsichtigen', after: '.' },
+    { orig: 'Ich möchte seinem Argument nichts hinzufügen.', before: 'Ich ', blank1: 'habe', mid1: ' seinem Argument nichts ', blank2: 'hinzuzufügen', after: '.' },
+    // sein zu
+    { orig: 'Die Küche soll aufgeräumt werden.', before: 'Die Küche ', blank1: 'ist', mid1: ' ', blank2: 'aufzuräumen', after: '.' },
+    { orig: 'Die Fluchtwege müssen stets frei gehalten werden.', before: 'Die Fluchtwege ', blank1: 'sind', mid1: ' stets frei ', blank2: 'zu halten', after: '.' },
+    { orig: 'Die Tür kann per Schalter geöffnet werden.', before: 'Die Tür ', blank1: 'ist', mid1: ' per Schalter ', blank2: 'zu öffnen', after: '.' },
+    { orig: 'Die Gefahr darf nicht unterschätzt werden.', before: 'Die Gefahr ', blank1: 'ist', mid1: ' nicht ', blank2: 'zu unterschätzen', after: '.' },
+    { orig: 'Beim Rausgehen muss die Tür abgeschlossen werden.', before: 'Beim Rausgehen ', blank1: 'ist', mid1: ' die Tür ', blank2: 'abzuschließen', after: '.' },
+    { orig: 'Die Ruhezeiten müssen eingehalten werden.', before: 'Die Ruhezeiten ', blank1: 'sind', mid1: ' ', blank2: 'einzuhalten', after: '.' },
+    { orig: 'Der Receiver kann per Fernbedienung programmiert werden.', before: 'Der Receiver ', blank1: 'ist', mid1: ' per Fernbedienung ', blank2: 'zu programmieren', after: '.' },
+];
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(d) {
+        var wrapper = document.createElement('div');
+        wrapper.style.marginBottom = '12px';
+
+        var orig = document.createElement('div');
+        orig.className = 'orig-satz';
+        orig.textContent = '→ ' + d.orig;
+        wrapper.appendChild(orig);
+
+        var div = document.createElement('div');
+        div.className = 'luecken-satz';
+
+        div.appendChild(document.createTextNode(d.before));
+
+        var inp1 = document.createElement('input');
+        inp1.type = 'text';
+        inp1.className = 'luecken-inp';
+        inp1.dataset.ans = d.blank1;
+        inp1.style.width = Math.max(70, d.blank1.length * 11) + 'px';
+        inp1.oninput = function() { liveCheckLuecke(this); timerAutoStart(2); };
+
+        div.appendChild(inp1);
+        div.appendChild(document.createTextNode(d.mid1));
+
+        var inp2 = document.createElement('input');
+        inp2.type = 'text';
+        inp2.className = 'luecken-inp';
+        inp2.dataset.ans = d.blank2;
+        inp2.style.width = Math.max(100, d.blank2.length * 11) + 'px';
+        inp2.oninput = function() { liveCheckLuecke(this); timerAutoStart(2); };
+
+        div.appendChild(inp2);
+        div.appendChild(document.createTextNode(d.after));
+        wrapper.appendChild(div);
+        container.appendChild(wrapper);
+    });
+}
+
+function liveCheckLuecke(inp) {
+    var ans = inp.dataset.ans.trim().toLowerCase();
+    var val = inp.value.trim().toLowerCase();
+    if (val === '') { inp.classList.remove('ok', 'no'); return; }
+    if (ans.startsWith(val)) {
+        inp.classList.remove('no');
+        if (val === ans) {
+            inp.classList.add('ok');
+            checkLueckenAllDone();
+        } else {
+            inp.classList.remove('ok');
+        }
+    } else {
+        inp.classList.remove('ok');
+        inp.classList.add('no');
+    }
+}
+
+function checkLueckenAllDone() {
+    var all = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    var done = Array.from(all).every(function(i) { return i.classList.contains('ok'); });
+    if (done) timerStop(2);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        if (!inp.classList.contains('ok')) {
+            inp.value = inp.dataset.ans;
+            inp.classList.add('ok');
+        }
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'no');
+    });
+}
+
+// ─── SATZBAU ──────────────────────────────────────────────────────────────────
+var satzbauData = [
+    {
+        parts: ['ich', 'habe', 'heute', 'noch', 'meiner', 'Mutter', 'beim', 'Kochen', 'zu', 'helfen'],
+        valid: [['ich', 'habe', 'heute', 'noch', 'meiner', 'Mutter', 'beim', 'Kochen', 'zu', 'helfen']],
+        punct: '.'
+    },
+    {
+        parts: ['die', 'Küche', 'ist', 'bis', 'Freitag', 'aufzuräumen'],
+        valid: [['die', 'Küche', 'ist', 'bis', 'Freitag', 'aufzuräumen']],
+        punct: '.'
+    },
+    {
+        parts: ['Eltern', 'haben', 'ihre', 'Kinder', 'stets', 'zu', 'beaufsichtigen'],
+        valid: [['Eltern', 'haben', 'ihre', 'Kinder', 'stets', 'zu', 'beaufsichtigen']],
+        punct: '.'
+    },
+    {
+        parts: ['der', 'Hausflur', 'ist', 'stets', 'sauber', 'zu', 'halten'],
+        valid: [['der', 'Hausflur', 'ist', 'stets', 'sauber', 'zu', 'halten']],
+        punct: '.'
+    },
+    {
+        parts: ['die', 'Gefahr', 'ist', 'nicht', 'zu', 'unterschätzen'],
+        valid: [['die', 'Gefahr', 'ist', 'nicht', 'zu', 'unterschätzen']],
+        punct: '.'
+    },
+    {
+        parts: ['du', 'hast', 'euch', 'hier', 'nicht', 'aufzuhalten'],
+        valid: [['du', 'hast', 'euch', 'hier', 'nicht', 'aufzuhalten']],
+        punct: '.'
+    },
+    {
+        parts: ['die', 'Ruhezeiten', 'sind', 'von', 'allen', 'einzuhalten'],
+        valid: [['die', 'Ruhezeiten', 'sind', 'von', 'allen', 'einzuhalten']],
+        punct: '.'
+    },
+    {
+        parts: ['ich', 'habe', 'seinem', 'Argument', 'nichts', 'hinzuzufügen'],
+        valid: [['ich', 'habe', 'seinem', 'Argument', 'nichts', 'hinzuzufügen']],
+        punct: '.'
+    },
+];
+
+var sbDragged = null;
+var sbClickSelected = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === ';') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(3);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    chip.addEventListener('click', function() {
+        if (sbClickSelected === chip) {
+            chip.classList.remove('selected');
+            sbClickSelected = null;
+            return;
+        }
+        if (sbClickSelected) sbClickSelected.classList.remove('selected');
+        sbClickSelected = chip;
+        chip.classList.add('selected');
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+    zone.addEventListener('click', function(e) {
+        if (!sbClickSelected) return;
+        if (e.target.classList.contains('chip')) return;
+        zone.appendChild(sbClickSelected);
+        sbClickSelected.classList.remove('selected');
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbClickSelected = null;
+        timerAutoStart(3);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() { sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() { sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function sbSolveAll() { satzbauData.forEach(function(_, i) { sbShowSolution(i); }); }
+function resetSatzbau() { initSatzbau(); }
+
+// ─── MULTIPLE CHOICE ──────────────────────────────────────────────────────────
+var MC_DATA = [
+    {
+        frage: 'Die Studenten ___ ihren Studentenausweis ___.',
+        hint: '(Studenten müssen ihren Studentenausweis zeigen.)',
+        options: [
+            { text: 'sind … zu zeigen', correct: false },
+            { text: 'haben … zu zeigen', correct: true },
+            { text: 'haben … gezeigt', correct: false },
+        ],
+        erklaerung: '✓ haben + zu zeigen — Aktivsatz, Notwendigkeit (müssen/sollen)'
+    },
+    {
+        frage: 'Hier ___ bitte nicht laut ___ ___.',
+        hint: '(Hier darf nicht laut gesprochen werden.)',
+        options: [
+            { text: 'haben … zu sprechen', correct: false },
+            { text: 'ist … zu sprechen', correct: true },
+            { text: 'ist … gesprochen', correct: false },
+        ],
+        erklaerung: '✓ ist … zu sprechen — Passivsatz, fehlende Erlaubnis (nicht dürfen)'
+    },
+    {
+        frage: 'Der Akku ___ bei Bedarf ___.',
+        hint: '(Der Akku kann bei Bedarf gewechselt werden.)',
+        options: [
+            { text: 'hat … zu wechseln', correct: false },
+            { text: 'ist … gewechselt', correct: false },
+            { text: 'ist … zu wechseln', correct: true },
+        ],
+        erklaerung: '✓ ist … zu wechseln — Passivsatz, Möglichkeit (können)'
+    },
+    {
+        frage: 'Ihr ___ euch hier nicht ___.',
+        hint: '(Ihr dürft euch hier nicht aufhalten.)',
+        options: [
+            { text: 'seid … aufzuhalten', correct: false },
+            { text: 'habt … aufzuhalten', correct: true },
+            { text: 'habt … zu aufhalten', correct: false },
+        ],
+        erklaerung: '✓ habt … aufzuhalten — Aktivsatz, fehlende Erlaubnis (nicht dürfen) — trennbares Verb!'
+    },
+    {
+        frage: 'Die Jalousien ___ per Knopfdruck ___.',
+        hint: '(Die Jalousien können per Knopfdruck geschlossen werden.)',
+        options: [
+            { text: 'haben … zu schließen', correct: false },
+            { text: 'sind … geschlossen', correct: false },
+            { text: 'sind … zu schließen', correct: true },
+        ],
+        erklaerung: '✓ sind … zu schließen — Passivsatz, Möglichkeit (können)'
+    },
+    {
+        frage: 'Ich ___ meiner Mutter beim Kochen ___.',
+        hint: '(Ich muss meiner Mutter beim Kochen helfen.)',
+        options: [
+            { text: 'bin … zu helfen', correct: false },
+            { text: 'habe … zu helfen', correct: true },
+            { text: 'habe … geholfen', correct: false },
+        ],
+        erklaerung: '✓ habe … zu helfen — Aktivsatz, Notwendigkeit (müssen/sollen)'
+    },
+    {
+        frage: 'Zu seinem Argument ___ Folgendes ___:',
+        hint: '(Zu seinem Argument kann Folgendes ergänzt werden.)',
+        options: [
+            { text: 'hat … zu ergänzen', correct: false },
+            { text: 'ist … ergänzt', correct: false },
+            { text: 'ist … zu ergänzen', correct: true },
+        ],
+        erklaerung: '✓ ist … zu ergänzen — Passivsatz, Möglichkeit (können)'
+    },
+    {
+        frage: 'Das Smartphone ___ per Fingerabdruck ___.',
+        hint: '(Das Smartphone kann per Fingerabdruck entsperrt werden.)',
+        options: [
+            { text: 'hat … zu entsperren', correct: false },
+            { text: 'ist … zu entsperren', correct: true },
+            { text: 'ist … entsperrt', correct: false },
+        ],
+        erklaerung: '✓ ist … zu entsperren — Passivsatz, Möglichkeit (können)'
+    },
+    {
+        frage: 'Die Mieter ___ den Hausflur stets sauber ___.',
+        hint: '(Die Mieter müssen den Hausflur stets sauber halten.)',
+        options: [
+            { text: 'sind … zu halten', correct: false },
+            { text: 'haben … zu halten', correct: true },
+            { text: 'haben … gehalten', correct: false },
+        ],
+        erklaerung: '✓ haben … zu halten — Aktivsatz, Notwendigkeit (müssen)'
+    },
+    {
+        frage: 'Die Gefahr ___ nicht ___.',
+        hint: '(Die Gefahr darf nicht unterschätzt werden.)',
+        options: [
+            { text: 'hat … zu unterschätzen', correct: false },
+            { text: 'ist … zu unterschätzen', correct: true },
+            { text: 'ist … unterschätzt', correct: false },
+        ],
+        erklaerung: '✓ ist … zu unterschätzen — Passivsatz, fehlende Erlaubnis (nicht dürfen)'
+    },
+];
+
+var mcAnsweredTab4 = [];
+
+function initMC() {
+    var container = document.getElementById('mcContainer');
+    container.innerHTML = '';
+    mcAnsweredTab4 = new Array(MC_DATA.length).fill(false);
+    MC_DATA.forEach(function(d, idx) {
+        var div = document.createElement('div');
+        div.className = 'mc-aufgabe';
+        div.id = 'mc-aufgabe-' + idx;
+
+        var frageDiv = document.createElement('div');
+        frageDiv.className = 'mc-frage-text';
+        frageDiv.innerHTML = '<strong>' + d.frage + '</strong><br><span style="font-size:0.85em;color:#888;">' + d.hint + '</span>';
+        div.appendChild(frageDiv);
+
+        var optionsDiv = document.createElement('div');
+        d.options.forEach(function(opt) {
+            var btn = document.createElement('button');
+            btn.className = 'mc-btn';
+            btn.textContent = opt.text;
+            btn.onclick = function() { handleMC4(idx, btn, opt.correct, d.erklaerung, div); };
+            optionsDiv.appendChild(btn);
+        });
+        div.appendChild(optionsDiv);
+
+        var result = document.createElement('div');
+        result.className = 'mc-result';
+        result.id = 'mc-result-' + idx;
+        div.appendChild(result);
+
+        container.appendChild(div);
+    });
+}
+
+function handleMC4(idx, btn, isCorrect, erklaerung, aufgabeDiv) {
+    if (mcAnsweredTab4[idx]) return;
+    timerAutoStart(4);
+    if (isCorrect) {
+        mcAnsweredTab4[idx] = true;
+        btn.classList.add('correct');
+        aufgabeDiv.classList.add('answered-correct');
+        document.getElementById('mc-result-' + idx).className = 'mc-result ok';
+        document.getElementById('mc-result-' + idx).textContent = erklaerung;
+        checkMC4AllDone();
+    } else {
+        btn.classList.add('wrong');
+        document.getElementById('mc-result-' + idx).className = 'mc-result err';
+        document.getElementById('mc-result-' + idx).textContent = '✗ Nicht ganz — versuch es nochmal!';
+        setTimeout(function() {
+            btn.classList.remove('wrong');
+            document.getElementById('mc-result-' + idx).textContent = '';
+        }, 1000);
+    }
+}
+
+function checkMC4AllDone() {
+    if (mcAnsweredTab4.every(function(v) { return v; })) timerStop(4);
+}
+
+function resetMC() {
+    initMC();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadBestTimes();
+initLuecken();
+initSatzbau();
+initMC();
+</script>
+</body>
+</html>

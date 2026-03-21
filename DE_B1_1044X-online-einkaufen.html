@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 · 1044X · Online einkaufen</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+@media (max-width: 600px) { .tab-banner { max-height: 120px; } }
+
+/* CONTROL BAR */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-val { color: #667eea; font-weight: 700; }
+.best-val { color: #f39c12; font-weight: 600; }
+
+/* HILFE-BOX */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+
+/* WORTSCHATZ */
+#vocabContainer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (max-width: 700px) { #vocabContainer { grid-template-columns: 1fr; } .vocab-item { flex-direction: column; align-items: flex-start; } }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 140px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 150px; }
+.vocab-inputs input.plural { width: 140px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+
+/* ZUORDNUNG */
+.zuord-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 18px; }
+.zuord-chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.9em; user-select: none; transition: all 0.2s; }
+.zuord-chip:hover { background: #f0edff; }
+.zuord-chip.selected { background: #667eea; color: white; }
+.zuord-chip.correct { background: #27ae60; border-color: #27ae60; color: white; cursor: default; }
+.zuord-chip.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+.zuord-categories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 18px; }
+@media (max-width: 600px) { .zuord-categories { grid-template-columns: 1fr; } }
+.zuord-cat { border: 2px dashed #ccc; border-radius: 10px; padding: 14px; min-height: 80px; cursor: pointer; transition: all 0.2s; }
+.zuord-cat:hover { border-color: #667eea; background: #f8f8ff; }
+.zuord-cat.selected-target { border-color: #667eea; background: #eef1ff; }
+.zuord-cat-title { font-weight: 700; color: #764ba2; margin-bottom: 8px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.05em; }
+.zuord-cat-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 32px; }
+
+/* LÜCKENTEXT */
+.luecken-item { background: #f8f9ff; padding: 16px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; font-size: 1em; line-height: 1.8; }
+.luecken-inp { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 2px 6px; font-family: inherit; font-size: 1em; outline: none; min-width: 100px; transition: all 0.2s; }
+.luecken-inp:focus { border-bottom-color: #764ba2; }
+.luecken-inp.ok { border-bottom-color: #27ae60; background: #e8f8f0; border-radius: 4px; }
+.luecken-inp.no { border-bottom-color: #e74c3c; background: #fdeaea; border-radius: 4px; }
+.luecken-inp.prefix { border-bottom-color: #667eea; }
+
+/* SATZBAU */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected { outline: 3px solid #f39c12; outline-offset: 2px; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; }
+
+/* MEINUNGEN TAB */
+.pro-contra { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+@media (max-width: 600px) { .pro-contra { grid-template-columns: 1fr; } }
+.pro-box { background: #f0fff4; border: 2px solid #27ae60; border-radius: 10px; padding: 16px; }
+.contra-box { background: #fff5f5; border: 2px solid #e74c3c; border-radius: 10px; padding: 16px; }
+.pro-box h3 { color: #27ae60; margin-bottom: 10px; font-size: 0.95em; }
+.contra-box h3 { color: #e74c3c; margin-bottom: 10px; font-size: 0.95em; }
+.pro-box ul, .contra-box ul { padding-left: 18px; font-size: 0.9em; color: #444; line-height: 1.8; }
+.phrase-card { background: #fff; border: 2px solid #c0b0e8; border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; font-size: 0.95em; color: #444; line-height: 1.6; }
+.phrase-card strong { color: #667eea; }
+
+/* FOOTER */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Online einkaufen</h1>
+        <p style="font-family: Georgia, serif;">B1.1 · Lektion 1044X · Extra-Übungen</p>
+        <div class="big-emoji">🛒</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📚</span><span class="nav-label">Wortschatz</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🔀</span><span class="nav-label">Zuordnung</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">💬</span><span class="nav-label">Meinungen</span></div>
+    </div>
+
+    <!-- TAB 0: WORTSCHATZ -->
+    <div class="section active" id="sec-0">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/5632397/pexels-photo-5632397.jpeg?auto=compress&cs=tinysrgb&w=800&h=300&fit=crop" alt="Online einkaufen am Laptop">
+            <h2>📚 Wortschatz</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showVocabLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetVocab(); timerResetOne(0);">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-0">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-0">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Übersetze die Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+            <div id="vocabContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: ZUORDNUNG -->
+    <div class="section" id="sec-1">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800&h=300&fit=crop" alt="Online-Shop Kategorien">
+            <h2>🔀 Zuordnung</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showZuordLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetZuord(); timerResetOne(1);">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-1">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-1">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Ordne die Aussagen den richtigen Kategorien zu. Klicke einen Chip und dann die Kategorie.</div>
+            <div class="zuord-bank" id="zuord-bank"></div>
+            <div class="zuord-categories" id="zuord-cats"></div>
+        </div>
+    </div>
+
+    <!-- TAB 2: LÜCKENTEXT -->
+    <div class="section" id="sec-2">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/3944405/pexels-photo-3944405.jpeg?auto=compress&cs=tinysrgb&w=800&h=300&fit=crop" alt="Einkaufen und Schreiben">
+            <h2>✏️ Lückentext</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showLueckenLoesung()">💡 Lösungen</button>
+                    <button class="btn" onclick="resetLuecken(); timerResetOne(2);">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-2">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-2">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Ergänze die fehlenden Wörter. Das System gibt dir sofort Rückmeldung.</div>
+            <div id="lueckenContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: SATZBAU -->
+    <div class="section" id="sec-3">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/4482900/pexels-photo-4482900.jpeg?auto=compress&cs=tinysrgb&w=800&h=300&fit=crop" alt="Puzzle und Satzbau">
+            <h2>🧩 Satzbau</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="satzbauData.forEach(function(_,i){sbShowSolution(i);})">💡 Lösungen</button>
+                    <button class="btn" onclick="resetSatzbau(); timerResetOne(3);">↺ Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-3">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-3">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge. Ziehe die Chips oder klicke sie der Reihe nach an.</div>
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: MEINUNGEN -->
+    <div class="section" id="sec-4">
+        <div style="padding: 28px 30px;">
+            <img class="tab-banner" src="https://images.pexels.com/photos/7679720/pexels-photo-7679720.jpeg?auto=compress&cs=tinysrgb&w=800&h=300&fit=crop" alt="Meinung und Diskussion">
+            <h2>💬 Meinungen zum Online-Einkauf</h2>
+            <div class="hilfe-box"><strong>Thema:</strong> Was sind die Vor- und Nachteile des Online-Einkaufs? Lies die Argumente und übe, deine Meinung zu äußern.</div>
+
+            <div class="pro-contra">
+                <div class="pro-box">
+                    <h3>✅ Vorteile</h3>
+                    <ul>
+                        <li>Bequemlichkeit: kein Ausgang nötig</li>
+                        <li>Riesige Auswahl — Verfügbarkeit rund um die Uhr</li>
+                        <li>Schnelle Lieferung oft noch am gleichen Tag</li>
+                        <li>Preisvergleich in Sekunden möglich</li>
+                        <li>Gebrauchtwaren günstig kaufen (z.B. eBay)</li>
+                    </ul>
+                </div>
+                <div class="contra-box">
+                    <h3>❌ Nachteile</h3>
+                    <ul>
+                        <li>Sicherheitsrisiken beim Bezahlen online</li>
+                        <li>Vertrauenswürdigkeit des Shops schwer zu prüfen</li>
+                        <li>Man kann Produkte nicht anfassen oder anprobieren</li>
+                        <li>Betrug und gefälschte Rezensionen möglich</li>
+                        <li>Retouren sind aufwendig und umweltschädlich</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="color:#764ba2; margin-bottom:12px; font-size:1em;">💬 Redemittel für die Diskussion</h3>
+            <div class="phrase-card"><strong>Meinung äußern:</strong> Meiner Meinung nach … | Ich finde, dass … | Ich bin der Ansicht, dass …</div>
+            <div class="phrase-card"><strong>Vorteile nennen:</strong> Ein großer Vorteil ist … | Das Positive daran ist … | Besonders gut finde ich, dass …</div>
+            <div class="phrase-card"><strong>Nachteile nennen:</strong> Ein Problem dabei ist … | Ich sehe das kritisch, weil … | Man muss aber bedenken, dass …</div>
+            <div class="phrase-card"><strong>Abwägen:</strong> Einerseits … andererseits … | Trotzdem … | Alles in allem würde ich sagen, dass …</div>
+            <div class="phrase-card"><strong>Begründen:</strong> Das liegt daran, dass … | Ein Grund dafür ist … | Das zeigt sich zum Beispiel daran, dass …</div>
+
+            <div class="phrase-card" style="margin-top:20px; border-color:#27ae60;">
+                <strong style="color:#27ae60;">🎭 Diskussionsaufgabe:</strong> Dein Freund betreibt einen Online-Shop und fragt dich: <em>„Glaubst du, dass die Leute in Zukunft noch mehr online kaufen werden? Was könnte den Online-Einkauf verbessern?"</em> Beantworte seine Fragen in 4–5 Sätzen. Benutze die Redemittel oben.
+            </div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+// ─── TIMER ────────────────────────────────────────────────────────────────
+var TIMER_PREFIX = 'b1_1044x_best_';
+var timers = [null, null, null, null, null];
+var timerSecs = [0, 0, 0, 0, 0];
+var timerRunning = [false, false, false, false, false];
+
+function fmtTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function timerAutoStart(n) {
+    if (timerRunning[n]) return;
+    timerRunning[n] = true;
+    timers[n] = setInterval(function() {
+        timerSecs[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSecs[n]);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timers[n]);
+    timerRunning[n] = false;
+    var best = localStorage.getItem(TIMER_PREFIX + n);
+    if (!best || timerSecs[n] < parseInt(best)) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSecs[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSecs[n]);
+    }
+}
+
+function timerResetOne(n) {
+    clearInterval(timers[n]);
+    timers[n] = null;
+    timerRunning[n] = false;
+    timerSecs[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function loadBestTimes() {
+    for (var i = 0; i < 5; i++) {
+        var best = localStorage.getItem(TIMER_PREFIX + i);
+        if (best) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(best));
+        }
+    }
+}
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) { b.classList.toggle('active', i === idx); });
+}
+
+// ─── WORTSCHATZ ───────────────────────────────────────────────────────────
+var WORTSCHATZ = [
+    { id:1,  type:'n', en:'website',                  artikel:'die', de:'Webseite',              plural:'Webseiten' },
+    { id:2,  type:'n', en:'home page',                artikel:'die', de:'Homepage',              plural:'Homepages' },
+    { id:3,  type:'n', en:'internet page',            artikel:'die', de:'Internetseite',         plural:'Internetseiten' },
+    { id:4,  type:'n', en:'world market',             artikel:'der', de:'Weltmarkt',             plural:'Weltmärkte' },
+    { id:5,  type:'n', en:'convenience',              artikel:'die', de:'Bequemlichkeit',        plural:'(–)' },
+    { id:6,  type:'n', en:'availability',             artikel:'die', de:'Verfügbarkeit',         plural:'(–)' },
+    { id:7,  type:'n', en:'accessibility / reachability', artikel:'die', de:'Erreichbarkeit',   plural:'(–)' },
+    { id:8,  type:'n', en:'speed',                    artikel:'die', de:'Schnelligkeit',         plural:'(–)' },
+    { id:9,  type:'n', en:'internet security',        artikel:'die', de:'Sicherheit im Internet', plural:'(–)' },
+    { id:10, type:'n', en:'review / rating',          artikel:'die', de:'Bewertung',             plural:'Bewertungen' },
+    { id:11, type:'n', en:'review (text)',             artikel:'die', de:'Rezension',             plural:'Rezensionen' },
+    { id:12, type:'n', en:'receipt / proof of payment', artikel:'die', de:'Quittung',            plural:'Quittungen' },
+    { id:13, type:'n', en:'fraud / deception',        artikel:'der', de:'Betrug',                plural:'(–)' },
+    { id:14, type:'n', en:'security measure',         artikel:'die', de:'Sicherheitsmaßnahme',   plural:'Sicherheitsmaßnahmen' },
+    { id:15, type:'n', en:'password / PIN',           artikel:'das', de:'Kennwort',              plural:'Kennwörter' },
+    { id:16, type:'n', en:'user',                     artikel:'der', de:'Benutzer',              plural:'Benutzer' },
+    { id:17, type:'v', en:'trustworthy',              de:'vertrauenswürdig' },
+    { id:18, type:'v', en:'to order online',          de:'online bestellen' },
+];
+
+function initVocab() {
+    var c = document.getElementById('vocabContainer');
+    c.innerHTML = '';
+    var shuffled = WORTSCHATZ.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+    }
+    shuffled.forEach(function(w) {
+        var item = document.createElement('div');
+        item.className = 'vocab-item';
+        var en = document.createElement('span');
+        en.className = 'vocab-en';
+        en.textContent = w.en;
+        var arrow = document.createElement('span');
+        arrow.className = 'vocab-arrow';
+        arrow.textContent = '→';
+        var inputs = document.createElement('div');
+        inputs.className = 'vocab-inputs';
+        if (w.type === 'n') {
+            var art = document.createElement('input');
+            art.type = 'text'; art.className = 'art vocab-inp'; art.placeholder = 'Artikel';
+            art.dataset.ans = w.artikel; art.dataset.id = w.id;
+            art.addEventListener('input', function() { vocabLiveCheck(this); timerAutoStart(0); });
+            var wort = document.createElement('input');
+            wort.type = 'text'; wort.className = 'wort vocab-inp'; wort.placeholder = 'Deutsch';
+            wort.dataset.ans = w.de; wort.dataset.id = w.id;
+            wort.addEventListener('input', function() { vocabLiveCheck(this); timerAutoStart(0); });
+            var pl = document.createElement('input');
+            pl.type = 'text'; pl.className = 'plural vocab-inp'; pl.placeholder = 'Plural';
+            pl.dataset.ans = w.plural; pl.dataset.id = w.id;
+            pl.addEventListener('input', function() { vocabLiveCheck(this); timerAutoStart(0); });
+            inputs.appendChild(art);
+            inputs.appendChild(wort);
+            inputs.appendChild(pl);
+        } else {
+            var wortV = document.createElement('input');
+            wortV.type = 'text'; wortV.className = 'wort vocab-inp'; wortV.style.width = '200px'; wortV.placeholder = 'Deutsch';
+            wortV.dataset.ans = w.de; wortV.dataset.id = w.id;
+            wortV.addEventListener('input', function() { vocabLiveCheck(this); timerAutoStart(0); });
+            inputs.appendChild(wortV);
+        }
+        item.appendChild(en); item.appendChild(arrow); item.appendChild(inputs);
+        c.appendChild(item);
+    });
+}
+
+function vocabLiveCheck(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.ans;
+    if (!val) { inp.classList.remove('correct', 'wrong'); return; }
+    if (val === ans) {
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    } else if (ans.toLowerCase().startsWith(val.toLowerCase())) {
+        inp.classList.remove('correct', 'wrong');
+    } else {
+        inp.classList.add('wrong'); inp.classList.remove('correct');
+    }
+    checkVocabAllDone();
+}
+
+function checkVocabAllDone() {
+    var inputs = document.querySelectorAll('#vocabContainer input');
+    var allOk = Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk && inputs.length > 0) timerStop(0);
+}
+
+function showVocabLoesung() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        if (!inp.classList.contains('correct')) {
+            var hint = document.createElement('span');
+            hint.className = 'vocab-hint';
+            hint.textContent = inp.dataset.ans;
+            if (!inp.nextSibling || !inp.nextSibling.classList || !inp.nextSibling.classList.contains('vocab-hint')) {
+                inp.parentNode.insertBefore(hint, inp.nextSibling);
+            }
+        }
+    });
+}
+
+function resetVocab() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
+    document.querySelectorAll('.vocab-hint').forEach(function(h) { h.parentNode.removeChild(h); });
+}
+
+// ─── ZUORDNUNG ────────────────────────────────────────────────────────────
+var ZUORD_DATA = [
+    { text: 'Du brauchst nicht rauszugehen. Es reichen ein paar Klicks!',                    cat: 'vorteil' },
+    { text: 'Morgens bestellst du, abends ist es schon bei dir angekommen.',                  cat: 'vorteil' },
+    { text: 'Du musst darauf achten, ob der Online-Shop vertrauenswürdig ist.',               cat: 'sicherheit' },
+    { text: 'Um deine Identität zu bestätigen, musst du Passwörter eingeben.',                cat: 'sicherheit' },
+    { text: 'Man kann nur ein Foto sehen — das Produkt nicht anfassen.',                      cat: 'nachteil' },
+    { text: 'Kriminelle täuschen manchmal mit gefälschten Produktfotos.',                     cat: 'nachteil' },
+    { text: 'Alle Online-Läden haben eine gute Webseite, die einfach zu benutzen ist.',       cat: 'onlineshop' },
+    { text: 'Auf der Homepage verschafft man sich einen Überblick über die Produkte.',        cat: 'onlineshop' },
+];
+
+var ZUORD_CATS = [
+    { id: 'vorteil',    label: '✅ Vorteil' },
+    { id: 'nachteil',   label: '❌ Nachteil' },
+    { id: 'sicherheit', label: '🔒 Sicherheit' },
+    { id: 'onlineshop', label: '🏪 Online-Shop' },
+];
+
+var zuordSelected = null;
+
+function initZuord() {
+    var bank = document.getElementById('zuord-bank');
+    var cats = document.getElementById('zuord-cats');
+    bank.innerHTML = ''; cats.innerHTML = '';
+    zuordSelected = null;
+
+    var shuffled = ZUORD_DATA.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+    }
+    shuffled.forEach(function(item, idx) {
+        var chip = document.createElement('div');
+        chip.className = 'zuord-chip';
+        chip.textContent = item.text;
+        chip.dataset.cat = item.cat;
+        chip.dataset.idx = idx;
+        chip.draggable = true;
+        chip.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (this.classList.contains('correct')) return;
+            if (zuordSelected === this) { this.classList.remove('selected'); zuordSelected = null; return; }
+            if (zuordSelected) zuordSelected.classList.remove('selected');
+            zuordSelected = this;
+            this.classList.add('selected');
+        });
+        chip.addEventListener('dragstart', function(e) {
+            zuordSelected = this;
+            e.dataTransfer.setData('text/plain', '');
+        });
+        bank.appendChild(chip);
+    });
+
+    ZUORD_CATS.forEach(function(cat) {
+        var box = document.createElement('div');
+        box.className = 'zuord-cat';
+        box.dataset.catId = cat.id;
+        var title = document.createElement('div');
+        title.className = 'zuord-cat-title';
+        title.textContent = cat.label;
+        var chipsDiv = document.createElement('div');
+        chipsDiv.className = 'zuord-cat-chips';
+        chipsDiv.id = 'zuord-drop-' + cat.id;
+        box.appendChild(title); box.appendChild(chipsDiv);
+        box.addEventListener('click', function() {
+            if (!zuordSelected) return;
+            var targetCat = this.dataset.catId;
+            var chipCat = zuordSelected.dataset.cat;
+            var destZone = document.getElementById('zuord-drop-' + targetCat);
+            destZone.appendChild(zuordSelected);
+            if (chipCat === targetCat) {
+                zuordSelected.classList.add('correct'); zuordSelected.classList.remove('selected', 'wrong');
+            } else {
+                zuordSelected.classList.add('wrong'); zuordSelected.classList.remove('selected', 'correct');
+                var sel = zuordSelected;
+                setTimeout(function() {
+                    document.getElementById('zuord-bank').appendChild(sel);
+                    sel.classList.remove('wrong');
+                }, 1000);
+                zuordSelected = null;
+                return;
+            }
+            zuordSelected = null;
+            timerAutoStart(1);
+            checkZuordAllDone();
+        });
+        box.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('selected-target'); });
+        box.addEventListener('dragleave', function() { this.classList.remove('selected-target'); });
+        box.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('selected-target');
+            if (!zuordSelected) return;
+            var targetCat = this.dataset.catId;
+            var chipCat = zuordSelected.dataset.cat;
+            var destZone = document.getElementById('zuord-drop-' + targetCat);
+            destZone.appendChild(zuordSelected);
+            if (chipCat === targetCat) {
+                zuordSelected.classList.add('correct'); zuordSelected.classList.remove('selected', 'wrong');
+            } else {
+                zuordSelected.classList.add('wrong'); zuordSelected.classList.remove('selected', 'correct');
+                var sel2 = zuordSelected;
+                setTimeout(function() {
+                    document.getElementById('zuord-bank').appendChild(sel2);
+                    sel2.classList.remove('wrong');
+                }, 1000);
+                zuordSelected = null;
+                return;
+            }
+            zuordSelected = null;
+            timerAutoStart(1);
+            checkZuordAllDone();
+        });
+        cats.appendChild(box);
+    });
+}
+
+function checkZuordAllDone() {
+    var all = document.querySelectorAll('.zuord-chip');
+    var allOk = Array.from(all).every(function(c) { return c.classList.contains('correct'); });
+    if (allOk && all.length > 0) timerStop(1);
+}
+
+function showZuordLoesung() {
+    document.querySelectorAll('.zuord-chip').forEach(function(chip) {
+        if (!chip.classList.contains('correct')) {
+            var catId = chip.dataset.cat;
+            var destZone = document.getElementById('zuord-drop-' + catId);
+            if (destZone) { destZone.appendChild(chip); chip.classList.add('correct'); chip.classList.remove('selected', 'wrong'); }
+        }
+    });
+}
+
+function resetZuord() { initZuord(); }
+
+// ─── LÜCKENTEXT ───────────────────────────────────────────────────────────
+var LUECKEN_DATA = [
+    { pre: 'Als das Internet in den frühen 90ern auch für kommerzielle Zwecke eröffnet wurde, begann die Geschichte des Online-', ans: 'Shoppings', post: '.' },
+    { pre: 'Die Zahl der Online-', ans: 'Käufer', post: ' hat sich in den letzten 20 Jahren in Deutschland fast versiebenfacht.' },
+    { pre: 'Alle Online-Läden haben eine gute ', ans: 'Webseite', post: ', die einfach zu benutzen ist.' },
+    { pre: 'Auf der ', ans: 'Homepage', post: ' verschafft man sich einen Überblick über die Vielfalt der Produkte.' },
+    { pre: 'Weil die Marken die ganze Welt mit dem Internet erreichen, redet man vom ', ans: 'Weltmarkt', post: '.' },
+    { pre: 'Die elektronische Bezahlung erfordert mehr ', ans: 'Sicherheitsmaßnahmen', post: ' als eine normale Bezahlung mit EC-Karte.' },
+    { pre: 'Wenn du bestellt hast, bekommst du eine ', ans: 'Quittung', post: ' oder einen Beleg. Diese können dich gegen Betrug schützen.' },
+    { pre: 'Du musst darauf achten, ob der Online-Shop ', ans: 'vertrauenswürdig', post: ' ist.' },
+    { pre: 'Nach dem Kauf kannst du eine ', ans: 'Bewertung', post: ' oder Rezension hinterlassen.' },
+    { pre: 'Im Internet kannst du zwar alles finden und kaufen, was dein Herz ', ans: 'begehrt', post: ', aber du musst vorsichtig sein.' },
+];
+
+function initLuecken() {
+    var c = document.getElementById('lueckenContainer');
+    c.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
+        div.appendChild(document.createTextNode(item.pre));
+        var inp = document.createElement('input');
+        inp.type = 'text'; inp.className = 'luecken-inp';
+        inp.placeholder = '';
+        inp.dataset.ans = item.ans;
+        inp.style.width = (Math.max(item.ans.length * 12, 100)) + 'px';
+        inp.addEventListener('input', function() { liveCheckLuecke(this); timerAutoStart(2); });
+        div.appendChild(inp);
+        div.appendChild(document.createTextNode(item.post));
+        c.appendChild(div);
+    });
+}
+
+function liveCheckLuecke(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.ans;
+    if (!val) { inp.classList.remove('ok', 'no', 'prefix'); return; }
+    if (val === ans) {
+        inp.classList.add('ok'); inp.classList.remove('no', 'prefix');
+    } else if (ans.startsWith(val)) {
+        inp.classList.add('prefix'); inp.classList.remove('ok', 'no');
+    } else {
+        inp.classList.add('no'); inp.classList.remove('ok', 'prefix');
+    }
+    checkLueckenAllDone();
+}
+
+function checkLueckenAllDone() {
+    var inputs = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    var allOk = Array.from(inputs).every(function(i) { return i.classList.contains('ok'); });
+    if (allOk && inputs.length > 0) timerStop(2);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        if (!inp.classList.contains('ok')) { inp.value = inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no', 'prefix'); }
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = ''; inp.classList.remove('ok', 'no', 'prefix');
+    });
+}
+
+// ─── SATZBAU ──────────────────────────────────────────────────────────────
+var sbDragged = null;
+
+var satzbauData = [
+    { parts: ['Online-Shopping', 'ist', 'immer', 'beliebter', 'geworden'], valid: [['Online-Shopping', 'ist', 'immer', 'beliebter', 'geworden']], punct: '.' },
+    { parts: ['Die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein'], valid: [['Die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein']], punct: '.' },
+    { parts: ['Du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist'], valid: [['Du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist']], punct: '.' },
+    { parts: ['Nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen'], valid: [['Nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen']], punct: '.' },
+    { parts: ['Die', 'Quittung', 'schützt', 'dich', 'gegen', 'Betrug'], valid: [['Die', 'Quittung', 'schützt', 'dich', 'gegen', 'Betrug']], punct: '.' },
+    { parts: ['Auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt'], valid: [['Auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt']], punct: '.' },
+    { parts: ['Morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da'], valid: [['Morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da']], punct: '.' },
+];
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function sbMakeChip(word, idx) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.dataset.idx = idx;
+    chip.draggable = true;
+    chip.addEventListener('mouseenter', function() {
+        var row = this.parentElement;
+        if (!row || !row.classList.contains('sentence-builder')) return;
+        var cursor = getSbCursor();
+        row.insertBefore(cursor, this);
+    });
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = this;
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { if (sbDragged) sbDragged.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        this.style.opacity = '1';
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
+    });
+    chip.addEventListener('click', function() {
+        var rowN = this.closest('.satzbau-item') ? parseInt(this.closest('.satzbau-item').dataset.n) : -1;
+        if (rowN < 0) return;
+        var bank = document.getElementById('sb-bank-' + rowN);
+        var row = document.getElementById('sb-row-' + rowN);
+        if (this.parentElement === bank) {
+            var existing = row.querySelector('.chip.selected');
+            if (existing) { existing.classList.remove('selected'); }
+            this.classList.add('selected');
+        } else if (this.parentElement === row) {
+            bank.appendChild(this);
+            this.classList.remove('selected', 'correct', 'incorrect');
+            sbUpdateCapitalization(rowN);
+            sbCheckAuto(rowN);
+        }
+    });
+    return chip;
+}
+
+function sbRegisterZone(row, bankEl, n) {
+    row.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        var cursor = getSbCursor();
+        var afterEl = getDragAfterElement(row, e.clientX);
+        if (!afterEl) row.appendChild(cursor);
+        else row.insertBefore(cursor, afterEl);
+    });
+    row.addEventListener('dragleave', function(e) {
+        if (!row.contains(e.relatedTarget)) {
+            var cursor = document.getElementById('sb-insert-cursor');
+            if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
+        }
+    });
+    row.addEventListener('drop', function(e) {
+        e.preventDefault();
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (sbDragged) {
+            if (cursor && cursor.parentNode === row) row.insertBefore(sbDragged, cursor);
+            else row.appendChild(sbDragged);
+            sbDragged.classList.remove('selected');
+        }
+        if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
+        sbDragged = null;
+        sbUpdateCapitalization(n);
+        sbCheckAuto(n);
+        timerAutoStart(3);
+    });
+    row.addEventListener('click', function(e) {
+        if (e.target !== row) return;
+        var selected = bankEl.querySelector('.chip.selected');
+        if (!selected) return;
+        row.appendChild(selected);
+        selected.classList.remove('selected');
+        sbUpdateCapitalization(n);
+        sbCheckAuto(n);
+        timerAutoStart(3);
+    });
+    bankEl.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (sbDragged) { bankEl.appendChild(sbDragged); sbDragged.classList.remove('selected', 'correct', 'incorrect'); }
+        sbDragged = null;
+        sbUpdateCapitalization(n);
+        sbCheckAuto(n);
+    });
+    bankEl.addEventListener('dragover', function(e) { e.preventDefault(); });
+}
+
+function getDragAfterElement(container, x) {
+    var draggableElements = Array.from(container.querySelectorAll('.chip:not([style*="opacity: 0.4"])'));
+    return draggableElements.reduce(function(closest, child) {
+        var box = child.getBoundingClientRect();
+        var offset = x - box.left - box.width / 2;
+        if (offset < 0 && offset > closest.offset) return { offset: offset, element: child };
+        return closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+function sbColorRow(n) {
+    var row = document.getElementById('sb-row-' + n);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var data = satzbauData[n];
+    var words = chips.map(function(c) { return c.dataset.orig; });
+    var isCorrect = data.valid.some(function(v) {
+        if (v.length !== words.length) return false;
+        return v.every(function(w, i) { return w === words[i]; });
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        if (chips.length === data.parts.length) c.classList.add(isCorrect ? 'correct' : 'incorrect');
+    });
+    return isCorrect;
+}
+
+function sbCheckAuto(n) {
+    var row = document.getElementById('sb-row-' + n);
+    var fb = document.getElementById('sb-fb-' + n);
+    var data = satzbauData[n];
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    if (chips.length !== data.parts.length) { fb.textContent = ''; fb.className = 'satzbau-feedback'; return; }
+    var ok = sbColorRow(n);
+    if (ok) {
+        fb.textContent = '✓ Korrekt!';
+        fb.className = 'satzbau-feedback correct';
+        timerAutoStart(3);
+        checkSatzbauAllDone();
+    } else {
+        fb.textContent = '✗ Nicht ganz richtig.';
+        fb.className = 'satzbau-feedback incorrect';
+    }
+}
+
+function sbUpdateCapitalization(n) {
+    var row = document.getElementById('sb-row-' + n);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(chip, pos) {
+        var orig = chip.dataset.orig;
+        if (pos === 0) {
+            chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+        } else {
+            chip.textContent = orig;
+        }
+    });
+}
+
+function sbShowSolution(n) {
+    var row = document.getElementById('sb-row-' + n);
+    var bank = document.getElementById('sb-bank-' + n);
+    var fb = document.getElementById('sb-fb-' + n);
+    var data = satzbauData[n];
+    var solution = data.valid[0];
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c) { bank.appendChild(c); c.classList.remove('correct','incorrect','selected'); });
+    solution.forEach(function(word) {
+        var chip = Array.from(bank.querySelectorAll('.chip')).find(function(c) { return c.dataset.orig === word; });
+        if (chip) { row.appendChild(chip); chip.classList.add('correct'); }
+    });
+    sbUpdateCapitalization(n);
+    fb.textContent = '✓ Korrekt!';
+    fb.className = 'satzbau-feedback correct';
+}
+
+function checkSatzbauAllDone() {
+    var allDone = satzbauData.every(function(_, n) {
+        var fb = document.getElementById('sb-fb-' + n);
+        return fb && fb.classList.contains('correct');
+    });
+    if (allDone) timerStop(3);
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(data, n) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        item.dataset.n = n;
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + n;
+
+        var shuffled = data.parts.slice();
+        for (var i = shuffled.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+        }
+        shuffled.forEach(function(word, idx) {
+            bank.appendChild(sbMakeChip(word, idx));
+        });
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + n;
+
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = data.punct;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + n;
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(punkt);
+        item.appendChild(fb);
+        container.appendChild(item);
+
+        sbRegisterZone(row, bank, n);
+    });
+}
+
+function resetSatzbau() { initSatzbau(); }
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function() {
+    initVocab();
+    initZuord();
+    initLuecken();
+    initSatzbau();
+    loadBestTimes();
+});
+</script>
+</body>
+</html>

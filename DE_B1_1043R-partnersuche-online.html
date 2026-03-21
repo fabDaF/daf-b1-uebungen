@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1043R · Partnersuche online</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header .subtitle { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+
+/* ── NAV ── */
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.2em; line-height: 1.2; }
+.nav-label { font-size: 0.72em; margin-top: 2px; line-height: 1.2; }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.75em; padding: 8px 4px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* ── TAB BANNER ── */
+.tab-banner {
+    width: 100%; height: 180px;
+    object-fit: cover; display: block; margin-bottom: 0;
+}
+
+/* ── SECTION CONTENT ── */
+.section-content { padding: 28px 32px; }
+h2.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+
+/* ── HILFE-BOX ── */
+.hilfe-box {
+    background: #f0f4ff; border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0; padding: 14px 18px;
+    margin-bottom: 22px; font-size: 0.9em; color: #444;
+    line-height: 1.6;
+}
+
+/* ── VORENTLASTUNG ── */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px; margin-bottom: 24px;
+}
+.vocab-card {
+    background: linear-gradient(135deg, #f8f9ff, #f0f2ff);
+    border: 1px solid #d0d8ff; border-radius: 10px;
+    padding: 14px 16px; display: flex; flex-direction: column; gap: 4px;
+}
+.vocab-card .wort { font-size: 1.05em; font-weight: 700; color: #333; }
+.vocab-card .artikel { font-size: 0.8em; color: #667eea; font-weight: 600; }
+.vocab-card .plural { font-size: 0.78em; color: #888; }
+.vocab-card .english { font-size: 0.82em; color: #555; font-style: italic; }
+.vocab-card .beispiel { font-size: 0.82em; color: #444; margin-top: 4px; border-top: 1px solid #e0e4ff; padding-top: 4px; }
+
+/* ── LESETEXT ── */
+.story-text {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.02em; line-height: 1.85;
+    color: #222; max-width: 680px;
+    margin: 0 auto; text-align: justify;
+    hyphens: auto;
+}
+.story-text p { margin-bottom: 1.2em; text-indent: 1.5em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text h3 { font-size: 1.1em; color: #667eea; margin: 1.4em 0 0.4em; text-indent: 0; font-family: 'Segoe UI', sans-serif; }
+.vocab-hl { background: #fff3cd; border-radius: 3px; padding: 0 3px; cursor: help; position: relative; }
+.vocab-hl:hover::after {
+    content: attr(data-tip); position: absolute; bottom: 125%; left: 50%;
+    transform: translateX(-50%); background: #333; color: #fff;
+    font-size: 0.78em; padding: 4px 8px; border-radius: 6px;
+    white-space: nowrap; z-index: 10; pointer-events: none;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── VERSTÄNDNIS (R/F) ── */
+.rf-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.rf-item {
+    background: #fafbff; border: 1px solid #e0e4ff;
+    border-radius: 10px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+}
+.rf-text { flex: 1; font-size: 0.95em; color: #333; line-height: 1.5; }
+.rf-btns { display: flex; gap: 8px; flex-shrink: 0; }
+.rf-btn {
+    padding: 7px 16px; border-radius: 6px; border: 2px solid #c5cae9;
+    background: #fff; cursor: pointer; font-size: 0.88em; font-weight: 600;
+    transition: all 0.2s; color: #555;
+}
+.rf-btn:hover { border-color: #667eea; background: #f0f2ff; color: #667eea; }
+.rf-btn.correct { background: #e8f5e9; border-color: #43a047; color: #2e7d32; }
+.rf-btn.wrong   { background: #ffebee; border-color: #e53935; color: #c62828; }
+.rf-feedback { font-size: 0.78em; margin-top: 4px; font-weight: 600; min-height: 1em; }
+.rf-feedback.ok  { color: #2e7d32; }
+.rf-feedback.err { color: #c62828; }
+
+/* ── LÜCKENTEXT ── */
+.luecken-satz { margin-bottom: 14px; font-size: 0.97em; line-height: 1.9; color: #333; }
+.luecken-inp {
+    border: none; border-bottom: 2px solid #667eea;
+    outline: none; font-size: 0.97em; font-family: inherit;
+    padding: 2px 4px; background: transparent; color: #222;
+    transition: border-color 0.2s;
+}
+.luecken-inp.ok  { border-bottom-color: #27ae60; color: #27ae60; }
+.luecken-inp.no  { border-bottom-color: #e74c3c; color: #e74c3c; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; }
+
+/* ── SATZBAU ── */
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 14px; background: #f8f8f8;
+    border-radius: 10px; min-height: 56px; margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 14px; background: white;
+    border: 2px dashed #ccc; border-radius: 10px;
+    min-height: 56px; align-items: center; margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white; border: 2px solid #667eea; color: #667eea;
+    padding: 8px 14px; border-radius: 20px; cursor: move;
+    font-weight: 500; font-size: 0.9em; transition: all 0.2s;
+    user-select: none; white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { background: #667eea; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.satzbau-item:last-child { border-bottom: none; }
+
+/* ── WORTSCHATZ ── */
+.vocab-train-item {
+    background: #fafbff; border: 1px solid #e0e4ff;
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.vocab-train-en { font-weight: 700; color: #667eea; min-width: 160px; font-size: 0.95em; }
+.vocab-train-inputs { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.vocab-inp {
+    border: 2px solid #c5cae9; border-radius: 6px;
+    padding: 4px 8px; font-size: 0.9em; font-family: inherit;
+    outline: none; transition: border-color 0.2s, background 0.2s; background: white;
+}
+.vocab-inp:focus { border-color: #667eea; }
+.vocab-inp.ok  { border-color: #27ae60; background: #e8f5e9; }
+.vocab-inp.no  { border-color: #e74c3c; background: #ffebee; }
+.vocab-inp.art-inp  { width: 62px; }
+.vocab-inp.wort-inp { width: 150px; }
+.vocab-inp.pl-inp   { width: 110px; }
+.vocab-inp-label { font-size: 0.72em; color: #999; }
+
+/* ── TIMER ── */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.btn-row { display:flex; gap:6px; }
+.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn:hover { background:#f0f0f0; color:#555; }
+.timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.score-box { font-size:0.82rem; color:#888; }
+.score-box span { font-weight:700; color:#667eea; }
+
+/* ── AUTHOR FOOTER ── */
+.author-footer { text-align:center; margin-top:40px; padding:16px; font-size:0.8rem; color:#aaa; }
+.author-footer a { color:#aaa; }
+.author-name { font-weight:700; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <span class="big-emoji">💑</span>
+    <h1>Partnersuche online</h1>
+    <div class="subtitle">B1.1 · Lektion 1043R · Soziale Netzwerke &amp; Privatsphäre</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+      <span class="nav-emoji">🌅</span><span class="nav-label">Vorentlastung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+      <span class="nav-emoji">📖</span><span class="nav-label">Geschichte</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+      <span class="nav-emoji">❓</span><span class="nav-label">Verständnis</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+      <span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+      <span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(5)">
+      <span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 0 — VORENTLASTUNG ═══ -->
+  <div class="section active" id="section0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6951677/pexels-photo-6951677.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Online Dating Partnersuche">
+    <div class="section-content">
+      <h2 class="section-title">Schlüsselwörter: Soziale Netzwerke &amp; Partnersuche</h2>
+      <div class="hilfe-box">
+        <strong>Vor dem Lesen:</strong> Lerne die wichtigsten Wörter aus dieser Lektion kennen. Diese Wörter helfen dir, den Text besser zu verstehen.
+      </div>
+      <div class="vocab-grid">
+        <div class="vocab-card">
+          <span class="artikel">die</span>
+          <span class="wort">Partnerbörse</span>
+          <span class="plural">Plural: die Partnerbörsen</span>
+          <span class="english">dating platform / matchmaking site</span>
+          <span class="beispiel">Viele Menschen nutzen eine <em>Partnerbörse</em>, um online einen Partner zu finden.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">die</span>
+          <span class="wort">Anonymität</span>
+          <span class="plural">Plural: (–)</span>
+          <span class="english">anonymity</span>
+          <span class="beispiel">Im Internet kann man durch <em>Anonymität</em> ein falsches Bild von sich geben.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">die</span>
+          <span class="wort">Privatsphäre</span>
+          <span class="plural">Plural: (–)</span>
+          <span class="english">privacy</span>
+          <span class="beispiel">Wir sollten unsere <em>Privatsphäre</em> im Internet schützen.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">das</span>
+          <span class="wort">Profil</span>
+          <span class="plural">Plural: die Profile</span>
+          <span class="english">profile</span>
+          <span class="beispiel">Bei der Anmeldung muss man ein <em>Profil</em> anlegen.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">die</span>
+          <span class="wort">Sicherheit</span>
+          <span class="plural">Plural: (–)</span>
+          <span class="english">security / safety</span>
+          <span class="beispiel">Viele Nutzer denken nicht genug an ihre <em>Sicherheit</em> im Netz.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">der</span>
+          <span class="wort">Nutzer</span>
+          <span class="plural">Plural: die Nutzer</span>
+          <span class="english">user</span>
+          <span class="beispiel">Einige <em>Nutzer</em> stehen Informationen im Internet grundsätzlich kritisch gegenüber.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">die</span>
+          <span class="wort">Fake News</span>
+          <span class="plural">Plural: (–)</span>
+          <span class="english">fake news</span>
+          <span class="beispiel"><em>Fake News</em> führen oft zu Missverständnissen und Ärger.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">der</span>
+          <span class="wort">Datenkraken</span>
+          <span class="plural">Plural: die Datenkraken</span>
+          <span class="english">data octopus (company hoarding data)</span>
+          <span class="beispiel"><em>Datenkraken</em> großer Firmen tragen persönliche Daten zusammen.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">die</span>
+          <span class="wort">Echtheit</span>
+          <span class="plural">Plural: (–)</span>
+          <span class="english">authenticity / genuineness</span>
+          <span class="beispiel">Die <em>Echtheit</em> von Nachrichten im Internet ist schwer zu überprüfen.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">die</span>
+          <span class="wort">Bekanntschaft</span>
+          <span class="plural">Plural: die Bekanntschaften</span>
+          <span class="english">acquaintance</span>
+          <span class="beispiel">Virtuelle <em>Bekanntschaften</em> können zu echten Freundschaften werden.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">das</span>
+          <span class="wort">Matching-Verfahren</span>
+          <span class="plural">Plural: die Matching-Verfahren</span>
+          <span class="english">matching process / algorithm</span>
+          <span class="beispiel">Das <em>Matching-Verfahren</em> schlägt passende Partner nach bestimmten Kriterien vor.</span>
+        </div>
+        <div class="vocab-card">
+          <span class="artikel">das</span>
+          <span class="wort">Mitglied</span>
+          <span class="plural">Plural: die Mitglieder</span>
+          <span class="english">member</span>
+          <span class="beispiel">Ein Premium-<em>Mitglied</em> kann mehr Funktionen der Partnerbörse nutzen.</span>
+        </div>
+      </div>
+      <div class="hilfe-box" style="margin-top:10px;">
+        <strong>💡 Redewendung:</strong> <em>eine weiße Weste haben</em> = augenscheinlich unschuldig sein und ein reines Gewissen haben (to have a clean record / clean slate)
+      </div>
+      <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 1 — GESCHICHTE ═══ -->
+  <div class="section" id="section1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Online Dating Lesetext">
+    <div class="section-content">
+      <h2 class="section-title">Informationen in sozialen Netzwerken &amp; Online-Dating</h2>
+      <div class="story-text">
+        <h3>Informationen in sozialen Netzwerken</h3>
+        <p>Wo liest du normalerweise deine Nachrichten? Es gibt viele <span class="vocab-hl" data-tip="sources of news">Nachrichtenquellen</span>, online und offline: <strong>Zeitungsberichte</strong>, Videos, <strong>Podcasts</strong> und <strong>Audiodateien</strong>. Im Internet werden diese Quellen verbreitet – unter anderem mittels sozialer Netzwerke. Nachrichten und Meldungen verbreiten sich dadurch sehr schnell weltweit.</p>
+        <p>Können wir die <span class="vocab-hl" data-tip="authenticity">Echtheit</span> dieser Nachrichten prüfen? Sogenannte <span class="vocab-hl" data-tip="fake news">Fake News</span> führen oft zu Missverständnissen und Ärger. Immer mehr Menschen merken das jedoch und glauben keineswegs alles, was sie im Internet finden. Das kann man an den Kommentaren in einigen sozialen Netzwerken beobachten. Ein Teil der <span class="vocab-hl" data-tip="users">Nutzer</span> steht vielen Informationen grundsätzlich kritisch gegenüber. Ein anderer Teil hingegen glaubt so ziemlich alles, was er im Netz findet.</p>
+        <p>Wie sieht es aber mit den Informationen aus, die die <span class="vocab-hl" data-tip="users">Nutzer</span> sozialer Netzwerke <strong>über sich selbst preisgeben</strong>? Wir teilen Fotos, Videos, Erlebnisse, Meinungen und Nachrichten online mit anderen Menschen. Das sind nicht nur weit entfernt lebende Freunde und Familienmitglieder. Viele Menschen finden auch sogenannte <span class="vocab-hl" data-tip="virtual acquaintances">virtuelle Bekanntschaften</span>, Freunde und Partner.</p>
+
+        <h3>Online-Dating</h3>
+        <p>Nehmen wir <span class="vocab-hl" data-tip="online dating">Online-Dating</span> als Beispiel. Die <span class="vocab-hl" data-tip="online partner search">virtuelle Partnersuche</span> ist in den letzten Jahren mit der wachsenden Bedeutung des Internets immer beliebter geworden. Ob auf dem PC oder als <strong>Dating-App</strong> auf dem Smartphone: Partner in der <strong>virtuellen Welt</strong> zu finden, mit denen man irgendwann realen Kontakt haben möchte, ist normal geworden. Je nach Geschmack gibt es Apps nur zum Flirten, nur für eine flüchtige Bekanntschaft oder gleich für die Anbahnung einer festen Partnerschaft.</p>
+        <p>Es gibt <span class="vocab-hl" data-tip="dating platforms">Partnerbörsen</span> für <strong>bestimmte Gruppen in der Bevölkerung</strong>: Menschen mit einer bestimmten Glaubensrichtung, Homosexuelle, Menschen mit einem bestimmten Lebensstandard, <strong>regionale Partnerbörsen</strong> – für fast jeden Geschmack ist etwas dabei. Einige Partnerbörsen sind kostenpflichtig, andere kostenlos. Ein <strong>Premium-Mitglied</strong> kann mehr Funktionen der Partnerbörse nutzen als ein einfaches Mitglied, zahlt aber natürlich auch mehr dafür.</p>
+        <p>Die <span class="vocab-hl" data-tip="members">Mitglieder</span> der Partnerbörse müssen bei ihrer Anmeldung ein <span class="vocab-hl" data-tip="profile">Profil</span> anlegen, welches oft auch mit anderen sozialen Netzwerken verknüpft wird. So hat die App <strong>Zugriff auf die Daten</strong> des anderen Netzwerks, bei dem die Person Mitglied ist.</p>
+
+        <h3>Gefahr des Datenmissbrauchs</h3>
+        <p>Diese Daten werden weltweit für bestimmte Zwecke genutzt. <span class="vocab-hl" data-tip="data-hungry companies">Datenkraken</span> großer Firmen tragen die Daten zusammen und geben dann auch mal <strong>Studien zu Übergewicht und Karrierekillern</strong> in Auftrag. Personalisierte Werbung wird ebenfalls <strong>auf der Basis dieser Daten generiert</strong>. Auch bei der Partnerbörse selbst werden noch Daten angegeben. Größe, Gewicht, Alter, Beruf, Interessen, Hobbys und natürlich das Profilfoto dürfen nicht fehlen. Nun loggen sich andere Mitglieder ein, die <strong>nach bestimmten Kriterien</strong> einen Partner <strong>auswählen</strong>.</p>
+        <p>Diese <strong>Suchkriterien</strong> können Informationen wie Größe, Gewicht, Alter, Beruf, Interessen oder Hobbys des Gegenübers beinhalten. Passende Partner werden dann <strong>per <span class="vocab-hl" data-tip="matching process">Matching-Verfahren</span> ausgewählt</strong>: Die Personen, die am besten zu den gewählten Kriterien passen, werden als Partner vorgeschlagen. Auch <strong>Privatnachrichten</strong>, <strong>Chats</strong> und <strong>Likes</strong> sind bei vielen Dating-Apps möglich. Nach einem Austausch, der normalerweise zuerst per E-Mail, per Chat oder telefonisch erfolgt, kann man die andere Person weiter kennenlernen oder <strong>den Kontakt blockieren</strong>.</p>
+        <p>Wie bei anderen sozialen Netzwerken kann ein Mitglied einer Partnerbörse natürlich ein <span class="vocab-hl" data-tip="unrealistic image">unrealistisches Bild</span> von sich abgeben. Jemand kann sich als schlank und erfolgreich präsentieren. Doch beim ersten Treffen stellt sich heraus, dass derjenige arbeitslos und das Foto mit der tollen Figur bereits fünf Jahre alt ist. Ebenso melden sich natürlich <strong>Kriminelle</strong> in Partnerbörsen an. Nach außen hin präsentieren sie sich <strong>mit einer weißen Weste</strong>, sodass das kriminelle Verhalten zunächst verborgen bleibt.</p>
+      </div>
+      <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 2 — VERSTÄNDNIS ═══ -->
+  <div class="section" id="section2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5699456/pexels-photo-5699456.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Verständnisfragen Online Dating">
+    <div class="section-content">
+      <h2 class="section-title">Hast du den Text verstanden?</h2>
+      <div class="hilfe-box"><strong>Aufgabe:</strong> Lies die Aussagen und entscheide: Richtig oder Falsch?</div>
+      <div class="timer-controls">
+        <div class="btn-row">
+          <button class="btn" onclick="showRFLoesung()">Lösungen</button>
+          <button class="btn" onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-2">0:00</span></span>
+          <span>🏆 Best: <span id="best-2">–</span></span>
+        </div>
+      </div>
+      <div class="rf-list" id="rfList">
+        <div class="rf-item" data-ans="falsch">
+          <div class="rf-text">1. Firmen haben Datenverluste durch Partnerbörsen.</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div class="rf-btns">
+              <button class="rf-btn" onclick="checkRF(this,'richtig')">Richtig</button>
+              <button class="rf-btn" onclick="checkRF(this,'falsch')">Falsch</button>
+            </div>
+            <div class="rf-feedback"></div>
+          </div>
+        </div>
+        <div class="rf-item" data-ans="richtig">
+          <div class="rf-text">2. Personalisierte Werbung basiert auf Datenprofilen.</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div class="rf-btns">
+              <button class="rf-btn" onclick="checkRF(this,'richtig')">Richtig</button>
+              <button class="rf-btn" onclick="checkRF(this,'falsch')">Falsch</button>
+            </div>
+            <div class="rf-feedback"></div>
+          </div>
+        </div>
+        <div class="rf-item" data-ans="richtig">
+          <div class="rf-text">3. Viele Partnerbörsen verknüpfen Mitglieder-Profile mit anderen sozialen Netzwerken.</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div class="rf-btns">
+              <button class="rf-btn" onclick="checkRF(this,'richtig')">Richtig</button>
+              <button class="rf-btn" onclick="checkRF(this,'falsch')">Falsch</button>
+            </div>
+            <div class="rf-feedback"></div>
+          </div>
+        </div>
+        <div class="rf-item" data-ans="falsch">
+          <div class="rf-text">4. Es gibt Partnerbörsen nur für eine Gruppe der Bevölkerung.</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div class="rf-btns">
+              <button class="rf-btn" onclick="checkRF(this,'richtig')">Richtig</button>
+              <button class="rf-btn" onclick="checkRF(this,'falsch')">Falsch</button>
+            </div>
+            <div class="rf-feedback"></div>
+          </div>
+        </div>
+        <div class="rf-item" data-ans="falsch">
+          <div class="rf-text">5. Die Premium-Mitgliedschaft ist oft günstiger als eine normale Mitgliedschaft.</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div class="rf-btns">
+              <button class="rf-btn" onclick="checkRF(this,'richtig')">Richtig</button>
+              <button class="rf-btn" onclick="checkRF(this,'falsch')">Falsch</button>
+            </div>
+            <div class="rf-feedback"></div>
+          </div>
+        </div>
+        <div class="rf-item" data-ans="falsch">
+          <div class="rf-text">6. Es gibt nur Apps zum Flirten im Internet.</div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+            <div class="rf-btns">
+              <button class="rf-btn" onclick="checkRF(this,'richtig')">Richtig</button>
+              <button class="rf-btn" onclick="checkRF(this,'falsch')">Falsch</button>
+            </div>
+            <div class="rf-feedback"></div>
+          </div>
+        </div>
+      </div>
+      <div class="score-box" id="rfScore">Richtig: <span id="rfRight">0</span> / <span id="rfTotal">6</span></div>
+      <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 3 — LÜCKENTEXT ═══ -->
+  <div class="section" id="section3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5716032/pexels-photo-5716032.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Lückentext Partnersuche">
+    <div class="section-content">
+      <h2 class="section-title">Was passt hier inhaltlich?</h2>
+      <div class="hilfe-box"><strong>Aufgabe:</strong> Fülle die Lücken aus dem Text aus. Achte auf die richtige Form!</div>
+      <div class="timer-controls">
+        <div class="btn-row">
+          <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+          <button class="btn" onclick="timerResetOne(3); resetLuecken()">↺ Neustart</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-3">0:00</span></span>
+          <span>🏆 Best: <span id="best-3">–</span></span>
+        </div>
+      </div>
+      <div id="lueckenContainer"></div>
+      <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 4 — SATZBAU ═══ -->
+  <div class="section" id="section4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6953867/pexels-photo-6953867.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Satzbau Partnersuche">
+    <div class="section-content">
+      <h2 class="section-title">Satzbau: Sätze ordnen</h2>
+      <div class="hilfe-box"><strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge. Klicke einen Chip, dann klicke die Zielzeile.</div>
+      <div class="timer-controls">
+        <div class="btn-row">
+          <button class="btn" onclick="satzbauData.forEach(function(_,i){sbShowSolution(i);})">💡 Lösungen</button>
+          <button class="btn" onclick="timerResetOne(4); resetSatzbau()">↺ Neustart</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-4">0:00</span></span>
+          <span>🏆 Best: <span id="best-4">–</span></span>
+        </div>
+      </div>
+      <div id="satzbauContainer"></div>
+      <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB 5 — WORTSCHATZ ═══ -->
+  <div class="section" id="section5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Wortschatz Training">
+    <div class="section-content">
+      <h2 class="section-title">Wortschatz-Training</h2>
+      <div class="hilfe-box"><strong>Aufgabe:</strong> Tippe Artikel (der/die/das), deutsches Wort und Pluralform. Groß-/Kleinschreibung wird geprüft!</div>
+      <div class="timer-controls">
+        <div class="btn-row">
+          <button class="btn" onclick="showVocabLoesung()">Lösungen</button>
+          <button class="btn" onclick="timerResetOne(5); resetVocab()">↺ Neustart</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-5">0:00</span></span>
+          <span>🏆 Best: <span id="best-5">–</span></span>
+        </div>
+      </div>
+      <div id="vocabContainer"></div>
+      <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .container -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('section' + n).classList.add('active');
+    document.querySelectorAll('.nav-btn')[n].classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+//  TIMER SYSTEM
+// ═══════════════════════════════════════════════════════
+var TIMER_PREFIX = 'b1_1043r_best_';
+var timerSeconds = {};
+var timerIntervals = {};
+var timerRunning = {};
+
+function timerAutoStart(n) {
+    if (timerRunning[n]) return;
+    timerRunning[n] = true;
+    timerSeconds[n] = timerSeconds[n] || 0;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var m = Math.floor(timerSeconds[n] / 60);
+        var s = timerSeconds[n] % 60;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    timerRunning[n] = false;
+    clearInterval(timerIntervals[n]);
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var bEl = document.getElementById('best-' + n);
+        if (bEl) {
+            var m = Math.floor(timerSeconds[n] / 60);
+            var s = timerSeconds[n] % 60;
+            bEl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+        }
+    }
+}
+
+function timerResetOne(n) {
+    timerRunning[n] = false;
+    clearInterval(timerIntervals[n]);
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function initBestTimes() {
+    [2, 3, 4, 5].forEach(function(n) {
+        var v = localStorage.getItem(TIMER_PREFIX + n);
+        if (v) {
+            var sec = parseInt(v);
+            var m = Math.floor(sec / 60);
+            var s = sec % 60;
+            var el = document.getElementById('best-' + n);
+            if (el) el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+        }
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  RICHTIG / FALSCH (Tab 2)
+// ═══════════════════════════════════════════════════════
+var rfCorrect = 0;
+
+function checkRF(btn, answer) {
+    var item = btn.closest('.rf-item');
+    if (item.dataset.done === 'true') return;
+    var correctAns = item.dataset.ans;
+    var allBtns = item.querySelectorAll('.rf-btn');
+    var fb = item.querySelector('.rf-feedback');
+    allBtns.forEach(function(b){ b.disabled = true; });
+    timerAutoStart(2);
+    if (answer === correctAns) {
+        btn.classList.add('correct');
+        fb.textContent = '✓ Richtig!';
+        fb.className = 'rf-feedback ok';
+        item.dataset.done = 'true';
+        rfCorrect++;
+        document.getElementById('rfRight').textContent = rfCorrect;
+        if (rfCorrect === 6) timerStop(2);
+    } else {
+        btn.classList.add('wrong');
+        fb.textContent = '✗ Falsch – versuche es erneut!';
+        fb.className = 'rf-feedback err';
+        setTimeout(function(){
+            allBtns.forEach(function(b){ b.disabled = false; b.classList.remove('wrong','correct'); });
+            fb.textContent = '';
+            fb.className = 'rf-feedback';
+        }, 1400);
+    }
+}
+
+function showRFLoesung() {
+    document.querySelectorAll('.rf-item').forEach(function(item){
+        if (item.dataset.done === 'true') return;
+        var correctAns = item.dataset.ans;
+        var allBtns = item.querySelectorAll('.rf-btn');
+        var fb = item.querySelector('.rf-feedback');
+        allBtns.forEach(function(b){
+            b.disabled = true;
+            if (b.textContent.toLowerCase() === correctAns) b.classList.add('correct');
+        });
+        fb.textContent = '✓ Lösung';
+        fb.className = 'rf-feedback ok';
+        item.dataset.done = 'true';
+    });
+}
+
+function resetRF() {
+    rfCorrect = 0;
+    document.getElementById('rfRight').textContent = '0';
+    document.querySelectorAll('.rf-item').forEach(function(item){
+        delete item.dataset.done;
+        var allBtns = item.querySelectorAll('.rf-btn');
+        var fb = item.querySelector('.rf-feedback');
+        allBtns.forEach(function(b){ b.disabled = false; b.classList.remove('correct','wrong'); });
+        fb.textContent = '';
+        fb.className = 'rf-feedback';
+    });
+}
+
+// ═══════════════════════════════════════════════════════
+//  LÜCKENTEXT (Tab 3)
+// ═══════════════════════════════════════════════════════
+var LUECKEN_DATA = [
+    { pre: 'Viele ', ans: 'Nutzer', post: ' machen sich zu wenig Gedanken über ihre Sicherheit im Internet.', size: 80 },
+    { pre: 'Sie ', ans: 'teilen', post: ' gerne Berichte, Fotos und Videos vom letzten Urlaub.', size: 70 },
+    { pre: 'Gerne ', ans: 'kommentieren', post: ' und ', ans2: 'liken', post2: ' sie auch Fake News.', size: 100, size2: 60 },
+    { pre: 'Manchmal werden ', ans: 'virtuelle', post: ' Bekannte auch zu ', ans2: 'realen', post2: ' Bekannten und Freunden!', size: 80, size2: 60 },
+    { pre: 'Die ', ans: 'Echtheit', post: ' von Nachrichten ist schwer zu überprüfen.', size: 80 },
+    { pre: 'Bei der Anmeldung muss man ein ', ans: 'Profil', post: ' anlegen.', size: 70 },
+    { pre: 'Passende Partner werden per ', ans: 'Matching-Verfahren', post: ' ausgewählt.', size: 130 },
+    { pre: 'Ein ', ans: 'Premium-Mitglied', post: ' kann mehr Funktionen der Partnerbörse nutzen.', size: 110 },
+    { pre: 'Kriminelle präsentieren sich nach außen hin mit einer weißen ', ans: 'Weste', post: '.', size: 70 },
+    { pre: 'Datenkraken tragen die Daten zusammen und generieren personalisierte ', ans: 'Werbung', post: '.', size: 80 },
+];
+
+function buildLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecken-satz';
+        var html = item.pre;
+        html += '<input class="luecken-inp" data-ans="' + item.ans + '" data-idx="' + idx + 'a" placeholder="" style="width:' + item.size + 'px" />';
+        if (item.ans2) {
+            html += item.post;
+            html += '<input class="luecken-inp" data-ans="' + item.ans2 + '" data-idx="' + idx + 'b" placeholder="" style="width:' + (item.size2||70) + 'px" />';
+            html += item.post2;
+        } else {
+            html += item.post;
+        }
+        div.innerHTML = html;
+        container.appendChild(div);
+    });
+    container.querySelectorAll('.luecken-inp').forEach(function(inp){
+        inp.addEventListener('input', function(){ liveCheckLuecke(this); timerAutoStart(3); });
+    });
+}
+
+function liveCheckLuecke(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.ans;
+    inp.classList.remove('ok', 'no');
+    var hint = inp.nextElementSibling;
+    if (hint && hint.classList.contains('correction-hint')) hint.remove();
+    if (val === '') return;
+    if (val === ans) {
+        inp.classList.add('ok');
+        checkAllLueckenDone();
+    } else if (ans.toLowerCase().startsWith(val.toLowerCase())) {
+        // prefix — neutral
+    } else {
+        inp.classList.add('no');
+    }
+}
+
+function checkAllLueckenDone() {
+    var all = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    var done = Array.from(all).every(function(i){ return i.classList.contains('ok'); });
+    if (done) timerStop(3);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp){
+        inp.value = inp.dataset.ans;
+        inp.classList.remove('ok','no');
+        inp.classList.add('ok');
+    });
+}
+
+function resetLuecken() { buildLuecken(); }
+
+// ═══════════════════════════════════════════════════════
+//  SATZBAU (Tab 4) — Mandatory SKILL pattern
+// ═══════════════════════════════════════════════════════
+var satzbauData = [
+    { parts: ['Fake','News','führen','oft','zu','Missverständnissen'], valid:[['Fake','News','führen','oft','zu','Missverständnissen']], punct:'.' },
+    { parts: ['Die','virtuelle','Partnersuche','ist','immer','beliebter','geworden'], valid:[['Die','virtuelle','Partnersuche','ist','immer','beliebter','geworden']], punct:'.' },
+    { parts: ['Bei','der','Anmeldung','muss','man','ein','Profil','anlegen'], valid:[['Bei','der','Anmeldung','muss','man','ein','Profil','anlegen']], punct:'.' },
+    { parts: ['Passende','Partner','werden','per','Matching-Verfahren','ausgewählt'], valid:[['Passende','Partner','werden','per','Matching-Verfahren','ausgewählt']], punct:'.' },
+    { parts: ['Kriminelle','präsentieren','sich','mit','einer','weißen','Weste'], valid:[['Kriminelle','präsentieren','sich','mit','einer','weißen','Weste']], punct:'.' },
+    { parts: ['Die','Echtheit','von','Nachrichten','ist','schwer','zu','überprüfen'], valid:[['Die','Echtheit','von','Nachrichten','ist','schwer','zu','überprüfen']], punct:'.' },
+    { parts: ['Man','kann','den','Kontakt','auch','blockieren'], valid:[['Man','kann','den','Kontakt','auch','blockieren']], punct:'.' },
+];
+
+var sbDragged = null;
+
+function sbCapitalize(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        c.textContent = (i === 0) ? sbCapitalize(c.dataset.orig) : c.dataset.orig;
+    });
+}
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) { c = document.createElement('div'); c.id = 'sb-insert-cursor'; c.style.cssText = 'width:3px;background:#667eea;border-radius:2px;min-height:28px;pointer-events:none;'; }
+    return c;
+}
+
+function getSbInsertPos(zone, x) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (x < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        e.dataTransfer.setData('text/plain', '');
+        timerAutoStart(4);
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '1';
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
+        sbDragged = null;
+    });
+    chip.addEventListener('click', function(e) {
+        e.stopPropagation();
+        timerAutoStart(4);
+        if (chip.classList.contains('selected')) {
+            chip.classList.remove('selected');
+            return;
+        }
+        document.querySelectorAll('.chip.selected').forEach(function(c){ c.classList.remove('selected'); });
+        chip.classList.add('selected');
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var cursor = document.getElementById('sb-insert-cursor');
+            if (cursor && cursor.parentNode === zone) zone.removeChild(cursor);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+    zone.addEventListener('click', function(e) {
+        if (e.target === zone || e.target.closest('.chip') === null) {
+            var sel = document.querySelector('.chip.selected');
+            if (!sel) return;
+            sel.classList.remove('selected');
+            zone.appendChild(sel);
+            var row = document.getElementById('sb-row-' + idx);
+            sbUpdateCapitalization(row);
+            sbCheckAuto(idx);
+        }
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+        row.classList.remove('correct','incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(4);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(4);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct','incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function(){ sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct','incorrect');
+    fb.textContent = ''; fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container'; bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder'; row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback'; fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn'; solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function(){ sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn'; resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function(){ sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function resetSatzbau() { initSatzbau(); }
+
+// ═══════════════════════════════════════════════════════
+//  WORTSCHATZ (Tab 5)
+// ═══════════════════════════════════════════════════════
+var VOCAB_DATA = [
+    { en: 'dating platform', art: 'die', wort: 'Partnerbörse', pl: 'Partnerbörsen' },
+    { en: 'anonymity', art: 'die', wort: 'Anonymität', pl: '(–)' },
+    { en: 'privacy', art: 'die', wort: 'Privatsphäre', pl: '(–)' },
+    { en: 'profile', art: 'das', wort: 'Profil', pl: 'Profile' },
+    { en: 'security / safety', art: 'die', wort: 'Sicherheit', pl: '(–)' },
+    { en: 'user', art: 'der', wort: 'Nutzer', pl: 'Nutzer' },
+    { en: 'fake news', art: 'die', wort: 'Fake News', pl: '(–)' },
+    { en: 'matching process', art: 'das', wort: 'Matching-Verfahren', pl: 'Matching-Verfahren' },
+    { en: 'member', art: 'das', wort: 'Mitglied', pl: 'Mitglieder' },
+    { en: 'data-hoarding company', art: 'der', wort: 'Datenkraken', pl: 'Datenkraken' },
+];
+
+function buildVocab() {
+    var container = document.getElementById('vocabContainer');
+    container.innerHTML = '';
+    VOCAB_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'vocab-train-item';
+        div.innerHTML = '<div class="vocab-train-en">' + item.en + '</div><div class="vocab-train-inputs">' +
+            '<span class="vocab-inp-label">Artikel</span>' +
+            '<input class="vocab-inp art-inp" data-ans="' + item.art + '" placeholder="" />' +
+            '<span class="vocab-inp-label">Wort</span>' +
+            '<input class="vocab-inp wort-inp" data-ans="' + item.wort + '" placeholder="" />' +
+            '<span class="vocab-inp-label">Plural</span>' +
+            '<input class="vocab-inp pl-inp" data-ans="' + item.pl + '" placeholder="" />' +
+            '</div>';
+        container.appendChild(div);
+    });
+    container.querySelectorAll('.vocab-inp').forEach(function(inp){
+        inp.addEventListener('input', function(){ liveCheckVocab(this); timerAutoStart(5); });
+    });
+}
+
+function liveCheckVocab(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.ans;
+    inp.classList.remove('ok','no');
+    if (val === '') return;
+    if (val === ans) {
+        inp.classList.add('ok');
+        checkAllVocabDone();
+    } else if (ans.toLowerCase().startsWith(val.toLowerCase())) {
+        // prefix — neutral
+    } else {
+        inp.classList.add('no');
+    }
+}
+
+function checkAllVocabDone() {
+    var all = document.querySelectorAll('#vocabContainer .vocab-inp');
+    var done = Array.from(all).every(function(i){ return i.classList.contains('ok'); });
+    if (done) timerStop(5);
+}
+
+function showVocabLoesung() {
+    document.querySelectorAll('#vocabContainer .vocab-inp').forEach(function(inp){
+        inp.value = inp.dataset.ans;
+        inp.classList.remove('ok','no');
+        inp.classList.add('ok');
+    });
+}
+
+function resetVocab() { buildVocab(); }
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+buildLuecken();
+initSatzbau();
+buildVocab();
+initBestTimes();
+</script>
+</body>
+</html>

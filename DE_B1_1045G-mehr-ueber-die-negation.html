@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · 1045G · Mehr über die Negation</title>
+<style>
+/* ── RESET & BASE ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ── CONTAINER ── */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* ── HEADER ── */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header .subtitle { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+
+/* ── NAV ── */
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* ── TAB BANNER ── */
+.tab-banner {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    margin-bottom: 0;
+}
+
+/* ── SECTION TITLES ── */
+h2.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+
+/* ── HILFE-BOX ── */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* ── CONTENT PADDING ── */
+.section-content { padding: 30px; }
+
+/* ── TIMER CONTROLS ── */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.btn-row { display:flex; gap:6px; }
+.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn:hover { background:#f0f0f0; color:#555; }
+.timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-val { color:#667eea; font-weight:700; }
+.best-val  { color:#f39c12; font-weight:600; }
+
+/* ── ENTDECKUNGS-TAB ── */
+.intro-box {
+    background: #f8f9ff;
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+}
+.intro-box .beispiel {
+    font-size: 1.05em;
+    line-height: 2.2;
+    color: #333;
+}
+.hl { color: #764ba2; font-weight: 700; }
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; transition: background 0.3s; }
+.dot.active { background: #667eea; }
+.mc-step { display: none; margin-bottom: 20px; }
+.mc-step.visible { display: block; }
+.mc-frage { font-weight: 600; color: #333; margin-bottom: 12px; font-size: 1em; }
+.mc-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-option {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.mc-option:hover { background: #f0edf8; }
+.mc-option.correct { background: #27ae60; border-color: #27ae60; color: white; cursor: default; }
+.mc-option.wrong   { background: #e74c3c; border-color: #e74c3c; color: white; animation: shake 0.3s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.mc-feedback { margin-top: 10px; font-size: 0.88em; font-weight: 600; min-height: 1.2em; }
+.mc-feedback.ok  { color: #27ae60; }
+.mc-feedback.err { color: #e74c3c; }
+.regel-karte-end { display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; padding: 20px 24px; margin-top: 20px; }
+.regel-karte-end.visible { display: block; }
+.regel-karte-end h3 { font-size: 1.1em; margin-bottom: 12px; font-family: Georgia, serif; }
+.regel-karte-end ul { margin-left: 18px; }
+.regel-karte-end li { line-height: 2; font-size: 0.95em; }
+
+/* ── REGEL-TAB ── */
+.regel-box { background: #f0f4ff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+.regel-box h3 { color: #667eea; font-size: 1.05em; margin-bottom: 12px; font-weight: 700; }
+.regel-tabelle { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-bottom: 16px; }
+.regel-tabelle th { background: #667eea; color: white; padding: 8px 12px; text-align: left; }
+.regel-tabelle td { padding: 8px 12px; border-bottom: 1px solid #e0e0f0; }
+.regel-tabelle tr:last-child td { border-bottom: none; }
+.regel-tabelle .hl2 { color: #764ba2; font-weight: 700; }
+.beispiel-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 14px 18px; margin-top: 10px; font-size: 0.9em; line-height: 1.9; }
+
+/* ── LÜCKENTEXT ── */
+.luecken-satz {
+    background: #f8f9ff;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    font-size: 0.95em;
+    line-height: 1.9;
+}
+.luecken-inp {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    padding: 2px 6px;
+    outline: none;
+    min-width: 80px;
+    transition: all 0.2s;
+    color: inherit;
+}
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.wortkasten {
+    background: #f0f4ff;
+    border: 1px solid #c0b0e8;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 0.88em;
+    color: #555;
+    line-height: 2;
+}
+.wortkasten strong { color: #667eea; }
+
+/* ── SATZBAU ── */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 14px;
+    background: white;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    min-height: 56px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: move;
+    font-weight: 500;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.selected  { background: #667eea; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+.satzbau-item:last-child { border-bottom: none; }
+
+/* ── ZUORDNUNG ── */
+.zuord-bank {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 14px; background: #f8f8f8;
+    border-radius: 10px; margin-bottom: 18px; min-height: 54px;
+}
+.zuord-chip {
+    padding: 7px 14px; border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: pointer; font-size: 0.85rem;
+    font-weight: 600; user-select: none;
+    transition: transform .15s, opacity .15s;
+    white-space: nowrap; border: 2px solid transparent;
+}
+.zuord-chip:hover { transform: scale(1.04); }
+.zuord-chip.selected { border: 2px solid #f39c12; box-shadow: 0 0 0 2px #f39c12; }
+.zuord-chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; cursor: default; }
+.zuord-chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.zuord-categories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 18px; }
+@media (max-width: 600px) { .zuord-categories { grid-template-columns: 1fr; } }
+.zuord-cat { border: 2px dashed #ccc; border-radius: 10px; padding: 14px; min-height: 80px; cursor: pointer; transition: all 0.2s; }
+.zuord-cat:hover { border-color: #667eea; background: #f8f8ff; }
+.zuord-cat-title { font-weight: 700; color: #764ba2; margin-bottom: 8px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.05em; }
+.zuord-cat-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 32px; }
+
+/* ── AUTHOR FOOTER ── */
+.author-footer {
+    text-align: center; margin-top: 40px; padding: 16px;
+    font-size: 0.8rem; color: #aaa; border-top: 1px solid #f0f0f0;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+    <h1>Mehr über die Negation</h1>
+    <p class="subtitle">B1 · Lektion 1045G · Negationswörter, Präfix un-, Suffix -los</p>
+    <span class="big-emoji">🚫</span>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">📖</span>
+        <span class="nav-label">Entdecken</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">📋</span>
+        <span class="nav-label">Regeln</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">✏️</span>
+        <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">🧩</span>
+        <span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">🔀</span>
+        <span class="nav-label">Zuordnung</span>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ TAB 0: ENTDECKEN -->
+<div class="section active" id="sec0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&dpr=1" alt="Negation">
+    <div class="section-content">
+        <h2 class="section-title">Entdecken</h2>
+        <div class="intro-box">
+            <p class="beispiel">
+                Es ist so dunkel — ich sehe <span class="hl">nichts</span>.<br>
+                Heute bin ich <span class="hl">niemandem</span> begegnet.<br>
+                Ich gehe <span class="hl">nirgendwohin</span>.<br>
+                Ich war noch <span class="hl">niemals</span> in New York.<br>
+                <span class="hl">Nirgendwo</span> ist der, der überall ist.<br>
+                Sie möchte <span class="hl">weder</span> Pizza <span class="hl">noch</span> Nudeln essen.
+            </p>
+        </div>
+
+        <div class="progress-dots">
+            <div class="dot active" id="dot0"></div>
+            <div class="dot" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+        </div>
+
+        <!-- Step 0 -->
+        <div class="mc-step visible" id="step0">
+            <div class="mc-frage">Was bedeutet <strong>„nichts"</strong>?</div>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcAnswer(0,'a')">keine Person</button>
+                <button class="mc-option" onclick="mcAnswer(0,'b')">kein Ding / keine Sache</button>
+                <button class="mc-option" onclick="mcAnswer(0,'c')">kein Ort</button>
+                <button class="mc-option" onclick="mcAnswer(0,'d')">keine Zeit</button>
+            </div>
+            <div class="mc-feedback" id="fb0"></div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="mc-step" id="step1">
+            <div class="mc-frage">Was ist der Unterschied zwischen <strong>„nirgendwo"</strong> und <strong>„nirgendwohin"</strong>?</div>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcAnswer(1,'a')">Sie bedeuten dasselbe</button>
+                <button class="mc-option" onclick="mcAnswer(1,'b')">nirgendwo = kein Ort (statisch); nirgendwohin = keine Richtung (Bewegung)</button>
+                <button class="mc-option" onclick="mcAnswer(1,'c')">nirgendwohin = kein Ort; nirgendwo = keine Zeit</button>
+            </div>
+            <div class="mc-feedback" id="fb1"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="mc-step" id="step2">
+            <div class="mc-frage">Was bedeutet <strong>„weder … noch"</strong>?</div>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcAnswer(2,'a')">entweder … oder</button>
+                <button class="mc-option" onclick="mcAnswer(2,'b')">nicht das eine und auch nicht das andere</button>
+                <button class="mc-option" onclick="mcAnswer(2,'c')">sowohl … als auch</button>
+            </div>
+            <div class="mc-feedback" id="fb2"></div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="mc-step" id="step3">
+            <div class="mc-frage">Wie verneint man ein Adjektiv mit einem Präfix oder Suffix?</div>
+            <div class="mc-options">
+                <button class="mc-option" onclick="mcAnswer(3,'a')">Immer mit „nicht" davor</button>
+                <button class="mc-option" onclick="mcAnswer(3,'b')">Mit dem Präfix <strong>un-</strong> (unhöflich) oder dem Suffix <strong>-los</strong> (nutzlos)</button>
+                <button class="mc-option" onclick="mcAnswer(3,'c')">Mit dem Suffix <strong>-arm</strong></button>
+            </div>
+            <div class="mc-feedback" id="fb3"></div>
+        </div>
+
+        <!-- Regel-Karte -->
+        <div class="regel-karte-end" id="regelKarte">
+            <h3>📌 Die Negation — Zusammenfassung</h3>
+            <ul>
+                <li><strong>nichts</strong> — Gegenteil von etwas/alles (Sachen)</li>
+                <li><strong>niemand</strong> — Gegenteil von jemand (Personen)</li>
+                <li><strong>nirgendwo / nirgends</strong> — an keinem Ort (statisch)</li>
+                <li><strong>nirgendwohin</strong> — keine Richtung (Bewegung)</li>
+                <li><strong>nie / niemals</strong> — zu keiner Zeit</li>
+                <li><strong>weder … noch</strong> — nicht das eine und nicht das andere</li>
+                <li><strong>ohne … zu</strong> — Infinitivkonstruktion mit Negation</li>
+                <li><strong>un-</strong> vor Adjektiven: abhängig → unabhängig</li>
+                <li><strong>-los</strong> nach Nomen/Adjektiven: Nutzen → nutzlos</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TAB 1: REGELN -->
+<div class="section" id="sec1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/159866/books-book-pages-read-literature-159866.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&dpr=1" alt="Grammatikregeln">
+    <div class="section-content">
+        <h2 class="section-title">Regeln: Die Negation</h2>
+
+        <!-- Negationswörter -->
+        <div class="regel-box">
+            <h3>🔤 Negationswörter</h3>
+            <table class="regel-tabelle">
+                <tr><th>Wort</th><th>Bedeutung</th><th>Beispiel</th></tr>
+                <tr><td class="hl2">nichts</td><td>keine Sache / kein Ding</td><td>Ich sehe <em>nichts</em>.</td></tr>
+                <tr><td class="hl2">niemand</td><td>keine Person</td><td>Heute bin ich <em>niemandem</em> begegnet.</td></tr>
+                <tr><td class="hl2">nirgendwo / nirgends</td><td>an keinem Ort (statisch)</td><td>Er ist <em>nirgendwo</em> zu finden.</td></tr>
+                <tr><td class="hl2">nirgendwohin</td><td>keine Richtung (Bewegung)</td><td>Ich gehe <em>nirgendwohin</em>.</td></tr>
+                <tr><td class="hl2">nie / niemals</td><td>zu keiner Zeit</td><td>Ich war noch <em>niemals</em> in New York.</td></tr>
+            </table>
+        </div>
+
+        <!-- Präpositionen -->
+        <div class="regel-box">
+            <h3>🔗 Präpositionen mit Negationsbedeutung</h3>
+            <table class="regel-tabelle">
+                <tr><th>Präposition</th><th>Kasus</th><th>Bedeutung</th><th>Beispiel</th></tr>
+                <tr><td class="hl2">ohne</td><td>Akkusativ</td><td>Gegenteil von <em>mit</em></td><td>Ich komme <em>ohne</em> mein Fahrrad.</td></tr>
+                <tr><td class="hl2">außer</td><td>Dativ</td><td>ausgenommen / exkludiert</td><td>Alle haben Urlaub <em>außer</em> mir.</td></tr>
+            </table>
+        </div>
+
+        <!-- Konjunktionen -->
+        <div class="regel-box">
+            <h3>🔀 Konjunktionen mit Negationsbedeutung</h3>
+            <table class="regel-tabelle">
+                <tr><th>Konjunktion</th><th>Bedeutung</th><th>Beispiel</th></tr>
+                <tr><td class="hl2">weder … noch</td><td>nicht A und nicht B</td><td>Sie möchte <em>weder</em> Pizza <em>noch</em> Nudeln essen.</td></tr>
+                <tr><td class="hl2">ohne … zu</td><td>Infinitivkonstruktion mit Negation</td><td>Du kommst immer, <em>ohne</em> vorher Bescheid <em>zu</em> sagen.</td></tr>
+            </table>
+        </div>
+
+        <!-- Präfix un- -->
+        <div class="regel-box">
+            <h3>🔠 Präfix <em>un-</em> vor Adjektiven</h3>
+            <p style="margin-bottom:12px; font-size:0.9em; color:#555;">Um ein Adjektiv zu verneinen, setzt man das Präfix <strong>un-</strong> davor.</p>
+            <table class="regel-tabelle">
+                <tr><th>Adjektiv</th><th>Verneinung mit un-</th></tr>
+                <tr><td>abhängig</td><td class="hl2">unabhängig</td></tr>
+                <tr><td>höflich</td><td class="hl2">unhöflich</td></tr>
+                <tr><td>gewürzt</td><td class="hl2">ungewürzt</td></tr>
+                <tr><td>verständlich</td><td class="hl2">unverständlich</td></tr>
+            </table>
+        </div>
+
+        <!-- Suffix -los -->
+        <div class="regel-box">
+            <h3>🔡 Suffix <em>-los</em> nach Nomen/Adjektiven</h3>
+            <p style="margin-bottom:12px; font-size:0.9em; color:#555;">Mit dem Suffix <strong>-los</strong> kann man Nomen adjektivieren und dabei verneinen. Bei Nomen mit Fugenelement werden <em>-n-, -en-, -er-</em> oder <em>-s-</em> eingeschoben.</p>
+            <table class="regel-tabelle">
+                <tr><th>Nomen / Adjektiv</th><th>Verneinung mit -los</th></tr>
+                <tr><td>Nutzen</td><td class="hl2">nutzlos</td></tr>
+                <tr><td>Kommentar</td><td class="hl2">kommentarlos</td></tr>
+                <tr><td>Pause</td><td class="hl2">pausenlos</td></tr>
+                <tr><td>Ahnung</td><td class="hl2">ahnungslos</td></tr>
+                <tr><td>Falte</td><td class="hl2">faltenlos</td></tr>
+                <tr><td>Kind</td><td class="hl2">kinderlos</td></tr>
+                <tr><td>Ehre</td><td class="hl2">ehrlos</td></tr>
+                <tr><td>Frage</td><td class="hl2">fraglos</td></tr>
+            </table>
+            <div class="beispiel-box" style="margin-top:12px;">
+                ⚠️ <strong>Ausnahmen:</strong> Bei Nomen mit unbetontem <em>-e</em> am Ende fällt die Endung weg:<br>
+                Freude → <strong>freudlos</strong> &nbsp;|&nbsp; Frieden → <strong>friedlos</strong><br>
+                Aber auch: Mühe → <strong>mühelos</strong> &nbsp;|&nbsp; Boden → <strong>bodenlos</strong> (Endung bleibt)
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TAB 2: LÜCKENTEXT -->
+<div class="section" id="sec2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5699456/pexels-photo-5699456.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&dpr=1" alt="Lückentext">
+    <div class="section-content">
+        <h2 class="section-title">Lückentext</h2>
+        <div class="timer-controls">
+            <div class="btn-row">
+                <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+                <button class="btn" onclick="timerResetOne(2); resetLuecken()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span class="timer-val" id="timer-2">0:00</span></span>
+                <span>🏆 Best: <span class="best-val" id="best-2">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">Fülle die Lücken mit dem richtigen Negationswort oder der richtigen Verneinungsform. Beachte Groß- und Kleinschreibung!</div>
+        <div class="wortkasten">
+            <strong>Wortkasten:</strong> nichts · niemand · nirgendwo · nirgendwohin · nie · niemals · weder … noch · ohne … zu · außer · ohne · unabhängig · nutzlos · ahnungslos · kommentarlos · faltenlos
+        </div>
+        <div id="lueckenContainer"></div>
+        <div class="author-footer">
+            <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+            <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TAB 3: SATZBAU -->
+<div class="section" id="sec3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5716032/pexels-photo-5716032.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&dpr=1" alt="Satzbau">
+    <div class="section-content">
+        <h2 class="section-title">Satzbau</h2>
+        <div class="timer-controls">
+            <div class="btn-row">
+                <button class="btn" onclick="sbShowAllSolutions()">Lösungen</button>
+                <button class="btn" onclick="timerResetOne(3); resetSatzbau()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span class="timer-val" id="timer-3">0:00</span></span>
+                <span>🏆 Best: <span class="best-val" id="best-3">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">Ziehe die Wort-Chips in die richtige Reihenfolge, um den Satz zu bilden.</div>
+        <div id="satzbauContainer"></div>
+        <div class="author-footer">
+            <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+            <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TAB 4: ZUORDNUNG -->
+<div class="section" id="sec4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3944405/pexels-photo-3944405.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&dpr=1" alt="Zuordnung">
+    <div class="section-content">
+        <h2 class="section-title">Zuordnung</h2>
+        <div class="timer-controls">
+            <div class="btn-row">
+                <button class="btn" onclick="showZuordLoesung()">Lösungen</button>
+                <button class="btn" onclick="timerResetOne(4); resetZuordnung()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span class="timer-val" id="timer-4">0:00</span></span>
+                <span>🏆 Best: <span class="best-val" id="best-4">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">Klicke auf einen Chip und dann auf die passende Kategorie. Welche Verneinungsform passt wozu?</div>
+        <div class="zuord-bank" id="zuordBank"></div>
+        <div class="zuord-categories" id="zuordCats"></div>
+        <div class="author-footer">
+            <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+            <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// ═══════════════════════════ TIMER SYSTEM ═══════════════════════════════════
+var TIMER_PREFIX = 'b1_1045g_best_';
+var timers = {};
+
+function fmtTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function timerStart(n) {
+    if (timers[n] && timers[n].running) return;
+    if (!timers[n]) timers[n] = { s: 0, running: false, interval: null };
+    timers[n].running = true;
+    timers[n].interval = setInterval(function() {
+        timers[n].s++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timers[n].s);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timers[n] || !timers[n].running) return;
+    clearInterval(timers[n].interval);
+    timers[n].running = false;
+    var best = localStorage.getItem(TIMER_PREFIX + n);
+    if (!best || timers[n].s < parseInt(best)) {
+        localStorage.setItem(TIMER_PREFIX + n, timers[n].s);
+        var bel = document.getElementById('best-' + n);
+        if (bel) bel.textContent = fmtTime(timers[n].s);
+    }
+}
+
+function timerAutoStart(n) {
+    if (!timers[n] || !timers[n].running) timerStart(n);
+}
+
+function timerResetOne(n) {
+    if (timers[n]) {
+        clearInterval(timers[n].interval);
+        timers[n] = { s: 0, running: false, interval: null };
+    }
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function loadBestTimes() {
+    [2, 3, 4].forEach(function(n) {
+        var best = localStorage.getItem(TIMER_PREFIX + n);
+        if (best) {
+            var el = document.getElementById('best-' + n);
+            if (el) el.textContent = fmtTime(parseInt(best));
+        }
+    });
+}
+
+// ═══════════════════════════ TAB NAVIGATION ═════════════════════════════════
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === n);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === n);
+    });
+    if (n === 2 && !lueckenBuilt) { buildLuecken(); lueckenBuilt = true; }
+    if (n === 3 && !satzbauBuilt) { initSatzbau(); satzbauBuilt = true; }
+    if (n === 4 && !zuordBuilt) { buildZuordnung(); zuordBuilt = true; }
+}
+
+// ═══════════════════════════ ENTDECKEN (MC) ══════════════════════════════════
+var mcCorrect = ['b', 'b', 'b', 'b'];
+var mcDone = [false, false, false, false];
+
+function mcAnswer(step, choice) {
+    if (mcDone[step]) return;
+    var fb = document.getElementById('fb' + step);
+    var opts = document.getElementById('step' + step).querySelectorAll('.mc-option');
+    if (choice === mcCorrect[step]) {
+        opts.forEach(function(o) { o.disabled = true; });
+        opts[['a','b','c','d'].indexOf(choice)].classList.add('correct');
+        fb.className = 'mc-feedback ok';
+        fb.textContent = '✓ Richtig!';
+        mcDone[step] = true;
+        document.getElementById('dot' + step).classList.add('active');
+        setTimeout(function() {
+            if (step < 3) {
+                document.getElementById('step' + (step+1)).classList.add('visible');
+                document.getElementById('dot' + (step+1)).classList.add('active');
+            } else {
+                document.getElementById('regelKarte').classList.add('visible');
+            }
+        }, 600);
+    } else {
+        var idx = ['a','b','c','d'].indexOf(choice);
+        opts[idx].classList.add('wrong');
+        fb.className = 'mc-feedback err';
+        fb.textContent = '✗ Nicht ganz — versuch es nochmal!';
+        setTimeout(function() {
+            opts[idx].classList.remove('wrong');
+            fb.textContent = '';
+        }, 900);
+    }
+}
+
+// ═══════════════════════════ LÜCKENTEXT ══════════════════════════════════════
+var lueckenBuilt = false;
+
+var LUECKEN_DATA = [
+    { pre: 'Es ist so dunkel — ich sehe ', ans: 'nichts', post: ' in diesem Raum.' },
+    { pre: 'Heute bin ich ', ans: 'niemandem', post: ' auf der Straße begegnet.' },
+    { pre: 'Er sucht überall, aber er findet den Schlüssel ', ans: 'nirgendwo', post: '.' },
+    { pre: 'Wegen des Sturms gehe ich heute ', ans: 'nirgendwohin', post: '.' },
+    { pre: 'Ich habe das Buch ', ans: 'nie', post: ' gelesen, obwohl es sehr bekannt ist.' },
+    { pre: 'Sie möchte ', ans: 'weder', post: ' Kaffee ', ans2: 'noch', post2: ' Tee trinken.' },
+    { pre: 'Du kommst immer, ', ans: 'ohne', post: ' vorher Bescheid zu sagen.' },
+    { pre: 'Alle haben Urlaub ', ans: 'außer', post: ' mir.' },
+    { pre: 'Das Kind war völlig ', ans: 'ahnungslos', post: ', was als Nächstes passieren würde.' },
+    { pre: 'Die Maschine läuft ', ans: 'pausenlos', post: ' — sie macht keine einzige Pause.' },
+    { pre: 'Das Land wurde nach dem Krieg endlich ', ans: 'unabhängig', post: '.' },
+    { pre: 'Dieses Programm ist völlig ', ans: 'nutzlos', post: ' — es hilft mir gar nicht.' },
+];
+
+function buildLuecken() {
+    var c = document.getElementById('lueckenContainer');
+    c.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecken-satz';
+        var html = item.pre;
+        html += '<input class="luecken-inp" data-ans="' + item.ans + '" data-idx="' + idx + '" oninput="liveCheck(this,2)" size="' + Math.max(8, item.ans.length + 2) + '">';
+        if (item.ans2) {
+            html += item.post;
+            html += '<input class="luecken-inp" data-ans="' + item.ans2 + '" data-idx="' + idx + 'b" oninput="liveCheck(this,2)" size="' + Math.max(8, item.ans2.length + 2) + '">';
+            html += item.post2;
+        } else {
+            html += item.post;
+        }
+        div.innerHTML = html;
+        c.appendChild(div);
+    });
+}
+
+function liveCheck(inp, tabN) {
+    timerAutoStart(tabN);
+    var ans = inp.dataset.ans;
+    var val = inp.value;
+    if (val === '') { inp.className = 'luecken-inp'; return; }
+    if (val === ans) {
+        inp.className = 'luecken-inp ok';
+        checkAllLueckenDone(tabN);
+    } else if (!ans.startsWith(val)) {
+        inp.className = 'luecken-inp no';
+    } else {
+        inp.className = 'luecken-inp';
+    }
+}
+
+function checkAllLueckenDone(tabN) {
+    var inputs = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    var allOk = Array.from(inputs).every(function(i) { return i.classList.contains('ok'); });
+    if (allOk) timerStop(tabN);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans;
+        inp.className = 'luecken-inp ok';
+    });
+}
+
+function resetLuecken() {
+    buildLuecken();
+    lueckenBuilt = true;
+}
+
+// ═══════════════════════════ SATZBAU ═════════════════════════════════════════
+var satzbauBuilt = false;
+var sbDragged = null;
+
+var satzbauData = [
+    { parts: ['Ich', 'sehe', 'hier', 'nichts'], valid: [['ich', 'sehe', 'hier', 'nichts']], punct: '.' },
+    { parts: ['Er', 'ist', 'niemandem', 'begegnet'], valid: [['er', 'ist', 'niemandem', 'begegnet']], punct: '.' },
+    { parts: ['Ich', 'gehe', 'heute', 'nirgendwohin'], valid: [['ich', 'gehe', 'heute', 'nirgendwohin']], punct: '.' },
+    { parts: ['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen'], valid: [['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen']], punct: '.' },
+    { parts: ['Alle', 'haben', 'Urlaub', 'außer', 'mir'], valid: [['alle', 'haben', 'Urlaub', 'außer', 'mir']], punct: '.' },
+    { parts: ['Das', 'Land', 'wurde', 'endlich', 'unabhängig'], valid: [['das', 'Land', 'wurde', 'endlich', 'unabhängig']], punct: '.' },
+    { parts: ['Die', 'Maschine', 'läuft', 'pausenlos'], valid: [['die', 'Maschine', 'läuft', 'pausenlos']], punct: '.' },
+];
+
+// Fix: store parts with correct case for display but compare lowercase in valid
+// Redefine with proper case handling
+var satzbauData = [
+    { parts: ['ich', 'sehe', 'hier', 'nichts'], valid: [['ich', 'sehe', 'hier', 'nichts']], punct: '.' },
+    { parts: ['er', 'ist', 'niemandem', 'begegnet'], valid: [['er', 'ist', 'niemandem', 'begegnet']], punct: '.' },
+    { parts: ['ich', 'gehe', 'heute', 'nirgendwohin'], valid: [['ich', 'gehe', 'heute', 'nirgendwohin']], punct: '.' },
+    { parts: ['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen'], valid: [['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen']], punct: '.' },
+    { parts: ['alle', 'haben', 'Urlaub', 'außer', 'mir'], valid: [['alle', 'haben', 'Urlaub', 'außer', 'mir']], punct: '.' },
+    { parts: ['das', 'Land', 'wurde', 'endlich', 'unabhängig'], valid: [['das', 'Land', 'wurde', 'endlich', 'unabhängig']], punct: '.' },
+    { parts: ['die', 'Maschine', 'läuft', 'pausenlos'], valid: [['die', 'Maschine', 'läuft', 'pausenlos']], punct: '.' },
+];
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(3);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+
+    // Click-to-Place
+    chip.addEventListener('click', function() {
+        if (chip.classList.contains('correct')) return;
+        if (chip.classList.contains('selected')) {
+            chip.classList.remove('selected');
+            return;
+        }
+        document.querySelectorAll('.chip.selected').forEach(function(s) { s.classList.remove('selected'); });
+        chip.classList.add('selected');
+    });
+
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+
+    // Click-to-Place zone handler
+    zone.addEventListener('click', function(e) {
+        if (e.target === zone || e.target.classList.contains('chips-container') || e.target.classList.contains('sentence-builder')) {
+            var selected = document.querySelector('.chip.selected');
+            if (!selected) return;
+            var row = document.getElementById('sb-row-' + idx);
+            var bank = document.getElementById('sb-bank-' + idx);
+            if (zone === row || zone === bank) {
+                zone.appendChild(selected);
+                selected.classList.remove('selected');
+                sbUpdateCapitalization(row);
+                sbCheckAuto(idx);
+            }
+        }
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(3);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbShowAllSolutions() {
+    satzbauData.forEach(function(_, i) { sbShowSolution(i); });
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function resetSatzbau() { initSatzbau(); }
+
+// ═══════════════════════════ ZUORDNUNG ═══════════════════════════════════════
+var zuordBuilt = false;
+var selectedZuordChip = null;
+
+var ZUORD_DATA = [
+    { word: 'nichts', cat: 'negwort' },
+    { word: 'niemand', cat: 'negwort' },
+    { word: 'nirgendwohin', cat: 'negwort' },
+    { word: 'niemals', cat: 'negwort' },
+    { word: 'unabhängig', cat: 'unpref' },
+    { word: 'unhöflich', cat: 'unpref' },
+    { word: 'unverständlich', cat: 'unpref' },
+    { word: 'nutzlos', cat: 'lossuf' },
+    { word: 'ahnungslos', cat: 'lossuf' },
+    { word: 'kinderlos', cat: 'lossuf' },
+    { word: 'kommentarlos', cat: 'lossuf' },
+    { word: 'weder … noch', cat: 'konj' },
+    { word: 'ohne … zu', cat: 'konj' },
+];
+
+var ZUORD_CATS = [
+    { id: 'negwort', label: 'Negationswort' },
+    { id: 'unpref',  label: 'Präfix un-' },
+    { id: 'lossuf',  label: 'Suffix -los' },
+    { id: 'konj',    label: 'Konjunktion/Konstruktion' },
+];
+
+function buildZuordnung() {
+    var bank = document.getElementById('zuordBank');
+    var catsDiv = document.getElementById('zuordCats');
+    bank.innerHTML = '';
+    catsDiv.innerHTML = '';
+
+    // Shuffle
+    var items = ZUORD_DATA.slice();
+    for (var i = items.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = items[i]; items[i] = items[j]; items[j] = t;
+    }
+
+    items.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'zuord-chip';
+        chip.textContent = item.word;
+        chip.dataset.cat = item.cat;
+        chip.addEventListener('click', function() {
+            if (chip.classList.contains('correct')) return;
+            if (selectedZuordChip === chip) {
+                chip.classList.remove('selected');
+                selectedZuordChip = null;
+                return;
+            }
+            if (selectedZuordChip) selectedZuordChip.classList.remove('selected');
+            chip.classList.add('selected');
+            selectedZuordChip = chip;
+        });
+        bank.appendChild(chip);
+    });
+
+    ZUORD_CATS.forEach(function(cat) {
+        var catDiv = document.createElement('div');
+        catDiv.className = 'zuord-cat';
+        catDiv.dataset.catId = cat.id;
+        var title = document.createElement('div');
+        title.className = 'zuord-cat-title';
+        title.textContent = cat.label;
+        var chips = document.createElement('div');
+        chips.className = 'zuord-cat-chips';
+        chips.id = 'zuord-cat-' + cat.id;
+        catDiv.appendChild(title);
+        catDiv.appendChild(chips);
+
+        catDiv.addEventListener('click', function() {
+            if (!selectedZuordChip) return;
+            timerAutoStart(4);
+            var correctCat = selectedZuordChip.dataset.cat;
+            var chip = selectedZuordChip;
+            selectedZuordChip = null;
+            chip.classList.remove('selected');
+
+            if (correctCat === cat.id) {
+                chip.classList.add('correct');
+                chips.appendChild(chip);
+                checkAllZuordDone();
+            } else {
+                chip.classList.add('wrong');
+                setTimeout(function() { chip.classList.remove('wrong'); }, 800);
+            }
+        });
+
+        catsDiv.appendChild(catDiv);
+    });
+}
+
+function checkAllZuordDone() {
+    var allChips = document.querySelectorAll('#zuordBank .zuord-chip, .zuord-cat-chips .zuord-chip');
+    var allDone = Array.from(allChips).every(function(c) { return c.classList.contains('correct'); });
+    if (allDone) timerStop(4);
+}
+
+function showZuordLoesung() {
+    var allChips = document.querySelectorAll('.zuord-chip');
+    allChips.forEach(function(chip) {
+        if (chip.classList.contains('correct')) return;
+        var catId = chip.dataset.cat;
+        var target = document.getElementById('zuord-cat-' + catId);
+        if (target) {
+            chip.classList.remove('selected', 'wrong');
+            chip.classList.add('correct');
+            target.appendChild(chip);
+        }
+    });
+}
+
+function resetZuordnung() {
+    selectedZuordChip = null;
+    buildZuordnung();
+    zuordBuilt = true;
+}
+
+// ═══════════════════════════ INIT ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', function() {
+    loadBestTimes();
+});
+</script>
+</body>
+</html>

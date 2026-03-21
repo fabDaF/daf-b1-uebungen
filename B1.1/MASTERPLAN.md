@@ -63,7 +63,7 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 101x | Bewerbung & Arbeit | 1011X 1012G 1013R 1014X 1015G 1016R 1017X 1018S |
 | 102x | Umwelt & Gesellschaft | 1021X 1022G 1023R 1024X 1025G 1026R 1027X 1028S |
 | 103x | Identität & Sprache | 1031X 1032G 1033R 1034X 1035G 1036R 1037X 1038S |
-| 104x | Soziale Netzwerke & Privatsphäre | 1041X 1042G 1043R |
+| 104x | Soziale Netzwerke & Privatsphäre | 1041X 1042G 1043R 1044X |
 
 ### Fertigstellungsstatus B1.1
 
@@ -96,6 +96,7 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1041X | X | Privatsphäre in einer vernetzten Welt | ✅ Fertig |
 | 1042G | G | Mehr über Pronomen | ✅ Fertig |
 | 1043R | R | Partnersuche online | ✅ Fertig |
+| 1044X | X | Online einkaufen | ✅ Fertig |
 
 ---
 

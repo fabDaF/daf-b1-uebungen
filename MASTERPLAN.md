@@ -46,27 +46,68 @@ Beispiel: `DE_B1_1011X-vorstellungsgespraech.html`
 Lingoda-PDFs unter: `Cowork/lingoda/B 1.1/`
 
 ### Dashboard
-**Es gibt genau ein gültiges Dashboard:**
+
+# ⛔⛔⛔ ES GIBT NUR EIN EINZIGES DASHBOARD ⛔⛔⛔
+
 ```
 /sessions/eager-great-dirac/mnt/htmlS/dashboard.html
+file:///Users/frankburkert/Cowork/htmlS/dashboard.html
 ```
-auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 
-⛔ Alle anderen Dashboard-Dateien (`b1-1-dashboard.html`, `a2-1-dashboard.html` etc.) sind **obsolet** und werden **nie** verwendet oder verlinkt.
+**ABSOLUTES VERBOT:**
+- ❌ Niemals eine neue `b1-1-dashboard.html` anlegen
+- ❌ Niemals eine neue `b1-2-dashboard.html` anlegen
+- ❌ Niemals irgendeine andere Dashboard-Datei anlegen oder verlinken
+- ❌ Niemals in ein anderes Dashboard als `dashboard.html` schreiben
+
+**PFLICHT nach jeder neuen HTML-Datei:**
+→ Neue Lektion sofort in `/sessions/eager-great-dirac/mnt/htmlS/dashboard.html` eintragen (KURSE → id:'b11' oder id:'b12')
+
+Jede andere Dashboard-Datei die existiert (`b1-1-dashboard.html`, `a2-1-dashboard.html` etc.) ist **obsolet** — sofort löschen falls gefunden.
 
 ---
 
-## 2. Übersicht aller B1.1-Lektionen
+## 2. Übersicht aller Lektionen (B1.1 + B1.2)
+
+> Dieser Masterplan gilt für **alle** Niveaus. B1.1 und B1.2 folgen denselben Regeln.
+> Quellmaterial B1.2: `Cowork/lingoda/B 1.2/`
+> HTML-Dateien B1.2: `htmlS/B1.2/`
+
+### B1.1
 
 | Einheit | Thema | Lektionen |
 |---------|-------|-----------|
 | 101x | Bewerbung & Arbeit | 1011X 1012G 1013R 1014X 1015G 1016R 1017X 1018S |
-| 102x | Umwelt & Gesellschaft | 1021X 1022G 1023R 1024X 1025G 1026R 1027X 1028S |
-| 103x | Identität & Sprache | 1031X 1032G 1033R 1034X 1035G 1036R 1037X 1038S |
-| 104x | Soziale Netzwerke & Privatsphäre | 1041X 1042G 1043R 1044X 1045G 1046R 1047X 1048S |
-| 105x | Stadt & Land / Wohnen | 1051X 1052G 1053R 1054X 1055G 1056R 1057X 1058S |
-| 106x | Geschichte & Persönlichkeiten | 1061X 1062G 1063R 1064X 1065G 1066R 1067X 1068S |
-| 107x | Schreiben (W-Typ) | 1071W 1072W |
+| 102x | Umwelt & Natur | 1021X 1022G 1023R 1024X 1025G 1026R 1027X 1028S |
+| 103x | Kultur & Identität | 1031X 1032G 1033R 1034X 1035G 1036R 1037X 1038S |
+| 104x | Digital & Medien | 1041X 1042G 1043R 1044X 1045G 1046R 1047X 1048S |
+| 105x | Stadt & Land | 1051X 1052G 1053R 1054X 1055G 1056R 1057X 1058S |
+| 106x | Geschichte | 1061X 1062G 1063R 1064X 1065G 1066R 1067X 1068S |
+| 107x | Schreiben | 1071W 1072W |
+
+### B1.2
+
+| Einheit | Thema | Lektionen |
+|---------|-------|-----------|
+| 201x | Werbung & Marketing | 2011X 2012G 2013R 2014X 2015G 2016R 2017X 2018S |
+| 202x | Subkultur & Mainstream | 2021X 2022G 2023R 2024X 2025G 2026R 2027X 2028S |
+| 203x | Familie & Gefühle | 2031X 2032G 2033R 2034X 2035G 2036R 2037X 2038S |
+| 204x | Medien & Entertainment | 2041X 2042G 2043R 2044X 2045G 2046R 2047X 2048S |
+| 205x | Leben im Ausland | 2051X 2052G 2053R 2054X 2055G 2056R 2057X 2058S |
+| 206x | DIY & Nachhaltigkeit | 2061X 2062G 2063R 2064X 2065G 2066R 2067X 2068S |
+| 207x | Schreiben | 2071W 2072W |
+
+### B1.3
+
+| Einheit | Thema | Lektionen |
+|---------|-------|-----------|
+| 301x | Spiele & Sport | 3011X 3012G 3013R 3014X 3015G 3016R 3017X 3018S |
+| 302x | Prominente & Berühmtheiten | 3021X 3022G 3023R 3024X 3025G 3026R 3027X 3028S |
+| 303x | Bildung & Schule | 3031X 3032G 3033R 3034X 3035G 3036R 3037X 3038S |
+| 304x | Konsum & Medien | 3041X 3042G 3043R 3044X 3045G 3046R 3047X 3048S |
+| 305x | Science-Fiction & Fiktion | 3051X 3052G 3053R 3054X 3055G 3056R 3057X 3058S |
+| 306x | Schönheit & Aussehen | 3061X 3062G 3063R 3064X 3065G 3066R 3067X 3068S |
+| 307x | Schreiben | 3071W 3072W |
 
 ### Fertigstellungsstatus B1.1
 
@@ -107,21 +148,131 @@ auf dem Rechner: `file:///Users/frankburkert/Cowork/htmlS/dashboard.html`
 | 1051X | X | Landflucht | ⏳ Ausstehend |
 | 1052G | G | Mehr über den Genitiv | ⏳ Ausstehend |
 | 1053R | R | Kulturelle Angebote in der Großstadt | ⏳ Ausstehend |
-| 1054X | X | Eine Wohnung mieten | ⏳ Ausstehend |
-| 1055G | G | Mehr über den Infinitiv mit zu | ⏳ Ausstehend |
-| 1056R | R | Das Leben auf dem Land | ⏳ Ausstehend |
-| 1057X | X | Heimweh | ⏳ Ausstehend |
-| 1058S | S | Der beste Ort zum Leben | ⏳ Ausstehend |
-| 1061X | X | Historische Ereignisse | ⏳ Ausstehend |
-| 1062G | G | Funktionen und Bedeutungen des Verbs werden | ⏳ Ausstehend |
-| 1063R | R | Der Fall der Berliner Mauer | ⏳ Ausstehend |
-| 1064X | X | Historische Persönlichkeiten | ⏳ Ausstehend |
-| 1065G | G | Mehr über das Verb werden | ⏳ Ausstehend |
-| 1066R | R | Immanuel Kant | ⏳ Ausstehend |
-| 1067X | X | Chronologisch erzählen | ⏳ Ausstehend |
-| 1068S | S | Über historische Fakten sprechen | ⏳ Ausstehend |
-| 1071W | W | Schreibe ein Motivationsschreiben | ⏳ Ausstehend |
-| 1072W | W | Verfasse einen Beschwerdebrief | ⏳ Ausstehend |
+| 1054X | X | Eine Wohnung mieten | ✅ Fertig (Phase A) |
+| 1055G | G | Mehr über den Infinitiv mit zu | ✅ Fertig (Phase A) |
+| 1056R | R | Das Leben auf dem Land | ✅ Fertig (Phase A) |
+| 1057X | X | Heimweh | ✅ Fertig (Phase A) |
+| 1058S | S | Der beste Ort zum Leben | ✅ Fertig (Phase A) |
+| 1061X | X | Historische Ereignisse | ✅ Fertig (Phase A) |
+| 1062G | G | Das Verb lassen | ✅ Fertig (Phase A) |
+| 1063R | R | Der Fall der Berliner Mauer | ✅ Fertig (Phase A) |
+| 1064X | X | Historische Persönlichkeiten | ✅ Fertig (Phase A) |
+| 1065G | G | Mehr über das Verb werden | ✅ Fertig (Phase A) |
+| 1066R | R | Immanuel Kant | ✅ Fertig (Phase A) |
+| 1067X | X | Chronologisch erzählen | ✅ Fertig (Phase A) |
+| 1068S | S | Über historische Fakten sprechen | ✅ Fertig (Phase A) |
+| 1071W | W | Schreibe ein Motivationsschreiben | ✅ Fertig (Phase A) |
+| 1072W | W | Verfasse einen Beschwerdebrief | ✅ Fertig (Phase A) |
+
+### Fertigstellungsstatus B1.2
+
+| Lektion | Typ | Thema | Status |
+|---------|-----|-------|--------|
+| 2011X | X | Werbekampagne | ✅ Fertig (Phase A) |
+| 2012G | G | Mischverben | ✅ Fertig (Phase A) |
+| 2013R | R | Werbegeschichte | ✅ Fertig (Phase A) |
+| 2014X | X | Werbung beschreiben | ✅ Fertig (Phase A) |
+| 2015G | G | Nullartikel | ✅ Fertig (Phase A) |
+| 2016R | R | Marketingstrategien | ✅ Fertig (Phase A) |
+| 2017X | X | Die Zukunft der Werbung | ✅ Fertig (Phase A) |
+| 2018S | S | Über alte und neue Werbekampagnen sprechen | ✅ Fertig (Phase A) |
+| 2021X | X | Urbane Szenen | ✅ Fertig (Phase A) |
+| 2022G | G | Zusätzliches über das Futur I | ✅ Fertig (Phase A) |
+| 2023R | R | Die Mainstream-Kultur | ✅ Fertig (Phase A) |
+| 2024X | X | An einer Diskussion teilnehmen | ✅ Fertig Phase A |
+| 2025G | G | Konjunktiv II der Modalverben | ✅ Fertig Phase A |
+| 2026R | R | Reisen als Subkultur | ✅ Fertig Phase A |
+| 2027X | X | Tattoos und Piercings | ✅ Fertig Phase A |
+| 2028S | S | Über Subkulturen sprechen | ✅ Fertig Phase A |
+| 2031X | X | Familienstrukturen | ✅ Fertig Phase A |
+| 2032G | G | Partizip II als Adjektiv | ✅ Fertig Phase A |
+| 2033R | R | Adoption | ✅ Fertig Phase A |
+| 2034X | X | Gefühle ausdrücken | ✅ Fertig Phase A |
+| 2035G | G | Zusätzliches über Infinitivsätze | ✅ Fertig Phase A |
+| 2036R | R | Bikulturelle Familien | ✅ Fertig Phase A |
+| 2037X | X | Was ist Liebe? | ✅ Fertig Phase A |
+| 2038S | S | Über Familien und Gefühle sprechen | ✅ Fertig Phase A |
+| 2041X | X | Film- und Theaterkritik | ✅ Fertig Phase A |
+| 2042G | G | Indirekte Fragesätze | ✅ Fertig Phase A |
+| 2043R | R | Mehr Folgen, bitte! | ✅ Fertig Phase A |
+| 2044X | X | Gefühle über Dinge und Ereignisse | ✅ Fertig Phase A |
+| 2045G | G | Passiversatzformen | ✅ Fertig Phase A |
+| 2046R | R | Video-on-Demand | ✅ Fertig Phase A |
+| 2047X | X | Einen Grund äußern | ✅ Fertig Phase A |
+| 2048S | S | Shows und Programme | ✅ Fertig Phase A |
+| 2051X | X | Ins Ausland übersiedeln | ✅ Fertig Phase A |
+| 2052G | G | Mehr zum Perfekt | ✅ Fertig Phase A |
+| 2053R | R | Ein Auslandspraktikum machen | ✅ Fertig Phase A |
+| 2054X | X | Internationale Erfahrungen | ✅ Fertig Phase A |
+| 2055G | G | Plusquamperfekt mit Modalverben | ✅ Fertig Phase A |
+| 2056R | R | Sprachassistenz in Deutschland | ✅ Fertig Phase A |
+| 2057X | X | Möglichkeiten ausdrücken | ✅ Fertig Phase A |
+| 2058S | S | Über das Leben im Ausland diskutieren | ✅ Fertig Phase A |
+| 2061X | X | Mach es selbst! | ✅ Fertig Phase A |
+| 2062G | G | Relativsatz | ✅ Fertig Phase A |
+| 2063R | R | Ein Haus renovieren | ✅ Fertig Phase A |
+| 2064X | X | Lokaler Handel | ✅ Fertig Phase A |
+| 2065G | G | Komplementsatz | ✅ Fertig Phase A |
+| 2066R | R | Aus Müll basteln | ✅ Fertig Phase A |
+| 2067X | X | Gegensatz und Ausnahme ausdrücken | ✅ Fertig Phase A |
+| 2068S | S | Mit neuen Fähigkeiten das Leben ändern | ✅ Fertig Phase A |
+| 2071W | W | Ein Skript für einen Dialog schreiben | ✅ Fertig Phase A |
+| 2072W | W | Eine Werbeanzeige schreiben | ✅ Fertig Phase A |
+
+### Fertigstellungsstatus B1.3
+
+| Lektion | Typ | Thema | Status |
+|---------|-----|-------|--------|
+| 3011X | X | Die Kultur der Brettspiele | ✅ Fertig |
+| 3012G | G | Mehr über Infinitivsätze | ✅ Fertig |
+| 3013R | R | Die Olympischen Spiele | ✅ Fertig |
+| 3014X | X | Konsequenzen ausdrücken | ✅ Fertig |
+| 3015G | G | Partizip I | ✅ Fertig |
+| 3016R | R | Mit Spielzeug aufwachsen | ✅ Fertig |
+| 3017X | X | Spielstände und Klassifizierungen | ✅ Fertig |
+| 3018S | S | Über verschiedene Spielarten sprechen | ✅ Fertig |
+| 3021X | X | Ich habe etwas dazu zu sagen | ✅ Fertig |
+| 3022G | G | Verben mit situativer Ergänzung | ✅ Fertig |
+| 3023R | R | Lebensweise der Berühmtheiten | ✅ Fertig |
+| 3024X | X | Gesprächig werden | ✅ Fertig |
+| 3025G | G | Verben mit Direktivergänzung | ✅ Fertig |
+| 3026R | R | Bekannte Autoren | ✅ Fertig |
+| 3027X | X | Ratschläge geben | ✅ Fertig |
+| 3028S | S | Verhalten berühmter Personen besprechen | ✅ Fertig |
+| 3031X | X | Das Studentenleben | ✅ Fertig |
+| 3032G | G | Akkusativ-Ergänzungen | ✅ Fertig |
+| 3033R | R | Das deutsche Schulsystem | ✅ Fertig |
+| 3034X | X | Das Benotungssystem | ✅ Fertig |
+| 3035G | G | Subjektive Bedeutung der Modalverben | ✅ Fertig |
+| 3036R | R | Mehrsprachig aufwachsen | ✅ Fertig |
+| 3037X | X | Sich um einen Studienplatz bewerben | ✅ Fertig |
+| 3038S | S | Über Bildung diskutieren | ✅ Fertig |
+| 3041X | X | Bewusstes Konsumverhalten | ✅ Fertig |
+| 3042G | G | Bedeutungen des Verbs melden | ✅ Fertig |
+| 3043R | R | Der Einfluss der Medien auf das Konsumverhalten | ✅ Fertig |
+| 3044X | X | Eine komplexe Situation erklären | ✅ Fertig |
+| 3045G | G | Nominativ-, Akkusativ- und Dativergänzung | ✅ Fertig |
+| 3046R | R | Die Rückverfolgbarkeit der Produkte | ✅ Fertig |
+| 3047X | X | Eine Präsentation vorbereiten | ✅ Fertig |
+| 3048S | S | Über Konsumverhalten sprechen | ✅ Fertig |
+| 3051X | X | Utopische und dystopische Fiktion | ✅ Fertig |
+| 3052G | G | Feste Wortverbindungen | ✅ Fertig |
+| 3053R | R | Apokalyptische und postapokalyptische Fiktion | ✅ Fertig |
+| 3054X | X | Strukturen der Narration | ✅ Fertig |
+| 3055G | G | Reziprokpronomen | ✅ Fertig |
+| 3056R | R | Futuristische Science-Fiction | ✅ Fertig |
+| 3057X | X | Vager und gezielter Sprachgebrauch | ✅ Fertig |
+| 3058S | S | Über Science-Fiction sprechen | ✅ Fertig |
+| 3061X | X | Äußeres Erscheinungsbild | ✅ Fertig |
+| 3062G | G | Komparativ und Superlativ | ✅ Fertig |
+| 3063R | R | Schönheitsideale im Wandel der Zeit | ✅ Fertig |
+| 3064X | X | Mode und Kleidungsstil | ✅ Fertig |
+| 3065G | G | Adjektivdeklination | ✅ Fertig |
+| 3066R | R | Körperbild und Selbstakzeptanz | ✅ Fertig |
+| 3067X | X | Kosmetik und Körperpflege | ✅ Fertig |
+| 3068S | S | Über Schönheit sprechen | ✅ Fertig |
+| 3071W | W | Eine Biografie schreiben | ✅ Fertig |
+| 3072W | W | Einen Artikel schreiben | ✅ Fertig |
 
 ---
 
@@ -186,6 +337,24 @@ Tab-Struktur wird beim ersten W-File definiert.
 ---
 
 ## 4. Verbindliche Qualitätsregeln
+
+### Typografie — Deutsche Anführungszeichen
+
+⛔ **Gerade ASCII-Anführungszeichen `"` (U+0022) sind im Fließtext VERBOTEN.**
+
+| Zeichen | Unicode | Name | Verwendung |
+|---------|---------|------|------------|
+| „ | U+201E | DOUBLE LOW-9 QUOTATION MARK | öffnendes deutsches Anführungszeichen |
+| " | U+201C | LEFT DOUBLE QUOTATION MARK | schließendes deutsches Anführungszeichen |
+
+```html
+<!-- ❌ FALSCH -->
+<p>Er sagte "Hallo".</p>
+<!-- ✅ RICHTIG -->
+<p>Er sagte „Hallo".</p>
+```
+
+Das gerade `"` (U+0022) darf **nur** in HTML-Attributen verwendet werden (`class="..."`, `src="..."`), niemals im sichtbaren Fließtext.
 
 ### Layout
 - Lila Hintergrund-Gradient (`#667eea` → `#764ba2`) — Skill: `daf-html-layout`
@@ -253,10 +422,35 @@ Reihenfolge in JS: erst `val === ans`, dann `ans.startsWith(val)`.
 ### Satzbau
 
 Verbindlich: Skill `satzbau-drag-drop`
-- Variable: `sbDragged`
-- IDs: `sb-bank-N` / `sb-row-N` / `sb-fb-N`
-- Fisher-Yates-Shuffle
-- 500ms-Timeout vor Farb-Feedback
+
+⛔ **Exakte Funktionsnamen — keine Abweichungen:**
+
+| Funktion | Zweck |
+|----------|-------|
+| `sbDragged` | let-Variable, hält das gezogene Chip-Element |
+| `sbMakeChip(word, isPunct)` | Erstellt einen Chip (draggable div) |
+| `sbRegisterZone(zone)` | Registriert dragover/dragleave/drop auf einer Zone |
+| `sbCheckAuto(itemIdx)` | Prüft Satz nach 500ms Timeout |
+| `sbColorRow(idx, ok)` | Setzt correct/incorrect Klassen |
+| `sbUpdateCapitalization(zone)` | Großschreibt das erste Chip in der Zone |
+| `checkSatzbauComplete()` | Stoppt Timer wenn alle Sätze korrekt |
+| `buildSatzbau()` | Baut alle Sätze aus SATZBAU_DATA auf |
+| `resetSatzbau()` | Ruft buildSatzbau() + resetTimer(N) auf |
+| `shuffleArr(arr)` | Fisher-Yates-Shuffle |
+
+**SATZBAU_DATA-Format:**
+```javascript
+const SATZBAU_DATA = [
+  { words: ['Er', 'hat', 'viel', 'gelernt', '.'] },
+  { words: ['Sie', 'kann', 'gut', 'singen', '.'] },
+];
+// Satzzeichen als eigener Chip: '.' ',' '!' '?'
+```
+
+- `timerAutoStart(N)` im dragstart-Handler aufrufen
+- 500ms Timeout in `sbCheckAuto` vor Farb-Feedback
+- Fisher-Yates via `shuffleArr()`
+- IDs: `sb_pool_N` / `sb_zone_N` / `sb_fb_N`
 
 ### ⛔ ABSOLUTES VERBOT — Satznummerierung
 
@@ -270,6 +464,42 @@ wrapper.appendChild(label); // wenn label eine Nummer enthält
 ```
 
 Kein Mensch braucht diesen Hinweis. Er stört und wirkt amateurhaft.
+
+### ⛔ ABSOLUTES VERBOT — Tab-Name "Vokabeln"
+
+Der Wortschatz-Tab heißt **immer** `Wortschatz` (nicht "Vokabeln", nicht "Vocabulary").
+
+```html
+<!-- ❌ VERBOTEN -->
+<button class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Vokabeln</span></button>
+<!-- ✅ RICHTIG -->
+<button class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></button>
+```
+
+### Wortschatz-Tab — Verbindliche JS-Funktionen
+
+⛔ **Exakte Funktionsnamen — keine Abweichungen:**
+
+| Funktion | Zweck |
+|----------|-------|
+| `initVocab()` | Baut die Wortschatz-Karten auf (PFLICHT-Name) |
+| `vocabLiveCheck(input, ans)` | Live-Prüfung beim Tippen |
+| `showVocabLoesung()` | Zeigt alle Lösungen an |
+| `resetVocab()` | Setzt alle Felder zurück und ruft initVocab() auf |
+
+**WORTSCHATZ-Array-Format:**
+```javascript
+var WORTSCHATZ = [
+  { type: 'n', en: 'the city', art: 'die', wort: 'Stadt', plural: '-"e' },
+  { type: 'v', en: 'to travel', de: 'reisen' },
+];
+// type: 'n' = Nomen (art + wort + plural tippen)
+// type: 'v' = Verb (de tippen)
+```
+
+**HTML-Container:** `<div id="vocabContainer"></div>` (kein Table!)
+
+**Initialisierungsaufruf:** `initVocab();` beim Seitenstart aufrufen.
 
 ### Bilder (Pexels)
 

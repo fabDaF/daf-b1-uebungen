@@ -187,11 +187,11 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
   </div>
 
   <nav class="nav">
-    <button class="nav-btn active" onclick="showSection(0)">🌪️ Vokabular</button>
-    <button class="nav-btn" onclick="showSection(1)">🛡️ Schutz</button>
-    <button class="nav-btn" onclick="showSection(2)">✏️ Lückentext</button>
-    <button class="nav-btn" onclick="showSection(3)">🧩 Satzbau</button>
-    <button class="nav-btn" onclick="showSection(4)">🔠 Wortschatz</button>
+    <button class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🌪️</span><span class="nav-label">Vokabular</span></button>
+    <button class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🛡️</span><span class="nav-label">Schutz</span></button>
+    <button class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></button>
+    <button class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></button>
+    <button class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></button>
   </nav>
 
   <!-- TAB 0: VOKABULAR -->
@@ -764,18 +764,18 @@ function resetSatzbau() { initSatzbau(); }
 
 /* ===== WORTSCHATZ (Tab 4) ===== */
 var WORTSCHATZ = [
-  { type:'n', en:'flood',            artikel:'das', de:'Hochwasser',     plural:'̈—' },
-  { type:'n', en:'drought',          artikel:'die', de:'Dürre',         plural:'-n' },
-  { type:'n', en:'earthquake',       artikel:'das', de:'Erdbeben',       plural:'̈—' },
-  { type:'n', en:'hurricane',        artikel:'der', de:'Hurrikan',       plural:'-e' },
-  { type:'n', en:'tsunami',          artikel:'der', de:'Tsunami',        plural:'-s' },
-  { type:'n', en:'forest fire',      artikel:'der', de:'Waldbrand',      plural:'̈-e' },
-  { type:'n', en:'volcanic eruption',artikel:'der', de:'Vulkanausbruch', plural:'̈-e' },
-  { type:'n', en:'tornado',          artikel:'der', de:'Tornado',        plural:'-s' },
-  { type:'v', en:'to destroy',       de:'zerstören' },
-  { type:'v', en:'to prevent',       de:'verhindern' },
-  { type:'v', en:'to worsen',        de:'verschlimmern' },
-  { type:'v', en:'to pollute',       de:'verschmutzen' },
+  { type:'n', en:'flood',             art:'das', wort:'Hochwasser',     plural:'̈—' },
+  { type:'n', en:'drought',           art:'die', wort:'Dürre',         plural:'-n' },
+  { type:'n', en:'earthquake',        art:'das', wort:'Erdbeben',       plural:'̈—' },
+  { type:'n', en:'hurricane',         art:'der', wort:'Hurrikan',       plural:'-e' },
+  { type:'n', en:'tsunami',           art:'der', wort:'Tsunami',        plural:'-s' },
+  { type:'n', en:'forest fire',       art:'der', wort:'Waldbrand',      plural:'̈-e' },
+  { type:'n', en:'volcanic eruption', art:'der', wort:'Vulkanausbruch', plural:'̈-e' },
+  { type:'n', en:'tornado',           art:'der', wort:'Tornado',        plural:'-s' },
+  { type:'v', en:'to destroy',        de:'zerstören' },
+  { type:'v', en:'to prevent',        de:'verhindern' },
+  { type:'v', en:'to worsen',         de:'verschlimmern' },
+  { type:'v', en:'to pollute',        de:'verschmutzen' },
 ];
 
 function makeVocabInput(type, val, ph, id, cls) {
@@ -813,7 +813,7 @@ function resetVocab() {
   });
 }
 
-function vocabInit() {
+function initVocab() {
   var container = document.getElementById('vocabContainer');
   if (!container) return;
   container.innerHTML = '';
@@ -822,8 +822,8 @@ function vocabInit() {
     var enLabel = document.createElement('div'); enLabel.className = 'vocab-en-label'; enLabel.textContent = w.en;
     var inputsDiv = document.createElement('div'); inputsDiv.className = 'vocab-inputs';
     if (w.type === 'n') {
-      var iArt  = makeVocabInput('text', w.artikel, 'Artikel', i, 'artikel');
-      var iWort = makeVocabInput('text', w.de,      'Wort',    i, 'wort');
+      var iArt  = makeVocabInput('text', w.art,     'Artikel', i, 'artikel');
+      var iWort = makeVocabInput('text', w.wort,    'Wort',    i, 'wort');
       var iPlu  = makeVocabInput('text', w.plural,  'Endung',  i, 'plural');
       [iArt, iWort, iPlu].forEach(function(inp){ inputsDiv.appendChild(inp); });
     } else {
@@ -835,7 +835,9 @@ function vocabInit() {
   });
 }
 
-vocabInit();
+lueckeInit();
+initSatzbau();
+initVocab();
 loadBestTimes();
 </script>
 </body>

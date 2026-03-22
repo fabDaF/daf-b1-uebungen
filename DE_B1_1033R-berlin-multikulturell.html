@@ -192,42 +192,14 @@ body {
     margin-right: auto;
 }
 
-/* ── TIMER-BAR ── */
-.timer-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: white;
-    border-radius: 10px;
-    padding: 10px 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-    font-size: 0.85rem;
-    color: #666;
-}
-.timer-display { font-weight: 700; color: #667eea; font-size: 1rem; }
+/* ── TIMER-CONTROLS ── */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.tc-buttons { display:flex; gap:6px; }
+.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.tc-buttons button:hover { background:#f0f0f0; color:#555; }
+.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-display { color:#667eea; font-weight:700; }
 .best-display  { color: #f39c12; font-weight: 600; }
-
-.btn-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 16px;
-    padding-top: 12px;
-    border-top: 1px solid #eee;
-}
-.btn-row button {
-    background: none;
-    border: 1px solid #c0b0e8;
-    border-radius: 16px;
-    padding: 5px 16px;
-    cursor: pointer;
-    font-size: .88rem;
-    color: #5a3e9e;
-    transition: background .2s;
-}
-.btn-row button:hover { background: #f0edf8; }
 
 /* ── LÜCKENTEXT ── */
 .luecke-item {
@@ -492,19 +464,20 @@ input.plural-inp { width: 110px; }
          alt="Fragen zum Text">
     <div class="section-title">❓ Verständnisfragen</div>
 
-    <div class="timer-bar">
-        <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-2">–</span></span>
+    <div class="timer-controls">
+        <div class="tc-buttons">
+            <button onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
+            <button onclick="showRFLoesung()">💡 Lösungen</button>
+        </div>
+        <div class="tc-times">
+            <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
+            <span>🏆 <span class="best-display" id="best-2">–</span></span>
+        </div>
     </div>
 
     <p class="rf-title">Richtig oder Falsch? Klicke auf R oder F.</p>
 
     <div class="rf-list" id="rfList"></div>
-
-    <div class="btn-row">
-        <button onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
-        <button onclick="showRFLoesung()">💡 Lösungen</button>
-    </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -517,9 +490,15 @@ input.plural-inp { width: 110px; }
     <div class="section-title">✏️ Lückentext</div>
     <div class="section-sub">Ergänze die fehlenden Wörter.</div>
 
-    <div class="timer-bar">
-        <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-3">–</span></span>
+    <div class="timer-controls">
+        <div class="tc-buttons">
+            <button onclick="showLueckeLoesung()">💡 Lösungen</button>
+            <button onclick="timerResetOne(3); resetLuecke()">↺ Neustart</button>
+        </div>
+        <div class="tc-times">
+            <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
+            <span>🏆 <span class="best-display" id="best-3">–</span></span>
+        </div>
     </div>
 
     <div class="wortkasten">
@@ -530,10 +509,6 @@ input.plural-inp { width: 110px; }
 
     <div id="lueckeContainer"></div>
 
-    <div class="btn-row">
-        <button onclick="showLueckeLoesung()">💡 Lösungen</button>
-        <button onclick="timerResetOne(3); resetLuecke()">↺ Neustart</button>
-    </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -546,17 +521,18 @@ input.plural-inp { width: 110px; }
     <div class="section-title">🧩 Satzbau</div>
     <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge.</div>
 
-    <div class="timer-bar">
-        <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-4">–</span></span>
+    <div class="timer-controls">
+        <div class="tc-buttons">
+            <button onclick="showAllSbSolutions()">💡 Alle lösen</button>
+            <button onclick="timerResetOne(4); initSatzbau()">↺ Neustart</button>
+        </div>
+        <div class="tc-times">
+            <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
+            <span>🏆 <span class="best-display" id="best-4">–</span></span>
+        </div>
     </div>
 
     <div id="satzbauContainer"></div>
-
-    <div class="btn-row">
-        <button onclick="showAllSbSolutions()">💡 Alle lösen</button>
-        <button onclick="timerResetOne(4); initSatzbau()">↺ Neustart</button>
-    </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -569,17 +545,18 @@ input.plural-inp { width: 110px; }
     <div class="section-title">📚 Wortschatz</div>
     <div class="section-sub">Tippe das deutsche Wort (mit Artikel und Plural).</div>
 
-    <div class="timer-bar">
-        <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-5">–</span></span>
+    <div class="timer-controls">
+        <div class="tc-buttons">
+            <button onclick="showWortLoesung()">💡 Lösungen</button>
+            <button onclick="timerResetOne(5); initWortschatz()">↺ Neustart</button>
+        </div>
+        <div class="tc-times">
+            <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
+            <span>🏆 <span class="best-display" id="best-5">–</span></span>
+        </div>
     </div>
 
     <div class="wort-grid" id="vocabContainer"></div>
-
-    <div class="btn-row">
-        <button onclick="showWortLoesung()">💡 Lösungen</button>
-        <button onclick="timerResetOne(5); initWortschatz()">↺ Neustart</button>
-    </div>
 </div>
 
 <!-- AUTHOR FOOTER -->

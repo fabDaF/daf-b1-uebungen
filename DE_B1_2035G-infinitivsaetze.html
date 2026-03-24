@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2035G Infinitivsätze</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #667eea; font-family: Arial, sans-serif; min-height: 100vh; padding: 20px; }
+  .container { background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); max-width: 860px; margin: 0 auto; overflow: hidden; }
+  h1 { background: #667eea; color: #fff; padding: 18px 24px; font-size: 1.25rem; }
+  h1 span { font-size: 0.95rem; font-weight: normal; opacity: 0.85; margin-left: 10px; }
+
+  /* NAV */
+  .nav { display: flex; flex-direction: column; gap: 0; border-bottom: 2px solid #667eea; }
+  .nav button {
+    background: #f3e8ff; border: 1px solid #b589d6; color: #4a007a;
+    padding: 10px 16px; cursor: pointer; font-size: 0.9rem; text-align: left;
+    transition: background 0.2s; border-left: none; border-right: none;
+  }
+  .nav button:first-child { border-top: none; }
+  .nav button.active { background: #667eea; color: #fff; font-weight: bold; }
+  .nav button:hover:not(.active) { background: #e0c8f8; }
+
+  /* TAB CONTENT */
+  .tab { display: none; padding: 20px 24px 28px; }
+  .tab.active { display: block; }
+
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 18px; }
+
+  /* REGEL BOX */
+  .regel-box { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; }
+  .regel-box h3 { color: #4a007a; margin-bottom: 8px; font-size: 1rem; }
+  .regel-box p, .regel-box li { font-size: 0.92rem; line-height: 1.6; color: #333; }
+  .regel-box ul { padding-left: 18px; }
+
+  /* EXAMPLE BOX */
+  .ex-box { background: #e8f4fd; border-radius: 6px; padding: 12px 16px; margin: 10px 0; font-size: 0.92rem; line-height: 1.7; }
+  .ex-box strong { color: #1a5276; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9rem; }
+  th { background: #667eea; color: #fff; padding: 8px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; }
+  tr:nth-child(even) td { background: #f9f3ff; }
+
+  /* CHIP GROUP */
+  .chip-group { background: #f0f0f0; border-radius: 6px; padding: 10px 14px; margin: 10px 0; display: flex; flex-wrap: wrap; gap: 6px; min-height: 48px; }
+  .chip {
+    background: #667eea; color: #fff; padding: 6px 12px; border-radius: 20px;
+    cursor: grab; font-size: 0.88rem; user-select: none; border: none;
+    transition: background 0.15s; display: inline-block;
+  }
+  .chip:active { cursor: grabbing; }
+  .chip.dragging { opacity: 0.5; }
+  .chip.correct-chip { background: #27ae60; cursor: default; }
+  .chip.wrong-chip { background: #e74c3c; animation: shake 0.3s; }
+
+  /* DROP ZONE */
+  .drop-zone {
+    background: #f9f3ff; border: 2px dashed #b589d6; border-radius: 8px;
+    min-height: 54px; padding: 10px; display: flex; flex-wrap: wrap; gap: 6px;
+    align-items: center; margin: 8px 0; transition: background 0.2s;
+  }
+  .drop-zone.drag-over { background: #e8d5ff; border-color: #667eea; }
+  .drop-zone .placeholder { color: #aaa; font-size: 0.85rem; font-style: italic; pointer-events: none; }
+
+  /* ZUORDNUNG */
+  .zuordnung-container { display: flex; gap: 16px; flex-wrap: wrap; }
+  .zuordnung-category { flex: 1; min-width: 220px; }
+  .zuordnung-category h4 { background: #667eea; color: #fff; padding: 8px 12px; border-radius: 6px 6px 0 0; font-size: 0.9rem; }
+  .zuordnung-category .drop-zone { border-radius: 0 0 6px 6px; min-height: 120px; }
+
+  /* LÜCKENTEXT */
+  .luecke-wrap { line-height: 2.4; font-size: 0.95rem; color: #222; }
+  .luecke-wrap .gap-input {
+    border: none; border-bottom: 2px solid #667eea; background: transparent;
+    width: 140px; font-size: 0.93rem; padding: 2px 4px; outline: none; color: #333;
+  }
+  .luecke-wrap .gap-input.correct { border-color: #27ae60; color: #27ae60; background: #eafaf1; border-radius: 4px; }
+  .luecke-wrap .gap-input.wrong { border-color: #e74c3c; color: #e74c3c; background: #fdf2f2; border-radius: 4px; }
+
+  .sentence-block { background: #f9f3ff; border-radius: 8px; padding: 14px 18px; margin: 10px 0; line-height: 2.4; font-size: 0.95rem; }
+
+  /* TIMER */
+  .timer-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tc-buttons { display: flex; gap: 6px; }
+  .tc-times { display: flex; gap: 6px; }
+  .timer-btn {
+    padding: 7px 14px; border: none; border-radius: 6px; cursor: pointer;
+    font-size: 0.85rem; font-weight: bold;
+  }
+  .btn-start { background: #27ae60; color: #fff; }
+  .btn-stop  { background: #e74c3c; color: #fff; }
+  .btn-reset { background: #888; color: #fff; }
+  .time-btn  { background: #e8d5ff; color: #4a007a; padding: 7px 10px; border: 1px solid #b589d6; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+  .time-btn.active-t { background: #667eea; color: #fff; }
+  #timerDisplay_L, #timerDisplay_S {
+    font-weight: bold; font-size: 1.1rem; color: #4a007a;
+    background: #f3e8ff; padding: 6px 14px; border-radius: 8px; min-width: 64px; text-align: center;
+  }
+
+  /* FEEDBACK */
+  .check-btn {
+    background: #667eea; color: #fff; border: none; border-radius: 6px;
+    padding: 10px 20px; cursor: pointer; font-size: 0.92rem; margin-top: 14px;
+  }
+  .check-btn:hover { background: #5a0090; }
+  .feedback { margin-top: 10px; font-weight: bold; font-size: 0.95rem; padding: 8px 14px; border-radius: 6px; }
+  .feedback.ok { background: #eafaf1; color: #27ae60; }
+  .feedback.err { background: #fdf2f2; color: #e74c3c; }
+
+  /* ENTDECKEN TAB */
+  .entd-question { font-size: 1rem; font-weight: bold; color: #4a007a; margin-bottom: 14px; }
+  .entd-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .entd-opt {
+    padding: 10px 16px; border: 2px solid #b589d6; border-radius: 8px;
+    cursor: pointer; background: #f9f3ff; font-size: 0.92rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .entd-opt:hover { background: #e8d5ff; }
+  .entd-opt.correct { background: #eafaf1; border-color: #27ae60; color: #1a7a40; }
+  .entd-opt.wrong   { background: #fdf2f2; border-color: #e74c3c; color: #a93226; }
+  .entd-hint { font-size: 0.88rem; padding: 8px 14px; border-radius: 6px; margin-bottom: 10px; }
+  .entd-hint.ok  { background: #eafaf1; color: #1a7a40; }
+  .entd-hint.err { background: #fdf2f2; color: #a93226; }
+  .entd-dots { display: flex; gap: 8px; margin-bottom: 16px; }
+  .entd-dot { width: 14px; height: 14px; border-radius: 50%; background: #ddd; transition: background 0.3s; }
+  .entd-dot.done { background: #667eea; }
+  .entd-nav { display: flex; gap: 10px; margin-top: 12px; }
+  .entd-nav button {
+    background: #667eea; color: #fff; border: none; border-radius: 6px;
+    padding: 8px 16px; cursor: pointer; font-size: 0.88rem;
+  }
+  .entd-nav button:disabled { background: #ccc; cursor: default; }
+  .rule-card { background: #f3e8ff; border: 2px solid #667eea; border-radius: 10px; padding: 18px 22px; margin-top: 14px; }
+  .rule-card h3 { color: #4a007a; margin-bottom: 10px; }
+
+  /* VOKABELN */
+  .vok-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .vok-table th { background: #667eea; color: #fff; padding: 8px 12px; }
+  .vok-table td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; }
+  .vok-table tr:nth-child(even) td { background: #f9f3ff; }
+
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}
+  }
+
+  .author-footer { text-align: center; font-size: 0.78rem; color: #999; padding: 14px 0 8px; border-top: 1px solid #eee; margin-top: 24px; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>B1.2 – Lektion 2035G <span>Infinitivsätze</span></h1>
+
+  <div class="nav">
+    <button class="active" onclick="showTab(0)">🔍 Entdecken</button>
+    <button onclick="showTab(1)">📋 Regel</button>
+    <button onclick="showTab(2)">✏️ Lückentext</button>
+    <button onclick="showTab(3)">🔀 Satzbau</button>
+    <button onclick="showTab(4)">🗂️ Zuordnung</button>
+    <button onclick="showTab(5)">🔤 Wortschatz</button>
+  </div>
+
+  <!-- TAB 0: ENTDECKEN -->
+  <div class="tab active" id="tab0">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Grammatik entdecken">
+    <h2 style="color:#4a007a;margin-bottom:16px;">🔍 Grammatik entdecken</h2>
+    <p style="margin-bottom:16px;color:#555;font-size:0.92rem;">Entdecke die Regel selbst! Beantworte die Fragen und finde das Muster.</p>
+
+    <div class="entd-dots" id="entdDots">
+      <div class="entd-dot" id="dot0"></div>
+      <div class="entd-dot" id="dot1"></div>
+      <div class="entd-dot" id="dot2"></div>
+      <div class="entd-dot" id="dot3"></div>
+    </div>
+
+    <div id="entdStep0" class="entd-step">
+      <div class="entd-question">Schau dir diese Sätze an. Was fällt dir auf?<br><br>
+        <span style="font-style:italic;">&nbsp;• Sie hat mir angeboten, mir mit den Hausaufgaben <strong>zu helfen</strong>.<br>
+        &nbsp;• Wir sollten anfangen, die Hausaufgaben <strong>zu machen</strong>.<br>
+        &nbsp;• Ich beabsichtige nicht, das <strong>zu wiederholen</strong>.</span>
+      </div>
+      <div class="entd-question">Wo steht der Infinitiv mit „zu"?</div>
+      <div class="entd-options">
+        <div class="entd-opt" onclick="checkEntd(0,0,false)">Am Anfang des Satzes</div>
+        <div class="entd-opt" onclick="checkEntd(0,1,true)">Am Ende des Satzes</div>
+        <div class="entd-opt" onclick="checkEntd(0,2,false)">In der Mitte des Satzes</div>
+      </div>
+      <div id="hint0" class="entd-hint" style="display:none;"></div>
+      <div class="entd-nav"><button onclick="nextEntd(1)" id="entdNext0" disabled>Weiter →</button></div>
+    </div>
+
+    <div id="entdStep1" class="entd-step" style="display:none;">
+      <div class="entd-question">Schaue dir den Satz an:<br><br>
+        <span style="font-style:italic;">&nbsp;• Ich <strong>hoffe</strong>, dass <em>ich</em> bald fertig bin.<br>
+        &nbsp;• Ich <strong>hoffe</strong>, bald fertig <strong>zu sein</strong>.</span>
+      </div>
+      <div class="entd-question">Wann kann man einen dass-Satz durch einen Infinitivsatz ersetzen?</div>
+      <div class="entd-options">
+        <div class="entd-opt" onclick="checkEntd(1,0,false)">Immer — es ist egal, wer die Person ist</div>
+        <div class="entd-opt" onclick="checkEntd(1,1,true)">Nur wenn die Person im Hauptsatz und Nebensatz identisch ist</div>
+        <div class="entd-opt" onclick="checkEntd(1,2,false)">Nur bei Modalverben</div>
+      </div>
+      <div id="hint1" class="entd-hint" style="display:none;"></div>
+      <div class="entd-nav"><button onclick="nextEntd(2)" id="entdNext1" disabled>Weiter →</button></div>
+    </div>
+
+    <div id="entdStep2" class="entd-step" style="display:none;">
+      <div class="entd-question">Welche Verben verlangen eine Infinitivkonstruktion mit „zu"?</div>
+      <div class="entd-options">
+        <div class="entd-opt" onclick="checkEntd(2,0,false)">müssen, sollen, wollen — Modalverben</div>
+        <div class="entd-opt" onclick="checkEntd(2,1,false)">gehen, fahren, sehen, hören</div>
+        <div class="entd-opt" onclick="checkEntd(2,2,true)">anfangen, aufhören, beschließen, bitten, versuchen, hoffen</div>
+      </div>
+      <div id="hint2" class="entd-hint" style="display:none;"></div>
+      <div class="entd-nav"><button onclick="nextEntd(3)" id="entdNext2" disabled>Weiter →</button></div>
+    </div>
+
+    <div id="entdStep3" class="entd-step" style="display:none;">
+      <div class="entd-question">Welcher Satz ist richtig?</div>
+      <div class="entd-options">
+        <div class="entd-opt" onclick="checkEntd(3,0,false)">Es ist verboten das Gebäude zu betreten.</div>
+        <div class="entd-opt" onclick="checkEntd(3,1,true)">Es ist verboten, das Gebäude zu betreten.</div>
+        <div class="entd-opt" onclick="checkEntd(3,2,false)">Es ist verboten zu das Gebäude betreten.</div>
+      </div>
+      <div id="hint3" class="entd-hint" style="display:none;"></div>
+      <div class="entd-nav"><button onclick="showRuleCard()" id="entdNext3" disabled>Regel anzeigen ✓</button></div>
+    </div>
+
+    <div id="ruleCard" style="display:none;" class="rule-card">
+      <h3>🎉 Regel: Infinitivsätze mit „zu"</h3>
+      <ul style="padding-left:18px;line-height:2;font-size:0.93rem;color:#333;">
+        <li>Der Infinitiv mit „zu" steht am <strong>Ende des Satzes</strong>.</li>
+        <li>Vor dem Infinitivsatz steht oft ein <strong>Komma</strong>.</li>
+        <li>Infinitivsatz ersetzt den dass-Satz, wenn <strong>beide Personen identisch</strong> sind.</li>
+        <li>Verben: <em>anfangen, aufhören, beschließen, beabsichtigen, bitten, sich entschließen, versuchen, hoffen, meinen, versprechen, glauben</em></li>
+        <li>Adjektive: <em>bereit sein zu, verboten sein, erlaubt sein, gesund sein, leicht sein, richtig sein</em></li>
+        <li>Nomen: <em>die Absicht haben, Angst haben, Lust haben, Zeit haben, Freude sein</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB 1: REGEL -->
+  <div class="tab" id="tab1">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Grammatikregel">
+    <h2 style="color:#4a007a;margin-bottom:16px;">📋 Die Regel</h2>
+
+    <div class="regel-box">
+      <h3>Infinitiv ohne „zu"</h3>
+      <ul>
+        <li>Mit <strong>Modalverben</strong>: Ich <em>muss</em> früher <strong>aufstehen</strong>.</li>
+        <li>Mit <strong>bleiben, lassen, gehen, fahren, sehen, hören</strong>: Sie <em>lässt</em> ihn <strong>reden</strong>. Wir <em>gehen</em> <strong>schwimmen</strong>.</li>
+        <li>Im <strong>Futur I</strong> mit werden: Es <em>wird</em> bald <strong>regnen</strong>.</li>
+        <li>Im <strong>Konjunktiv II</strong>: Ich <em>würde</em> gerne <strong>helfen</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="regel-box" style="margin-top:16px;">
+      <h3>Infinitiv mit „zu"</h3>
+      <ul>
+        <li>Nach bestimmten Verben: Er <em>versucht</em>, pünktlich <strong>zu sein</strong>.</li>
+        <li>„zu" steht direkt vor dem Infinitiv, bei trennbaren Verben dazwischen: <em>auf<strong>zu</strong>hören</em></li>
+        <li>Der Infinitivsatz steht meist am <strong>Ende</strong>.</li>
+        <li>Komma vor dem Infinitivsatz (fakultativ, aber üblich).</li>
+      </ul>
+    </div>
+
+    <div class="regel-box" style="margin-top:16px;">
+      <h3>dass-Satz ↔ Infinitivsatz</h3>
+      <p>Nur wenn die Person im Haupt- und Nebensatz <strong>identisch</strong> ist:</p>
+      <div class="ex-box" style="margin-top:10px;">
+        <strong>Ich hoffe, dass ich gewinne.</strong> → <strong>Ich hoffe zu gewinnen.</strong><br>
+        <strong>Er meint, dass er Recht hat.</strong> → <strong>Er meint, Recht zu haben.</strong><br>
+        <strong>Sie versucht, dass sie früh aufsteht.</strong> → <strong>Sie versucht, früh aufzustehen.</strong>
+      </div>
+    </div>
+
+    <table style="margin-top:16px;">
+      <tr><th>Typ</th><th>Beispiele</th><th>Satz</th></tr>
+      <tr><td><strong>Verben</strong></td><td>anfangen, aufhören, beschließen, bitten, versuchen, hoffen, versprechen</td><td><em>Ich habe beschlossen, früher aufzustehen.</em></td></tr>
+      <tr><td><strong>Adjektive</strong></td><td>verboten sein, erlaubt sein, leicht sein, gesund sein, richtig sein</td><td><em>Es ist verboten, hier zu rauchen.</em></td></tr>
+      <tr><td><strong>Nomen</strong></td><td>Angst haben, Lust haben, Zeit haben, die Absicht haben</td><td><em>Sie hat Angst, allein zu fahren.</em></td></tr>
+    </table>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="tab" id="tab2">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Lückentext">
+    <h2 style="color:#4a007a;margin-bottom:6px;">✏️ Lückentext</h2>
+    <p style="color:#666;font-size:0.88rem;margin-bottom:14px;">Ergänze die Lücken mit der richtigen Form (Infinitiv mit oder ohne „zu").</p>
+
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="timer-btn btn-start" onclick="startTimer('L')">▶ Start</button>
+        <button class="timer-btn btn-stop"  onclick="stopTimer('L')">⏹ Stop</button>
+        <button class="timer-btn btn-reset" onclick="resetTimer('L')">↺ Reset</button>
+      </div>
+      <div id="timerDisplay_L">0:00</div>
+      <div class="tc-times">
+        <button class="time-btn" onclick="setTarget('L',60)">1 min</button>
+        <button class="time-btn" onclick="setTarget('L',90)">1:30</button>
+        <button class="time-btn" onclick="setTarget('L',120)">2 min</button>
+      </div>
+    </div>
+
+    <div id="lueckenContainer"></div>
+    <button class="check-btn" onclick="checkLuecken()">Prüfen</button>
+    <div id="lueckenFeedback" class="feedback" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div class="tab" id="tab3">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Satzbau">
+    <h2 style="color:#4a007a;margin-bottom:6px;">🔀 Satzbau</h2>
+    <p style="color:#666;font-size:0.88rem;margin-bottom:14px;">Bringe die Wörter in die richtige Reihenfolge. Klicken oder ziehen!</p>
+
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="timer-btn btn-start" onclick="startTimer('S')">▶ Start</button>
+        <button class="timer-btn btn-stop"  onclick="stopTimer('S')">⏹ Stop</button>
+        <button class="timer-btn btn-reset" onclick="resetTimer('S')">↺ Reset</button>
+      </div>
+      <div id="timerDisplay_S">0:00</div>
+      <div class="tc-times">
+        <button class="time-btn" onclick="setTarget('S',90)">1:30</button>
+        <button class="time-btn" onclick="setTarget('S',120)">2 min</button>
+        <button class="time-btn" onclick="setTarget('S',180)">3 min</button>
+      </div>
+    </div>
+
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <!-- TAB 4: ZUORDNUNG -->
+  <div class="tab" id="tab4">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Zuordnung">
+    <h2 style="color:#4a007a;margin-bottom:6px;">🗂️ Zuordnung</h2>
+    <p style="color:#666;font-size:0.88rem;margin-bottom:14px;">Ordne die Wörter den drei Kategorien zu: <strong>Verben / Adjektive / Nomen</strong>, die Infinitivsätze verlangen.</p>
+
+    <div class="chip-group" id="zuordChips">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="zuordnung-container" style="margin-top:16px;">
+      <div class="zuordnung-category">
+        <h4>Verben</h4>
+        <div class="drop-zone" id="zone-Verben" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropZuord(event,'Verben')">
+          <span class="placeholder">Verben hierher ziehen …</span>
+        </div>
+      </div>
+      <div class="zuordnung-category">
+        <h4>Adjektive</h4>
+        <div class="drop-zone" id="zone-Adjektive" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropZuord(event,'Adjektive')">
+          <span class="placeholder">Adjektive hierher ziehen …</span>
+        </div>
+      </div>
+      <div class="zuordnung-category">
+        <h4>Nomen</h4>
+        <div class="drop-zone" id="zone-Nomen" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropZuord(event,'Nomen')">
+          <span class="placeholder">Nomen hierher ziehen …</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkZuordnung()">Prüfen</button>
+    <button class="check-btn" style="background:#888;margin-left:8px;" onclick="resetZuordnung()">↺ Reset</button>
+    <div id="zuordFeedback" class="feedback" style="display:none;"></div>
+  </div>
+
+  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ==================== TAB NAV ====================
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
+}
+
+// ==================== ENTDECKEN ====================
+let entdAnswered = [false,false,false,false];
+function checkEntd(step, opt, correct) {
+  if(entdAnswered[step]) return;
+  const container = document.getElementById('entdStep'+step);
+  const opts = container.querySelectorAll('.entd-opt');
+  opts.forEach(o=>o.style.pointerEvents='none');
+  opts[opt].classList.add(correct ? 'correct' : 'wrong');
+  if(!correct) {
+    for(let i=0;i<opts.length;i++){
+      if(opts[i].onclick && opts[i].onclick.toString().includes('true')) opts[i].classList.add('correct');
+    }
+  }
+  const hints = ['✓ Richtig! Der Infinitiv mit „zu" steht am Ende des Satzes.',
+    '✓ Genau! Nur wenn die Person in beiden Sätzen identisch ist.',
+    '✓ Richtig! Diese Verben verlangen eine Infinitivkonstruktion mit „zu".',
+    '✓ Richtig! Vor dem Infinitivsatz steht ein Komma.'];
+  const wrongHints = ['✗ Nicht ganz. Schau nochmal — der Infinitiv steht am Ende.',
+    '✗ Das stimmt nicht. Die Personen müssen identisch sein.',
+    '✗ Nein. Modalverben und Bewegungsverben nehmen Infinitiv ohne „zu".',
+    '✗ Fast! Das Komma fehlt. Es ist verboten<strong>,</strong> das Gebäude zu betreten.'];
+  const hint = document.getElementById('hint'+step);
+  hint.innerHTML = correct ? hints[step] : wrongHints[step];
+  hint.className = 'entd-hint ' + (correct ? 'ok' : 'err');
+  hint.style.display = 'block';
+  entdAnswered[step] = true;
+  document.getElementById('dot'+step).classList.add('done');
+  const nextBtn = document.getElementById('entdNext'+step);
+  if(nextBtn) nextBtn.disabled = false;
+}
+function nextEntd(step) {
+  document.getElementById('entdStep'+(step-1)).style.display='none';
+  document.getElementById('entdStep'+step).style.display='block';
+}
+function showRuleCard() {
+  document.getElementById('entdStep3').style.display='none';
+  document.getElementById('ruleCard').style.display='block';
+}
+
+// ==================== TIMER ====================
+const TIMER_PREFIX = 'best2035G';
+let timers = {L:{iv:null,sec:0,target:0,running:false}, S:{iv:null,sec:0,target:0,running:false}};
+function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
+function startTimer(k){
+  if(timers[k].running) return;
+  timers[k].running=true;
+  timers[k].iv=setInterval(()=>{
+    timers[k].sec++;
+    document.getElementById('timerDisplay_'+k).textContent=fmt(timers[k].sec);
+    if(timers[k].target>0 && timers[k].sec>=timers[k].target){
+      stopTimer(k);
+      document.getElementById('timerDisplay_'+k).style.color='#e74c3c';
+    }
+  },1000);
+}
+function stopTimer(k){
+  clearInterval(timers[k].iv); timers[k].running=false;
+}
+function resetTimer(k){
+  stopTimer(k); timers[k].sec=0;
+  document.getElementById('timerDisplay_'+k).textContent='0:00';
+  document.getElementById('timerDisplay_'+k).style.color='#4a007a';
+}
+function setTarget(k,t){
+  timers[k].target=t;
+  document.querySelectorAll('.tc-times .time-btn').forEach(b=>b.classList.remove('active-t'));
+  event.target.classList.add('active-t');
+}
+function autoStopIfDone(k){
+  if(timers[k].running) stopTimer(k);
+}
+
+// ==================== LÜCKENTEXT ====================
+const LUECKEN_DATA = [
+  {before:'Ich habe beschlossen, mehr Sport ', gap:'zu treiben', after:'.'},
+  {before:'Es ist verboten, hier ', gap:'zu rauchen', after:'.'},
+  {before:'Sie hat Angst, allein ', gap:'zu fahren', after:'.'},
+  {before:'Wir haben angefangen, Deutsch ', gap:'zu lernen', after:'.'},
+  {before:'Er beabsichtigt nicht, das noch einmal ', gap:'zu wiederholen', after:'.'},
+  {before:'Du hast versprochen, pünktlich ', gap:'zu sein', after:'.'},
+  {before:'Ich hoffe, die Prüfung ', gap:'zu bestehen', after:'.'},
+  {before:'Es ist nicht gesund, so viel Süßes ', gap:'zu essen', after:'.'},
+  {before:'Hast du Lust, mit mir in die Stadt ', gap:'zu gehen', after:'?'},
+  {before:'Sie hat mir angeboten, mir mit den Hausaufgaben ', gap:'zu helfen', after:'.'},
+];
+
+(function buildLuecken(){
+  const c = document.getElementById('lueckenContainer');
+  LUECKEN_DATA.forEach((item,i)=>{
+    const d = document.createElement('div');
+    d.className = 'sentence-block';
+    d.innerHTML = item.before +
+      `<input class="gap-input" id="gap${i}" type="text" placeholder="…" oninput="liveCheck(${i})">` +
+      item.after;
+    c.appendChild(d);
+  });
+})();
+
+function liveCheck(i){
+  const inp = document.getElementById('gap'+i);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[i].gap;
+  const caseSens = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
+  const match = caseSens ? val === ans : val.toLowerCase() === ans.toLowerCase();
+  inp.classList.toggle('correct', match);
+  inp.classList.toggle('wrong', val.length > 0 && !match);
+  const allCorrect = LUECKEN_DATA.every((_,j)=>{
+    const v = document.getElementById('gap'+j).value.trim();
+    const a = LUECKEN_DATA[j].gap;
+    const cs = a[0]===a[0].toUpperCase()&&a[0]!==a[0].toLowerCase();
+    return cs ? v===a : v.toLowerCase()===a.toLowerCase();
+  });
+  if(allCorrect) autoStopIfDone('L');
+}
+
+function checkLuecken(){
+  let correct=0;
+  LUECKEN_DATA.forEach((_,i)=>{
+    const inp = document.getElementById('gap'+i);
+    const val = inp.value.trim();
+    const ans = LUECKEN_DATA[i].gap;
+    const cs = ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+    const ok = cs ? val===ans : val.toLowerCase()===ans.toLowerCase();
+    inp.classList.toggle('correct', ok);
+    inp.classList.toggle('wrong', !ok);
+    if(ok) correct++;
+  });
+  const fb = document.getElementById('lueckenFeedback');
+  fb.style.display='block';
+  if(correct===LUECKEN_DATA.length){
+    fb.className='feedback ok'; fb.textContent='✓ Alle '+correct+' Lücken richtig!';
+    autoStopIfDone('L');
+  } else {
+    fb.className='feedback err'; fb.textContent=correct+' von '+LUECKEN_DATA.length+' richtig. Versuche es nochmal!';
+  }
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich', 'habe', 'beschlossen', ',', 'früher', 'aufzustehen', '.'] },
+  { words: ['Es', 'ist', 'verboten', ',', 'das', 'Gebäude', 'zu', 'betreten', '.'] },
+  { words: ['Sie', 'hat', 'Angst', ',', 'allein', 'zu', 'sprechen', '.'] },
+  { words: ['Wir', 'haben', 'angefangen', ',', 'Deutsch', 'zu', 'lernen', '.'] },
+  { words: ['Hast', 'du', 'Lust', ',', 'mit', 'mir', 'in', 'die', 'Stadt', 'zu', 'gehen', '?'] },
+  { words: ['Ich', 'hoffe', ',', 'die', 'Prüfung', 'zu', 'bestehen', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the infinitive', art: 'der', wort: 'Infinitiv', plural: '-e' },
+  { type: 'n', en: 'the clause', art: 'der', wort: 'Satz', plural: '-e' },
+  { type: 'n', en: 'the intention', art: 'die', wort: 'Absicht', plural: '-en' },
+  { type: 'v', en: 'to intend to', de: 'beabsichtigen zu' },
+  { type: 'v', en: 'to help to', de: 'helfen zu' },
+  { type: 'v', en: 'to try to', de: 'versuchen zu' },
+  { type: 'v', en: 'to begin to', de: 'anfangen zu' },
+  { type: 'v', en: 'to stop to', de: 'aufhören zu' },
+  { type: 'v', en: 'to expect to', de: 'erwarten zu' },
+  { type: 'v', en: 'to allow to', de: 'erlauben zu' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

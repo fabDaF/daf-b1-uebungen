@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2065G · Komplementsatz</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
+  .nav button { padding: 11px 16px; border: 1px solid #b388e8; background: #f3e8ff; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; color: #5a0090; text-align: left; transition: background 0.2s; }
+  .nav button:hover { background: #e1c6ff; }
+  .nav button.active { background: #667eea; color: #fff; border-color: #667eea; }
+  .tab-content { display: none; padding: 28px 32px; }
+  .tab-content.active { display: block; }
+  h2 { color: #667eea; margin-bottom: 18px; font-size: 1.25rem; }
+  h3 { color: #5a0090; margin: 18px 0 10px; font-size: 1.05rem; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; display: block; }
+  /* MC */
+  .mc-scenario { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 10px;
+    padding: 16px 20px; margin-bottom: 16px; font-size: 0.97rem; line-height: 1.7; }
+  .mc-scenario strong { color: #667eea; }
+  .mc-question { font-weight: 700; color: #333; margin-bottom: 12px; font-size: 1rem; }
+  .mc-options { display: flex; flex-direction: column; gap: 8px; }
+  .mc-option { padding: 11px 16px; border: 2px solid #b388e8; border-radius: 8px;
+    cursor: pointer; font-size: 0.95rem; background: #fff; transition: background 0.15s; }
+  .mc-option:hover { background: #f3e8ff; }
+  .mc-option.correct { background: #c8f7c5; border-color: #3a9a36; color: #1a5e17; font-weight: 700; }
+  .mc-option.wrong { background: #ffd5d5; border-color: #cc3333; color: #7a0000; }
+  .mc-feedback { margin-top: 10px; font-size: 0.9rem; min-height: 1.3em; }
+  .progress-dots { display: flex; gap: 8px; margin-bottom: 16px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: #d4b8f5; }
+  .dot.done { background: #667eea; }
+  .dot.active { background: #b388e8; }
+  .next-btn { margin-top: 12px; padding: 9px 22px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 700; display: none; }
+  .next-btn:hover { background: #5a0090; }
+  /* REGEL */
+  .regel-box { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 10px;
+    padding: 18px 22px; margin-bottom: 18px; }
+  .regel-box h4 { color: #667eea; font-size: 1.05rem; margin-bottom: 12px; }
+  .regel-box p { font-size: 0.95rem; line-height: 1.7; }
+  .highlight { background: #ffe066; border-radius: 3px; padding: 0 3px; }
+  /* LÜCKENTEXT */
+  .luecken-text { font-size: 1rem; line-height: 2.1; max-width: 680px; }
+  .luecken-text p { margin-bottom: 10px; }
+  .luecken-text input { border: none; border-bottom: 2px solid #b388e8; background: transparent;
+    font-size: 0.97rem; outline: none; padding: 2px 6px; color: #333; transition: border-color 0.2s; }
+  .luecken-text input:focus { border-color: #667eea; }
+  .luecken-text input.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .luecken-text input.err { border-color: #cc3333; background: #ffd5d5; }
+  /* SATZBAU */
+  .sb-task { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task .aufgabe { font-size: 0.85rem; color: #888; margin-bottom: 8px; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 36px; }
+  .sb-chip { background: #667eea; color: #fff; border-radius: 6px; padding: 6px 12px;
+    cursor: grab; font-size: 0.92rem; user-select: none; border: 2px solid transparent; }
+  .sb-chip:active { cursor: grabbing; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-chip.selected { border-color: #ffcc00; }
+  .sb-drop { border: 2px dashed #b388e8; border-radius: 8px; min-height: 40px; padding: 4px 8px;
+    display: flex; flex-wrap: wrap; gap: 6px; background: #faf5ff; transition: background 0.2s; }
+  .sb-drop.drag-over { background: #e1c6ff; }
+  .sb-feedback { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; }
+  /* ZUORDNUNG */
+  .zuord-list { list-style: none; max-width: 680px; margin: 0 auto; }
+  .zuord-item { display: flex; align-items: center; gap: 12px; background: #f9f3ff;
+    border: 1px solid #d4b8f5; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+  .zuord-item .satz { flex: 1; font-size: 0.95rem; }
+  .zuord-item select { border: 2px solid #b388e8; border-radius: 6px; padding: 6px 10px;
+    font-size: 0.9rem; background: #fff; cursor: pointer; }
+  .zuord-item select.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .zuord-item select.err { border-color: #cc3333; background: #ffd5d5; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 60px; }
+  .timer-btn { padding: 6px 16px; border-radius: 6px; border: 2px solid #667eea;
+    background: #fff; color: #667eea; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+  .timer-btn:hover { background: #f3e8ff; }
+  .timer-best { font-size: 0.85rem; color: #888; }
+  .check-btn { margin-top: 14px; padding: 10px 28px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+  .check-btn:hover { background: #5a0090; }
+  .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
+    font-size: 0.75rem; color: #aaa; text-align: center; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="nav" id="nav">
+    <button class="active" onclick="showTab(0)">🔍 Entdecken</button>
+    <button onclick="showTab(1)">📋 Regel</button>
+    <button onclick="showTab(2)">✏️ Lückentext</button>
+    <button onclick="showTab(3)">🧩 Satzbau</button>
+    <button onclick="showTab(4)">🔗 Zuordnung</button>
+  </div>
+
+  <!-- TAB 0: ENTDECKEN -->
+  <div class="tab-content active" id="tab0">
+    <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Entdecken" class="tab-banner">
+    <h2>Entdecken — Komplementsatz</h2>
+    <div class="progress-dots" id="progressDots"></div>
+    <div id="mcContainer"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 1: REGEL -->
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Regel" class="tab-banner">
+    <h2>Regel — Der Komplementsatz</h2>
+
+    <div class="regel-box">
+      <h4>Was ist ein Komplementsatz?</h4>
+      <p>Ein <strong>Komplementsatz</strong> (auch: <em>dass-Satz</em> oder <em>ob-Satz</em>) ist ein
+      Nebensatz, der als Ergänzung (Komplement) eines Verbs, eines Adjektivs oder eines Nomens fungiert.
+      Das Verb steht am Ende des Nebensatzes.</p>
+    </div>
+
+    <div class="regel-box">
+      <h4>Dass-Satz — Aussagen und Meinungen</h4>
+      <p>Wird verwendet nach Verben wie: <em>sagen, wissen, glauben, finden, hoffen, denken, meinen</em><br><br>
+      Beispiele:<br>
+      „Ich glaube, <span class="highlight">dass lokale Geschäfte wichtig sind</span>."<br>
+      „Er sagt, <span class="highlight">dass er die Renovierung selbst macht</span>."<br>
+      „Wir wissen, <span class="highlight">dass das sehr teuer sein wird</span>."<br><br>
+      <strong>Wortstellung:</strong> Verb steht am Ende des Nebensatzes.</p>
+    </div>
+
+    <div class="regel-box">
+      <h4>Ob-Satz — Indirekte Fragen</h4>
+      <p>Wird verwendet, wenn eine Ja/Nein-Frage indirekt ausgedrückt wird.<br>
+      Eingeleitet durch: <em>ob</em><br><br>
+      Beispiele:<br>
+      „Ich weiß nicht, <span class="highlight">ob das Haus renoviert werden muss</span>."<br>
+      „Er fragt sich, <span class="highlight">ob er einen Klempner beauftragen soll</span>."<br>
+      „Sie überlegt, <span class="highlight">ob sie lokal oder online kaufen soll</span>."</p>
+    </div>
+
+    <div class="regel-box">
+      <h4>Infinitiv-Satz mit zu</h4>
+      <p>Wenn das Subjekt gleich ist, kann man oft <strong>zu + Infinitiv</strong> verwenden:<br><br>
+      „Ich plane, <span class="highlight">die Küche zu renovieren</span>." (= ich renoviere)<br>
+      „Er hofft, <span class="highlight">das Haus günstig zu kaufen</span>."<br>
+      „Wir versuchen, <span class="highlight">lokal einzukaufen</span>."</p>
+    </div>
+
+    <div class="regel-box">
+      <h4>W-Satz — Indirekte W-Fragen</h4>
+      <p>W-Fragewort leitet den Nebensatz ein, Verb am Ende:<br><br>
+      „Ich weiß nicht, <span class="highlight">wie viel die Renovierung kostet</span>."<br>
+      „Er fragt, <span class="highlight">wo man gute Materialien kaufen kann</span>."<br>
+      „Sie möchte wissen, <span class="highlight">warum lokale Geschäfte wichtig sind</span>."</p>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="tab-content" id="tab2">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lückentext" class="tab-banner">
+    <h2>Lückentext — dass, ob oder zu?</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerL">0:00</span>
+      <button class="timer-btn" id="timerLBtn" onclick="timerToggle('L')">▶ Start</button>
+      <span class="timer-best" id="timerLBest"></span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="lueckenResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div class="tab-content" id="tab3">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Satzbau" class="tab-banner">
+    <h2>Satzbau — Komplementsätze bilden</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerS">0:00</span>
+      <button class="timer-btn" id="timerSBtn" onclick="timerToggle('S')">▶ Start</button>
+      <span class="timer-best" id="timerSBest"></span>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 4: ZUORDNUNG -->
+  <div class="tab-content" id="tab4">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Zuordnung" class="tab-banner">
+    <h2>Zuordnung — dass, ob oder W-Satz?</h2>
+    <p style="margin-bottom:16px;color:#555;">Ordne jeden Satz dem Typ zu.</p>
+    <ul class="zuord-list" id="zuordList"></ul>
+    <button class="check-btn" onclick="checkZuordnung()">Überprüfen</button>
+    <div class="result-msg" id="zuordResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TIMER_PREFIX = 'best2065G';
+
+// MC
+const MC_STEPS = [
+  {
+    scenario: 'Du siehst: „Ich glaube, ___ lokale Geschäfte wichtig sind." Welches Wort leitet den Nebensatz ein?',
+    question: 'Welches Einleitewort ist richtig?',
+    options: ['a) ob', 'b) dass', 'c) wenn', 'd) weil'],
+    correct: 1,
+    explanation: '✅ Richtig! Nach „glauben" steht ein <strong>dass-Satz</strong>, weil es eine Meinung ausdrückt.'
+  },
+  {
+    scenario: 'Du siehst: „Ich weiß nicht, ___ er kommt." Es ist eine indirekte Ja/Nein-Frage. Was passt?',
+    question: 'Welches Einleitewort steht für indirekte Ja/Nein-Fragen?',
+    options: ['a) dass', 'b) wenn', 'c) ob', 'd) weil'],
+    correct: 2,
+    explanation: '✅ Richtig! Indirekte Ja/Nein-Fragen werden mit <strong>ob</strong> eingeleitet.'
+  },
+  {
+    scenario: 'Du siehst: „Wir versuchen, lokal ___." Das Subjekt beider Sätze ist gleich. Welche Form ist richtig?',
+    question: 'Wie endet dieser Satz korrekt?',
+    options: ['a) einzukaufen', 'b) dass wir einkaufen', 'c) ob wir einkaufen', 'd) einkaufen zu'],
+    correct: 0,
+    explanation: '✅ Richtig! Bei gleichem Subjekt: <strong>zu + Infinitiv</strong>. Bei trennbaren Verben: einzukaufen (zu steht zwischen Präfix und Verb).'
+  },
+  {
+    scenario: 'Du siehst: „Er fragt, ___ viel die Renovierung kostet." Welches Fragewort passt?',
+    question: 'Welches Einleitewort für eine indirekte W-Frage ist richtig?',
+    options: ['a) ob', 'b) dass', 'c) wie', 'd) wann'],
+    correct: 2,
+    explanation: '✅ Richtig! <strong>wie</strong> ist das passende W-Fragewort für diese indirekte Frage nach dem Ausmaß.'
+  },
+];
+
+let mcCurrent = 0;
+function buildMC() {
+  const dots = document.getElementById('progressDots');
+  MC_STEPS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.id = `dot-${i}`; dots.appendChild(d);
+  });
+  renderMCStep(0);
+}
+function renderMCStep(idx) {
+  const c = document.getElementById('mcContainer');
+  const s = MC_STEPS[idx];
+  c.innerHTML = `<div class="mc-scenario">${s.scenario}</div>
+    <div class="mc-question">${s.question}</div>
+    <div class="mc-options">${s.options.map((opt,i)=>`<div class="mc-option" onclick="checkMC(this,${i},${idx})">${opt}</div>`).join('')}</div>
+    <div class="mc-feedback" id="mcFb-${idx}"></div>
+    <button class="next-btn" id="mcNext-${idx}" onclick="nextMC(${idx})">Weiter →</button>`;
+}
+function checkMC(el,choice,idx){
+  const s=MC_STEPS[idx];
+  el.parentElement.querySelectorAll('.mc-option').forEach(o=>o.style.pointerEvents='none');
+  const fb=document.getElementById(`mcFb-${idx}`),next=document.getElementById(`mcNext-${idx}`);
+  if(choice===s.correct){el.classList.add('correct');fb.innerHTML=s.explanation;fb.style.color='#1a5e17';}
+  else{el.classList.add('wrong');el.parentElement.querySelectorAll('.mc-option')[s.correct].classList.add('correct');fb.innerHTML='❌ '+s.explanation;fb.style.color='#7a0000';}
+  document.getElementById(`dot-${idx}`).classList.add('done');
+  next.style.display='inline-block';
+}
+function nextMC(idx){
+  const next=idx+1;
+  if(next<MC_STEPS.length){document.getElementById(`dot-${next}`).classList.add('active');mcCurrent=next;renderMCStep(next);}
+  else{document.getElementById('mcContainer').innerHTML=`<div style="text-align:center;padding:30px;background:#f3e8ff;border-radius:10px;"><div style="font-size:2rem;margin-bottom:10px;">🎉</div><div style="font-weight:700;color:#667eea;font-size:1.1rem;">Alle Schritte abgeschlossen!</div><div style="color:#555;margin-top:8px;">Schau dir jetzt die Regel an.</div></div>`;}
+}
+buildMC();
+
+// LÜCKENTEXT
+const LUECKEN = [
+  { before: 'Ich glaube, ', blank: 'dass', after: ' lokale Geschäfte wichtig sind.' },
+  { before: 'Er fragt, ', blank: 'ob', after: ' er einen Klempner beauftragen soll.' },
+  { before: 'Wir versuchen, lokal ', blank: 'einzukaufen', after: '.' },
+  { before: 'Sie weiß nicht, ', blank: 'wie', after: ' viel die Renovierung kostet.' },
+  { before: 'Ich hoffe, ', blank: 'dass', after: ' die Qualität gut ist.' },
+  { before: 'Er überlegt, ', blank: 'ob', after: ' er online oder lokal kauft.' },
+  { before: 'Sie planen, das Haus bald zu ', blank: 'renovieren', after: '.' },
+  { before: 'Ich weiß nicht, ', blank: 'warum', after: ' das so teuer ist.' },
+];
+
+(function(){const c=document.getElementById('lueckenText');LUECKEN.forEach((item,idx)=>{const p=document.createElement('p');p.style.marginBottom='10px';p.innerHTML=`${item.before}<input type="text" id="luecke-${idx}" data-answer="${item.blank.toLowerCase()}" placeholder="..." oninput="liveCheck(this)" style="width:${Math.max(80,item.blank.length*13)}px"/>${item.after}`;c.appendChild(p);});})();
+function liveCheck(inp){inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===inp.dataset.answer)inp.classList.add('ok');autoStopIfDone();}
+function checkLuecken(){let correct=0;LUECKEN.forEach((item,idx)=>{const inp=document.getElementById(`luecke-${idx}`);inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}else inp.classList.add('err');});const res=document.getElementById('lueckenResult');if(correct===LUECKEN.length){res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';stopTimer('L');saveBest('L');}else{res.textContent=`${correct} von ${LUECKEN.length} richtig.`;res.style.color='#7a0000';}}
+function autoStopIfDone(){if([...document.querySelectorAll('#lueckenText input')].every(i=>i.classList.contains('ok'))){stopTimer('L');saveBest('L');document.getElementById('lueckenResult').textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;document.getElementById('lueckenResult').style.color='#1a5e17';}}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich glaube', ',', 'dass lokale', 'Geschäfte', 'wichtig sind', '.'] },
+  { words: ['Er fragt sich', ',', 'ob er', 'einen Klempner', 'beauftragen soll', '.'] },
+  { words: ['Wir versuchen', ',', 'so viel', 'wie möglich', 'lokal einzukaufen', '.'] },
+  { words: ['Sie weiß nicht', ',', 'wie viel', 'die Renovierung', 'kostet', '.'] },
+  { words: ['Ich hoffe', ',', 'dass die', 'Qualität', 'gut ist', '.'] },
+  { words: ['Er überlegt', ',', 'ob er', 'online', 'oder lokal kauft', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// ZUORDNUNG
+const ZUORDNUNG_ITEMS = [
+  { satz: '„Ich glaube, dass es gut wird."', cat: 'dass-Satz' },
+  { satz: '„Er weiß nicht, ob sie kommt."', cat: 'ob-Satz' },
+  { satz: '„Sie fragt, wann er fertig ist."', cat: 'W-Satz' },
+  { satz: '„Wir hoffen, dass es klappt."', cat: 'dass-Satz' },
+  { satz: '„Ich überlege, ob ich mitgehe."', cat: 'ob-Satz' },
+  { satz: '„Er erklärt, wie das funktioniert."', cat: 'W-Satz' },
+  { satz: '„Sie meint, dass lokale Läden wichtig sind."', cat: 'dass-Satz' },
+  { satz: '„Wir wissen nicht, ob das stimmt."', cat: 'ob-Satz' },
+];
+
+(function(){const list=document.getElementById('zuordList');const cats=['dass-Satz','ob-Satz','W-Satz'];ZUORDNUNG_ITEMS.forEach((item,idx)=>{const li=document.createElement('li');li.className='zuord-item';const opts=cats.map(c=>`<option value="${c}">${c}</option>`).join('');li.innerHTML=`<div class="satz">${idx+1}. ${item.satz}</div><select id="zuord-${idx}"><option value="">— Typ —</option>${opts}</select>`;list.appendChild(li);});})();
+function checkZuordnung(){let correct=0;ZUORDNUNG_ITEMS.forEach((item,idx)=>{const sel=document.getElementById(`zuord-${idx}`);sel.classList.remove('ok','err');if(sel.value===item.cat){sel.classList.add('ok');correct++;}else sel.classList.add('err');});const res=document.getElementById('zuordResult');res.textContent=correct===ZUORDNUNG_ITEMS.length?`✅ Alle ${ZUORDNUNG_ITEMS.length} Zuordnungen richtig!`:`${correct} von ${ZUORDNUNG_ITEMS.length} richtig.`;res.style.color=correct===ZUORDNUNG_ITEMS.length?'#1a5e17':'#7a0000';}
+
+// TABS
+function showTab(n){document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));}
+
+// TIMER
+let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
+function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}
+function startTimer(k){if(timerRunning[k])return;timerRunning[k]=true;document.getElementById(`timer${k}Btn`).textContent='⏸ Pause';timerIntervals[k]=setInterval(()=>{timerSeconds[k]++;document.getElementById(`timer${k}`).textContent=formatTime(timerSeconds[k]);},1000);}
+function stopTimer(k){clearInterval(timerIntervals[k]);timerRunning[k]=false;document.getElementById(`timer${k}Btn`).textContent='▶ Weiter';}
+function saveBest(k){const sk=TIMER_PREFIX+'_'+k,prev=parseInt(localStorage.getItem(sk)||'999999');if(timerSeconds[k]<prev){localStorage.setItem(sk,timerSeconds[k]);document.getElementById(`timer${k}Best`).textContent='🏆 Neue Bestzeit: '+formatTime(timerSeconds[k]);}else{document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(prev);}}
+function formatTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+(function(){['L','S'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the complement clause', art: 'der', wort: 'Komplementsatz', plural: '-e' },
+  { type: 'n', en: 'the object', art: 'das', wort: 'Objekt', plural: '-e' },
+  { type: 'n', en: 'the conjunction', art: 'die', wort: 'Konjunktion', plural: '-en' },
+  { type: 'v', en: 'to say', de: 'sagen' },
+  { type: 'v', en: 'to think', de: 'denken' },
+  { type: 'v', en: 'to believe', de: 'glauben' },
+  { type: 'v', en: 'to feel', de: 'fühlen' },
+  { type: 'v', en: 'to realize', de: 'bemerken' },
+  { type: 'v', en: 'to know', de: 'wissen' },
+  { type: 'v', en: 'to assume', de: 'vermuten' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

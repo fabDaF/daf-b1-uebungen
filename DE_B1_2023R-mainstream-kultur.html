@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2023R – Die Mainstream-Kultur</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#667eea;min-height:100vh;padding:20px}
+  .container{max-width:860px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.18);overflow:hidden}
+  h1{background:#667eea;color:#fff;padding:18px 24px;font-size:1.3rem;letter-spacing:.5px}
+  .nav{display:flex;flex-wrap:wrap;gap:0;border-bottom:2px solid #667eea;background:#f3e8ff}
+  .nav button{padding:10px 15px;border:1px solid #b388d8;border-bottom:none;background:#e9d5ff;color:#4a0080;font-size:.85rem;cursor:pointer;font-weight:600;border-radius:6px 6px 0 0;margin-bottom:-2px;transition:background .2s}
+  .nav button.active{background:#fff;color:#667eea;border-bottom:2px solid #fff;z-index:1}
+  .nav button:hover:not(.active){background:#d8b4fe}
+  .tab{display:none;padding:24px}
+  .tab.active{display:block}
+  .tab-banner{width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:18px}
+  .tab h2{color:#667eea;margin-bottom:14px;font-size:1.1rem}
+  .tab h3{color:#4a0080;margin:14px 0 8px;font-size:1rem}
+
+  /* Timer */
+  .timer-bar{display:flex;align-items:center;gap:10px;background:#f3e8ff;border-radius:8px;padding:8px 14px;margin-bottom:16px;flex-wrap:wrap}
+  .timer-display{font-size:1.1rem;font-weight:700;color:#667eea;min-width:60px;font-family:monospace}
+  .timer-bar button{padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600}
+  .btn-start{background:#22c55e;color:#fff}.btn-stop{background:#ef4444;color:#fff}.btn-reset{background:#94a3b8;color:#fff}
+  .best-time{font-size:.8rem;color:#7c3aed;margin-left:4px}
+
+  /* Vorentlastung */
+  .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:12px;margin:14px 0}
+  .vocab-card{border:2px solid #b388d8;border-radius:10px;overflow:hidden;text-align:center}
+  .vocab-card img{width:100%;height:95px;object-fit:cover}
+  .vocab-card .vc-de{background:#667eea;color:#fff;padding:7px 6px;font-weight:700;font-size:.88rem}
+  .vocab-card .vc-en{background:#e9d5ff;color:#4a0080;padding:5px 6px;font-size:.82rem}
+
+  /* Lesetext */
+  .story-text{font-family:Georgia,serif;font-size:.97rem;line-height:1.85;text-align:justify;hyphens:auto;max-width:680px;margin:0 auto}
+  .story-text p{margin-bottom:14px;text-indent:1.5em}
+  .story-text p:first-child{text-indent:0}
+  .story-text strong{color:#667eea}
+  .section-title{font-family:'Segoe UI',Arial,sans-serif;font-weight:700;color:#667eea;font-size:1rem;margin:18px 0 8px;padding-bottom:4px;border-bottom:2px solid #e9d5ff}
+
+  /* RF */
+  .rf-list{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+  .rf-item{display:flex;align-items:flex-start;gap:12px;background:#f9f5ff;border:1px solid #d8b4fe;border-radius:10px;padding:12px 14px}
+  .rf-text{flex:1;font-size:.92rem;line-height:1.5}
+  .rf-btns{display:flex;gap:7px;flex-shrink:0}
+  .rf-btn{padding:6px 14px;border:2px solid #b388d8;border-radius:20px;background:#fff;cursor:pointer;font-size:.82rem;font-weight:700;transition:all .2s}
+  .rf-btn:hover{background:#e9d5ff}
+  .rf-btn.selected-r{background:#dcfce7;border-color:#22c55e;color:#166534}
+  .rf-btn.selected-f{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+  .rf-btn.correct{background:#dcfce7;border-color:#22c55e;color:#166534}
+  .rf-btn.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+  .check-btn{margin-top:14px;padding:9px 22px;background:#667eea;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.95rem;font-weight:600}
+  .check-btn:hover{background:#4a0080}
+  .result-msg{margin-top:10px;font-weight:700;font-size:.97rem}
+
+  /* Lückentext */
+  .luecke-item{margin-bottom:14px;line-height:2}
+  .luecke-item input{border:none;border-bottom:2px solid #667eea;background:#f3e8ff;padding:3px 8px;font-size:.95rem;color:#4a0080;border-radius:4px 4px 0 0;min-width:130px;outline:none}
+  .luecke-item input.correct{background:#dcfce7;border-color:#22c55e;color:#166534}
+  .luecke-item input.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+
+  /* Satzbau */
+  .sb-sentence{margin-bottom:20px}
+  .sb-sentence p{color:#4a0080;font-size:.88rem;margin-bottom:8px;font-style:italic}
+  .sb-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;min-height:38px;border:2px dashed #d8b4fe;border-radius:8px;padding:6px}
+  .sb-chip{background:#e9d5ff;border:2px solid #b388d8;border-radius:16px;padding:6px 13px;cursor:grab;font-size:.88rem;color:#4a0080;font-weight:600;user-select:none;transition:transform .1s}
+  .sb-chip:active{cursor:grabbing;transform:scale(1.05)}
+  .sb-drop-zone{display:flex;flex-wrap:wrap;gap:7px;min-height:44px;border:2px dashed #667eea;border-radius:8px;padding:6px;background:#faf5ff}
+  .sb-drop-zone.drag-over{background:#e9d5ff}
+  .sb-drop-zone .sb-chip{background:#c4b5fd}
+  .sb-ok{color:#22c55e;font-weight:700;font-size:.9rem;margin-top:4px}
+  .sb-err{color:#ef4444;font-weight:700;font-size:.9rem;margin-top:4px}
+
+  /* Vokabeln Tab */
+  .vocab-train-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin:14px 0}
+  .vt-card{border:2px solid #b388d8;border-radius:10px;overflow:hidden;text-align:center}
+  .vt-card img{width:100%;height:100px;object-fit:cover}
+  .vt-card .vt-en{background:#e9d5ff;color:#4a0080;padding:5px 6px;font-size:.82rem}
+  .vocab-input-row{display:flex;gap:8px;align-items:center;padding:6px 8px;background:#f3e8ff}
+  .vocab-input-row input{flex:1;border:none;border-bottom:2px solid #667eea;background:transparent;padding:3px 5px;font-size:.85rem;outline:none;color:#4a0080}
+  .vocab-input-row input.correct{border-color:#22c55e;color:#166534}
+  .vocab-input-row input.wrong{border-color:#ef4444;color:#991b1b}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>2023R – Die Mainstream-Kultur</h1>
+  <div class="nav">
+    <button class="active" onclick="showTab(0)">1 · Vorentlastung</button>
+    <button onclick="showTab(1)">2 · Lesetext</button>
+    <button onclick="showTab(2)">3 · Richtig/Falsch</button>
+    <button onclick="showTab(3)">4 · Lückentext</button>
+    <button onclick="showTab(4)">5 · Satzbau</button>
+    <button onclick="showTab(5)">6 · Wortschatz</button>
+  </div>
+
+  <!-- TAB 1: VORENTLASTUNG -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Mainstream">
+    <h2>Vorentlastung – Schlüsselwörter</h2>
+    <p style="color:#555;font-size:.9rem;margin-bottom:16px">Die Mainstream-Kultur ist ein Phänomen des 21. Jahrhunderts. Lerne die wichtigen Wörter kennen, bevor du den Text liest.</p>
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Zugang">
+        <div class="vc-de">der Zugang</div><div class="vc-en">access</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&w=200&h=95&fit=crop" alt="die Massen">
+        <div class="vc-de">die Massen</div><div class="vc-en">the masses</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Prominente">
+        <div class="vc-de">Prominente (Pl.)</div><div class="vc-en">celebrities</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=200&h=95&fit=crop" alt="kulturelle Ära">
+        <div class="vc-de">die kulturelle Ära</div><div class="vc-en">cultural era</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Kultobjekt">
+        <div class="vc-de">das Kultobjekt</div><div class="vc-en">cult object</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Phänomen">
+        <div class="vc-de">das Phänomen</div><div class="vc-en">phenomenon</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Ikone">
+        <div class="vc-de">die Ikone</div><div class="vc-en">icon</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/1549200/pexels-photo-1549200.jpeg?auto=compress&w=200&h=95&fit=crop" alt="widerspiegeln">
+        <div class="vc-de">widerspiegeln</div><div class="vc-en">to reflect</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/3777560/pexels-photo-3777560.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Massengeschmack">
+        <div class="vc-de">der Massengeschmack</div><div class="vc-en">mass taste</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/1602726/pexels-photo-1602726.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Subkultur">
+        <div class="vc-de">die Subkultur</div><div class="vc-en">subculture</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/3184432/pexels-photo-3184432.jpeg?auto=compress&w=200&h=95&fit=crop" alt="verwandeln">
+        <div class="vc-de">sich verwandeln</div><div class="vc-en">to transform</div>
+      </div>
+      <div class="vocab-card">
+        <img src="https://images.pexels.com/photos/1365425/pexels-photo-1365425.jpeg?auto=compress&w=200&h=95&fit=crop" alt="Trend">
+        <div class="vc-de">der Trend</div><div class="vc-en">trend</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: LESETEXT -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Lesetext">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td1">00:00</span>
+      <button class="btn-start" onclick="startTimer(1)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(1)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(1)">Reset</button>
+      <span class="best-time" id="bt1"></span>
+    </div>
+    <h2>Die Mainstream-Kultur</h2>
+    <div class="story-text">
+      <div class="section-title">Entstehung</div>
+      <p>Seit der Erfindung des Radios oder des Fernsehens im frühen 20. Jahrhundert hat sich die gesamte Welt verändert. Auf einmal konnten Millionen Menschen <strong>Zugang</strong> zu Informationen, Kultur und Kunst haben. Neue Lieder, Bücher oder <strong>Prominente</strong> konnten so besser den <strong>Massen</strong> vorgestellt werden. Es war der Anfang einer neuen <strong>kulturellen Ära</strong> – der Mainstream-Kultur.</p>
+
+      <div class="section-title">Was ist Mainstream?</div>
+      <p>Mithilfe der Medien können heute Bücher, Prominente, aber auch Lebensmittel oder Fast-Food-Ketten zu wahren <strong>Kultobjekten</strong> werden. Mainstream <strong>spiegelt</strong> den kulturellen Geschmack einer großen Mehrheit <strong>wider</strong>. Anders gesagt, es ist das, was die Massen mögen und wollen. Mainstream bezieht sich auf Politik, Mode und auf alles, was wichtig für die aktuelle Gesellschaft ist.</p>
+
+      <div class="section-title">Werbung und Mode</div>
+      <p>Wenn eine große Geschäftskette ihre Kleidung besser verkaufen möchte, denkt sie über gute Werbung im Internet oder Fernsehen nach. Eine bekannte Schauspielerin trägt die neuen Kleider, die Werbung wird in der ganzen Welt gezeigt und schon <strong>verwandeln sich</strong> die neuen Hosen, Leggings oder Kleider in Kultobjekte.</p>
+
+      <div class="section-title">Musik und Film</div>
+      <p>Das gleiche gilt auch für die Musik. Mitte des 20. Jahrhunderts begannen Bands wahre <strong>Phänomene</strong> zu werden. Wer hat nicht von berühmten Bands gehört, die heute, wie auch vor 60 Jahren, sehr beliebt und wahre <strong>Ikonen</strong> waren und sind. Ihre Konzerte waren <strong>innerhalb kürzester Zeit</strong> ausverkauft. Auch berühmte Sängerinnen haben in den 80er-Jahren zur Mode beigetragen. Mädchen wollten so sein wie sie: Wild, <strong>erfolgreich</strong> und schön.</p>
+
+      <p>Und wer hat noch nie in seinem Leben einen Teenager-Film gesehen? Teenager sind so begeistert davon, dass man noch Jahre danach verschiedene <strong>Accessoires</strong> wie Parfüms, Hefte, und Bücher mit den Lieblingsschauspielern kaufen kann. Einen wahren <strong>Trend</strong> stellen heute Fantasiebücher dar. Diese sind bei den Jugendlichen sehr beliebt. Zahlreiche Filme wurden auf Grundlage dieser Bücher gedreht. Es ist die Welt der <strong>Hexen</strong>, <strong>Zauberer</strong>, <strong>Zwerge</strong> und <strong>Feen</strong>, die sich eben von der realen Welt unterscheidet.</p>
+
+      <div class="section-title">Markennamen als Begriffe</div>
+      <p>Interessant ist es auch, dass eine Marke, die sehr beliebt ist, ihren Namen dem betreffenden Produkt verleihen kann. So zum Beispiel werden heute <strong>Windeln</strong> oft als Pampers bezeichnet, auch wenn sie von anderen Marken stammen.</p>
+
+      <div class="section-title">Kritik am Mainstream</div>
+      <p>Es gibt Mainstream-Rock, Mainstream-Kino, Mainstream-Radio, obwohl diese Begriffe eher <strong>kritisch</strong> gebraucht werden. Diese Mainstream-Kultur muss aber auch harte Kritiken einstecken, denn Künstler, die <strong>jenseits</strong> des Mainstreams agieren, haben kleinere Chancen, <strong>sich durchzusetzen</strong> oder ihre Kunstwerke zu veröffentlichen. Nur das ist wichtig, was die Massen wollen und was von den Medien <strong>promotet</strong> wird. <strong>Kulturpessimisten</strong> finden, dass sich Mainstream im Bereich Film und Musik immer mehr durchsetzt.</p>
+
+      <p>Mainstream stellt somit den <strong>Massengeschmack</strong> dar und steht anderen <strong>Subkulturen</strong> gegenüber. Oft entscheiden die Massen, was <strong>in</strong> oder <strong>out</strong> ist, wer Erfolg haben wird und wer seine Karriere beenden muss. Mainstream ist mit Sicherheit ein Phänomen des 21. Jahrhunderts und wird über das Internet und die Medien verbreitet. Mainstream steht in festem Zusammenhang mit der Globalisierung.</p>
+    </div>
+  </div>
+
+  <!-- TAB 3: RICHTIG/FALSCH -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=800&h=180&fit=crop" alt="R/F">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td2">00:00</span>
+      <button class="btn-start" onclick="startTimer(2)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(2)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(2)">Reset</button>
+      <span class="best-time" id="bt2"></span>
+    </div>
+    <h2>Richtig oder Falsch?</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Wähle R (richtig) oder F (falsch) für jede Aussage.</p>
+    <div class="rf-list" id="rf-container"></div>
+    <button class="check-btn" onclick="checkRF()">Überprüfen</button>
+    <div class="result-msg" id="rf-result"></div>
+  </div>
+
+  <!-- TAB 4: LÜCKENTEXT -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Lückentext">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td3">00:00</span>
+      <button class="btn-start" onclick="startTimer(3)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(3)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(3)">Reset</button>
+      <span class="best-time" id="bt3"></span>
+    </div>
+    <h2>Lückentext – Schlüsselwörter</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:16px">Ergänze die fehlenden Wörter aus dem Lesetext.</p>
+    <div id="luecken-container"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="luecken-result"></div>
+  </div>
+
+  <!-- TAB 5: SATZBAU -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Satzbau">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td4">00:00</span>
+      <button class="btn-start" onclick="startTimer(4)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(4)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(4)">Reset</button>
+      <span class="best-time" id="bt4"></span>
+    </div>
+    <h2>Satzbau – Sätze ordnen</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Ziehe die Wörter in die richtige Reihenfolge.</p>
+    <div id="sb-container"></div>
+    <button class="check-btn" onclick="checkAllSb()">Alle prüfen</button>
+    <div class="result-msg" id="sb-result"></div>
+  </div>
+
+  <!-- TAB 6: VOKABELN -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Vokabeln">
+    <h2>Vokabeltraining – Englisch → Deutsch</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Tippe das deutsche Wort. Groß-/Kleinschreibung beachten!</p>
+    <div class="vocab-train-grid" id="vocab-container"></div>
+    <button class="check-btn" onclick="checkVocab()">Überprüfen</button>
+    <div class="result-msg" id="vocab-result"></div>
+  </div>
+</div>
+
+<script>
+// ===== TIMER =====
+const TIMER_PREFIX = 'best2023R';
+const timers = {1:{iv:null,s:0},2:{iv:null,s:0},3:{iv:null,s:0},4:{iv:null,s:0}};
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function startTimer(n){const t=timers[n];if(t.iv)return;t.iv=setInterval(()=>{t.s++;document.getElementById('td'+n).textContent=fmtTime(t.s)},1000)}
+function stopTimer(n){const t=timers[n];if(!t.iv)return;clearInterval(t.iv);t.iv=null;const k=TIMER_PREFIX+'_t'+n;const prev=localStorage.getItem(k);if(!prev||t.s<parseInt(prev)){localStorage.setItem(k,t.s)}loadBestTimes()}
+function resetTimer(n){const t=timers[n];clearInterval(t.iv);t.iv=null;t.s=0;document.getElementById('td'+n).textContent='00:00'}
+function loadBestTimes(){[1,2,3,4].forEach(n=>{const k=TIMER_PREFIX+'_t'+n;const v=localStorage.getItem(k);const el=document.getElementById('bt'+n);if(el&&v)el.textContent='Bestzeit: '+fmtTime(parseInt(v))})}
+function timerAutoStart(n){if(!timers[n].iv)startTimer(n)}
+loadBestTimes();
+
+// ===== TABS =====
+function showTab(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',i===j)});
+  document.querySelectorAll('.nav button').forEach((b,j)=>{b.classList.toggle('active',i===j)});
+  if(i===1)timerAutoStart(1);
+  if(i===2)timerAutoStart(2);
+  if(i===3)timerAutoStart(3);
+  if(i===4)timerAutoStart(4);
+}
+
+// ===== RICHTIG/FALSCH =====
+const RF_DATA = [
+  {text:'Das Radio wurde im frühen 20. Jahrhundert erfunden und veränderte die Welt.',answer:true},
+  {text:'Durch das Radio und Fernsehen konnten nur wenige Menschen Zugang zu Informationen haben.',answer:false},
+  {text:'Mainstream spiegelt den kulturellen Geschmack einer großen Mehrheit wider.',answer:true},
+  {text:'Mainstream bezieht sich nur auf Musik, nicht auf Mode oder Politik.',answer:false},
+  {text:'Berühmte Sängerinnen der 80er-Jahre haben zur Mode beigetragen.',answer:true},
+  {text:'Künstler jenseits des Mainstreams haben bessere Chancen, sich durchzusetzen.',answer:false},
+  {text:'Windeln werden manchmal als „Pampers" bezeichnet, auch wenn sie von anderen Marken stammen.',answer:true},
+  {text:'Mainstream steht in keinem Zusammenhang mit der Globalisierung.',answer:false},
+];
+let rfAnswers=new Array(RF_DATA.length).fill(null);
+(function buildRF(){
+  const c=document.getElementById('rf-container');
+  RF_DATA.forEach((d,i)=>{
+    const div=document.createElement('div');div.className='rf-item';
+    div.innerHTML=`<span class="rf-text">${i+1}. ${d.text}</span>
+      <div class="rf-btns">
+        <button class="rf-btn" id="rfR${i}" onclick="selectRF(${i},true)">R</button>
+        <button class="rf-btn" id="rfF${i}" onclick="selectRF(${i},false)">F</button>
+      </div>`;
+    c.appendChild(div);
+  });
+})();
+function selectRF(i,val){
+  rfAnswers[i]=val;
+  document.getElementById('rfR'+i).className='rf-btn'+(val?' selected-r':'');
+  document.getElementById('rfF'+i).className='rf-btn'+(!val?' selected-f':'');
+  if(rfAnswers.every(a=>a!==null))checkRF();
+}
+function checkRF(){
+  let ok=0;
+  RF_DATA.forEach((d,i)=>{
+    const rBtn=document.getElementById('rfR'+i);
+    const fBtn=document.getElementById('rfF'+i);
+    rBtn.className='rf-btn'+(d.answer?' correct':' wrong');
+    fBtn.className='rf-btn'+(!d.answer?' correct':' wrong');
+    if(rfAnswers[i]===d.answer)ok++;
+  });
+  const r=document.getElementById('rf-result');
+  r.textContent=ok===RF_DATA.length?'✅ Alle richtig!':'⚠️ '+ok+'/'+RF_DATA.length+' richtig.';
+  r.style.color=ok===RF_DATA.length?'#22c55e':'#ef4444';
+  if(ok===RF_DATA.length)stopTimer(2);
+}
+
+// ===== LÜCKENTEXT =====
+const LUECKEN_DATA = [
+  {pre:'Seit der Erfindung des Radios konnten Millionen Menschen ',blank:'Zugang',post:' zu Informationen haben.'},
+  {pre:'Neue Lieder konnten so besser den ',blank:'Massen',post:' vorgestellt werden.'},
+  {pre:'Mithilfe der Medien können Bücher zu wahren ',blank:'Kultobjekten',post:' werden.'},
+  {pre:'Mainstream ',blank:'spiegelt',post:' den kulturellen Geschmack einer großen Mehrheit wider.'},
+  {pre:'Mitte des 20. Jahrhunderts begannen Bands wahre ',blank:'Phänomene',post:' zu werden.'},
+  {pre:'Ihre Konzerte waren innerhalb kürzester Zeit ',blank:'ausverkauft',post:'.'},
+  {pre:'Fantasiebücher stellen heute einen wahren ',blank:'Trend',post:' dar.'},
+  {pre:'Künstler jenseits des Mainstreams haben kleinere Chancen, sich ',blank:'durchzusetzen',post:'.'},
+  {pre:'Mainstream stellt den ',blank:'Massengeschmack',post:' dar und steht anderen Subkulturen gegenüber.'},
+  {pre:'Mainstream steht in festem Zusammenhang mit der ',blank:'Globalisierung',post:'.'},
+];
+(function buildLuecken(){
+  const c=document.getElementById('luecken-container');
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div');div.className='luecke-item';
+    div.innerHTML=`<span>${i+1}. ${d.pre}</span><input id="li${i}" type="text" placeholder="..."><span>${d.post}</span>`;
+    c.appendChild(div);
+    div.querySelector('input').addEventListener('input',()=>liveCheck(i));
+  });
+})();
+function liveCheck(i){
+  const inp=document.getElementById('li'+i);
+  const val=inp.value.trim();
+  const ans=LUECKEN_DATA[i].blank;
+  if(!val){inp.className='';return}
+  const cs=ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+  const correct=cs?(val===ans):(val.toLowerCase()===ans.toLowerCase());
+  inp.classList.toggle('correct',correct);inp.classList.toggle('wrong',!correct);
+  if(LUECKEN_DATA.every((_,j)=>{const v=document.getElementById('li'+j).value.trim();const a=LUECKEN_DATA[j].blank;const c2=a[0]===a[0].toUpperCase()&&a[0]!==a[0].toLowerCase();return c2?(v===a):(v.toLowerCase()===a.toLowerCase())})){
+    stopTimer(3);document.getElementById('luecken-result').textContent='✅ Alle richtig!';document.getElementById('luecken-result').style.color='#22c55e';
+  }
+}
+function checkLuecken(){
+  let ok=0;
+  LUECKEN_DATA.forEach((d,i)=>{
+    const inp=document.getElementById('li'+i);const val=inp.value.trim();
+    const cs=d.blank[0]===d.blank[0].toUpperCase()&&d.blank[0]!==d.blank[0].toLowerCase();
+    const correct=cs?(val===d.blank):(val.toLowerCase()===d.blank.toLowerCase());
+    inp.className=correct?'correct':'wrong';if(correct)ok++;
+  });
+  const r=document.getElementById('luecken-result');
+  r.textContent=ok===LUECKEN_DATA.length?'✅ Alle richtig!':'⚠️ '+ok+'/'+LUECKEN_DATA.length+' richtig.';
+  r.style.color=ok===LUECKEN_DATA.length?'#22c55e':'#ef4444';
+  if(ok===LUECKEN_DATA.length)stopTimer(3);
+}
+
+// ===== SATZBAU =====
+const SATZBAU_DATA = [
+  {hint:'Entstehung der Mainstream-Kultur',words:['Das','Radio','veränderte','die','gesamte','Welt','.']},
+  {hint:'Was ist Mainstream?',words:['Mainstream','spiegelt','den','kulturellen','Geschmack','der','Massen','wider','.']},
+  {hint:'Werbung und Mode',words:['Die','Kleider','verwandeln','sich','in','Kultobjekte','.']},
+  {hint:'Musik als Mainstream',words:['Bands','wurden','Mitte','des','20.','Jahrhunderts','wahre','Phänomene','.']},
+  {hint:'Kritik am Mainstream',words:['Nur','das','ist','wichtig',',','was','die','Massen','wollen','.']},
+];
+let sbState=[];
+(function buildSatzbau(){
+  const c=document.getElementById('sb-container');
+  SATZBAU_DATA.forEach((d,si)=>{
+    let sh=[...d.words.map((w,wi)=>({w,wi}))];
+    let ok=false;for(let t=0;t<50&&!ok;t++){for(let i=sh.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[sh[i],sh[j]]=[sh[i],sh[j]];}ok=sh.some((x,i)=>x.wi!==i)}
+    sbState.push({dropped:[],chips:sh});
+    const wrap=document.createElement('div');wrap.className='sb-sentence';
+    wrap.innerHTML=`<p>${d.hint}</p><div class="sb-chips" id="sbchips${si}"></div><div class="sb-drop-zone" id="sbdrop${si}"></div><div id="sbfb${si}"></div>`;
+    c.appendChild(wrap);
+    sh.forEach(({w},ci)=>sbMakeChip(si,ci,w,document.getElementById('sbchips'+si)));
+    sbRegisterZone(si,document.getElementById('sbdrop'+si));
+  });
+})();
+let sbDragged=null;
+function sbMakeChip(si,ci,w,parent){
+  const chip=document.createElement('div');chip.className='sb-chip';chip.textContent=w;chip.draggable=true;chip.dataset.si=si;chip.dataset.ci=ci;
+  chip.addEventListener('dragstart',e=>{sbDragged=chip;e.dataTransfer.effectAllowed='move'});
+  chip.addEventListener('dragend',()=>{sbDragged=null});
+  parent.appendChild(chip);
+}
+function sbRegisterZone(si,zone){
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over')});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');if(sbDragged){zone.appendChild(sbDragged)}setTimeout(()=>sbCheckAuto(si),500)});
+  const src=document.getElementById('sbchips'+si);
+  src.addEventListener('dragover',e=>e.preventDefault());
+  src.addEventListener('drop',e=>{e.preventDefault();if(sbDragged)src.appendChild(sbDragged)});
+}
+function sbCheckAuto(si){
+  const zone=document.getElementById('sbdrop'+si);
+  const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
+  const ans=SATZBAU_DATA[si].words;
+  const fb=document.getElementById('sbfb'+si);
+  if(chips.length!==ans.length){fb.textContent='';return}
+  const match=chips.every((w,i)=>w===ans[i]);
+  if(match){fb.className='sb-ok';fb.textContent='✅ Richtig!';}
+  else{fb.className='sb-err';fb.textContent='❌ Noch nicht richtig.';}
+}
+function checkAllSb(){
+  let ok=0;
+  SATZBAU_DATA.forEach((_,si)=>{
+    const zone=document.getElementById('sbdrop'+si);
+    const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
+    const ans=SATZBAU_DATA[si].words;
+    const fb=document.getElementById('sbfb'+si);
+    const match=chips.length===ans.length&&chips.every((w,i)=>w===ans[i]);
+    fb.className=match?'sb-ok':'sb-err';
+    fb.textContent=match?'✅ Richtig!':'❌ Noch nicht richtig.';
+    if(match)ok++;
+  });
+  const r=document.getElementById('sb-result');
+  r.textContent=ok===SATZBAU_DATA.length?'🎉 Alle Sätze richtig!':'⚠️ '+ok+'/'+SATZBAU_DATA.length+' richtig.';
+  r.style.color=ok===SATZBAU_DATA.length?'#22c55e':'#ef4444';
+  if(ok===SATZBAU_DATA.length)stopTimer(4);
+}
+
+// ===== VOKABELN =====
+const VOCAB_DATA = [
+  {de:'Zugang',en:'access',pexels:'265087'},
+  {de:'Massen',en:'masses',pexels:'1181233'},
+  {de:'Prominente',en:'celebrities',pexels:'3183197'},
+  {de:'Kultobjekt',en:'cult object',pexels:'3184418'},
+  {de:'Phänomen',en:'phenomenon',pexels:'3184338'},
+  {de:'Ikone',en:'icon',pexels:'1181467'},
+  {de:'Trend',en:'trend',pexels:'1549200'},
+  {de:'Massengeschmack',en:'mass taste',pexels:'3184432'},
+  {de:'Subkultur',en:'subculture',pexels:'1602726'},
+  {de:'Globalisierung',en:'globalization',pexels:'3184465'},
+];
+initVocab = function(){
+  const c=document.getElementById('vocab-container');
+  VOCAB_DATA.forEach((d,i)=>{
+    const card=document.createElement('div');card.className='vt-card';
+    card.innerHTML=`<img src="https://images.pexels.com/photos/${d.pexels}/pexels-photo-${d.pexels}.jpeg?auto=compress&w=200&h=100&fit=crop" alt="${d.de}">
+      <div class="vt-en">${d.en}</div>
+      <div class="vocab-input-row"><input id="vi${i}" type="text" placeholder="Deutsch..."></div>`;
+    c.appendChild(card);
+  });
+})();
+function checkVocab(){
+  let ok=0;
+  VOCAB_DATA.forEach((d,i)=>{
+    const inp=document.getElementById('vi'+i);
+    const correct=inp.value.trim()===d.de;
+    inp.className=correct?'correct':'wrong';
+    if(correct)ok++;
+  });
+  const r=document.getElementById('vocab-result');
+  r.textContent=ok===VOCAB_DATA.length?'🎉 Alle richtig!':'⚠️ '+ok+'/'+VOCAB_DATA.length+' richtig.';
+  r.style.color=ok===VOCAB_DATA.length?'#22c55e':'#ef4444';
+}
+</script>
+</body>
+</html>

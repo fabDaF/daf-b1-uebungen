@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2058S · Über das Leben im Ausland diskutieren</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
+  .nav button { padding: 11px 16px; border: 1px solid #b388e8; background: #f3e8ff; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; color: #5a0090; text-align: left; transition: background 0.2s; }
+  .nav button:hover { background: #e1c6ff; }
+  .nav button.active { background: #667eea; color: #fff; border-color: #667eea; }
+  .tab-content { display: none; padding: 28px 32px; }
+  .tab-content.active { display: block; }
+  h2 { color: #667eea; margin-bottom: 18px; font-size: 1.25rem; }
+  h3 { color: #5a0090; margin: 18px 0 10px; font-size: 1.05rem; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; display: block; }
+  /* SPRECH KARTEN */
+  .sprech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; margin-top: 14px; }
+  .sprech-card { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 8px;
+    padding: 16px 18px; font-size: 0.95rem; line-height: 1.6; }
+  .sprech-card .nr { font-size: 0.75rem; color: #999; margin-bottom: 6px; }
+  .sprech-card .frage { font-weight: 700; color: #667eea; margin-bottom: 8px; }
+  .sprech-card .hinweis { font-size: 0.85rem; color: #666; font-style: italic; }
+  /* REDEMITTEL */
+  .redem-section { margin-bottom: 20px; }
+  .redem-box { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 14px; }
+  .redem-box h4 { color: #667eea; font-size: 1rem; margin-bottom: 10px; }
+  .redem-box ul { list-style: none; }
+  .redem-box ul li { padding: 5px 0; font-size: 0.95rem; border-bottom: 1px solid #e8d8f8; }
+  .redem-box ul li:last-child { border-bottom: none; }
+  .redem-box ul li::before { content: '→ '; color: #667eea; font-weight: 700; }
+  /* ROLLENSPIEL */
+  .rolle-card { background: #f9f3ff; border: 2px solid #b388e8; border-radius: 10px;
+    padding: 18px 22px; margin-bottom: 16px; }
+  .rolle-card .rolle-title { font-weight: 700; color: #667eea; margin-bottom: 10px; font-size: 1rem; }
+  .rolle-card .rolle-info { font-size: 0.93rem; line-height: 1.65; }
+  /* PRO KONTRA */
+  .pk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .pk-box { border-radius: 8px; padding: 16px 18px; }
+  .pk-pro { background: #e8f8e8; border: 2px solid #4caf50; }
+  .pk-kontra { background: #fde8e8; border: 2px solid #e53935; }
+  .pk-box h4 { font-size: 1rem; margin-bottom: 10px; }
+  .pk-pro h4 { color: #2e7d32; }
+  .pk-kontra h4 { color: #b71c1c; }
+  .pk-box ul { list-style: none; }
+  .pk-box ul li { padding: 5px 0; font-size: 0.9rem; border-bottom: 1px solid rgba(0,0,0,0.07); }
+  .pk-box ul li:last-child { border-bottom: none; }
+  /* LÜCKENTEXT */
+  .luecken-text { font-size: 1rem; line-height: 2.1; max-width: 680px; }
+  .luecken-text p { margin-bottom: 10px; }
+  .luecken-text input { border: none; border-bottom: 2px solid #b388e8; background: transparent;
+    font-size: 0.97rem; outline: none; padding: 2px 6px; color: #333; transition: border-color 0.2s; }
+  .luecken-text input:focus { border-color: #667eea; }
+  .luecken-text input.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .luecken-text input.err { border-color: #cc3333; background: #ffd5d5; }
+  /* SATZBAU */
+  .sb-task { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task .aufgabe { font-size: 0.85rem; color: #888; margin-bottom: 8px; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 36px; }
+  .sb-chip { background: #667eea; color: #fff; border-radius: 6px; padding: 6px 12px;
+    cursor: grab; font-size: 0.92rem; user-select: none; border: 2px solid transparent; }
+  .sb-chip:active { cursor: grabbing; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-chip.selected { border-color: #ffcc00; }
+  .sb-drop { border: 2px dashed #b388e8; border-radius: 8px; min-height: 40px; padding: 4px 8px;
+    display: flex; flex-wrap: wrap; gap: 6px; background: #faf5ff; transition: background 0.2s; }
+  .sb-drop.drag-over { background: #e1c6ff; }
+  .sb-feedback { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 60px; }
+  .timer-btn { padding: 6px 16px; border-radius: 6px; border: 2px solid #667eea;
+    background: #fff; color: #667eea; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+  .timer-btn:hover { background: #f3e8ff; }
+  .timer-best { font-size: 0.85rem; color: #888; }
+  .check-btn { margin-top: 14px; padding: 10px 28px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+  .check-btn:hover { background: #5a0090; }
+  .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
+    font-size: 0.75rem; color: #aaa; text-align: center; }
+  .info-box { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6; }
+  .info-box strong { color: #667eea; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="nav" id="nav">
+    <button class="active" onclick="showTab(0)">🗣️ Sprechaufgaben</button>
+    <button onclick="showTab(1)">💬 Redemittel</button>
+    <button onclick="showTab(2)">🎭 Rollenspiel</button>
+    <button onclick="showTab(3)">✏️ Lückentext</button>
+    <button onclick="showTab(4)">🧩 Satzbau</button>
+  </div>
+
+  <!-- TAB 0: SPRECHAUFGABEN -->
+  <div class="tab-content active" id="tab0">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Sprechen" class="tab-banner">
+    <h2>Über das Leben im Ausland diskutieren</h2>
+    <div class="info-box">
+      In dieser Einheit lernst du, über das Leben im Ausland zu sprechen — Vor- und Nachteile,
+      eigene Erfahrungen und die Meinungen anderer.
+    </div>
+
+    <h3>Diskussionsfragen</h3>
+    <div class="sprech-grid">
+      <div class="sprech-card">
+        <div class="nr">Frage 1</div>
+        <div class="frage">Was sind die größten Vorteile, wenn man im Ausland lebt?</div>
+        <div class="hinweis">Denke an: Sprache, Kultur, Karriere, persönliche Entwicklung</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 2</div>
+        <div class="frage">Welche Schwierigkeiten kann das Leben im Ausland mit sich bringen?</div>
+        <div class="hinweis">Denke an: Heimweh, Bürokratie, soziale Isolation, Sprachbarrieren</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 3</div>
+        <div class="frage">Würdest du gerne für längere Zeit im Ausland leben? Warum (nicht)?</div>
+        <div class="hinweis">Begründe deine Meinung mit mindestens drei Argumenten.</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 4</div>
+        <div class="frage">Was muss man deiner Meinung nach unbedingt vorbereiten, bevor man ins Ausland geht?</div>
+        <div class="hinweis">Denke an: Visum, Unterkunft, Finanzen, Sprache</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 5</div>
+        <div class="frage">Kennst du jemanden, der im Ausland gelebt hat? Was hat er/sie berichtet?</div>
+        <div class="hinweis">Berichte in 4–6 Sätzen.</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 6</div>
+        <div class="frage">Wie verändert sich ein Mensch durch das Leben im Ausland?</div>
+        <div class="hinweis">Denke an: Weltbild, Toleranz, Selbstständigkeit, Anpassungsfähigkeit</div>
+      </div>
+    </div>
+
+    <h3>Pro und Kontra — Leben im Ausland</h3>
+    <div class="pk-grid">
+      <div class="pk-box pk-pro">
+        <h4>✅ Pro</h4>
+        <ul>
+          <li>Neue Sprache lernen</li>
+          <li>Andere Kultur kennenlernen</li>
+          <li>Persönliche Entwicklung</li>
+          <li>Karrierechancen verbessern</li>
+          <li>Mehr Selbstständigkeit</li>
+          <li>Neue Freundschaften schließen</li>
+        </ul>
+      </div>
+      <div class="pk-box pk-kontra">
+        <h4>❌ Kontra</h4>
+        <ul>
+          <li>Heimweh nach Familie</li>
+          <li>Bürokratische Hürden</li>
+          <li>Sprachbarrieren am Anfang</li>
+          <li>Kulturschock möglich</li>
+          <li>Soziale Isolation</li>
+          <li>Hohe Lebenshaltungskosten</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 1: REDEMITTEL -->
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Redemittel" class="tab-banner">
+    <h2>Redemittel — Meinung äußern und diskutieren</h2>
+
+    <div class="redem-section">
+      <div class="redem-box">
+        <h4>Eigene Meinung äußern</h4>
+        <ul>
+          <li>Meiner Meinung nach …</li>
+          <li>Ich finde, dass …</li>
+          <li>Ich bin der Meinung, dass …</li>
+          <li>Ich glaube / denke, dass …</li>
+          <li>Aus meiner Sicht …</li>
+        </ul>
+      </div>
+      <div class="redem-box">
+        <h4>Zustimmung ausdrücken</h4>
+        <ul>
+          <li>Da stimme ich dir zu.</li>
+          <li>Das sehe ich genauso.</li>
+          <li>Du hast völlig recht.</li>
+          <li>Ich teile deine Meinung.</li>
+          <li>Genau — das ist ein wichtiger Punkt.</li>
+        </ul>
+      </div>
+      <div class="redem-box">
+        <h4>Widerspruch ausdrücken</h4>
+        <ul>
+          <li>Da bin ich anderer Meinung.</li>
+          <li>Ich sehe das etwas anders.</li>
+          <li>Das stimmt zwar, aber …</li>
+          <li>Ich würde eher sagen, dass …</li>
+          <li>Da muss ich widersprechen.</li>
+        </ul>
+      </div>
+      <div class="redem-box">
+        <h4>Beispiele nennen</h4>
+        <ul>
+          <li>Ein gutes Beispiel dafür ist …</li>
+          <li>Zum Beispiel könnte man …</li>
+          <li>Das zeigt sich zum Beispiel darin, dass …</li>
+          <li>Ich kenne jemanden, der …</li>
+        </ul>
+      </div>
+      <div class="redem-box">
+        <h4>Zusammenfassen und abschließen</h4>
+        <ul>
+          <li>Zusammenfassend lässt sich sagen, dass …</li>
+          <li>Insgesamt bin ich der Meinung, …</li>
+          <li>Alles in allem denke ich, dass …</li>
+          <li>Zum Schluss möchte ich betonen, dass …</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 2: ROLLENSPIEL -->
+  <div class="tab-content" id="tab2">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Rollenspiel" class="tab-banner">
+    <h2>Rollenspiel</h2>
+    <div class="info-box">
+      <strong>Situation:</strong> Zwei Freunde diskutieren über das Leben im Ausland.
+      Person A hat positive Erfahrungen gemacht. Person B ist eher skeptisch.
+      Sprecht mindestens 3 Minuten miteinander.
+    </div>
+
+    <div class="rolle-card">
+      <div class="rolle-title">🅰 Person A — Der Enthusiast</div>
+      <div class="rolle-info">
+        Du hast ein Jahr in Kanada gelebt und bist begeistert.
+        Du findest, dass jeder mindestens einmal im Ausland leben sollte.
+        <br><br>
+        <strong>Deine Argumente:</strong><br>
+        — Du hast dein Englisch stark verbessert.<br>
+        — Du bist viel selbstständiger geworden.<br>
+        — Du hast viele interessante Menschen kennengelernt.<br>
+        — Die Erfahrung hat deine Karriere positiv beeinflusst.<br>
+        <br>
+        <strong>Deine Reaktion auf Kritik:</strong> Zugeben, dass es Herausforderungen gab,
+        aber betonen, dass sie wertvoll waren.
+      </div>
+    </div>
+
+    <div class="rolle-card">
+      <div class="rolle-title">🅱 Person B — Der Skeptiker</div>
+      <div class="rolle-info">
+        Du bist nie ins Ausland gegangen und hast gemischte Gefühle dazu.
+        Du siehst sowohl Vorteile als auch ernsthafte Nachteile.
+        <br><br>
+        <strong>Deine Argumente:</strong><br>
+        — Heimweh und soziale Isolation sind ein echtes Problem.<br>
+        — Bürokratie und Visum-Prozesse sind sehr aufwendig.<br>
+        — Man muss viel Geld mitbringen — nicht alle können sich das leisten.<br>
+        — Die eigene Karriere kann auch in Deutschland gut laufen.<br>
+        <br>
+        <strong>Deine Reaktion:</strong> Offen bleiben und zugeben,
+        wenn Person A gute Punkte macht.
+      </div>
+    </div>
+
+    <h3>Aufgaben nach dem Rollenspiel</h3>
+    <div class="sprech-card">Wer hat die überzeugendsten Argumente gehabt? Begründe deine Antwort.</div>
+    <div class="sprech-card">Welche Redemittel aus Tab 2 habt ihr benutzt? Listet sie auf.</div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab-content" id="tab3">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lückentext" class="tab-banner">
+    <h2>Lückentext</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerL">0:00</span>
+      <button class="timer-btn" id="timerLBtn" onclick="timerToggle('L')">▶ Start</button>
+      <span class="timer-best" id="timerLBest"></span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="lueckenResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab-content" id="tab4">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Satzbau" class="tab-banner">
+    <h2>Satzbau</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerS">0:00</span>
+      <button class="timer-btn" id="timerSBtn" onclick="timerToggle('S')">▶ Start</button>
+      <span class="timer-best" id="timerSBest"></span>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+const TIMER_PREFIX = 'best2058S';
+
+const LUECKEN = [
+  { before: 'Meiner ', blank: 'Meinung', after: ' nach ist das Leben im Ausland sehr bereichernd.' },
+  { before: 'Ich bin der ', blank: 'Meinung', after: ', dass man viel lernt, wenn man im Ausland lebt.' },
+  { before: 'Da ', blank: 'stimme', after: ' ich dir zu — das ist ein gutes Argument.' },
+  { before: 'Das stimmt zwar, ', blank: 'aber', after: ' es gibt auch Nachteile.' },
+  { before: 'Da muss ich ', blank: 'widersprechen', after: ' — das sehe ich anders.' },
+  { before: 'Zusammenfassend lässt sich ', blank: 'sagen', after: ', dass die Erfahrung sehr wertvoll war.' },
+  { before: 'Ein gutes ', blank: 'Beispiel', after: ' dafür ist Luisas Aufenthalt in München.' },
+  { before: 'Ich teile deine ', blank: 'Meinung', after: ' nicht vollständig.' },
+];
+
+const SATZBAU_SAETZE = [
+  ['Meiner Meinung nach', 'sollte jeder', 'mindestens einmal', 'im Ausland leben.'],
+  ['Das stimmt zwar,', 'aber', 'Heimweh ist', 'ein echtes Problem.'],
+  ['Da bin ich', 'anderer Meinung —', 'ich sehe das', 'etwas anders.'],
+  ['Zusammenfassend', 'lässt sich sagen,', 'dass die Erfahrung', 'sehr wertvoll war.'],
+  ['Ich finde,', 'dass man', 'viel Selbstvertrauen', 'im Ausland gewinnt.'],
+  ['Da stimme ich', 'dir zu —', 'das ist', 'ein wichtiger Punkt.'],
+];
+
+// TABS
+function showTab(n) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// LÜCKENTEXT
+(function buildLuecken() {
+  const container = document.getElementById('lueckenText');
+  LUECKEN.forEach((item, idx) => {
+    const p = document.createElement('p'); p.style.marginBottom = '10px';
+    p.innerHTML = `${item.before}<input type="text" id="luecke-${idx}"
+      data-answer="${item.blank.toLowerCase()}"
+      placeholder="..."
+      oninput="liveCheck(this)"
+      style="width:${Math.max(100, item.blank.length*11)}px"
+    />${item.after}`;
+    container.appendChild(p);
+  });
+})();
+
+function liveCheck(inp) {
+  const val = inp.value.trim().toLowerCase();
+  inp.classList.remove('ok','err');
+  if (val === inp.dataset.answer) inp.classList.add('ok');
+  autoStopIfDone();
+}
+
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN.forEach((item, idx) => {
+    const inp = document.getElementById(`luecke-${idx}`);
+    inp.classList.remove('ok','err');
+    if (inp.value.trim().toLowerCase() === item.blank.toLowerCase()) { inp.classList.add('ok'); correct++; }
+    else { inp.classList.add('err'); }
+  });
+  const res = document.getElementById('lueckenResult');
+  if (correct === LUECKEN.length) {
+    res.textContent = `✅ Alle ${LUECKEN.length} Lücken richtig!`; res.style.color = '#1a5e17';
+    stopTimer('L'); saveBest('L');
+  } else {
+    res.textContent = `${correct} von ${LUECKEN.length} richtig.`; res.style.color = '#7a0000';
+  }
+}
+
+function autoStopIfDone() {
+  const inputs = document.querySelectorAll('#lueckenText input');
+  if ([...inputs].every(i => i.classList.contains('ok'))) {
+    stopTimer('L'); saveBest('L');
+    const res = document.getElementById('lueckenResult');
+    res.textContent = `✅ Alle ${LUECKEN.length} Lücken richtig!`; res.style.color='#1a5e17';
+  }
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Meiner Meinung nach', 'sollte jeder', 'mindestens einmal', 'im Ausland leben', '.'] },
+  { words: ['Das stimmt zwar', ',', 'aber', 'Heimweh ist', 'ein echtes Problem', '.'] },
+  { words: ['Da bin ich', 'anderer Meinung —', 'ich sehe das', 'etwas anders', '.'] },
+  { words: ['Zusammenfassend', 'lässt sich sagen', ',', 'dass die Erfahrung', 'sehr wertvoll war', '.'] },
+  { words: ['Ich finde', ',', 'dass man', 'viel Selbstvertrauen', 'im Ausland gewinnt', '.'] },
+  { words: ['Da stimme ich', 'dir zu —', 'das ist', 'ein wichtiger Punkt', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// TIMER
+let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
+function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}
+function startTimer(k){
+  if(timerRunning[k])return; timerRunning[k]=true;
+  document.getElementById(`timer${k}Btn`).textContent='⏸ Pause';
+  timerIntervals[k]=setInterval(()=>{timerSeconds[k]++;document.getElementById(`timer${k}`).textContent=formatTime(timerSeconds[k]);},1000);
+}
+function stopTimer(k){
+  clearInterval(timerIntervals[k]); timerRunning[k]=false;
+  document.getElementById(`timer${k}Btn`).textContent='▶ Weiter';
+}
+function saveBest(k){
+  const sk=TIMER_PREFIX+'_'+k, prev=parseInt(localStorage.getItem(sk)||'999999');
+  if(timerSeconds[k]<prev){localStorage.setItem(sk,timerSeconds[k]);document.getElementById(`timer${k}Best`).textContent='🏆 Neue Bestzeit: '+formatTime(timerSeconds[k]);}
+  else{document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(prev);}
+}
+function formatTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+(function loadBest(){['L','S'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the foreign country', art: 'das', wort: 'Ausland', plural: '-' },
+  { type: 'n', en: 'the culture', art: 'die', wort: 'Kultur', plural: '-en' },
+  { type: 'n', en: 'the language', art: 'die', wort: 'Sprache', plural: '-n' },
+  { type: 'n', en: 'the custom', art: 'der', wort: 'Brauch', plural: '-e' },
+  { type: 'v', en: 'to move abroad', de: 'ins Ausland ziehen' },
+  { type: 'v', en: 'to adapt', de: 'sich anpassen' },
+  { type: 'v', en: 'to miss', de: 'vermissen' },
+  { type: 'v', en: 'to adjust', de: 'sich eingewöhnen' },
+  { type: 'v', en: 'to experience', de: 'erleben' },
+  { type: 'v', en: 'to settle in', de: 'sich niederlassen' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

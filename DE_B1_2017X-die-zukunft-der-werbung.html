@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Die Zukunft der Werbung – B1.2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; display: block; }
+.tab-content { padding: 28px 32px 32px 32px; }
+@media (max-width: 600px) { .tab-content { padding: 16px; } }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* MINDMAP VOCAB */
+.vocab-mindmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.vocab-mindmap-center { grid-column: 1 / -1; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; padding: 18px 24px; text-align: center; font-size: 1.3em; font-weight: 700; margin-bottom: 6px; }
+.vk { background: #f3effd; border: 1.5px solid #c5b8e8; border-radius: 12px; padding: 14px 16px; border-left: 4px solid #667eea; }
+.vk .art { font-size: 0.78em; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.vk .wort { font-size: 1.1em; font-weight: 700; color: #5a3e9e; margin-bottom: 4px; }
+.vk .def { font-size: 0.82em; color: #555; line-height: 1.45; }
+
+/* FORMS OF ONLINE MARKETING */
+.formen-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.form-row { display: flex; align-items: flex-start; gap: 16px; background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 18px; }
+.form-tag { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 8px; padding: 6px 12px; font-size: 0.82em; font-weight: 700; min-width: 140px; text-align: center; line-height: 1.35; flex-shrink: 0; }
+.form-desc { font-size: 0.9em; color: #444; line-height: 1.55; align-self: center; }
+
+/* LÜCKENTEXT */
+.luecke-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 0.93em; line-height: 1.9; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.93em; font-family: inherit; outline: none; transition: all 0.2s; min-width: 100px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* ZUORDNUNG */
+.match-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+@media (max-width: 600px) { .match-layout { grid-template-columns: 1fr; } }
+.match-col h4 { background: #ede9f8; color: #5a3e9e; border: 1px solid #d0c8f0; border-bottom: none; border-radius: 8px 8px 0 0; padding: 8px 12px; font-size: 0.88em; }
+.drop-zone { min-height: 100px; border-radius: 0 0 8px 8px; border: 1px solid #d0c8f0; background: #faf9ff; padding: 10px; transition: background 0.2s; display: flex; flex-direction: column; gap: 6px; }
+.drop-zone.drag-over { background: #ede8ff; border-color: #667eea; }
+.term-card { background: white; border: 1.5px solid #c5b8e8; border-radius: 8px; padding: 8px 12px; font-size: 0.85em; font-weight: 600; color: #5a3e9e; cursor: pointer; user-select: none; transition: all 0.2s; }
+.term-card:hover { background: #f0ecff; }
+.term-card.selected { background: #e8e0ff; border-color: #667eea; }
+.term-card.matched { background: #e8f8f0; border-color: #27ae60; color: #27ae60; cursor: default; }
+.term-card.error { background: #fdeaea; border-color: #e74c3c; color: #e74c3c; animation: shake 0.4s; }
+.desc-card { background: #f8f9ff; border: 1.5px solid #e0daf5; border-radius: 8px; padding: 9px 12px; font-size: 0.83em; color: #444; line-height: 1.45; cursor: pointer; transition: all 0.2s; }
+.desc-card:hover { background: #ede8ff; border-color: #c5b8e8; }
+.desc-card.selected { background: #e8e0ff; border-color: #667eea; }
+.desc-card.matched { background: #e8f8f0; border-color: #27ae60; cursor: default; }
+.desc-card.error { background: #fdeaea; border-color: #e74c3c; animation: shake 0.4s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 60%{transform:translateX(6px)} }
+.match-feedback { margin-top: 14px; font-size: 0.9em; font-weight: 600; color: #27ae60; min-height: 22px; }
+
+/* SATZBAU */
+.sb-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.sb-prompt { font-size: 0.85em; color: #666; margin-bottom: 8px; font-style: italic; }
+.sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 36px; }
+.sb-chip { background: #667eea; color: white; border-radius: 20px; padding: 5px 13px; font-size: 0.85em; font-weight: 600; cursor: grab; user-select: none; transition: all 0.2s; }
+.sb-chip:hover { background: #764ba2; transform: translateY(-1px); }
+.sb-chip.dragging { opacity: 0.45; }
+.sb-chip.static-chip { background: #9e9e9e; cursor: default; }
+.sb-drop { display: flex; flex-wrap: wrap; gap: 6px; min-height: 42px; background: #f0eeff; border: 2px dashed #c5b8e8; border-radius: 8px; padding: 6px 10px; transition: background 0.2s; }
+.sb-drop.drag-over { background: #e0d8ff; border-color: #667eea; }
+.sb-drop .sb-chip { cursor: grab; }
+.sb-feedback { font-size: 0.82em; margin-top: 6px; font-weight: 600; min-height: 18px; }
+.sb-feedback.ok { color: #27ae60; }
+.sb-feedback.err { color: #e74c3c; }
+
+/* TIMER */
+.timer-bar { display: flex; align-items: center; gap: 12px; background: #f8f5ff; border: 1px solid #e0daf5; border-radius: 8px; padding: 8px 14px; margin-bottom: 18px; }
+.timer-display { font-size: 1.1em; font-weight: 700; color: #667eea; min-width: 58px; font-variant-numeric: tabular-nums; }
+.timer-btn { background: #667eea; color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.82em; cursor: pointer; font-weight: 600; }
+.timer-btn:hover { background: #764ba2; }
+.best-time { font-size: 0.78em; color: #888; margin-left: auto; }
+
+/* WORTSCHATZ */
+.ws-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ws-en { font-size: 0.92em; color: #666; min-width: 160px; font-style: italic; }
+.ws-fields { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+input.ws-input { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 7px; font-size: 0.88em; font-family: inherit; outline: none; transition: all 0.2s; }
+input.ws-input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.ws-input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.ws-input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.ws-hint { font-size: 0.75em; color: #aaa; }
+.pruef-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95em; font-weight: 700; cursor: pointer; margin-top: 12px; }
+.pruef-btn:hover { opacity: 0.9; }
+.reset-btn { background: #f0f4ff; color: #667eea; border: 1.5px solid #667eea; border-radius: 8px; padding: 10px 20px; font-size: 0.9em; font-weight: 600; cursor: pointer; margin-top: 12px; margin-left: 8px; }
+.reset-btn:hover { background: #e0e7ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Die Zukunft der Werbung</h1>
+    <p>B1.2 · Einheit 1 · Kommunikation</p>
+    <span class="big-emoji">🚀</span>
+  </div>
+  <div class="nav">
+    <div class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">📖</span><span class="nav-label">Wortschatz</span></div>
+    <div class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">💻</span><span class="nav-label">Online-Mktg</span></div>
+    <div class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">🔗</span><span class="nav-label">Zuordnung</span></div>
+    <div class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🌟</span><span class="nav-label">Wortschatz</span></div>
+  </div>
+
+  <!-- TAB 0: WORTSCHATZ -->
+  <div class="section active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Zukunft der Werbung">
+    <div class="tab-content">
+      <div class="hilfe-box">Heutzutage wird es immer einfacher, für die bestimmte <strong>Zielgruppe</strong> zu werben — dank <strong>Algorithmen</strong> in sozialen Netzwerken. Lerne die Schlüsselbegriffe der digitalen Werbung.</div>
+      <div class="section-title">Schlüsselvokabular</div>
+      <div class="vocab-mindmap">
+        <div class="vocab-mindmap-center">🚀 Die Zukunft der Werbung</div>
+        <div class="vk"><div class="art">das / –</div><div class="wort">Online-Marketing</div><div class="def">Alle Marketing-Maßnahmen, die online durchgeführt werden</div></div>
+        <div class="vk"><div class="art">das / –</div><div class="wort">Internetmarketing</div><div class="def">Synonym für Online-Marketing — Werbung im Internet</div></div>
+        <div class="vk"><div class="art">der / -en</div><div class="wort">Algorithmus</div><div class="def">Mathematisches Verfahren, das bestimmt, welche Werbung welchen Nutzern gezeigt wird</div></div>
+        <div class="vk"><div class="art">das / -e</div><div class="wort">soziale Netzwerk</div><div class="def">Online-Plattform zur Vernetzung von Menschen (z.B. Instagram, Facebook)</div></div>
+        <div class="vk"><div class="art">die / -n</div><div class="wort">Internetwerbung</div><div class="def">Verschiedene Werbeformen im Internet (Banner, Pop-ups, etc.)</div></div>
+        <div class="vk"><div class="art">die / -n</div><div class="wort">Webseite</div><div class="def">Online-Auftritt eines Unternehmens — präsentiert das Online-Geschäft</div></div>
+        <div class="vk"><div class="art">das / –</div><div class="wort">Content Marketing</div><div class="def">Produktion und Verteilung von Medien, um neue Kunden zu gewinnen</div></div>
+        <div class="vk"><div class="art">das / –</div><div class="wort">E-Mail-Marketing</div><div class="def">Versand von Werbung direkt per E-Mail an Kunden</div></div>
+        <div class="vk"><div class="art">das / –</div><div class="wort">Social Media Marketing</div><div class="def">Werbung auf Social-Media-Plattformen verbreiten (SMM)</div></div>
+        <div class="vk"><div class="art">die / -n</div><div class="wort">Online-Kleinanzeige</div><div class="def">Online gepostete Anzeige für Produkte oder Dienstleistungen</div></div>
+        <div class="vk"><div class="art">die / –</div><div class="wort">digitale Werbung</div><div class="def">Die modernste Art der Werbung — im digitalen Bereich</div></div>
+        <div class="vk"><div class="art">verb</div><div class="wort">posten</div><div class="def">Eine Anzeige oder einen Inhalt online veröffentlichen</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: ONLINE-MARKETING FORMEN -->
+  <div class="section" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Online Marketing">
+    <div class="tab-content">
+      <div class="section-title">Formen des Online-Marketings</div>
+      <div class="hilfe-box"><strong>Online-Marketing</strong> (auch: Internetmarketing) beinhaltet alle Marketing-Maßnahmen, die online durchgeführt werden. Es gibt viele verschiedene Formen.</div>
+      <div class="formen-list">
+        <div class="form-row">
+          <div class="form-tag">🌐 die Internet­werbung</div>
+          <div class="form-desc">Die <strong>Internetwerbung</strong> beinhaltet verschiedene Werbeformen im Internet — z.B. Bannerwerbung, Pop-ups und gesponserte Inhalte.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-tag">💻 die Webseite</div>
+          <div class="form-desc">Die <strong>Webseite</strong> präsentiert das Online-Geschäft. Sie ist die digitale Visitenkarte eines Unternehmens.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-tag">📝 das Content Marketing</div>
+          <div class="form-desc">Das <strong>Content Marketing</strong> ist für die Produktion und die Verteilung von Medien zuständig, um neue Kunden zu erhalten — z.B. Blogartikel, Videos, Podcasts.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-tag">📧 das E-Mail-Marketing</div>
+          <div class="form-desc">Das <strong>E-Mail-Marketing</strong> ist für den Versand von Werbung per E-Mail zuständig — direkt in den Posteingang der Kunden.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-tag">📱 Social Media Marketing</div>
+          <div class="form-desc">Das <strong>Social Media Marketing (SMM)</strong> ist dafür zuständig, Werbung auf den Social-Media-Plattformen zu verbreiten — z.B. Instagram, Facebook, TikTok.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-tag">📌 Online-Kleinanzeige</div>
+          <div class="form-desc">Um für etwas im Internet zu werben, <strong>postet</strong> man die <strong>Kleinanzeigen online</strong>. Nur der Kunde, der daran Interesse haben kann, sieht die Anzeige — dank Algorithmen.</div>
+        </div>
+      </div>
+      <div class="hilfe-box">💡 Der wichtigste Vorteil des Online-Marketings: Dank <strong>Algorithmen</strong> in sozialen Netzwerken sieht nur die <strong>Zielgruppe</strong> die Werbung — das spart Kosten und erhöht den Erfolg.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="section" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6476808/pexels-photo-6476808.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Lückentext">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span><span class="timer-display" id="td2">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(2)">↺</button>
+        <span class="best-time" id="bt2"></span>
+      </div>
+      <div class="hilfe-box">Fülle die Lücken mit dem richtigen Wort aus. Die Wörter stehen im Kasten.</div>
+      <div class="wortkasten">📦 <strong>Wortkasten:</strong> Algorithmen · Zielgruppe · Online-Marketing · Content Marketing · E-Mail-Marketing · Webseite · Kleinanzeigen · Internetwerbung · Social Media · digitale</div>
+      <div id="luecken-container"></div>
+      <button class="reset-btn" onclick="resetLuecken()">↺ Zurücksetzen</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: ZUORDNUNG -->
+  <div class="section" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Zuordnung">
+    <div class="tab-content">
+      <div class="hilfe-box">Klicke auf einen Begriff, dann auf die passende Beschreibung.</div>
+      <div id="match-container"></div>
+      <div class="match-feedback" id="match-feedback"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Satzbau">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span><span class="timer-display" id="td4">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(4)">↺</button>
+        <span class="best-time" id="bt4"></span>
+      </div>
+      <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge.</div>
+      <div id="sb-container"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="section" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Vokabeln">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span><span class="timer-display" id="td5">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(5)">↺</button>
+        <span class="best-time" id="bt5"></span>
+      </div>
+      <div class="hilfe-box">Tippe Artikel, Nomen und Plural. Groß-/Kleinschreibung beachten!</div>
+      <div id="ws-container"></div>
+      <button class="pruef-btn" onclick="vocabLiveCheck()">✔ Prüfen</button>
+      <button class="reset-btn" onclick="wsReset()">↺ Zurücksetzen</button>
+      <div style="margin-top:12px;font-size:0.9em;color:#667eea;font-weight:700;" id="ws-score"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TABS ─────────────────────────────────────────────────────────
+function showTab(n){
+  document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
+  if(n===2&&!timers[2].started) timerAutoStart(2);
+  if(n===4&&!timers[4].started) timerAutoStart(4);
+  if(n===5&&!timers[5].started) timerAutoStart(5);
+}
+
+// ── TIMER ─────────────────────────────────────────────────────────
+const TIMER_PREFIX='best2017X';
+const timers={};
+[2,4,5].forEach(n=>{timers[n]={s:0,iv:null,started:false};});
+function fmtTime(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
+function startTimer(n){if(timers[n].iv)return;timers[n].iv=setInterval(()=>{timers[n].s++;document.getElementById('td'+n).textContent=fmtTime(timers[n].s);},1000);}
+function stopTimer(n){clearInterval(timers[n].iv);timers[n].iv=null;const key=TIMER_PREFIX+'_t'+n;const best=parseInt(localStorage.getItem(key)||'99999');if(timers[n].s>0&&timers[n].s<best){localStorage.setItem(key,timers[n].s);showBest(n,timers[n].s);}else showBest(n,best);}
+function resetTimer(n){clearInterval(timers[n].iv);timers[n].iv=null;timers[n].s=0;timers[n].started=false;document.getElementById('td'+n).textContent='0:00';startTimer(n);timers[n].started=true;}
+function showBest(n,s){const el=document.getElementById('bt'+n);if(el&&s<99999)el.textContent='Best: '+fmtTime(s);}
+function loadBestTimes(){[2,4,5].forEach(n=>{const v=localStorage.getItem(TIMER_PREFIX+'_t'+n);if(v)showBest(n,parseInt(v));});}
+function timerAutoStart(n){startTimer(n);timers[n].started=true;}
+
+// ── LÜCKENTEXT ───────────────────────────────────────────────────
+const LUECKEN_DATA=[
+  {pre:'Das ',blank:'Online-Marketing',post:' beinhaltet alle Maßnahmen, die im Internet durchgeführt werden.'},
+  {pre:'Dank ',blank:'Algorithmen',post:' in sozialen Netzwerken sieht nur die Zielgruppe die Werbung.'},
+  {pre:'Nur der Kunde, der Interesse haben kann, sieht die Online-',blank:'Kleinanzeigen',post:'.'},
+  {pre:'Die ',blank:'Webseite',post:' präsentiert das Online-Geschäft eines Unternehmens.'},
+  {pre:'Das ',blank:'Content Marketing',post:' ist für die Produktion und Verteilung von Medien zuständig.'},
+  {pre:'Das ',blank:'E-Mail-Marketing',post:' sendet Werbung direkt in den Posteingang der Kunden.'},
+  {pre:'Die ',blank:'Internetwerbung',post:' beinhaltet verschiedene Werbeformen im Internet.'},
+  {pre:'',blank:'Social Media',post:' Marketing verbreitet Werbung auf Plattformen wie Instagram und Facebook.'},
+  {pre:'Die Online-Werbung ist die modernste und ',blank:'digitale',post:' Art der Werbung.'},
+  {pre:'Werbung richtet sich immer an eine bestimmte ',blank:'Zielgruppe',post:'.'},
+];
+
+function buildLuecken(){
+  const c=document.getElementById('luecken-container');c.innerHTML='';
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div');div.className='luecke-item';
+    div.innerHTML=d.pre+'<input class="blank" id="lb'+i+'" type="text" autocomplete="off" oninput="liveCheck('+i+')" placeholder="…">'+d.post;
+    c.appendChild(div);
+  });
+}
+function liveCheck(i){
+  const inp=document.getElementById('lb'+i);const ans=LUECKEN_DATA[i].blank;const v=inp.value;
+  if(!v){inp.className='blank';return;}
+  const cs=ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+  const exact=cs?(ans===v):(ans.toLowerCase()===v.toLowerCase());
+  const partial=cs?ans.startsWith(v):ans.toLowerCase().startsWith(v.toLowerCase());
+  if(exact){
+    inp.className='blank correct';
+    if(!document.getElementById('lh'+i)){const sp=document.createElement('span');sp.className='correction-hint';sp.id='lh'+i;sp.textContent='✓';inp.parentNode.insertBefore(sp,inp.nextSibling);}
+    const allOk=[...document.querySelectorAll('#luecken-container .blank')].every(b=>b.classList.contains('correct'));
+    if(allOk)stopTimer(2);
+  }else{inp.className='blank'+(partial?'':' wrong');}
+}
+function resetLuecken(){buildLuecken();}
+
+// ── ZUORDNUNG ────────────────────────────────────────────────────
+const MATCH_DATA=[
+  {term:'das Online-Marketing',        desc:'Alle Marketing-Maßnahmen, die online durchgeführt werden'},
+  {term:'der Algorithmus',             desc:'Bestimmt, welche Werbung welchen Nutzern gezeigt wird'},
+  {term:'die Internetwerbung',         desc:'Verschiedene Werbeformen im Internet (Banner, Pop-ups…)'},
+  {term:'das Content Marketing',       desc:'Produktion und Verteilung von Medien, um neue Kunden zu gewinnen'},
+  {term:'das E-Mail-Marketing',        desc:'Versand von Werbung direkt per E-Mail an Kunden'},
+  {term:'das Social Media Marketing',  desc:'Werbung auf Social-Media-Plattformen verbreiten'},
+  {term:'die Online-Kleinanzeige',     desc:'Online gepostete Anzeige, die nur die Zielgruppe sieht'},
+  {term:'die Webseite',                desc:'Präsentiert das Online-Geschäft eines Unternehmens'},
+  {term:'die digitale Werbung',        desc:'Die modernste Art der Werbung im digitalen Raum'},
+  {term:'die Zielgruppe',              desc:'Gruppe von Menschen, die eine Werbung ansprechen soll'},
+];
+
+let matchSelected=null,matchSolved=0;
+function shuffleArr(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function buildMatch(){
+  const c=document.getElementById('match-container');c.innerHTML='';
+  const layout=document.createElement('div');layout.className='match-layout';
+  const leftCol=document.createElement('div');leftCol.className='match-col';
+  const lh=document.createElement('h4');lh.textContent='Begriff';leftCol.appendChild(lh);
+  const lz=document.createElement('div');lz.className='drop-zone';leftCol.appendChild(lz);
+  const rightCol=document.createElement('div');rightCol.className='match-col';
+  const rh=document.createElement('h4');rh.textContent='Bedeutung';rightCol.appendChild(rh);
+  const rz=document.createElement('div');rz.className='drop-zone';rightCol.appendChild(rz);
+  const idxs=MATCH_DATA.map((_,i)=>i);
+  let descIdxs=[...idxs];let ok=false;
+  for(let a=0;a<50&&!ok;a++){shuffleArr(descIdxs);ok=descIdxs.every((v,i)=>v!==i);}
+  shuffleArr(idxs).forEach(i=>{
+    const tc=document.createElement('div');tc.className='term-card';tc.textContent=MATCH_DATA[i].term;tc.dataset.idx=i;
+    tc.onclick=()=>selectTermCard(tc);lz.appendChild(tc);
+  });
+  descIdxs.forEach(i=>{
+    const dc=document.createElement('div');dc.className='desc-card';dc.textContent=MATCH_DATA[i].desc;dc.dataset.idx=i;
+    dc.onclick=()=>matchDescCard(dc);rz.appendChild(dc);
+  });
+  layout.appendChild(leftCol);layout.appendChild(rightCol);c.appendChild(layout);
+  matchSelected=null;matchSolved=0;
+}
+function selectTermCard(tc){
+  if(tc.classList.contains('matched'))return;
+  document.querySelectorAll('.term-card').forEach(c=>c.classList.remove('selected'));
+  tc.classList.add('selected');matchSelected=tc;
+}
+function matchDescCard(dc){
+  if(dc.classList.contains('matched'))return;
+  if(!matchSelected)return;
+  const ti=parseInt(matchSelected.dataset.idx),di=parseInt(dc.dataset.idx);
+  if(ti===di){
+    matchSelected.classList.remove('selected');matchSelected.classList.add('matched');dc.classList.add('matched');
+    matchSolved++;matchSelected=null;
+    if(matchSolved===MATCH_DATA.length)document.getElementById('match-feedback').textContent='🎉 Alle '+MATCH_DATA.length+' Paare korrekt!';
+  }else{
+    matchSelected.classList.add('error');dc.classList.add('error');
+    setTimeout(()=>{matchSelected&&matchSelected.classList.remove('error','selected');dc.classList.remove('error');matchSelected=null;},800);
+  }
+}
+
+// ── SATZBAU ──────────────────────────────────────────────────────
+const SATZBAU_DATA=[
+  {prompt:'Was beinhaltet das Online-Marketing?',chips:['Das','Online-Marketing','beinhaltet','alle','Maßnahmen',',','die','online','durchgeführt','werden','.'],correct:'Das Online-Marketing beinhaltet alle Maßnahmen , die online durchgeführt werden .'},
+  {prompt:'Wie funktioniert gezielte Online-Werbung?',chips:['Dank','der','Algorithmen','sieht','nur','die','Zielgruppe','die','Werbung','.'],correct:'Dank der Algorithmen sieht nur die Zielgruppe die Werbung .'},
+  {prompt:'Wofür ist Content Marketing zuständig?',chips:['Content','Marketing','ist','für','die','Produktion','von','Medien','zuständig',',','um','neue','Kunden','zu','gewinnen','.'],correct:'Content Marketing ist für die Produktion von Medien zuständig , um neue Kunden zu gewinnen .'},
+  {prompt:'Was ist die modernste Art der Werbung?',chips:['Die','Online-Werbung','ist','die','modernste','Art','der','Werbung','.'],correct:'Die Online-Werbung ist die modernste Art der Werbung .'},
+  {prompt:'Was macht das E-Mail-Marketing?',chips:['Das','E-Mail-Marketing','ist','für','den','Versand','von','Werbung','per','E-Mail','zuständig','.'],correct:'Das E-Mail-Marketing ist für den Versand von Werbung per E-Mail zuständig .'},
+  {prompt:'Wie wirbt man mit Online-Kleinanzeigen?',chips:['Um','für','etwas','zu','werben',',','postet','man','die','Kleinanzeigen','online','.'],correct:'Um für etwas zu werben , postet man die Kleinanzeigen online .'},
+];
+
+let sbDragged=null;
+function sbMakeChip(word,isStatic=false){const span=document.createElement('span');span.className='sb-chip'+(isStatic?' static-chip':'');span.textContent=word;if(!isStatic){span.draggable=true;span.ondragstart=e=>{sbDragged=span;span.classList.add('dragging');};span.ondragend=e=>{span.classList.remove('dragging');sbDragged=null;};}return span;}
+function sbRegisterZone(zone,idx){zone.ondragover=e=>{e.preventDefault();zone.classList.add('drag-over');};zone.ondragleave=e=>zone.classList.remove('drag-over');zone.ondrop=e=>{e.preventDefault();zone.classList.remove('drag-over');if(sbDragged)zone.appendChild(sbDragged);setTimeout(()=>sbCheckAuto(idx),500);};}
+function sbUpdateCapitalization(zone){const chips=[...zone.querySelectorAll('.sb-chip:not(.static-chip)')];chips.forEach((ch,i)=>{const w=ch.dataset.original||ch.textContent;if(!ch.dataset.original)ch.dataset.original=w;if(i===0)ch.textContent=w[0].toUpperCase()+w.slice(1);else ch.textContent=w;});}
+function sbCheckAuto(idx){const zone=document.getElementById('sb_drop_'+idx);const fb=document.getElementById('sb_fb_'+idx);sbUpdateCapitalization(zone);const chips=[...zone.querySelectorAll('.sb-chip')];const attempt=chips.map(c=>c.textContent).join(' ');const correct=SATZBAU_DATA[idx].correct;if(chips.length===0){fb.textContent='';return;}if(attempt===correct){fb.className='sb-feedback ok';fb.textContent='✓ Richtig!';const allDone=[...document.querySelectorAll('.sb-feedback')].every(f=>f.classList.contains('ok'));if(allDone)stopTimer(4);}else if(chips.length===correct.split(' ').length){fb.className='sb-feedback err';fb.textContent='✗ Noch nicht richtig.';}else fb.textContent='';}
+function buildSatzbau(){const c=document.getElementById('sb-container');c.innerHTML='';SATZBAU_DATA.forEach((d,idx)=>{let shuffled=[...d.chips];let ok=false;for(let a=0;a<50&&!ok;a++){for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}ok=shuffled.some((w,i)=>w!==d.chips[i]);}const div=document.createElement('div');div.className='sb-item';const prompt=document.createElement('div');prompt.className='sb-prompt';prompt.textContent=(idx+1)+'. '+d.prompt;div.appendChild(prompt);const chipArea=document.createElement('div');chipArea.className='sb-chips';chipArea.id='sb_src_'+idx;shuffled.forEach(w=>{const isPunct=/^[.,!?;:—–,]$/.test(w);chipArea.appendChild(sbMakeChip(w,isPunct));});const dropZone=document.createElement('div');dropZone.className='sb-drop';dropZone.id='sb_drop_'+idx;sbRegisterZone(dropZone,idx);sbRegisterZone(chipArea,idx);const fb=document.createElement('div');fb.className='sb-feedback';fb.id='sb_fb_'+idx;div.appendChild(chipArea);div.appendChild(dropZone);div.appendChild(fb);c.appendChild(div);});}
+
+// ── WORTSCHATZ ───────────────────────────────────────────────────
+const VOCAB_DATA=[
+  {en:'online marketing',art:'das',wort:'Online-Marketing',plural:'–'},
+  {en:'algorithm',art:'der',wort:'Algorithmus',plural:'-en'},
+  {en:'internet advertising',art:'die',wort:'Internetwerbung',plural:'-en'},
+  {en:'website',art:'die',wort:'Webseite',plural:'-n'},
+  {en:'content marketing',art:'das',wort:'Content Marketing',plural:'–'},
+  {en:'email marketing',art:'das',wort:'E-Mail-Marketing',plural:'–'},
+  {en:'social media marketing',art:'das',wort:'Social Media Marketing',plural:'–'},
+  {en:'online classified ad',art:'die',wort:'Online-Kleinanzeige',plural:'-n'},
+  {en:'target group',art:'die',wort:'Zielgruppe',plural:'-n'},
+  {en:'digital advertising',art:'die',wort:'digitale Werbung',plural:'–'},
+  {en:'social network',art:'das',wort:'soziale Netzwerk',plural:'-e'},
+  {en:'to post (online)',art:'verb',wort:'posten',plural:'–'},
+];
+
+function buildWortschatz(){const c=document.getElementById('ws-container');c.innerHTML='';VOCAB_DATA.forEach((d,i)=>{const div=document.createElement('div');div.className='ws-item';div.innerHTML=`<span class="ws-en">${d.en}</span><div class="ws-fields"><span class="ws-hint">Artikel:</span><input class="ws-input" id="ws_art_${i}" style="width:55px" type="text" autocomplete="off" placeholder="der/…"><span class="ws-hint">Nomen:</span><input class="ws-input" id="ws_wort_${i}" style="width:180px" type="text" autocomplete="off" placeholder="…"><span class="ws-hint">Pl.:</span><input class="ws-input" id="ws_pl_${i}" style="width:55px" type="text" autocomplete="off" placeholder="…"></div>`;c.appendChild(div);});}
+function vocabLiveCheck(){let correct=0;VOCAB_DATA.forEach((d,i)=>{const aEl=document.getElementById('ws_art_'+i),wEl=document.getElementById('ws_wort_'+i),pEl=document.getElementById('ws_pl_'+i);const aOk=aEl.value.trim()===d.art,wOk=wEl.value.trim()===d.wort,pOk=pEl.value.trim()===d.plural;aEl.className='ws-input '+(aEl.value.trim()===''?'':(aOk?'correct':'wrong'));wEl.className='ws-input '+(wEl.value.trim()===''?'':(wOk?'correct':'wrong'));pEl.className='ws-input '+(pEl.value.trim()===''?'':(pOk?'correct':'wrong'));if(aOk&&wOk&&pOk)correct++;});document.getElementById('ws-score').textContent=correct+' / '+VOCAB_DATA.length+' richtig';if(correct===VOCAB_DATA.length)stopTimer(5);}
+function wsReset(){VOCAB_DATA.forEach((_,i)=>{['ws_art_','ws_wort_','ws_pl_'].forEach(p=>{const el=document.getElementById(p+i);el.value='';el.className='ws-input';});});document.getElementById('ws-score').textContent='';}
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildLuecken();buildMatch();buildSatzbau();buildWortschatz();loadBestTimes();
+function initVocab() { buildWortschatz(); }
+</script>
+</body>
+</html>

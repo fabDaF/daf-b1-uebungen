@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2052G: Mehr zum Perfekt</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #667eea;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
+  header {
+    background: #667eea;
+    color: #fff;
+    padding: 18px 28px 10px 28px;
+  }
+  header h1 { font-size: 1.35rem; font-weight: 700; }
+  header p  { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 14px 18px;
+    background: #f3e8ff;
+    border-bottom: 2px solid #667eea;
+  }
+  nav button {
+    background: #fff;
+    border: 1.5px solid #667eea;
+    border-radius: 7px;
+    padding: 9px 14px;
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 5px;
+    color: #4a0080;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  nav button:last-child { margin-bottom: 0; }
+  nav button.active { background: #667eea; color: #fff; font-weight: 700; }
+  nav button:hover:not(.active) { background: #ede0fa; }
+
+  .tab { display: none; padding: 24px 28px 32px 28px; }
+  .tab.active { display: block; }
+
+  .tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+
+  h2 { color: #667eea; font-size: 1.15rem; margin-bottom: 12px; }
+  h3 { color: #4a0080; font-size: 1rem; margin: 16px 0 8px 0; }
+  p  { line-height: 1.65; color: #333; margin-bottom: 10px; }
+
+  /* MC ENTDECKEN */
+  .mc-step { display: none; }
+  .mc-step.active { display: block; }
+  .mc-question {
+    background: #f3e8ff;
+    border-left: 4px solid #667eea;
+    border-radius: 7px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-size: 1rem;
+    color: #222;
+    line-height: 1.6;
+  }
+  .mc-options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 12px; }
+  .mc-btn {
+    background: #fff;
+    border: 1.5px solid #9c4dcc;
+    border-radius: 8px;
+    padding: 10px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: #333;
+    transition: background 0.12s;
+  }
+  .mc-btn:hover { background: #f3e8ff; }
+  .mc-btn.correct { background: #e8f5e9; border-color: #2e7d32; color: #1b5e20; font-weight: 600; }
+  .mc-btn.wrong   { background: #ffebee; border-color: #c62828; color: #b71c1c; }
+  .mc-feedback { font-size: 0.88rem; margin-bottom: 10px; font-weight: 600; min-height: 20px; }
+  .mc-feedback.ok  { color: #2e7d32; }
+  .mc-feedback.err { color: #c62828; }
+  .mc-progress { display: flex; gap: 6px; margin-bottom: 14px; }
+  .mc-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #ddd; border: 1.5px solid #9c4dcc;
+    transition: background 0.2s;
+  }
+  .mc-dot.done { background: #667eea; }
+  .btn-next {
+    background: #667eea; color: #fff; border: none;
+    border-radius: 7px; padding: 9px 22px; cursor: pointer;
+    font-size: 0.92rem; margin-top: 6px; display: none;
+  }
+  .btn-next:hover { background: #4a0080; }
+
+  /* REGEL TABELLE */
+  .regel-tabelle {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 18px;
+    font-size: 0.92rem;
+  }
+  .regel-tabelle th {
+    background: #667eea; color: #fff;
+    padding: 9px 12px; text-align: left;
+    border: 1px solid #4a0080;
+  }
+  .regel-tabelle td {
+    padding: 8px 12px; border: 1px solid #ccc; vertical-align: top;
+  }
+  .regel-tabelle tr:nth-child(even) td { background: #f8f0ff; }
+  .regel-box {
+    background: #f3e8ff;
+    border: 2px solid #667eea;
+    border-radius: 9px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .regel-box h3 { margin-top: 0; }
+  .hinweis-box {
+    background: #fff3e0;
+    border: 1.5px solid #f57c00;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    color: #5a3500;
+    font-size: 0.92rem;
+  }
+
+  /* LÜCKENTEXT */
+  .luecke-satz {
+    background: #f8f0ff; border-radius: 7px;
+    padding: 11px 15px; margin-bottom: 10px;
+    font-size: 0.97rem; line-height: 1.7; color: #222;
+  }
+  input.luecke {
+    border: none; border-bottom: 2px solid #667eea;
+    background: transparent; width: 160px;
+    font-size: 0.96rem; color: #333;
+    padding: 2px 4px; outline: none;
+  }
+  input.luecke.correct { border-bottom-color: #2e7d32; color: #2e7d32; background: #e8f5e9; border-radius: 4px; }
+  input.luecke.wrong   { border-bottom-color: #c62828; color: #c62828; background: #ffebee; border-radius: 4px; }
+  .feedback-inline { font-size: 0.82rem; margin-left: 6px; }
+  .feedback-inline.ok  { color: #2e7d32; }
+  .feedback-inline.err { color: #c62828; }
+
+  /* SATZBAU */
+  .sb-aufgabe { margin-bottom: 22px; }
+  .sb-chips-pool {
+    display: flex; flex-wrap: wrap; gap: 7px;
+    min-height: 44px; background: #f3e8ff;
+    border: 1.5px dashed #9c4dcc; border-radius: 7px;
+    padding: 8px; margin-bottom: 8px;
+  }
+  .sb-drop-zone {
+    display: flex; flex-wrap: wrap; gap: 7px;
+    min-height: 44px; background: #fff;
+    border: 1.5px solid #667eea; border-radius: 7px;
+    padding: 8px; margin-bottom: 6px;
+  }
+  .sb-chip {
+    background: #667eea; color: #fff;
+    border-radius: 16px; padding: 5px 13px;
+    font-size: 0.88rem; cursor: pointer;
+    user-select: none;
+  }
+  .sb-chip:hover { opacity: 0.82; }
+  .sb-result { font-size: 0.87rem; margin-top: 4px; font-weight: 600; }
+  .sb-result.ok  { color: #2e7d32; }
+  .sb-result.err { color: #c62828; }
+
+  /* ZUORDNUNG */
+  .zuord-item {
+    display: flex; align-items: center; gap: 12px;
+    background: #f8f0ff; border-radius: 7px;
+    padding: 10px 14px; margin-bottom: 8px;
+    font-size: 0.93rem; flex-wrap: wrap;
+  }
+  .zuord-item select {
+    border: 1.5px solid #667eea; border-radius: 6px;
+    padding: 5px 10px; font-size: 0.9rem;
+    background: #fff; color: #333; cursor: pointer;
+  }
+  .zuord-fb { font-size: 0.85rem; font-weight: 600; }
+  .zuord-fb.ok  { color: #2e7d32; }
+  .zuord-fb.err { color: #c62828; }
+
+  /* TIMER */
+  .timer-bar {
+    background: #f3e8ff; border: 1px solid #c084fc;
+    border-radius: 8px; padding: 8px 16px;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 16px; font-size: 0.9rem; color: #4a0080;
+  }
+  .timer-bar span { font-weight: 700; font-size: 1rem; }
+  .timer-bar button {
+    background: #667eea; color: #fff; border: none;
+    border-radius: 6px; padding: 5px 14px; cursor: pointer; font-size: 0.88rem;
+  }
+  .timer-bar button:hover { background: #4a0080; }
+
+  .btn-check {
+    background: #667eea; color: #fff; border: none;
+    border-radius: 7px; padding: 10px 26px;
+    font-size: 0.95rem; cursor: pointer; margin-top: 10px;
+  }
+  .btn-check:hover { background: #4a0080; }
+  .ergebnis { margin-top: 10px; font-weight: 600; font-size: 0.97rem; color: #4a0080; }
+
+  footer {
+    text-align: center; font-size: 0.78rem; color: #888;
+    padding: 14px 0 10px 0; border-top: 1px solid #eee; margin-top: 8px;
+  }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>2052G · Mehr zum Perfekt</h1>
+    <p>B1.2 · Grammatik · Perfekt mit Modalverben und Wahrnehmungsverben (sehen/hören)</p>
+  </header>
+
+  <nav id="mainNav">
+    <button class="active" onclick="showTab(0)">🔍 Entdecken</button>
+    <button onclick="showTab(1)">📋 Regel</button>
+    <button onclick="showTab(2)">✏️ Lückentext</button>
+    <button onclick="showTab(3)">🧩 Satzbau</button>
+    <button onclick="showTab(4)">🔗 Zuordnung</button>
+  </nav>
+
+  <!-- TAB 0: ENTDECKEN -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=860" alt="Perfekt entdecken">
+    <h2>🔍 Entdecken: Perfekt mit Modalverben</h2>
+
+    <div class="mc-progress" id="mcProgress"></div>
+
+    <!-- STEP 0 -->
+    <div class="mc-step active" id="step0">
+      <div class="mc-question">
+        Lies den Satz:<br><br>
+        <em>„Ich lerne Deutsch. Das <strong>habe</strong> ich schon immer <strong>gewollt</strong>."</em><br><br>
+        Das Verb <strong>wollen</strong> steht hier <strong>ohne</strong> Vollverb (kein zweites Verb im Infinitiv). Wie wird das Perfekt gebildet?
+      </div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(0, this, false)">a) haben + Infinitiv + Infinitiv des Modalverbs</button>
+        <button class="mc-btn" onclick="mcCheck(0, this, true)">b) haben + Partizip II des Modalverbs (gewollt)</button>
+        <button class="mc-btn" onclick="mcCheck(0, this, false)">c) sein + Partizip II des Modalverbs</button>
+      </div>
+      <div class="mc-feedback" id="fb0"></div>
+      <button class="btn-next" id="next0" onclick="nextStep(1)">Weiter →</button>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="mc-step" id="step1">
+      <div class="mc-question">
+        Jetzt mit Vollverb:<br><br>
+        <em>„Ich <strong>soll</strong> lernen."</em> → Wie lautet das Perfekt?
+      </div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(1, this, false)">a) Ich habe lernen gesollt.</button>
+        <button class="mc-btn" onclick="mcCheck(1, this, true)">b) Ich habe lernen sollen.</button>
+        <button class="mc-btn" onclick="mcCheck(1, this, false)">c) Ich bin lernen gesollen.</button>
+      </div>
+      <div class="mc-feedback" id="fb1"></div>
+      <button class="btn-next" id="next1" onclick="nextStep(2)">Weiter →</button>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="mc-step" id="step2">
+      <div class="mc-question">
+        Die Wahrnehmungsverben <strong>sehen</strong> und <strong>hören</strong> mit Vollverb:<br><br>
+        <em>„Ich <strong>sehe</strong> meine Tochter <strong>spielen</strong>."</em> → Wie lautet das Perfekt? (zwei Formen möglich!)
+      </div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(2, this, false)">a) Ich habe meine Tochter gespielt gesehen.</button>
+        <button class="mc-btn" onclick="mcCheck(2, this, true)">b) Ich habe meine Tochter spielen sehen / spielen gesehen.</button>
+        <button class="mc-btn" onclick="mcCheck(2, this, false)">c) Ich bin meine Tochter spielen sehen.</button>
+      </div>
+      <div class="mc-feedback" id="fb2"></div>
+      <button class="btn-next" id="next2" onclick="nextStep(3)">Weiter →</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="mc-step" id="step3">
+      <div class="mc-question">
+        Welche Aussage ist <strong>FALSCH</strong>?
+      </div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="mcCheck(3, this, false)">a) Modalverben mit Vollverb bilden den doppelten Infinitiv im Perfekt.</button>
+        <button class="mc-btn" onclick="mcCheck(3, this, false)">b) <em>sehen</em> und <em>hören</em> können sowohl Partizip II als auch doppelten Infinitiv bilden.</button>
+        <button class="mc-btn" onclick="mcCheck(3, this, true)">c) Das Verb <em>sollen</em> bildet das Partizip II regelmäßig als „gesollt".</button>
+      </div>
+      <div class="mc-feedback" id="fb3"></div>
+      <button class="btn-next" id="next3" onclick="showRegel()">Zur Regel →</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: REGEL -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&w=860" alt="Grammatikregel">
+    <h2>📋 Regel: Mehr zum Perfekt</h2>
+
+    <div class="regel-box">
+      <h3>1️⃣ Modalverben im Perfekt — MIT Vollverb (doppelter Infinitiv)</h3>
+      <p>Werden Modalverben mit einem Vollverb im Infinitiv benutzt, wird im Perfekt <strong>kein Partizip II</strong>, sondern der <strong>doppelte Infinitiv</strong> verwendet:</p>
+      <p style="text-align:center; font-size:1.05rem; color:#667eea; font-weight:700; margin:10px 0;">
+        haben + Infinitiv (Vollverb) + Infinitiv (Modalverb)
+      </p>
+    </div>
+
+    <table class="regel-tabelle">
+      <tr>
+        <th>Präsens</th>
+        <th>Perfekt (doppelter Infinitiv)</th>
+      </tr>
+      <tr><td>Ich soll lernen.</td><td>Ich habe lernen <strong>sollen</strong>.</td></tr>
+      <tr><td>Du musst gehen.</td><td>Du hast gehen <strong>müssen</strong>.</td></tr>
+      <tr><td>Er will bleiben.</td><td>Er hat bleiben <strong>wollen</strong>.</td></tr>
+      <tr><td>Wir dürfen Party machen.</td><td>Wir haben Party machen <strong>dürfen</strong>.</td></tr>
+      <tr><td>Ihr könnt schwimmen.</td><td>Ihr habt schwimmen <strong>können</strong>.</td></tr>
+    </table>
+
+    <div class="regel-box">
+      <h3>2️⃣ Modalverben im Perfekt — OHNE Vollverb (Partizip II)</h3>
+      <p>Stehen Modalverben <strong>ohne</strong> Vollverb im Infinitiv, wird das <strong>Partizip II</strong> regelmäßig gebildet.</p>
+      <div class="hinweis-box">⚠️ Ausnahme: Das Verb <strong>sollen</strong> wird <em>nicht</em> im Partizip II verwendet!</div>
+    </div>
+
+    <table class="regel-tabelle">
+      <tr>
+        <th>Modalverb</th>
+        <th>Partizip II</th>
+        <th>Beispiel</th>
+      </tr>
+      <tr><td>dürfen</td><td><strong>gedurft</strong></td><td>Das habe ich nicht gedurft.</td></tr>
+      <tr><td>können</td><td><strong>gekonnt</strong></td><td>Das habe ich nicht gekonnt.</td></tr>
+      <tr><td>mögen</td><td><strong>gemocht</strong></td><td>Das habe ich immer gemocht.</td></tr>
+      <tr><td>müssen</td><td><strong>gemusst</strong></td><td>Das habe ich gemusst.</td></tr>
+      <tr><td>wollen</td><td><strong>gewollt</strong></td><td>Das habe ich immer gewollt.</td></tr>
+    </table>
+
+    <div class="regel-box">
+      <h3>3️⃣ Wahrnehmungsverben <em>sehen</em> und <em>hören</em> im Perfekt</h3>
+      <p>Die Verben <strong>sehen</strong> und <strong>hören</strong> bilden im Perfekt — wenn sie ein weiteres Verb im Infinitiv begleiten — häufig einen <strong>doppelten Infinitiv</strong>. Beide Formen sind möglich:</p>
+    </div>
+
+    <table class="regel-tabelle">
+      <tr>
+        <th>Präsens</th>
+        <th>Perfekt (doppelter Infinitiv)</th>
+        <th>Perfekt (Partizip II)</th>
+      </tr>
+      <tr>
+        <td>Sie sieht den Zug kommen.</td>
+        <td>Sie hat den Zug kommen <strong>sehen</strong>.</td>
+        <td>Sie hat den Zug kommen <strong>gesehen</strong>.</td>
+      </tr>
+      <tr>
+        <td>Ich höre meine Tochter singen.</td>
+        <td>Ich habe meine Tochter singen <strong>hören</strong>.</td>
+        <td>Ich habe meine Tochter singen <strong>gehört</strong>.</td>
+      </tr>
+      <tr>
+        <td>Wir sehen die Band spielen.</td>
+        <td>Wir haben die Band spielen <strong>sehen</strong>.</td>
+        <td>Wir haben die Band spielen <strong>gesehen</strong>.</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=860" alt="Lückentext">
+    <h2>✏️ Lückentext: Perfekt mit Modalverben &amp; sehen/hören</h2>
+
+    <div class="timer-bar">
+      ⏱ Zeit: <span id="best2052G_L_display">00:00</span>
+      <button onclick="startTimer('best2052G_L')">Start</button>
+      <button onclick="stopTimer('best2052G_L')">Stop</button>
+    </div>
+
+    <div id="lueckenContainer"></div>
+    <button class="btn-check" onclick="checkAll()">Alle prüfen</button>
+    <div class="ergebnis" id="lueckenErgebnis"></div>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=860" alt="Satzbau">
+    <h2>🧩 Satzbau: Perfekt bilden</h2>
+
+    <div class="timer-bar">
+      ⏱ Zeit: <span id="best2052G_S_display">00:00</span>
+      <button onclick="startTimer('best2052G_S')">Start</button>
+      <button onclick="stopTimer('best2052G_S')">Stop</button>
+    </div>
+
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <!-- TAB 4: ZUORDNUNG -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=860" alt="Zuordnung">
+    <h2>🔗 Zuordnung: Welche Perfektform?</h2>
+    <p>Wähle: Wird hier der <strong>doppelte Infinitiv</strong> oder das <strong>Partizip II</strong> verwendet?</p>
+
+    <div id="zuordContainer"></div>
+    <button class="btn-check" onclick="checkZuord()">Alle prüfen</button>
+    <div class="ergebnis" id="zuordErgebnis"></div>
+  </div>
+
+  <footer>Erstellt von FrankBurkert@fabdaf.onmicrosoft.com · B1.2 DaF-Übungen · 2052G</footer>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== TAB NAVIGATION =====
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('#mainNav button').forEach((b,i) => b.classList.toggle('active', i===idx));
+}
+
+// ===== MC ENTDECKEN =====
+const MC_STEPS = 4;
+let mcDone = [false, false, false, false];
+
+// Build progress dots
+const prog = document.getElementById('mcProgress');
+for (let i=0; i<MC_STEPS; i++) {
+  const dot = document.createElement('div');
+  dot.className = 'mc-dot';
+  dot.id = 'dot_' + i;
+  prog.appendChild(dot);
+}
+
+function mcCheck(stepIdx, btn, isCorrect) {
+  const opts = btn.parentElement.querySelectorAll('.mc-btn');
+  opts.forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb' + stepIdx);
+  const nextBtn = document.getElementById('next' + stepIdx);
+  if (isCorrect) {
+    btn.classList.add('correct');
+    fb.className = 'mc-feedback ok';
+    fb.textContent = '✓ Richtig!';
+    mcDone[stepIdx] = true;
+    document.getElementById('dot_' + stepIdx).classList.add('done');
+    nextBtn.style.display = 'inline-block';
+  } else {
+    btn.classList.add('wrong');
+    fb.className = 'mc-feedback err';
+    fb.textContent = '✗ Nicht ganz — versuch es nochmal!';
+    opts.forEach(b => b.disabled = false);
+    btn.disabled = true;
+  }
+}
+
+function nextStep(idx) {
+  document.querySelectorAll('.mc-step').forEach(s => s.classList.remove('active'));
+  const next = document.getElementById('step' + idx);
+  if (next) next.classList.add('active');
+}
+
+function showRegel() {
+  showTab(1);
+}
+
+// ===== TIMER =====
+const timers = {};
+function startTimer(key) {
+  if (timers[key] && timers[key].running) return;
+  const actualStart = Date.now() - (timers[key] ? timers[key].elapsed * 1000 : 0);
+  timers[key] = { running: true, start: actualStart, elapsed: 0 };
+  timers[key].interval = setInterval(() => {
+    const sec = Math.floor((Date.now() - timers[key].start) / 1000);
+    timers[key].elapsed = sec;
+    const m = String(Math.floor(sec/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    const el = document.getElementById(key + '_display');
+    if (el) el.textContent = m + ':' + s;
+  }, 1000);
+}
+function stopTimer(key) {
+  if (timers[key] && timers[key].interval) {
+    clearInterval(timers[key].interval);
+    timers[key].running = false;
+  }
+}
+
+// ===== LÜCKENTEXT =====
+const LUECKEN_DATA = [
+  { pre: 'Ich habe unbedingt nach Deutschland fliegen ', ans: 'wollen', post: '.' },
+  { pre: 'Ein Fluggast hat sich nicht anschnallen ', ans: 'wollen', post: '.' },
+  { pre: 'Er hat wieder aussteigen ', ans: 'müssen', post: '.' },
+  { pre: 'Der Marshall hat ihn aber nicht bändigen ', ans: 'können', post: '.' },
+  { pre: 'Weil ich dabei verletzt worden bin, habe ich erste Klasse fliegen ', ans: 'dürfen', post: '.' },
+  { pre: 'Dort habe ich kostenlos Essen und Getränke bestellen ', ans: 'dürfen', post: '.' },
+  { pre: 'Sie hat den Zug kommen ', ans: 'sehen', post: '.' },
+  { pre: 'Wir haben die Band spielen ', ans: 'gesehen', post: '.' },
+  { pre: 'Ich habe meine Tochter singen ', ans: 'hören', post: '.' },
+  { pre: 'Er hat die Lawine kommen ', ans: 'gesehen', post: '.' },
+];
+
+function buildLuecken() {
+  const container = document.getElementById('lueckenContainer');
+  LUECKEN_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'luecke-satz';
+    div.innerHTML = item.pre +
+      `<input class="luecke" id="luecke_${i}" type="text" autocomplete="off" placeholder="…" oninput="liveCheck(${i})">` +
+      `<span class="feedback-inline" id="fb_${i}"></span>` +
+      item.post;
+    container.appendChild(div);
+  });
+}
+
+function liveCheck(i) {
+  const inp = document.getElementById('luecke_' + i);
+  const fb  = document.getElementById('fb_' + i);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[i].ans;
+  if (!val) { inp.className='luecke'; fb.textContent=''; return; }
+  if (val.toLowerCase() === ans.toLowerCase()) {
+    inp.className='luecke correct'; fb.className='feedback-inline ok'; fb.textContent='✓';
+    const all = document.querySelectorAll('.luecke');
+    if (Array.from(all).every(x => x.classList.contains('correct'))) stopTimer('best2052G_L');
+  } else {
+    inp.className='luecke'; fb.className=''; fb.textContent='';
+  }
+}
+
+function checkAll() {
+  let right = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('luecke_' + i);
+    const fb  = document.getElementById('fb_' + i);
+    const val = inp.value.trim();
+    if (val.toLowerCase() === item.ans.toLowerCase()) {
+      inp.className='luecke correct'; fb.className='feedback-inline ok'; fb.textContent='✓'; right++;
+    } else {
+      inp.className='luecke wrong'; fb.className='feedback-inline err'; fb.textContent='✗ ('+item.ans+')';
+    }
+  });
+  document.getElementById('lueckenErgebnis').textContent =
+    right + ' / ' + LUECKEN_DATA.length + ' richtig' + (right===LUECKEN_DATA.length ? ' 🎉' : '');
+  stopTimer('best2052G_L');
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich', 'habe', 'nach', 'Berlin', 'fahren', 'wollen', '.'] },
+  { words: ['Du', 'hast', 'ein', 'Bahnticket', 'kaufen', 'müssen', '.'] },
+  { words: ['Ich', 'habe', 'nicht', 'in', 'der', 'Schlange', 'stehen', 'mögen', '.'] },
+  { words: ['Das', 'habe', 'ich', 'allerdings', 'nicht', 'vermeiden', 'können', '.'] },
+  { words: ['Sie', 'hat', 'den', 'Zug', 'kommen', 'sehen', '.'] },
+  { words: ['Ich', 'habe', 'die', 'Band', 'spielen', 'gesehen', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// ===== ZUORDNUNG =====
+const ZUORD_DATA = [
+  { satz: 'Ich habe lernen sollen.', ans: 'Doppelter Infinitiv' },
+  { satz: 'Das habe ich nicht gedurft.', ans: 'Partizip II' },
+  { satz: 'Sie hat den Zug kommen sehen.', ans: 'Doppelter Infinitiv' },
+  { satz: 'Das habe ich immer gewollt.', ans: 'Partizip II' },
+  { satz: 'Wir haben Party machen dürfen.', ans: 'Doppelter Infinitiv' },
+  { satz: 'Er hat das nicht gekonnt.', ans: 'Partizip II' },
+  { satz: 'Ich habe meine Tochter singen hören.', ans: 'Doppelter Infinitiv' },
+  { satz: 'Das habe ich immer gemocht.', ans: 'Partizip II' },
+];
+
+function buildZuord() {
+  const container = document.getElementById('zuordContainer');
+  ZUORD_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'zuord-item';
+    div.innerHTML = `
+      <span style="flex:1;">${item.satz}</span>
+      <select id="zuord_${i}">
+        <option value="">— wählen —</option>
+        <option value="Doppelter Infinitiv">Doppelter Infinitiv</option>
+        <option value="Partizip II">Partizip II</option>
+      </select>
+      <span class="zuord-fb" id="zuordfb_${i}"></span>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function checkZuord() {
+  let right = 0;
+  ZUORD_DATA.forEach((item, i) => {
+    const sel = document.getElementById('zuord_' + i);
+    const fb  = document.getElementById('zuordfb_' + i);
+    if (sel.value === item.ans) {
+      fb.className='zuord-fb ok'; fb.textContent='✓'; right++;
+    } else {
+      fb.className='zuord-fb err'; fb.textContent='✗ ('+item.ans+')';
+    }
+  });
+  document.getElementById('zuordErgebnis').textContent =
+    right + ' / ' + ZUORD_DATA.length + ' richtig' + (right===ZUORD_DATA.length ? ' 🎉' : '');
+}
+
+// INIT
+buildLuecken();
+buildSatzbau();
+buildZuord();
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the perfect tense', art: 'das', wort: 'Perfekt', plural: '-' },
+  { type: 'n', en: 'the past participle', art: 'das', wort: 'Partizip II', plural: '-' },
+  { type: 'n', en: 'the auxiliary verb', art: 'das', wort: 'Hilfsverb', plural: '-en' },
+  { type: 'v', en: 'to have', de: 'haben' },
+  { type: 'v', en: 'to be', de: 'sein' },
+  { type: 'v', en: 'to go', de: 'gehen' },
+  { type: 'v', en: 'to come', de: 'kommen' },
+  { type: 'v', en: 'to speak', de: 'sprechen' },
+  { type: 'v', en: 'to understand', de: 'verstehen' },
+  { type: 'v', en: 'to stay', de: 'bleiben' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2034X · Gefühle ausdrücken</title>
+<style>
+  :root { --accent: #667eea; --accent-light: #f3e5ff; --accent-mid: #9c27b0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  h1.main-title { background: var(--accent); color: #fff; text-align: center; padding: 18px 20px 10px; font-size: 1.5rem; margin: 0; }
+  p.subtitle { background: var(--accent); color: #e8c8ff; text-align: center; padding: 0 20px 14px; font-size: 0.92rem; margin: 0; }
+
+  /* NAV */
+  .tab-nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 12px 0; background: #f8f0ff; border-bottom: 2px solid var(--accent); }
+  .tab-btn { flex: 1 1 auto; min-width: 100px; padding: 8px 6px; border: 2px solid var(--accent); border-bottom: none; border-radius: 6px 6px 0 0; background: #fff; color: var(--accent); font-size: 0.82rem; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s, color 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .tab-btn:hover { background: var(--accent-light); }
+  .tab-btn.active { background: var(--accent); color: #fff; }
+  .tab-btn .tab-icon { font-size: 1.1rem; }
+  .tab-btn .tab-label { font-size: 0.75rem; }
+
+  /* CONTENT */
+  .tab-content { display: none; padding: 24px 28px 32px; }
+  .tab-content.active { display: block; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
+
+  /* SECTION HEADERS */
+  .section-title { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin: 20px 0 10px; padding-bottom: 4px; border-bottom: 2px solid var(--accent-light); }
+  .section-intro { font-size: 0.95rem; color: #555; margin-bottom: 14px; line-height: 1.55; }
+
+  /* AUSDRUCK KARTEN (Redemittel) */
+  .ausdruck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .ausdruck-card { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 10px; padding: 12px 14px; }
+  .ausdruck-card .phrase { font-size: 1.0rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .ausdruck-card .example { font-size: 0.87rem; color: #555; font-style: italic; line-height: 1.45; }
+
+  /* HIGHLIGHT AUSDRUCK */
+  .highlight-box { background: #e8f4ff; border-left: 4px solid #2196F3; border-radius: 6px; padding: 14px 16px; margin: 16px 0; }
+  .highlight-box .hl-phrase { font-size: 1.1rem; font-weight: 700; color: #1565C0; margin-bottom: 6px; }
+  .highlight-box .hl-desc { font-size: 0.9rem; color: #333; line-height: 1.5; }
+
+  /* GEFÜHLE VOCAB GRID */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .vocab-card { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 8px; padding: 10px 14px; }
+  .vocab-card .word { font-size: 1.0rem; font-weight: 700; color: var(--accent); }
+  .vocab-card .transl { font-size: 0.85rem; color: #555; margin-top: 3px; }
+  .vocab-card .example { font-size: 0.82rem; color: #777; margin-top: 4px; font-style: italic; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+
+  /* ZUORDNUNG TAB */
+  .zuordnung-intro { font-size: 0.95rem; color: #555; margin-bottom: 16px; }
+  .zuordnung-zones { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .zuord-zone { background: #fafafa; border: 2px dashed var(--accent-mid); border-radius: 10px; padding: 10px; min-height: 80px; }
+  .zuord-zone-title { font-size: 0.82rem; font-weight: 700; color: var(--accent); margin-bottom: 8px; text-align: center; background: var(--accent-light); padding: 4px 6px; border-radius: 5px; }
+  .zuord-zone-content { display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; }
+  .zuord-zone.drag-over { background: #ede0ff; }
+  .zuord-chips-pool { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: #f8f0ff; border-radius: 8px; border: 1.5px solid #d4a0f0; margin-bottom: 16px; }
+  .zuord-chip { background: #fff; border: 1.5px solid var(--accent-mid); border-radius: 14px; padding: 5px 13px; font-size: 0.88rem; color: var(--accent); cursor: grab; user-select: none; font-weight: 600; transition: background 0.15s, transform 0.1s; }
+  .zuord-chip:hover { background: #ddb8ff; transform: scale(1.04); }
+  .zuord-chip.selected { outline: 2px solid orange; background: #ffe0b2; }
+  .btn-check-z { background: var(--accent); color: #fff; border: none; padding: 10px 28px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .btn-check-z:hover { background: var(--accent-mid); }
+  .z-score { margin-top: 12px; font-size: 1rem; font-weight: 700; color: var(--accent); }
+
+  /* LÜCKENTEXT */
+  .luecken-intro { font-size: 0.95rem; color: #555; margin-bottom: 16px; }
+  .luecken-text { font-size: 1.02rem; line-height: 2.2; color: #222; }
+  .luecken-text input { border: none; border-bottom: 2px solid var(--accent); background: transparent; font-size: 1.0rem; font-family: inherit; color: #222; width: 160px; outline: none; padding: 1px 3px; transition: border-color 0.2s; }
+  .luecken-text input:focus { border-bottom-color: #ff9800; }
+  .luecken-text input.correct { border-bottom-color: #27ae60; background: #eaffea; }
+  .luecken-text input.wrong { border-bottom-color: #e74c3c; background: #ffeaea; }
+  .btn-check { margin-top: 20px; background: var(--accent); color: #fff; border: none; padding: 10px 28px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .btn-check:hover { background: var(--accent-mid); }
+  .luecken-score { margin-top: 12px; font-size: 1rem; font-weight: 700; color: var(--accent); }
+  .wordbank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; padding: 12px; background: #f8f0ff; border-radius: 8px; border: 1.5px solid #d4a0f0; }
+  .wordbank-chip { background: #fff; border: 1.5px solid var(--accent-mid); border-radius: 14px; padding: 4px 12px; font-size: 0.88rem; color: var(--accent); font-weight: 600; }
+
+  /* TIMER */
+  .timer-controls { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .tc-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tc-times { display: flex; gap: 8px; flex-wrap: wrap; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: var(--accent); background: var(--accent-light); padding: 6px 16px; border-radius: 8px; display: inline-block; min-width: 80px; text-align: center; }
+  .btn-timer { padding: 7px 16px; border: 2px solid var(--accent); border-radius: 8px; background: #fff; color: var(--accent); font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: background 0.15s; }
+  .btn-timer:hover { background: var(--accent-light); }
+  .btn-timer.time-btn { border-color: #888; color: #555; font-size: 0.82rem; }
+  .btn-timer.time-btn:hover { background: #f0f0f0; }
+
+  /* SATZBAU */
+  .sb-intro { font-size: 0.95rem; color: #555; margin-bottom: 16px; }
+  .sb-list { display: flex; flex-direction: column; gap: 20px; }
+  .sb-item { background: #fafafa; border: 1.5px solid #e0c8f8; border-radius: 10px; padding: 14px; }
+  .sb-drop-zone { min-height: 44px; border: 2px dashed var(--accent-mid); border-radius: 8px; padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; background: #fff; transition: background 0.15s; }
+  .sb-drop-zone.drag-over { background: #ede0ff; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .sb-chip { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 14px; padding: 5px 13px; font-size: 0.9rem; color: var(--accent); cursor: grab; user-select: none; font-weight: 600; transition: background 0.15s, transform 0.1s; }
+  .sb-chip:hover { background: #ddb8ff; transform: scale(1.04); }
+  .sb-chip.in-zone { background: #ddb8ff; cursor: grab; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 6px; min-height: 1.2em; }
+  .sb-feedback.ok { color: #27ae60; }
+  .sb-feedback.err { color: #e74c3c; }
+
+  /* VOKABELN */
+  .vocab-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  .vocab-table th { background: var(--accent); color: #fff; padding: 10px 12px; text-align: left; }
+  .vocab-table td { padding: 9px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .vocab-table tr:hover td { background: var(--accent-light); }
+  .vocab-table .de { font-weight: 700; color: var(--accent); }
+  .vocab-table .en { color: #555; }
+  .vocab-table .bsp { color: #777; font-style: italic; font-size: 0.87rem; }
+
+  /* FOOTER */
+  .author-footer { text-align: center; font-size: 0.78rem; color: #bbb; padding: 12px 0 8px; border-top: 1px solid #eee; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 class="main-title">Gefühle ausdrücken</h1>
+  <p class="subtitle">B1.2 · Lektion 2034X · Kommunikation</p>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab(0,this)"><span class="tab-icon">😊</span><span class="tab-label">Gefühle</span></button>
+    <button class="tab-btn" onclick="showTab(1,this)"><span class="tab-icon">😄</span><span class="tab-label">Freude &amp; Ruhe</span></button>
+    <button class="tab-btn" onclick="showTab(2,this)"><span class="tab-icon">😡</span><span class="tab-label">Ärger &amp; Angst</span></button>
+    <button class="tab-btn" onclick="showTab(3,this)"><span class="tab-icon">✏️</span><span class="tab-label">Lückentext</span></button>
+    <button class="tab-btn" onclick="showTab(4,this)"><span class="tab-icon">🔀</span><span class="tab-label">Satzbau</span></button>
+    <button class="tab-btn" onclick="showTab(5,this)"><span class="tab-icon">📚</span><span class="tab-label">Vokabeln</span></button>
+  </nav>
+
+  <!-- TAB 0: GEFÜHLE ÜBERSICHT -->
+  <div class="tab-content active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=900" alt="Gefühle Banner">
+    <p class="section-intro">Gefühle auszudrücken ist sehr wichtig, um eine korrekte und ehrliche Kommunikation zwischen den Menschen zu sichern. Der passende Ausdruck kann viele Unklarheiten lösen. In der deutschen Sprache gibt es viele typische Ausdrücke für verschiedene Emotionen.</p>
+
+    <p class="section-title">🔤 Wortschatz</p>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hl-phrase">Igitt!</div>
+      <div class="hl-desc"><strong>Igitt</strong> ist ein typisch deutscher Ausdruck, um eine <strong>Abneigung</strong> zu zeigen. Er drückt Ekel oder Abscheu aus.</div>
+    </div>
+    <div class="highlight-box" style="background:#fff8e1; border-color:#ff9800;">
+      <div class="hl-phrase" style="color:#e65100;">Huch!</div>
+      <div class="hl-desc">Drückt <strong>Angst</strong> aber auch <strong>Erstaunen</strong> aus — ein typischer Ausruf bei einer Überraschung.</div>
+    </div>
+  </div>
+
+  <!-- TAB 1: FREUDE & RUHE -->
+  <div class="tab-content" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&w=900" alt="Freude Banner">
+
+    <p class="section-title">Freude ausdrücken</p>
+    <p class="section-intro">Diese Ausdrücke verwendest du, wenn du dich über etwas oder eine Situation freust.</p>
+    <div class="ausdruck-grid">
+      <div class="ausdruck-card"><div class="phrase">Ich freue mich sehr darüber!</div><div class="example">Ich freue mich sehr darüber, dass du die Prüfung bestanden hast.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Da lacht mein Herz!</div><div class="example">Immer wenn ich so etwas höre, lacht mein Herz.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich bin froh, das zu hören.</div><div class="example">Ich bin froh zu hören, dass du jetzt wieder gesund bist.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich könnte nicht glücklicher sein!</div><div class="example">Maria ist schwanger. Ich könnte nicht glücklicher sein!</div></div>
+      <div class="ausdruck-card"><div class="phrase">Das ist sehr freundlich von dir.</div><div class="example">Es ist sehr freundlich von dir, dass du mir meine Tasche gebracht hast.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Eigentlich finde ich es sehr nett.</div><div class="example">Eigentlich finde ich es sehr nett, dass sie bei den Kindern geblieben ist.</div></div>
+    </div>
+
+    <div class="highlight-box" style="background:#e8f5e9; border-color:#43a047;">
+      <div class="hl-phrase" style="color:#1b5e20;">Gut, dass du das sagst.</div>
+      <div class="hl-desc">Dieser Ausdruck drückt nicht nur <strong>Freude</strong> aus, sondern ist auch eine <strong>Bestätigung</strong>. Er zeigt, dass man dem anderen zustimmt.</div>
+    </div>
+
+    <p class="section-title">Ruhe ausdrücken</p>
+    <p class="section-intro">Diese Ausdrücke verwendest du, wenn du jemanden beruhigen möchtest oder Gelassenheit ausdrückst.</p>
+    <div class="ausdruck-grid">
+      <div class="ausdruck-card"><div class="phrase">Nur keine Hektik.</div><div class="example">Nur keine Hektik. Wir schaffen das schon in Ruhe.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Keine Panik.</div><div class="example">Keine Panik. Er wird schon rechtzeitig kommen.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Keine Sorge, das ist nicht wichtig.</div><div class="example">Keine Sorge, was er sagt, ist nicht wichtig.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Das macht nichts.</div><div class="example">„Entschuldigen Sie bitte. Ich habe Ihre Bluse zerstört." – „Das macht nichts."</div></div>
+      <div class="ausdruck-card"><div class="phrase">Das ist in Ordnung.</div><div class="example">Sehr oft benutzter Ausdruck, um zu zeigen, dass die Situation wirklich stimmt.</div></div>
+    </div>
+    <div class="highlight-box">
+      <div class="hl-phrase">Immer mit der Ruhe!</div>
+      <div class="hl-desc">Der perfekte Ausdruck, um den Sprecher zu bitten, sich zu beruhigen.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: ÄRGER & ANGST -->
+  <div class="tab-content" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=900" alt="Ärger Banner">
+
+    <p class="section-title">Abneigung ausdrücken</p>
+    <div class="ausdruck-grid">
+      <div class="ausdruck-card"><div class="phrase">Das ist widerlich!</div><div class="example">Ich möchte das nicht hören! Das ist widerlich!</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich kann das nicht ausstehen.</div><div class="example">Ich kann das nicht ausstehen, wenn du so sprichst.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Bitte, nimm das weg!</div><div class="example">Ich mag keine Spinnen. Bitte, nimm diese Spinne weg!</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich kann nicht mal hingucken.</div><div class="example">Im Zirkus kann ich oft nicht mal hingucken, was sie da machen.</div></div>
+    </div>
+
+    <p class="section-title">Ärger ausdrücken</p>
+    <div class="ausdruck-grid">
+      <div class="ausdruck-card"><div class="phrase">Lass mich allein!</div><div class="example">Ich möchte niemanden sehen. Lass mich allein!</div></div>
+      <div class="ausdruck-card"><div class="phrase">Es macht mich wütend.</div><div class="example">Es macht mich wütend, wenn ich das höre.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich finde das störend.</div><div class="example">Ich finde es störend, wenn er so über dich spricht.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich bin deswegen sehr verärgert.</div><div class="example">Er hat mich beleidigt. Ich bin deswegen sehr verärgert.</div></div>
+    </div>
+    <div class="highlight-box" style="background:#fce4ec; border-color:#e91e63;">
+      <div class="hl-phrase" style="color:#880e4f;">Lass mich in Ruhe!</div>
+      <div class="hl-desc">Ich möchte davon nichts mehr hören und auch nicht mehr diskutieren, also <strong>lass mich in Ruhe</strong>!</div>
+    </div>
+
+    <p class="section-title">Angst &amp; Sorge ausdrücken</p>
+    <div class="ausdruck-grid">
+      <div class="ausdruck-card"><div class="phrase">Das ist sehr gruselig!</div><div class="example">Das ist sehr gruselig! Ich will nichts mehr davon hören.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich habe Angst.</div><div class="example">Ich habe Angst. Schalte bitte das Licht an.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich bin besorgt.</div><div class="example">Ich bin besorgt, denn ich habe lange nichts von ihm gehört.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich bin sehr beunruhigt.</div><div class="example">Er hat mir seit drei Tagen nicht mehr geschrieben. Ich bin sehr beunruhigt.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich bin besorgt, dass es nicht so ist, wie du gesagt hast.</div><div class="example">Ich denke, es wird nicht gut sein.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Das ist eine große Sorge von mir.</div><div class="example">Ich weiß nicht, wie es morgen sein wird. Das ist eine große Sorge von mir.</div></div>
+      <div class="ausdruck-card"><div class="phrase">Ich bin zutiefst betroffen.</div><div class="example">Drückt eine tiefe Betroffenheit über eine traurige Situation aus.</div></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab-content" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=900" alt="Lückentext Banner">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="btn-timer" onclick="timerStart('best2034X_L')">▶ Start</button>
+        <button class="btn-timer" onclick="timerStop('best2034X_L')">⏹ Stop</button>
+        <button class="btn-timer" onclick="timerReset('best2034X_L')">↺ Reset</button>
+      </div>
+      <div class="tc-times">
+        <span class="timer-display" id="best2034X_L-display">00:00</span>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_L',60)">1 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_L',120)">2 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_L',180)">3 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_L',300)">5 min</button>
+      </div>
+    </div>
+    <p class="luecken-intro">Füll die Lücken mit dem passenden Ausdruck oder Wort aus.</p>
+    <div class="wordbank">
+      <span class="wordbank-chip">vereinsamt</span>
+      <span class="wordbank-chip">widerlich</span>
+      <span class="wordbank-chip">besorgt</span>
+      <span class="wordbank-chip">melancholisch</span>
+      <span class="wordbank-chip">Hektik</span>
+      <span class="wordbank-chip">ausstehen</span>
+      <span class="wordbank-chip">verärgert</span>
+      <span class="wordbank-chip">Abwesenheit</span>
+      <span class="wordbank-chip">vermisst</span>
+      <span class="wordbank-chip">Langeweile</span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="btn-check" onclick="checkLuecken()">Überprüfen</button>
+    <div class="luecken-score" id="lueckenScore"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab-content" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=900" alt="Satzbau Banner">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="btn-timer" onclick="timerStart('best2034X_S')">▶ Start</button>
+        <button class="btn-timer" onclick="timerStop('best2034X_S')">⏹ Stop</button>
+        <button class="btn-timer" onclick="timerReset('best2034X_S')">↺ Reset</button>
+      </div>
+      <div class="tc-times">
+        <span class="timer-display" id="best2034X_S-display">00:00</span>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_S',60)">1 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_S',120)">2 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_S',180)">3 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2034X_S',300)">5 min</button>
+      </div>
+    </div>
+    <p class="sb-intro">Bringe die Wörter in die richtige Reihenfolge.</p>
+    <div class="sb-list" id="sbList"></div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="tab-content" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&w=900" alt="Vokabeln Banner">
+    <table class="vocab-table">
+      <thead><tr><th>Deutsch</th><th>Englisch</th><th>Beispielsatz</th></tr></thead>
+      <tbody>
+        <tr><td class="de">melancholisch</td><td class="en">melancholic</td><td class="bsp">Im Herbst fühle ich mich immer melancholisch.</td></tr>
+        <tr><td class="de">vereinsamt</td><td class="en">lonely, isolated</td><td class="bsp">Er ist so vereinsamt, nachdem ihn seine Frau verlassen hat.</td></tr>
+        <tr><td class="de">jemanden vermissen</td><td class="en">to miss someone</td><td class="bsp">Die Mutter vermisst ihr Kind sehr.</td></tr>
+        <tr><td class="de">nostalgisch</td><td class="en">nostalgic</td><td class="bsp">Warum schaust du so nostalgisch?</td></tr>
+        <tr><td class="de">die Abwesenheit (Sg.)</td><td class="en">absence</td><td class="bsp">Seine Abwesenheit ist wirklich unbegründet.</td></tr>
+        <tr><td class="de">leiden (an + D.)</td><td class="en">to suffer (from)</td><td class="bsp">Ich leide oft an einer Erkältung.</td></tr>
+        <tr><td class="de">die Langeweile (Sg.)</td><td class="en">boredom</td><td class="bsp">Ich verspüre so eine Langeweile!</td></tr>
+        <tr><td class="de">widerlich</td><td class="en">disgusting</td><td class="bsp">Das ist widerlich! Ich möchte das nicht hören.</td></tr>
+        <tr><td class="de">verärgert</td><td class="en">annoyed, upset</td><td class="bsp">Ich bin deswegen sehr verärgert.</td></tr>
+        <tr><td class="de">besorgt</td><td class="en">worried, concerned</td><td class="bsp">Ich bin besorgt, denn ich habe lange nichts gehört.</td></tr>
+        <tr><td class="de">beunruhigt</td><td class="en">unsettled, alarmed</td><td class="bsp">Ich bin sehr beunruhigt.</td></tr>
+        <tr><td class="de">betroffen</td><td class="en">affected, shocked</td><td class="bsp">Ich bin zutiefst betroffen.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · fabDaF · B1.2 · 2034X</div>
+</div>
+
+<script>
+// ── TAB NAVIGATION ──────────────────────────────────────────
+function showTab(idx, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab' + idx).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── WORTSCHATZ INTERACTIVE ───────────────────────────────────
+var WORTSCHATZ = [
+  { type: "v", en: "melancholic (adj.)", de: "melancholisch" },
+  { type: "v", en: "to feel out of place", de: "sich fremd fühlen" },
+  { type: "n", en: "boredom", art: "die", wort: "Langeweile", plural: "Langweilen" },
+  { type: "v", en: "lonely, isolated (adj.)", de: "vereinsamt" },
+  { type: "v", en: "to miss someone", de: "jemanden vermissen" },
+  { type: "v", en: "nostalgic (adj.)", de: "nostalgisch" },
+  { type: "n", en: "absence", art: "die", wort: "Abwesenheit", plural: "Abwesenheiten" },
+  { type: "v", en: "to suffer (from)", de: "leiden (an + D.)" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    var ok2 = w2 === item.de;
+    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+// ── LÜCKENTEXT DATA ──────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Im Herbst fühle ich mich immer ', blank: 'melancholisch', after: ' und denke an vergangene Zeiten.' },
+  { before: 'Er ist sehr ', blank: 'vereinsamt', after: ', seit seine Frau ihn verlassen hat.' },
+  { before: 'Die Mutter ', blank: 'vermisst', after: ' ihr Kind, das weit weg wohnt, sehr.' },
+  { before: 'Ich verspüre so eine ', blank: 'Langeweile', after: '. Wir sollten etwas unternehmen!' },
+  { before: 'Seine ', blank: 'Abwesenheit', after: ' beim Meeting war wirklich unbegründet.' },
+  { before: 'Das ist ', blank: 'widerlich', after: '! Ich möchte das nicht hören.' },
+  { before: 'Ich kann das nicht ', blank: 'ausstehen', after: ', wenn du so sprichst.' },
+  { before: 'Er hat mich beleidigt. Ich bin deswegen sehr ', blank: 'verärgert', after: '.' },
+  { before: 'Ich bin ', blank: 'besorgt', after: ', denn ich habe lange nichts von ihr gehört.' },
+  { before: 'Nur keine ', blank: 'Hektik', after: '. Wir schaffen das schon in Ruhe.' },
+];
+
+function buildLuecken() {
+  const container = document.getElementById('lueckenText');
+  container.innerHTML = '';
+  LUECKEN_DATA.forEach((item, i) => {
+    const span = document.createElement('span');
+    span.innerHTML = item.before +
+      `<input type="text" id="l${i}" data-answer="${item.blank}" placeholder="..." oninput="liveCheck(this)" autocomplete="off">` +
+      item.after + ' ';
+    container.appendChild(span);
+    container.appendChild(document.createTextNode(' '));
+  });
+}
+
+function liveCheck(input) {
+  const ans = input.dataset.answer;
+  const val = input.value.trim();
+  if (!val) { input.className = ''; return; }
+  const caseSensitive = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
+  const match = caseSensitive ? val === ans : val.toLowerCase() === ans.toLowerCase();
+  input.classList.toggle('correct', match);
+  input.classList.toggle('wrong', !match);
+  if (match) {
+    const allCorrect = LUECKEN_DATA.every((item, j) => {
+      const inp = document.getElementById('l' + j);
+      if (!inp) return false;
+      const a = inp.dataset.answer;
+      const v = inp.value.trim();
+      const cs = a[0] === a[0].toUpperCase() && a[0] !== a[0].toLowerCase();
+      return cs ? v === a : v.toLowerCase() === a.toLowerCase();
+    });
+    if (allCorrect) timerStop('best2034X_L');
+  }
+}
+
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('l' + i);
+    const ans = item.blank;
+    const val = inp.value.trim();
+    const cs = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
+    const ok = cs ? val === ans : val.toLowerCase() === ans.toLowerCase();
+    inp.classList.toggle('correct', ok);
+    inp.classList.toggle('wrong', !ok);
+    if (ok) correct++;
+    else if (!val) { inp.value = ans; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+  });
+  document.getElementById('lueckenScore').textContent = `Ergebnis: ${correct} / ${LUECKEN_DATA.length} richtig`;
+  if (correct === LUECKEN_DATA.length) timerStop('best2034X_L');
+}
+
+buildLuecken();
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich', 'freue', 'mich', 'sehr', 'darüber', ',', 'dass', 'du', 'die', 'Prüfung', 'bestanden', 'hast', '.'] },
+  { words: ['Es', 'macht', 'mich', 'wütend', ',', 'wenn', 'ich', 'das', 'höre', '.'] },
+  { words: ['Ich', 'bin', 'besorgt', ',', 'denn', 'ich', 'habe', 'lange', 'nichts', 'von', 'ihm', 'gehört', '.'] },
+  { words: ['Nur', 'keine', 'Hektik', '.', 'Wir', 'schaffen', 'das', 'schon', 'in', 'Ruhe', '.'] },
+  { words: ['Ich', 'kann', 'das', 'nicht', 'ausstehen', ',', 'wenn', 'er', 'so', 'über', 'dich', 'spricht', '.'] },
+  { words: ['Das', 'ist', 'eine', 'große', 'Sorge', 'von', 'mir', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+buildSatzbau();
+
+// ── TIMER ENGINE ──────────────────────────────────────────────
+const timers = {};
+function timerInit(id) {
+  if (!timers[id]) timers[id] = { interval: null, elapsed: 0, countdown: null, running: false };
+}
+function timerStart(id) {
+  timerInit(id);
+  const t = timers[id];
+  if (t.running) return;
+  t.running = true;
+  const disp = document.getElementById(id + '-display');
+  t.interval = setInterval(() => {
+    if (t.countdown !== null) {
+      t.countdown--;
+      if (t.countdown <= 0) { t.countdown = 0; timerStop(id); }
+      disp.textContent = fmt(t.countdown);
+    } else {
+      t.elapsed++;
+      disp.textContent = fmt(t.elapsed);
+    }
+  }, 1000);
+}
+function timerStop(id) {
+  timerInit(id);
+  const t = timers[id];
+  clearInterval(t.interval);
+  t.running = false;
+}
+function timerReset(id) {
+  timerStop(id);
+  timers[id].elapsed = 0;
+  timers[id].countdown = null;
+  const disp = document.getElementById(id + '-display');
+  if (disp) disp.textContent = '00:00';
+}
+function timerSet(id, secs) {
+  timerStop(id);
+  timerInit(id);
+  timers[id].countdown = secs;
+  const disp = document.getElementById(id + '-display');
+  if (disp) disp.textContent = fmt(secs);
+}
+function fmt(s) {
+  const m = Math.floor(s / 60), sec = s % 60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+initVocab();
+</script>
+</body>
+</html>

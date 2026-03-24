@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2033R · Adoption</title>
+<style>
+  :root { --accent: #667eea; --accent-light: #f3e5ff; --accent-mid: #9c27b0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  h1.main-title { background: var(--accent); color: #fff; text-align: center; padding: 18px 20px 10px; font-size: 1.5rem; margin: 0; }
+  p.subtitle { background: var(--accent); color: #e8c8ff; text-align: center; padding: 0 20px 14px; font-size: 0.92rem; margin: 0; }
+
+  /* NAV */
+  .tab-nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 12px 0; background: #f8f0ff; border-bottom: 2px solid var(--accent); }
+  .tab-btn { flex: 1 1 auto; min-width: 110px; padding: 8px 6px; border: 2px solid var(--accent); border-bottom: none; border-radius: 6px 6px 0 0; background: #fff; color: var(--accent); font-size: 0.82rem; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s, color 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .tab-btn:hover { background: var(--accent-light); }
+  .tab-btn.active { background: var(--accent); color: #fff; }
+  .tab-btn .tab-icon { font-size: 1.1rem; }
+  .tab-btn .tab-label { font-size: 0.75rem; }
+
+  /* CONTENT */
+  .tab-content { display: none; padding: 24px 28px 32px; }
+  .tab-content.active { display: block; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
+
+  /* VORENTLASTUNG */
+  .vocab-intro { font-size: 1.05rem; color: #555; margin-bottom: 16px; text-align: center; }
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .vocab-card { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 8px; padding: 12px 14px; }
+  .vocab-card .word { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+  .vocab-card .transl { font-size: 0.87rem; color: #555; margin-top: 3px; }
+  .vocab-card .example { font-size: 0.83rem; color: #777; margin-top: 4px; font-style: italic; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+
+  /* LESETEXT */
+  .story-container { max-width: 640px; margin: 0 auto; }
+  .story-text { font-family: Georgia, 'Times New Roman', serif; font-size: 1.05rem; line-height: 1.85; text-align: justify; hyphens: auto; color: #222; }
+  .story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+  .story-text p:first-of-type { text-indent: 0; }
+  .story-section-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 1.0rem; font-weight: 700; color: var(--accent); margin: 18px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .vocab-hl { background: #ffe066; border-radius: 3px; padding: 0 2px; cursor: help; position: relative; }
+  .vocab-hl .tooltip { display: none; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: #333; color: #fff; font-size: 0.78rem; padding: 4px 8px; border-radius: 5px; white-space: nowrap; z-index: 10; font-family: 'Segoe UI', Arial, sans-serif; font-style: normal; }
+  .vocab-hl:hover .tooltip { display: block; }
+
+  /* RICHTIG/FALSCH */
+  .rf-task-title { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+  .rf-list { display: flex; flex-direction: column; gap: 10px; }
+  .rf-item { display: flex; align-items: flex-start; gap: 10px; background: #fafafa; border: 1.5px solid #ddd; border-radius: 8px; padding: 12px 14px; }
+  .rf-text { flex: 1; font-size: 0.97rem; color: #333; line-height: 1.45; }
+  .rf-buttons { display: flex; gap: 8px; flex-shrink: 0; margin-top: 2px; }
+  .rf-btn { padding: 5px 14px; border: 2px solid #ccc; border-radius: 6px; background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .rf-btn.r { border-color: #27ae60; color: #27ae60; }
+  .rf-btn.f { border-color: #e74c3c; color: #e74c3c; }
+  .rf-btn.r.selected { background: #27ae60; color: #fff; }
+  .rf-btn.f.selected { background: #e74c3c; color: #fff; }
+  .rf-btn.correct { background: #27ae60 !important; color: #fff !important; border-color: #27ae60 !important; }
+  .rf-btn.wrong { background: #e74c3c !important; color: #fff !important; border-color: #e74c3c !important; }
+  .rf-correction { font-size: 0.85rem; color: #c0392b; margin-top: 6px; font-style: italic; display: none; }
+  .rf-correction.visible { display: block; }
+  .btn-check-rf { margin-top: 18px; background: var(--accent); color: #fff; border: none; padding: 10px 28px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .btn-check-rf:hover { background: var(--accent-mid); }
+  .rf-score { margin-top: 12px; font-size: 1rem; font-weight: 700; color: var(--accent); }
+
+  /* LÜCKENTEXT */
+  .luecken-intro { font-size: 0.95rem; color: #555; margin-bottom: 16px; }
+  .luecken-text { font-size: 1.02rem; line-height: 2.1; color: #222; }
+  .luecken-text input { border: none; border-bottom: 2px solid var(--accent); background: transparent; font-size: 1.0rem; font-family: inherit; color: #222; width: 130px; outline: none; padding: 1px 3px; transition: border-color 0.2s; }
+  .luecken-text input:focus { border-bottom-color: #ff9800; }
+  .luecken-text input.correct { border-bottom-color: #27ae60; background: #eaffea; }
+  .luecken-text input.wrong { border-bottom-color: #e74c3c; background: #ffeaea; }
+  .btn-check { margin-top: 20px; background: var(--accent); color: #fff; border: none; padding: 10px 28px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .btn-check:hover { background: var(--accent-mid); }
+  .luecken-score { margin-top: 12px; font-size: 1rem; font-weight: 700; color: var(--accent); }
+  .wordbank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; padding: 12px; background: #f8f0ff; border-radius: 8px; border: 1.5px solid #d4a0f0; }
+  .wordbank-chip { background: #fff; border: 1.5px solid var(--accent-mid); border-radius: 14px; padding: 4px 12px; font-size: 0.88rem; color: var(--accent); font-weight: 600; }
+
+  /* TIMER */
+  .timer-controls { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .tc-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tc-times { display: flex; gap: 8px; flex-wrap: wrap; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: var(--accent); background: var(--accent-light); padding: 6px 16px; border-radius: 8px; display: inline-block; min-width: 80px; text-align: center; }
+  .btn-timer { padding: 7px 16px; border: 2px solid var(--accent); border-radius: 8px; background: #fff; color: var(--accent); font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: background 0.15s; }
+  .btn-timer:hover { background: var(--accent-light); }
+  .btn-timer.time-btn { border-color: #888; color: #555; font-size: 0.82rem; }
+  .btn-timer.time-btn:hover { background: #f0f0f0; }
+
+  /* SATZBAU */
+  .sb-intro { font-size: 0.95rem; color: #555; margin-bottom: 16px; }
+  .sb-list { display: flex; flex-direction: column; gap: 20px; }
+  .sb-item { background: #fafafa; border: 1.5px solid #e0c8f8; border-radius: 10px; padding: 14px; }
+  .sb-drop-zone { min-height: 44px; border: 2px dashed var(--accent-mid); border-radius: 8px; padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; background: #fff; transition: background 0.15s; }
+  .sb-drop-zone.drag-over { background: #ede0ff; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .sb-chip { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 14px; padding: 5px 13px; font-size: 0.9rem; color: var(--accent); cursor: grab; user-select: none; font-weight: 600; transition: background 0.15s, transform 0.1s; }
+  .sb-chip:hover { background: #ddb8ff; transform: scale(1.04); }
+  .sb-chip.in-zone { background: #ddb8ff; cursor: grab; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 6px; min-height: 1.2em; }
+  .sb-feedback.ok { color: #27ae60; }
+  .sb-feedback.err { color: #e74c3c; }
+
+  /* VOKABELN */
+  .vocab-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  .vocab-table th { background: var(--accent); color: #fff; padding: 10px 12px; text-align: left; }
+  .vocab-table td { padding: 9px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
+  .vocab-table tr:hover td { background: var(--accent-light); }
+  .vocab-table .de { font-weight: 700; color: var(--accent); }
+  .vocab-table .en { color: #555; }
+  .vocab-table .bsp { color: #777; font-style: italic; font-size: 0.87rem; }
+
+  /* FOOTER */
+  .author-footer { text-align: center; font-size: 0.78rem; color: #bbb; padding: 12px 0 8px; border-top: 1px solid #eee; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 class="main-title">Adoption</h1>
+  <p class="subtitle">B1.2 · Lektion 2033R · Lesetext &amp; Übungen</p>
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab(0,this)"><span class="tab-icon">📖</span><span class="tab-label">Vorentlastung</span></button>
+    <button class="tab-btn" onclick="showTab(1,this)"><span class="tab-icon">📰</span><span class="tab-label">Lesetext</span></button>
+    <button class="tab-btn" onclick="showTab(2,this)"><span class="tab-icon">✅</span><span class="tab-label">Text &amp; Fragen</span></button>
+    <button class="tab-btn" onclick="showTab(3,this)"><span class="tab-icon">✏️</span><span class="tab-label">Lückentext</span></button>
+    <button class="tab-btn" onclick="showTab(4,this)"><span class="tab-icon">🔀</span><span class="tab-label">Satzbau</span></button>
+    <button class="tab-btn" onclick="showTab(5,this)"><span class="tab-icon">📚</span><span class="tab-label">Vokabeln</span></button>
+  </nav>
+
+  <!-- TAB 0: WORTSCHATZ -->
+  <div class="tab-content active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&w=900" alt="Adoption Banner">
+    <div style="margin-bottom: 16px;">
+      <h2 style="color: #667eea; text-align: center; margin-bottom: 16px;">🔤 Wortschatz</h2>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button onclick="showVocabLoesung()">💡 Lösung</button>
+        <button onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="tab-content" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1682497/pexels-photo-1682497.jpeg?auto=compress&w=900" alt="Familie Lesetext Banner">
+    <div class="story-container">
+      <div class="story-text">
+        <p class="story-section-title">Viele Kinder</p>
+        <p>Ich wollte schon immer eigene Kinder — möglichst früh und möglichst viele. Kurz nach der Hochzeit haben mein Mann und ich auch angefangen, zu probieren, ein Kind zu bekommen. Leider hat es auch nach einem Jahr nicht funktioniert. Also haben wir versucht, auf anderen Wegen unseren Traum zu erfüllen. Der erste Schritt ist erstmal eine <span class="vocab-hl">künstliche Befruchtung<span class="tooltip">artificial fertilisation</span></span>. Es gibt viele verschiedene Methoden und wir haben einige ausprobiert.</p>
+
+        <p class="story-section-title">Viele Versuche</p>
+        <p>Oft musste ich Hormone nehmen, wodurch sich mein Charakter verändert hat. Das war sicherlich nicht immer einfach für meinen Partner, aber auch für mich war die Zeit sehr hart. Jeden Monat haben wir gehofft, dass es funktioniert hat. Wenn dann aber wieder klar war, dass ich nicht schwanger bin, brauchte ich immer wieder ein paar Tage, um mich davon zu erholen. Mein Mann war ebenso <span class="vocab-hl">geknickt<span class="tooltip">dejected, downcast</span></span> wie ich.</p>
+
+        <p class="story-section-title">Adoption</p>
+        <p>Nach einigen missglückten Versuchen haben wir uns schließlich untersuchen lassen und es hat sich herausgestellt, dass wir keine Kinder bekommen können. Natürlich waren wir erst einmal total geschockt, aber auch <span class="vocab-hl">erleichtert<span class="tooltip">relieved</span></span>, denn wir hatten jetzt endlich eine Diagnose. So konnten wir über andere Optionen nachdenken: Sollten wir eine kinderlose Familie bleiben, sollten wir Pflegekinder aufnehmen oder doch ein Kind adoptieren? Da wir es nicht verkraftet hätten, ein Kind eventuell wieder hergeben zu müssen, entschieden wir uns für eine <span class="vocab-hl">Adoption<span class="tooltip">adoption</span></span>, aber wer darf in Deutschland eigentlich adoptieren und was muss man noch alles beachten?</p>
+
+        <p class="story-section-title">Wer darf adoptieren?</p>
+        <p>Wir haben uns zu diesem Thema alle möglichen Informationen gesucht und uns viel mit Eltern ausgetauscht, die schon ein Kind adoptiert hatten. In Deutschland dürfen theoretisch alle Menschen ein Kind adoptieren, die über 25 Jahre alt sind. Also dürfen auch Alleinerziehende und seit Oktober 2017 endlich auch <span class="vocab-hl">Regenbogenfamilien<span class="tooltip">rainbow families</span></span> ein Kind adoptieren.</p>
+
+        <p class="story-section-title">Der Anfang</p>
+        <p>Wenn man ein Kind adoptieren möchte, muss man sich mit einer sogenannten <span class="vocab-hl">Adoptionsvermittlungsstelle<span class="tooltip">adoption agency</span></span> in Verbindung setzen. Das sind offizielle Institutionen, die normalerweise zum Jugendamt gehören, aber auch ein paar private Vereine sind offiziell als Adoptionsvermittler registriert. Dort wird geprüft, ob eine Familie geeignet ist, ein Kind aufzunehmen: Wie sind die Eltern? Haben sie genug Geld? Ist die Wohnung groß genug? Wie wollen sie das Kind erziehen?</p>
+
+        <p class="story-section-title">Hilfe für die Adoptiveltern</p>
+        <p>Theoretisch müssten nur die Formalitäten geprüft werden, aber viele Jugendämter wollen die zukünftigen Eltern auch in Seminaren auf ihre neue Rolle vorbereiten. Sie stehen den Adoptiveltern danach während der ganzen Zeit zur Seite. Oft haben sogar die ganz Kleinen schon traumatische Erfahrungen gemacht, daher kann es passieren, dass sie Probleme haben, sich in die Familie oder später in der Schule zu integrieren. Da ist es hilfreich, wenn die Eltern das wissen und <span class="vocab-hl">Ansprechpartner<span class="tooltip">contact persons</span></span> haben, die ihnen Tipps geben können.</p>
+
+        <p class="story-section-title">Der Anruf</p>
+        <p>Bei uns war es nach etwa zwei Jahren Warten soweit: An einem Dienstagmorgen bekamen wir den Anruf, dass der kleine Elias bald Teil unserer kleinen Familie sein würde. Wir waren so aufgeregt, glücklich und hatten Angst. Also, vermutlich die gleichen Gefühle wie ein Paar, das gerade einen positiven Schwangerschaftstest in den Händen hält. Drei Wochen später kam Elias dann zu uns.</p>
+
+        <p class="story-section-title">3 Jahre später</p>
+        <p>Das alles ist jetzt etwa drei Jahre her. Elias ist jetzt vier Jahre alt und geht seit einem Jahr in den Kindergarten. Manchmal hat er ganz plötzlich und ohne Grund einen <span class="vocab-hl">Wutanfall<span class="tooltip">tantrum, fit of rage</span></span>, aber wir wissen, dass es bei seiner <span class="vocab-hl">leiblichen<span class="tooltip">biological</span></span> Mutter nicht immer einfach für ihn war. Deshalb können wir damit umgehen und zeigen ihm, dass wir ihn trotzdem sehr lieben. Es geht auch gar nicht anders, denn er ist einfach der Tollste, Schönste und Liebste.</p>
+
+        <p class="story-section-title">Was bringt die Zukunft?</p>
+        <p>Natürlich wird er bald erfahren, dass er noch eine zweite Mama hat und vielleicht möchte er sie auch kennenlernen, wenn er größer ist. Ein bisschen Angst habe ich davor schon, aber wir werden ihn unterstützen, denn er soll mehr über seine <span class="vocab-hl">Herkunft<span class="tooltip">origin, heritage</span></span> erfahren, wenn er das möchte.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: TEXT & FRAGEN (Richtig/Falsch) -->
+  <div class="tab-content" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=900" alt="Text und Fragen Banner">
+    <p class="rf-task-title">Richtig oder falsch? Korrigiere die falschen Aussagen!</p>
+    <div class="rf-list" id="rfList">
+      <div class="rf-item" data-correct="r">
+        <div style="flex:1">
+          <div class="rf-text">Die Erzählerin wollte schon immer Kinder haben.</div>
+          <div class="rf-correction">Korrektur: —</div>
+        </div>
+        <div class="rf-buttons">
+          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
+          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
+        </div>
+      </div>
+      <div class="rf-item" data-correct="f">
+        <div style="flex:1">
+          <div class="rf-text">Sie haben nicht lange probiert, ein Kind auf natürlichem Weg zu bekommen.</div>
+          <div class="rf-correction">Korrektur: Sie haben ein Jahr lang probiert, ein Kind auf natürlichem Weg zu bekommen.</div>
+        </div>
+        <div class="rf-buttons">
+          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
+          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
+        </div>
+      </div>
+      <div class="rf-item" data-correct="f">
+        <div style="flex:1">
+          <div class="rf-text">Die Zeit mit der künstlichen Befruchtung war nur für den Mann schwierig.</div>
+          <div class="rf-correction">Korrektur: Es war für beide schwierig — für den Mann und für die Erzählerin.</div>
+        </div>
+        <div class="rf-buttons">
+          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
+          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
+        </div>
+      </div>
+      <div class="rf-item" data-correct="f">
+        <div style="flex:1">
+          <div class="rf-text">Wenn in jedem Monat klar war, dass sie nicht schwanger ist, war das kein Problem.</div>
+          <div class="rf-correction">Korrektur: Sie brauchte jedes Mal ein paar Tage, um sich davon zu erholen.</div>
+        </div>
+        <div class="rf-buttons">
+          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
+          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
+        </div>
+      </div>
+      <div class="rf-item" data-correct="f">
+        <div style="flex:1">
+          <div class="rf-text">Als sie die Diagnose gehört haben, waren sie nur traurig.</div>
+          <div class="rf-correction">Korrektur: Sie waren geschockt, aber auch erleichtert, denn sie hatten endlich eine Diagnose.</div>
+        </div>
+        <div class="rf-buttons">
+          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
+          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
+        </div>
+      </div>
+      <div class="rf-item" data-correct="r">
+        <div style="flex:1">
+          <div class="rf-text">In Deutschland dürfen auch Alleinerziehende und Regenbogenfamilien ein Kind adoptieren.</div>
+          <div class="rf-correction">Korrektur: —</div>
+        </div>
+        <div class="rf-buttons">
+          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
+          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn-check-rf" onclick="checkRF()">Überprüfen</button>
+    <div class="rf-score" id="rfScore"></div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab-content" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1128318/pexels-photo-1128318.jpeg?auto=compress&w=900" alt="Lückentext Banner">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="btn-timer" onclick="timerStart('best2033R_L')">▶ Start</button>
+        <button class="btn-timer" onclick="timerStop('best2033R_L')">⏹ Stop</button>
+        <button class="btn-timer" onclick="timerReset('best2033R_L')">↺ Reset</button>
+      </div>
+      <div class="tc-times">
+        <span class="timer-display" id="best2033R_L-display">00:00</span>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',60)">1 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',120)">2 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',180)">3 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',300)">5 min</button>
+      </div>
+    </div>
+    <p class="luecken-intro">Füll die Lücken mit den richtigen Wörtern aus.</p>
+    <div class="wordbank">
+      <span class="wordbank-chip">Adoption</span>
+      <span class="wordbank-chip">Adoptivfamilie</span>
+      <span class="wordbank-chip">leibliche</span>
+      <span class="wordbank-chip">Befruchtung</span>
+      <span class="wordbank-chip">erleichtert</span>
+      <span class="wordbank-chip">Wutanfall</span>
+      <span class="wordbank-chip">Herkunft</span>
+      <span class="wordbank-chip">geknickt</span>
+      <span class="wordbank-chip">Ansprechpartner</span>
+      <span class="wordbank-chip">Jugendamt</span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="btn-check" onclick="checkLuecken()">Überprüfen</button>
+    <div class="luecken-score" id="lueckenScore"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab-content" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=900" alt="Satzbau Banner">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="btn-timer" onclick="timerStart('best2033R_S')">▶ Start</button>
+        <button class="btn-timer" onclick="timerStop('best2033R_S')">⏹ Stop</button>
+        <button class="btn-timer" onclick="timerReset('best2033R_S')">↺ Reset</button>
+      </div>
+      <div class="tc-times">
+        <span class="timer-display" id="best2033R_S-display">00:00</span>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',60)">1 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',120)">2 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',180)">3 min</button>
+        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',300)">5 min</button>
+      </div>
+    </div>
+    <p class="sb-intro">Bringe die Wörter in die richtige Reihenfolge.</p>
+    <div class="sb-list" id="sbList"></div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="tab-content" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=900" alt="Vokabeln Banner">
+    <table class="vocab-table">
+      <thead><tr><th>Deutsch</th><th>Englisch</th><th>Beispielsatz</th></tr></thead>
+      <tbody>
+        <tr><td class="de">die Adoption, -en</td><td class="en">adoption</td><td class="bsp">Sie haben sich für eine Adoption entschieden.</td></tr>
+        <tr><td class="de">adoptieren</td><td class="en">to adopt</td><td class="bsp">In Deutschland dürfen alle über 25 ein Kind adoptieren.</td></tr>
+        <tr><td class="de">die Adoptivfamilie, -n</td><td class="en">adoptive family</td><td class="bsp">Er wächst in seiner Adoptivfamilie auf.</td></tr>
+        <tr><td class="de">die Adoptiveltern (Pl.)</td><td class="en">adoptive parents</td><td class="bsp">Das Jugendamt unterstützt die Adoptiveltern.</td></tr>
+        <tr><td class="de">leiblich</td><td class="en">biological (parent/child)</td><td class="bsp">Er möchte seine leibliche Mutter kennenlernen.</td></tr>
+        <tr><td class="de">die künstliche Befruchtung</td><td class="en">artificial fertilisation</td><td class="bsp">Die künstliche Befruchtung war eine stressige Zeit.</td></tr>
+        <tr><td class="de">geknickt</td><td class="en">dejected, downcast</td><td class="bsp">Mein Mann war ebenso geknickt wie ich.</td></tr>
+        <tr><td class="de">erleichtert</td><td class="en">relieved</td><td class="bsp">Wir waren erleichtert, als wir die Diagnose bekamen.</td></tr>
+        <tr><td class="de">die Adoptionsvermittlungsstelle, -n</td><td class="en">adoption agency</td><td class="bsp">Man muss sich an eine Adoptionsvermittlungsstelle wenden.</td></tr>
+        <tr><td class="de">der Ansprechpartner, –</td><td class="en">contact person</td><td class="bsp">Das Jugendamt ist unser Ansprechpartner.</td></tr>
+        <tr><td class="de">der Wutanfall, ¨-e</td><td class="en">tantrum, fit of rage</td><td class="bsp">Manchmal hat er plötzlich einen Wutanfall.</td></tr>
+        <tr><td class="de">die Herkunft (Sg.)</td><td class="en">origin, heritage</td><td class="bsp">Er soll mehr über seine Herkunft erfahren.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · fabDaF · B1.2 · 2033R</div>
+</div>
+
+<script>
+// ── TAB NAVIGATION ──────────────────────────────────────────
+function showTab(idx, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab' + idx).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── WORTSCHATZ INTERACTIVE ───────────────────────────────────
+var WORTSCHATZ = [
+  { type: "n", en: "adoption", art: "die", wort: "Adoption", plural: "Adoptionen" },
+  { type: "n", en: "adoptive family", art: "die", wort: "Adoptivfamilie", plural: "Adoptivfamilien" },
+  { type: "v", en: "biological (adj.)", de: "leiblich" },
+  { type: "n", en: "fertilisation", art: "die", wort: "Befruchtung", plural: "Befruchtungen" },
+  { type: "v", en: "dejected, downcast (adj.)", de: "geknickt" },
+  { type: "v", en: "relieved (adj.)", de: "erleichtert" },
+  { type: "n", en: "adoption agency", art: "die", wort: "Adoptionsvermittlungsstelle", plural: "Adoptionsvermittlungsstellen" },
+  { type: "n", en: "contact person", art: "der", wort: "Ansprechpartner", plural: "Ansprechpartner" },
+  { type: "n", en: "tantrum, fit of rage", art: "der", wort: "Wutanfall", plural: "Wutanfälle" },
+  { type: "n", en: "origin, heritage", art: "die", wort: "Herkunft", plural: "Herkünfte" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    var ok2 = w2 === item.de;
+    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+// ── LÜCKENTEXT DATA ──────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Der erste Schritt war eine künstliche ', blank: 'Befruchtung', after: ', die wir mehrfach ausprobiert haben.' },
+  { before: 'Mein Mann war ebenso ', blank: 'geknickt', after: ' wie ich, wenn es nicht funktioniert hatte.' },
+  { before: 'Wir waren erst einmal geschockt, aber auch ', blank: 'erleichtert', after: ', denn wir hatten endlich eine Diagnose.' },
+  { before: 'Wir entschieden uns für eine ', blank: 'Adoption', after: ', weil wir kein Kind wieder hergeben wollten.' },
+  { before: 'Man muss sich an eine Adoptionsvermittlungsstelle wenden, die zum ', blank: 'Jugendamt', after: ' gehört.' },
+  { before: 'Dort wird geprüft, ob eine Familie geeignet ist — das ist der Beginn der Aufnahme in die ', blank: 'Adoptivfamilie', after: '.' },
+  { before: 'Das Jugendamt ist ein wichtiger ', blank: 'Ansprechpartner', after: ' für die Adoptiveltern.' },
+  { before: 'Elias hat manchmal einen ', blank: 'Wutanfall', after: ', aber wir wissen, warum.' },
+  { before: 'Er soll mehr über seine ', blank: 'Herkunft', after: ' erfahren, wenn er das möchte.' },
+  { before: 'Elias wird eines Tages auch seine ', blank: 'leibliche', after: ' Mutter kennenlernen wollen.' },
+];
+
+function buildLuecken() {
+  const container = document.getElementById('lueckenText');
+  container.innerHTML = '';
+  LUECKEN_DATA.forEach((item, i) => {
+    const span = document.createElement('span');
+    span.innerHTML = item.before +
+      `<input type="text" id="l${i}" data-answer="${item.blank}" placeholder="..." oninput="liveCheck(this)" autocomplete="off">` +
+      item.after + ' ';
+    container.appendChild(span);
+    container.appendChild(document.createTextNode(' '));
+  });
+}
+
+function liveCheck(input) {
+  const ans = input.dataset.answer;
+  const val = input.value.trim();
+  if (!val) { input.className = ''; return; }
+  const caseSensitive = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
+  const match = caseSensitive ? val === ans : val.toLowerCase() === ans.toLowerCase();
+  input.classList.toggle('correct', match);
+  input.classList.toggle('wrong', !match);
+  if (match) {
+    const allCorrect = LUECKEN_DATA.every((item, j) => {
+      const inp = document.getElementById('l' + j);
+      if (!inp) return false;
+      const a = inp.dataset.answer;
+      const v = inp.value.trim();
+      const cs = a[0] === a[0].toUpperCase() && a[0] !== a[0].toLowerCase();
+      return cs ? v === a : v.toLowerCase() === a.toLowerCase();
+    });
+    if (allCorrect) timerStop('best2033R_L');
+  }
+}
+
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('l' + i);
+    const ans = item.blank;
+    const val = inp.value.trim();
+    const cs = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
+    const ok = cs ? val === ans : val.toLowerCase() === ans.toLowerCase();
+    inp.classList.toggle('correct', ok);
+    inp.classList.toggle('wrong', !ok);
+    if (ok) correct++;
+    else if (!val) inp.value = ans, inp.classList.add('correct'), inp.classList.remove('wrong');
+  });
+  document.getElementById('lueckenScore').textContent = `Ergebnis: ${correct} / ${LUECKEN_DATA.length} richtig`;
+  if (correct === LUECKEN_DATA.length) timerStop('best2033R_L');
+}
+
+buildLuecken();
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Kurz', 'nach', 'der', 'Hochzeit', 'haben', 'wir', 'angefangen', ',', 'ein', 'Kind', 'zu', 'bekommen', '.'] },
+  { words: ['Mein', 'Mann', 'war', 'ebenso', 'geknickt', 'wie', 'ich', '.'] },
+  { words: ['Wir', 'entschieden', 'uns', 'für', 'eine', 'Adoption', ',', 'da', 'wir', 'kein', 'Kind', 'hergeben', 'wollten', '.'] },
+  { words: ['In', 'Deutschland', 'dürfen', 'alle', 'Menschen', 'über', '25', 'ein', 'Kind', 'adoptieren', '.'] },
+  { words: ['Das', 'Jugendamt', 'steht', 'den', 'Adoptiveltern', 'während', 'der', 'ganzen', 'Zeit', 'zur', 'Seite', '.'] },
+  { words: ['Er', 'soll', 'mehr', 'über', 'seine', 'Herkunft', 'erfahren', ',', 'wenn', 'er', 'das', 'möchte', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+buildSatzbau();
+
+// ── RICHTIG / FALSCH ──────────────────────────────────────────
+function selectRF(btn, choice) {
+  const item = btn.closest('.rf-item');
+  item.querySelectorAll('.rf-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  btn.dataset.choice = choice;
+}
+
+function checkRF() {
+  const items = document.querySelectorAll('.rf-item');
+  let correct = 0;
+  items.forEach(item => {
+    const expected = item.dataset.correct;
+    const selected = [...item.querySelectorAll('.rf-btn')].find(b => b.classList.contains('selected'));
+    const correction = item.querySelector('.rf-correction');
+    item.querySelectorAll('.rf-btn').forEach(b => { b.classList.remove('correct', 'wrong'); });
+    if (selected) {
+      const choice = selected.classList.contains('r') ? 'r' : 'f';
+      if (choice === expected) {
+        selected.classList.add('correct');
+        correct++;
+        if (correction) correction.classList.remove('visible');
+      } else {
+        selected.classList.add('wrong');
+        const correctBtn = [...item.querySelectorAll('.rf-btn')].find(b => b.classList.contains(expected));
+        if (correctBtn) correctBtn.classList.add('correct');
+        if (correction) correction.classList.add('visible');
+      }
+    }
+  });
+  document.getElementById('rfScore').textContent = `Ergebnis: ${correct} / ${items.length} richtig`;
+}
+
+// ── TIMER ENGINE ──────────────────────────────────────────────
+const timers = {};
+function timerInit(id) {
+  if (!timers[id]) timers[id] = { interval: null, elapsed: 0, countdown: null, running: false };
+}
+function timerStart(id) {
+  timerInit(id);
+  const t = timers[id];
+  if (t.running) return;
+  t.running = true;
+  const disp = document.getElementById(id + '-display');
+  t.interval = setInterval(() => {
+    if (t.countdown !== null) {
+      t.countdown--;
+      if (t.countdown <= 0) { t.countdown = 0; timerStop(id); }
+      disp.textContent = fmt(t.countdown);
+    } else {
+      t.elapsed++;
+      disp.textContent = fmt(t.elapsed);
+    }
+  }, 1000);
+}
+function timerStop(id) {
+  timerInit(id);
+  const t = timers[id];
+  clearInterval(t.interval);
+  t.running = false;
+}
+function timerReset(id) {
+  timerStop(id);
+  timers[id].elapsed = 0;
+  timers[id].countdown = null;
+  const disp = document.getElementById(id + '-display');
+  if (disp) disp.textContent = '00:00';
+}
+function timerSet(id, secs) {
+  timerStop(id);
+  timerInit(id);
+  timers[id].countdown = secs;
+  const disp = document.getElementById(id + '-display');
+  if (disp) disp.textContent = fmt(secs);
+}
+function fmt(s) {
+  const m = Math.floor(s / 60), sec = s % 60;
+  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+}
+
+initVocab();
+</script>
+</body>
+</html>

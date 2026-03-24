@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2068S · Mit neuen Fähigkeiten das Leben ändern</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
+  .nav button { padding: 11px 16px; border: 1px solid #b388e8; background: #f3e8ff; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; color: #5a0090; text-align: left; transition: background 0.2s; }
+  .nav button:hover { background: #e1c6ff; }
+  .nav button.active { background: #667eea; color: #fff; border-color: #667eea; }
+  .tab-content { display: none; padding: 28px 32px; }
+  .tab-content.active { display: block; }
+  h2 { color: #667eea; margin-bottom: 18px; font-size: 1.25rem; }
+  h3 { color: #5a0090; margin: 18px 0 10px; font-size: 1.05rem; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; display: block; }
+  .sprech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; margin-top: 14px; }
+  .sprech-card { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 8px;
+    padding: 16px 18px; font-size: 0.95rem; line-height: 1.6; }
+  .sprech-card .nr { font-size: 0.75rem; color: #999; margin-bottom: 6px; }
+  .sprech-card .frage { font-weight: 700; color: #667eea; margin-bottom: 8px; }
+  .sprech-card .hinweis { font-size: 0.85rem; color: #666; font-style: italic; }
+  .redem-box { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px; padding: 16px 20px; margin-bottom: 14px; }
+  .redem-box h4 { color: #667eea; font-size: 1rem; margin-bottom: 10px; }
+  .redem-box ul { list-style: none; }
+  .redem-box ul li { padding: 5px 0; font-size: 0.95rem; border-bottom: 1px solid #e8d8f8; }
+  .redem-box ul li:last-child { border-bottom: none; }
+  .redem-box ul li::before { content: '→ '; color: #667eea; font-weight: 700; }
+  .rolle-card { background: #f9f3ff; border: 2px solid #b388e8; border-radius: 10px; padding: 18px 22px; margin-bottom: 16px; }
+  .rolle-card .rolle-title { font-weight: 700; color: #667eea; margin-bottom: 10px; font-size: 1rem; }
+  .rolle-card .rolle-info { font-size: 0.93rem; line-height: 1.65; }
+  .luecken-text { font-size: 1rem; line-height: 2.1; max-width: 680px; }
+  .luecken-text p { margin-bottom: 10px; }
+  .luecken-text input { border: none; border-bottom: 2px solid #b388e8; background: transparent;
+    font-size: 0.97rem; outline: none; padding: 2px 6px; color: #333; transition: border-color 0.2s; }
+  .luecken-text input:focus { border-color: #667eea; }
+  .luecken-text input.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .luecken-text input.err { border-color: #cc3333; background: #ffd5d5; }
+  .sb-task { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task .aufgabe { font-size: 0.85rem; color: #888; margin-bottom: 8px; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 36px; }
+  .sb-chip { background: #667eea; color: #fff; border-radius: 6px; padding: 6px 12px;
+    cursor: grab; font-size: 0.92rem; user-select: none; border: 2px solid transparent; }
+  .sb-chip:active { cursor: grabbing; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-chip.selected { border-color: #ffcc00; }
+  .sb-drop { border: 2px dashed #b388e8; border-radius: 8px; min-height: 40px; padding: 4px 8px;
+    display: flex; flex-wrap: wrap; gap: 6px; background: #faf5ff; transition: background 0.2s; }
+  .sb-drop.drag-over { background: #e1c6ff; }
+  .sb-feedback { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; }
+  .timer-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 60px; }
+  .timer-btn { padding: 6px 16px; border-radius: 6px; border: 2px solid #667eea;
+    background: #fff; color: #667eea; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+  .timer-btn:hover { background: #f3e8ff; }
+  .timer-best { font-size: 0.85rem; color: #888; }
+  .check-btn { margin-top: 14px; padding: 10px 28px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+  .check-btn:hover { background: #5a0090; }
+  .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
+    font-size: 0.75rem; color: #aaa; text-align: center; }
+  .info-box { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="nav" id="nav">
+    <button class="active" onclick="showTab(0)">🗣️ Sprechaufgaben</button>
+    <button onclick="showTab(1)">💬 Redemittel</button>
+    <button onclick="showTab(2)">🎭 Rollenspiel</button>
+    <button onclick="showTab(3)">✏️ Lückentext</button>
+    <button onclick="showTab(4)">🧩 Satzbau</button>
+  </div>
+
+  <div class="tab-content active" id="tab0">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Fähigkeiten" class="tab-banner">
+    <h2>Mit neuen Fähigkeiten das Leben ändern</h2>
+    <div class="info-box">
+      Eine neue Fähigkeit zu lernen kann das Leben verändern — beruflich und persönlich.
+      In dieser Einheit diskutieren wir darüber, wie man neue Skills erwirbt und was sich dadurch ändert.
+    </div>
+
+    <h3>Diskussionsfragen</h3>
+    <div class="sprech-grid">
+      <div class="sprech-card">
+        <div class="nr">Frage 1</div>
+        <div class="frage">Welche neue Fähigkeit hast du in den letzten Jahren gelernt?</div>
+        <div class="hinweis">Sprache, Handwerk, Sport, Musik, Technologie ...</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 2</div>
+        <div class="frage">Wie hat diese Fähigkeit dein Leben verändert?</div>
+        <div class="hinweis">Denke an: Beruf, Selbstvertrauen, Freundschaften, Alltag</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 3</div>
+        <div class="frage">Was ist die schwierigste Fähigkeit, die du jemals gelernt hast?</div>
+        <div class="hinweis">Was hat dir dabei geholfen, nicht aufzugeben?</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 4</div>
+        <div class="frage">Glaubst du, dass man im Erwachsenenalter noch genauso gut lernen kann wie als Kind?</div>
+        <div class="hinweis">Begründe mit Beispielen.</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 5</div>
+        <div class="frage">Welche Fähigkeit möchtest du als nächstes erwerben? Warum?</div>
+        <div class="hinweis">Planes für die Zukunft: Wie willst du das lernen?</div>
+      </div>
+      <div class="sprech-card">
+        <div class="nr">Frage 6</div>
+        <div class="frage">Wie kann man andere Menschen motivieren, neue Fähigkeiten zu lernen?</div>
+        <div class="hinweis">Denke an: Vorteile kommunizieren, Vorbild sein, Geduld haben</div>
+      </div>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Redemittel" class="tab-banner">
+    <h2>Redemittel — Veränderungen beschreiben</h2>
+
+    <div class="redem-box">
+      <h4>Fähigkeiten beschreiben</h4>
+      <ul>
+        <li>Ich habe gelernt, wie man … macht.</li>
+        <li>Ich bin jetzt in der Lage, … zu tun.</li>
+        <li>Ich habe mir die Fähigkeit angeeignet, …</li>
+        <li>Ich beherrsche jetzt …</li>
+        <li>Ich habe Fortschritte bei … gemacht.</li>
+      </ul>
+    </div>
+    <div class="redem-box">
+      <h4>Veränderungen ausdrücken</h4>
+      <ul>
+        <li>Seitdem ich … kann, hat sich vieles geändert.</li>
+        <li>Das hat mein Leben positiv beeinflusst, weil …</li>
+        <li>Ich bin viel selbstständiger geworden, seit ich …</li>
+        <li>Obwohl es schwer war, hat es sich gelohnt.</li>
+        <li>Durch das Lernen von … habe ich …</li>
+      </ul>
+    </div>
+    <div class="redem-box">
+      <h4>Lernprozess beschreiben</h4>
+      <ul>
+        <li>Am Anfang war es sehr schwierig, jedoch …</li>
+        <li>Mit der Zeit habe ich Fortschritte gemacht.</li>
+        <li>Was mir am meisten geholfen hat, war …</li>
+        <li>Ich habe aufgehört, Angst vor Fehlern zu haben.</li>
+        <li>Übung macht den Meister.</li>
+      </ul>
+    </div>
+    <div class="redem-box">
+      <h4>Zukunftspläne äußern</h4>
+      <ul>
+        <li>Als nächstes möchte ich lernen, wie man …</li>
+        <li>Ich plane, mich in … weiterzubilden.</li>
+        <li>Mein Ziel ist es, bis Ende des Jahres … zu können.</li>
+        <li>Ich hoffe, dass ich … irgendwann beherrsche.</li>
+      </ul>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <div class="tab-content" id="tab2">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Rollenspiel" class="tab-banner">
+    <h2>Rollenspiel</h2>
+    <div class="info-box">
+      <strong>Situation:</strong> Ein Interview-Gespräch. Person A interviewt Person B über ihre neu erworbene Fähigkeit und wie sie das Leben verändert hat. Tauscht danach die Rollen.
+    </div>
+
+    <div class="rolle-card">
+      <div class="rolle-title">🎤 Person A — Der Interviewer</div>
+      <div class="rolle-info">
+        Du interviewst deinen Partner über eine neue Fähigkeit, die er gelernt hat.<br><br>
+        <strong>Fragen, die du stellen sollst:</strong><br>
+        — Welche neue Fähigkeit hast du gelernt?<br>
+        — Warum hast du dich dafür entschieden?<br>
+        — Wie lange hat das Lernen gedauert?<br>
+        — Was war die größte Herausforderung?<br>
+        — Wie hat sich dein Leben dadurch verändert?<br>
+        — Was würdest du anderen empfehlen, die das auch lernen möchten?
+      </div>
+    </div>
+
+    <div class="rolle-card">
+      <div class="rolle-title">🗣️ Person B — Der Interviewte</div>
+      <div class="rolle-info">
+        Du erzählst von einer Fähigkeit, die du gelernt hast (kann echt oder erfunden sein).<br><br>
+        <strong>Ideen für Fähigkeiten:</strong><br>
+        — Eine neue Sprache lernen (Deutsch, Englisch, Arabisch ...)<br>
+        — Kochen (z.B. vegane Küche, internationale Gerichte)<br>
+        — Eine neue Handwerkskunst (z.B. Möbel bauen, Nähen)<br>
+        — Ein Instrument spielen (z.B. Gitarre, Klavier)<br>
+        — Programmieren oder eine neue Software<br><br>
+        <strong>Achte auf:</strong> Redemittel aus Tab 2 benutzen!
+      </div>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <div class="tab-content" id="tab3">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lückentext" class="tab-banner">
+    <h2>Lückentext</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerL">0:00</span>
+      <button class="timer-btn" id="timerLBtn" onclick="timerToggle('L')">▶ Start</button>
+      <span class="timer-best" id="timerLBest"></span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="lueckenResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <div class="tab-content" id="tab4">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Satzbau" class="tab-banner">
+    <h2>Satzbau</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerS">0:00</span>
+      <button class="timer-btn" id="timerSBtn" onclick="timerToggle('S')">▶ Start</button>
+      <span class="timer-best" id="timerSBest"></span>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TIMER_PREFIX = 'best2068S';
+
+const LUECKEN = [
+  { before: 'Ich habe gelernt, wie man ', blank: 'Möbel', after: ' aus alten Materialien baut.' },
+  { before: 'Ich bin jetzt in der ', blank: 'Lage', after: ', selbst zu reparieren.' },
+  { before: 'Seitdem ich das kann, hat sich ', blank: 'vieles', after: ' verändert.' },
+  { before: 'Obwohl es schwer war, hat es sich ', blank: 'gelohnt', after: '.' },
+  { before: 'Mit der Zeit habe ich große ', blank: 'Fortschritte', after: ' gemacht.' },
+  { before: 'Ich habe aufgehört, Angst vor ', blank: 'Fehlern', after: ' zu haben.' },
+  { before: 'Mein Ziel ist es, Deutsch bis Ende des Jahres zu ', blank: 'beherrschen', after: '.' },
+  { before: 'Was mir am meisten geholfen hat, war die ', blank: 'Übung', after: ' jeden Tag.' },
+];
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich', 'habe', 'gelernt', ',', 'wie', 'man', 'Möbel', 'aus', 'alten', 'Materialien', 'baut', '.'] },
+  { words: ['Seitdem', 'ich', 'das', 'kann', ',', 'hat', 'sich', 'mein', 'Leben', 'positiv', 'verändert', '.'] },
+  { words: ['Obwohl', 'es', 'schwer', 'war', ',', 'habe', 'ich', 'nicht', 'aufgehört', '.'] },
+  { words: ['Mit', 'der', 'Zeit', 'habe', 'ich', 'große', 'Fortschritte', 'gemacht', '.'] },
+  { words: ['Ich', 'hoffe', ',', 'dass', 'ich', 'diese', 'Fähigkeit', 'bald', 'beherrsche', '.'] },
+  { words: ['Durch', 'das', 'Lernen', 'neuer', 'Fähigkeiten', 'bin', 'ich', 'selbstständiger', 'geworden', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+function showTab(n){document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));}
+
+(function(){const c=document.getElementById('lueckenText');LUECKEN.forEach((item,idx)=>{const p=document.createElement('p');p.style.marginBottom='10px';p.innerHTML=`${item.before}<input type="text" id="luecke-${idx}" data-answer="${item.blank.toLowerCase()}" placeholder="..." oninput="liveCheck(this)" style="width:${Math.max(100,item.blank.length*12)}px"/>${item.after}`;c.appendChild(p);});})();
+function liveCheck(inp){inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===inp.dataset.answer)inp.classList.add('ok');autoStopIfDone();}
+function checkLuecken(){let correct=0;LUECKEN.forEach((item,idx)=>{const inp=document.getElementById(`luecke-${idx}`);inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}else inp.classList.add('err');});const res=document.getElementById('lueckenResult');if(correct===LUECKEN.length){res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';stopTimer('L');saveBest('L');}else{res.textContent=`${correct} von ${LUECKEN.length} richtig.`;res.style.color='#7a0000';}}
+function autoStopIfDone(){if([...document.querySelectorAll('#lueckenText input')].every(i=>i.classList.contains('ok'))){stopTimer('L');saveBest('L');document.getElementById('lueckenResult').textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;document.getElementById('lueckenResult').style.color='#1a5e17';}}
+
+(function(){const c=document.getElementById('satzbauContainer');SATZBAU_SAETZE.forEach((chips,idx)=>{const shuffled=fisherYates([...chips]);const div=document.createElement('div');div.className='sb-task';div.innerHTML=`<div class="aufgabe">Ordne die Satzteile:</div><div class="sb-chips" id="sbChips-${idx}">${shuffled.map((c,i)=>sbMakeChip(c,i,idx)).join('')}</div><div class="sb-drop" id="sbDrop-${idx}" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="sbDrop(event,${idx})"></div><div class="sb-feedback" id="sbFb-${idx}"></div>`;c.appendChild(div);});})();
+function sbMakeChip(text,i,idx){return `<div class="sb-chip" draggable="true" data-idx="${idx}" data-chip="${i}" data-text="${text.replace(/"/g,'&quot;')}" ondragstart="sbDragStart(event)" onclick="sbClick(this,${idx})">${text}</div>`;}
+let sbSel=null;
+function sbClick(chip,idx){const drop=document.getElementById(`sbDrop-${idx}`),src=document.getElementById(`sbChips-${idx}`);if(chip.parentElement===src){if(sbSel)sbSel.classList.remove('selected');sbSel=chip;chip.classList.add('selected');drop.appendChild(chip);chip.classList.remove('selected');sbSel=null;sbCheckAuto(idx);}else{if(sbSel)sbSel.classList.remove('selected');sbSel=null;src.appendChild(chip);sbCheckAuto(idx);}}
+function sbDragStart(ev){ev.dataTransfer.setData('text/plain',ev.target.dataset.chip);ev.target.classList.add('dragging');setTimeout(()=>ev.target.classList.remove('dragging'),300);}
+function sbDrop(ev,idx){ev.preventDefault();const drop=document.getElementById(`sbDrop-${idx}`);drop.classList.remove('drag-over');const chip=[...document.querySelectorAll(`.sb-chip[data-idx="${idx}"]`)].find(c=>c.dataset.chip===ev.dataTransfer.getData('text/plain'));if(chip){drop.appendChild(chip);sbCheckAuto(idx);}}
+function sbCheckAuto(idx){setTimeout(()=>{const drop=document.getElementById(`sbDrop-${idx}`),fb=document.getElementById(`sbFb-${idx}`),chips=[...drop.querySelectorAll('.sb-chip')].map(c=>c.dataset.text);if(chips.length!==SATZBAU_SAETZE[idx].length){fb.textContent='';return;}if(chips.join(' ')===SATZBAU_SAETZE[idx].join(' ')){fb.textContent='✅ Richtig!';fb.style.color='#1a5e17';sbCheckAllDone();}else{fb.textContent='❌ Noch nicht ganz richtig.';fb.style.color='#7a0000';}},500);}
+function sbCheckAllDone(){if(SATZBAU_SAETZE.every((_,i)=>{const fb=document.getElementById(`sbFb-${i}`);return fb&&fb.textContent.startsWith('✅');})){stopTimer('S');saveBest('S');}}
+function fisherYates(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
+function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}
+function startTimer(k){if(timerRunning[k])return;timerRunning[k]=true;document.getElementById(`timer${k}Btn`).textContent='⏸ Pause';timerIntervals[k]=setInterval(()=>{timerSeconds[k]++;document.getElementById(`timer${k}`).textContent=formatTime(timerSeconds[k]);},1000);}
+function stopTimer(k){clearInterval(timerIntervals[k]);timerRunning[k]=false;document.getElementById(`timer${k}Btn`).textContent='▶ Weiter';}
+function saveBest(k){const sk=TIMER_PREFIX+'_'+k,prev=parseInt(localStorage.getItem(sk)||'999999');if(timerSeconds[k]<prev){localStorage.setItem(sk,timerSeconds[k]);document.getElementById(`timer${k}Best`).textContent='🏆 Neue Bestzeit: '+formatTime(timerSeconds[k]);}else{document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(prev);}}
+function formatTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+(function(){['L','S'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the ability', art: 'die', wort: 'Fähigkeit', plural: '-en' },
+  { type: 'n', en: 'the skill', art: 'die', wort: 'Fertigkeit', plural: '-en' },
+  { type: 'n', en: 'the life', art: 'das', wort: 'Leben', plural: '-' },
+  { type: 'v', en: 'to learn', de: 'erlernen' },
+  { type: 'v', en: 'to master', de: 'beherrschen' },
+  { type: 'v', en: 'to change', de: 'verändern' },
+  { type: 'v', en: 'to improve', de: 'verbessern' },
+  { type: 'v', en: 'to develop', de: 'entwickeln' },
+  { type: 'v', en: 'to acquire', de: 'erwerben' },
+  { type: 'v', en: 'to train', de: 'trainieren' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

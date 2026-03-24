@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einen Artikel schreiben – B1.3 Lektion 3072W</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 8px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.75em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.section-content { padding: 28px 30px; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.warn-box { background: #fff8e1; border-left: 4px solid #f39c12; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 18px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.info-box { background: #e8f4fd; border-left: 4px solid #3498db; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 18px; font-size: 0.9em; color: #444; line-height: 1.6; }
+
+/* === STRUKTUR === */
+.struktur-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+.struktur-card { border-radius: 10px; padding: 18px; border-left: 5px solid; }
+.s-einleitung { background: #e8f5e9; border-color: #4caf50; }
+.s-hauptteil { background: #fff3e0; border-color: #ff9800; }
+.s-schluss { background: #e0f7fa; border-color: #00bcd4; }
+.s-kontext { background: #fce4ec; border-color: #e91e63; }
+.s-fakten { background: #e8eaf6; border-color: #3f51b5; }
+.s-zitate { background: #f3e5f5; border-color: #9c27b0; }
+.s-meinung { background: #fff9c4; border-color: #f9a825; }
+.s-titel { background: #ede7f6; border-color: #673ab7; }
+.struktur-name { font-weight: 700; font-size: 1.05em; margin-bottom: 8px; }
+.struktur-desc { font-size: 0.88em; line-height: 1.6; color: #444; }
+.struktur-example { margin-top: 8px; font-size: 0.85em; color: #666; font-style: italic; background: rgba(255,255,255,0.6); padding: 6px 10px; border-radius: 6px; }
+.letter-demo { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 10px; padding: 20px 24px; font-family: Georgia, serif; font-size: 0.92em; line-height: 1.8; color: #333; margin-bottom: 24px; }
+.letter-part { margin-bottom: 12px; padding: 6px 10px; border-radius: 6px; }
+.letter-demo .lp-kontext { background: #fce4ec; }
+.letter-demo .lp-einleitung { background: #e8f5e9; }
+.letter-demo .lp-hauptteil { background: #fff3e0; }
+.letter-demo .lp-schluss { background: #e0f7fa; }
+.letter-demo .lp-titel { background: #ede7f6; }
+.letter-demo .lp-lead { background: #e8f5e9; }
+.letter-demo .lp-body { background: #fff3e0; }
+.letter-demo .lp-outro { background: #e0f7fa; }
+.letter-label { font-size: 0.72em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.7; margin-bottom: 2px; }
+
+/* === PHRASEN === */
+.phrasen-section { margin-bottom: 24px; }
+.phrasen-title { font-size: 1.1em; font-weight: 700; color: #667eea; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #e8ecff; }
+.phrasen-list { display: flex; flex-direction: column; gap: 8px; }
+.phrase-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 8px; padding: 10px 14px; font-size: 0.92em; color: #333; }
+.phrase-card strong { color: #667eea; }
+.phrase-card .phrase-en { font-size: 0.82em; color: #888; font-style: italic; margin-top: 2px; }
+
+/* === LÜCKENTEXT === */
+.luecken-container { margin-bottom: 20px; }
+.luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
+.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1.0em; padding: 2px 4px; transition: border-color 0.2s; min-width: 100px; }
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.wortkasten { background: #f0f4ff; border: 1px dashed #667eea; border-radius: 8px; padding: 10px 14px; margin-bottom: 18px; font-size: 0.9em; color: #444; line-height: 1.8; }
+
+/* === SATZBAU === */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 20px; }
+
+/* === ZUORDNUNG === */
+.match-exercise { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 10px; }
+.match-card { padding: 12px 16px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.2s; user-select: none; font-size: 0.9em; line-height: 1.4; }
+.match-card.selected { background: #e8ecff; border-color: #667eea; font-weight: 600; }
+.match-card.matched { background: #d4edda; border-color: #28a745; opacity: 0.75; pointer-events: none; }
+.match-card.error { animation: shake 0.4s; background: #f8d7da !important; border-color: #dc3545 !important; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+.match-label { font-weight: 700; color: #667eea; margin-bottom: 10px; font-size: 0.9em; }
+.match-score { text-align: center; font-size: 1.0em; font-weight: 600; color: #555; margin-top: 16px; padding: 10px; background: #f0f4ff; border-radius: 8px; }
+.match-score.complete { background: #d4edda; color: #155724; }
+
+/* === WORTSCHATZ === */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 0; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 190px; font-size: 0.95em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 160px; }
+.vocab-inputs input.plural { width: 160px; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.75em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .struktur-grid, .match-exercise { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Einen Artikel schreiben</h1>
+        <p style="font-family: Georgia, serif;">B1.3 · Lektion 3072W · Schreiben</p>
+        <div class="big-emoji">📰</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📋</span><span class="nav-label">Struktur</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">💬</span><span class="nav-label">Phrasen</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">📑</span><span class="nav-label">Zuordnung</span></div>
+        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- TAB 0: STRUKTUR -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="">
+        <div class="section-content">
+            <div class="section-title">📋 Struktur: Einen Artikel schreiben</div>
+            <div class="section-sub">Ein guter Text hat eine klare Struktur: Einleitung, Hauptteil und Schluss.</div>
+            <div class="struktur-grid">
+<div class="struktur-card s-titel"><div class="struktur-name">📰 1. Überschrift (Titel)</div><div class="struktur-desc">Die Überschrift macht neugierig und fasst das Thema zusammen. Kurz, prägnant, interessant!</div><div class="struktur-example">"Klimawandel: Was können wir wirklich tun?"</div></div>
+<div class="struktur-card s-einleitung"><div class="struktur-name">🎯 2. Lead / Einleitung</div><div class="struktur-desc">Die ersten 2–3 Sätze beantworten: Wer? Was? Wann? Wo? Warum? (die 5 W-Fragen)</div><div class="struktur-example">"Laut einer neuen Studie steigt die Durchschnittstemperatur in Europa schneller als je zuvor."</div></div>
+<div class="struktur-card s-hauptteil"><div class="struktur-name">⭐ 3. Hauptteil: Fakten und Hintergründe</div><div class="struktur-desc">Belege, Beispiele, Zitate von Experten. Logisch strukturiert, sachlich formuliert.</div><div class="struktur-example">"Wissenschaftler der Universität Hamburg zeigen, dass die CO₂-Emissionen seit 1990 um 40% gestiegen sind."</div></div>
+<div class="struktur-card s-zitate"><div class="struktur-name">💬 4. Verschiedene Perspektiven</div><div class="struktur-desc">Ein guter Artikel zeigt mehrere Seiten. Zitate und Meinungen von Betroffenen oder Experten.</div><div class="struktur-example">"'Der Wandel muss jetzt stattfinden', sagt Klimaforscherin Prof. Meyer."</div></div>
+<div class="struktur-card s-meinung"><div class="struktur-name">📊 5. Analyse und Bewertung</div><div class="struktur-desc">Was bedeuten die Fakten? Was sind die Folgen? Eine Einordnung des Themas.</div><div class="struktur-example">"Diese Entwicklung könnte langfristig zu einem Anstieg des Meeresspiegels um bis zu 50 cm führen."</div></div>
+<div class="struktur-card s-schluss"><div class="struktur-name">🔮 6. Ausblick / Schluss</div><div class="struktur-desc">Was kommt als nächstes? Welche Lösungen gibt es? Ein offener Ausblick lädt zum Nachdenken ein.</div><div class="struktur-example">"Ob die geplanten Maßnahmen ausreichen, wird sich in den nächsten Jahren zeigen."</div></div>
+</div>
+
+            <div class="section-title" style="margin-bottom:14px;">📄 Beispieltext mit Farbmarkierungen</div>
+            <div class="letter-demo">
+<div class="letter-part lp-titel"><div class="letter-label">Überschrift</div><strong>Plastik im Meer: Eine Katastrophe für Meerestiere</strong></div>
+<div class="letter-part lp-lead"><div class="letter-label">Lead</div>Jedes Jahr landen acht Millionen Tonnen Plastik im Meer. Die Folgen für die Tierwelt sind verheerend, wie neue Forschungsergebnisse zeigen.</div>
+<div class="letter-part lp-body"><div class="letter-label">Hauptteil</div>Wissenschaftler der Universität Kiel haben herausgefunden, dass über 90% der Meerestiere Plastikreste im Körper haben. Besonders Schildkröten und Delfine sind betroffen.</div>
+<div class="letter-part lp-body"><div class="letter-label">Perspektive</div>"Das Problem ist größer als wir dachten", sagt Meeresbiologin Dr. Fischer. "Wir müssen sofort handeln."</div>
+<div class="letter-part lp-outro"><div class="letter-label">Ausblick</div>Mehrere Länder haben bereits Einwegplastik verboten. Ob dies ausreicht, um das Ökosystem zu retten, bleibt offen.</div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- TAB 1: PHRASEN -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="">
+        <div class="section-content">
+            <div class="section-title">💬 Hilfreiche Phrasen</div>
+            <div class="section-sub">Lerne die wichtigsten Formulierungen für diesen Texttyp.</div>
+            <div class="phrasen-section"><div class="phrasen-title">📌 Einleitungssätze (Lead)</div><div class="phrasen-list">
+<div class="phrase-card"><strong>Laut einer neuen Studie ...</strong><div class="phrase-en">According to a new study...</div></div>
+<div class="phrase-card"><strong>Wie Forscher herausgefunden haben, ...</strong><div class="phrase-en">As researchers have found out,...</div></div>
+<div class="phrase-card"><strong>Ein neuer Bericht zeigt, dass ...</strong><div class="phrase-en">A new report shows that...</div></div>
+<div class="phrase-card"><strong>Angesichts von ... stellt sich die Frage, ...</strong><div class="phrase-en">In view of ... the question arises...</div></div>
+</div></div>
+<div class="phrasen-section"><div class="phrasen-title">⭐ Fakten und Belege nennen</div><div class="phrasen-list">
+<div class="phrase-card"><strong>Wissenschaftler haben herausgefunden, dass ...</strong><div class="phrase-en">Scientists have found that...</div></div>
+<div class="phrase-card"><strong>Laut Statistiken/Experten ...</strong><div class="phrase-en">According to statistics/experts...</div></div>
+<div class="phrase-card"><strong>Studien belegen, dass ...</strong><div class="phrase-en">Studies prove that...</div></div>
+<div class="phrase-card"><strong>Ein Beispiel dafür ist ...</strong><div class="phrase-en">One example of this is...</div></div>
+</div></div>
+<div class="phrasen-section"><div class="phrasen-title">💬 Zitieren und Perspektiven zeigen</div><div class="phrasen-list">
+<div class="phrase-card"><strong>"...", sagt/erklärt/betont [Name].</strong><div class="phrase-en">"...", says/explains/emphasizes [name].</div></div>
+<div class="phrase-card"><strong>Kritiker hingegen argumentieren, dass ...</strong><div class="phrase-en">Critics, however, argue that...</div></div>
+<div class="phrase-card"><strong>Befürworter der Maßnahme betonen, dass ...</strong><div class="phrase-en">Supporters of the measure emphasize that...</div></div>
+<div class="phrase-card"><strong>Sowohl ... als auch ... sind sich einig, dass ...</strong><div class="phrase-en">Both ... and ... agree that...</div></div>
+</div></div>
+<div class="phrasen-section"><div class="phrasen-title">🔮 Schluss und Ausblick</div><div class="phrasen-list">
+<div class="phrase-card"><strong>Ob ... ausreicht, bleibt abzuwarten.</strong><div class="phrase-en">Whether ... is sufficient remains to be seen.</div></div>
+<div class="phrase-card"><strong>Es ist zu hoffen, dass ...</strong><div class="phrase-en">It is to be hoped that...</div></div>
+<div class="phrase-card"><strong>Die Zukunft wird zeigen, ob ...</strong><div class="phrase-en">The future will show whether...</div></div>
+<div class="phrase-card"><strong>Fest steht, dass ... dringend gehandelt werden muss.</strong><div class="phrase-en">One thing is certain: urgent action must be taken.</div></div>
+</div></div>
+
+        </div>
+    </div>
+
+    <!-- TAB 2: LÜCKENTEXT -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="">
+        <div class="section-content">
+            <div class="section-title">✏️ Lückentext</div>
+            <div class="wortkasten"><strong>Wörter:</strong> zeigt · haben herausgefunden · betont · steigt · liegt · nehmen zu · gefährdet · bleibt · fordern · verursacht</div>
+            <div class="luecken-container">
+<div class="luecken-item">Eine neue Studie <input class="luecken-inp" data-answer="zeigt" oninput="liveCheck(this)" placeholder="">, dass die Meerestemperaturen stark ansteigen.</div>
+<div class="luecken-item">Forscher <input class="luecken-inp" data-answer="haben herausgefunden" oninput="liveCheck(this)" placeholder="">, dass Plastik in jedem Ozean vorkommt.</div>
+<div class="luecken-item">Die Anzahl der Unwetter <input class="luecken-inp" data-answer="nimmt zu" oninput="liveCheck(this)" placeholder=""> durch den Klimawandel.</div>
+<div class="luecken-item">"Das Problem ist dringend", <input class="luecken-inp" data-answer="betont" oninput="liveCheck(this)" placeholder=""> der Experte.</div>
+<div class="luecken-item">Der CO₂-Gehalt in der Atmosphäre <input class="luecken-inp" data-answer="steigt" oninput="liveCheck(this)" placeholder=""> weiterhin an.</div>
+<div class="luecken-item">Die Ursache <input class="luecken-inp" data-answer="liegt" oninput="liveCheck(this)" placeholder=""> hauptsächlich in der Industrie.</div>
+<div class="luecken-item">Viele Tierarten sind durch den Klimawandel stark <input class="luecken-inp" data-answer="gefährdet" oninput="liveCheck(this)" placeholder="">.</div>
+<div class="luecken-item">Plastikabfälle <input class="luecken-inp" data-answer="verursachen" oninput="liveCheck(this)" placeholder=""> großen Schaden im Ökosystem.</div>
+<div class="luecken-item">Umweltschützer <input class="luecken-inp" data-answer="fordern" oninput="liveCheck(this)" placeholder=""> strengere Gesetze.</div>
+<div class="luecken-item">Ob die Maßnahmen ausreichen, <input class="luecken-inp" data-answer="bleibt" oninput="liveCheck(this)" placeholder=""> abzuwarten.</div>
+            </div>
+            <button class="btn" onclick="showLoesung()">Lösung zeigen</button>
+            <button class="btn" onclick="resetLuecke()">Reset</button>
+        </div>
+    </div>
+
+    <!-- TAB 3: SATZBAU -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3769747/pexels-photo-3769747.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="">
+        <div class="section-content">
+            <div class="section-title">🧩 Satzbau</div>
+            <div class="hilfe-box">Ordne die Wörter zum richtigen Satz. Klicke auf ein Wort, um es zu platzieren. Klicke auf ein platziertes Wort, um es zurückzulegen.</div>
+            <div id="sbContainer"></div>
+            <button class="btn" onclick="resetSatzbau()">Reset</button>
+        </div>
+    </div>
+
+    <!-- TAB 4: ZUORDNUNG -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="">
+        <div class="section-content">
+            <div class="section-title">📑 Zuordnung</div>
+            <div class="hilfe-box">Ordne die Textanfänge den passenden Fortsetzungen zu. Klicke zuerst auf eine Karte links, dann auf die passende Karte rechts.</div>
+            <div class="match-exercise">
+                <div>
+                    <div class="match-label">🔵 Satzanfang</div>
+                    <div class="match-card left" data-id="1" onclick="matchClick(this,'left')">Laut einer neuen Studie</div>
+<div class="match-card left" data-id="2" onclick="matchClick(this,'left')">Forscher haben herausgefunden,</div>
+<div class="match-card left" data-id="3" onclick="matchClick(this,'left')">"Das Problem ist dringend",</div>
+<div class="match-card left" data-id="4" onclick="matchClick(this,'left')">Die Ursache liegt</div>
+<div class="match-card left" data-id="5" onclick="matchClick(this,'left')">Viele Tierarten sind</div>
+<div class="match-card left" data-id="6" onclick="matchClick(this,'left')">Ob die Maßnahmen ausreichen,</div>
+
+                </div>
+                <div>
+                    <div class="match-label">🟢 Fortsetzung</div>
+                    <div class="match-card right" data-id="2" onclick="matchClick(this,'right')">dass Plastik in jedem Ozean vorkommt.</div>
+<div class="match-card right" data-id="3" onclick="matchClick(this,'right')">betont der Experte.</div>
+<div class="match-card right" data-id="5" onclick="matchClick(this,'right')">durch den Klimawandel stark gefährdet.</div>
+<div class="match-card right" data-id="1" onclick="matchClick(this,'right')">steigen die Meerestemperaturen stark an.</div>
+<div class="match-card right" data-id="6" onclick="matchClick(this,'right')">bleibt abzuwarten.</div>
+<div class="match-card right" data-id="4" onclick="matchClick(this,'right')">hauptsächlich in der Industrie.</div>
+
+                </div>
+            </div>
+            <div class="match-score" id="matchScore">0 / 6 Paare gefunden</div>
+            <button class="btn" onclick="resetMatch()" style="margin-top:12px;">Reset</button>
+        </div>
+    </div>
+
+    <!-- TAB 5: WORTSCHATZ -->
+    <div class="section" id="sec-5">
+        <img class="tab-banner" src="https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="">
+        <div class="section-content">
+            <div class="section-title">🔠 Wortschatz</div>
+            <div class="hilfe-box">Tippe die deutschen Wörter (mit Artikel bei Nomen).</div>
+            <div class="control-bar"><div class="btn-row"><button class="btn" onclick="showVocabLoesung()">Lösung</button><button class="btn" onclick="resetVocab()">Reset</button></div><div class="timer-display">⏱ <span id="vocabTimerDisplay">00:00</span></div></div>
+<div id="vocabContainer"></div>
+        </div>
+    </div>
+
+</div>
+<script>
+var sbData = [
+  { words: ['Eine', 'neue', 'Studie', 'zeigt', ',', 'dass', 'Plastik', 'überall', 'vorkommt', '.'] },
+  { words: ['Forscher', 'haben', 'herausgefunden', ',', 'dass', 'die', 'Temperaturen', 'steigen', '.'] },
+  { words: ['Laut', 'Experten', 'nehmen', 'die', 'Unwetter', 'zu', '.'] },
+  { words: ['Ob', 'die', 'Maßnahmen', 'ausreichen', ',', 'bleibt', 'abzuwarten', '.'] },
+  { words: ['Viele', 'Tierarten', 'sind', 'durch', 'den', 'Klimawandel', 'gefährdet', '.'] },
+  { words: ['Umweltschützer', 'fordern', 'strengere', 'Gesetze', '.'] },
+  { words: ['Die', 'Zukunft', 'wird', 'zeigen', ',', 'ob', 'es', 'ausreicht', '.'] }
+];
+var WORTSCHATZ = [
+  {type:'n',en:'article (press)',art:'der',wort:'Artikel',plural:'-'},
+  {type:'n',en:'headline',art:'die',wort:'Überschrift',plural:'-en'},
+  {type:'n',en:'expert',art:'der',wort:'Experte',plural:'-n'},
+  {type:'n',en:'study (scientific)',art:'die',wort:'Studie',plural:'-n'},
+  {type:'v',en:'to prove / show',de:'belegen'},
+  {type:'v',en:'to quote / cite',de:'zitieren'},
+  {type:'v',en:'to demand / require',de:'fordern'},
+  {type:'v',en:'to analyze',de:'analysieren'},
+  {type:'v',en:'objective (sachlich)',de:'sachlich'}
+];
+function showSection(n){
+  document.querySelectorAll('.section').forEach((s,i)=>{ s.classList.toggle('active',i===n); });
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>{ b.classList.toggle('active',i===n); });
+}
+
+// LÜCKENTEXT
+function liveCheck(inp){
+  const ans=inp.dataset.answer;
+  inp.classList.toggle('ok',inp.value.trim()===ans);
+  inp.classList.toggle('no',inp.value.trim()!==''&&inp.value.trim()!==ans);
+}
+function showLoesung(){
+  document.querySelectorAll('.luecken-inp').forEach(inp=>{inp.value=inp.dataset.answer;inp.classList.add('ok');inp.classList.remove('no');});
+}
+function resetLuecke(){
+  document.querySelectorAll('.luecken-inp').forEach(inp=>{inp.value='';inp.classList.remove('ok','no');});
+}
+
+// SATZBAU
+var sbData=[]; var sbStates=[];
+function initSatzbau(){
+  var c=document.getElementById('sbContainer'); if(!c)return;
+  c.innerHTML=''; sbStates=[];
+  sbData.forEach(function(s,i){
+    var words=[...s.words]; var punct=words[words.length-1];
+    var hasPunct=['.','!','?',','].includes(punct); if(hasPunct)words=words.slice(0,-1);
+    var shuffled=[...words].sort(()=>Math.random()-0.5);
+    sbStates.push({words:words,punct:hasPunct?punct:'',placed:[]});
+    var div=document.createElement('div'); div.className='satzbau-item'; div.id='sbi'+i;
+    var pool=document.createElement('div'); pool.className='chips-container'; pool.id='pool'+i;
+    shuffled.forEach(function(w){
+      var chip=document.createElement('div'); chip.className='chip'; chip.textContent=w;
+      chip.draggable=true;
+      chip.addEventListener('dragstart',function(e){e.dataTransfer.setData('text',w+' '+i);});
+      chip.addEventListener('click',function(){moveToZone(w,i,chip);});
+      pool.appendChild(chip);
+    });
+    var zone=document.createElement('div'); zone.className='sentence-builder'; zone.id='zone'+i;
+    zone.addEventListener('dragover',function(e){e.preventDefault();});
+    zone.addEventListener('drop',function(e){
+      e.preventDefault(); var d=e.dataTransfer.getData('text').split(' ');
+      if(parseInt(d[1])===i) moveToZone(d[0],i,null);
+    });
+    var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sfb'+i;
+    div.appendChild(pool); div.appendChild(zone); div.appendChild(fb);
+    c.appendChild(div);
+  });
+}
+function moveToZone(word,i,chip){
+  var state=sbStates[i]; var pool=document.getElementById('pool'+i); var zone=document.getElementById('zone'+i);
+  if(chip&&chip.parentElement===pool){ state.placed.push(word); }
+  else if(!chip){ var found=null; pool.querySelectorAll('.chip').forEach(function(c){if(c.textContent===word&&!found)found=c;}); if(!found)return; found.remove(); state.placed.push(word); }
+  else return;
+  zone.innerHTML='';
+  state.placed.forEach(function(w,k){
+    var c=document.createElement('div'); c.className='chip'; c.textContent=w;
+    c.addEventListener('click',function(){ state.placed.splice(k,1); moveBackToPool(word,i); renderZone(i); checkSentence(i); });
+    zone.appendChild(c);
+  });
+  if(state.punct){ var p=document.createElement('span'); p.className='sb-punkt'; p.textContent=state.punct; zone.appendChild(p); }
+  checkSentence(i);
+}
+function moveBackToPool(word,i){ var pool=document.getElementById('pool'+i); var c=document.createElement('div'); c.className='chip'; c.textContent=word; c.draggable=true; c.addEventListener('dragstart',function(e){e.dataTransfer.setData('text',word+' '+i);}); c.addEventListener('click',function(){moveToZone(word,i,c);}); pool.appendChild(c); }
+function renderZone(i){ var state=sbStates[i]; var zone=document.getElementById('zone'+i); zone.innerHTML=''; state.placed.forEach(function(w,k){ var c=document.createElement('div'); c.className='chip'; c.textContent=w; c.addEventListener('click',function(){ state.placed.splice(k,1); moveBackToPool(w,i); renderZone(i); checkSentence(i); }); zone.appendChild(c); }); if(state.punct){var p=document.createElement('span');p.className='sb-punkt';p.textContent=state.punct;zone.appendChild(p);} }
+function checkSentence(i){ var state=sbStates[i]; var zone=document.getElementById('zone'+i); var fb=document.getElementById('sfb'+i); if(state.placed.length!==state.words.length){zone.classList.remove('correct','incorrect');fb.textContent='';return;} var ok=state.placed.join(' ')===state.words.join(' '); zone.classList.toggle('correct',ok); zone.classList.toggle('incorrect',!ok); fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✅ Richtig!':'❌ Falsch – versuche es nochmal.'; }
+function resetSatzbau(){ initSatzbau(); }
+
+// ZUORDNUNG
+var matchSel={left:null,right:null};
+function matchClick(el,side){
+  if(el.classList.contains('matched'))return;
+  document.querySelectorAll('.match-card.'+side).forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected'); matchSel[side]=el;
+  if(matchSel.left&&matchSel.right){
+    var ok=matchSel.left.dataset.id===matchSel.right.dataset.id;
+    if(ok){ matchSel.left.classList.add('matched'); matchSel.right.classList.add('matched'); updateMatchScore(); }
+    else{ matchSel.left.classList.add('error'); matchSel.right.classList.add('error'); setTimeout(()=>{matchSel.left.classList.remove('selected','error');matchSel.right.classList.remove('selected','error');},600); }
+    matchSel={left:null,right:null};
+  }
+}
+function updateMatchScore(){ var tot=document.querySelectorAll('.match-card.left').length; var done=document.querySelectorAll('.match-card.left.matched').length; var sc=document.getElementById('matchScore'); if(sc){sc.textContent=done+' / '+tot+' Paare gefunden';if(done===tot){sc.classList.add('complete');sc.textContent='🎉 Alle '+tot+' Paare gefunden!';}} }
+function resetMatch(){ document.querySelectorAll('.match-card').forEach(c=>c.classList.remove('matched','selected','error')); var sc=document.getElementById('matchScore'); if(sc){sc.classList.remove('complete');sc.textContent='0 / '+document.querySelectorAll('.match-card.left').length+' Paare gefunden';} matchSel={left:null,right:null}; }
+
+// WORTSCHATZ
+var vocabTimer=null; var vocabSec=0;
+function initVocab(){
+  var c=document.getElementById('vocabContainer'); if(!c)return;
+  c.innerHTML='';
+  var grid=document.createElement('div'); grid.style.cssText='display:flex;flex-direction:column;gap:10px;';
+  WORTSCHATZ.forEach(function(w,i){
+    var item=document.createElement('div'); item.className='vocab-item';
+    var en=document.createElement('div'); en.className='vocab-en'; en.textContent=w.en; item.appendChild(en);
+    var inp=document.createElement('div'); inp.className='vocab-inputs';
+    if(w.type==='n'){
+      var art=document.createElement('input'); art.type='text'; art.className='art'; art.placeholder='Artikel'; art.dataset.answer=w.art; art.addEventListener('input',function(){vocabLiveCheck(art);});
+      var wort=document.createElement('input'); wort.type='text'; wort.className='wort'; wort.placeholder='Nomen'; wort.dataset.answer=w.wort; wort.addEventListener('input',function(){vocabLiveCheck(wort);});
+      var pl=document.createElement('input'); pl.type='text'; pl.className='plural'; pl.placeholder='Plural'; pl.dataset.answer=w.plural; pl.addEventListener('input',function(){vocabLiveCheck(pl);});
+      inp.appendChild(art); inp.appendChild(wort); inp.appendChild(pl);
+    } else {
+      var de=document.createElement('input'); de.type='text'; de.className='wort'; de.placeholder='Deutsch'; de.dataset.answer=w.de; de.addEventListener('input',function(){vocabLiveCheck(de);});
+      inp.appendChild(de);
+    }
+    item.appendChild(inp); grid.appendChild(item);
+  });
+  c.appendChild(grid);
+  startVocabTimer();
+}
+function vocabLiveCheck(inp){ inp.classList.toggle('correct',inp.value.trim()===inp.dataset.answer); inp.classList.toggle('wrong',inp.value.trim()!==''&&inp.value.trim()!==inp.dataset.answer); }
+function showVocabLoesung(){ document.querySelectorAll('.vocab-inputs input').forEach(inp=>{inp.value=inp.dataset.answer;inp.classList.add('correct');inp.classList.remove('wrong');}); }
+function resetVocab(){ document.querySelectorAll('.vocab-inputs input').forEach(inp=>{inp.value='';inp.classList.remove('correct','wrong');}); vocabSec=0; updateVocabDisplay(); }
+function startVocabTimer(){ clearInterval(vocabTimer); vocabSec=0; vocabTimer=setInterval(function(){vocabSec++;updateVocabDisplay();},1000); }
+function updateVocabDisplay(){ var el=document.getElementById('vocabTimerDisplay'); if(el){var m=Math.floor(vocabSec/60),s=vocabSec%60;el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;} }
+
+window.addEventListener('DOMContentLoaded',function(){ initSatzbau(); initVocab(); });
+</script>
+</body>
+</html>

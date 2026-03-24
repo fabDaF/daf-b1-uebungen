@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2021X – Urbane Szenen</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#667eea;min-height:100vh;padding:20px}
+  .container{max-width:860px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.18);overflow:hidden}
+  h1{background:#667eea;color:#fff;padding:18px 24px;font-size:1.3rem;letter-spacing:.5px}
+  .nav{display:flex;flex-wrap:wrap;gap:0;border-bottom:2px solid #667eea;background:#f3e8ff}
+  .nav button{padding:10px 15px;border:1px solid #b388d8;border-bottom:none;background:#e9d5ff;color:#4a0080;font-size:.85rem;cursor:pointer;font-weight:600;border-radius:6px 6px 0 0;margin-bottom:-2px;transition:background .2s}
+  .nav button.active{background:#fff;color:#667eea;border-bottom:2px solid #fff;z-index:1}
+  .nav button:hover:not(.active){background:#d8b4fe}
+  .tab{display:none;padding:24px}
+  .tab.active{display:block}
+  .tab-banner{width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:18px}
+  .tab h2{color:#667eea;margin-bottom:14px;font-size:1.1rem}
+  .tab h3{color:#4a0080;margin:14px 0 8px;font-size:1rem}
+
+  /* Timer */
+  .timer-bar{display:flex;align-items:center;gap:10px;background:#f3e8ff;border-radius:8px;padding:8px 14px;margin-bottom:16px;flex-wrap:wrap}
+  .timer-display{font-size:1.1rem;font-weight:700;color:#667eea;min-width:60px;font-family:monospace}
+  .timer-bar button{padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600}
+  .btn-start{background:#22c55e;color:#fff}.btn-stop{background:#ef4444;color:#fff}.btn-reset{background:#94a3b8;color:#fff}
+  .best-time{font-size:.8rem;color:#7c3aed;margin-left:4px}
+
+  /* Mindmap/Wortschatz */
+  .mindmap{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:16px 0}
+  .mm-node{background:#e9d5ff;border:2px solid #b388d8;border-radius:20px;padding:8px 16px;font-weight:700;color:#4a0080;font-size:.95rem}
+  .mm-center{background:#667eea;color:#fff;border-color:#667eea;font-size:1.05rem;padding:10px 20px}
+
+  /* Szenen-Karten */
+  .szenen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:16px 0}
+  .szene-card{border:2px solid #b388d8;border-radius:10px;overflow:hidden}
+  .szene-card-header{background:#667eea;color:#fff;padding:10px 14px;font-weight:700;font-size:1rem}
+  .szene-card-body{padding:12px 14px}
+  .szene-adj{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .adj-chip{background:#e9d5ff;color:#4a0080;border-radius:12px;padding:4px 10px;font-size:.85rem;font-weight:600}
+  .adj-chip.neg{background:#fee2e2;color:#991b1b}
+  .adj-chip.pos{background:#dcfce7;color:#166534}
+
+  /* Persönlichkeiten Tabelle */
+  .pers-table{width:100%;border-collapse:collapse;margin:12px 0}
+  .pers-table th{background:#667eea;color:#fff;padding:9px 12px;text-align:left;font-size:.9rem}
+  .pers-table td{padding:9px 12px;border-bottom:1px solid #e9d5ff;font-size:.9rem;vertical-align:top}
+  .pers-table tr:nth-child(even) td{background:#f9f5ff}
+  .pers-table .wort{font-weight:700;color:#667eea}
+
+  /* Lückentext */
+  .luecke-item{margin-bottom:14px;line-height:2}
+  .luecke-item input{border:none;border-bottom:2px solid #667eea;background:#f3e8ff;padding:3px 8px;font-size:.95rem;color:#4a0080;border-radius:4px 4px 0 0;min-width:120px;outline:none}
+  .luecke-item input.correct{background:#dcfce7;border-color:#22c55e;color:#166534}
+  .luecke-item input.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+  .check-btn{margin-top:14px;padding:9px 22px;background:#667eea;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.95rem;font-weight:600}
+  .check-btn:hover{background:#4a0080}
+  .result-msg{margin-top:10px;font-weight:700;font-size:.97rem}
+
+  /* Zuordnung */
+  .match-area{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0}
+  .match-col{flex:1;min-width:200px}
+  .match-col h4{color:#667eea;margin-bottom:8px;font-size:.9rem;font-weight:700}
+  .term-card,.desc-card{padding:10px 14px;border-radius:8px;margin-bottom:8px;cursor:pointer;font-size:.88rem;line-height:1.4;transition:all .2s;border:2px solid transparent}
+  .term-card{background:#e9d5ff;color:#4a0080;font-weight:700;border-color:#b388d8}
+  .desc-card{background:#f9f5ff;border-color:#d8b4fe}
+  .term-card.selected,.desc-card.selected{border-color:#667eea;background:#c4b5fd}
+  .term-card.matched{background:#dcfce7;border-color:#22c55e;color:#166534;cursor:default}
+  .desc-card.matched{background:#dcfce7;border-color:#22c55e;cursor:default}
+  .term-card.wrong-match{background:#fee2e2;border-color:#ef4444}
+  .desc-card.wrong-match{background:#fee2e2;border-color:#ef4444}
+
+  /* Satzbau */
+  .sb-sentence{margin-bottom:20px}
+  .sb-sentence p{color:#4a0080;font-size:.88rem;margin-bottom:8px;font-style:italic}
+  .sb-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;min-height:38px;border:2px dashed #d8b4fe;border-radius:8px;padding:6px}
+  .sb-chip{background:#e9d5ff;border:2px solid #b388d8;border-radius:16px;padding:6px 13px;cursor:grab;font-size:.88rem;color:#4a0080;font-weight:600;user-select:none;transition:transform .1s}
+  .sb-chip:active{cursor:grabbing;transform:scale(1.05)}
+  .sb-drop-zone{display:flex;flex-wrap:wrap;gap:7px;min-height:44px;border:2px dashed #667eea;border-radius:8px;padding:6px;background:#faf5ff}
+  .sb-drop-zone.drag-over{background:#e9d5ff}
+  .sb-drop-zone .sb-chip{background:#c4b5fd}
+  .sb-ok{color:#22c55e;font-weight:700;font-size:.9rem;margin-top:4px}
+  .sb-err{color:#ef4444;font-weight:700;font-size:.9rem;margin-top:4px}
+
+  /* Vokabeln */
+  .vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin:14px 0}
+  .vocab-card{border:2px solid #b388d8;border-radius:10px;overflow:hidden;text-align:center}
+  .vocab-card img{width:100%;height:100px;object-fit:cover}
+  .vocab-card .vc-de{background:#667eea;color:#fff;padding:7px 6px;font-weight:700;font-size:.88rem}
+  .vocab-card .vc-en{background:#e9d5ff;color:#4a0080;padding:5px 6px;font-size:.82rem}
+  .vocab-input-row{display:flex;gap:8px;align-items:center;padding:6px 8px;background:#f3e8ff}
+  .vocab-input-row input{flex:1;border:none;border-bottom:2px solid #667eea;background:transparent;padding:3px 5px;font-size:.85rem;outline:none;color:#4a0080}
+  .vocab-input-row input.correct{border-color:#22c55e;color:#166534}
+  .vocab-input-row input.wrong{border-color:#ef4444;color:#991b1b}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>2021X – Urbane Szenen</h1>
+  <div class="nav">
+    <button class="active" onclick="showTab(0)">1 · Wortschatz</button>
+    <button onclick="showTab(1)">2 · Urbane Szenen</button>
+    <button onclick="showTab(2)">3 · Lückentext</button>
+    <button onclick="showTab(3)">4 · Zuordnung</button>
+    <button onclick="showTab(4)">5 · Satzbau</button>
+    <button onclick="showTab(5)">6 · Wortschatz</button>
+  </div>
+
+  <!-- TAB 1: WORTSCHATZ MINDMAP -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Urbane Szenen">
+    <h2>Persönlichkeiten – Wortschatz</h2>
+    <p style="color:#555;font-size:.9rem;margin-bottom:14px">Großstädte sind wie Dschungel — es gibt viele verschiedene urbane Szenen mit unterschiedlichen Persönlichkeiten.</p>
+    <div class="mindmap">
+      <div class="mm-node mm-center">Persönlichkeit</div>
+      <div class="mm-node">mutig</div>
+      <div class="mm-node">locker</div>
+      <div class="mm-node">gemütlich</div>
+      <div class="mm-node">künstlerisch</div>
+      <div class="mm-node">abenteuerlustig</div>
+      <div class="mm-node">ungewöhnlich</div>
+      <div class="mm-node">friedlich</div>
+      <div class="mm-node">ehrlich</div>
+      <div class="mm-node">großzügig</div>
+      <div class="mm-node">fröhlich</div>
+      <div class="mm-node">engagiert</div>
+      <div class="mm-node">seriös</div>
+      <div class="mm-node">anspruchsvoll</div>
+      <div class="mm-node">arrogant</div>
+      <div class="mm-node">geizig</div>
+      <div class="mm-node">nervös</div>
+      <div class="mm-node">egoistisch</div>
+      <div class="mm-node">gruselig</div>
+      <div class="mm-node">neidisch</div>
+    </div>
+    <div style="background:#f3e8ff;border-radius:8px;padding:14px;margin-top:10px">
+      <strong style="color:#667eea">Merke:</strong>
+      <span style="color:#4a0080;font-size:.9rem"> Persönlichkeitseigenschaften beschreiben, wie jemand ist. Adjektive können positiv <span style="color:#166534">(friedlich, ehrlich)</span> oder negativ <span style="color:#991b1b">(arrogant, geizig)</span> sein.</span>
+    </div>
+  </div>
+
+  <!-- TAB 2: URBANE SZENEN -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Szenen">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td1">00:00</span>
+      <button class="btn-start" onclick="startTimer(1)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(1)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(1)">Reset</button>
+      <span class="best-time" id="bt1"></span>
+    </div>
+    <h2>Urbane Szenen — Hipster · Hippies · Emos</h2>
+    <p style="color:#555;font-size:.9rem;margin-bottom:16px">Lerne die verschiedenen urbanen Szenen und ihre typischen Eigenschaften kennen.</p>
+    <div class="szenen-grid">
+      <div class="szene-card">
+        <div class="szene-card-header">🎩 Hipster</div>
+        <div class="szene-card-body">
+          <p style="font-size:.88rem;color:#555;margin-bottom:8px">Hipster sind laut Duden Personen, die immer modern und informiert sind. Sie mögen exklusive Kleidung und Accessoires.</p>
+          <div class="szene-adj">
+            <span class="adj-chip pos">locker</span>
+            <span class="adj-chip pos">elegant</span>
+            <span class="adj-chip pos">seriös</span>
+            <span class="adj-chip pos">anspruchsvoll</span>
+            <span class="adj-chip neg">arrogant</span>
+            <span class="adj-chip neg">sorglos</span>
+          </div>
+        </div>
+      </div>
+      <div class="szene-card">
+        <div class="szene-card-header">🌸 Hippies</div>
+        <div class="szene-card-body">
+          <p style="font-size:.88rem;color:#555;margin-bottom:8px">Hippies sind eine lockere und ehrliche Gemeinschaft. Sie finden, dass das Leben einfach und schön ist. Geld ist für sie nicht wichtig.</p>
+          <div class="szene-adj">
+            <span class="adj-chip pos">friedlich</span>
+            <span class="adj-chip pos">leidenschaftlich</span>
+            <span class="adj-chip pos">ehrlich</span>
+            <span class="adj-chip pos">großzügig</span>
+            <span class="adj-chip pos">unkompliziert</span>
+            <span class="adj-chip pos">fröhlich</span>
+            <span class="adj-chip pos">mutig</span>
+          </div>
+        </div>
+      </div>
+      <div class="szene-card">
+        <div class="szene-card-header">🖤 Emos</div>
+        <div class="szene-card-body">
+          <p style="font-size:.88rem;color:#555;margin-bottom:8px">Emos können wegen ihres Aussehens unheimlich wirken. Sie tragen oft schwarze Kleidung. Mit Menschen, die eine schwierige Persönlichkeit haben, ist es kompliziert zu kommunizieren.</p>
+          <div class="szene-adj">
+            <span class="adj-chip neg">unheimlich</span>
+            <span class="adj-chip neg">gruselig</span>
+            <span class="adj-chip neg">frech</span>
+            <span class="adj-chip neg">achtlos</span>
+            <span class="adj-chip neg">nervös</span>
+            <span class="adj-chip neg">egoistisch</span>
+            <span class="adj-chip neg">rechthaberisch</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:#f3e8ff;border-radius:8px;padding:12px;margin-top:6px">
+      <p style="color:#4a0080;font-size:.9rem"><strong>Merke:</strong> Zur Urbanen Szene gehören die Hipster. Wichtig ist es, andere zu akzeptieren und nicht auf sie <strong>neidisch</strong> zu sein.</p>
+    </div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Lückentext">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td2">00:00</span>
+      <button class="btn-start" onclick="startTimer(2)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(2)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(2)">Reset</button>
+      <span class="best-time" id="bt2"></span>
+    </div>
+    <h2>Lückentext – Persönlichkeiten</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:16px">Ergänze die fehlenden Adjektive. Schreibe genau wie im Original.</p>
+    <div id="luecken-container"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="luecken-result"></div>
+  </div>
+
+  <!-- TAB 4: ZUORDNUNG -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Zuordnung">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td3">00:00</span>
+      <button class="btn-start" onclick="startTimer(3)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(3)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(3)">Reset</button>
+      <span class="best-time" id="bt3"></span>
+    </div>
+    <h2>Zuordnung – Adjektive & Bedeutungen</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Klicke auf ein Adjektiv, dann auf die passende Beschreibung.</p>
+    <div class="match-area">
+      <div class="match-col">
+        <h4>Adjektiv</h4>
+        <div id="match-terms"></div>
+      </div>
+      <div class="match-col">
+        <h4>Bedeutung / Beispiel</h4>
+        <div id="match-descs"></div>
+      </div>
+    </div>
+    <div class="result-msg" id="match-result"></div>
+  </div>
+
+  <!-- TAB 5: SATZBAU -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Satzbau">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td4">00:00</span>
+      <button class="btn-start" onclick="startTimer(4)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(4)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(4)">Reset</button>
+      <span class="best-time" id="bt4"></span>
+    </div>
+    <h2>Satzbau – Sätze ordnen</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Ziehe die Wörter in die richtige Reihenfolge.</p>
+    <div id="sb-container"></div>
+    <button class="check-btn" onclick="checkAllSb()">Alle prüfen</button>
+    <div class="result-msg" id="sb-result"></div>
+  </div>
+
+  <!-- TAB 6: VOKABELN -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Vokabeln">
+    <h2>Vokabeltraining – Englisch → Deutsch</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Tippe das deutsche Wort. Groß-/Kleinschreibung beachten!</p>
+    <div class="vocab-grid" id="vocab-container"></div>
+    <button class="check-btn" onclick="checkVocab()">Überprüfen</button>
+    <div class="result-msg" id="vocab-result"></div>
+  </div>
+</div>
+
+<script>
+// ===== TIMER =====
+const TIMER_PREFIX = 'best2021X';
+const timers = {1:{iv:null,s:0},2:{iv:null,s:0},3:{iv:null,s:0},4:{iv:null,s:0}};
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function startTimer(n){const t=timers[n];if(t.iv)return;t.iv=setInterval(()=>{t.s++;document.getElementById('td'+n).textContent=fmtTime(t.s)},1000)}
+function stopTimer(n){const t=timers[n];if(!t.iv)return;clearInterval(t.iv);t.iv=null;const k=TIMER_PREFIX+'_t'+n;const prev=localStorage.getItem(k);if(!prev||t.s<parseInt(prev)){localStorage.setItem(k,t.s)}loadBestTimes()}
+function resetTimer(n){const t=timers[n];clearInterval(t.iv);t.iv=null;t.s=0;document.getElementById('td'+n).textContent='00:00'}
+function loadBestTimes(){[1,2,3,4].forEach(n=>{const k=TIMER_PREFIX+'_t'+n;const v=localStorage.getItem(k);const el=document.getElementById('bt'+n);if(el&&v)el.textContent='Bestzeit: '+fmtTime(parseInt(v))})}
+function timerAutoStart(n){if(!timers[n].iv)startTimer(n)}
+loadBestTimes();
+
+// ===== TABS =====
+function showTab(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',i===j)});
+  document.querySelectorAll('.nav button').forEach((b,j)=>{b.classList.toggle('active',i===j)});
+  if(i===2)timerAutoStart(2);
+  if(i===3)timerAutoStart(3);
+  if(i===4)timerAutoStart(4);
+}
+
+// ===== LÜCKENTEXT =====
+const LUECKEN_DATA = [
+  {pre:'Er hat eine sehr ',blank:'ungewöhnliche',post:' Persönlichkeit.'},
+  {pre:'Ich ',blank:'genieße',post:' mein Leben jeden Tag.'},
+  {pre:'Maria ist eine ',blank:'künstlerisch',post:' begabte Person.'},
+  {pre:'Was du da machen möchtest, ist sehr ',blank:'gefährlich',post:'.'},
+  {pre:'Er ist immer so ',blank:'abenteuerlustig',post:', er möchte überall hinfahren.'},
+  {pre:'Es ',blank:'lohnt sich',post:', zu studieren.'},
+  {pre:'Sein Büro ist wirklich ',blank:'gemütlich',post:'.'},
+  {pre:'Hippies sind ',blank:'großzügig',post:', sie teilen alles miteinander.'},
+  {pre:'Hippies sind ',blank:'unkompliziert',post:'. Sie brauchen keinen Reichtum.'},
+  {pre:'Emos können wegen ihres Aussehens ',blank:'unheimlich',post:' wirken.'},
+];
+(function buildLuecken(){
+  const c=document.getElementById('luecken-container');
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div');div.className='luecke-item';
+    div.innerHTML=`<span>${i+1}. ${d.pre}</span><input id="li${i}" type="text" placeholder="..."><span>${d.post}</span>`;
+    c.appendChild(div);
+    const inp=div.querySelector('input');
+    inp.addEventListener('input',()=>liveCheck(i));
+  });
+})();
+function liveCheck(i){
+  const inp=document.getElementById('li'+i);
+  const val=inp.value;
+  const ans=LUECKEN_DATA[i].blank;
+  if(!val){inp.className='';return}
+  const caseS=ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+  const correct=caseS?(val===ans):(val.toLowerCase()===ans.toLowerCase());
+  inp.classList.toggle('correct',correct);
+  inp.classList.toggle('wrong',!correct);
+  if(LUECKEN_DATA.every((_,j)=>{const v=document.getElementById('li'+j).value;const a=LUECKEN_DATA[j].blank;const cs=a[0]===a[0].toUpperCase()&&a[0]!==a[0].toLowerCase();return cs?(v===a):(v.toLowerCase()===a.toLowerCase())})){
+    stopTimer(2);document.getElementById('luecken-result').textContent='✅ Alle richtig!';document.getElementById('luecken-result').style.color='#22c55e';
+  }
+}
+function checkLuecken(){
+  let ok=0;
+  LUECKEN_DATA.forEach((d,i)=>{
+    const inp=document.getElementById('li'+i);const val=inp.value;
+    const caseS=d.blank[0]===d.blank[0].toUpperCase()&&d.blank[0]!==d.blank[0].toLowerCase();
+    const correct=caseS?(val===d.blank):(val.toLowerCase()===d.blank.toLowerCase());
+    inp.className=correct?'correct':'wrong';
+    if(correct)ok++;
+  });
+  const r=document.getElementById('luecken-result');
+  r.textContent=ok===LUECKEN_DATA.length?'✅ Alle richtig!':'⚠️ '+ok+'/'+LUECKEN_DATA.length+' richtig.';
+  r.style.color=ok===LUECKEN_DATA.length?'#22c55e':'#ef4444';
+  if(ok===LUECKEN_DATA.length)stopTimer(2);
+}
+
+// ===== ZUORDNUNG =====
+const MATCH_DATA_RAW = [
+  {term:'engagiert',desc:'Eine engagierte Person setzt sich für andere ein und hilft gern.'},
+  {term:'beschämt',desc:'Viele Politiker waren beschämt über den Skandal.'},
+  {term:'geizig',desc:'Menschen, die nicht mit anderen teilen wollen, sind geizig.'},
+  {term:'eifrig',desc:'Eifrig sein bedeutet, viel und fleißig zu arbeiten.'},
+  {term:'locker',desc:'Locker heißt, das Leben so zu nehmen, wie es kommt.'},
+  {term:'seriös',desc:'Seriöse Personen sind anständig, ordentlich und vertrauenswürdig.'},
+  {term:'ernstghaft',desc:'Eine ernsthafte Person lacht wenig.'},
+  {term:'leidenschaftlich',desc:'Hippies sind leidenschaftlich und lieben das Leben.'},
+  {term:'neidisch',desc:'Wichtig ist es, andere zu akzeptieren und nicht neidisch zu sein.'},
+  {term:'rechthaberisch',desc:'Rechthaberische Menschen sind fest von ihrer Meinung überzeugt.'},
+];
+// fix typo for display
+const MATCH_DATA = MATCH_DATA_RAW.map(d=>d.term==='ernstghaft'?{term:'ernsthaft',desc:d.desc}:d);
+let selTerm=null,selDesc=null,matchedCount=0;
+function shuffleArr(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+(function buildMatch(){
+  const terms=[...MATCH_DATA].map((d,i)=>({...d,i}));
+  const descs=[...MATCH_DATA].map((d,i)=>({...d,i}));
+  // shuffle descs avoiding same pos as terms (50 attempts)
+  let ok=false;for(let t=0;t<50&&!ok;t++){shuffleArr(descs);ok=descs.every((d,j)=>d.i!==j)}
+  const tc=document.getElementById('match-terms');
+  const dc=document.getElementById('match-descs');
+  terms.forEach(d=>{
+    const el=document.createElement('div');el.className='term-card';el.dataset.i=d.i;el.textContent=d.term;
+    el.onclick=()=>selectTermCard(el,d.i);tc.appendChild(el);
+  });
+  descs.forEach(d=>{
+    const el=document.createElement('div');el.className='desc-card';el.dataset.i=d.i;el.textContent=d.desc;
+    el.onclick=()=>matchDescCard(el,d.i);dc.appendChild(el);
+  });
+})();
+function selectTermCard(el,i){
+  document.querySelectorAll('.term-card:not(.matched)').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');selTerm={el,i};
+  if(selDesc)tryMatch();
+}
+function matchDescCard(el,i){
+  document.querySelectorAll('.desc-card:not(.matched)').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');selDesc={el,i};
+  if(selTerm)tryMatch();
+}
+function tryMatch(){
+  if(selTerm.i===selDesc.i){
+    selTerm.el.classList.add('matched');selTerm.el.classList.remove('selected');
+    selDesc.el.classList.add('matched');selDesc.el.classList.remove('selected');
+    matchedCount++;
+    if(matchedCount===MATCH_DATA.length){
+      stopTimer(3);
+      document.getElementById('match-result').textContent='✅ Alle Zuordnungen richtig!';
+      document.getElementById('match-result').style.color='#22c55e';
+    }
+  } else {
+    selTerm.el.classList.add('wrong-match');selDesc.el.classList.add('wrong-match');
+    setTimeout(()=>{selTerm.el.classList.remove('wrong-match','selected');selDesc.el.classList.remove('wrong-match','selected')},800);
+  }
+  selTerm=null;selDesc=null;
+}
+
+// ===== SATZBAU =====
+const SATZBAU_DATA = [
+  {hint:'Hipster und ihre Eigenschaften',words:['Hipster','sind','anspruchsvoll','und','mögen','exklusive','Kleidung','.']},
+  {hint:'Über Hippies',words:['Hippies','sind','leidenschaftlich','und','lieben','das','Leben','.']},
+  {hint:'Über Emos',words:['Emos','können','wegen','ihres','Aussehens','unheimlich','wirken','.']},
+  {hint:'Persönlichkeit beschreiben',words:['Er','hat','eine','sehr','ungewöhnliche','Persönlichkeit','.']},
+  {hint:'Meinung ausdrücken',words:['Für','mich','sind','Hipster','Personen',',','die','immer','modern','sind','.']},
+  {hint:'Über Eigenschaften',words:['Wichtig','ist','es',',','andere','zu','akzeptieren','.']},
+];
+let sbState=[];
+(function buildSatzbau(){
+  const c=document.getElementById('sb-container');
+  SATZBAU_DATA.forEach((d,si)=>{
+    // Fisher-Yates shuffle (50 attempts no-identity)
+    let sh=[...d.words.map((w,wi)=>({w,wi}))];
+    let ok=false;for(let t=0;t<50&&!ok;t++){for(let i=sh.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[sh[i],sh[j]]=[sh[i],sh[j]];}ok=sh.some((x,i)=>x.wi!==i)}
+    sbState.push({dropped:[],chips:sh});
+    const wrap=document.createElement('div');wrap.className='sb-sentence';
+    wrap.innerHTML=`<p>${d.hint}</p><div class="sb-chips" id="sbchips${si}"></div><div class="sb-drop-zone" id="sbdrop${si}"></div><div id="sbfb${si}"></div>`;
+    c.appendChild(wrap);
+    sh.forEach(({w},ci)=>sbMakeChip(si,ci,w,document.getElementById('sbchips'+si)));
+    sbRegisterZone(si,document.getElementById('sbdrop'+si));
+  });
+})();
+let sbDragged=null;
+function sbMakeChip(si,ci,w,parent){
+  const chip=document.createElement('div');chip.className='sb-chip';chip.textContent=w;chip.draggable=true;chip.dataset.si=si;chip.dataset.ci=ci;
+  chip.addEventListener('dragstart',e=>{sbDragged=chip;e.dataTransfer.effectAllowed='move'});
+  chip.addEventListener('dragend',()=>{sbDragged=null});
+  parent.appendChild(chip);
+}
+function sbRegisterZone(si,zone){
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over')});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('drag-over');
+    if(sbDragged){zone.appendChild(sbDragged)}
+    setTimeout(()=>sbCheckAuto(si),500);
+  });
+  // also allow chips to go back to source
+  const src=document.getElementById('sbchips'+si);
+  src.addEventListener('dragover',e=>e.preventDefault());
+  src.addEventListener('drop',e=>{e.preventDefault();if(sbDragged)src.appendChild(sbDragged)});
+}
+function sbCheckAuto(si){
+  const zone=document.getElementById('sbdrop'+si);
+  const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
+  const ans=SATZBAU_DATA[si].words;
+  const fb=document.getElementById('sbfb'+si);
+  if(chips.length!==ans.length){fb.textContent='';return}
+  // Capitalize first word check
+  const match=chips.every((w,i)=>w===ans[i]);
+  if(match){fb.className='sb-ok';fb.textContent='✅ Richtig!';}
+  else{fb.className='sb-err';fb.textContent='❌ Noch nicht richtig.';}
+}
+function checkAllSb(){
+  let ok=0;
+  SATZBAU_DATA.forEach((_,si)=>{
+    const zone=document.getElementById('sbdrop'+si);
+    const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
+    const ans=SATZBAU_DATA[si].words;
+    const fb=document.getElementById('sbfb'+si);
+    const match=chips.length===ans.length&&chips.every((w,i)=>w===ans[i]);
+    fb.className=match?'sb-ok':'sb-err';
+    fb.textContent=match?'✅ Richtig!':'❌ Noch nicht richtig.';
+    if(match)ok++;
+  });
+  const r=document.getElementById('sb-result');
+  r.textContent=ok===SATZBAU_DATA.length?'🎉 Alle Sätze richtig!':'⚠️ '+ok+'/'+SATZBAU_DATA.length+' richtig.';
+  r.style.color=ok===SATZBAU_DATA.length?'#22c55e':'#ef4444';
+  if(ok===SATZBAU_DATA.length)stopTimer(4);
+}
+
+// ===== VOKABELN =====
+const VOCAB_DATA = [
+  {de:'mutig',en:'brave',pexels:'1165674'},
+  {de:'friedlich',en:'peaceful',pexels:'3184432'},
+  {de:'ehrlich',en:'honest',pexels:'3777560'},
+  {de:'locker',en:'relaxed',pexels:'1549200'},
+  {de:'abenteuerlustig',en:'adventurous',pexels:'1365425'},
+  {de:'anspruchsvoll',en:'demanding',pexels:'3760263'},
+  {de:'großzügig',en:'generous',pexels:'3807571'},
+  {de:'engagiert',en:'committed',pexels:'3184338'},
+  {de:'geizig',en:'stingy',pexels:'1602726'},
+  {de:'neidisch',en:'envious',pexels:'3184418'},
+  {de:'arrogant',en:'arrogant',pexels:'1181233'},
+  {de:'unkompliziert',en:'uncomplicated',pexels:'1181467'},
+];
+initVocab = function(){
+  const c=document.getElementById('vocab-container');
+  VOCAB_DATA.forEach((d,i)=>{
+    const card=document.createElement('div');card.className='vocab-card';
+    card.innerHTML=`<img src="https://images.pexels.com/photos/${d.pexels}/pexels-photo-${d.pexels}.jpeg?auto=compress&w=200&h=100&fit=crop" alt="${d.de}">
+      <div class="vc-en">${d.en}</div>
+      <div class="vocab-input-row"><input id="vi${i}" type="text" placeholder="Deutsch..."></div>`;
+    c.appendChild(card);
+  });
+})();
+function checkVocab(){
+  let ok=0;
+  VOCAB_DATA.forEach((d,i)=>{
+    const inp=document.getElementById('vi'+i);
+    const correct=inp.value.trim().toLowerCase()===d.de.toLowerCase();
+    inp.className=correct?'correct':'wrong';
+    if(correct)ok++;
+  });
+  const r=document.getElementById('vocab-result');
+  r.textContent=ok===VOCAB_DATA.length?'🎉 Alle richtig!':'⚠️ '+ok+'/'+VOCAB_DATA.length+' richtig.';
+  r.style.color=ok===VOCAB_DATA.length?'#22c55e':'#ef4444';
+}
+</script>
+</body>
+</html>

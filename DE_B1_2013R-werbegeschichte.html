@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Werbegeschichte – B1.2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 0; margin-bottom: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: block; }
+.tab-content { padding: 28px 32px 32px 32px; }
+@media (max-width: 600px) { .tab-content { padding: 16px; } }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* VORENTLASTUNG */
+.vorent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.vorent-karte { background: #f3effd; border-left: 4px solid #667eea; border-radius: 10px; padding: 12px 14px; }
+.vorent-karte .de { font-weight: 700; color: #5a3e9e; font-size: 0.95em; margin-bottom: 3px; }
+.vorent-karte .en { font-size: 0.82em; color: #777; }
+
+/* LESETEXT */
+.story-text { font-family: Georgia, 'Times New Roman', serif; font-size: 1.0em; line-height: 1.85; color: #2c2c2c; text-align: justify; hyphens: auto; max-width: 720px; margin: 0 auto; }
+.story-text p { margin-bottom: 1.2em; text-indent: 1.5em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text h3 { font-size: 1.1em; color: #5a3e9e; margin: 1.4em 0 0.6em 0; text-indent: 0; border-bottom: 1px solid #e8e4f5; padding-bottom: 4px; }
+.hl { background: #fff3cd; border-radius: 3px; padding: 0 2px; cursor: help; position: relative; }
+
+/* RICHTIG/FALSCH */
+.rf-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.rf-item { display: flex; align-items: center; gap: 14px; background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 12px 16px; }
+.rf-text { flex: 1; font-size: 0.92em; color: #333; line-height: 1.4; }
+.rf-buttons { display: flex; gap: 8px; flex-shrink: 0; }
+.rf-btn { border: 1.5px solid #ddd; background: white; border-radius: 20px; padding: 5px 16px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.rf-btn:hover { border-color: #667eea; color: #667eea; }
+.rf-btn.selected-r { background: #27ae60; border-color: #27ae60; color: white; }
+.rf-btn.selected-f { background: #e74c3c; border-color: #e74c3c; color: white; }
+.rf-btn.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.rf-btn.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+.rf-result { font-size: 0.8em; font-weight: 700; margin-left: 8px; }
+.rf-result.ok { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+
+/* LÜCKENTEXT */
+.luecke-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 0.93em; line-height: 1.9; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.93em; font-family: inherit; outline: none; transition: all 0.2s; min-width: 120px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* SATZBAU */
+.satzbau-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* WORTSCHATZ */
+#vocabContainer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 130px; font-size: 0.9em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.92em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 160px; }
+.vocab-inputs input.plural { width: 150px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+@media (max-width: 700px) { #vocabContainer { grid-template-columns: 1fr; } .vocab-item { flex-direction: column; align-items: flex-start; } }
+
+/* CONTROL-BAR */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Werbegeschichte</h1>
+    <p style="font-family: Georgia, serif;">B1.2 · Lektion 2013R · Lesetext</p>
+    <div class="big-emoji">📜</div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">💡</span><span class="nav-label">Vorentlastung</span></div>
+    <div class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">📖</span><span class="nav-label">Lesetext</span></div>
+    <div class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">✅</span><span class="nav-label">Richtig/Falsch</span></div>
+    <div class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+  </div>
+
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="section active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Werbung Geschichte">
+    <div class="tab-content">
+      <div class="section-title">💡 Vorentlastung: Schlüsselwörter</div>
+      <div class="hilfe-box">
+        Lerne diese Wörter, bevor du den Text liest. Sie helfen dir, den Text besser zu verstehen.
+      </div>
+      <div class="vorent-grid">
+        <div class="vorent-karte"><div class="de">die Menschheit</div><div class="en">humanity / mankind</div></div>
+        <div class="vorent-karte"><div class="de">die Herstellung</div><div class="en">production / manufacture</div></div>
+        <div class="vorent-karte"><div class="de">die Dienstleistung, -en</div><div class="en">service</div></div>
+        <div class="vorent-karte"><div class="de">der Hersteller, -</div><div class="en">manufacturer / producer</div></div>
+        <div class="vorent-karte"><div class="de">potentiell</div><div class="en">potential</div></div>
+        <div class="vorent-karte"><div class="de">das Altdeutsche</div><div class="en">Old German (language)</div></div>
+        <div class="vorent-karte"><div class="de">sich bemühen</div><div class="en">to strive / make an effort</div></div>
+        <div class="vorent-karte"><div class="de">das Mittelalter</div><div class="en">the Middle Ages</div></div>
+        <div class="vorent-karte"><div class="de">die Tafel, -n</div><div class="en">sign / board / tablet</div></div>
+        <div class="vorent-karte"><div class="de">die Warenbeschreibung, -en</div><div class="en">product description</div></div>
+        <div class="vorent-karte"><div class="de">der Buchdruck</div><div class="en">printing press / typography</div></div>
+        <div class="vorent-karte"><div class="de">berücksichtigen</div><div class="en">to take into account</div></div>
+        <div class="vorent-karte"><div class="de">verbreiten</div><div class="en">to spread / distribute</div></div>
+        <div class="vorent-karte"><div class="de">die Komponente, -n</div><div class="en">component / element</div></div>
+      </div>
+      <div class="hilfe-box">
+        <strong>Denke vorher nach:</strong> Die Werbung ist fast so alt wie die Menschheit. Was glaubst du: Was war das erste Werbemittel?
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="section" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/159862/art-school-retro-vintage-159862.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Historische Werbung">
+    <div class="tab-content">
+      <div class="section-title">📖 Werbung und werben — eine kurze Geschichte</div>
+      <div class="story-text">
+        <h3>Werbung und werben</h3>
+        <p>Die Werbung ist so alt wie die Wirtschaft. Ihre Geschichte hat mit der Herstellung von Waren und Dienstleistungen begonnen. Um die Information über neue Waren den potentiellen Käufern zu präsentieren, haben die Hersteller immer versucht, eine gute Werbung zu machen.</p>
+        <p>Das Wort <em>werben</em> selbst kommt aus dem Altdeutschen (<em>hwerban</em>). Damals bedeutete es <em>etwas, was sich bemühen, sich umtun, sich drehen</em> oder <em>sich bewegen</em> kann.</p>
+
+        <h3>Erste Werbemittel</h3>
+        <p>Das erste Werbemittel war bestimmt eine menschliche Stimme. Solch eine Art von Werbung kann man manchmal auch heute auf den Märkten sehen: Die Verkäufer schreien heraus, wie toll ihre Waren sind.</p>
+        <p>Später bzw. im Mittelalter entstanden Tafeln mit den kurzen Warenbeschreibungen, Preisen und Warenbildern als Werbemittel. Bilder und Schilder hatten damals eine große Bedeutung, da nicht so viele Leute lesen konnten. So wurden erste Plakate erstellt.</p>
+
+        <h3>Martin Luthers Werbekampagne</h3>
+        <p>Nach der Erfindung des Buchdrucks von Johannes Gutenberg Anfang des 15. Jahrhunderts entstand die Möglichkeit, auch in Zeitungen zu werben.</p>
+        <p>Eine der ersten großen Werbekampagnen wurde von Martin Luther im Jahre 1517 organisiert. Seine <em>Fünfundneunzig Thesen</em> waren damals in ganz Deutschland verbreitet. Da waren alle wichtigsten Komponenten der Werbekampagne berücksichtigt: Zielgruppe, Werbemittel, Werbeanzeigen, Werbeziel.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: RICHTIG / FALSCH -->
+  <div class="section" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6801642/pexels-photo-6801642.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Richtig Falsch">
+    <div class="tab-content">
+      <div class="section-title">✅ Richtig oder Falsch?</div>
+      <div class="hilfe-box">Lies die Aussagen und entscheide: Richtig (R) oder Falsch (F)?</div>
+      <div class="rf-list" id="rfList"></div>
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button class="btn" onclick="checkRF()">Prüfen</button>
+        <button class="btn" onclick="resetRF()">↺ Neu</button>
+        <span id="rfScore" style="font-size:0.85em; color:#888; align-self:center;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="section" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1925536/pexels-photo-1925536.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Lückentext">
+    <div class="tab-content">
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="resetTimer(3)">↺ Timer</button>
+          <button class="btn" onclick="resetLuecken()">↺ Übung</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer3">0:00</span></span>
+          <span>🏆 <span id="best3">–</span></span>
+        </div>
+      </div>
+      <div class="section-title">✏️ Lückentext zum Text</div>
+      <div class="wortkasten"><strong>Wörter:</strong> Wirtschaft · Stimme · Mittelalter · Buchdruck · Zeitungen · Luther · Thesen · Zielgruppe · Werbemittel · Plakate</div>
+      <div id="lueckenContainer"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6476589/pexels-photo-6476589.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Satzbau">
+    <div class="tab-content">
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="resetTimer(4)">↺ Timer</button>
+          <button class="btn" onclick="resetSatzbau()">↺ Übung</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer4">0:00</span></span>
+          <span>🏆 <span id="best4">–</span></span>
+        </div>
+      </div>
+      <div class="section-title">🧩 Satzbau: Sätze aus dem Text</div>
+      <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge.</div>
+      <div id="satzbauContainer"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="section" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Vokabeln lernen">
+    <div class="tab-content">
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="resetTimer(5)">↺ Timer</button>
+          <button class="btn" onclick="resetVocab()">↺ Übung</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer5">0:00</span></span>
+          <span>🏆 <span id="best5">–</span></span>
+        </div>
+      </div>
+      <div class="section-title">🔠 Vokabeln: Englisch → Deutsch</div>
+      <div class="hilfe-box">Tippe Artikel, deutsches Wort und Plural.</div>
+      <div id="vocabContainer"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="author-footer">Erstellt von <strong>Frank Burkert</strong> · DaF B1.2 · 2026</div>
+
+<script>
+const TIMER_PREFIX = 'best2013R';
+
+// ── RICHTIG/FALSCH DATA ───────────────────────────────────────
+const RF_DATA = [
+  { text: 'Die Geschichte der Werbung begann mit der Herstellung von Waren und Dienstleistungen.', answer: true },
+  { text: 'Das Wort „werben" kommt aus dem Englischen.', answer: false },
+  { text: 'Das erste Werbemittel war wahrscheinlich die menschliche Stimme.', answer: true },
+  { text: 'Im Mittelalter konnten alle Menschen lesen, deshalb waren Texttafeln wichtig.', answer: false },
+  { text: 'Johannes Gutenberg erfand den Buchdruck Anfang des 15. Jahrhunderts.', answer: true },
+  { text: 'Martin Luthers Fünfundneunzig Thesen gelten als eine der ersten Werbekampagnen.', answer: true },
+  { text: 'Luther nutzte keine der klassischen Werbekomponenten für seine Thesen.', answer: false },
+  { text: 'Im Mittelalter entstanden die ersten Plakate als Werbemittel.', answer: true },
+];
+
+// ── LÜCKEN DATA ───────────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Die Geschichte der Werbung ist so alt wie die ', blank: 'Wirtschaft', after: '.' },
+  { before: 'Das erste Werbemittel war die menschliche ', blank: 'Stimme', after: ' auf den Märkten.' },
+  { before: 'Im ', blank: 'Mittelalter', after: ' entstanden Tafeln mit Warenbildern und Preisen.' },
+  { before: 'Die ersten ', blank: 'Plakate', after: ' entstanden, weil viele Menschen nicht lesen konnten.' },
+  { before: 'Nach der Erfindung des ', blank: 'Buchdruck', after: 's war es möglich, in Zeitungen zu werben.' },
+  { before: 'Gutenberg ermöglichte Werbung in ', blank: 'Zeitungen', after: '.' },
+  { before: 'Martin ', blank: 'Luther', after: ' organisierte 1517 eine der ersten großen deutschen Werbekampagnen.' },
+  { before: 'Seine Fünfundneunzig ', blank: 'Thesen', after: ' wurden in ganz Deutschland verbreitet.' },
+  { before: 'In Luthers Kampagne war die ', blank: 'Zielgruppe', after: ' ein wichtiger Bestandteil.' },
+  { before: 'Das ', blank: 'Werbemittel', after: ' ist ein Teil jeder erfolgreichen Werbekampagne.' },
+];
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Die', 'Werbung', 'ist', 'so', 'alt', 'wie', 'die', 'Wirtschaft', '.'] },
+  { words: ['Das', 'erste', 'Werbemittel', 'war', 'die', 'menschliche', 'Stimme', '.'] },
+  { words: ['Im', 'Mittelalter', 'entstanden', 'die', 'ersten', 'Plakate', '.'] },
+  { words: ['Martin', 'Luther', 'hat', '1517', 'eine', 'Werbekampagne', 'organisiert', '.'] },
+  { words: ['Seine', 'Thesen', 'wurden', 'in', 'ganz', 'Deutschland', 'verbreitet', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// ── VOCAB DATA ────────────────────────────────────────────────
+const VOCAB_DATA = [
+  { en: 'humanity', art: 'die', wort: 'Menschheit', plural: '–' },
+  { en: 'production', art: 'die', wort: 'Herstellung', plural: 'Herstellungen' },
+  { en: 'service', art: 'die', wort: 'Dienstleistung', plural: 'Dienstleistungen' },
+  { en: 'manufacturer', art: 'der', wort: 'Hersteller', plural: 'Hersteller' },
+  { en: 'the Middle Ages', art: 'das', wort: 'Mittelalter', plural: '–' },
+  { en: 'sign / board', art: 'die', wort: 'Tafel', plural: 'Tafeln' },
+  { en: 'printing press', art: 'der', wort: 'Buchdruck', plural: '–' },
+  { en: 'component', art: 'die', wort: 'Komponente', plural: 'Komponenten' },
+  { en: 'to spread / distribute', art: 'das', wort: 'Verbreiten', plural: '–' },
+  { en: 'product description', art: 'die', wort: 'Warenbeschreibung', plural: 'Warenbeschreibungen' },
+];
+
+// ══════════════════════════════════════════════
+// TIMER SYSTEM
+// ══════════════════════════════════════════════
+const timers = {};
+function fmtTime(s) { const m = Math.floor(s / 60); return m + ':' + String(s % 60).padStart(2, '0'); }
+function loadBestTimes() {
+  [3, 4, 5].forEach(n => {
+    const b = localStorage.getItem(TIMER_PREFIX + '_tab' + n);
+    const el = document.getElementById('best' + n);
+    if (el) el.textContent = b ? fmtTime(parseInt(b)) : '–';
+  });
+}
+function startTimer(n) {
+  if (timers[n] && timers[n].running) return;
+  timers[n] = { running: true, seconds: 0 };
+  timers[n].interval = setInterval(() => { timers[n].seconds++; const el = document.getElementById('timer' + n); if (el) el.textContent = fmtTime(timers[n].seconds); }, 1000);
+}
+function stopTimer(n) {
+  if (!timers[n] || !timers[n].running) return;
+  clearInterval(timers[n].interval); timers[n].running = false;
+  const key = TIMER_PREFIX + '_tab' + n;
+  const prev = localStorage.getItem(key);
+  if (!prev || timers[n].seconds < parseInt(prev)) { localStorage.setItem(key, timers[n].seconds); const el = document.getElementById('best' + n); if (el) el.textContent = fmtTime(timers[n].seconds); }
+}
+function resetTimer(n) { if (timers[n]) { clearInterval(timers[n].interval); timers[n] = null; } const el = document.getElementById('timer' + n); if (el) el.textContent = '0:00'; }
+
+// ══════════════════════════════════════════════
+// TAB NAVIGATION
+// ══════════════════════════════════════════════
+function showTab(n) {
+  document.querySelectorAll('.section').forEach((s, i) => s.classList.toggle('active', i === n));
+  document.querySelectorAll('.nav-btn').forEach((b, i) => b.classList.toggle('active', i === n));
+  if (n === 3) startTimer(3);
+  if (n === 4) startTimer(4);
+  if (n === 5) startTimer(5);
+}
+
+// ══════════════════════════════════════════════
+// RICHTIG / FALSCH
+// ══════════════════════════════════════════════
+let rfAnswers = {};
+function buildRF() {
+  rfAnswers = {};
+  document.getElementById('rfScore').textContent = '';
+  const list = document.getElementById('rfList');
+  list.innerHTML = '';
+  RF_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'rf-item';
+    div.innerHTML = `<span class="rf-text">${item.text}</span>
+      <div class="rf-buttons">
+        <button class="rf-btn" id="rfR${idx}" onclick="selectRF(${idx}, true)">R</button>
+        <button class="rf-btn" id="rfF${idx}" onclick="selectRF(${idx}, false)">F</button>
+      </div>
+      <span class="rf-result" id="rfRes${idx}"></span>`;
+    list.appendChild(div);
+  });
+}
+function selectRF(idx, isR) {
+  rfAnswers[idx] = isR;
+  document.getElementById('rfR' + idx).className = 'rf-btn' + (isR ? ' selected-r' : '');
+  document.getElementById('rfF' + idx).className = 'rf-btn' + (!isR ? ' selected-f' : '');
+  document.getElementById('rfRes' + idx).textContent = '';
+  document.getElementById('rfRes' + idx).className = 'rf-result';
+}
+function checkRF() {
+  let correct = 0;
+  RF_DATA.forEach((item, idx) => {
+    const ans = rfAnswers[idx];
+    const res = document.getElementById('rfRes' + idx);
+    if (ans === undefined) { res.textContent = '?'; res.className = 'rf-result'; return; }
+    if (ans === item.answer) { correct++; res.textContent = '✓'; res.className = 'rf-result ok'; }
+    else { res.textContent = '✗ ' + (item.answer ? 'Richtig' : 'Falsch'); res.className = 'rf-result err'; }
+  });
+  document.getElementById('rfScore').textContent = correct + ' / ' + RF_DATA.length + ' richtig';
+}
+function resetRF() { buildRF(); }
+
+// ══════════════════════════════════════════════
+// LÜCKENTEXT
+// ══════════════════════════════════════════════
+function buildLuecken() {
+  const cont = document.getElementById('lueckenContainer');
+  cont.innerHTML = '';
+  LUECKEN_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'luecke-item';
+    div.innerHTML = item.before + `<input class="blank" id="lb${idx}" type="text" autocomplete="off" placeholder="…" oninput="liveCheck(${idx})"><span class="correction-hint" id="lh${idx}"></span>` + item.after;
+    cont.appendChild(div);
+  });
+}
+function liveCheck(idx) {
+  const inp = document.getElementById('lb' + idx);
+  const hint = document.getElementById('lh' + idx);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[idx].blank;
+  if (!val) { inp.className = 'blank'; hint.textContent = ''; return; }
+  if (val === ans) { inp.className = 'blank correct'; hint.textContent = '✓'; checkLueckenComplete(); }
+  else if (ans.startsWith(val)) { inp.className = 'blank'; hint.textContent = ''; }
+  else { inp.className = 'blank wrong'; hint.textContent = ''; }
+}
+function checkLueckenComplete() { if (LUECKEN_DATA.every((_, i) => document.getElementById('lb'+i)?.classList.contains('correct'))) stopTimer(3); }
+function resetLuecken() { buildLuecken(); resetTimer(3); }
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+let sbDragged = null;
+function sbMakeChip(w) {
+  const s = document.createElement('span');
+  const ip = /^[.,!?;:]$/.test(w);
+  s.className = 'chip' + (ip ? ' punct-chip' : '');
+  s.textContent = w; s.draggable = !ip;
+  if (!ip) { s.addEventListener('dragstart', e => { sbDragged = s; e.dataTransfer.effectAllowed = 'move'; }); s.addEventListener('dragend', () => sbDragged = null); }
+  return s;
+}
+function regZone(zone, idx) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => zone.style.background = '');
+  zone.addEventListener('drop', e => { e.preventDefault(); zone.style.background = ''; if (sbDragged) { zone.appendChild(sbDragged); updCap(zone); chkSb(idx); } });
+}
+function updCap(zone) { zone.querySelectorAll('.chip:not(.punct-chip)').forEach((c, i) => { const t = c.textContent; c.textContent = i===0 ? t[0].toUpperCase()+t.slice(1) : t; }); }
+function chkSb(idx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_z_'+idx);
+    const got = Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).map(c => c.textContent);
+    const ans = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w,i) => w===ans[i]);
+    zone.className = 'sentence-builder' + (ok && got.length ? ' correct' : got.length ? ' incorrect' : '');
+    const fb = document.getElementById('sb_f_'+idx);
+    if (fb) { fb.className = 'satzbau-feedback' + (ok&&got.length?' correct':''); fb.textContent = ok&&got.length?'✓ Richtig!':''; }
+    if (ok) checkSbComplete();
+  }, 500);
+}
+function checkSbComplete() { if (SATZBAU_DATA.every((_,i) => document.getElementById('sb_z_'+i)?.classList.contains('correct'))) stopTimer(4); }
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer'); cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div'); div.className = 'satzbau-item';
+    const np = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let sh = [...np];
+    for (let a=0; a<50; a++) { for (let i=sh.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[sh[i],sh[j]]=[sh[j],sh[i]];} if (sh.some((w,i)=>w!==np[i])) break; }
+    const pool = document.createElement('div'); pool.className='chips-container'; pool.id='sb_p_'+idx;
+    sh.forEach(w => { const c=sbMakeChip(w); c.addEventListener('click',()=>{const z=document.getElementById('sb_z_'+idx);z.appendChild(c);updCap(z);chkSb(idx);}); pool.appendChild(c); });
+    regZone(pool, idx);
+    const zone = document.createElement('div'); zone.className='sentence-builder'; zone.id='sb_z_'+idx;
+    item.words.filter(w=>/^[.,!?;:]$/.test(w)).forEach(w=>zone.appendChild(sbMakeChip(w)));
+    regZone(zone, idx);
+    zone.addEventListener('click', e => { const c=e.target.closest('.chip:not(.punct-chip)'); if(c&&zone.contains(c)){pool.appendChild(c);updCap(zone);chkSb(idx);} });
+    const fb = document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb_f_'+idx;
+    div.append(pool, zone, fb); cont.appendChild(div);
+  });
+}
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// ══════════════════════════════════════════════
+// VOKABELN
+// ══════════════════════════════════════════════
+function initVocab() {
+  const cont = document.getElementById('vocabContainer'); cont.innerHTML = '';
+  VOCAB_DATA.forEach((item, idx) => {
+    const div = document.createElement('div'); div.className = 'vocab-item';
+    div.innerHTML = `<span class="vocab-en">${item.en}</span><span class="vocab-arrow">→</span>
+      <div class="vocab-inputs">
+        <input type="text" class="art" id="va${idx}" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(${idx})">
+        <input type="text" class="wort" id="vw${idx}" placeholder="Nomen" autocomplete="off" oninput="vocabLiveCheck(${idx})">
+        <input type="text" class="plural" id="vp${idx}" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(${idx})">
+        <span class="vocab-hint" id="vh${idx}"></span>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+function vocabLiveCheck(idx) {
+  const a=document.getElementById('va'+idx), w=document.getElementById('vw'+idx), p=document.getElementById('vp'+idx), h=document.getElementById('vh'+idx);
+  const item=VOCAB_DATA[idx];
+  function chk(el, ans, cls) { const v=el.value.trim(); if(!v){el.className=cls;return false;} const ok=cls==='art'?v.toLowerCase()===ans.toLowerCase():v===ans; el.className=cls+(ok?' correct':' wrong'); return ok; }
+  if (chk(a,item.art,'art') && chk(w,item.wort,'wort') && chk(p,item.plural,'plural')) { h.textContent='✓'; checkVocabComplete(); } else h.textContent='';
+}
+function checkVocabComplete() { if (VOCAB_DATA.every((_,i)=>document.getElementById('vh'+i)?.textContent==='✓')) stopTimer(5); }
+function resetVocab() { initVocab(); resetTimer(5); }
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadBestTimes(); buildRF(); buildLuecken(); buildSatzbau(); initVocab();
+});
+</script>
+</body>
+</html>

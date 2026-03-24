@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nullartikel – B1.2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* TAB BANNER */
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 0; display: block; }
+
+/* PADDING */
+.tab-content { padding: 28px 32px 32px 32px; }
+@media (max-width: 600px) { .tab-content { padding: 16px; } }
+
+/* HILFE-BOX */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+
+/* ENTDECKEN */
+.discover-box { background: #fafbff; border: 1.5px solid #e0daf5; border-radius: 12px; padding: 20px 24px; margin-bottom: 22px; font-size: 0.95em; line-height: 2.0; font-family: Georgia, serif; color: #333; }
+.discover-box .hl { font-weight: 700; color: #667eea; }
+.discover-question { font-size: 0.9em; color: #555; font-style: italic; margin-top: 12px; }
+
+/* SEKTION-TITEL */
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* GRAMMAR TABLE */
+.gram-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.9em; }
+.gram-table th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 14px; text-align: left; }
+.gram-table td { padding: 10px 14px; border-bottom: 1px solid #e8e4f5; vertical-align: top; line-height: 1.5; }
+.gram-table tr:nth-child(even) td { background: #f8f5ff; }
+.gram-table .rule { font-weight: 700; color: #5a3e9e; }
+.gram-table .example { color: #333; font-style: italic; }
+.gram-table .counter { color: #888; font-size: 0.88em; }
+
+/* VERGLEICH KARTE */
+.vergleich-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+@media(max-width:600px){ .vergleich-grid { grid-template-columns: 1fr; } }
+.vgl-karte { border-radius: 10px; padding: 16px 18px; }
+.vgl-karte.mit { background: #f0f4ff; border: 2px solid #c5b8e8; }
+.vgl-karte.ohne { background: #fff0f0; border: 2px solid #f5c5c5; }
+.vgl-karte h4 { font-size: 0.88em; font-weight: 700; margin-bottom: 10px; }
+.vgl-karte.mit h4 { color: #667eea; }
+.vgl-karte.ohne h4 { color: #e74c3c; }
+.vgl-karte ul { list-style: none; padding: 0; }
+.vgl-karte ul li { padding: 5px 0; font-size: 0.88em; color: #444; border-bottom: 1px solid rgba(0,0,0,0.06); line-height: 1.5; }
+.vgl-karte ul li:last-child { border-bottom: none; }
+
+/* LÜCKENTEXT */
+.luecke-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 0.93em; line-height: 1.9; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.93em; font-family: inherit; outline: none; transition: all 0.2s; min-width: 80px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* SATZBAU */
+.sb-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.sb-prompt { font-size: 0.85em; color: #666; margin-bottom: 8px; font-style: italic; }
+.sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 36px; }
+.sb-chip { background: #667eea; color: white; border-radius: 20px; padding: 5px 13px; font-size: 0.85em; font-weight: 600; cursor: grab; user-select: none; transition: all 0.2s; }
+.sb-chip:hover { background: #764ba2; transform: translateY(-1px); }
+.sb-chip.dragging { opacity: 0.45; }
+.sb-chip.static-chip { background: #9e9e9e; cursor: default; }
+.sb-drop { display: flex; flex-wrap: wrap; gap: 6px; min-height: 42px; background: #f0eeff; border: 2px dashed #c5b8e8; border-radius: 8px; padding: 6px 10px; transition: background 0.2s; }
+.sb-drop.drag-over { background: #e0d8ff; border-color: #667eea; }
+.sb-drop .sb-chip { cursor: grab; }
+.sb-feedback { font-size: 0.82em; margin-top: 6px; font-weight: 600; min-height: 18px; }
+.sb-feedback.ok { color: #27ae60; }
+.sb-feedback.err { color: #e74c3c; }
+
+/* TIMER */
+.timer-bar { display: flex; align-items: center; gap: 12px; background: #f8f5ff; border: 1px solid #e0daf5; border-radius: 8px; padding: 8px 14px; margin-bottom: 18px; }
+.timer-display { font-size: 1.1em; font-weight: 700; color: #667eea; min-width: 58px; font-variant-numeric: tabular-nums; }
+.timer-btn { background: #667eea; color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.82em; cursor: pointer; font-weight: 600; }
+.timer-btn:hover { background: #764ba2; }
+.best-time { font-size: 0.78em; color: #888; margin-left: auto; }
+
+/* FORMEN ÜBEN (G-file style) */
+.ws-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ws-en { font-size: 0.92em; color: #666; min-width: 180px; font-style: italic; }
+.ws-fields { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+input.ws-input { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 7px; font-size: 0.88em; font-family: inherit; outline: none; transition: all 0.2s; }
+input.ws-input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.ws-input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.ws-input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.ws-hint { font-size: 0.75em; color: #aaa; }
+.pruef-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95em; font-weight: 700; cursor: pointer; margin-top: 12px; }
+.pruef-btn:hover { opacity: 0.9; }
+.reset-btn { background: #f0f4ff; color: #667eea; border: 1.5px solid #667eea; border-radius: 8px; padding: 10px 20px; font-size: 0.9em; font-weight: 600; cursor: pointer; margin-top: 12px; margin-left: 8px; }
+.reset-btn:hover { background: #e0e7ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Nullartikel</h1>
+    <p>B1.2 · Einheit 1 · Grammatik</p>
+    <span class="big-emoji">Ø</span>
+  </div>
+  <div class="nav">
+    <div class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">🔍</span><span class="nav-label">Entdecken</span></div>
+    <div class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">📋</span><span class="nav-label">Regeln</span></div>
+    <div class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🌟</span><span class="nav-label">Üben</span></div>
+  </div>
+
+  <!-- TAB 0: ENTDECKEN -->
+  <div class="section active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Grammatik entdecken">
+    <div class="tab-content">
+      <div class="section-title">🔍 Entdecken: Wann braucht man keinen Artikel?</div>
+      <div class="hilfe-box">Lies den Dialog. Achte auf die <strong>fett gedruckten Wörter</strong>. Wann steht kein Artikel davor?</div>
+      <div class="discover-box">
+        <p>– Kannst du bitte <span class="hl">Brot</span> kaufen?</p>
+        <p>– Welches denn?</p>
+        <p>– Na… das, das wir gestern in dieser Bäckerei an der Ecke gesehen haben.</p>
+        <p>– Ach, <span class="hl">das Weißbrot</span> meinst du?</p>
+        <p>– Genau.</p>
+        <p class="discover-question">➜ Warum steht beim ersten „Brot" kein Artikel, beim zweiten schon?</p>
+      </div>
+      <div class="hilfe-box">Im Deutschen gibt es drei Artikel-Typen:<br>
+        <strong>unbestimmte Artikel</strong> (ein, eine) · <strong>bestimmte Artikel</strong> (der, die, das) · <strong>Nullartikel</strong> (kein Artikel)<br><br>
+        Der <strong>Nullartikel</strong> wird verwendet, wenn es <em>keine detaillierte Bestimmung</em> des Substantivs gibt — also kein Adjektiv-Attribut, kein Genitivattribut und keinen Relativsatz.
+      </div>
+      <div class="vergleich-grid">
+        <div class="vgl-karte mit">
+          <h4>✅ MIT Artikel (bestimmt/unbestimmt)</h4>
+          <ul>
+            <li>der <em>alte</em> Goethe (Adjektiv-Attribut)</li>
+            <li>das Weißbrot (= bestimmt bekannt)</li>
+            <li>der Peter, <em>von dem ich dir erzählt habe</em> (Relativsatz)</li>
+            <li>im Polen <em>der Nachkriegszeit</em> (Genitivattribut)</li>
+          </ul>
+        </div>
+        <div class="vgl-karte ohne">
+          <h4>❌ OHNE Artikel (Nullartikel)</h4>
+          <ul>
+            <li>Brot (unspezifisch, kein Attribut)</li>
+            <li>in Europa (Kontinent)</li>
+            <li>in Indien (Land)</li>
+            <li>durch Berlin (Stadt)</li>
+            <li>auf Kreta (Insel)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: REGELN -->
+  <div class="section" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5428833/pexels-photo-5428833.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Regeln">
+    <div class="tab-content">
+      <div class="section-title">📋 Regeln für den Nullartikel</div>
+      <div class="hilfe-box">Der Nullartikel hat klare Regeln. Lerne die vier Hauptbereiche.</div>
+
+      <table class="gram-table">
+        <tr><th>Regel / Kategorie</th><th>Beispiel mit Nullartikel</th><th>Gegen-Beispiel (mit Artikel)</th></tr>
+        <tr>
+          <td class="rule">1. Plural (wenn Singular = unbestimmter Artikel)</td>
+          <td class="example">Ich sehe <strong>Kinder</strong> auf dem Spielplatz. (← ein Kind)</td>
+          <td class="counter">Ich sehe <em>die Kinder</em> aus der Nachbarschaft.</td>
+        </tr>
+        <tr>
+          <td class="rule">2. Vertreter einer Klasse (allgemeine Aussage, Plural)</td>
+          <td class="example"><strong>Kinder</strong> essen gerne Eis.<br><strong>Männer</strong> gucken gerne Fußball.</td>
+          <td class="counter"><em>Die Kinder</em> in meiner Klasse essen gerne Eis.</td>
+        </tr>
+        <tr>
+          <td class="rule">3. Eigennamen (ohne Attribut)</td>
+          <td class="example"><strong>Goethe</strong> lebte in Weimar.<br>Ich heiße <strong>Maria</strong>.</td>
+          <td class="counter"><em>Der alte</em> Goethe lebte in Weimar.</td>
+        </tr>
+        <tr>
+          <td class="rule">4. Länder, Kontinente, Städte (meistens)</td>
+          <td class="example">In <strong>Europa</strong> / In <strong>Indien</strong> / Durch <strong>Berlin</strong> / Auf <strong>Kreta</strong></td>
+          <td class="counter">Im <em>Polen der Nachkriegszeit</em> (mit Genitivattribut)</td>
+        </tr>
+        <tr>
+          <td class="rule">5. Materialien und Stoffe (unzählbar)</td>
+          <td class="example">Er trinkt <strong>Wasser</strong>. Ich esse <strong>Brot</strong>.</td>
+          <td class="counter">Er trinkt <em>das Wasser</em> aus dem Brunnen.</td>
+        </tr>
+        <tr>
+          <td class="rule">6. Berufe, Nationalitäten, Religionen</td>
+          <td class="example">Sie ist <strong>Ärztin</strong>. Er ist <strong>Deutscher</strong>.</td>
+          <td class="counter">Sie ist <em>eine ausgezeichnete</em> Ärztin.</td>
+        </tr>
+      </table>
+
+      <div class="section-title">Vergleich: Artikel-Typen im Überblick</div>
+      <table class="gram-table">
+        <tr><th>Artikel-Typ</th><th>Verwendung</th><th>Beispiel</th></tr>
+        <tr><td><strong>bestimmt</strong> (der/die/das)</td><td>Bekannt, bereits erwähnt, eindeutig</td><td>Das Weißbrot, das wir gestern sahen</td></tr>
+        <tr><td><strong>unbestimmt</strong> (ein/eine)</td><td>Erstmalig, unspezifisch, Singular</td><td>Kannst du ein Brot kaufen?</td></tr>
+        <tr><td><strong>Nullartikel</strong> (–)</td><td>Kein Attribut; Plural; Eigenname; Land/Stadt</td><td>Kannst du Brot kaufen? / In Berlin</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="section" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4145153/pexels-photo-4145153.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Lückentext">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td2">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(2)">↺</button>
+        <span class="best-time" id="bt2"></span>
+      </div>
+      <div class="hilfe-box">Ergänze: Schreibe den richtigen Artikel (<strong>der / die / das / ein / eine</strong>) oder lasse die Lücke leer (Nullartikel = <strong>–</strong>). Tippe <strong>–</strong> für Nullartikel.</div>
+      <div id="luecken-container"></div>
+      <button class="reset-btn" onclick="resetLuecken()">↺ Zurücksetzen</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div class="section" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Satzbau">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td3">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(3)">↺</button>
+        <span class="best-time" id="bt3"></span>
+      </div>
+      <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge. Ziehe die Chips ins Zielfeld.</div>
+      <div id="sb-container"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: ÜBEN -->
+  <div class="section" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Üben">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td4">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(4)">↺</button>
+        <span class="best-time" id="bt4"></span>
+      </div>
+      <div class="hilfe-box">Schreibe den richtigen Artikel (<strong>der/die/das/ein/eine</strong>) oder <strong>–</strong> für Nullartikel. Erkläre danach die Regel!</div>
+      <div id="ws-container"></div>
+      <button class="pruef-btn" onclick="vocabLiveCheck()">✔ Prüfen</button>
+      <button class="reset-btn" onclick="wsReset()">↺ Zurücksetzen</button>
+      <div style="margin-top:12px; font-size:0.9em; color:#667eea; font-weight:700;" id="ws-score"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TAB NAVIGATION ──────────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  if (n===2 && !timers[2].started) timerAutoStart(2);
+  if (n===3 && !timers[3].started) timerAutoStart(3);
+  if (n===4 && !timers[4].started) timerAutoStart(4);
+}
+
+// ── TIMER ────────────────────────────────────────────────────────
+const TIMER_PREFIX = 'best2015G';
+const timers = {};
+[2,3,4].forEach(n => { timers[n] = { s:0, iv:null, started:false }; });
+function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
+function startTimer(n){ if(timers[n].iv) return; timers[n].iv=setInterval(()=>{ timers[n].s++; document.getElementById('td'+n).textContent=fmtTime(timers[n].s); },1000); }
+function stopTimer(n){ clearInterval(timers[n].iv); timers[n].iv=null; const key=TIMER_PREFIX+'_t'+n; const best=parseInt(localStorage.getItem(key)||'99999'); if(timers[n].s>0&&timers[n].s<best){ localStorage.setItem(key,timers[n].s); showBest(n,timers[n].s); } else showBest(n,best); }
+function resetTimer(n){ clearInterval(timers[n].iv); timers[n].iv=null; timers[n].s=0; timers[n].started=false; document.getElementById('td'+n).textContent='0:00'; startTimer(n); timers[n].started=true; }
+function showBest(n,s){ const el=document.getElementById('bt'+n); if(el&&s<99999) el.textContent='Best: '+fmtTime(s); }
+function loadBestTimes(){ [2,3,4].forEach(n=>{ const v=localStorage.getItem(TIMER_PREFIX+'_t'+n); if(v) showBest(n,parseInt(v)); }); }
+function timerAutoStart(n){ startTimer(n); timers[n].started=true; }
+
+// ── LÜCKENTEXT ───────────────────────────────────────────────────
+// Answer is the article that should appear. '–' means Nullartikel.
+const LUECKEN_DATA = [
+  { pre:'Kannst du bitte ', blank:'–', post:' Brot kaufen? (unspezifisch)' },
+  { pre:'Ich sehe ', blank:'–', post:' Kinder auf dem Spielplatz spielen. (Plural ohne Spezifizierung)' },
+  { pre:'In ', blank:'–', post:' Europa kann man interessante Städtetouren machen. (Kontinent)' },
+  { pre:'In ', blank:'–', post:' Indien feiert man das Holi Festival. (Land)' },
+  { pre:'Durch ', blank:'–', post:' Berlin fließt die Spree. (Stadt)' },
+  { pre:'Sie ist ', blank:'–', post:' Ärztin von Beruf. (Beruf)' },
+  { pre:'', blank:'–', post:' Männer gucken gerne Fußball. (allgemeine Aussage über Gruppe)' },
+  { pre:'Ach, ', blank:'das', post:' Weißbrot meinst du? (bestimmt — mit Adjektiv)' },
+  { pre:'Ich lese gerade ', blank:'ein', post:' interessantes Buch über Marketing. (erstmalig + Adjektiv-Attribut)' },
+  { pre:'Der ', blank:'alte', post:' Goethe lebte in Weimar. (Adjektiv-Attribut beim Eigennamen)' },
+];
+
+function buildLuecken(){
+  const c=document.getElementById('luecken-container'); c.innerHTML='';
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div'); div.className='luecke-item';
+    div.innerHTML=d.pre+'<input class="blank" id="lb'+i+'" type="text" autocomplete="off" oninput="liveCheck('+i+')" placeholder="…">'+d.post;
+    c.appendChild(div);
+  });
+}
+function liveCheck(i){
+  const inp=document.getElementById('lb'+i);
+  const ans=LUECKEN_DATA[i].blank;
+  const v=inp.value.trim();
+  if(!v){ inp.className='blank'; return; }
+  const ok=v.toLowerCase()===ans.toLowerCase()||v===ans;
+  if(ok){
+    inp.className='blank correct';
+    if(!document.getElementById('lh'+i)){
+      const sp=document.createElement('span'); sp.className='correction-hint'; sp.id='lh'+i; sp.textContent='✓';
+      inp.parentNode.insertBefore(sp,inp.nextSibling);
+    }
+    const allOk=[...document.querySelectorAll('.blank')].every(b=>b.classList.contains('correct'));
+    if(allOk) stopTimer(2);
+  } else {
+    const partMatch=ans.toLowerCase().startsWith(v.toLowerCase());
+    inp.className='blank'+(partMatch?'':' wrong');
+  }
+}
+function resetLuecken(){ buildLuecken(); }
+
+// ── SATZBAU ──────────────────────────────────────────────────────
+const SATZBAU_DATA = [
+  { prompt:'Plural ohne Artikel — was essen Kinder gerne?', chips:['Kinder','essen','gerne','Eis','.'], correct:'Kinder essen gerne Eis .' },
+  { prompt:'Wohin fließt die Spree?', chips:['Durch','Berlin','fließt','die','Spree','.'], correct:'Durch Berlin fließt die Spree .' },
+  { prompt:'Beruf ohne Artikel', chips:['Mein','Vater','ist','Ingenieur','von','Beruf','.'], correct:'Mein Vater ist Ingenieur von Beruf .' },
+  { prompt:'Land ohne Artikel', chips:['In','Frankreich','spricht','man','Französisch','.'], correct:'In Frankreich spricht man Französisch .' },
+  { prompt:'Unzählbares ohne Artikel', chips:['Er','trinkt','jeden','Morgen','Kaffee','.'], correct:'Er trinkt jeden Morgen Kaffee .' },
+  { prompt:'Nullartikel vs. bestimmter Artikel', chips:['Kannst','du','Brot','kaufen','?','–','Das','Weißbrot','von','gestern','?'], correct:'Kannst du Brot kaufen ? – Das Weißbrot von gestern ?' },
+];
+
+let sbDragged = null;
+function sbMakeChip(word, isStatic=false){
+  const span=document.createElement('span'); span.className='sb-chip'+(isStatic?' static-chip':'');
+  span.textContent=word;
+  if(!isStatic){ span.draggable=true; span.ondragstart=e=>{ sbDragged=span; span.classList.add('dragging'); }; span.ondragend=e=>{ span.classList.remove('dragging'); sbDragged=null; }; }
+  return span;
+}
+function sbRegisterZone(zone, idx){
+  zone.ondragover=e=>{ e.preventDefault(); zone.classList.add('drag-over'); };
+  zone.ondragleave=e=>zone.classList.remove('drag-over');
+  zone.ondrop=e=>{ e.preventDefault(); zone.classList.remove('drag-over'); if(sbDragged) zone.appendChild(sbDragged); setTimeout(()=>sbCheckAuto(idx),500); };
+}
+function sbUpdateCapitalization(zone){
+  const chips=[...zone.querySelectorAll('.sb-chip:not(.static-chip)')];
+  chips.forEach((ch,i)=>{ const w=ch.dataset.original||ch.textContent; if(!ch.dataset.original) ch.dataset.original=w; if(i===0) ch.textContent=w[0].toUpperCase()+w.slice(1); else ch.textContent=w; });
+}
+function sbCheckAuto(idx){
+  const zone=document.getElementById('sb_drop_'+idx);
+  const fb=document.getElementById('sb_fb_'+idx);
+  sbUpdateCapitalization(zone);
+  const chips=[...zone.querySelectorAll('.sb-chip')];
+  const attempt=chips.map(c=>c.textContent).join(' ');
+  const correct=SATZBAU_DATA[idx].correct;
+  if(chips.length===0){ fb.textContent=''; return; }
+  if(attempt===correct){ fb.className='sb-feedback ok'; fb.textContent='✓ Richtig!'; const allDone=[...document.querySelectorAll('.sb-feedback')].every(f=>f.classList.contains('ok')); if(allDone) stopTimer(3); }
+  else if(chips.length===correct.split(' ').length){ fb.className='sb-feedback err'; fb.textContent='✗ Noch nicht richtig.'; }
+  else fb.textContent='';
+}
+function buildSatzbau(){
+  const c=document.getElementById('sb-container'); c.innerHTML='';
+  SATZBAU_DATA.forEach((d,idx)=>{
+    let shuffled=[...d.chips]; let ok=false;
+    for(let attempt=0;attempt<50&&!ok;attempt++){ for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; } ok=shuffled.some((w,i)=>w!==d.chips[i]); }
+    const div=document.createElement('div'); div.className='sb-item';
+    const prompt=document.createElement('div'); prompt.className='sb-prompt'; prompt.textContent=(idx+1)+'. '+d.prompt; div.appendChild(prompt);
+    const chipArea=document.createElement('div'); chipArea.className='sb-chips'; chipArea.id='sb_src_'+idx;
+    shuffled.forEach(w=>{ const isPunct=/^[.,!?;:—–]$/.test(w); chipArea.appendChild(sbMakeChip(w,isPunct)); });
+    const dropZone=document.createElement('div'); dropZone.className='sb-drop'; dropZone.id='sb_drop_'+idx;
+    sbRegisterZone(dropZone,idx); sbRegisterZone(chipArea,idx);
+    const fb=document.createElement('div'); fb.className='sb-feedback'; fb.id='sb_fb_'+idx;
+    div.appendChild(chipArea); div.appendChild(dropZone); div.appendChild(fb);
+    c.appendChild(div);
+  });
+}
+
+// ── ÜBEN (Artikel-Entscheidung) ──────────────────────────────────
+// For each item: give EN context, expect article or '–' + short rule label
+const WS_DATA = [
+  { en:'Ich esse ___ Brot. (Brot allgemein)', art:'–', regel:'Nullartikel (Stoff, unspezifisch)' },
+  { en:'___ Frauen kaufen gerne Schuhe. (alle Frauen)', art:'–', regel:'Nullartikel (Klasse im Plural)' },
+  { en:'Er kommt aus ___ Deutschland. (Land)', art:'–', regel:'Nullartikel (Land ohne Attribut)' },
+  { en:'Sie ist ___ Lehrerin. (Beruf)', art:'–', regel:'Nullartikel (Beruf)' },
+  { en:'___ Goethe schrieb Faust. (Eigenname)', art:'–', regel:'Nullartikel (Eigenname ohne Attribut)' },
+  { en:'Das ist ___ Buch, das ich dir empfohlen habe. (bestimmt)', art:'das', regel:'bestimmter Artikel (Relativsatz)' },
+  { en:'Ich habe ___ neues Handy gekauft. (erstmalig, Adjektiv)', art:'ein', regel:'unbestimmter Artikel' },
+  { en:'In ___ Europa gibt es viele Kulturen. (Kontinent)', art:'–', regel:'Nullartikel (Kontinent)' },
+  { en:'Durch ___ Berlin fließt die Spree. (Stadt)', art:'–', regel:'Nullartikel (Stadt)' },
+  { en:'___ alte Goethe war sehr weise. (Adjektiv-Attribut)', art:'Der', regel:'bestimmter Artikel (Adjektiv-Attribut)' },
+  { en:'Er trinkt jeden Morgen ___ Kaffee. (Stoff)', art:'–', regel:'Nullartikel (Stoff, unzählbar)' },
+  { en:'Sie ist ___ Deutsche. (Nationalität)', art:'–', regel:'Nullartikel (Nationalität)' },
+];
+
+function buildWortschatz(){
+  const c=document.getElementById('ws-container'); c.innerHTML='';
+  WS_DATA.forEach((d,i)=>{
+    const div=document.createElement('div'); div.className='ws-item';
+    div.innerHTML=`<span class="ws-en">${d.en}</span>
+      <div class="ws-fields">
+        <span class="ws-hint">Artikel / –:</span>
+        <input class="ws-input" id="ws_art_${i}" style="width:70px" type="text" autocomplete="off" placeholder="der/–/…">
+        <span class="ws-hint" id="ws_regel_${i}" style="color:#aaa; font-size:0.75em;"></span>
+      </div>`;
+    c.appendChild(div);
+  });
+}
+function vocabLiveCheck(){
+  let correct=0;
+  WS_DATA.forEach((d,i)=>{
+    const artEl=document.getElementById('ws_art_'+i);
+    const regelEl=document.getElementById('ws_regel_'+i);
+    const v=artEl.value.trim();
+    const ok=v.toLowerCase()===d.art.toLowerCase()||v===d.art;
+    artEl.className='ws-input '+(v===''?'':(ok?'correct':'wrong'));
+    if(!ok&&v!=='') regelEl.textContent='→ '+d.art+' ('+d.regel+')';
+    else if(ok) regelEl.textContent='✓ '+d.regel;
+    else regelEl.textContent='';
+    if(ok) correct++;
+  });
+  document.getElementById('ws-score').textContent=correct+' / '+WS_DATA.length+' richtig';
+  if(correct===WS_DATA.length) stopTimer(4);
+}
+function wsReset(){
+  WS_DATA.forEach((_,i)=>{ const el=document.getElementById('ws_art_'+i); el.value=''; el.className='ws-input'; document.getElementById('ws_regel_'+i).textContent=''; });
+  document.getElementById('ws-score').textContent='';
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildLuecken();
+buildSatzbau();
+buildWortschatz();
+loadBestTimes();
+function initVocab() { buildWortschatz(); }
+</script>
+</body>
+</html>

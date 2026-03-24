@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Über Konsumverhalten sprechen – B1.3</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 8px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.75em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: block; }
+@media (max-width: 600px) { .tab-banner { max-height: 120px; } }
+.section-content { padding: 28px 30px; }
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.tc-buttons { display:flex; gap:6px; }
+.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.tc-buttons button:hover { background:#f0f0f0; color:#555; }
+.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-display { color:#667eea; font-weight:700; }
+.best-display  { color:#f39c12; font-weight:600; }
+.luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
+.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1.0em; padding: 2px 4px; transition: border-color 0.2s; min-width: 110px; }
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; }
+.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 20px; }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 160px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 130px; }
+.vocab-inputs input.plural { width: 140px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+.score-box { background: #e8f8f0; border: 1px solid #27ae60; border-radius: 8px; padding: 10px 16px; margin-top: 14px; font-size: 0.9em; color: #1a7a3c; font-weight: 600; display: none; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.75em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+  .vocab-item { flex-direction: column; align-items: flex-start; }
+}
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Über Konsumverhalten sprechen</h1>
+    <p style="font-family: Georgia, serif;">B1.3 – Lektion 3048S &nbsp;|&nbsp; Kommunikation</p>
+    <div class="big-emoji">🗣️</div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">💡</span><span class="nav-label">Wörter</span></div>
+    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+  </div>
+
+  <div class="section active" id="sec-0">
+  <img class="tab-banner" src="https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
+  <div class="section-content">
+<div class="section-title">💡 Schlüsselwörter</div>
+<div class="hilfe-box"><strong>Redemittel: Konsum diskutieren</strong></div>
+<div class="hilfe-box">
+<strong>Ich kaufe lieber …, weil …</strong> — I prefer to buy … because …<br>
+<strong>Beim Kauf achte ich besonders auf …</strong> — When buying, I pay special attention to …<br>
+<strong>Ich halte es für sinnvoll, …</strong> — I think it makes sense to …<br>
+<strong>Das Problem dabei ist, dass …</strong> — The problem with this is that …<br>
+<strong>Einkaufen ist für mich …</strong> — Shopping is for me …<br>
+<strong>Ich versuche zu vermeiden, …</strong> — I try to avoid …<br>
+<strong>Im Vergleich zu früher …</strong> — Compared to the past …
+</div>
+  </div>
+  </div>
+
+  <div class="section" id="sec-1">
+  <img class="tab-banner" src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
+  <div class="section-content">
+<div class="timer-controls">
+  <div class="tc-buttons"><button onclick="showLueckeLoesung()">💡 Lösungen</button><button onclick="resetLuecke()">↺ Neustart</button></div>
+  <div class="tc-times">
+    <span>⏱ <span class="timer-display" id="timer-1">00:00</span></span>
+    <span>🏆 <span class="best-display" id="best-1">--:--</span></span>
+  </div>
+</div>
+<div class="section-title">✏️ Lückentext</div>
+<div class="hilfe-box"><strong>Aufgabe:</strong> Fülle die Lücken mit den richtigen Wörtern aus.</div>
+<div class="wortkasten"><strong>Wörter:</strong> achte · halte · versuche · kaufe · vermeide · bevorzuge · finde · denke · schätze · wähle</div>
+    <div class="luecken-item">Beim Einkauf <input class="luecken-inp" data-answer="achte" oninput="liveCheck(this)" placeholder=""> ich auf die Herkunft der Produkte.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="halte" oninput="liveCheck(this)" placeholder=""> es für sinnvoll, lokal einzukaufen.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="versuche" oninput="liveCheck(this)" placeholder="">, Plastikverpackungen zu vermeiden.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="kaufe" oninput="liveCheck(this)" placeholder=""> lieber weniger, aber bessere Qualität.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="vermeide" oninput="liveCheck(this)" placeholder=""> impulsive Käufe so weit wie möglich.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="bevorzuge" oninput="liveCheck(this)" placeholder=""> nachhaltige Marken.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="finde" oninput="liveCheck(this)" placeholder="">, dass bewusster Konsum wichtig ist.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="denke" oninput="liveCheck(this)" placeholder="">, dass jeder Konsument Verantwortung trägt.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="schätze" oninput="liveCheck(this)" placeholder=""> Produkte, die lange halten.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="wähle" oninput="liveCheck(this)" placeholder=""> bewusst umweltfreundliche Alternativen.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="achte" oninput="liveCheck(this)" placeholder=""> auf faire Arbeitsbedingungen.</div>
+    <div class="luecken-item">Ich <input class="luecken-inp" data-answer="versuche" oninput="liveCheck(this)" placeholder="">, meinen ökologischen Fußabdruck zu verkleinern.</div>
+
+<div class="score-box" id="lueckeScore"></div>
+  </div>
+  </div>
+
+  <div class="section" id="sec-2">
+  <img class="tab-banner" src="https://images.pexels.com/photos/3769747/pexels-photo-3769747.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
+  <div class="section-content">
+<div class="timer-controls">
+  <div class="tc-buttons"><button onclick="resetSatzbau()">↺ Neustart</button></div>
+  <div class="tc-times">
+    <span>⏱ <span class="timer-display" id="timer-2">00:00</span></span>
+    <span>🏆 <span class="best-display" id="best-2">--:--</span></span>
+  </div>
+</div>
+<div class="section-title">🧩 Satzbau</div>
+<div class="hilfe-box"><strong>Aufgabe:</strong> Ziehe die Wörter in die richtige Reihenfolge.</div>
+<div id="sbContainer"></div>
+  </div>
+  </div>
+
+  <div class="section" id="sec-3">
+  <img class="tab-banner" src="https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
+  <div class="section-content">
+<div class="timer-controls">
+  <div class="tc-buttons"><button onclick="showVocabLoesung()">💡 Lösungen</button><button onclick="resetVocab()">↺ Neustart</button></div>
+  <div class="tc-times">
+    <span>⏱ <span class="timer-display" id="timer-3">00:00</span></span>
+    <span>🏆 <span class="best-display" id="best-3">--:--</span></span>
+  </div>
+</div>
+<div class="section-title">🔠 Wortschatz</div>
+<div class="hilfe-box"><strong>Aufgabe:</strong> Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+<div id="vocabContainer"></div>
+  </div>
+  </div>
+
+
+  <div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+  </div>
+</div><!-- /container -->
+
+<script>
+
+// ─── TIMER ───────────────────────────────────────────────────────────────────
+var _tv = {}, _ti = {}, _tr = {};
+var BEST_KEY = 'best_3048S_';
+function initTimers(ns) {{ ns.forEach(function(n){{ _tv[n]=0; _ti[n]=null; _tr[n]=false; }}); loadBests(ns); }}
+function timerTick(n) {{ _tv[n]++; var m=Math.floor(_tv[n]/60),s=_tv[n]%60; var el=document.getElementById('timer-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }}
+function timerAutoStart(n) {{ if(_tr[n]) return; _tr[n]=true; _ti[n]=setInterval(function(){{timerTick(n);}},1000); }}
+function timerStop(n) {{ if(!_tr[n]) return; clearInterval(_ti[n]); _tr[n]=false; var k=BEST_KEY+n; var prev=parseInt(localStorage.getItem(k)||'99999'); if(_tv[n]<prev){{ localStorage.setItem(k,_tv[n]); var m=Math.floor(_tv[n]/60),s=_tv[n]%60; var el=document.getElementById('best-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }} }}
+function resetTimer(n) {{ clearInterval(_ti[n]); _tr[n]=false; _tv[n]=0; var el=document.getElementById('timer-'+n); if(el) el.textContent='00:00'; }}
+function loadBests(ns) {{ ns.forEach(function(n){{ var s=parseInt(localStorage.getItem(BEST_KEY+n)||'0'); if(s>0){{ var m=Math.floor(s/60),ss=s%60; var el=document.getElementById('best-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }} }}); }}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function showSection(n) {
+  document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active',i===n); });
+  document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active',i===n); });
+}
+
+// ─── LÜCKENTEXT ──────────────────────────────────────────────────────────────
+function liveCheck(inp) {{
+  timerAutoStart(1);
+  var val=inp.value.trim(), ans=inp.dataset.answer||'';
+  inp.classList.remove('ok','no');
+  if(!val) return;
+  if(val===ans) {{ inp.classList.add('ok'); checkLueckeDone(); }}
+  else if(!ans.startsWith(val)) {{ inp.classList.add('no'); }}
+}}
+function checkLueckeDone() {{
+  var all=document.querySelectorAll('#sec-1 .luecken-inp');
+  if(Array.from(all).every(function(i){{return i.classList.contains('ok');}})) {{
+    timerStop(1);
+    var s=document.getElementById('lueckeScore'); if(s){{s.textContent='🎉 Alle Lücken korrekt!'; s.style.display='block';}}
+  }}
+}}
+function showLueckeLoesung() {{
+  document.querySelectorAll('#sec-1 .luecken-inp').forEach(function(i){{ i.value=i.dataset.answer; i.classList.add('ok'); }});
+}}
+function resetLuecke() {{
+  document.querySelectorAll('#sec-1 .luecken-inp').forEach(function(i){{ i.value=''; i.classList.remove('ok','no'); }});
+  var s=document.getElementById('lueckeScore'); if(s) s.style.display='none';
+  resetTimer(1);
+}}
+
+// ─── SATZBAU ─────────────────────────────────────────────────────────────────
+var sbDragged = null;
+function shuffleArr(a) {{ var b=a.slice(); for(var i=b.length-1;i>0;i--){{ var j=Math.floor(Math.random()*(i+1)),t=b[i]; b[i]=b[j]; b[j]=t; }} return b; }}
+function getSbCursor() {{ var c=document.getElementById('sb-insert-cursor'); if(!c){{ c=document.createElement('div'); c.id='sb-insert-cursor'; c.style.cssText='width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;'; }} return c; }}
+function getSbInsertPos(zone,clientX) {{ var chips=Array.from(zone.querySelectorAll('.chip')); for(var i=0;i<chips.length;i++){{ var r=chips[i].getBoundingClientRect(); if(clientX<r.left+r.width/2) return chips[i]; }} return null; }}
+function sbCapitalize(s) {{ return s.charAt(0).toUpperCase()+s.slice(1); }}
+function sbUpdateCapitalization(zone) {{
+  var chips=Array.from(zone.querySelectorAll('.chip'));
+  chips.forEach(function(c,i) {{
+    var orig=c.dataset.orig;
+    if(!orig||orig===','||orig===';') return;
+    var isProper=orig.charAt(0)===orig.charAt(0).toUpperCase()&&orig.charAt(0)!==orig.charAt(0).toLowerCase();
+    c.textContent=isProper?orig:(i===0?sbCapitalize(orig):orig);
+  }});
+}}
+function sbMakeChip(word, isTarget) {{
+  var chip=document.createElement('div'); chip.className='chip';
+  var isPunct=/^[.,!?;:]$/.test(word);
+  if(isPunct) chip.classList.add('punct-chip');
+  chip.textContent=word; chip.dataset.orig=word; chip.draggable=!isTarget;
+  if(!isTarget) {{
+    chip.addEventListener('dragstart',function(e){{ sbDragged=chip; timerAutoStart(2); e.dataTransfer.setData('text/plain',''); setTimeout(function(){{chip.style.opacity='0.4';}},0); }});
+    chip.addEventListener('dragend',function(){{ chip.style.opacity=''; sbDragged=null; var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode) c.parentNode.removeChild(c); }});
+  }}
+  return chip;
+}}
+function sbRegisterZone(zone) {{
+  zone.addEventListener('dragover',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=getSbCursor(),bef=getSbInsertPos(zone,e.clientX); if(bef) zone.insertBefore(cur,bef); else zone.appendChild(cur); }});
+  zone.addEventListener('dragleave',function(e){{ if(!zone.contains(e.relatedTarget)){{ var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode===zone) zone.removeChild(c); }} }});
+  zone.addEventListener('drop',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=document.getElementById('sb-insert-cursor'); if(cur&&cur.parentNode===zone){{ zone.insertBefore(sbDragged,cur); zone.removeChild(cur); }} else {{ zone.appendChild(sbDragged); }} sbDragged=null; }});
+}}
+function sbCheckAuto(itemIdx) {{
+  var zone=document.getElementById('sb_zone_'+itemIdx);
+  var fb=document.getElementById('sb_fb_'+itemIdx);
+  if(!zone) return;
+  setTimeout(function() {{
+    var chips=Array.from(zone.querySelectorAll('.chip'));
+    var ans=SATZBAU_DATA[itemIdx].words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
+    var got=chips.filter(function(c){{return !/^[.,!?;:]$/.test(c.dataset.orig);}}).map(function(c){{return c.dataset.orig;}});
+    if(got.length===0) return;
+    var ok=JSON.stringify(got)===JSON.stringify(ans);
+    chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
+    if(fb) {{ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge – verschiebe die Chips!'; }}
+    if(ok) checkSatzbauComplete();
+  }}, 500);
+}}
+function sbColorRow(idx,ok) {{
+  var zone=document.getElementById('sb_zone_'+idx);
+  if(!zone) return;
+  var chips=Array.from(zone.querySelectorAll('.chip'));
+  chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
+}}
+function checkSatzbauComplete() {{
+  var allOk=SATZBAU_DATA.every(function(_,i){{ var z=document.getElementById('sb_zone_'+i); return z&&Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('correct');}})&&!Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('incorrect');}}); }});
+  if(allOk) timerStop(2);
+}}
+function buildSatzbau() {{
+  var cont=document.getElementById('sbContainer'); if(!cont) return;
+  cont.innerHTML='';
+  SATZBAU_DATA.forEach(function(item,idx) {{
+    var div=document.createElement('div'); div.className='satzbau-item';
+    var nonPunct=item.words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
+    var shuffled=shuffleArr(nonPunct);
+    var pool=document.createElement('div'); pool.className='chips-container'; pool.id='sb_pool_'+idx;
+    shuffled.forEach(function(w) {{
+      var chip=sbMakeChip(w,false);
+      chip.addEventListener('click',function() {{ var z=document.getElementById('sb_zone_'+idx); z.appendChild(chip); sbUpdateCapitalization(z); sbCheckAuto(idx); }});
+      pool.appendChild(chip);
+    }});
+    sbRegisterZone(pool);
+    var zone=document.createElement('div'); zone.className='sentence-builder'; zone.id='sb_zone_'+idx;
+    item.words.filter(function(w){{return /^[.,!?;:]$/.test(w);}}).forEach(function(w) {{
+      var pc=sbMakeChip(w,true); zone.appendChild(pc);
+    }});
+    sbRegisterZone(zone);
+    zone.addEventListener('drop',function(){{ sbUpdateCapitalization(zone); setTimeout(function(){{sbCheckAuto(idx);}},50); }});
+    zone.addEventListener('click',function(e) {{
+      var chip=e.target.closest('.chip:not(.punct-chip)');
+      if(chip&&zone.contains(chip)) {{ pool.appendChild(chip); sbUpdateCapitalization(zone); sbCheckAuto(idx); }}
+    }});
+    var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb_fb_'+idx;
+    div.appendChild(pool); div.appendChild(zone); div.appendChild(fb);
+    cont.appendChild(div);
+  }});
+}}
+function resetSatzbau() {{ buildSatzbau(); resetTimer(2); }}
+
+// ─── WORTSCHATZ ──────────────────────────────────────────────────────────────
+function initVocab() {{
+  var cont=document.getElementById('vocabContainer'); if(!cont) return;
+  cont.innerHTML='';
+  var items=shuffleArr(WORTSCHATZ);
+  items.forEach(function(w) {{
+    var div=document.createElement('div'); div.className='vocab-item';
+    var en=document.createElement('div'); en.className='vocab-en'; en.textContent=w.en;
+    var arrow=document.createElement('div'); arrow.className='vocab-arrow'; arrow.textContent='→';
+    var inputs=document.createElement('div'); inputs.className='vocab-inputs';
+    if(w.type==='n') {{
+      var iA=document.createElement('input'); iA.className='art'; iA.placeholder='Artikel'; iA.setAttribute('data-answer',w.art);
+      iA.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iA,w.art); checkVocabAllDone(); }});
+      var iW=document.createElement('input'); iW.className='wort'; iW.placeholder='Deutsch'; iW.setAttribute('data-answer',w.wort);
+      iW.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iW,w.wort); checkVocabAllDone(); }});
+      var iP=document.createElement('input'); iP.className='plural'; iP.placeholder='Plural'; iP.setAttribute('data-answer',w.plural);
+      iP.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iP,w.plural); checkVocabAllDone(); }});
+      inputs.appendChild(iA); inputs.appendChild(iW); inputs.appendChild(iP);
+    }} else {{
+      var iD=document.createElement('input'); iD.className='wort'; iD.placeholder='Deutsch'; iD.setAttribute('data-answer',w.de);
+      iD.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iD,w.de); checkVocabAllDone(); }});
+      inputs.appendChild(iD);
+    }}
+    div.appendChild(en); div.appendChild(arrow); div.appendChild(inputs); cont.appendChild(div);
+  }});
+}}
+function vocabLiveCheck(inp,ans) {{
+  var val=inp.value.trim(); inp.classList.remove('correct','wrong');
+  if(!val) return;
+  if(val===ans) {{ inp.classList.add('correct'); }} else if(!ans.startsWith(val)) {{ inp.classList.add('wrong'); }}
+}}
+function checkVocabAllDone() {{
+  var all=document.querySelectorAll('#vocabContainer input'); if(!all.length) return;
+  if(Array.from(all).every(function(i){{return i.classList.contains('correct');}})) timerStop(3);
+}}
+function showVocabLoesung() {{
+  document.querySelectorAll('#vocabContainer input').forEach(function(i){{ i.value=i.getAttribute('data-answer'); i.classList.remove('wrong'); i.classList.add('correct'); }});
+}}
+function resetVocab() {{ initVocab(); resetTimer(3); }}
+
+const SATZBAU_DATA = [
+  { words: ['Beim', 'Einkauf', 'achte', 'ich', 'auf', 'die', 'Herkunft', 'der', 'Produkte', '.'] },
+  { words: ['Ich', 'kaufe', 'lieber', 'weniger', ',', 'aber', 'bessere', 'Qualität', '.'] },
+  { words: ['Ich', 'versuche', ',', 'Plastikverpackungen', 'zu', 'vermeiden', '.'] },
+  { words: ['Ich', 'finde', ',', 'dass', 'bewusster', 'Konsum', 'wichtig', 'ist', '.'] },
+  { words: ['Ich', 'bevorzuge', 'nachhaltige', 'Marken', '.'] },
+  { words: ['Ich', 'denke', ',', 'dass', 'jeder', 'Konsument', 'Verantwortung', 'trägt', '.'] },
+  { words: ['Ich', 'wähle', 'bewusst', 'umweltfreundliche', 'Alternativen', '.'] }
+];
+
+var WORTSCHATZ = [
+  {type:'n', en:'the responsibility', art:'die', wort:'Verantwortung', plural:'—'},
+  {type:'n', en:'the alternative', art:'die', wort:'Alternative', plural:'-n'},
+  {type:'n', en:'the brand', art:'die', wort:'Marke', plural:'-n'},
+  {type:'n', en:'the quality', art:'die', wort:'Qualität', plural:'-en'},
+  {type:'v', en:'to value / appreciate', de:'schätzen'},
+  {type:'v', en:'to choose', de:'wählen'},
+  {type:'v', en:'to avoid', de:'vermeiden'},
+  {type:'v', en:'to prefer', de:'bevorzugen'},
+  {type:'n', en:'the working conditions', art:'die', wort:'Arbeitsbedingungen', plural:'(pl.)'},
+  {type:'v', en:'to reduce / shrink', de:'verkleinern'}
+];
+
+buildSatzbau();
+initVocab();
+
+// INIT
+initTimers([1,2,3]);
+
+</script>
+</body>
+</html>

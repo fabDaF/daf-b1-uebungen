@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2051X: Ins Ausland übersiedeln</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #667eea;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
+  header {
+    background: #667eea;
+    color: #fff;
+    padding: 18px 28px 10px 28px;
+  }
+  header h1 { font-size: 1.35rem; font-weight: 700; }
+  header p  { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 14px 18px;
+    background: #f3e8ff;
+    border-bottom: 2px solid #667eea;
+  }
+  nav button {
+    background: #fff;
+    border: 1.5px solid #667eea;
+    border-radius: 7px;
+    padding: 9px 14px;
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 5px;
+    color: #4a0080;
+    font-weight: 500;
+  }
+  nav button:last-child { margin-bottom: 0; }
+  nav button.active { background: #667eea; color: #fff; font-weight: 700; }
+  nav button:hover:not(.active) { background: #ede0fa; }
+
+  .tab { display: none; padding: 24px 28px 32px 28px; }
+  .tab.active { display: block; }
+
+  .tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+
+  h2 { color: #667eea; font-size: 1.15rem; margin-bottom: 12px; }
+  h3 { color: #4a0080; font-size: 1rem; margin: 16px 0 8px 0; }
+  p  { line-height: 1.65; color: #333; margin-bottom: 10px; }
+
+  /* VOK CARDS */
+  .vok-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .vok-card {
+    background: #f3e8ff;
+    border: 1.5px solid #9c4dcc;
+    border-radius: 9px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .vok-card .de { font-weight: 700; color: #4a0080; font-size: 0.97rem; }
+  .vok-card .en { color: #666; font-size: 0.83rem; margin-top: 4px; font-style: italic; }
+  .vok-card .bsp { color: #444; font-size: 0.82rem; margin-top: 6px; border-top: 1px solid #ddd; padding-top: 5px; }
+
+  /* KULTURSCHOCK PHASEN */
+  .phasen-list { list-style: none; padding: 0; }
+  .phasen-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #f8f0ff;
+    border-left: 4px solid #667eea;
+    border-radius: 7px;
+    padding: 13px 16px;
+    margin-bottom: 10px;
+  }
+  .phasen-list li .nr {
+    background: #667eea;
+    color: #fff;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .phasen-list li .txt { color: #333; line-height: 1.6; }
+  .phasen-list li .txt strong { color: #667eea; }
+
+  /* SPRECHKARTE */
+  .sprechkarte {
+    background: #f3e8ff;
+    border: 1.5px solid #667eea;
+    border-radius: 9px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .sprechkarte .frage { font-weight: 700; color: #667eea; margin-bottom: 8px; }
+  .sprechkarte ul { padding-left: 20px; color: #333; line-height: 1.8; }
+
+  /* REDEMITTEL */
+  .redemittel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .redemittel-col {
+    border-radius: 9px;
+    padding: 14px 18px;
+  }
+  .redemittel-col.rat {
+    background: #e8f5e9;
+    border: 1.5px solid #4caf50;
+  }
+  .redemittel-col.rat h3 { color: #1b5e20; margin-top: 0; }
+  .redemittel-col.vor {
+    background: #e3f2fd;
+    border: 1.5px solid #1e88e5;
+  }
+  .redemittel-col.vor h3 { color: #0d47a1; margin-top: 0; }
+  .redemittel-col ul { padding-left: 18px; line-height: 1.85; color: #333; font-size: 0.9rem; }
+
+  /* ZUORDNUNG */
+  .zuord-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8f0ff;
+    border-radius: 7px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+  }
+  .zuord-item select {
+    border: 1.5px solid #667eea;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+  }
+  .zuord-fb { font-size: 0.85rem; font-weight: 600; }
+  .zuord-fb.ok  { color: #2e7d32; }
+  .zuord-fb.err { color: #c62828; }
+
+  /* LÜCKENTEXT */
+  .luecke-satz {
+    background: #f8f0ff;
+    border-radius: 7px;
+    padding: 11px 15px;
+    margin-bottom: 10px;
+    font-size: 0.97rem;
+    line-height: 1.7;
+    color: #222;
+  }
+  input.luecke {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    width: 150px;
+    font-size: 0.96rem;
+    color: #333;
+    padding: 2px 4px;
+    outline: none;
+  }
+  input.luecke.correct { border-bottom-color: #2e7d32; color: #2e7d32; background: #e8f5e9; border-radius: 4px; }
+  input.luecke.wrong   { border-bottom-color: #c62828; color: #c62828; background: #ffebee; border-radius: 4px; }
+  .feedback-inline { font-size: 0.82rem; margin-left: 6px; }
+  .feedback-inline.ok  { color: #2e7d32; }
+  .feedback-inline.err { color: #c62828; }
+
+  /* SATZBAU */
+  .sb-aufgabe { margin-bottom: 22px; }
+  .sb-chips-pool {
+    display: flex; flex-wrap: wrap; gap: 7px;
+    min-height: 44px; background: #f3e8ff;
+    border: 1.5px dashed #9c4dcc; border-radius: 7px;
+    padding: 8px; margin-bottom: 8px;
+  }
+  .sb-drop-zone {
+    display: flex; flex-wrap: wrap; gap: 7px;
+    min-height: 44px; background: #fff;
+    border: 1.5px solid #667eea; border-radius: 7px;
+    padding: 8px; margin-bottom: 6px;
+  }
+  .sb-chip {
+    background: #667eea; color: #fff;
+    border-radius: 16px; padding: 5px 13px;
+    font-size: 0.88rem; cursor: pointer;
+    user-select: none; transition: opacity 0.15s;
+  }
+  .sb-chip:hover { opacity: 0.82; }
+  .sb-result { font-size: 0.87rem; margin-top: 4px; font-weight: 600; }
+  .sb-result.ok  { color: #2e7d32; }
+  .sb-result.err { color: #c62828; }
+
+  /* TIMER */
+  .timer-bar {
+    background: #f3e8ff; border: 1px solid #c084fc;
+    border-radius: 8px; padding: 8px 16px;
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 16px; font-size: 0.9rem; color: #4a0080;
+  }
+  .timer-bar span { font-weight: 700; font-size: 1rem; }
+  .timer-bar button {
+    background: #667eea; color: #fff; border: none;
+    border-radius: 6px; padding: 5px 14px; cursor: pointer; font-size: 0.88rem;
+  }
+  .timer-bar button:hover { background: #4a0080; }
+
+  .btn-check {
+    background: #667eea; color: #fff; border: none;
+    border-radius: 7px; padding: 10px 26px;
+    font-size: 0.95rem; cursor: pointer; margin-top: 10px;
+  }
+  .btn-check:hover { background: #4a0080; }
+  .ergebnis { margin-top: 10px; font-weight: 600; font-size: 0.97rem; color: #4a0080; }
+
+  /* AUFGABE BOX */
+  .aufgabe-box {
+    background: #e3f2fd; border: 1.5px solid #1e88e5;
+    border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+    color: #0d47a1; font-weight: 600; font-size: 0.95rem;
+  }
+
+  footer {
+    text-align: center; font-size: 0.78rem; color: #888;
+    padding: 14px 0 10px 0; border-top: 1px solid #eee; margin-top: 8px;
+  }
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>2051X · Ins Ausland übersiedeln kann schwierig sein</h1>
+    <p>B1.2 · Kommunikation · Kulturschock, Integration &amp; Ratschläge äußern</p>
+  </header>
+
+  <nav id="mainNav">
+    <button class="active" onclick="showTab(0)">🌍 Kulturschock &amp; Kultur</button>
+    <button onclick="showTab(1)">📝 Neue Vokabeln</button>
+    <button onclick="showTab(2)">💡 Ratschläge &amp; Vorschläge</button>
+    <button onclick="showTab(3)">🔗 Zuordnung</button>
+    <button onclick="showTab(4)">✏️ Lückentext</button>
+    <button onclick="showTab(5)">🧩 Satzbau &amp; Vokabeln</button>
+  </nav>
+
+  <!-- TAB 0: KULTURSCHOCK & KULTUR -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=860" alt="Ins Ausland übersiedeln">
+    <h2>🌍 Der Kulturschock — Phasen der Integration</h2>
+
+    <p>Wenn man in ein fremdes Land übersiedelt, gewinnt man viele neue Eindrücke. Oft kommt es aber auch zu einem <strong>Kulturschock</strong> — denn alles ist neu und ungewohnt!</p>
+
+    <ul class="phasen-list">
+      <li>
+        <div class="nr">1</div>
+        <div class="txt"><strong>Euphorie</strong> — Oft ist man euphorisch, wenn man in einem neuen Land angekommen ist. Alles wirkt spannend und aufregend.</div>
+      </li>
+      <li>
+        <div class="nr">2</div>
+        <div class="txt"><strong>Sich fehl am Platz fühlen</strong> — Gelegentlich fühlt man sich vielleicht fehl am Platz. Die Sprache, die Kultur, die Gewohnheiten — alles ist anders.</div>
+      </li>
+      <li>
+        <div class="nr">3</div>
+        <div class="txt"><strong>Einen Weg finden</strong> — Im Idealfall findet man einen Weg aus der Krise. Man lernt, mit den Unterschieden umzugehen.</div>
+      </li>
+      <li>
+        <div class="nr">4</div>
+        <div class="txt"><strong>Einen Platz finden</strong> — Schließlich findet man einen Platz in der Gastkultur. Die <strong>Integration</strong> ist ein langwieriger Prozess, aber am Ende entwickelt man ein <strong>Zugehörigkeitsgefühl</strong>.</div>
+      </li>
+    </ul>
+
+    <h3>🗺️ Was gehört zur Kultur?</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+      <div style="background:#f3e8ff; border:1.5px solid #9c4dcc; border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:1.5rem;">🎉</div>
+        <strong style="color:#667eea;">Feierlichkeiten</strong>
+        <p style="font-size:0.85rem; margin-top:4px;">Traditionen, Feste, Rituale</p>
+      </div>
+      <div style="background:#e8f5e9; border:1.5px solid #4caf50; border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:1.5rem;">🏛️</div>
+        <strong style="color:#1b5e20;">Sehenswürdigkeiten</strong>
+        <p style="font-size:0.85rem; margin-top:4px;">Denkmäler, historische Stätten</p>
+      </div>
+      <div style="background:#e3f2fd; border:1.5px solid #1e88e5; border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:1.5rem;">🏔️</div>
+        <strong style="color:#0d47a1;">Landschaften</strong>
+        <p style="font-size:0.85rem; margin-top:4px;">Natur, Geographie, Klima</p>
+      </div>
+      <div style="background:#fff3e0; border:1.5px solid #f57c00; border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:1.5rem;">🙏</div>
+        <strong style="color:#e65100;">Gottheiten</strong>
+        <p style="font-size:0.85rem; margin-top:4px;">Religion, Spiritualität, Glaube</p>
+      </div>
+    </div>
+
+    <div class="aufgabe-box">
+      ❓ Was könnte im Alltag in einer fremden Kultur schwierig sein? Benutze: <em>Sprache · Herkunft · Nation · Geschichte · Zwang · Körpersprache · Kulturelle Bräuche</em>
+    </div>
+
+    <div class="sprechkarte">
+      <div class="frage">💬 Und du? Wann hast du dich das letzte Mal euphorisch oder fehl am Platz gefühlt? Warum?</div>
+      <ul>
+        <li>Ich habe mich … gefühlt, als …</li>
+        <li>Das war für mich ein Kulturschock, weil …</li>
+        <li>Ich konnte das gar nicht, dass man …</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB 1: NEUE VOKABELN -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&w=860" alt="Vokabeln">
+    <h2>📝 Wortschatz: Ins Ausland übersiedeln</h2>
+
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: RATSCHLÄGE & VORSCHLÄGE -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=860" alt="Ratschläge">
+    <h2>💡 Redemittel: Ratschläge &amp; Vorschläge äußern</h2>
+
+    <p>Bei der Übersiedlung ins Ausland ist es wichtig, Ratschläge und Vorschläge geben und nehmen zu können.</p>
+
+    <div class="redemittel-grid">
+      <div class="redemittel-col rat">
+        <h3>💬 Ratschläge geben</h3>
+        <ul>
+          <li>Du solltest …</li>
+          <li>Ich würde dir empfehlen, …</li>
+          <li>Es wäre ratsam, …</li>
+          <li>Am besten …</li>
+          <li>Ich rate dir, …</li>
+          <li>Vergiss nicht, …</li>
+          <li>Pass auf, dass …</li>
+          <li>Es lohnt sich, …</li>
+        </ul>
+      </div>
+      <div class="redemittel-col vor">
+        <h3>🗣️ Vorschläge machen</h3>
+        <ul>
+          <li>Wie wäre es, wenn …?</li>
+          <li>Wir könnten …</li>
+          <li>Was hältst du von …?</li>
+          <li>Ich schlage vor, dass …</li>
+          <li>Hast du schon daran gedacht, …?</li>
+          <li>Vielleicht könnte man …</li>
+          <li>Es wäre eine Idee, …</li>
+          <li>Lass uns …</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>🎭 Partnerübung: Neue Erfahrungen</h3>
+    <div class="sprechkarte">
+      <div class="frage">Vervollständige die Sätze mit deinen eigenen Worten:</div>
+      <ul>
+        <li>In ein neues Land auszuwandern, kann …</li>
+        <li>Der erste Eindruck …</li>
+        <li>Kulturelle Missverständnisse kommen vor, wenn …</li>
+        <li>Die Integration in eine neue Kultur …</li>
+        <li>Ein Zugehörigkeitsgefühl ist (nicht) wichtig für mich, weil …</li>
+      </ul>
+    </div>
+
+    <div class="sprechkarte">
+      <div class="frage">🌎 Erzähle! Warst du schon im Ausland? Benutze: Körpersprache · Internationale Beziehungen · Kulturelle Bräuche · sich entwickeln · Herkunft · Impression</div>
+      <ul>
+        <li>Zu Beginn war Vieles …</li>
+        <li>Nach einer Weile …</li>
+        <li>Ich vermisste manchmal …</li>
+        <li>Das Gute war, dass …</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TAB 3: ZUORDNUNG -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=860" alt="Zuordnung">
+    <h2>🔗 Zuordnung: Ratschlag oder Vorschlag?</h2>
+    <p>Ordne jedem Satz die richtige Kategorie zu.</p>
+
+    <div id="zuordContainer"></div>
+    <button class="btn-check" onclick="checkZuord()">Alle prüfen</button>
+    <div class="ergebnis" id="zuordErgebnis"></div>
+  </div>
+
+  <!-- TAB 4: LÜCKENTEXT -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=860" alt="Lückentext">
+    <h2>✏️ Lückentext: Ins Ausland übersiedeln</h2>
+
+    <div class="timer-bar">
+      ⏱ Zeit: <span id="best2051X_L_display">00:00</span>
+      <button onclick="startTimer('best2051X_L')">Start</button>
+      <button onclick="stopTimer('best2051X_L')">Stop</button>
+    </div>
+
+    <div id="lueckenContainer"></div>
+    <button class="btn-check" onclick="checkAll()">Alle prüfen</button>
+    <div class="ergebnis" id="lueckenErgebnis"></div>
+  </div>
+
+  <!-- TAB 5: SATZBAU & VOKABELN -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&w=860" alt="Satzbau">
+    <h2>🧩 Satzbau: Sätze über das Ausland</h2>
+
+    <div class="timer-bar">
+      ⏱ Zeit: <span id="best2051X_S_display">00:00</span>
+      <button onclick="startTimer('best2051X_S')">Start</button>
+      <button onclick="stopTimer('best2051X_S')">Stop</button>
+    </div>
+
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <footer>Erstellt von FrankBurkert@fabdaf.onmicrosoft.com · B1.2 DaF-Übungen · 2051X</footer>
+</div>
+
+<script>
+// ===== TAB NAVIGATION =====
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('#mainNav button').forEach((b,i) => b.classList.toggle('active', i===idx));
+}
+
+// ===== TIMER =====
+const timers = {};
+function startTimer(key) {
+  if (timers[key] && timers[key].running) return;
+  const actualStart = Date.now() - (timers[key] ? timers[key].elapsed * 1000 : 0);
+  timers[key] = { running: true, start: actualStart, elapsed: 0 };
+  timers[key].interval = setInterval(() => {
+    const sec = Math.floor((Date.now() - timers[key].start) / 1000);
+    timers[key].elapsed = sec;
+    const m = String(Math.floor(sec/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    const el = document.getElementById(key + '_display');
+    if (el) el.textContent = m + ':' + s;
+  }, 1000);
+}
+function stopTimer(key) {
+  if (timers[key] && timers[key].interval) {
+    clearInterval(timers[key].interval);
+    timers[key].running = false;
+  }
+}
+
+// ===== ZUORDNUNG =====
+const ZUORD_DATA = [
+  { satz: 'Du solltest zuerst die Sprache lernen.', ans: 'Ratschlag' },
+  { satz: 'Wie wäre es, wenn wir zusammen Deutsch üben?', ans: 'Vorschlag' },
+  { satz: 'Es wäre ratsam, die kulturellen Bräuche zu respektieren.', ans: 'Ratschlag' },
+  { satz: 'Wir könnten zusammen in die Stadt gehen.', ans: 'Vorschlag' },
+  { satz: 'Ich würde dir empfehlen, Freunde zu finden.', ans: 'Ratschlag' },
+  { satz: 'Was hältst du von einem Auslandspraktikum?', ans: 'Vorschlag' },
+  { satz: 'Vergiss nicht, offen für neue Erfahrungen zu sein.', ans: 'Ratschlag' },
+  { satz: 'Ich schlage vor, dass wir ein interkulturelles Fest organisieren.', ans: 'Vorschlag' },
+];
+
+function buildZuord() {
+  const container = document.getElementById('zuordContainer');
+  ZUORD_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'zuord-item';
+    div.innerHTML = `
+      <span style="flex:1;">${item.satz}</span>
+      <select id="zuord_${i}">
+        <option value="">— wählen —</option>
+        <option value="Ratschlag">Ratschlag</option>
+        <option value="Vorschlag">Vorschlag</option>
+      </select>
+      <span class="zuord-fb" id="zuordfb_${i}"></span>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function checkZuord() {
+  let right = 0;
+  ZUORD_DATA.forEach((item, i) => {
+    const sel = document.getElementById('zuord_' + i);
+    const fb  = document.getElementById('zuordfb_' + i);
+    if (sel.value === item.ans) {
+      fb.className = 'zuord-fb ok'; fb.textContent = '✓'; right++;
+    } else {
+      fb.className = 'zuord-fb err'; fb.textContent = '✗ ('+item.ans+')';
+    }
+  });
+  document.getElementById('zuordErgebnis').textContent =
+    right + ' / ' + ZUORD_DATA.length + ' richtig' + (right===ZUORD_DATA.length ? ' 🎉' : '');
+}
+
+// ===== LÜCKENTEXT =====
+const LUECKEN_DATA = [
+  { pre: 'Sie hat ihren Zielort endlich ', ans: 'erreicht', post: '.' },
+  { pre: 'Zuerst war ich total ', ans: 'euphorisch', post: ', alles war so aufregend!' },
+  { pre: 'Nach einer Woche fühlte ich mich ', ans: 'fehl am Platz', post: '.' },
+  { pre: 'Manchmal ist es schwer, die Vergangenheit ', ans: 'hinter sich zu lassen', post: '.' },
+  { pre: 'Die ', ans: 'Integration', post: ' in eine neue Kultur braucht Zeit.' },
+  { pre: 'Nach zwei Wochen habe ich endlich ein ', ans: 'Zugehörigkeitsgefühl', post: ' entwickelt.' },
+  { pre: 'Er hat den Entschluss gefasst, ', ans: 'weiterzuziehen', post: '.' },
+  { pre: 'Kulturelle ', ans: 'Missverständnisse', post: ' können leicht entstehen.' },
+  { pre: 'Im Flughafen gewinnt man den ersten ', ans: 'Eindruck', post: ' von einem Land.' },
+  { pre: 'Du solltest die ', ans: 'Körpersprache', post: ' der Menschen beobachten.' },
+];
+
+function buildLuecken() {
+  const container = document.getElementById('lueckenContainer');
+  LUECKEN_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'luecke-satz';
+    div.innerHTML = item.pre +
+      `<input class="luecke" id="luecke_${i}" type="text" autocomplete="off" placeholder="…" oninput="liveCheck(${i})">` +
+      `<span class="feedback-inline" id="fb_${i}"></span>` +
+      item.post;
+    container.appendChild(div);
+  });
+}
+
+function liveCheck(i) {
+  const inp = document.getElementById('luecke_' + i);
+  const fb  = document.getElementById('fb_' + i);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[i].ans;
+  if (!val) { inp.className='luecke'; fb.textContent=''; return; }
+  if (val.toLowerCase() === ans.toLowerCase()) {
+    inp.className = 'luecke correct'; fb.className='feedback-inline ok'; fb.textContent='✓';
+    const allInps = document.querySelectorAll('.luecke');
+    if (Array.from(allInps).every(x => x.classList.contains('correct'))) stopTimer('best2051X_L');
+  } else {
+    inp.className = 'luecke'; fb.className=''; fb.textContent='';
+  }
+}
+
+function checkAll() {
+  let right = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('luecke_' + i);
+    const fb  = document.getElementById('fb_' + i);
+    const val = inp.value.trim();
+    if (val.toLowerCase() === item.ans.toLowerCase()) {
+      inp.className='luecke correct'; fb.className='feedback-inline ok'; fb.textContent='✓'; right++;
+    } else {
+      inp.className='luecke wrong'; fb.className='feedback-inline err'; fb.textContent='✗ ('+item.ans+')';
+    }
+  });
+  document.getElementById('lueckenErgebnis').textContent =
+    right + ' / ' + LUECKEN_DATA.length + ' richtig' + (right===LUECKEN_DATA.length ? ' 🎉' : '');
+  stopTimer('best2051X_L');
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Sie', 'hat', 'ihren', 'Zielort', 'endlich', 'erreicht', '.'] },
+  { words: ['Manchmal', 'fühlte', 'er', 'sich', 'fehl', 'am', 'Platz', '.'] },
+  { words: ['Die', 'Integration', 'ist', 'ein', 'langwieriger', 'Prozess', '.'] },
+  { words: ['Du', 'solltest', 'die', 'Sprache', 'schnell', 'lernen', '.'] },
+  { words: ['Nach', 'zwei', 'Wochen', 'hat', 'sie', 'ein', 'Zugehörigkeitsgefühl', 'entwickelt', '.'] },
+  { words: ['Er', 'hat', 'den', 'Entschluss', 'gefasst', ',', 'weiterzuziehen', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+buildSatzbau();
+
+// ── WORTSCHATZ ──────────────────────────────────────────────
+var WORTSCHATZ = [
+  { type: "v", en: "to move abroad", de: "ins Ausland übersiedeln" },
+  { type: "n", en: "the move", art: "der", wort: "Umzug", plural: "Umzüge" },
+  { type: "n", en: "the country", art: "das", wort: "Land", plural: "Länder" },
+  { type: "v", en: "to relocate", de: "umziehen" },
+  { type: "n", en: "the apartment", art: "die", wort: "Wohnung", plural: "Wohnungen" },
+  { type: "n", en: "the furniture", art: "die", wort: "Möbel", plural: "Möbel" },
+  { type: "n", en: "the visa", art: "das", wort: "Visum", plural: "Visa" },
+  { type: "n", en: "the customs", art: "der", wort: "Zoll", plural: "Zölle" },
+  { type: "v", en: "to pack", de: "packen" },
+  { type: "n", en: "the suitcase", art: "der", wort: "Koffer", plural: "Koffer" },
+  { type: "v", en: "to register", de: "anmelden" },
+  { type: "n", en: "the permit", art: "die", wort: "Genehmigung", plural: "Genehmigungen" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

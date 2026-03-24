@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketingstrategien – B1.2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* TAB BANNER */
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 0; display: block; }
+
+/* PADDING */
+.tab-content { padding: 28px 32px 32px 32px; }
+@media (max-width: 600px) { .tab-content { padding: 16px; } }
+
+/* HILFE-BOX */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+
+/* SEKTION-TITEL */
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* VOKABEL-KARTEN */
+.vocab-mindmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.vocab-mindmap-center { grid-column: 1 / -1; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; padding: 18px 24px; text-align: center; font-size: 1.3em; font-weight: 700; margin-bottom: 6px; }
+.vk { background: #f3effd; border: 1.5px solid #c5b8e8; border-radius: 12px; padding: 14px 16px; border-left: 4px solid #667eea; }
+.vk .art { font-size: 0.78em; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.vk .wort { font-size: 1.1em; font-weight: 700; color: #5a3e9e; margin-bottom: 4px; }
+.vk .def { font-size: 0.82em; color: #555; line-height: 1.45; }
+
+/* LESETEXT */
+.story-text { font-family: Georgia, 'Times New Roman', serif; font-size: 1.0em; line-height: 1.85; color: #2d2d2d; max-width: 720px; margin: 0 auto 24px auto; text-align: justify; hyphens: auto; }
+.story-text p { margin-bottom: 1.1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text .hl { background: rgba(255,230,80,0.45); border-radius: 3px; padding: 0 2px; font-weight: 600; }
+.story-section-title { font-family: Georgia, serif; font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin: 24px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #e8e4f5; }
+
+/* RICHTIG / FALSCH */
+.rf-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+.rf-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
+.rf-text { flex: 1; font-size: 0.92em; color: #333; line-height: 1.55; min-width: 200px; }
+.rf-btns { display: flex; gap: 8px; flex-shrink: 0; }
+.rf-btn { border: 2px solid #c5b8e8; background: white; border-radius: 8px; padding: 6px 14px; font-size: 0.85em; font-weight: 700; cursor: pointer; color: #5a3e9e; transition: all 0.2s; }
+.rf-btn:hover { background: #f0ecff; }
+.rf-btn.selected-r { background: #e8f8f0; border-color: #27ae60; color: #27ae60; }
+.rf-btn.selected-f { background: #fdeaea; border-color: #e74c3c; color: #e74c3c; }
+.rf-btn.correct { background: #e8f8f0 !important; border-color: #27ae60 !important; color: #27ae60 !important; }
+.rf-btn.wrong { background: #fdeaea !important; border-color: #e74c3c !important; color: #e74c3c !important; }
+.rf-feedback { font-size: 0.78em; font-weight: 700; margin-top: 6px; width: 100%; }
+.rf-feedback.ok { color: #27ae60; }
+.rf-feedback.err { color: #e74c3c; }
+.pruef-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95em; font-weight: 700; cursor: pointer; margin-top: 6px; }
+.pruef-btn:hover { opacity: 0.9; }
+
+/* LÜCKENTEXT */
+.luecke-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 0.93em; line-height: 1.9; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.93em; font-family: inherit; outline: none; transition: all 0.2s; min-width: 100px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* SATZBAU */
+.sb-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.sb-prompt { font-size: 0.85em; color: #666; margin-bottom: 8px; font-style: italic; }
+.sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 36px; }
+.sb-chip { background: #667eea; color: white; border-radius: 20px; padding: 5px 13px; font-size: 0.85em; font-weight: 600; cursor: grab; user-select: none; transition: all 0.2s; }
+.sb-chip:hover { background: #764ba2; transform: translateY(-1px); }
+.sb-chip.dragging { opacity: 0.45; }
+.sb-chip.static-chip { background: #9e9e9e; cursor: default; }
+.sb-drop { display: flex; flex-wrap: wrap; gap: 6px; min-height: 42px; background: #f0eeff; border: 2px dashed #c5b8e8; border-radius: 8px; padding: 6px 10px; transition: background 0.2s; }
+.sb-drop.drag-over { background: #e0d8ff; border-color: #667eea; }
+.sb-drop .sb-chip { cursor: grab; }
+.sb-feedback { font-size: 0.82em; margin-top: 6px; font-weight: 600; min-height: 18px; }
+.sb-feedback.ok { color: #27ae60; }
+.sb-feedback.err { color: #e74c3c; }
+
+/* TIMER */
+.timer-bar { display: flex; align-items: center; gap: 12px; background: #f8f5ff; border: 1px solid #e0daf5; border-radius: 8px; padding: 8px 14px; margin-bottom: 18px; }
+.timer-display { font-size: 1.1em; font-weight: 700; color: #667eea; min-width: 58px; font-variant-numeric: tabular-nums; }
+.timer-btn { background: #667eea; color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.82em; cursor: pointer; font-weight: 600; }
+.timer-btn:hover { background: #764ba2; }
+.best-time { font-size: 0.78em; color: #888; margin-left: auto; }
+
+/* WORTSCHATZ TRAINING */
+.ws-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ws-en { font-size: 0.92em; color: #666; min-width: 160px; font-style: italic; }
+.ws-fields { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+input.ws-input { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 7px; font-size: 0.88em; font-family: inherit; outline: none; transition: all 0.2s; }
+input.ws-input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.ws-input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.ws-input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.ws-hint { font-size: 0.75em; color: #aaa; }
+.reset-btn { background: #f0f4ff; color: #667eea; border: 1.5px solid #667eea; border-radius: 8px; padding: 10px 20px; font-size: 0.9em; font-weight: 600; cursor: pointer; margin-top: 12px; margin-left: 8px; }
+.reset-btn:hover { background: #e0e7ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Marketingstrategien</h1>
+    <p>B1.2 · Einheit 1 · Lesetext</p>
+    <span class="big-emoji">📊</span>
+  </div>
+  <div class="nav">
+    <div class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">📖</span><span class="nav-label">Vorentlastung</span></div>
+    <div class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">📄</span><span class="nav-label">Lesetext</span></div>
+    <div class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">✅</span><span class="nav-label">Richtig/Falsch</span></div>
+    <div class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🌟</span><span class="nav-label">Wortschatz</span></div>
+  </div>
+
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="section active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Marketingstrategien">
+    <div class="tab-content">
+      <div class="hilfe-box">Damit ein <strong>Unternehmen</strong> Erfolg hat, muss es <strong>Marketingstrategien</strong> berücksichtigen. Lerne die wichtigsten Begriffe vor dem Lesen.</div>
+      <div class="section-title">Schlüsselvokabular</div>
+      <div class="vocab-mindmap">
+        <div class="vocab-mindmap-center">📊 Marketingstrategien</div>
+        <div class="vk"><div class="art">das / –</div><div class="wort">Marketing</div><div class="def">Alle Maßnahmen, die ein Unternehmen zur Vermarktung seiner Produkte einsetzt</div></div>
+        <div class="vk"><div class="art">die / -n</div><div class="wort">Marketingstrategie</div><div class="def">Ein langfristiger Plan zur Erreichung von Marketingzielen</div></div>
+        <div class="vk"><div class="art">die / -n</div><div class="wort">Werbestrategie</div><div class="def">Gezielter Plan für Werbemaßnahmen eines Unternehmens</div></div>
+        <div class="vk"><div class="art">die / -n</div><div class="wort">Werbekampagne</div><div class="def">Koordinierte Reihe von Werbemaßnahmen mit gemeinsamen Zielen</div></div>
+        <div class="vk"><div class="art">das / -e</div><div class="wort">Werbeziel</div><div class="def">Was eine Werbung erreichen soll (z.B. Bekanntheit, Verkauf)</div></div>
+        <div class="vk"><div class="art">die / -n</div><div class="wort">Zielgruppe</div><div class="def">Die Personengruppe, die man mit der Werbung erreichen möchte</div></div>
+        <div class="vk"><div class="art">das / –</div><div class="wort">Online-Marketing</div><div class="def">Alle Marketingmaßnahmen im Internet</div></div>
+        <div class="vk"><div class="art">die / –</div><div class="wort">Konkurrenz</div><div class="def">Andere Unternehmen, die ähnliche Produkte oder Dienstleistungen anbieten</div></div>
+        <div class="vk"><div class="art">die / -en</div><div class="wort">Platzierung</div><div class="def">Wo und wie ein Produkt oder eine Werbung positioniert wird</div></div>
+        <div class="vk"><div class="art">die / -en</div><div class="wort">Maßnahme</div><div class="def">Konkrete Handlung zur Erreichung eines Ziels</div></div>
+        <div class="vk"><div class="art">das / -s</div><div class="wort">Budget</div><div class="def">Der finanzielle Rahmen, der für Marketingmaßnahmen zur Verfügung steht</div></div>
+        <div class="vk"><div class="art">die / -en</div><div class="wort">Zielsetzung</div><div class="def">Das Festlegen von Zielen, die man erreichen möchte</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="section" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Lesetext">
+    <div class="tab-content">
+      <div class="hilfe-box">Lies den Text über <strong>Marketingstrategien</strong>. Achte besonders auf die hervorgehobenen Wörter.</div>
+      <div class="story-section-title">Ziel</div>
+      <div class="story-text">
+        <p>Wer etwas verkaufen will, muss sich zuerst einmal fragen: <em>Wie?</em> Weitere Fragen sind dann <em>für wen? wann?</em> und <em>wo?</em> Als Antworten darauf gibt es <span class="hl">Marketingstrategien</span>, die fast so alt sind, wie die <span class="hl">Wirtschaft</span> selbst.</p>
+        <p>Am Anfang muss man einen sehr guten Plan erstellen, wo möglichst viele wichtige Aspekte wie <span class="hl">Zielgruppe</span>, <span class="hl">Platzierung</span>, <span class="hl">Werbung</span> und <span class="hl">Werbekampagnen</span> berücksichtigt werden.</p>
+        <p>Und außerdem darf nicht vergessen werden, dass jede Planung mit einem <span class="hl">Ziel</span> beginnt. Eine Strategie zeigt dann nur den Weg, wie dieses Ziel erreicht werden kann.</p>
+        <p>Dabei muss man darauf achten, dass es ein <span class="hl">realistisches Ziel</span> ist. Wer zum Beispiel einen Friseursalon eröffnen will und das Ziel hat, in einem Jahr einer der bekanntesten Friseursalons in Deutschland zu sein, muss sich fragen, ob das überhaupt möglich ist.</p>
+        <p>Viel besser wäre vielleicht, zuerst die <span class="hl">Konkurrenz</span> in bestimmten Stadtvierteln zu übertreffen. Dann im Stadtbezirk. Und in ein paar Jahren kann man es vielleicht schaffen – warum nicht? – der beste Friseursalon in der ganzen Stadt zu werden.</p>
+      </div>
+      <div class="story-section-title">Budget</div>
+      <div class="story-text">
+        <p>Bei der <span class="hl">Zielsetzung</span> muss man auch das <span class="hl">Marketing-Budget</span> berücksichtigen. Das verfügbare Marketing-Budget wirkt sich auf die <span class="hl">Marketing-Maßnahmen</span> und das mögliche Ziel aus.</p>
+        <p>Ein Start-Budget darf normalerweise nicht weniger als 1.000 Euro betragen – mit Werbung!</p>
+      </div>
+      <div class="story-section-title">Strategie</div>
+      <div class="story-text">
+        <p>Eine gute <span class="hl">Marketingstrategie</span> setzt klare Prioritäten. Man muss entscheiden, welche <span class="hl">Kanäle</span> man benutzt: TV, Radio, Online-Marketing, Social Media oder Print. Jeder Kanal hat seine eigene <span class="hl">Zielgruppe</span> und seine eigenen Kosten.</p>
+        <p>Wichtig ist auch die <span class="hl">Werbekampagne</span> selbst: Die <span class="hl">Botschaft</span> muss klar sein. Der <span class="hl">Slogan</span> muss einprägsam sein. Und das Design muss zur <span class="hl">Marke</span> passen.</p>
+        <p>Kurz gesagt: Ohne eine klare Strategie ist auch das beste Produkt zum Scheitern verurteilt. Denn <span class="hl">Werbung</span> allein reicht nicht — es braucht eine durchdachte <span class="hl">Gesamtstrategie</span>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: RICHTIG / FALSCH -->
+  <div class="section" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Richtig Falsch">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td2">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(2)">↺</button>
+        <span class="best-time" id="bt2"></span>
+      </div>
+      <div class="hilfe-box">Klicke auf <strong>R</strong> (Richtig) oder <strong>F</strong> (Falsch) für jede Aussage über den Text.</div>
+      <div class="rf-list" id="rf-list"></div>
+      <button class="pruef-btn" onclick="checkRF()">✔ Prüfen</button>
+      <div style="margin-top:12px; font-size:0.9em; color:#667eea; font-weight:700;" id="rf-score"></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="section" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6476808/pexels-photo-6476808.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Lückentext">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td3">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(3)">↺</button>
+        <span class="best-time" id="bt3"></span>
+      </div>
+      <div class="hilfe-box">Fülle die Lücken mit dem richtigen Wort aus. Die Wörter stehen im Kasten.</div>
+      <div class="wortkasten">📦 <strong>Wortkasten:</strong> Zielgruppe · Budget · Strategie · Konkurrenz · Maßnahmen · realistisches · Werbekampagne · Platzierung · Botschaft · Zielsetzung</div>
+      <div id="luecken-container"></div>
+      <button class="reset-btn" onclick="resetLuecken()">↺ Zurücksetzen</button>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Satzbau">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td4">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(4)">↺</button>
+        <span class="best-time" id="bt4"></span>
+      </div>
+      <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge. Ziehe die Chips ins Zielfeld.</div>
+      <div id="sb-container"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="section" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Vokabeln">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td5">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(5)">↺</button>
+        <span class="best-time" id="bt5"></span>
+      </div>
+      <div class="hilfe-box">Tippe den deutschen Artikel und das Wort (sowie den Plural). Groß-/Kleinschreibung beachten!</div>
+      <div id="ws-container"></div>
+      <button class="pruef-btn" onclick="vocabLiveCheck()">✔ Prüfen</button>
+      <button class="reset-btn" onclick="wsReset()">↺ Zurücksetzen</button>
+      <div style="margin-top:12px; font-size:0.9em; color:#667eea; font-weight:700;" id="ws-score"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TAB NAVIGATION ──────────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  if (n===2 && !timers[2].started) timerAutoStart(2);
+  if (n===3 && !timers[3].started) timerAutoStart(3);
+  if (n===4 && !timers[4].started) timerAutoStart(4);
+  if (n===5 && !timers[5].started) timerAutoStart(5);
+}
+
+// ── TIMER ────────────────────────────────────────────────────────
+const TIMER_PREFIX = 'best2016R';
+const timers = {};
+[2,3,4,5].forEach(n => { timers[n] = { s:0, iv:null, started:false }; });
+function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
+function startTimer(n){ if(timers[n].iv) return; timers[n].iv=setInterval(()=>{ timers[n].s++; document.getElementById('td'+n).textContent=fmtTime(timers[n].s); },1000); }
+function stopTimer(n){ clearInterval(timers[n].iv); timers[n].iv=null; const key=TIMER_PREFIX+'_t'+n; const best=parseInt(localStorage.getItem(key)||'99999'); if(timers[n].s>0&&timers[n].s<best){ localStorage.setItem(key,timers[n].s); showBest(n,timers[n].s); } else showBest(n,best); }
+function resetTimer(n){ clearInterval(timers[n].iv); timers[n].iv=null; timers[n].s=0; timers[n].started=false; document.getElementById('td'+n).textContent='0:00'; startTimer(n); timers[n].started=true; }
+function showBest(n,s){ const el=document.getElementById('bt'+n); if(el&&s<99999) el.textContent='Best: '+fmtTime(s); }
+function loadBestTimes(){ [2,3,4,5].forEach(n=>{ const v=localStorage.getItem(TIMER_PREFIX+'_t'+n); if(v) showBest(n,parseInt(v)); }); }
+function timerAutoStart(n){ startTimer(n); timers[n].started=true; }
+
+// ── RICHTIG / FALSCH ─────────────────────────────────────────────
+const RF_DATA = [
+  { text:'Wer etwas verkaufen will, muss sich zuerst fragen: Wie? Für wen? Wann? und Wo?', answer: true },
+  { text:'Marketingstrategien sind ein modernes Konzept aus dem 21. Jahrhundert.', answer: false },
+  { text:'Eine gute Marketingstrategie berücksichtigt Zielgruppe, Platzierung und Werbekampagnen.', answer: true },
+  { text:'Jede Planung beginnt mit einem Ziel — die Strategie zeigt den Weg dorthin.', answer: true },
+  { text:'Ein realistisches Ziel für einen neuen Friseursalon wäre sofort der bekannteste in ganz Deutschland zu werden.', answer: false },
+  { text:'Das verfügbare Marketing-Budget beeinflusst die Maßnahmen und das erreichbare Ziel.', answer: true },
+  { text:'Ein Start-Budget von mindestens 1.000 Euro wird für Werbung empfohlen.', answer: true },
+  { text:'Online-Marketing ist der einzige Kanal, den moderne Unternehmen nutzen sollten.', answer: false },
+];
+
+let rfSelected = {};
+function buildRF(){
+  const list=document.getElementById('rf-list'); list.innerHTML=''; rfSelected={};
+  RF_DATA.forEach((d,i)=>{
+    const item=document.createElement('div'); item.className='rf-item';
+    item.innerHTML=`<div class="rf-text">${i+1}. ${d.text}</div>
+      <div class="rf-btns">
+        <button class="rf-btn" id="rf_r_${i}" onclick="selectRF(${i},true)">R</button>
+        <button class="rf-btn" id="rf_f_${i}" onclick="selectRF(${i},false)">F</button>
+      </div>
+      <div class="rf-feedback" id="rf_fb_${i}"></div>`;
+    list.appendChild(item);
+  });
+}
+function selectRF(i, val){
+  rfSelected[i]=val;
+  const rb=document.getElementById('rf_r_'+i); const fb=document.getElementById('rf_f_'+i);
+  rb.className='rf-btn'+(val?' selected-r':''); fb.className='rf-btn'+(!val?' selected-f':'');
+}
+function checkRF(){
+  let correct=0;
+  RF_DATA.forEach((d,i)=>{
+    const fb=document.getElementById('rf_fb_'+i);
+    if(rfSelected[i]===undefined){ fb.textContent=''; return; }
+    const ok=rfSelected[i]===d.answer;
+    if(ok){ correct++; fb.className='rf-feedback ok'; fb.textContent='✓ Richtig!'; }
+    else { fb.className='rf-feedback err'; fb.textContent='✗ Falsch — die Aussage ist '+(d.answer?'richtig':'falsch')+'.'; }
+    const rb=document.getElementById('rf_r_'+i); const ffb=document.getElementById('rf_f_'+i);
+    if(ok){ if(rfSelected[i]) rb.className='rf-btn correct'; else ffb.className='rf-btn correct'; }
+    else { if(rfSelected[i]) rb.className='rf-btn wrong'; else ffb.className='rf-btn wrong'; }
+  });
+  document.getElementById('rf-score').textContent=correct+' / '+RF_DATA.length+' richtig';
+  if(correct===RF_DATA.length) stopTimer(2);
+}
+
+// ── LÜCKENTEXT ───────────────────────────────────────────────────
+const LUECKEN_DATA = [
+  { pre:'Wer etwas verkaufen will, braucht eine klare ', blank:'Strategie', post:' für sein Marketing.' },
+  { pre:'Am Anfang muss man wichtige Aspekte wie ', blank:'Zielgruppe', post:' und Platzierung berücksichtigen.' },
+  { pre:'Die ', blank:'Platzierung', post:' eines Produkts beschreibt, wo und wie es positioniert wird.' },
+  { pre:'Jede Planung beginnt mit einem ', blank:'realistisches', post:'n Ziel.' },
+  { pre:'Wenn man einen Friseursalon eröffnet, sollte man zuerst die lokale ', blank:'Konkurrenz', post:' übertreffen.' },
+  { pre:'Das verfügbare Marketing-', blank:'Budget', post:' wirkt sich auf die möglichen Maßnahmen aus.' },
+  { pre:'Bei der ', blank:'Zielsetzung', post:' muss man auch das Budget berücksichtigen.' },
+  { pre:'Verschiedene Marketing-', blank:'Maßnahmen', post:' werden eingesetzt, um das Ziel zu erreichen.' },
+  { pre:'Die ', blank:'Botschaft', post:' einer Werbekampagne muss klar und einprägsam sein.' },
+  { pre:'Eine koordinierte Reihe von Werbemaßnahmen heißt ', blank:'Werbekampagne', post:'.' },
+];
+
+function buildLuecken(){
+  const c=document.getElementById('luecken-container'); c.innerHTML='';
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div'); div.className='luecke-item';
+    div.innerHTML=d.pre+'<input class="blank" id="lb'+i+'" type="text" autocomplete="off" oninput="liveCheck('+i+')" placeholder="…">'+d.post;
+    c.appendChild(div);
+  });
+}
+function liveCheck(i){
+  const inp=document.getElementById('lb'+i);
+  const ans=LUECKEN_DATA[i].blank;
+  const v=inp.value;
+  if(!v){ inp.className='blank'; return; }
+  const caseSensitive=ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+  const match=caseSensitive?ans.startsWith(v):ans.toLowerCase().startsWith(v.toLowerCase());
+  const exact=caseSensitive?(ans===v):(ans.toLowerCase()===v.toLowerCase());
+  if(exact){
+    inp.className='blank correct';
+    if(!document.getElementById('lh'+i)){ const sp=document.createElement('span'); sp.className='correction-hint'; sp.id='lh'+i; sp.textContent='✓'; inp.parentNode.insertBefore(sp,inp.nextSibling); }
+    const allOk=[...document.querySelectorAll('#luecken-container .blank')].every(b=>b.classList.contains('correct'));
+    if(allOk) stopTimer(3);
+  } else { inp.className='blank'+(match?'':' wrong'); }
+}
+function resetLuecken(){ buildLuecken(); }
+
+// ── SATZBAU ──────────────────────────────────────────────────────
+const SATZBAU_DATA = [
+  { prompt:'Was muss man bei der Planung berücksichtigen?', chips:['Zielgruppe',',','Platzierung','und','Werbekampagnen','müssen','berücksichtigt','werden','.'], correct:'Zielgruppe , Platzierung und Werbekampagnen müssen berücksichtigt werden .' },
+  { prompt:'Womit beginnt jede Planung?', chips:['Jede','Planung','beginnt','mit','einem','Ziel','.'], correct:'Jede Planung beginnt mit einem Ziel .' },
+  { prompt:'Was wirkt sich auf die Maßnahmen aus?', chips:['Das','verfügbare','Marketing-Budget','wirkt','sich','auf','die','Maßnahmen','aus','.'], correct:'Das verfügbare Marketing-Budget wirkt sich auf die Maßnahmen aus .' },
+  { prompt:'Was zeigt eine Strategie?', chips:['Eine','Strategie','zeigt','den','Weg',',','wie','das','Ziel','erreicht','werden','kann','.'], correct:'Eine Strategie zeigt den Weg , wie das Ziel erreicht werden kann .' },
+  { prompt:'Ohne was scheitert auch das beste Produkt?', chips:['Ohne','eine','klare','Strategie','ist','auch','das','beste','Produkt','zum','Scheitern','verurteilt','.'], correct:'Ohne eine klare Strategie ist auch das beste Produkt zum Scheitern verurteilt .' },
+];
+
+let sbDragged=null;
+function sbMakeChip(word,isStatic=false){ const span=document.createElement('span'); span.className='sb-chip'+(isStatic?' static-chip':''); span.textContent=word; if(!isStatic){ span.draggable=true; span.ondragstart=e=>{ sbDragged=span; span.classList.add('dragging'); }; span.ondragend=e=>{ span.classList.remove('dragging'); sbDragged=null; }; } return span; }
+function sbRegisterZone(zone,idx){ zone.ondragover=e=>{ e.preventDefault(); zone.classList.add('drag-over'); }; zone.ondragleave=e=>zone.classList.remove('drag-over'); zone.ondrop=e=>{ e.preventDefault(); zone.classList.remove('drag-over'); if(sbDragged) zone.appendChild(sbDragged); setTimeout(()=>sbCheckAuto(idx),500); }; }
+function sbUpdateCapitalization(zone){ const chips=[...zone.querySelectorAll('.sb-chip:not(.static-chip)')]; chips.forEach((ch,i)=>{ const w=ch.dataset.original||ch.textContent; if(!ch.dataset.original) ch.dataset.original=w; if(i===0) ch.textContent=w[0].toUpperCase()+w.slice(1); else ch.textContent=w; }); }
+function sbCheckAuto(idx){ const zone=document.getElementById('sb_drop_'+idx); const fb=document.getElementById('sb_fb_'+idx); sbUpdateCapitalization(zone); const chips=[...zone.querySelectorAll('.sb-chip')]; const attempt=chips.map(c=>c.textContent).join(' '); const correct=SATZBAU_DATA[idx].correct; if(chips.length===0){ fb.textContent=''; return; } if(attempt===correct){ fb.className='sb-feedback ok'; fb.textContent='✓ Richtig!'; const allDone=[...document.querySelectorAll('.sb-feedback')].every(f=>f.classList.contains('ok')); if(allDone) stopTimer(4); } else if(chips.length===correct.split(' ').length){ fb.className='sb-feedback err'; fb.textContent='✗ Noch nicht richtig.'; } else fb.textContent=''; }
+function buildSatzbau(){ const c=document.getElementById('sb-container'); c.innerHTML=''; SATZBAU_DATA.forEach((d,idx)=>{ let shuffled=[...d.chips]; let ok=false; for(let attempt=0;attempt<50&&!ok;attempt++){ for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; } ok=shuffled.some((w,i)=>w!==d.chips[i]); } const div=document.createElement('div'); div.className='sb-item'; const prompt=document.createElement('div'); prompt.className='sb-prompt'; prompt.textContent=(idx+1)+'. '+d.prompt; div.appendChild(prompt); const chipArea=document.createElement('div'); chipArea.className='sb-chips'; chipArea.id='sb_src_'+idx; shuffled.forEach(w=>{ const isPunct=/^[.,!?;:—–,]$/.test(w); chipArea.appendChild(sbMakeChip(w,isPunct)); }); const dropZone=document.createElement('div'); dropZone.className='sb-drop'; dropZone.id='sb_drop_'+idx; sbRegisterZone(dropZone,idx); sbRegisterZone(chipArea,idx); const fb=document.createElement('div'); fb.className='sb-feedback'; fb.id='sb_fb_'+idx; div.appendChild(chipArea); div.appendChild(dropZone); div.appendChild(fb); c.appendChild(div); }); }
+
+// ── WORTSCHATZ ───────────────────────────────────────────────────
+const VOCAB_DATA = [
+  { en:'marketing strategy', art:'die', wort:'Marketingstrategie', plural:'-n' },
+  { en:'advertising strategy', art:'die', wort:'Werbestrategie', plural:'-n' },
+  { en:'advertising campaign', art:'die', wort:'Werbekampagne', plural:'-n' },
+  { en:'advertising goal', art:'das', wort:'Werbeziel', plural:'-e' },
+  { en:'target group', art:'die', wort:'Zielgruppe', plural:'-n' },
+  { en:'competition', art:'die', wort:'Konkurrenz', plural:'–' },
+  { en:'measure / action', art:'die', wort:'Maßnahme', plural:'-n' },
+  { en:'budget', art:'das', wort:'Budget', plural:'-s' },
+  { en:'goal setting', art:'die', wort:'Zielsetzung', plural:'-en' },
+  { en:'placement', art:'die', wort:'Platzierung', plural:'-en' },
+];
+
+function buildWortschatz(){ const c=document.getElementById('ws-container'); c.innerHTML=''; VOCAB_DATA.forEach((d,i)=>{ const div=document.createElement('div'); div.className='ws-item'; div.innerHTML=`<span class="ws-en">${d.en}</span><div class="ws-fields"><span class="ws-hint">Artikel:</span><input class="ws-input" id="ws_art_${i}" style="width:50px" type="text" autocomplete="off" placeholder="der/die/das"><span class="ws-hint">Nomen:</span><input class="ws-input" id="ws_wort_${i}" style="width:160px" type="text" autocomplete="off" placeholder="…"><span class="ws-hint">Pl.:</span><input class="ws-input" id="ws_pl_${i}" style="width:60px" type="text" autocomplete="off" placeholder="…"></div>`; c.appendChild(div); }); }
+function vocabLiveCheck(){ let correct=0; VOCAB_DATA.forEach((d,i)=>{ const artEl=document.getElementById('ws_art_'+i); const wortEl=document.getElementById('ws_wort_'+i); const plEl=document.getElementById('ws_pl_'+i); const artOk=artEl.value.trim()===d.art; const wortOk=wortEl.value.trim()===d.wort; const plOk=plEl.value.trim()===d.plural; artEl.className='ws-input '+(artEl.value.trim()===''?'':(artOk?'correct':'wrong')); wortEl.className='ws-input '+(wortEl.value.trim()===''?'':(wortOk?'correct':'wrong')); plEl.className='ws-input '+(plEl.value.trim()===''?'':(plOk?'correct':'wrong')); if(artOk&&wortOk&&plOk) correct++; }); document.getElementById('ws-score').textContent=correct+' / '+VOCAB_DATA.length+' richtig'; if(correct===VOCAB_DATA.length) stopTimer(5); }
+function wsReset(){ VOCAB_DATA.forEach((_,i)=>{ ['ws_art_','ws_wort_','ws_pl_'].forEach(p=>{ const el=document.getElementById(p+i); el.value=''; el.className='ws-input'; }); }); document.getElementById('ws-score').textContent=''; }
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildRF();
+buildLuecken();
+buildSatzbau();
+buildWortschatz();
+loadBestTimes();
+function initVocab() { buildWortschatz(); }
+</script>
+</body>
+</html>

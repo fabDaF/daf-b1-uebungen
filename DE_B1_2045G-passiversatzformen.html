@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2045G · Passiversatzformen</title>
+<style>
+  :root { --main: #667eea; --main-light: #f3e5f5; --main-dark: #4a0080; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--main); min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); overflow: hidden; }
+  header { background: var(--main); color: #fff; padding: 22px 28px 16px; }
+  header h1 { font-size: 1.45rem; font-weight: 700; }
+  header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
+  /* NAV */
+  nav { display: flex; flex-direction: column; background: #f8f0ff; border-bottom: 2px solid var(--main); }
+  nav button { background: transparent; border: none; border-bottom: 1px solid #ddd; padding: 11px 18px; text-align: left; cursor: pointer; font-size: 0.92rem; color: #333; transition: background 0.2s; }
+  nav button:last-child { border-bottom: none; }
+  nav button.active { background: var(--main); color: #fff; font-weight: 700; }
+  nav button:hover:not(.active) { background: #e8d5f5; }
+  /* TAB CONTENT */
+  .tab { display: none; padding: 24px 28px 32px; }
+  .tab.active { display: block; }
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; }
+  /* ENTDECKEN */
+  .discover-box { background: #f8f0ff; border-left: 4px solid var(--main); border-radius: 8px; padding: 16px 20px; margin-bottom: 18px; }
+  .discover-box p { font-size: 0.97rem; line-height: 1.6; }
+  .discover-box .example { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin-top: 10px; font-size: 0.95rem; }
+  .mc-question { margin-bottom: 20px; }
+  .mc-question p.frage { font-weight: 600; margin-bottom: 10px; font-size: 0.97rem; }
+  .mc-options { display: flex; flex-direction: column; gap: 8px; }
+  .mc-options label { display: flex; align-items: flex-start; gap: 10px; background: #f8f0ff; border: 2px solid transparent; border-radius: 8px; padding: 10px 14px; cursor: pointer; font-size: 0.93rem; transition: border-color 0.2s; }
+  .mc-options label:hover { border-color: var(--main); }
+  .mc-options input { margin-top: 2px; accent-color: var(--main); flex-shrink: 0; }
+  .mc-options label.correct { border-color: #27ae60; background: #e8f8ee; }
+  .mc-options label.wrong { border-color: #e74c3c; background: #fdecea; }
+  .progress-dots { display: flex; gap: 8px; margin-bottom: 18px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd; transition: background 0.3s; }
+  .dot.done { background: var(--main); }
+  .dot.active { background: #b060f0; }
+  .btn { background: var(--main); color: #fff; border: none; padding: 9px 22px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; margin-top: 10px; transition: background 0.2s; }
+  .btn:hover { background: var(--main-dark); }
+  .step { display: none; }
+  .step.active { display: block; }
+  .rule-card { background: linear-gradient(135deg, #f3e5f5, #e8d5f5); border: 2px solid var(--main); border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; }
+  .rule-card h3 { color: var(--main-dark); font-size: 1.05rem; margin-bottom: 12px; }
+  /* REGEL */
+  .regel-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.92rem; }
+  .regel-table th { background: var(--main); color: #fff; padding: 10px 12px; text-align: left; }
+  .regel-table td { border: 1px solid #ddd; padding: 10px 12px; vertical-align: top; }
+  .regel-table tr:nth-child(even) td { background: #f8f0ff; }
+  .highlight-passiv { color: #1565c0; font-weight: 600; }
+  .highlight-ersatz { color: #667eea; font-weight: 600; }
+  .info-box { background: #e8f4fd; border-left: 4px solid #1565c0; border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 0.93rem; line-height: 1.6; }
+  .info-box strong { color: #1565c0; }
+  /* LÜCKENTEXT */
+  .luecken-intro { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; font-size: 0.93rem; color: #555; }
+  .luecken-satz { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; line-height: 1.8; }
+  .luecke { border: none; border-bottom: 2px solid var(--main); background: transparent; font-size: 0.97rem; font-family: inherit; color: #222; padding: 2px 4px; min-width: 120px; outline: none; }
+  .luecke.correct { border-bottom-color: #27ae60; background: #e8f8ee; border-radius: 4px; }
+  .luecke.wrong { border-bottom-color: #e74c3c; background: #fdecea; border-radius: 4px; }
+  .check-btn { background: var(--main); color: #fff; border: none; padding: 10px 26px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; margin-top: 14px; transition: background 0.2s; }
+  .check-btn:hover { background: var(--main-dark); }
+  .result-msg { margin-top: 12px; font-weight: 600; font-size: 0.95rem; }
+  .result-msg.ok { color: #27ae60; }
+  .result-msg.nok { color: #e74c3c; }
+  /* SATZBAU */
+  .sb-task { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task p.aufgabe { font-size: 0.93rem; color: #555; margin-bottom: 10px; }
+  .chips-area { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; background: #fff; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; }
+  .chip { background: var(--main); color: #fff; border: none; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.88rem; font-weight: 500; user-select: none; transition: opacity 0.2s, transform 0.15s; }
+  .chip:hover { transform: scale(1.05); }
+  .chip.dragging { opacity: 0.4; }
+  .drop-zone { min-height: 44px; background: #fafafa; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .drop-zone.over { background: #e8d5f5; border-color: var(--main); }
+  .sb-feedback { font-size: 0.9rem; font-weight: 600; margin-top: 6px; min-height: 20px; }
+  .sb-feedback.ok { color: #27ae60; }
+  .sb-feedback.nok { color: #e74c3c; }
+  /* ZUORDNUNG */
+  .zuord-item { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; font-size: 0.93rem; }
+  .zuord-item span { flex: 1; line-height: 1.5; }
+  .zuord-item select { padding: 6px 10px; border: 2px solid #ccc; border-radius: 6px; font-size: 0.9rem; background: #fff; cursor: pointer; min-width: 160px; }
+  .zuord-item select.correct { border-color: #27ae60; background: #e8f8ee; }
+  .zuord-item select.wrong { border-color: #e74c3c; background: #fdecea; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 10px; background: #f8f0ff; border-radius: 8px; padding: 8px 16px; margin-bottom: 16px; font-size: 0.88rem; color: #555; }
+  .timer-display { font-size: 1rem; font-weight: 700; color: var(--main); min-width: 50px; }
+  .timer-btn { background: var(--main); color: #fff; border: none; padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+  /* FOOTER */
+  footer { text-align: center; padding: 14px; font-size: 0.78rem; color: #aaa; border-top: 1px solid #eee; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Passiversatzformen</h1>
+    <p>B1.2 · Lektion 2045G · Grammatik</p>
+  </header>
+
+  <nav id="mainNav">
+    <button class="active" onclick="showTab(0)">① Entdecken</button>
+    <button onclick="showTab(1)">② Regel</button>
+    <button onclick="showTab(2)">③ Lückentext</button>
+    <button onclick="showTab(3)">④ Satzbau</button>
+    <button onclick="showTab(4)">⑤ Zuordnung</button>
+  </nav>
+
+  <!-- TAB 0: ENTDECKEN -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=860" alt="Lernen" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:16px;">Entdecken: Passiversatzformen</h2>
+
+    <div class="progress-dots" id="dots0">
+      <div class="dot active" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+    </div>
+
+    <!-- Step 0 -->
+    <div class="step active" id="step0">
+      <div class="discover-box">
+        <p>Im Deutschen kann man einen Passivsatz durch eine <strong>Passiversatzform</strong> ersetzen. Schau dir die Beispiele an:</p>
+        <div class="example">
+          <span class="highlight-passiv">Passiv:</span> Diese Aufgabe <strong>wird</strong> mit mehreren Methoden <strong>gelöst</strong>.<br>
+          <span class="highlight-ersatz">Passiversatz:</span> Diese Aufgabe <strong>lässt sich</strong> mit mehreren Methoden <strong>lösen</strong>.
+        </div>
+      </div>
+      <div class="mc-question">
+        <p class="frage">Was ist der Unterschied zwischen Passiv und Passiversatzform?</p>
+        <div class="mc-options" id="mc0">
+          <label><input type="radio" name="q0" value="a"> Die Passiversatzform ist immer falsch.</label>
+          <label><input type="radio" name="q0" value="b"> Die Passiversatzform drückt dasselbe aus, aber mit anderen Mitteln.</label>
+          <label><input type="radio" name="q0" value="c"> Die Passiversatzform ist nur im Perfekt möglich.</label>
+        </div>
+        <button class="btn" onclick="checkMC(0,'b',1)">Prüfen</button>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step" id="step1">
+      <div class="discover-box">
+        <p>Die einfachste Passiversatzform verwendet <strong>man</strong> oder <strong>jemand</strong>:</p>
+        <div class="example">
+          <span class="highlight-passiv">Passiv:</span> Manchmal <strong>wird</strong> im Restaurant <strong>gegessen</strong>.<br>
+          <span class="highlight-ersatz">Passiversatz:</span> Manchmal isst <strong>man</strong> im Restaurant.
+        </div>
+        <div class="example" style="margin-top:8px;">
+          <span class="highlight-passiv">Passiv:</span> Ein Auto <strong>wird gekauft</strong>.<br>
+          <span class="highlight-ersatz">Passiversatz:</span> <strong>Jemand</strong> kauft ein Auto.
+        </div>
+      </div>
+      <div class="mc-question">
+        <p class="frage">Welche Passiversatzform passt? → „Die Spielzeuge werden gesammelt."</p>
+        <div class="mc-options" id="mc1">
+          <label><input type="radio" name="q1" value="a"> Die Spielzeuge lassen sich sammeln.</label>
+          <label><input type="radio" name="q1" value="b"> Man/Jemand sammelt die Spielzeuge.</label>
+          <label><input type="radio" name="q1" value="c"> Die Spielzeuge sind zu sammeln.</label>
+        </div>
+        <button class="btn" onclick="checkMC(1,'b',2)">Prüfen</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" id="step2">
+      <div class="discover-box">
+        <p>Für Modalverben wie <strong>können, müssen, sollen</strong> und <strong>nicht dürfen</strong> im Passiv kann man <strong>sein zu + Infinitiv</strong> verwenden:</p>
+        <div class="example">
+          <span class="highlight-passiv">Passiv:</span> Der Marathon <strong>kann</strong> geschafft <strong>werden</strong>.<br>
+          <span class="highlight-ersatz">Passiversatz:</span> Der Marathon <strong>ist zu schaffen</strong>.
+        </div>
+        <div class="example" style="margin-top:8px;">
+          <span class="highlight-passiv">Passiv:</span> Im Zug <strong>darf nicht</strong> geraucht <strong>werden</strong>.<br>
+          <span class="highlight-ersatz">Passiversatz:</span> Im Zug <strong>ist nicht zu rauchen</strong>.
+        </div>
+      </div>
+      <div class="mc-question">
+        <p class="frage">Was ist die Passiversatzform für: „Das Zimmer muss aufgeräumt werden."?</p>
+        <div class="mc-options" id="mc2">
+          <label><input type="radio" name="q2" value="a"> Das Zimmer lässt sich aufräumen.</label>
+          <label><input type="radio" name="q2" value="b"> Das Zimmer kann aufgeräumt werden.</label>
+          <label><input type="radio" name="q2" value="c"> Das Zimmer ist aufzuräumen.</label>
+        </div>
+        <button class="btn" onclick="checkMC(2,'c',3)">Prüfen</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" id="step3">
+      <div class="discover-box">
+        <p>Mit den Adjektivendungen <strong>-lich</strong> und <strong>-bar</strong> kann man das Modalverb <strong>können</strong> im Passiv ersetzen. Außerdem: <strong>sich lassen + Infinitiv</strong> für Möglichkeit/Unmöglichkeit:</p>
+        <div class="example">
+          Das Problem <strong>kann</strong> gelöst <strong>werden</strong>.<br>
+          → Das Problem ist <strong>lösbar</strong>. / Das Problem <strong>lässt sich</strong> lösen.
+        </div>
+        <div class="example" style="margin-top:8px;">
+          Die Schrift <strong>kann nicht</strong> gelesen <strong>werden</strong>.<br>
+          → Die Schrift ist <strong>nicht leserlich</strong>. / Die Schrift <strong>lässt sich nicht</strong> lesen.
+        </div>
+      </div>
+      <div class="mc-question">
+        <p class="frage">Welche Passiversatzform ist KEINE Möglichkeit für „Die Aufgaben können nicht gemacht werden."?</p>
+        <div class="mc-options" id="mc3">
+          <label><input type="radio" name="q3" value="a"> Die Aufgaben sind nicht machbar.</label>
+          <label><input type="radio" name="q3" value="b"> Die Aufgaben lassen sich nicht machen.</label>
+          <label><input type="radio" name="q3" value="c"> Die Aufgaben sind nicht zu machen geworden.</label>
+        </div>
+        <button class="btn" onclick="checkMC(3,'c',-1)">Prüfen</button>
+      </div>
+      <div id="done-msg" style="display:none;background:#e8f8ee;border:2px solid #27ae60;border-radius:10px;padding:16px;margin-top:16px;color:#1a5c2e;font-weight:600;">
+        🎉 Sehr gut! Du hast alle 4 Schritte abgeschlossen. Schau jetzt in den <strong>Regel-Tab</strong> für eine Übersicht!
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: REGEL -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&w=860" alt="Grammatik" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:16px;">Regel: Passiversatzformen im Überblick</h2>
+
+    <div class="info-box">
+      <strong>Grundprinzip:</strong> Man kann einen Passivsatz durch verschiedene Passiversatzformen ersetzen. Die Handlung bleibt im Mittelpunkt – die handelnde Person bleibt unwichtig.
+    </div>
+
+    <div class="rule-card">
+      <h3>1. Passiversatz mit <em>man</em> und <em>jemand</em> (einfachste Form)</h3>
+      <table class="regel-table">
+        <tr><th>Passiv</th><th>Passiversatz</th></tr>
+        <tr><td>Manchmal <span class="highlight-passiv">wird</span> im Restaurant <span class="highlight-passiv">gegessen</span>.</td><td>Manchmal isst <span class="highlight-ersatz">man</span> im Restaurant.</td></tr>
+        <tr><td>Ein Auto <span class="highlight-passiv">wird gekauft</span>.</td><td><span class="highlight-ersatz">Jemand</span> kauft ein Auto.</td></tr>
+      </table>
+    </div>
+
+    <div class="rule-card">
+      <h3>2. Passiversatz mit <em>sein zu</em> + Infinitiv</h3>
+      <p style="margin-bottom:10px;font-size:0.93rem;">Für Modalverben: <strong>können, müssen, sollen, nicht dürfen</strong></p>
+      <table class="regel-table">
+        <tr><th>Aktiv</th><th>Passiv</th><th>Passiversatz</th></tr>
+        <tr><td>Paul kann den Marathon schaffen.</td><td>Der Marathon kann geschafft werden.</td><td>Der Marathon <span class="highlight-ersatz">ist zu schaffen</span>.</td></tr>
+        <tr><td>Lisa muss das Zimmer aufräumen.</td><td>Das Zimmer muss aufgeräumt werden.</td><td>Das Zimmer <span class="highlight-ersatz">ist aufzuräumen</span>.</td></tr>
+        <tr><td>Caro soll das Auto waschen.</td><td>Das Auto soll gewaschen werden.</td><td>Das Auto <span class="highlight-ersatz">ist zu waschen</span>.</td></tr>
+        <tr><td>Peter darf im Zug nicht rauchen.</td><td>Im Zug darf nicht geraucht werden.</td><td>Im Zug <span class="highlight-ersatz">ist nicht zu rauchen</span>.</td></tr>
+      </table>
+    </div>
+
+    <div class="rule-card">
+      <h3>3. Passiversatz mit <em>-lich</em> und <em>-bar</em> (Adjektivendungen)</h3>
+      <p style="margin-bottom:10px;font-size:0.93rem;">Für das Modalverb <strong>können</strong> im Passiv:</p>
+      <table class="regel-table">
+        <tr><th>Passiv</th><th>Passiversatz (-lich/-bar)</th></tr>
+        <tr><td>Das Problem <span class="highlight-passiv">kann</span> gelöst <span class="highlight-passiv">werden</span>.</td><td>Das Problem ist <span class="highlight-ersatz">lösbar</span>.</td></tr>
+        <tr><td>Die Aufgaben <span class="highlight-passiv">können nicht</span> gemacht <span class="highlight-passiv">werden</span>.</td><td>Die Aufgaben sind <span class="highlight-ersatz">nicht machbar</span>.</td></tr>
+        <tr><td>Die Erzählungen <span class="highlight-passiv">konnten</span> leicht missverstanden <span class="highlight-passiv">werden</span>.</td><td>Die Erzählungen waren leicht <span class="highlight-ersatz">missverständlich</span>.</td></tr>
+        <tr><td>Die Schrift <span class="highlight-passiv">kann nicht</span> gelesen <span class="highlight-passiv">werden</span>.</td><td>Die Schrift ist <span class="highlight-ersatz">nicht leserlich</span>.</td></tr>
+      </table>
+    </div>
+
+    <div class="rule-card">
+      <h3>4. Passiversatz mit <em>sich lassen</em> + Infinitiv</h3>
+      <p style="margin-bottom:10px;font-size:0.93rem;">Drückt Möglichkeit oder Unmöglichkeit aus (für Passiv mit <strong>können</strong>):</p>
+      <table class="regel-table">
+        <tr><th>Passiv</th><th>Passiversatz (sich lassen)</th></tr>
+        <tr><td>Das Problem kann gelöst werden.</td><td>Das Problem <span class="highlight-ersatz">lässt sich</span> lösen.</td></tr>
+        <tr><td>Die Erzählungen konnten leicht missverstanden werden.</td><td>Die Erzählungen <span class="highlight-ersatz">ließen sich</span> leicht missverstehen.</td></tr>
+        <tr><td>Die Schrift kann einfach gelesen werden.</td><td>Die Schrift <span class="highlight-ersatz">lässt sich</span> einfach lesen.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=860" alt="Aufgaben" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Lückentext: Passiversatzformen</h2>
+
+    <div class="timer-bar">
+      <span>⏱ Zeit:</span>
+      <span class="timer-display" id="timer2">00:00</span>
+      <button class="timer-btn" onclick="startTimer(2)">Start</button>
+      <button class="timer-btn" onclick="stopTimer(2)" style="background:#999;">Stop</button>
+    </div>
+
+    <div class="luecken-intro">Fülle die Lücken mit der richtigen Passiversatzform. Achte auf Groß- und Kleinschreibung!</div>
+
+    <div id="luecken-container">
+      <!-- Sätze werden per JS eingefügt -->
+    </div>
+
+    <button class="check-btn" onclick="checkLuecken()">Alle prüfen</button>
+    <div class="result-msg" id="luecken-result"></div>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=860" alt="Satzbau" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Satzbau: Passiversatzformen</h2>
+
+    <div class="timer-bar">
+      <span>⏱ Zeit:</span>
+      <span class="timer-display" id="timer3">00:00</span>
+      <button class="timer-btn" onclick="startTimer(3)">Start</button>
+      <button class="timer-btn" onclick="stopTimer(3)" style="background:#999;">Stop</button>
+    </div>
+
+    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Bringe die Wörter in die richtige Reihenfolge. Klicke oder ziehe die Chips in die Zielzone.</p>
+
+    <div id="satzbau-container"></div>
+  </div>
+
+  <!-- TAB 4: ZUORDNUNG -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=860" alt="Zuordnung" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Zuordnung: Passiv oder Passiversatz?</h2>
+
+    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Wähle für jeden Satz die richtige Passiversatzform. Nutze die Dropdown-Menüs.</p>
+
+    <div id="zuord-container"></div>
+
+    <button class="check-btn" onclick="checkZuordnung()">Alle prüfen</button>
+    <div class="result-msg" id="zuord-result"></div>
+  </div>
+
+  <footer>© fabDaF · <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com" style="color:#aaa;">FrankBurkert@fabdaf.onmicrosoft.com</a></footer>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── TAB NAVIGATION ───────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// ─── TIMER ────────────────────────────────────────────────────
+const TIMER_PREFIX = 'best2045G';
+let timers = {2: null, 3: null};
+let secs   = {2: 0, 3: 0};
+function startTimer(t) {
+  if (timers[t]) return;
+  secs[t] = 0;
+  timers[t] = setInterval(() => {
+    secs[t]++;
+    const m = String(Math.floor(secs[t]/60)).padStart(2,'0');
+    const s = String(secs[t]%60).padStart(2,'0');
+    document.getElementById('timer'+t).textContent = m+':'+s;
+  }, 1000);
+}
+function stopTimer(t) {
+  clearInterval(timers[t]); timers[t] = null;
+  const key = TIMER_PREFIX + '_T' + t;
+  const cur = localStorage.getItem(key);
+  if (!cur || secs[t] < parseInt(cur)) localStorage.setItem(key, secs[t]);
+}
+function autoStopIfDone(t, total, correct) {
+  if (correct === total) { stopTimer(t); }
+}
+
+// ─── ENTDECKEN MC ─────────────────────────────────────────────
+let stepsComplete = [false,false,false,false];
+function checkMC(stepIdx, correct, nextStep) {
+  const opts = document.querySelectorAll(`#mc${stepIdx} label`);
+  const sel  = document.querySelector(`input[name="q${stepIdx}"]:checked`);
+  if (!sel) return;
+  opts.forEach(l => {
+    const v = l.querySelector('input').value;
+    l.classList.remove('correct','wrong');
+    if (v === correct) l.classList.add('correct');
+    else if (l.querySelector('input').checked) l.classList.add('wrong');
+  });
+  if (sel.value === correct) {
+    stepsComplete[stepIdx] = true;
+    document.getElementById('d'+stepIdx).classList.add('done');
+    document.getElementById('d'+stepIdx).classList.remove('active');
+    if (nextStep >= 0) {
+      setTimeout(() => {
+        document.getElementById('step'+stepIdx).classList.remove('active');
+        document.getElementById('step'+nextStep).classList.add('active');
+        document.getElementById('d'+nextStep).classList.add('active');
+      }, 700);
+    } else {
+      setTimeout(() => document.getElementById('done-msg').style.display='block', 700);
+    }
+  }
+}
+
+// ─── LÜCKENTEXT DATA ──────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Der Marathon ', blank: 'ist zu schaffen', after: '. (können → sein zu + Inf.)' },
+  { before: 'Das Essen ', blank: 'lässt sich', after: ' leicht vorbereiten. (sich lassen + Inf.)' },
+  { before: 'Die Kleidung ist leicht ', blank: 'waschbar', after: '. (-bar-Adjektiv)' },
+  { before: 'An Weihnachten ', blank: 'singt man', after: ' zusammen Lieder. (man-Ersatz)' },
+  { before: 'Das alte Handy ist nicht mehr ', blank: 'verwendbar', after: '. (-bar-Adjektiv)' },
+  { before: 'Die Aufsätze sind nicht ', blank: 'verständlich', after: '. (-lich-Adjektiv)' },
+  { before: 'Das Auto ', blank: 'ist zu waschen', after: '. (sollen → sein zu + Inf.)' },
+  { before: 'Das Problem ', blank: 'lässt sich', after: ' in wenigen Minuten lösen. (sich lassen + Inf.)' },
+  { before: 'Im Zug ', blank: 'ist nicht zu rauchen', after: '. (nicht dürfen → sein zu + Inf.)' },
+  { before: 'Für Weihnachten kauft ', blank: 'jemand', after: ' viele Geschenke. (jemand-Ersatz)' },
+];
+
+(function buildLuecken() {
+  const cont = document.getElementById('luecken-container');
+  LUECKEN_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'luecken-satz';
+    div.innerHTML = item.before +
+      `<input class="luecke" id="l${i}" type="text" autocomplete="off" placeholder="?" oninput="liveCheck(${i})">` +
+      item.after;
+    cont.appendChild(div);
+  });
+})();
+
+function normalize(s) { return s.trim().toLowerCase().replace(/\s+/g,' '); }
+
+function liveCheck(i) {
+  const inp = document.getElementById('l'+i);
+  const val = normalize(inp.value);
+  const sol = normalize(LUECKEN_DATA[i].blank);
+  if (val === sol) { inp.classList.add('correct'); inp.classList.remove('wrong'); }
+  else { inp.classList.remove('correct','wrong'); }
+  const allCorrect = LUECKEN_DATA.every((_,j) => normalize(document.getElementById('l'+j).value) === normalize(LUECKEN_DATA[j].blank));
+  if (allCorrect) autoStopIfDone(2, LUECKEN_DATA.length, LUECKEN_DATA.length);
+}
+
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('l'+i);
+    const val = normalize(inp.value);
+    const sol = normalize(item.blank);
+    inp.classList.remove('correct','wrong');
+    if (val === sol) { inp.classList.add('correct'); correct++; }
+    else { inp.classList.add('wrong'); inp.title = 'Lösung: ' + item.blank; }
+  });
+  const r = document.getElementById('luecken-result');
+  r.textContent = correct === LUECKEN_DATA.length
+    ? '🎉 Alle ' + LUECKEN_DATA.length + ' Lücken richtig!'
+    : correct + ' / ' + LUECKEN_DATA.length + ' richtig. Versuche es nochmal!';
+  r.className = 'result-msg ' + (correct === LUECKEN_DATA.length ? 'ok' : 'nok');
+  autoStopIfDone(2, LUECKEN_DATA.length, correct);
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Der', 'Tannenbaum', 'ist', 'zu', 'schmücken', '.'] },
+  { words: ['Das', 'Essen', 'lässt', 'sich', 'leicht', 'vorbereiten', '.'] },
+  { words: ['Die', 'Kleidung', 'ist', 'leicht', 'waschbar', '.'] },
+  { words: ['An', 'Neujahr', 'feiert', 'man', 'lange', '.'] },
+  { words: ['Das', 'Zimmer', 'ist', 'aufzuräumen', '.'] },
+  { words: ['Die', 'Schrift', 'lässt', 'sich', 'nicht', 'lesen', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the passive voice', art: 'das', wort: 'Passiv', plural: '-' },
+  { type: 'n', en: 'the replacement', art: 'der', wort: 'Ersatz', plural: '-e' },
+  { type: 'n', en: 'the active voice', art: 'das', wort: 'Aktiv', plural: '-' },
+  { type: 'v', en: 'to replace', de: 'ersetzen' },
+  { type: 'v', en: 'to transform', de: 'umwandeln' },
+  { type: 'v', en: 'to build', de: 'bauen' },
+  { type: 'v', en: 'to destroy', de: 'zerstören' },
+  { type: 'v', en: 'to produce', de: 'herstellen' },
+  { type: 'v', en: 'to create', de: 'schaffen' },
+  { type: 'v', en: 'to repair', de: 'reparieren' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

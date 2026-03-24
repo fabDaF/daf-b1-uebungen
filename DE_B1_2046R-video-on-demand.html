@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2046R · Video-on-Demand</title>
+<style>
+  :root { --main: #667eea; --main-light: #f3e5f5; --main-dark: #4a0080; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--main); min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); overflow: hidden; }
+  header { background: var(--main); color: #fff; padding: 22px 28px 16px; }
+  header h1 { font-size: 1.45rem; font-weight: 700; }
+  header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
+  /* NAV */
+  nav { display: flex; flex-direction: column; background: #f8f0ff; border-bottom: 2px solid var(--main); }
+  nav button { background: transparent; border: none; border-bottom: 1px solid #ddd; padding: 11px 18px; text-align: left; cursor: pointer; font-size: 0.92rem; color: #333; transition: background 0.2s; }
+  nav button:last-child { border-bottom: none; }
+  nav button.active { background: var(--main); color: #fff; font-weight: 700; }
+  nav button:hover:not(.active) { background: #e8d5f5; }
+  /* TAB */
+  .tab { display: none; padding: 24px 28px 32px; }
+  .tab.active { display: block; }
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; }
+  /* VOCAB CARDS */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .vocab-card { background: var(--main-light); border: 1px solid #d0a0e8; border-radius: 10px; padding: 12px 14px; }
+  .vocab-card .wort { font-weight: 700; color: var(--main-dark); font-size: 0.97rem; }
+  .vocab-card .artikel { font-size: 0.8rem; color: #888; margin-bottom: 4px; }
+  .vocab-card .def { font-size: 0.85rem; color: #444; line-height: 1.4; }
+  /* LESETEXT */
+  .lesetext { font-family: Georgia, 'Times New Roman', serif; font-size: 1.02rem; line-height: 1.85; color: #222; max-width: 680px; margin: 0 auto; text-align: justify; hyphens: auto; }
+  .lesetext p { text-indent: 1.5em; margin-bottom: 0.8em; }
+  .lesetext p:first-of-type { text-indent: 0; }
+  .teil-heading { font-family: 'Segoe UI', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--main); text-transform: uppercase; letter-spacing: 0.05em; margin: 20px 0 6px; }
+  .vocab-hl { background: #fff176; border-radius: 3px; padding: 0 2px; cursor: help; position: relative; }
+  /* RF FRAGEN */
+  .rf-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .rf-item { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 12px 16px; }
+  .rf-item p { font-size: 0.95rem; margin-bottom: 8px; line-height: 1.5; }
+  .rf-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .rf-btn { padding: 6px 18px; border: 2px solid #ccc; border-radius: 20px; background: #fff; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: all 0.2s; }
+  .rf-btn:hover { border-color: var(--main); color: var(--main); }
+  .rf-btn.selected-r { border-color: #1565c0; background: #e3f2fd; color: #1565c0; }
+  .rf-btn.selected-f { border-color: #667eea; background: #f3e5f5; color: #667eea; }
+  .rf-btn.correct { border-color: #27ae60; background: #e8f8ee; color: #27ae60; }
+  .rf-btn.wrong { border-color: #e74c3c; background: #fdecea; color: #e74c3c; }
+  .check-btn { background: var(--main); color: #fff; border: none; padding: 10px 26px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; margin-top: 6px; transition: background 0.2s; }
+  .check-btn:hover { background: var(--main-dark); }
+  .result-msg { margin-top: 12px; font-weight: 600; font-size: 0.95rem; }
+  .result-msg.ok { color: #27ae60; }
+  .result-msg.nok { color: #e74c3c; }
+  /* LÜCKENTEXT */
+  .luecken-intro { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; font-size: 0.93rem; color: #555; }
+  .luecken-satz { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; line-height: 1.8; }
+  .luecke { border: none; border-bottom: 2px solid var(--main); background: transparent; font-size: 0.97rem; font-family: inherit; color: #222; padding: 2px 4px; min-width: 130px; outline: none; }
+  .luecke.correct { border-bottom-color: #27ae60; background: #e8f8ee; border-radius: 4px; }
+  .luecke.wrong { border-bottom-color: #e74c3c; background: #fdecea; border-radius: 4px; }
+  /* SATZBAU */
+  .sb-task { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task p.aufgabe { font-size: 0.93rem; color: #555; margin-bottom: 10px; }
+  .chips-area { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; background: #fff; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; }
+  .chip { background: var(--main); color: #fff; border: none; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.88rem; font-weight: 500; user-select: none; transition: opacity 0.2s, transform 0.15s; }
+  .chip:hover { transform: scale(1.05); }
+  .chip.dragging { opacity: 0.4; }
+  .drop-zone { min-height: 44px; background: #fafafa; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .drop-zone.over { background: #e8d5f5; border-color: var(--main); }
+  .sb-feedback { font-size: 0.9rem; font-weight: 600; margin-top: 6px; min-height: 20px; }
+  .sb-feedback.ok { color: #27ae60; }
+  .sb-feedback.nok { color: #e74c3c; }
+  /* VOKABELN */
+  .vok-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .vok-card { background: var(--main-light); border: 2px solid transparent; border-radius: 10px; padding: 14px; cursor: pointer; transition: border-color 0.2s; }
+  .vok-card:hover { border-color: var(--main); }
+  .vok-card .vok-de { font-weight: 700; color: var(--main-dark); font-size: 0.97rem; }
+  .vok-card .vok-en { font-size: 0.85rem; color: #666; margin-top: 4px; display: none; }
+  .vok-card.revealed .vok-en { display: block; }
+  .vok-hint { font-size: 0.82rem; color: #999; margin-bottom: 12px; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 10px; background: #f8f0ff; border-radius: 8px; padding: 8px 16px; margin-bottom: 16px; font-size: 0.88rem; color: #555; }
+  .timer-display { font-size: 1rem; font-weight: 700; color: var(--main); min-width: 50px; }
+  .timer-btn { background: var(--main); color: #fff; border: none; padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid var(--main); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+  footer { text-align: center; padding: 14px; font-size: 0.78rem; color: #aaa; border-top: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Video-on-Demand</h1>
+    <p>B1.2 · Lektion 2046R · Lesetext</p>
+  </header>
+
+  <nav id="mainNav">
+    <button class="active" onclick="showTab(0)">① Vorentlastung</button>
+    <button onclick="showTab(1)">② Lesetext</button>
+    <button onclick="showTab(2)">③ Text &amp; Fragen</button>
+    <button onclick="showTab(3)">④ Lückentext</button>
+    <button onclick="showTab(4)">⑤ Satzbau</button>
+    <button onclick="showTab(5)">⑥ Wortschatz</button>
+  </nav>
+
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&w=860" alt="Online Videos" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:16px;">Vorentlastung: Schlüsselwörter</h2>
+    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Lerne die wichtigsten Wörter zum Thema <em>Video-on-Demand</em>, bevor du den Text liest.</p>
+    <div class="vocab-grid">
+      <div class="vocab-card"><div class="artikel">das</div><div class="wort">Video-on-Demand</div><div class="def">Abrufvideo über das Internet, jederzeit verfügbar</div></div>
+      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Vielfältigkeit</div><div class="def">viele verschiedene Möglichkeiten, Abwechslung</div></div>
+      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Bequemlichkeit</div><div class="def">Komfort, einfacher Zugang ohne Aufwand</div></div>
+      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Video-Plattform</div><div class="def">Internetseite, auf der man Videos abrufen kann</div></div>
+      <div class="vocab-card"><div class="artikel">das</div><div class="wort">Streaming</div><div class="def">gleichzeitige Übertragung und Wiedergabe von Videos</div></div>
+      <div class="vocab-card"><div class="artikel">der</div><div class="wort">Livestream</div><div class="def">direkte Live-Übertragung eines Videos im Internet</div></div>
+      <div class="vocab-card"><div class="artikel">der</div><div class="wort">Phonecast</div><div class="def">Rundfunkprogramm über den Telefonserver</div></div>
+      <div class="vocab-card"><div class="artikel">—</div><div class="wort">konsumieren</div><div class="def">verbrauchen, nutzen, ansehen</div></div>
+      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Videovorlesung</div><div class="def">Universitätsvorlesung als Video übertragen</div></div>
+      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Mitgliedschaft</div><div class="def">Abonnement, monatliche Zahlung für Zugang</div></div>
+      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Internetverbindung</div><div class="def">Verbindung zum Internet, nötig für Streaming</div></div>
+      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Hardwareanforderung</div><div class="def">technische Voraussetzung für ein Gerät/Programm</div></div>
+    </div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1662770/pexels-photo-1662770.jpeg?auto=compress&w=860" alt="Streaming" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:20px;">Video-on-Demand</h2>
+    <div class="lesetext" lang="de">
+      <div class="teil-heading">Teil 1 – Online-Abrufvideos</div>
+      <p>Seit Jahren sucht man nach Alternativen zum Fernsehen. Technologische Fortschritte haben der Welt ganz neue Wege eröffnet. Die <span class="vocab-hl" title="viele verschiedene Möglichkeiten">Vielfältigkeit</span> der <strong>Medien</strong> hat der Filmindustrie einen enormen Gewinn gebracht. Aber nicht nur die Filmemacher haben davon profitiert, das Auditorium genießt auch die <span class="vocab-hl" title="Komfort, einfacher Zugang">Bequemlichkeit</span>, über das Internet an jedem Ort, ob von zu Hause oder unterwegs, und zu jeder beliebigen Zeit ein Video zu gucken.</p>
+      <p>Das sind die sogenannten <strong>Online-Abrufvideos</strong> oder auf Englisch <strong>Online-Video on Demand (OVD)</strong>, die über das Internet <strong>auf Anfrage</strong> durch verschiedene <span class="vocab-hl" title="Internetseite für Videos">Video-Plattformen</span> übertragen werden.</p>
+
+      <div class="teil-heading">Teil 2 – Vorteile von Video-on-Demand</div>
+      <p>Video-on-Demand hat einige Vorteile. Ein Vorteil ist, dass man Filme oder Serien dann ansehen kann, wann man möchte. Man muss auch den Inhalt nicht unbedingt bis zum Ende <span class="vocab-hl" title="verbrauchen, nutzen, ansehen">konsumieren</span>. Man kann nämlich das Angefangene pausieren und später weitergucken. Außerdem kann man <strong>Fernsehberichte speichern</strong> und weiter verwenden.</p>
+
+      <div class="teil-heading">Teil 3 – Streaming</div>
+      <p>Ist dir der Begriff <span class="vocab-hl" title="gleichzeitige Übertragung und Wiedergabe">Streaming</span> bekannt? Streaming ist für <strong>Internetbenutzer</strong> ein ganz bekannter Begriff. Es beinhaltet die gleichzeitige <strong>Übertragung und Wiedergabe</strong> von Videos über das <strong>Netzwerk</strong>. Programme, die live übertragen werden, werden als <span class="vocab-hl" title="Live-Übertragung im Internet">Livestream</span> oder einfach <strong>Stream</strong> bezeichnet.</p>
+      <p>Im Gegensatz zum Herunterladen ist das Ziel vom Streaming, die Videos direkt auszugeben. Die Videos werden direkt geliefert. Das Angebot wird in Echtzeit realisiert.</p>
+
+      <div class="teil-heading">Teil 4 – Phonecast und On-Demand Streaming</div>
+      <p>Livestream hat seit kurzer Zeit auch eine neue Form – <span class="vocab-hl" title="Rundfunk über den Telefonserver">Phonecast</span>. Das englische Wort leitet sich aus zwei Wörtern ab: Telefon und Rundfunk. Dabei wird über den Telefonserver ein Rundfunkprogramm für die Empfänger verbreitet, das sie abrufen können.</p>
+      <p>Eine andere Form vom Streaming ist das <strong>On-Demand Streaming</strong>. Beim On-Demand Streaming werden Daten vom Server auf Anfrage übertragen. Dabei kann man das Video pausieren, vor- oder <strong>zurückspulen</strong>.</p>
+
+      <div class="teil-heading">Teil 5 – Streaming im Alltag</div>
+      <p>Streaming wird in vielen Lebensbereichen genutzt: z. B. werden in der Ausbildung immer mehr <span class="vocab-hl" title="Vorlesungen als Video übertragen">Videovorlesungen</span> live übertragen, um den Studenten den Lernprozess zu erleichtern. Weiterhin trifft man die Streaming Videos auch im Alltag. In sozialen Medien herrscht zur Zeit ein Boom, <strong>sich zu streamen</strong>.</p>
+
+      <div class="teil-heading">Teil 6 – Geschichte der Streaming-Plattformen</div>
+      <p>Doch wie funktioniert das Streaming durch Plattformen. Es gibt heutzutage schon bekannte Streaming-Plattformen. Sie haben den Zugang zu den Videos verändert. Anfangs begannen die Plattformen ihre Tätigkeit mit dem Versand von DVDs an Abonnenten, die die Videos gekauft oder ausgeliehen hatten. Bald änderte sich die Lieferungsmethode und man hat die bestellten Daten über E-Mail bekommen. 2007 wurde erstmals das Streaming ausprobiert.</p>
+
+      <div class="teil-heading">Teil 7 – Plattformen heute</div>
+      <p>Heutzutage sind solche Plattformen in vielen Ländern zugänglich und bieten den Benutzern zahlreiche TV-Shows, Spielfilme oder Dokumentarfilme sowie Serien. Das Angebot wird jeden Monat erneuert. Dafür muss man eine <span class="vocab-hl" title="Abonnement, monatliche Zahlung">Mitgliedschaft</span>, ein sogenanntes Abonnement, kaufen und kann den ganzen Monat den Inhalt unbegrenzt anschauen. Was ganz wichtig ist – auf den Server kann man mit jedem Gerät zugreifen, das mit dem Internet verbunden ist.</p>
+
+      <div class="teil-heading">Teil 8 – Nachteile des Internetsehens</div>
+      <p>Trotz so vieler Vorteile kann man auch einige Probleme nennen, die mit dem <strong>Internetfernsehen</strong> verbunden sind. Was in vielen Regionen ganz unterschiedlich ist, ist das Angebot. Denn die Server bieten verschiedenen Ländern eine unterschiedliche Auswahl. Außerdem braucht man immer eine schnelle <span class="vocab-hl" title="Verbindung zum Internet">Internetverbindung</span>. An bestimmten Orten ist dies nicht der Fall. Bestimmte <span class="vocab-hl" title="technische Voraussetzungen">Hardwareanforderungen</span> sind nicht zu vergessen. Nicht auf jedem Gerät kann man die Server installieren. Manchmal ist die <strong>Bildqualität</strong> und die <strong>Bildgröße</strong> nicht die Beste. Dies kann den Prozess unangenehmer machen.</p>
+      <p>Trotz der Nachteile steigt die Tendenz. Immer mehr Menschen nutzen das Angebot vom On-Demand-Streaming.</p>
+    </div>
+  </div>
+
+  <!-- TAB 2: TEXT & FRAGEN -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=860" alt="Fragen" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:16px;">Richtig oder falsch?</h2>
+    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Klicke auf <strong>R</strong> (Richtig) oder <strong>F</strong> (Falsch) für jeden Satz.</p>
+
+    <div class="rf-list" id="rf-list">
+      <!-- gebaut per JS -->
+    </div>
+    <button class="check-btn" onclick="checkRF()">Alle prüfen</button>
+    <div class="result-msg" id="rf-result"></div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=860" alt="Lückentext" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Lückentext: Video-on-Demand</h2>
+
+    <div class="timer-bar">
+      <span>⏱ Zeit:</span>
+      <span class="timer-display" id="timer3">00:00</span>
+      <button class="timer-btn" onclick="startTimer(3)">Start</button>
+      <button class="timer-btn" onclick="stopTimer(3)" style="background:#999;">Stop</button>
+    </div>
+
+    <div class="luecken-intro">Ergänze die Lücken mit dem richtigen Wort aus dem Text.</div>
+    <div id="luecken-container"></div>
+    <button class="check-btn" onclick="checkLuecken()">Alle prüfen</button>
+    <div class="result-msg" id="luecken-result"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=860" alt="Satzbau" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Satzbau: Video-on-Demand</h2>
+
+    <div class="timer-bar">
+      <span>⏱ Zeit:</span>
+      <span class="timer-display" id="timer4">00:00</span>
+      <button class="timer-btn" onclick="startTimer(4)">Start</button>
+      <button class="timer-btn" onclick="stopTimer(4)" style="background:#999;">Stop</button>
+    </div>
+
+    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Bringe die Wörter in die richtige Reihenfolge. Klicke oder ziehe die Chips in die Zielzone.</p>
+    <div id="satzbau-container"></div>
+  </div>
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=860" alt="Vokabeln" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Wortschatz: Video-on-Demand</h2>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()" style="background: var(--main); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 600;">💡 Lösung</button>
+      <button onclick="resetVocab()" style="background: var(--main); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 600;">↺ Neustart</button>
+    </div>
+  </div>
+
+  <footer>© fabDaF · <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com" style="color:#aaa;">FrankBurkert@fabdaf.onmicrosoft.com</a></footer>
+</div>
+
+<script>
+// ─── TAB NAVIGATION ───────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// ─── TIMER ────────────────────────────────────────────────────
+const TIMER_PREFIX = 'best2046R';
+let timers = {3:null, 4:null};
+let secs   = {3:0, 4:0};
+function startTimer(t) {
+  if (timers[t]) return;
+  secs[t] = 0;
+  timers[t] = setInterval(() => {
+    secs[t]++;
+    const m = String(Math.floor(secs[t]/60)).padStart(2,'0');
+    const s = String(secs[t]%60).padStart(2,'0');
+    document.getElementById('timer'+t).textContent = m+':'+s;
+  }, 1000);
+}
+function stopTimer(t) {
+  clearInterval(timers[t]); timers[t] = null;
+  const key = TIMER_PREFIX + '_T' + t;
+  const cur = localStorage.getItem(key);
+  if (!cur || secs[t] < parseInt(cur)) localStorage.setItem(key, secs[t]);
+}
+function autoStopIfDone(t, total, correct) {
+  if (correct === total) stopTimer(t);
+}
+
+// ─── RF DATA ──────────────────────────────────────────────────
+const RF_DATA = [
+  { frage: 'Beim Phonecast nimmt man mit dem Handy Livevideos auf.', antwort: 'falsch' },
+  { frage: 'Für das Phonecast braucht man einen Telefonserver.', antwort: 'richtig' },
+  { frage: 'Beim On-Demand Streaming guckt man Videos live.', antwort: 'falsch' },
+  { frage: 'Soziale Medien sind das einzige Mittel, einen Stream zu gucken.', antwort: 'falsch' },
+  { frage: 'Streaming wird auch an den Universitäten benutzt.', antwort: 'richtig' },
+];
+(function buildRF() {
+  const list = document.getElementById('rf-list');
+  RF_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'rf-item';
+    div.innerHTML = `<p>${item.frage}</p><div class="rf-buttons">
+      <button class="rf-btn" id="rf${i}r" onclick="selectRF(${i},'richtig')">R – Richtig</button>
+      <button class="rf-btn" id="rf${i}f" onclick="selectRF(${i},'falsch')">F – Falsch</button>
+    </div>`;
+    list.appendChild(div);
+  });
+})();
+function selectRF(i, val) {
+  document.getElementById('rf'+i+'r').classList.toggle('selected-r', val==='richtig');
+  document.getElementById('rf'+i+'f').classList.toggle('selected-f', val==='falsch');
+  document.getElementById('rf'+i+'r').classList.remove('correct','wrong');
+  document.getElementById('rf'+i+'f').classList.remove('correct','wrong');
+}
+function checkRF() {
+  let correct = 0;
+  RF_DATA.forEach((item, i) => {
+    const rBtn = document.getElementById('rf'+i+'r');
+    const fBtn = document.getElementById('rf'+i+'f');
+    rBtn.classList.remove('correct','wrong','selected-r');
+    fBtn.classList.remove('correct','wrong','selected-f');
+    const chosen = rBtn.classList.contains('selected-r') ? 'richtig' : fBtn.classList.contains('selected-f') ? 'falsch' : '';
+    if (!chosen) return;
+    if (chosen === item.antwort) {
+      (item.antwort==='richtig'?rBtn:fBtn).classList.add('correct');
+      correct++;
+    } else {
+      (chosen==='richtig'?rBtn:fBtn).classList.add('wrong');
+      (item.antwort==='richtig'?rBtn:fBtn).classList.add('correct');
+    }
+  });
+  const r = document.getElementById('rf-result');
+  r.textContent = correct===RF_DATA.length ? '🎉 Alle '+RF_DATA.length+' Antworten richtig!' : correct+' / '+RF_DATA.length+' richtig. Schau nochmal in den Text!';
+  r.className = 'result-msg '+(correct===RF_DATA.length?'ok':'nok');
+}
+
+// ─── LÜCKENTEXT DATA ──────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Technologische Fortschritte haben der Welt neue Wege ', blank: 'eröffnet', after: '.' },
+  { before: 'Online-Abrufvideos werden über das Internet auf ', blank: 'Anfrage', after: ' übertragen.' },
+  { before: 'Man kann das Angefangene pausieren und später ', blank: 'weitergucken', after: '.' },
+  { before: 'Streaming beinhaltet die gleichzeitige Übertragung und ', blank: 'Wiedergabe', after: ' von Videos.' },
+  { before: 'Programme, die live übertragen werden, heißen ', blank: 'Livestream', after: '.' },
+  { before: 'Beim Phonecast wird über den Telefonserver ein ', blank: 'Rundfunkprogramm', after: ' verbreitet.' },
+  { before: 'Beim On-Demand Streaming kann man das Video pausieren, vor- oder ', blank: 'zurückspulen', after: '.' },
+  { before: 'Man muss eine ', blank: 'Mitgliedschaft', after: ' kaufen, um unbegrenzt Inhalte anzuschauen.' },
+  { before: 'Man braucht immer eine schnelle ', blank: 'Internetverbindung', after: ' für das Streaming.' },
+  { before: '2007 wurde erstmals das ', blank: 'Streaming', after: ' ausprobiert.' },
+];
+(function buildLuecken() {
+  const cont = document.getElementById('luecken-container');
+  LUECKEN_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'luecken-satz';
+    div.innerHTML = item.before +
+      `<input class="luecke" id="l${i}" type="text" autocomplete="off" placeholder="?" oninput="liveCheck(${i})">` +
+      item.after;
+    cont.appendChild(div);
+  });
+})();
+function normalize(s) { return s.trim().toLowerCase().replace(/\s+/g,' '); }
+function liveCheck(i) {
+  const inp = document.getElementById('l'+i);
+  const val = normalize(inp.value);
+  const sol = normalize(LUECKEN_DATA[i].blank);
+  if (val === sol) { inp.classList.add('correct'); inp.classList.remove('wrong'); }
+  else { inp.classList.remove('correct','wrong'); }
+  const allCorrect = LUECKEN_DATA.every((_,j) => normalize(document.getElementById('l'+j).value) === normalize(LUECKEN_DATA[j].blank));
+  if (allCorrect) autoStopIfDone(3, LUECKEN_DATA.length, LUECKEN_DATA.length);
+}
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('l'+i);
+    const val = normalize(inp.value);
+    const sol = normalize(item.blank);
+    inp.classList.remove('correct','wrong');
+    if (val === sol) { inp.classList.add('correct'); correct++; }
+    else { inp.classList.add('wrong'); inp.title = 'Lösung: ' + item.blank; }
+  });
+  const r = document.getElementById('luecken-result');
+  r.textContent = correct===LUECKEN_DATA.length ? '🎉 Alle '+LUECKEN_DATA.length+' Lücken richtig!' : correct+' / '+LUECKEN_DATA.length+' richtig. Versuche es nochmal!';
+  r.className = 'result-msg '+(correct===LUECKEN_DATA.length?'ok':'nok');
+  autoStopIfDone(3, LUECKEN_DATA.length, correct);
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Video-on-Demand', 'ermöglicht', 'uns', ',', 'jederzeit', 'Videos', 'zu', 'gucken', '.'] },
+  { words: ['Man', 'kann', 'das', 'Video', 'pausieren', 'und', 'weitergucken', '.'] },
+  { words: ['Streaming', 'wird', 'in', 'vielen', 'Lebensbereichen', 'genutzt', '.'] },
+  { words: ['Man', 'braucht', 'eine', 'schnelle', 'Internetverbindung', '.'] },
+  { words: ['Die', 'Mitgliedschaft', 'kostet', 'jeden', 'Monat', 'Geld', '.'] },
+  { words: ['Videovorlesungen', 'werden', 'live', 'übertragen', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// ── WORTSCHATZ ──────────────────────────────────────────────
+var WORTSCHATZ = [
+  { type: "n", en: "the streaming", art: "das", wort: "Streaming", plural: "Streaming" },
+  { type: "v", en: "to stream", de: "streamen" },
+  { type: "n", en: "the video", art: "das", wort: "Video", plural: "Videos" },
+  { type: "v", en: "to pause", de: "pausieren" },
+  { type: "v", en: "to skip/rewind", de: "zurückspulen" },
+  { type: "n", en: "the membership", art: "die", wort: "Mitgliedschaft", plural: "Mitgliedschaften" },
+  { type: "n", en: "the internet connection", art: "die", wort: "Internetverbindung", plural: "Internetverbindungen" },
+  { type: "v", en: "to broadcast", de: "übertragen" },
+  { type: "n", en: "the livestream", art: "der", wort: "Livestream", plural: "Livestreams" },
+  { type: "n", en: "the content", art: "der", wort: "Inhalt", plural: "Inhalte" },
+  { type: "v", en: "to watch", de: "gucken" },
+  { type: "n", en: "the platform", art: "die", wort: "Plattform", plural: "Plattformen" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+
+</script>
+</body>
+</html>

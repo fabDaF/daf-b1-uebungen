@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Über Werbekampagnen sprechen – B1.2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.0em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; display: block; }
+.tab-content { padding: 28px 32px 32px 32px; }
+@media (max-width: 600px) { .tab-content { padding: 16px; } }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* SPRECHANLASS KARTEN */
+.sprech-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+.sprech-karte { background: #fafbff; border: 1.5px solid #e0daf5; border-radius: 12px; padding: 16px 20px; border-left: 4px solid #667eea; }
+.sprech-karte .frage { font-size: 1.0em; font-weight: 700; color: #5a3e9e; margin-bottom: 8px; }
+.sprech-karte .hilfe { font-size: 0.84em; color: #666; line-height: 1.55; }
+.sprech-karte .beispiel { font-size: 0.85em; color: #888; font-style: italic; margin-top: 6px; border-top: 1px solid #e8e4f5; padding-top: 6px; }
+
+/* PLANUNG SCHEMA */
+.plan-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.9em; }
+.plan-table th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 14px; text-align: left; }
+.plan-table td { padding: 10px 14px; border-bottom: 1px solid #e8e4f5; vertical-align: top; }
+.plan-table tr:nth-child(even) td { background: #f8f5ff; }
+.plan-table .step { font-weight: 700; color: #5a3e9e; }
+
+/* PHRASEN */
+.phrasen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.phrasen-karte { background: #f8f9ff; border: 1.5px solid #e0daf5; border-radius: 10px; padding: 14px 16px; border-left: 4px solid #667eea; }
+.phrasen-karte .cat { font-size: 0.72em; color: #888; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.phrasen-karte .phrase { font-size: 0.9em; font-weight: 700; color: #5a3e9e; margin-bottom: 4px; }
+.phrasen-karte .ueber { font-size: 0.8em; color: #555; }
+
+/* AUSSPRACHE */
+.konsonant-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.konsonant-karte { background: #f3effd; border: 1.5px solid #c5b8e8; border-radius: 12px; padding: 16px; text-align: center; }
+.konsonant-karte .wort { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 6px; }
+.konsonant-karte .hl { background: rgba(255,230,80,0.6); border-radius: 3px; padding: 0 2px; }
+.konsonant-karte .erkl { font-size: 0.78em; color: #666; line-height: 1.4; }
+
+/* LÜCKENTEXT */
+.luecke-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 0.93em; line-height: 1.9; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.93em; font-family: inherit; outline: none; transition: all 0.2s; min-width: 100px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* SATZBAU */
+.sb-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.sb-prompt { font-size: 0.85em; color: #666; margin-bottom: 8px; font-style: italic; }
+.sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 36px; }
+.sb-chip { background: #667eea; color: white; border-radius: 20px; padding: 5px 13px; font-size: 0.85em; font-weight: 600; cursor: grab; user-select: none; transition: all 0.2s; }
+.sb-chip:hover { background: #764ba2; transform: translateY(-1px); }
+.sb-chip.dragging { opacity: 0.45; }
+.sb-chip.static-chip { background: #9e9e9e; cursor: default; }
+.sb-drop { display: flex; flex-wrap: wrap; gap: 6px; min-height: 42px; background: #f0eeff; border: 2px dashed #c5b8e8; border-radius: 8px; padding: 6px 10px; transition: background 0.2s; }
+.sb-drop.drag-over { background: #e0d8ff; border-color: #667eea; }
+.sb-drop .sb-chip { cursor: grab; }
+.sb-feedback { font-size: 0.82em; margin-top: 6px; font-weight: 600; min-height: 18px; }
+.sb-feedback.ok { color: #27ae60; }
+.sb-feedback.err { color: #e74c3c; }
+
+/* TIMER */
+.timer-bar { display: flex; align-items: center; gap: 12px; background: #f8f5ff; border: 1px solid #e0daf5; border-radius: 8px; padding: 8px 14px; margin-bottom: 18px; }
+.timer-display { font-size: 1.1em; font-weight: 700; color: #667eea; min-width: 58px; font-variant-numeric: tabular-nums; }
+.timer-btn { background: #667eea; color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.82em; cursor: pointer; font-weight: 600; }
+.timer-btn:hover { background: #764ba2; }
+.best-time { font-size: 0.78em; color: #888; margin-left: auto; }
+.reset-btn { background: #f0f4ff; color: #667eea; border: 1.5px solid #667eea; border-radius: 8px; padding: 10px 20px; font-size: 0.9em; font-weight: 600; cursor: pointer; margin-top: 12px; }
+.reset-btn:hover { background: #e0e7ff; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Über Werbekampagnen sprechen</h1>
+    <p>B1.2 · Einheit 1 · Sprechen</p>
+    <span class="big-emoji">🗣️</span>
+  </div>
+  <div class="nav">
+    <div class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">💬</span><span class="nav-label">Sprechen</span></div>
+    <div class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">📋</span><span class="nav-label">Planung</span></div>
+    <div class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">🔤</span><span class="nav-label">Aussprache</span></div>
+    <div class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+  </div>
+
+  <!-- TAB 0: SPRECHANLASS -->
+  <div class="section active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Sprechen">
+    <div class="tab-content">
+      <div class="hilfe-box">Den Prozess der <strong>Werbeplanung</strong> haben wir schon gelernt. Jetzt lernen wir nicht nur das Planen von Werbekampagnen, sondern auch, sie zu <strong>besprechen</strong>.</div>
+      <div class="section-title">Gesprächsanlässe</div>
+      <div class="sprech-grid">
+        <div class="sprech-karte">
+          <div class="frage">💭 Was macht eine gute Werbekampagne aus?</div>
+          <div class="hilfe">Spreche über: Botschaft, Zielgruppe, Design, Slogan, Kanal, Budget</div>
+          <div class="beispiel">„Eine gute Werbekampagne spricht die richtige Zielgruppe an. Sie hat eine klare Botschaft und einen einprägsamen Slogan."</div>
+        </div>
+        <div class="sprech-karte">
+          <div class="frage">📺 Vergleiche: alte vs. neue Werbekampagnen</div>
+          <div class="hilfe">Früher: TV, Radio, Print · Heute: Social Media, Online-Werbung, Influencer-Marketing</div>
+          <div class="beispiel">„Früher hat man vor allem im Fernsehen geworben. Heutzutage nutzt man Social Media, weil man die Zielgruppe gezielter erreicht."</div>
+        </div>
+        <div class="sprech-karte">
+          <div class="frage">🌟 Welche Werbekampagne hat dich beeindruckt?</div>
+          <div class="hilfe">Beschreibe: Produkt, Botschaft, Kanal, was dich besonders beeindruckt hat</div>
+          <div class="beispiel">„Ich erinnere mich an eine Kampagne für …, die … besonders gut gemacht hat, weil …"</div>
+        </div>
+        <div class="sprech-karte">
+          <div class="frage">🚀 Plant eine eigene Mini-Kampagne!</div>
+          <div class="hilfe">Produkt wählen → Zielgruppe definieren → Botschaft formulieren → Kanal auswählen → Budget schätzen</div>
+          <div class="beispiel">„Wir möchten für … werben. Unsere Zielgruppe sind … Wir würden … als Kanal nutzen, weil …"</div>
+        </div>
+      </div>
+      <div class="section-title">Nützliche Phrasen</div>
+      <div class="phrasen-grid">
+        <div class="phrasen-karte"><div class="cat">Meinung äußern</div><div class="phrase">„Ich finde, dass …"</div><div class="ueber">Eigene Einschätzung einleiten</div></div>
+        <div class="phrasen-karte"><div class="cat">Meinung äußern</div><div class="phrase">„Meiner Meinung nach …"</div><div class="ueber">Persönliche Position ausdrücken</div></div>
+        <div class="phrasen-karte"><div class="cat">Vergleich</div><div class="phrase">„Früher hat man … · Heutzutage …"</div><div class="ueber">Altes und Neues vergleichen</div></div>
+        <div class="phrasen-karte"><div class="cat">Vergleich</div><div class="phrase">„Im Vergleich zu … ist …"</div><div class="ueber">Direkten Vergleich anstellen</div></div>
+        <div class="phrasen-karte"><div class="cat">Beschreiben</div><div class="phrase">„Die Zielgruppe sind …"</div><div class="ueber">Zielgruppe einer Kampagne beschreiben</div></div>
+        <div class="phrasen-karte"><div class="cat">Beschreiben</div><div class="phrase">„Die Botschaft lautet: …"</div><div class="ueber">Kernaussage einer Werbung formulieren</div></div>
+        <div class="phrasen-karte"><div class="cat">Begründen</div><div class="phrase">„Das liegt daran, dass …"</div><div class="ueber">Ursache oder Grund angeben</div></div>
+        <div class="phrasen-karte"><div class="cat">Hypothese</div><div class="phrase">„In Zukunft wird … wahrscheinlich …"</div><div class="ueber">Prognose über die Zukunft der Werbung</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: WERBEPLANUNG -->
+  <div class="section" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Planung">
+    <div class="tab-content">
+      <div class="section-title">📋 Schema: Werbekampagne planen</div>
+      <div class="hilfe-box">Nutze dieses Schema, um eine eigene Werbekampagne zu planen und darüber zu sprechen.</div>
+      <table class="plan-table">
+        <tr><th>Schritt</th><th>Frage</th><th>Beispiel-Antwort</th></tr>
+        <tr><td class="step">1. Produkt</td><td>Was wird beworben?</td><td>Ein neues Bio-Müsli für Sportler</td></tr>
+        <tr><td class="step">2. Ziel</td><td>Was soll die Werbung erreichen?</td><td>Bekanntheit steigern, Verkauf erhöhen</td></tr>
+        <tr><td class="step">3. Zielgruppe</td><td>An wen richtet sich die Werbung?</td><td>Sportlich aktive Menschen, 20–40 Jahre</td></tr>
+        <tr><td class="step">4. Botschaft</td><td>Was ist die Kernaussage?</td><td>„Natürlich stark — für deinen Erfolg"</td></tr>
+        <tr><td class="step">5. Kanal</td><td>Wo wird die Werbung platziert?</td><td>Instagram, YouTube, Fitnessstudios</td></tr>
+        <tr><td class="step">6. Budget</td><td>Wie viel steht zur Verfügung?</td><td>5.000 € für die erste Kampagne</td></tr>
+        <tr><td class="step">7. Slogan</td><td>Wie lautet der einprägsame Spruch?</td><td>„Müsli für Macher."</td></tr>
+        <tr><td class="step">8. Auswertung</td><td>Wie misst man den Erfolg?</td><td>Klickzahlen, Verkaufszahlen, Follower</td></tr>
+      </table>
+      <div class="hilfe-box">💡 Tipp: <strong>Alte Kampagnen</strong> nutzten TV, Radio, Plakate und Print. <strong>Neue Kampagnen</strong> nutzen Social Media, Influencer, Content Marketing und gezielte Online-Werbung dank Algorithmen.</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: AUSSPRACHE -->
+  <div class="section" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Aussprache">
+    <div class="tab-content">
+      <div class="section-title">🔤 Aussprache: aufeinanderfolgende Konsonanten</div>
+      <div class="hilfe-box">Im Deutschen gibt es Wörter, in denen <strong>mehr als zwei Konsonanten aufeinanderfolgen</strong>. Das passiert meistens bei <strong>Komposita</strong> (zusammengesetzten Wörtern). Übe diese Wörter laut auszusprechen!</div>
+      <div class="konsonant-grid">
+        <div class="konsonant-karte">
+          <div class="wort">er<span class="hl">schöpft</span></div>
+          <div class="erkl">erschöpft = erschöpf + t<br>Konsonanten: p·f·t</div>
+        </div>
+        <div class="konsonant-karte">
+          <div class="wort">Unterrichts<span class="hl">schritt</span></div>
+          <div class="erkl">Unterrichts + schritt<br>Konsonanten: t·s·sch = ts+sch</div>
+        </div>
+        <div class="konsonant-karte">
+          <div class="wort">Markt<span class="hl">platz</span></div>
+          <div class="erkl">Markt + Platz<br>Konsonanten: r·k·t·p</div>
+        </div>
+        <div class="konsonant-karte">
+          <div class="wort">Wasch<span class="hl">schrank</span></div>
+          <div class="erkl">Wasch + Schrank<br>Konsonanten: sch+sch = [ʃ·ʃ]</div>
+        </div>
+        <div class="konsonant-karte">
+          <div class="wort">Geschichts<span class="hl">schreibung</span></div>
+          <div class="erkl">Geschichts + Schreibung<br>Konsonanten: ts+sch (5 Buchstaben!)</div>
+        </div>
+        <div class="konsonant-karte">
+          <div class="wort">Werbe<span class="hl">kampagne</span></div>
+          <div class="erkl">Werbe + Kampagne<br>Konsonanten: k·m·p</div>
+        </div>
+        <div class="konsonant-karte">
+          <div class="wort">Werbe<span class="hl">strategie</span></div>
+          <div class="erkl">Werbe + Strategie<br>Konsonanten: str = s·t·r</div>
+        </div>
+        <div class="konsonant-karte">
+          <div class="wort">Online<span class="hl">werbung</span></div>
+          <div class="erkl">Online + Werbung<br>Konsonanten: n·w (Wortgrenze)</div>
+        </div>
+      </div>
+      <div class="hilfe-box">📌 <strong>Regel:</strong> Bei Komposita spricht man jeden Teil einzeln aus. Trenne das Wort gedanklich in seine Bestandteile: <em>Unterrichts | schritt</em> — dann ist die Aussprache leichter!</div>
+    </div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="section" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6476808/pexels-photo-6476808.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Lückentext">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span><span class="timer-display" id="td3">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(3)">↺</button>
+        <span class="best-time" id="bt3"></span>
+      </div>
+      <div class="hilfe-box">Fülle die Lücken mit dem passenden Wort aus.</div>
+      <div class="wortkasten">📦 <strong>Wortkasten:</strong> Werbekampagne · Zielgruppe · Botschaft · Slogan · Kanal · Budget · planen · Algorithmen · Komposita · Konsonanten</div>
+      <div id="luecken-container"></div>
+      <button class="reset-btn" onclick="resetLuecken()">↺ Zurücksetzen</button>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Satzbau">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span><span class="timer-display" id="td4">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(4)">↺</button>
+        <span class="best-time" id="bt4"></span>
+      </div>
+      <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge.</div>
+      <div id="sb-container"></div>
+    </div>
+  </div>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── TABS ─────────────────────────────────────────────────────────
+function showTab(n){
+  document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
+  if(n===3&&!timers[3].started) timerAutoStart(3);
+  if(n===4&&!timers[4].started) timerAutoStart(4);
+}
+
+// ── TIMER ─────────────────────────────────────────────────────────
+const TIMER_PREFIX='best2018S';
+const timers={};
+[3,4].forEach(n=>{timers[n]={s:0,iv:null,started:false};});
+function fmtTime(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
+function startTimer(n){if(timers[n].iv)return;timers[n].iv=setInterval(()=>{timers[n].s++;document.getElementById('td'+n).textContent=fmtTime(timers[n].s);},1000);}
+function stopTimer(n){clearInterval(timers[n].iv);timers[n].iv=null;const key=TIMER_PREFIX+'_t'+n;const best=parseInt(localStorage.getItem(key)||'99999');if(timers[n].s>0&&timers[n].s<best){localStorage.setItem(key,timers[n].s);showBest(n,timers[n].s);}else showBest(n,best);}
+function resetTimer(n){clearInterval(timers[n].iv);timers[n].iv=null;timers[n].s=0;timers[n].started=false;document.getElementById('td'+n).textContent='0:00';startTimer(n);timers[n].started=true;}
+function showBest(n,s){const el=document.getElementById('bt'+n);if(el&&s<99999)el.textContent='Best: '+fmtTime(s);}
+function 
+loadBestTimes(){[3,4].forEach(n=>{const v=localStorage.getItem(TIMER_PREFIX+'_t'+n);if(v)showBest(n,parseInt(v));});}
+function timerAutoStart(n){startTimer(n);timers[n].started=true;}
+
+// ── LÜCKENTEXT ───────────────────────────────────────────────────
+const LUECKEN_DATA=[
+  {pre:'Eine ',blank:'Werbekampagne',post:' ist eine koordinierte Reihe von Werbemaßnahmen mit gemeinsamen Zielen.'},
+  {pre:'Die ',blank:'Zielgruppe',post:' ist die Gruppe von Menschen, die man mit der Werbung erreichen möchte.'},
+  {pre:'Die Kern-',blank:'Botschaft',post:' muss klar und einprägsam sein.'},
+  {pre:'Der ',blank:'Slogan',post:' ist ein kurzer, einprägsamer Werbespruch.'},
+  {pre:'Den richtigen ',blank:'Kanal',post:' zu wählen ist wichtig: TV, Social Media oder Print?'},
+  {pre:'Das ',blank:'Budget',post:' bestimmt, welche Maßnahmen möglich sind.'},
+  {pre:'Bevor man eine Kampagne startet, muss man sie sorgfältig ',blank:'planen',post:'.'},
+  {pre:'Dank ',blank:'Algorithmen',post:' sieht nur die Zielgruppe die Online-Werbung.'},
+  {pre:'',blank:'Komposita',post:' sind zusammengesetzte Wörter — z.B. „Werbekampagne" oder „Marktplatz".'},
+  {pre:'Bei Komposita können mehrere ',blank:'Konsonanten',post:' aufeinanderfolgen.'},
+];
+
+function buildLuecken(){
+  const c=document.getElementById('luecken-container');c.innerHTML='';
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div');div.className='luecke-item';
+    div.innerHTML=d.pre+'<input class="blank" id="lb'+i+'" type="text" autocomplete="off" oninput="liveCheck('+i+')" placeholder="…">'+d.post;
+    c.appendChild(div);
+  });
+}
+function liveCheck(i){
+  const inp=document.getElementById('lb'+i);const ans=LUECKEN_DATA[i].blank;const v=inp.value;
+  if(!v){inp.className='blank';return;}
+  const cs=ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+  const exact=cs?(ans===v):(ans.toLowerCase()===v.toLowerCase());
+  const partial=cs?ans.startsWith(v):ans.toLowerCase().startsWith(v.toLowerCase());
+  if(exact){
+    inp.className='blank correct';
+    if(!document.getElementById('lh'+i)){const sp=document.createElement('span');sp.className='correction-hint';sp.id='lh'+i;sp.textContent='✓';inp.parentNode.insertBefore(sp,inp.nextSibling);}
+    const allOk=[...document.querySelectorAll('#luecken-container .blank')].every(b=>b.classList.contains('correct'));
+    if(allOk)stopTimer(3);
+  }else{inp.className='blank'+(partial?'':' wrong');}
+}
+function resetLuecken(){buildLuecken();}
+
+// ── SATZBAU ──────────────────────────────────────────────────────
+const SATZBAU_DATA=[
+  {prompt:'Was macht eine gute Werbekampagne aus?',chips:['Eine','gute','Werbekampagne','spricht','die','richtige','Zielgruppe','an','.'],correct:'Eine gute Werbekampagne spricht die richtige Zielgruppe an .'},
+  {prompt:'Wie hat sich Werbung verändert?',chips:['Früher','hat','man','vor','allem','im','Fernsehen','geworben','.'],correct:'Früher hat man vor allem im Fernsehen geworben .'},
+  {prompt:'Warum ist Online-Werbung effektiver?',chips:['Heutzutage','kann','man','die','Zielgruppe','gezielter','erreichen',',','dank','der','Algorithmen','.'],correct:'Heutzutage kann man die Zielgruppe gezielter erreichen , dank der Algorithmen .'},
+  {prompt:'Was passiert bei Komposita?',chips:['Bei','Komposita','werden','zwei','Wörter','zusammengesetzt',',','daher','folgen','Konsonanten','aufeinander','.'],correct:'Bei Komposita werden zwei Wörter zusammengesetzt , daher folgen Konsonanten aufeinander .'},
+  {prompt:'Wie plant man eine Kampagne?',chips:['Zuerst','muss','man','die','Zielgruppe','definieren','und','dann','die','Botschaft','formulieren','.'],correct:'Zuerst muss man die Zielgruppe definieren und dann die Botschaft formulieren .'},
+];
+
+let sbDragged=null;
+function sbMakeChip(word,isStatic=false){const span=document.createElement('span');span.className='sb-chip'+(isStatic?' static-chip':'');span.textContent=word;if(!isStatic){span.draggable=true;span.ondragstart=e=>{sbDragged=span;span.classList.add('dragging');};span.ondragend=e=>{span.classList.remove('dragging');sbDragged=null;};}return span;}
+function sbRegisterZone(zone,idx){zone.ondragover=e=>{e.preventDefault();zone.classList.add('drag-over');};zone.ondragleave=e=>zone.classList.remove('drag-over');zone.ondrop=e=>{e.preventDefault();zone.classList.remove('drag-over');if(sbDragged)zone.appendChild(sbDragged);setTimeout(()=>sbCheckAuto(idx),500);};}
+function sbUpdateCapitalization(zone){const chips=[...zone.querySelectorAll('.sb-chip:not(.static-chip)')];chips.forEach((ch,i)=>{const w=ch.dataset.original||ch.textContent;if(!ch.dataset.original)ch.dataset.original=w;if(i===0)ch.textContent=w[0].toUpperCase()+w.slice(1);else ch.textContent=w;});}
+function sbCheckAuto(idx){const zone=document.getElementById('sb_drop_'+idx);const fb=document.getElementById('sb_fb_'+idx);sbUpdateCapitalization(zone);const chips=[...zone.querySelectorAll('.sb-chip')];const attempt=chips.map(c=>c.textContent).join(' ');const correct=SATZBAU_DATA[idx].correct;if(chips.length===0){fb.textContent='';return;}if(attempt===correct){fb.className='sb-feedback ok';fb.textContent='✓ Richtig!';const allDone=[...document.querySelectorAll('.sb-feedback')].every(f=>f.classList.contains('ok'));if(allDone)stopTimer(4);}else if(chips.length===correct.split(' ').length){fb.className='sb-feedback err';fb.textContent='✗ Noch nicht richtig.';}else fb.textContent='';}
+function buildSatzbau(){const c=document.getElementById('sb-container');c.innerHTML='';SATZBAU_DATA.forEach((d,idx)=>{let shuffled=[...d.chips];let ok=false;for(let a=0;a<50&&!ok;a++){for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]];}ok=shuffled.some((w,i)=>w!==d.chips[i]);}const div=document.createElement('div');div.className='sb-item';const prompt=document.createElement('div');prompt.className='sb-prompt';prompt.textContent=(idx+1)+'. '+d.prompt;div.appendChild(prompt);const chipArea=document.createElement('div');chipArea.className='sb-chips';chipArea.id='sb_src_'+idx;shuffled.forEach(w=>{const isPunct=/^[.,!?;:—–,]$/.test(w);chipArea.appendChild(sbMakeChip(w,isPunct));});const dropZone=document.createElement('div');dropZone.className='sb-drop';dropZone.id='sb_drop_'+idx;sbRegisterZone(dropZone,idx);sbRegisterZone(chipArea,idx);const fb=document.createElement('div');fb.className='sb-feedback';fb.id='sb_fb_'+idx;div.appendChild(chipArea);div.appendChild(dropZone);div.appendChild(fb);c.appendChild(div);});}
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildLuecken();buildSatzbau();
+loadBestTimes();
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the advertising campaign', art: 'die', wort: 'Werbekampagne', plural: '-n' },
+  { type: 'n', en: 'the target group', art: 'die', wort: 'Zielgruppe', plural: '-n' },
+  { type: 'n', en: 'the message', art: 'die', wort: 'Botschaft', plural: '-en' },
+  { type: 'n', en: 'the slogan', art: 'der', wort: 'Slogan', plural: '-s' },
+  { type: 'n', en: 'the channel', art: 'der', wort: 'Kanal', plural: '-e' },
+  { type: 'n', en: 'the budget', art: 'das', wort: 'Budget', plural: '-s' },
+  { type: 'v', en: 'to plan', de: 'planen' },
+  { type: 'v', en: 'to impress', de: 'beeindrucken' },
+  { type: 'v', en: 'to advertise', de: 'werben' },
+  { type: 'v', en: 'to compare', de: 'vergleichen' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – Indirekte Fragesätze (2042G)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #667eea; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; }
+  .header { background: #667eea; color: #fff; padding: 18px 24px; }
+  .header h1 { font-size: 1.25rem; font-weight: 700; }
+  .header p { font-size: 0.85rem; opacity: 0.85; margin-top: 3px; }
+  /* NAV */
+  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
+  .nav-row { display: flex; flex-wrap: wrap; }
+  .nav button { flex: 1 1 auto; padding: 10px 8px; border: 1px solid #9b59b6; background: #f3e8ff; color: #667eea; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+  .nav button:hover { background: #e0c8ff; }
+  .nav button.active { background: #667eea; color: #fff; }
+  /* TABS */
+  .tab { display: none; padding: 22px 24px; }
+  .tab.active { display: block; }
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
+  /* SECTION TITLE */
+  .section-title { font-size: 1.1rem; font-weight: 700; color: #667eea; margin-bottom: 14px; border-left: 4px solid #667eea; padding-left: 10px; }
+  /* ENTDECKEN */
+  .entdecken-box { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .entdecken-box p { font-size: 0.95rem; color: #333; margin-bottom: 12px; }
+  .entdecken-box .zitat { font-style: italic; color: #667eea; font-size: 1.05rem; font-weight: 600; display: block; margin-bottom: 12px; }
+  .mc-options { display: flex; flex-direction: column; gap: 8px; }
+  .mc-option { background: #fff; border: 2px solid #9b59b6; border-radius: 6px; padding: 10px 14px; cursor: pointer; font-size: 0.92rem; transition: background 0.2s, border-color 0.2s; }
+  .mc-option:hover { background: #e0c8ff; }
+  .mc-option.correct { background: #d4edda; border-color: #28a745; color: #155724; }
+  .mc-option.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
+  .mc-option.disabled { pointer-events: none; opacity: 0.7; }
+  .mc-feedback { margin-top: 10px; padding: 8px 12px; border-radius: 6px; font-size: 0.88rem; display: none; }
+  .mc-feedback.show { display: block; }
+  .mc-feedback.ok { background: #d4edda; color: #155724; }
+  .mc-feedback.nok { background: #f8d7da; color: #721c24; }
+  .step-dots { display: flex; gap: 8px; margin-bottom: 12px; }
+  .step-dot { width: 12px; height: 12px; border-radius: 50%; background: #ccc; }
+  .step-dot.done { background: #667eea; }
+  .step-dot.active { background: #9b59b6; }
+  /* REGEL */
+  .regel-card { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 16px; margin-bottom: 14px; }
+  .regel-card h3 { font-size: 0.95rem; font-weight: 700; color: #667eea; margin-bottom: 10px; }
+  .regel-card p { font-size: 0.92rem; color: #333; margin-bottom: 8px; }
+  .beispiel-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.88rem; }
+  .beispiel-table th { background: #667eea; color: #fff; padding: 7px 10px; text-align: left; }
+  .beispiel-table td { padding: 7px 10px; border: 1px solid #ddd; }
+  .beispiel-table tr:nth-child(even) td { background: #f9f0ff; }
+  .highlight { color: #667eea; font-weight: 700; }
+  .fragewort-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+  .fw-card { background: #fff; border: 1px solid #9b59b6; border-radius: 6px; padding: 8px 12px; font-size: 0.88rem; }
+  .fw-card strong { color: #667eea; }
+  /* LÜCKENTEXT */
+  .luecken-intro { background: #f3e8ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; color: #555; }
+  .luecken-list { list-style: none; }
+  .luecken-list li { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 0.95rem; flex-wrap: wrap; }
+  .luecken-list li span.prefix { color: #333; }
+  .gap-input { border: none; border-bottom: 2px solid #9b59b6; outline: none; font-size: 0.95rem; padding: 2px 4px; min-width: 140px; color: #333; background: transparent; }
+  .gap-input.correct { border-bottom-color: #28a745; color: #155724; background: #d4edda; border-radius: 4px; border: 1px solid #28a745; }
+  .gap-input.wrong { border-bottom-color: #dc3545; color: #721c24; background: #f8d7da; border-radius: 4px; border: 1px solid #dc3545; }
+  .timer-bar { display: flex; align-items: center; gap: 10px; background: #f3e8ff; border-radius: 8px; padding: 8px 14px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 55px; }
+  .timer-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 0.85rem; }
+  .timer-btn:hover { background: #5a0c9d; }
+  .check-btn { background: #667eea; color: #fff; border: none; border-radius: 8px; padding: 10px 22px; cursor: pointer; font-size: 0.95rem; margin-top: 10px; }
+  .check-btn:hover { background: #5a0c9d; }
+  .result-msg { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.92rem; display: none; }
+  .result-msg.show { display: block; }
+  .result-msg.ok { background: #d4edda; color: #155724; }
+  .result-msg.nok { background: #f8d7da; color: #721c24; }
+  /* SATZBAU */
+  .sb-sentence { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
+  .sb-sentence .sb-label { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
+  .sb-drop-zone { min-height: 44px; background: #fff; border: 2px dashed #9b59b6; border-radius: 6px; padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 5px 12px; font-size: 0.85rem; cursor: grab; user-select: none; border: none; }
+  .chip:active { cursor: grabbing; }
+  .chip.in-zone { background: #9b59b6; }
+  .sb-check-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; cursor: pointer; font-size: 0.85rem; }
+  .sb-check-btn:hover { background: #5a0c9d; }
+  .sb-feedback { font-size: 0.85rem; margin-top: 6px; display: none; }
+  .sb-feedback.show { display: block; }
+  .sb-feedback.ok { color: #155724; }
+  .sb-feedback.nok { color: #721c24; }
+  /* ZUORDNUNG */
+  .zuord-intro { background: #f3e8ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; color: #555; }
+  .zuord-item { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; font-size: 0.93rem; }
+  .zuord-item span { min-width: 200px; color: #333; }
+  .zuord-select { padding: 6px 10px; border: 2px solid #9b59b6; border-radius: 6px; font-size: 0.88rem; color: #333; background: #fff; cursor: pointer; }
+  .zuord-select.correct { border-color: #28a745; background: #d4edda; color: #155724; }
+  .zuord-select.wrong { border-color: #dc3545; background: #f8d7da; color: #721c24; }
+  /* VOCAB TABLE */
+  .vocab-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
+  .vocab-table th { background: #667eea; color: #fff; padding: 8px 10px; text-align: left; }
+  .vocab-table td { padding: 7px 10px; border: 1px solid #ddd; }
+  .vocab-table tr:nth-child(even) td { background: #f9f0ff; }
+  .author-footer { text-align: center; font-size: 0.75rem; color: #aaa; padding: 16px; border-top: 1px solid #eee; margin-top: 8px; }
+  /* RULE BOX */
+  .rule-box { background: #d4edda; border: 1px solid #28a745; border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 0.92rem; color: #155724; display: none; }
+  .rule-box.show { display: block; }
+  .rule-box h4 { font-weight: 700; margin-bottom: 8px; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Indirekte Fragesätze</h1>
+    <p>B1.2 · Lektion 2042G · Grammatik</p>
+  </div>
+
+  <div class="nav">
+    <div class="nav-row">
+      <button class="active" onclick="showTab(0)">🔍 Entdecken</button>
+      <button onclick="showTab(1)">📖 Regel</button>
+      <button onclick="showTab(2)">✏️ Lückentext</button>
+      <button onclick="showTab(3)">🧩 Satzbau</button>
+      <button onclick="showTab(4)">🔀 Zuordnung</button>
+    </div>
+  </div>
+
+  <!-- TAB 0: ENTDECKEN -->
+  <div class="tab active" id="tab-0">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=800" class="tab-banner" alt="Fragen stellen">
+    <div class="section-title">Entdeckungslernen: Indirekte Fragesätze</div>
+
+    <div class="step-dots" id="dots">
+      <div class="step-dot active" id="dot0"></div>
+      <div class="step-dot" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+      <div class="step-dot" id="dot3"></div>
+    </div>
+
+    <!-- Step 0 -->
+    <div id="step0">
+      <div class="entdecken-box">
+        <p>Lies diese Frage und überlege: Was macht diese Frage besonders?</p>
+        <span class="zitat">„Hast du dich schon mal gefragt, <strong>ob</strong> du bessere Noten haben könntest?"</span>
+        <p>Das Wort <em>ob</em> leitet einen Nebensatz ein. Was ist das für eine Frageform?</p>
+        <div class="mc-options">
+          <div class="mc-option" onclick="checkMC(0, this, false)">Das ist eine direkte Frage.</div>
+          <div class="mc-option" onclick="checkMC(0, this, true)">Das ist eine indirekte Frage – eingeleitet mit <em>ob</em>.</div>
+          <div class="mc-option" onclick="checkMC(0, this, false)">Das ist ein Aussagesatz.</div>
+        </div>
+        <div class="mc-feedback" id="fb0"></div>
+        <div class="rule-box" id="rule0">
+          <h4>✅ Richtig!</h4>
+          Das ist eine <strong>indirekte Frage</strong>. Sie wird mit <strong>ob</strong> eingeleitet, wenn die direkte Frage eine Ja/Nein-Frage (Entscheidungsfrage) ist.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="step1" style="display:none;">
+      <div class="entdecken-box">
+        <p>Schau dir diese beiden Sätze an:</p>
+        <span class="zitat">Direkte Frage: „Wann feiert ihr Weihnachten?"<br>
+        Indirekte Frage: „Sie möchte wissen, <strong>wann</strong> ihr Weihnachten <strong>feiert</strong>."</span>
+        <p>Was hat sich beim Verb verändert?</p>
+        <div class="mc-options">
+          <div class="mc-option" onclick="checkMC(1, this, false)">Das Verb bleibt an Position 2.</div>
+          <div class="mc-option" onclick="checkMC(1, this, true)">Das Verb wandert ans Ende des Satzes.</div>
+          <div class="mc-option" onclick="checkMC(1, this, false)">Das Verb fällt weg.</div>
+        </div>
+        <div class="mc-feedback" id="fb1"></div>
+        <div class="rule-box" id="rule1">
+          <h4>✅ Genau!</h4>
+          In indirekten Fragesätzen steht das konjugierte Verb <strong>am Ende</strong> des Satzes.
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2" style="display:none;">
+      <div class="entdecken-box">
+        <p>Welche Art von Frage braucht <em>ob</em> als Einleitung?</p>
+        <span class="zitat">„Ich weiß nicht, <strong>ob</strong> du Theater magst."<br>
+        „Könnte mir jemand sagen, <strong>ob</strong> es heute noch kälter wird?"</span>
+        <div class="mc-options">
+          <div class="mc-option" onclick="checkMC(2, this, false)">Ergänzungsfragen (W-Fragen)</div>
+          <div class="mc-option" onclick="checkMC(2, this, true)">Entscheidungsfragen (Ja/Nein-Fragen)</div>
+          <div class="mc-option" onclick="checkMC(2, this, false)">Alle Fragen verwenden <em>ob</em></div>
+        </div>
+        <div class="mc-feedback" id="fb2"></div>
+        <div class="rule-box" id="rule2">
+          <h4>✅ Sehr gut!</h4>
+          <strong>Entscheidungsfragen</strong> (Ja/Nein-Fragen) werden in indirekten Fragesätzen mit <strong>ob</strong> eingeleitet.<br>
+          <strong>Ergänzungsfragen</strong> (W-Fragen) behalten ihr Fragewort: <em>wann, wo, warum, wie, wer…</em>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="step3" style="display:none;">
+      <div class="entdecken-box">
+        <p>Welcher Satz ist korrekt?</p>
+        <span class="zitat">a) „Ich möchte wissen, warum <strong>verpasse</strong> ich immer das Wichtigste."<br>
+        b) „Ich möchte wissen, warum ich immer das Wichtigste <strong>verpasse</strong>."</span>
+        <div class="mc-options">
+          <div class="mc-option" onclick="checkMC(3, this, false)">Satz a) ist korrekt.</div>
+          <div class="mc-option" onclick="checkMC(3, this, true)">Satz b) ist korrekt.</div>
+          <div class="mc-option" onclick="checkMC(3, this, false)">Beide Sätze sind korrekt.</div>
+        </div>
+        <div class="mc-feedback" id="fb3"></div>
+        <div class="rule-box" id="rule3">
+          <h4>✅ Perfekt!</h4>
+          Satz b) ist korrekt. In indirekten Fragesätzen steht das Verb <strong>immer am Ende</strong> – egal ob mit <em>ob</em> oder einem Fragewort eingeleitet.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: REGEL -->
+  <div class="tab" id="tab-1">
+    <img src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&w=800" class="tab-banner" alt="Grammatikregel">
+    <div class="section-title">Indirekte Fragesätze – Die Regel</div>
+
+    <div class="regel-card">
+      <h3>Was sind indirekte Fragen?</h3>
+      <p>Indirekte Fragen sind <strong>Nebensätze</strong>. Sie drücken Höflichkeit aus und werden oft nach Verben wie <em>wissen, fragen, sagen, interessieren</em> verwendet.</p>
+      <p>Das konjugierte Verb steht <strong>am Ende des Nebensatzes</strong>.</p>
+    </div>
+
+    <div class="regel-card">
+      <h3>Zwei Typen – zwei Einleitungen</h3>
+      <table class="beispiel-table">
+        <tr><th>Direkte Frage</th><th>Typ</th><th>Einleitung</th><th>Indirekte Frage</th></tr>
+        <tr>
+          <td>Kommt er?</td>
+          <td>Entscheidungsfrage (Ja/Nein)</td>
+          <td><span class="highlight">ob</span></td>
+          <td>Ich möchte wissen, <span class="highlight">ob</span> er <span class="highlight">kommt</span>.</td>
+        </tr>
+        <tr>
+          <td>Wann kommt er?</td>
+          <td>Ergänzungsfrage (W-Frage)</td>
+          <td><span class="highlight">wann</span></td>
+          <td>Ich möchte wissen, <span class="highlight">wann</span> er <span class="highlight">kommt</span>.</td>
+        </tr>
+        <tr>
+          <td>Wohin fährst du?</td>
+          <td>Ergänzungsfrage</td>
+          <td><span class="highlight">wohin</span></td>
+          <td>Er fragt, <span class="highlight">wohin</span> du <span class="highlight">fährst</span>.</td>
+        </tr>
+        <tr>
+          <td>Hat David verloren?</td>
+          <td>Entscheidungsfrage</td>
+          <td><span class="highlight">ob</span></td>
+          <td>Weißt du, <span class="highlight">ob</span> David <span class="highlight">verloren hat</span>?</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="regel-card">
+      <h3>Fragewörter (Überblick)</h3>
+      <div class="fragewort-grid">
+        <div class="fw-card"><strong>Wann / Wie lange</strong><br>Zeitpunkt / Zeitdauer</div>
+        <div class="fw-card"><strong>Wo / Wohin / Woher</strong><br>Ort / Richtung</div>
+        <div class="fw-card"><strong>Warum / Weshalb</strong><br>Grund</div>
+        <div class="fw-card"><strong>Wie</strong><br>Qualität / Eigenschaft</div>
+        <div class="fw-card"><strong>Wie oft</strong><br>Häufigkeit</div>
+        <div class="fw-card"><strong>Wie viel / Wie viele</strong><br>Menge</div>
+        <div class="fw-card"><strong>Wer / Wem / Wessen</strong><br>Interrogativpronomen</div>
+        <div class="fw-card"><strong>Welcher / Welche / Welches</strong><br>Interrogativartikel</div>
+      </div>
+    </div>
+
+    <div class="regel-card">
+      <h3>Höfliche Einleitungsphrasen</h3>
+      <p>Indirekte Fragen werden oft mit diesen Phrasen eingeleitet:</p>
+      <p style="margin-top:8px;">
+        <em>Ich möchte wissen, …</em> &nbsp;·&nbsp;
+        <em>Ich frage mich, …</em> &nbsp;·&nbsp;
+        <em>Kannst du mir sagen, …</em> &nbsp;·&nbsp;
+        <em>Ich weiß nicht, …</em> &nbsp;·&nbsp;
+        <em>Mich interessiert, …</em>
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="tab" id="tab-2">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=800" class="tab-banner" alt="Lückentext Übung">
+    <div class="section-title">Lückentext: Indirekte Fragesätze</div>
+    <div class="timer-bar">
+      <span>⏱</span>
+      <span class="timer-display" id="timerDisplay2">00:00</span>
+      <button class="timer-btn" onclick="startTimer('best2042G_L','timerDisplay2')">Start</button>
+      <button class="timer-btn" onclick="stopTimer('best2042G_L')">Stop</button>
+      <button class="timer-btn" onclick="resetTimer('best2042G_L','timerDisplay2')">Reset</button>
+    </div>
+    <div class="luecken-intro">
+      Ergänze die Lücken mit dem passenden Fragewort oder <em>ob</em>. Achte auf das Verb am Satzende!
+    </div>
+    <ul class="luecken-list" id="lueckenList">
+    </ul>
+    <button class="check-btn" onclick="checkLuecken()">Auswerten</button>
+    <div class="result-msg" id="lueckenResult"></div>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div class="tab" id="tab-3">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=800" class="tab-banner" alt="Satzbau Übung">
+    <div class="section-title">Satzbau: Indirekte Fragesätze</div>
+    <div class="timer-bar">
+      <span>⏱</span>
+      <span class="timer-display" id="timerDisplay3">00:00</span>
+      <button class="timer-btn" onclick="startTimer('best2042G_S','timerDisplay3')">Start</button>
+      <button class="timer-btn" onclick="stopTimer('best2042G_S')">Stop</button>
+      <button class="timer-btn" onclick="resetTimer('best2042G_S','timerDisplay3')">Reset</button>
+    </div>
+    <div id="sbContainer"></div>
+  </div>
+
+  <!-- TAB 4: ZUORDNUNG -->
+  <div class="tab" id="tab-4">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=800" class="tab-banner" alt="Zuordnung Übung">
+    <div class="section-title">Zuordnung: Direkte oder indirekte Frage?</div>
+    <div class="zuord-intro">
+      Bestimme für jeden Satz: Handelt es sich um eine <strong>direkte</strong> oder <strong>indirekte</strong> Frage? Und wenn indirekt – <strong>ob</strong> oder <strong>Fragewort</strong>?
+    </div>
+    <div id="zuordContainer"></div>
+    <button class="check-btn" onclick="checkZuordnung()">Auswerten</button>
+    <div class="result-msg" id="zuordResult"></div>
+  </div>
+
+  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · B1.2 · 2042G · Indirekte Fragesätze</div>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── TAB NAVIGATION ──────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// ── ENTDECKEN ───────────────────────────────────────────────
+let currentStep = 0;
+const totalSteps = 4;
+
+function checkMC(step, el, correct) {
+  const opts = el.parentElement.querySelectorAll('.mc-option');
+  opts.forEach(o => o.classList.add('disabled'));
+  const fb = document.getElementById('fb'+step);
+  const rule = document.getElementById('rule'+step);
+  if (correct) {
+    el.classList.add('correct');
+    fb.textContent = '✅ Richtig! Weiter so.';
+    fb.className = 'mc-feedback show ok';
+    if (rule) rule.classList.add('show');
+    setTimeout(() => {
+      if (step < totalSteps - 1) {
+        currentStep = step + 1;
+        document.getElementById('step'+step).style.display = 'none';
+        document.getElementById('step'+currentStep).style.display = 'block';
+        updateDots();
+      }
+    }, 1800);
+  } else {
+    el.classList.add('wrong');
+    fb.textContent = '❌ Nicht ganz – versuch es nochmal!';
+    fb.className = 'mc-feedback show nok';
+    setTimeout(() => {
+      el.classList.remove('wrong');
+      opts.forEach(o => o.classList.remove('disabled'));
+      fb.classList.remove('show');
+    }, 1500);
+  }
+}
+
+function updateDots() {
+  for (let i = 0; i < totalSteps; i++) {
+    const d = document.getElementById('dot'+i);
+    if (i < currentStep) d.className = 'step-dot done';
+    else if (i === currentStep) d.className = 'step-dot active';
+    else d.className = 'step-dot';
+  }
+}
+
+// ── TIMER ───────────────────────────────────────────────────
+const timers = {};
+function startTimer(key, displayId) {
+  if (timers[key] && timers[key].running) return;
+  const start = Date.now() - (timers[key] ? timers[key].elapsed : 0);
+  timers[key] = { running: true, elapsed: 0,
+    interval: setInterval(() => {
+      const e = Date.now() - start;
+      timers[key].elapsed = e;
+      const m = String(Math.floor(e/60000)).padStart(2,'0');
+      const s = String(Math.floor((e%60000)/1000)).padStart(2,'0');
+      document.getElementById(displayId).textContent = m+':'+s;
+    }, 500)
+  };
+}
+function stopTimer(key) {
+  if (timers[key]) { clearInterval(timers[key].interval); timers[key].running = false; }
+}
+function resetTimer(key, displayId) {
+  stopTimer(key);
+  timers[key] = null;
+  document.getElementById(displayId).textContent = '00:00';
+}
+
+// ── LÜCKENTEXT DATA ──────────────────────────────────────────
+const LUECKEN_DATA = [
+  { pre:'Ich möchte wissen, ', gap:'ob', suf:' die Ausstellung morgen noch geöffnet ist.' },
+  { pre:'Er fragt, ', gap:'wohin', suf:' du nächsten Sommer fährst.' },
+  { pre:'Sie wollte wissen, ', gap:'ob', suf:' die Politiker immer die Wahrheit sagen.' },
+  { pre:'Kannst du mir sagen, ', gap:'wie viel', suf:' das Ticket für das Theater kostet?' },
+  { pre:'Ich weiß nicht, ', gap:'warum', suf:' ich immer das Wichtigste verpasse.' },
+  { pre:'Mich interessiert, ', gap:'ob', suf:' du fließend Englisch sprichst.' },
+  { pre:'Der Chef fragte mich, ', gap:'ob', suf:' ich heute rechtzeitig komme.' },
+  { pre:'Ich möchte wissen, ', gap:'wann', suf:' ihr Weihnachten feiert.' },
+  { pre:'Meine Eltern wollten wissen, ', gap:'ob', suf:' ich noch lange im Ausland bleibe.' },
+  { pre:'Weißt du, ', gap:'welcher', suf:' Flug heute keine Verspätung hat?' },
+];
+
+function buildLuecken() {
+  const ul = document.getElementById('lueckenList');
+  LUECKEN_DATA.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="prefix">${item.pre}</span><input class="gap-input" id="gap${i}" autocomplete="off" spellcheck="false" oninput="liveCheck(${i})"><span>${item.suf}</span>`;
+    ul.appendChild(li);
+  });
+}
+
+function liveCheck(i) {
+  const inp = document.getElementById('gap'+i);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[i].gap;
+  if (val === '') { inp.className = 'gap-input'; return; }
+  const ok = val.toLowerCase() === ans.toLowerCase();
+  inp.className = 'gap-input ' + (ok ? 'correct' : '');
+  autoStopIfDone();
+}
+
+function autoStopIfDone() {
+  const allOk = LUECKEN_DATA.every((_,i) => {
+    const v = (document.getElementById('gap'+i)||{}).value||'';
+    return v.trim().toLowerCase() === LUECKEN_DATA[i].gap.toLowerCase();
+  });
+  if (allOk) stopTimer('best2042G_L');
+}
+
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('gap'+i);
+    const ok = inp.value.trim().toLowerCase() === item.gap.toLowerCase();
+    inp.className = 'gap-input ' + (ok ? 'correct' : 'wrong');
+    if (ok) correct++;
+  });
+  const res = document.getElementById('lueckenResult');
+  res.textContent = correct === LUECKEN_DATA.length
+    ? `✅ Perfekt! Alle ${LUECKEN_DATA.length} Lücken richtig!`
+    : `${correct} von ${LUECKEN_DATA.length} richtig. Versuche die roten Lücken noch einmal.`;
+  res.className = 'result-msg show ' + (correct === LUECKEN_DATA.length ? 'ok' : 'nok');
+  if (correct === LUECKEN_DATA.length) stopTimer('best2042G_L');
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Indirekte', 'Frage', '–', 'ob'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('sbContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// ── ZUORDNUNG DATA ───────────────────────────────────────────
+const ZUORD_DATA = [
+  { satz: 'Ich wollte wissen, ob die Ausstellung bis morgen geöffnet ist.', answer: 'Indirekte Frage – ob' },
+  { satz: 'Wie viel kostet das Ticket für das Theater?', answer: 'Direkte Frage' },
+  { satz: 'Ich weiß nicht, ob du Theater magst.', answer: 'Indirekte Frage – ob' },
+  { satz: 'Könnte mir jemand sagen, ob es heute noch kälter wird?', answer: 'Indirekte Frage – ob' },
+  { satz: 'Warum verpasse ich immer das Wichtigste?', answer: 'Direkte Frage' },
+  { satz: 'Ich möchte wissen, wann ihr Weihnachten feiert.', answer: 'Indirekte Frage – Fragewort' },
+  { satz: 'Welcher Flug hat heute keine Verspätung?', answer: 'Direkte Frage' },
+  { satz: 'Er fragt, wohin du nächsten Sommer fährst.', answer: 'Indirekte Frage – Fragewort' },
+];
+
+const zuordOptions = ['Direkte Frage', 'Indirekte Frage – ob', 'Indirekte Frage – Fragewort'];
+
+function buildZuordnung() {
+  const container = document.getElementById('zuordContainer');
+  ZUORD_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'zuord-item';
+    let opts = zuordOptions.map(o => `<option value="${o}">${o}</option>`).join('');
+    div.innerHTML = `<span>${item.satz}</span>
+      <select class="zuord-select" id="zuord${i}">
+        <option value="">-- Wählen --</option>${opts}
+      </select>`;
+    container.appendChild(div);
+  });
+}
+
+function checkZuordnung() {
+  let correct = 0;
+  ZUORD_DATA.forEach((item, i) => {
+    const sel = document.getElementById('zuord'+i);
+    const ok = sel.value === item.answer;
+    sel.className = 'zuord-select ' + (ok ? 'correct' : (sel.value ? 'wrong' : ''));
+    if (ok) correct++;
+  });
+  const res = document.getElementById('zuordResult');
+  res.textContent = correct === ZUORD_DATA.length
+    ? `✅ Perfekt! Alle ${ZUORD_DATA.length} Zuordnungen richtig!`
+    : `${correct} von ${ZUORD_DATA.length} richtig. Überprüfe die markierten Sätze.`;
+  res.className = 'result-msg show ' + (correct === ZUORD_DATA.length ? 'ok' : 'nok');
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+buildLuecken();
+buildSatzbau();
+buildZuordnung();
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the question', art: 'die', wort: 'Frage', plural: '-n' },
+  { type: 'n', en: 'the answer', art: 'die', wort: 'Antwort', plural: '-en' },
+  { type: 'n', en: 'the reason', art: 'der', wort: 'Grund', plural: '-e' },
+  { type: 'v', en: 'to ask', de: 'fragen' },
+  { type: 'v', en: 'to wonder', de: 'sich fragen' },
+  { type: 'v', en: 'to know', de: 'wissen' },
+  { type: 'v', en: 'to want to know', de: 'erfahren wollen' },
+  { type: 'v', en: 'to tell', de: 'erzählen' },
+  { type: 'v', en: 'to explain', de: 'erklären' },
+  { type: 'v', en: 'to understand', de: 'verstehen' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

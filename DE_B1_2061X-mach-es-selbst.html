@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2061X · Mach es selbst!</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
+  .nav button { padding: 11px 16px; border: 1px solid #b388e8; background: #f3e8ff; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; color: #5a0090; text-align: left; transition: background 0.2s; }
+  .nav button:hover { background: #e1c6ff; }
+  .nav button.active { background: #667eea; color: #fff; border-color: #667eea; }
+  .tab-content { display: none; padding: 28px 32px; }
+  .tab-content.active { display: block; }
+  h2 { color: #667eea; margin-bottom: 18px; font-size: 1.25rem; }
+  h3 { color: #5a0090; margin: 18px 0 10px; font-size: 1.05rem; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; display: block; }
+  /* VOCAB */
+  .vocab-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+  .vocab-card { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 12px 16px; min-width: 190px; flex: 1 1 190px; cursor: pointer; transition: background 0.2s; }
+  .vocab-card:hover { background: #e1c6ff; }
+  .vocab-card .word { font-weight: 700; color: #667eea; font-size: 1rem; }
+  .vocab-card .translation { font-size: 0.85rem; color: #555; margin-top: 4px; display: none; }
+  .vocab-card.revealed .translation { display: block; }
+  /* PROJEKT KARTEN */
+  .projekt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 14px; margin-top: 14px; }
+  .projekt-card { background: #f9f3ff; border: 2px solid #b388e8; border-radius: 10px; padding: 16px 18px; }
+  .projekt-card .emoji { font-size: 1.8rem; margin-bottom: 8px; }
+  .projekt-card .titel { font-weight: 700; color: #667eea; font-size: 0.97rem; margin-bottom: 6px; }
+  .projekt-card .info { font-size: 0.86rem; color: #555; line-height: 1.5; }
+  /* ZUORDNUNG */
+  .zuord-list { list-style: none; max-width: 680px; margin: 0 auto; }
+  .zuord-item { display: flex; align-items: center; gap: 12px; background: #f9f3ff;
+    border: 1px solid #d4b8f5; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+  .zuord-item .satz { flex: 1; font-size: 0.95rem; }
+  .zuord-item select { border: 2px solid #b388e8; border-radius: 6px; padding: 6px 10px;
+    font-size: 0.9rem; background: #fff; cursor: pointer; }
+  .zuord-item select.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .zuord-item select.err { border-color: #cc3333; background: #ffd5d5; }
+  /* LÜCKENTEXT */
+  .luecken-text { font-size: 1rem; line-height: 2.1; max-width: 680px; }
+  .luecken-text p { margin-bottom: 10px; }
+  .luecken-text input { border: none; border-bottom: 2px solid #b388e8; background: transparent;
+    font-size: 0.97rem; outline: none; padding: 2px 6px; color: #333; transition: border-color 0.2s; }
+  .luecken-text input:focus { border-color: #667eea; }
+  .luecken-text input.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .luecken-text input.err { border-color: #cc3333; background: #ffd5d5; }
+  /* SATZBAU */
+  .sb-task { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task .aufgabe { font-size: 0.85rem; color: #888; margin-bottom: 8px; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 36px; }
+  .sb-chip { background: #667eea; color: #fff; border-radius: 6px; padding: 6px 12px;
+    cursor: grab; font-size: 0.92rem; user-select: none; border: 2px solid transparent; }
+  .sb-chip:active { cursor: grabbing; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-chip.selected { border-color: #ffcc00; }
+  .sb-drop { border: 2px dashed #b388e8; border-radius: 8px; min-height: 40px; padding: 4px 8px;
+    display: flex; flex-wrap: wrap; gap: 6px; background: #faf5ff; transition: background 0.2s; }
+  .sb-drop.drag-over { background: #e1c6ff; }
+  .sb-feedback { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 60px; }
+  .timer-btn { padding: 6px 16px; border-radius: 6px; border: 2px solid #667eea;
+    background: #fff; color: #667eea; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+  .timer-btn:hover { background: #f3e8ff; }
+  .timer-best { font-size: 0.85rem; color: #888; }
+  .check-btn { margin-top: 14px; padding: 10px 28px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+  .check-btn:hover { background: #5a0090; }
+  .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
+  .sprech-card { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; }
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
+    font-size: 0.75rem; color: #aaa; text-align: center; }
+  .info-box { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6; }
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="nav" id="nav">
+    <button class="active" onclick="showTab(0)">🔨 DIY-Projekte</button>
+    <button onclick="showTab(1)">📚 Wortschatz</button>
+    <button onclick="showTab(2)">🔗 Zuordnung</button>
+    <button onclick="showTab(3)">❓ Diskussion</button>
+    <button onclick="showTab(4)">✏️ Lückentext</button>
+    <button onclick="showTab(5)">🧩 Satzbau</button>
+  </div>
+
+  <!-- TAB 0: DIY-PROJEKTE -->
+  <div class="tab-content active" id="tab0">
+    <img src="https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         onerror="this.src='https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1'"
+         alt="DIY" class="tab-banner">
+    <h2>Mach es selbst! — DIY &amp; Heimwerken</h2>
+    <div class="info-box">
+      „Do it yourself" (DIY) bedeutet: selbst etwas bauen, reparieren oder herstellen —
+      ohne Fachmann oder Handwerker zu beauftragen. Es spart Geld, schützt die Umwelt und macht Spaß!
+    </div>
+
+    <h3>Beliebte DIY-Projekte</h3>
+    <div class="projekt-grid">
+      <div class="projekt-card">
+        <div class="emoji">🪑</div>
+        <div class="titel">Möbel restaurieren</div>
+        <div class="info">Alte Möbel schleifen, streichen und neu gestalten</div>
+      </div>
+      <div class="projekt-card">
+        <div class="emoji">🌱</div>
+        <div class="titel">Hochbeet bauen</div>
+        <div class="info">Aus Holzlatten ein Hochbeet für den Garten konstruieren</div>
+      </div>
+      <div class="projekt-card">
+        <div class="emoji">🔌</div>
+        <div class="titel">Reparieren statt wegwerfen</div>
+        <div class="info">Kaputte Geräte selbst reparieren mit Online-Tutorials</div>
+      </div>
+      <div class="projekt-card">
+        <div class="emoji">🎨</div>
+        <div class="titel">Wände streichen</div>
+        <div class="info">Zimmer selbst renovieren und frisch streichen</div>
+      </div>
+      <div class="projekt-card">
+        <div class="emoji">🪴</div>
+        <div class="titel">Upcycling</div>
+        <div class="info">Aus alten Materialien neue nützliche Gegenstände bauen</div>
+      </div>
+      <div class="projekt-card">
+        <div class="emoji">🔧</div>
+        <div class="titel">Kleines reparieren</div>
+        <div class="info">Wasserhahn, Türgriff oder Fahrrad selbst reparieren</div>
+      </div>
+    </div>
+
+    <h3>Sprechaufgaben</h3>
+    <div class="sprech-card"><strong>A)</strong> Hast du schon einmal etwas selbst gebaut oder repariert? Erzähle davon.</div>
+    <div class="sprech-card"><strong>B)</strong> Was sind die Vorteile von DIY? Nenne mindestens drei Argumente.</div>
+    <div class="sprech-card"><strong>C)</strong> Welches DIY-Projekt würdest du gerne ausprobieren? Warum?</div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 1: VOKABELN -->
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Vokabeln" class="tab-banner">
+    <h2>Wortschatz — Heimwerken &amp; DIY</h2>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 2: ZUORDNUNG -->
+  <div class="tab-content" id="tab2">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Zuordnung" class="tab-banner">
+    <h2>Zuordnung — Werkzeug oder Material?</h2>
+    <p style="margin-bottom:16px;color:#555;">Ordne jeden Begriff der richtigen Kategorie zu.</p>
+    <ul class="zuord-list" id="zuordList"></ul>
+    <button class="check-btn" onclick="checkZuordnung()">Überprüfen</button>
+    <div class="result-msg" id="zuordResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 3: DISKUSSION -->
+  <div class="tab-content" id="tab3">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Diskussion" class="tab-banner">
+    <h2>Diskussion — DIY oder Handwerker?</h2>
+    <div class="info-box">
+      <strong>Lies die Situation und beantworte die Fragen.</strong>
+    </div>
+    <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:18px 20px;margin-bottom:20px;font-size:0.97rem;line-height:1.8;">
+      <p><strong>Tim:</strong> „Ich möchte meine Küche renovieren. Ich denke, ich mache alles selbst — neue Fliesen legen, die Wände streichen und einen neuen Wasseranschluss installieren."</p>
+      <p><strong>Anna:</strong> „Ich finde das mutig! Aber für den Wasseranschluss würde ich doch lieber einen Klempner beauftragen. Das kann schnell teuer werden, wenn etwas schief geht."</p>
+      <p><strong>Tim:</strong> „Stimmt. Aber beim Streichen und Fliesenlegen kann ich sicher viel Geld sparen, wenn ich es selbst mache."</p>
+      <p><strong>Anna:</strong> „Das hängt davon ab, ob du die nötigen Werkzeuge hast. Werkzeuge kaufen oder mieten kann auch teuer sein."</p>
+      <p><strong>Tim:</strong> „Da hast du recht. Ich werde zuerst im Internet recherchieren und dann entscheiden."</p>
+    </div>
+    <h3>Fragen zum Text</h3>
+    <div style="max-width:650px;">
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>1.</strong> Was möchte Tim renovieren?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>2.</strong> Welche Aufgabe soll laut Anna ein Fachmann übernehmen?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>3.</strong> Welches Argument nennt Anna gegen das DIY?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>4.</strong> Was entscheidet Tim am Ende?
+      </div>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 4: LÜCKENTEXT -->
+  <div class="tab-content" id="tab4">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lückentext" class="tab-banner">
+    <h2>Lückentext</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerL">0:00</span>
+      <button class="timer-btn" id="timerLBtn" onclick="timerToggle('L')">▶ Start</button>
+      <span class="timer-best" id="timerLBest"></span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="lueckenResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 5: SATZBAU -->
+  <div class="tab-content" id="tab5">
+    <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Satzbau" class="tab-banner">
+    <h2>Satzbau</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerS">0:00</span>
+      <button class="timer-btn" id="timerSBtn" onclick="timerToggle('S')">▶ Start</button>
+      <span class="timer-best" id="timerSBest"></span>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+const TIMER_PREFIX = 'best2061X';
+
+const WORTSCHATZ = [
+  { word: 'heimwerken', en: 'to do DIY / home improvement' },
+  { word: 'der Handwerker, -', en: 'craftsman / tradesman' },
+  { word: 'das Werkzeug, -e', en: 'tool' },
+  { word: 'renovieren', en: 'to renovate' },
+  { word: 'streichen (strich)', en: 'to paint (walls)' },
+  { word: 'schleifen (schliff)', en: 'to sand / grind' },
+  { word: 'der Klempner, -', en: 'plumber' },
+  { word: 'der Elektriker, -', en: 'electrician' },
+  { word: 'Fliesen legen', en: 'to lay tiles' },
+  { word: 'upcyclen', en: 'to upcycle' },
+  { word: 'das Upcycling', en: 'upcycling' },
+  { word: 'die Nachhaltigkeit', en: 'sustainability' },
+  { word: 'reparieren', en: 'to repair' },
+  { word: 'basteln', en: 'to do crafts / make things' },
+  { word: 'beauftragen', en: 'to commission / hire' },
+  { word: 'der Bohrer, -', en: 'drill' },
+];
+
+const ZUORDNUNG_ITEMS = [
+  { satz: 'der Hammer', cat: 'Werkzeug' },
+  { satz: 'das Holz', cat: 'Material' },
+  { satz: 'die Säge', cat: 'Werkzeug' },
+  { satz: 'die Farbe', cat: 'Material' },
+  { satz: 'der Schraubenzieher', cat: 'Werkzeug' },
+  { satz: 'der Nagel', cat: 'Material' },
+  { satz: 'der Bohrer', cat: 'Werkzeug' },
+  { satz: 'der Lack', cat: 'Material' },
+];
+
+const LUECKEN = [
+  { before: 'Ich möchte meine Küche selbst ', blank: 'renovieren', after: '.' },
+  { before: 'Für den Wasseranschluss sollte man einen ', blank: 'Klempner', after: ' beauftragen.' },
+  { before: 'Beim Streichen kann man viel Geld ', blank: 'sparen', after: '.' },
+  { before: 'Das hängt davon ab, ob du die nötigen ', blank: 'Werkzeuge', after: ' hast.' },
+  { before: 'Alte Möbel kann man ', blank: 'schleifen', after: ' und neu streichen.' },
+  { before: 'DIY steht für „Do it ', blank: 'yourself', after: '".' },
+  { before: 'Aus alten Sachen neue Gegenstände zu machen nennt man ', blank: 'Upcycling', after: '.' },
+  { before: 'Einen Handwerker zu ', blank: 'beauftragen', after: ' kann teuer sein.' },
+  { before: 'Kaputte Geräte kann man oft selbst ', blank: 'reparieren', after: '.' },
+  { before: 'Beim Heimwerken braucht man die richtigen ', blank: 'Werkzeuge', after: '.' },
+];
+
+const SATZBAU_SAETZE = [
+  ['Ich möchte', 'meine Küche', 'selbst', 'renovieren.'],
+  ['Für den Wasseranschluss', 'würde ich', 'einen Klempner', 'beauftragen.'],
+  ['Beim Streichen', 'kann man', 'viel Geld', 'sparen.'],
+  ['Alte Möbel', 'kann man', 'schleifen', 'und neu streichen.'],
+  ['Das hängt davon ab,', 'ob man', 'die richtigen', 'Werkzeuge hat.'],
+  ['Reparieren', 'statt wegwerfen', 'ist gut', 'für die Umwelt.'],
+];
+
+// TABS
+function showTab(n) {
+  document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
+}
+
+// VOCAB
+(function() {
+  const g=document.getElementById('vocabGrid');
+  WORTSCHATZ.forEach(v=>{
+    const c=document.createElement('div'); c.className='vocab-card';
+    c.innerHTML=`<div class="word">${v.word}</div><div class="translation">${v.en}</div>`;
+    c.addEventListener('click',()=>c.classList.toggle('revealed')); g.appendChild(c);
+  });
+})();
+
+// ZUORDNUNG
+(function() {
+  const list=document.getElementById('zuordList');
+  const cats=['Werkzeug','Material'];
+  ZUORDNUNG_ITEMS.forEach((item,idx)=>{
+    const li=document.createElement('li'); li.className='zuord-item';
+    const opts=cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+    li.innerHTML=`<div class="satz">${idx+1}. ${item.satz}</div>
+      <select id="zuord-${idx}"><option value="">— wählen —</option>${opts}</select>`;
+    list.appendChild(li);
+  });
+})();
+
+function checkZuordnung() {
+  let correct=0;
+  ZUORDNUNG_ITEMS.forEach((item,idx)=>{
+    const sel=document.getElementById(`zuord-${idx}`);
+    sel.classList.remove('ok','err');
+    if(sel.value===item.cat){sel.classList.add('ok');correct++;}
+    else sel.classList.add('err');
+  });
+  const res=document.getElementById('zuordResult');
+  res.textContent=correct===ZUORDNUNG_ITEMS.length
+    ? `✅ Alle ${ZUORDNUNG_ITEMS.length} Zuordnungen richtig!`
+    : `${correct} von ${ZUORDNUNG_ITEMS.length} richtig.`;
+  res.style.color=correct===ZUORDNUNG_ITEMS.length?'#1a5e17':'#7a0000';
+}
+
+// LÜCKENTEXT
+(function() {
+  const c=document.getElementById('lueckenText');
+  LUECKEN.forEach((item,idx)=>{
+    const p=document.createElement('p'); p.style.marginBottom='10px';
+    p.innerHTML=`${item.before}<input type="text" id="luecke-${idx}"
+      data-answer="${item.blank.toLowerCase()}" placeholder="..."
+      oninput="liveCheck(this)" style="width:${Math.max(100,item.blank.length*11)}px"
+    />${item.after}`;
+    c.appendChild(p);
+  });
+})();
+
+function liveCheck(inp){
+  inp.classList.remove('ok','err');
+  if(inp.value.trim().toLowerCase()===inp.dataset.answer)inp.classList.add('ok');
+  autoStopIfDone();
+}
+function checkLuecken(){
+  let correct=0;
+  LUECKEN.forEach((item,idx)=>{
+    const inp=document.getElementById(`luecke-${idx}`);
+    inp.classList.remove('ok','err');
+    if(inp.value.trim().toLowerCase()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}
+    else inp.classList.add('err');
+  });
+  const res=document.getElementById('lueckenResult');
+  if(correct===LUECKEN.length){res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';stopTimer('L');saveBest('L');}
+  else{res.textContent=`${correct} von ${LUECKEN.length} richtig.`;res.style.color='#7a0000';}
+}
+function autoStopIfDone(){
+  if([...document.querySelectorAll('#lueckenText input')].every(i=>i.classList.contains('ok'))){
+    stopTimer('L');saveBest('L');
+    const res=document.getElementById('lueckenResult');
+    res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';
+  }
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich möchte', 'meine Küche', 'selbst', 'renovieren', '.'] },
+  { words: ['Für den Wasseranschluss', 'würde ich', 'einen Klempner', 'beauftragen', '.'] },
+  { words: ['Beim Streichen', 'kann man', 'viel Geld', 'sparen', '.'] },
+  { words: ['Alte Möbel', 'kann man', 'schleifen', 'und neu streichen', '.'] },
+  { words: ['Das hängt davon ab', ',', 'ob man', 'die richtigen', 'Werkzeuge hat', '.'] },
+  { words: ['Reparieren', 'statt wegwerfen', 'ist gut', 'für die Umwelt', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// TIMER
+let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
+function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}
+function startTimer(k){if(timerRunning[k])return;timerRunning[k]=true;document.getElementById(`timer${k}Btn`).textContent='⏸ Pause';timerIntervals[k]=setInterval(()=>{timerSeconds[k]++;document.getElementById(`timer${k}`).textContent=formatTime(timerSeconds[k]);},1000);}
+function stopTimer(k){clearInterval(timerIntervals[k]);timerRunning[k]=false;document.getElementById(`timer${k}Btn`).textContent='▶ Weiter';}
+function saveBest(k){const sk=TIMER_PREFIX+'_'+k,prev=parseInt(localStorage.getItem(sk)||'999999');if(timerSeconds[k]<prev){localStorage.setItem(sk,timerSeconds[k]);document.getElementById(`timer${k}Best`).textContent='🏆 Neue Bestzeit: '+formatTime(timerSeconds[k]);}else{document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(prev);}}
+function formatTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+(function(){['L','S'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
+
+// ── WORTSCHATZ ──────────────────────────────────────────────
+var WORTSCHATZ = [
+  { type: "v", en: "to build/make", de: "bauen" },
+  { type: "v", en: "to repair", de: "reparieren" },
+  { type: "n", en: "the tool", art: "das", wort: "Werkzeug", plural: "Werkzeuge" },
+  { type: "n", en: "the hammer", art: "der", wort: "Hammer", plural: "Hämmer" },
+  { type: "n", en: "the nail", art: "der", wort: "Nagel", plural: "Nägel" },
+  { type: "n", en: "the screw", art: "die", wort: "Schraube", plural: "Schrauben" },
+  { type: "n", en: "the screwdriver", art: "der", wort: "Schraubenzieher", plural: "Schraubenzieher" },
+  { type: "v", en: "to drill", de: "bohren" },
+  { type: "n", en: "the drill", art: "der", wort: "Bohrer", plural: "Bohrer" },
+  { type: "v", en: "to paint", de: "streichen" },
+  { type: "n", en: "the paint", art: "die", wort: "Farbe", plural: "Farben" },
+  { type: "v", en: "to sand", de: "schleifen" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

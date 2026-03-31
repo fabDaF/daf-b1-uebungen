@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eine Werbeanzeige schreiben – B1 Lektion 2072W</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.0em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 8px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.75em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.section-content { padding: 28px 30px; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.warn-box { background: #fff8e1; border-left: 4px solid #f39c12; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 18px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.info-box { background: #e8f4fd; border-left: 4px solid #3498db; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 18px; font-size: 0.9em; color: #444; line-height: 1.6; }
+
+/* === STRUKTUR === */
+.struktur-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+.struktur-card { border-radius: 10px; padding: 18px; border-left: 5px solid; }
+.s-headline { background: #fce4ec; border-color: #e91e63; }
+.s-subline { background: #e8eaf6; border-color: #3f51b5; }
+.s-body { background: #e8f5e9; border-color: #4caf50; }
+.s-usp { background: #fff3e0; border-color: #ff9800; }
+.s-cta { background: #e0f7fa; border-color: #00bcd4; }
+.s-kontakt { background: #f3e5f5; border-color: #9c27b0; }
+.struktur-name { font-weight: 700; font-size: 1.05em; margin-bottom: 8px; }
+.struktur-desc { font-size: 0.88em; line-height: 1.6; color: #444; }
+.struktur-example { margin-top: 8px; font-size: 0.85em; color: #666; font-style: italic; background: rgba(255,255,255,0.6); padding: 6px 10px; border-radius: 6px; }
+.anzeigen-demo { background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%); border: 2px solid #667eea; border-radius: 12px; padding: 24px 28px; font-size: 0.92em; line-height: 1.8; color: #333; margin-bottom: 24px; text-align: center; }
+.anzeige-headline { font-size: 1.5em; font-weight: 800; color: #667eea; margin-bottom: 6px; font-family: Georgia, serif; }
+.anzeige-subline { font-size: 1.1em; color: #764ba2; margin-bottom: 14px; font-style: italic; }
+.anzeige-body { font-size: 0.95em; color: #444; line-height: 1.7; margin-bottom: 14px; text-align: left; max-width: 540px; margin-left: auto; margin-right: auto; }
+.anzeige-usp { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 16px; }
+.usp-badge { background: #fff; border: 2px solid #667eea; color: #667eea; border-radius: 20px; padding: 6px 14px; font-size: 0.88em; font-weight: 600; }
+.anzeige-cta { background: #667eea; color: white; border-radius: 8px; padding: 10px 24px; display: inline-block; font-weight: 700; font-size: 1.05em; margin-bottom: 10px; }
+.anzeige-kontakt { font-size: 0.82em; color: #888; }
+.anzeige-label { font-size: 0.72em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.6; margin-bottom: 3px; }
+.anzeige-teil { padding: 4px 8px; border-radius: 4px; margin-bottom: 8px; }
+.anzeige-teil.hl { background: #fce4ec; }
+.anzeige-teil.sl { background: #e8eaf6; }
+.anzeige-teil.bd { background: #e8f5e9; }
+.anzeige-teil.up { background: #fff3e0; }
+.anzeige-teil.ct { background: #e0f7fa; }
+.anzeige-teil.ko { background: #f3e5f5; }
+.fragen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+.fragen-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px; }
+.fragen-title { font-weight: 700; color: #667eea; margin-bottom: 8px; font-size: 0.95em; }
+.fragen-list { list-style: none; padding: 0; }
+.fragen-item { font-size: 0.88em; color: #444; padding: 4px 0; border-bottom: 1px solid #eee; }
+.fragen-item:before { content: "✍️ "; }
+.fragen-item:last-child { border-bottom: none; }
+
+/* === PHRASEN === */
+.phrasen-section { margin-bottom: 24px; }
+.phrasen-title { font-size: 1.1em; font-weight: 700; color: #667eea; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #e8ecff; }
+.phrasen-list { display: flex; flex-direction: column; gap: 8px; }
+.phrase-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 8px; padding: 10px 14px; font-size: 0.92em; color: #333; }
+.phrase-card strong { color: #667eea; }
+.phrase-card .phrase-en { font-size: 0.82em; color: #888; font-style: italic; margin-top: 2px; }
+
+/* === LÜCKENTEXT === */
+.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.tc-buttons { display:flex; gap:6px; }
+.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.tc-buttons button:hover { background:#f0f0f0; color:#555; }
+.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.timer-display { color:#667eea; font-weight:700; }
+.best-display  { color:#f39c12; font-weight:600; }
+.hilfe-box-inline { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 18px; font-size: 0.88em; color: #444; }
+.luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
+.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1.0em; padding: 2px 4px; transition: border-color 0.2s; min-width: 110px; }
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+
+/* === SATZBAU === */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 20px; }
+
+/* === ZUORDNUNG === */
+.match-exercise { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 10px; }
+.match-card { padding: 12px 16px; background: white; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.2s; user-select: none; font-size: 0.9em; line-height: 1.4; margin-bottom: 8px; }
+.match-card.selected { background: #e8ecff; border-color: #667eea; font-weight: 600; }
+.match-card.matched { background: #d4edda; border-color: #28a745; opacity: 0.75; pointer-events: none; }
+.match-card.error { animation: shake 0.4s; background: #f8d7da !important; border-color: #dc3545 !important; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+.match-label { font-weight: 700; color: #667eea; margin-bottom: 10px; font-size: 0.9em; }
+.match-score { text-align: center; font-size: 1.0em; font-weight: 600; color: #555; margin-top: 16px; padding: 10px; background: #f0f4ff; border-radius: 8px; }
+.match-score.complete { background: #d4edda; color: #155724; }
+
+/* === WORTSCHATZ === */
+.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 190px; font-size: 0.95em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 60px; }
+.vocab-inputs input.wort { width: 160px; }
+.vocab-inputs input.plural { width: 160px; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.75em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .struktur-grid, .fragen-grid, .match-exercise { grid-template-columns: 1fr; }
+}
+
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Eine Werbeanzeige schreiben</h1>
+        <p style="font-family: Georgia, serif;">B1.2 · Lektion 2072W · Schreiben</p>
+        <div class="big-emoji">📢</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📋</span><span class="nav-label">Struktur</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">💬</span><span class="nav-label">Phrasen</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">📑</span><span class="nav-label">Zuordnung</span></div>
+        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- TAB 0: STRUKTUR -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/6476260/pexels-photo-6476260.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Werbeplakat und Design" onerror="this.style.background='#667eea';this.style.height='60px'">
+        <div class="section-content">
+            <div class="section-title">📋 Struktur einer Werbeanzeige</div>
+            <div class="section-sub">Eine gute Werbeanzeige hat klare Elemente: Headline, Haupttext, USP und Call-to-Action.</div>
+
+            <div class="struktur-grid">
+                <div class="struktur-card s-headline">
+                    <div class="struktur-name">🏆 1. Headline (Überschrift)</div>
+                    <div class="struktur-desc">Die Hauptüberschrift muss sofort Aufmerksamkeit wecken. Kurz, prägnant, einprägsam. Oft eine Frage oder ein Versprechen.</div>
+                    <div class="struktur-example">„Endlich schlafen Sie wie ein König!"</div>
+                </div>
+                <div class="struktur-card s-subline">
+                    <div class="struktur-name">📌 2. Subline (Unterüberschrift)</div>
+                    <div class="struktur-desc">Ergänzt die Headline und gibt mehr Information. Weckt Neugier auf den Haupttext.</div>
+                    <div class="struktur-example">„Das revolutionäre Schlafkissen für perfekte Nächte."</div>
+                </div>
+                <div class="struktur-card s-body">
+                    <div class="struktur-name">✍️ 3. Haupttext (Body Copy)</div>
+                    <div class="struktur-desc">Beschreibt das Produkt oder die Dienstleistung genauer. Erklärt den Nutzen. Spricht den Leser direkt an.</div>
+                    <div class="struktur-example">„Unser ergonomisch gestaltetes Kissen passt sich jedem Schlaftyp an und reduziert Nackenschmerzen nachhaltig."</div>
+                </div>
+                <div class="struktur-card s-usp">
+                    <div class="struktur-name">⭐ 4. USP (Alleinstellungsmerkmale)</div>
+                    <div class="struktur-desc">USP = Unique Selling Point. Was macht dieses Produkt besonders? 3–5 kurze Stichpunkte oder Badges.</div>
+                    <div class="struktur-example">✓ 30 Tage Rückgaberecht ✓ Made in Germany ✓ Dermatologisch getestet</div>
+                </div>
+                <div class="struktur-card s-cta">
+                    <div class="struktur-name">🎯 5. Call-to-Action (CTA)</div>
+                    <div class="struktur-desc">Aufforderung zum Handeln — direkt, aktiv, motivierend. Mit Verben im Imperativ.</div>
+                    <div class="struktur-example">„Jetzt bestellen und 20% sparen!"</div>
+                </div>
+                <div class="struktur-card s-kontakt">
+                    <div class="struktur-name">📞 6. Kontakt / Zusatzinfo</div>
+                    <div class="struktur-desc">Website, Telefonnummer, Adresse, QR-Code. Muss gut lesbar und leicht auffindbar sein.</div>
+                    <div class="struktur-example">www.schlafsupreme.de · Tel. 0800-SCHLAFEN</div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-bottom:14px;">📄 Beispiel-Werbeanzeige mit Farbmarkierungen</div>
+            <div class="anzeigen-demo">
+                <div class="anzeige-teil hl">
+                    <div class="anzeige-label">Headline</div>
+                    <div class="anzeige-headline">Dein Traumjob wartet — nicht du!</div>
+                </div>
+                <div class="anzeige-teil sl">
+                    <div class="anzeige-label">Subline</div>
+                    <div class="anzeige-subline">Professionelle Karriereberatung für den nächsten großen Schritt.</div>
+                </div>
+                <div class="anzeige-teil bd">
+                    <div class="anzeige-label">Haupttext</div>
+                    <div class="anzeige-body">Du bist talentiert, motiviert — und trotzdem stagnierst du in deiner Karriere? Unsere erfahrenen Karriereberater helfen dir, deine Stärken zu entdecken, deinen Lebenslauf zu perfektionieren und beim Vorstellungsgespräch zu überzeugen.</div>
+                </div>
+                <div class="anzeige-teil up">
+                    <div class="anzeige-label">USP</div>
+                    <div class="anzeige-usp">
+                        <span class="usp-badge">✓ Kostenloses Erstgespräch</span>
+                        <span class="usp-badge">✓ Über 500 Erfolgsgeschichten</span>
+                        <span class="usp-badge">✓ Online &amp; vor Ort</span>
+                    </div>
+                </div>
+                <div class="anzeige-teil ct">
+                    <div class="anzeige-label">Call-to-Action</div>
+                    <div><span class="anzeige-cta">Jetzt kostenlos beraten lassen!</span></div>
+                </div>
+                <div class="anzeige-teil ko">
+                    <div class="anzeige-label">Kontakt</div>
+                    <div class="anzeige-kontakt">www.karriereplus.de · info@karriereplus.de · Tel. 030 – 123 456 78</div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-bottom:14px;">❓ Tipps für eine wirksame Werbeanzeige</div>
+            <div class="fragen-grid">
+                <div class="fragen-card">
+                    <div class="fragen-title">🎨 Sprache &amp; Stil</div>
+                    <ul class="fragen-list">
+                        <li class="fragen-item">Sprich die Zielgruppe direkt an (du/Sie)</li>
+                        <li class="fragen-item">Verwende starke, aktive Verben</li>
+                        <li class="fragen-item">Nutze emotionale und positive Sprache</li>
+                        <li class="fragen-item">Vermeide Fachjargon — sei verständlich</li>
+                    </ul>
+                </div>
+                <div class="fragen-card">
+                    <div class="fragen-title">📝 Inhalt &amp; Struktur</div>
+                    <ul class="fragen-list">
+                        <li class="fragen-item">Die Headline muss sofort überzeugen</li>
+                        <li class="fragen-item">Maximal 3–5 USPs — Qualität vor Quantität</li>
+                        <li class="fragen-item">CTA am Ende: klar und auffällig</li>
+                        <li class="fragen-item">Kontaktdaten nicht vergessen!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warn-box">
+                <strong>⚠️ Wichtig:</strong> Werbetexte müssen <strong>ehrlich</strong> sein! Übertreibungen oder falsche Versprechen sind in Deutschland rechtlich problematisch und schaden dem Vertrauen.
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 1: PHRASEN -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Marketing und Texten" onerror="this.style.background='#667eea';this.style.height='60px'">
+        <div class="section-content">
+            <div class="section-title">💬 Hilfreiche Phrasen für Werbetexte</div>
+            <div class="section-sub">Diese Formulierungen helfen dir, professionelle und überzeugende Werbetexte zu schreiben.</div>
+
+            <div class="phrasen-section">
+                <div class="phrasen-title">🏆 Starke Headlines</div>
+                <div class="phrasen-list">
+                    <div class="phrase-card">
+                        <strong>„Endlich [Adjektiv] — [Produkt/Lösung]!"</strong>
+                        <div class="phrase-en">Finally [adjective] — [product/solution]!</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Warum [Problem], wenn [Lösung] so einfach ist?"</strong>
+                        <div class="phrase-en">Why [problem], when [solution] is so simple?</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Das Beste an [Produkt]? [Vorteil]."</strong>
+                        <div class="phrase-en">The best thing about [product]? [Benefit].</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„[Zielgruppe], aufgepasst: [kurzes Versprechen]!"</strong>
+                        <div class="phrase-en">[Target group], attention: [short promise]!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phrasen-section">
+                <div class="phrasen-title">⭐ Vorteile und USPs betonen</div>
+                <div class="phrasen-list">
+                    <div class="phrase-card">
+                        <strong>„Profitieren Sie von [Vorteil]."</strong>
+                        <div class="phrase-en">Benefit from [advantage].</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Dank [Produkt/Technologie] können Sie jetzt [Nutzen]."</strong>
+                        <div class="phrase-en">Thanks to [product/technology], you can now [benefit].</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Qualität, die überzeugt — [Kurzslogan]."</strong>
+                        <div class="phrase-en">Quality that convinces — [short slogan].</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Millionen zufriedene Kunden vertrauen bereits auf [Produkt]."</strong>
+                        <div class="phrase-en">Millions of satisfied customers already trust [product].</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phrasen-section">
+                <div class="phrasen-title">🎯 Call-to-Action Formulierungen</div>
+                <div class="phrasen-list">
+                    <div class="phrase-card">
+                        <strong>„Jetzt bestellen und [Vorteil] sichern!"</strong>
+                        <div class="phrase-en">Order now and secure [benefit]!</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Überzeugen Sie sich selbst — [Aktion]!"</strong>
+                        <div class="phrase-en">See for yourself — [action]!</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Nicht warten — [Vorteil] gilt nur noch bis [Datum]."</strong>
+                        <div class="phrase-en">Don't wait — [benefit] is only available until [date].</div>
+                    </div>
+                    <div class="phrase-card">
+                        <strong>„Erfahren Sie mehr auf [Website] oder rufen Sie uns an!"</strong>
+                        <div class="phrase-en">Find out more at [website] or give us a call!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: LÜCKENTEXT -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/210661/pexels-photo-210661.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Stift beim Schreiben" onerror="this.style.background='#667eea';this.style.height='60px'">
+        <div class="section-content">
+            <div class="section-title">✏️ Lückentext</div>
+            <div class="section-sub">Ergänze die fehlenden Wörter in dieser Werbeanzeige.</div>
+            <div class="timer-controls">
+                <div class="tc-buttons">
+                    <button onclick="showLoesung()">💡 Lösungen</button>
+                    <button onclick="timerResetOne(2); resetLuecken()">↺ Neustart</button>
+                </div>
+                <div class="tc-times">
+                    <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
+                    <span>🏆 <span class="best-display" id="best-2">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box-inline">Tippe das fehlende Wort. Das Feedback kommt automatisch!</div>
+            <div id="lueckenContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: SATZBAU -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Stift und Notizbuch" onerror="this.style.background='#667eea';this.style.height='60px'">
+        <div class="section-content">
+            <div class="section-title">🧩 Satzbau</div>
+            <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge, um typische Werbetextsätze zu bilden.</div>
+            <div class="timer-controls">
+                <div class="tc-buttons">
+                    <button onclick="showAllSolutionsSb()">💡 Lösungen</button>
+                    <button onclick="timerResetOne(3); resetSatzbau()">↺ Neustart</button>
+                </div>
+                <div class="tc-times">
+                    <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
+                    <span>🏆 <span class="best-display" id="best-3">–</span></span>
+                </div>
+            </div>
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: ZUORDNUNG -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Zuordnung und Verbindungen" onerror="this.style.background='#667eea';this.style.height='60px'">
+        <div class="section-content">
+            <div class="section-title">📑 Zuordnung: Textausschnitt → Anzeigen-Element</div>
+            <div class="section-sub">Ordne jeden Textausschnitt dem richtigen Teil einer Werbeanzeige zu.</div>
+            <div class="hilfe-box">Klicke zuerst auf einen Textausschnitt links, dann auf das passende Element rechts. Richtige Zuordnungen werden sofort grün markiert.</div>
+
+            <div class="match-exercise">
+                <div>
+                    <div class="match-label">📝 Textausschnitte:</div>
+                    <div id="matchTerms"></div>
+                </div>
+                <div>
+                    <div class="match-label">🗂️ Anzeigen-Element:</div>
+                    <div id="matchDescriptions"></div>
+                </div>
+            </div>
+            <div id="matchScore" class="match-score" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- TAB 5: WORTSCHATZ -->
+    <div class="section" id="sec-5">
+        <img class="tab-banner" src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Vokabeln lernen" onerror="this.style.background='#667eea';this.style.height='60px'">
+        <div class="section-content">
+            <h2 style="font-size:1.3em;font-weight:700;color:#667eea;margin-bottom:16px;">🔠 Wortschatz</h2>
+            <div class="timer-controls">
+                <div class="tc-buttons">
+                    <button onclick="showWsLoesung()">💡 Lösungen</button>
+                    <button onclick="timerResetOne(5); resetWs()">↺ Neustart</button>
+                </div>
+                <div class="tc-times">
+                    <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
+                    <span>🏆 <span class="best-display" id="best-5">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box-inline"><strong>Aufgabe:</strong> Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+            <div id="wsContainer" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+var TIMER_PREFIX = 'best2072W';
+
+// ── Navigation ──────────────────────────────────────────────────────────────
+function showSection(n) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===n); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===n); });
+}
+
+// ── Timer ────────────────────────────────────────────────────────────────────
+var timers = {};
+function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
+function startTimer(n){
+    if(!timers[n]) timers[n]={sec:0,running:false,interval:null};
+    if(timers[n].running) return;
+    timers[n].running=true;
+    timers[n].interval=setInterval(function(){
+        timers[n].sec++;
+        var el=document.getElementById('timer-'+n); if(el) el.textContent=fmtTime(timers[n].sec);
+    },1000);
+}
+function stopTimer(n){
+    if(!timers[n]||!timers[n].running) return;
+    clearInterval(timers[n].interval); timers[n].running=false;
+    var best=parseInt(localStorage.getItem(TIMER_PREFIX+'-best-'+n)||'999999');
+    if(timers[n].sec<best){ localStorage.setItem(TIMER_PREFIX+'-best-'+n,timers[n].sec); var bel=document.getElementById('best-'+n); if(bel) bel.textContent=fmtTime(timers[n].sec); }
+}
+function timerResetOne(n){
+    if(timers[n]){ clearInterval(timers[n].interval); timers[n]={sec:0,running:false,interval:null}; }
+    var el=document.getElementById('timer-'+n); if(el) el.textContent='0:00';
+}
+function timerAutoStart(n){ startTimer(n); }
+function loadBestTimes(){
+    [2,3,5].forEach(function(n){
+        var b=localStorage.getItem(TIMER_PREFIX+'-best-'+n);
+        if(b){ var el=document.getElementById('best-'+n); if(el) el.textContent=fmtTime(parseInt(b)); }
+    });
+}
+
+// ── Lückentext ───────────────────────────────────────────────────────────────
+var LUECKEN_DATA = [
+    { pre:'Die ', ans:'Headline', post:' einer Werbeanzeige muss sofort Aufmerksamkeit wecken.' },
+    { pre:'Gute Werbetexte sprechen die Zielgruppe direkt an — zum Beispiel mit „du" oder „', ans:'Sie', post:'".' },
+    { pre:'Am Ende jeder Anzeige steht ein Call-to-', ans:'Action', post:': eine klare Aufforderung zum Handeln.' },
+    { pre:'USP bedeutet Unique Selling ', ans:'Point', post:' — also das, was ein Produkt einzigartig macht.' },
+    { pre:'Werbetexte sollten ehrlich sein — falsche ', ans:'Versprechen', post:' schaden dem Vertrauen der Kunden.' },
+    { pre:'Eine Subline ergänzt die Headline und weckt ', ans:'Neugier', post:' auf den Haupttext.' },
+    { pre:'Der Haupttext beschreibt den ', ans:'Nutzen', post:' des Produkts für den Kunden.' },
+    { pre:'Kontaktdaten wie Website und Telefonnummer gehören immer ans ', ans:'Ende', post:' der Anzeige.' }
+];
+function buildLuecken(){
+    var c = document.getElementById('lueckenContainer'); c.innerHTML='';
+    LUECKEN_DATA.forEach(function(d,i){
+        var div=document.createElement('div'); div.className='luecken-item';
+        div.innerHTML = d.pre+'<input class="luecken-inp" id="li-'+i+'" placeholder="" autocomplete="off">'+(d.post||'');
+        c.appendChild(div);
+        var inp=document.getElementById('li-'+i);
+        inp.addEventListener('input',function(){ liveCheck(i); timerAutoStart(2); });
+    });
+}
+function liveCheck(i){
+    var inp=document.getElementById('li-'+i); if(!inp) return;
+    var val=inp.value.trim().toLowerCase();
+    var ans=LUECKEN_DATA[i].ans.toLowerCase();
+    inp.classList.remove('ok','no');
+    if(val===ans){ inp.classList.add('ok'); autoStopIfDone(); }
+    else if(ans.startsWith(val)&&val.length>0){ inp.style.borderBottomColor='#764ba2'; }
+    else if(val.length>0){ inp.classList.add('no'); }
+}
+function autoStopIfDone(){
+    var all=LUECKEN_DATA.every(function(_,i){ var el=document.getElementById('li-'+i); return el&&el.classList.contains('ok'); });
+    if(all) stopTimer(2);
+}
+function showLoesung(){
+    LUECKEN_DATA.forEach(function(d,i){ var el=document.getElementById('li-'+i); if(el){ el.value=d.ans; el.classList.add('ok'); el.classList.remove('no'); } });
+    stopTimer(2);
+}
+function resetLuecken(){ buildLuecken(); }
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Jetzt', 'bestellen', 'und', '20', '%', 'sparen', '!'] },
+  { words: ['Überzeugen', 'Sie', 'sich', 'selbst', '—', 'testen', 'Sie', 'kostenlos', '!'] },
+  { words: ['Dank', 'unserer', 'Technologie', 'schlafen', 'Sie', 'endlich', 'besser', '.'] },
+  { words: ['Qualität', ',', 'die', 'überzeugt', '—', 'seit', 'über', '20', 'Jahren', '.'] },
+  { words: ['Millionen', 'zufriedene', 'Kunden', 'vertrauen', 'auf', 'unser', 'Produkt', '.'] },
+  { words: ['Erfahren', 'Sie', 'mehr', 'auf', 'unserer', 'Website', '!'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(2); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(2);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(2); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(2); }
+
+// ── Zuordnung ──────────────────────────────────────────────────────────────
+var MATCH_DATA = [
+    { term:'„Endlich schlafen Sie wie ein König!"', desc:'Headline' },
+    { term:'„Das revolutionäre Kissen für perfekte Nächte."', desc:'Subline' },
+    { term:'„Unser Kissen passt sich jedem Schlaftyp an."', desc:'Haupttext (Body Copy)' },
+    { term:'✓ 30 Tage Rückgaberecht ✓ Made in Germany', desc:'USP (Alleinstellungsmerkmal)' },
+    { term:'„Jetzt bestellen und 20 % sparen!"', desc:'Call-to-Action' },
+    { term:'www.schlafsupreme.de · Tel. 0800-SCHLAFEN', desc:'Kontakt / Zusatzinfo' },
+    { term:'„Warum schlecht schlafen, wenn es besser geht?"', desc:'Rhetorische Frage' },
+    { term:'„Millionen Kunden vertrauen uns bereits."', desc:'Vertrauen aufbauen' }
+];
+var matchSelected = null;
+var matchDone = 0;
+function buildMatch(){
+    var terms = MATCH_DATA.map(function(d,i){ return {text:d.term, idx:i}; });
+    var descs = MATCH_DATA.map(function(d,i){ return {text:d.desc, idx:i}; });
+    function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; } return a; }
+    shuffle(terms); shuffle(descs);
+    matchSelected=null; matchDone=0;
+    var tC=document.getElementById('matchTerms'); tC.innerHTML='';
+    var dC=document.getElementById('matchDescriptions'); dC.innerHTML='';
+    var sc=document.getElementById('matchScore'); sc.style.display='none';
+    terms.forEach(function(t){
+        var card=document.createElement('div'); card.className='match-card'; card.textContent=t.text; card.dataset.idx=t.idx; card.dataset.side='term';
+        card.addEventListener('click',function(){ handleMatchClick(card); });
+        tC.appendChild(card);
+    });
+    descs.forEach(function(d){
+        var card=document.createElement('div'); card.className='match-card'; card.textContent=d.text; card.dataset.idx=d.idx; card.dataset.side='desc';
+        card.addEventListener('click',function(){ handleMatchClick(card); });
+        dC.appendChild(card);
+    });
+}
+function handleMatchClick(card){
+    if(card.classList.contains('matched')) return;
+    if(!matchSelected){
+        if(matchSelected) matchSelected.classList.remove('selected');
+        matchSelected=card; card.classList.add('selected');
+    } else {
+        if(matchSelected===card){ card.classList.remove('selected'); matchSelected=null; return; }
+        if(matchSelected.dataset.side===card.dataset.side){
+            matchSelected.classList.remove('selected'); matchSelected=card; card.classList.add('selected'); return;
+        }
+        if(matchSelected.dataset.idx===card.dataset.idx){
+            card.classList.add('matched'); matchSelected.classList.add('matched'); matchSelected.classList.remove('selected');
+            matchSelected=null; matchDone++;
+            if(matchDone===MATCH_DATA.length){
+                var sc=document.getElementById('matchScore');
+                sc.style.display='block'; sc.textContent='🎉 Alle '+MATCH_DATA.length+' Paare gefunden!'; sc.className='match-score complete';
+            }
+        } else {
+            card.classList.add('error'); matchSelected.classList.add('error');
+            var c1=card,c2=matchSelected; matchSelected=null;
+            setTimeout(function(){ c1.classList.remove('error','selected'); c2.classList.remove('error','selected'); },600);
+        }
+    }
+}
+
+// ── Wortschatz ─────────────────────────────────────────────────────────────
+var WS_DATA = [
+    { en:'the advertisement / ad', art:'die', wort:'Werbeanzeige', plural:'Werbeanzeigen' },
+    { en:'the headline', art:'die', wort:'Überschrift', plural:'Überschriften' },
+    { en:'the target group', art:'die', wort:'Zielgruppe', plural:'Zielgruppen' },
+    { en:'the advantage / benefit', art:'der', wort:'Vorteil', plural:'Vorteile' },
+    { en:'the promise', art:'das', wort:'Versprechen', plural:'Versprechen' },
+    { en:'the trust', art:'das', wort:'Vertrauen', plural:'–' },
+    { en:'to convince', art:'–', wort:'überzeugen', plural:'–' },
+    { en:'to advertise', art:'–', wort:'werben', plural:'–' },
+    { en:'the campaign', art:'die', wort:'Kampagne', plural:'Kampagnen' },
+    { en:'catchy / memorable', art:'–', wort:'einprägsam', plural:'–' },
+    { en:'the unique feature', art:'das', wort:'Alleinstellungsmerkmal', plural:'Alleinstellungsmerkmale' },
+    { en:'to promote / market', art:'–', wort:'vermarkten', plural:'–' }
+];
+function buildWs(){
+    var c=document.getElementById('wsContainer'); c.innerHTML='';
+    WS_DATA.forEach(function(d,i){
+        var div=document.createElement('div'); div.className='vocab-item';
+        var en=document.createElement('span'); en.className='vocab-en'; en.textContent=d.en;
+        var inps=document.createElement('div'); inps.className='vocab-inputs';
+        if(d.art!=='–'){
+            var a=document.createElement('input'); a.className='art'; a.placeholder=''; a.autocomplete='off';
+            a.addEventListener('input',function(){ vocabLiveCheck(i); timerAutoStart(5); }); inps.appendChild(a);
+        }
+        var w=document.createElement('input'); w.className='wort'; w.placeholder=''; w.autocomplete='off';
+        w.addEventListener('input',function(){ vocabLiveCheck(i); timerAutoStart(5); }); inps.appendChild(w);
+        if(d.plural!=='–'){
+            var p=document.createElement('input'); p.className='plural'; p.placeholder=''; p.autocomplete='off';
+            p.addEventListener('input',function(){ vocabLiveCheck(i); timerAutoStart(5); }); inps.appendChild(p);
+        }
+        div.appendChild(en); div.appendChild(inps);
+        c.appendChild(div);
+    });
+}
+function vocabLiveCheck(i){
+    var item=document.getElementById('wsContainer').children[i]; if(!item) return;
+    var d=WS_DATA[i];
+    var inps=item.querySelectorAll('input');
+    var vals=[]; inps.forEach(function(el){ vals.push(el.value.trim().toLowerCase()); });
+    var answers=[];
+    if(d.art!=='–') answers.push(d.art.toLowerCase());
+    answers.push(d.wort.toLowerCase());
+    if(d.plural!=='–') answers.push(d.plural.toLowerCase());
+    var allOk=true;
+    inps.forEach(function(el,j){
+        el.classList.remove('correct','wrong');
+        if(vals[j]===answers[j]){ el.classList.add('correct'); }
+        else if(answers[j].startsWith(vals[j])&&vals[j].length>0){ el.style.borderBottomColor='#764ba2'; allOk=false; }
+        else if(vals[j].length>0){ el.classList.add('wrong'); allOk=false; }
+        else allOk=false;
+    });
+    if(allOk) wsAutoStop();
+}
+function wsAutoStop(){
+    var allDone=Array.from(document.getElementById('wsContainer').children).every(function(item){
+        return Array.from(item.querySelectorAll('input')).every(function(el){ return el.classList.contains('correct'); });
+    });
+    if(allDone) stopTimer(5);
+}
+function showWsLoesung(){
+    var items=document.getElementById('wsContainer').children;
+    WS_DATA.forEach(function(d,i){
+        var inps=items[i].querySelectorAll('input');
+        var answers=[];
+        if(d.art!=='–') answers.push(d.art);
+        answers.push(d.wort);
+        if(d.plural!=='–') answers.push(d.plural);
+        inps.forEach(function(el,j){ el.value=answers[j]; el.classList.add('correct'); el.classList.remove('wrong'); });
+    });
+    stopTimer(5);
+}
+function resetWs(){ buildWs(); }
+
+// ── Init ────────────────────────────────────────────────────────────────────
+window.addEventListener('load',function(){
+    buildLuecken();
+    buildSatzbau();
+    buildMatch();
+    buildWs();
+    loadBestTimes();
+});
+function initVocab() { buildWs(); }
+</script>
+</body>
+</html>

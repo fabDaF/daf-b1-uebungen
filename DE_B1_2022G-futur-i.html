@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2022G – Zusätzliches über das Futur I</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#667eea;min-height:100vh;padding:20px}
+  .container{max-width:860px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.18);overflow:hidden}
+  h1{background:#667eea;color:#fff;padding:18px 24px;font-size:1.3rem;letter-spacing:.5px}
+  .nav{display:flex;flex-wrap:wrap;gap:0;border-bottom:2px solid #667eea;background:#f3e8ff}
+  .nav button{padding:10px 15px;border:1px solid #b388d8;border-bottom:none;background:#e9d5ff;color:#4a0080;font-size:.85rem;cursor:pointer;font-weight:600;border-radius:6px 6px 0 0;margin-bottom:-2px;transition:background .2s}
+  .nav button.active{background:#fff;color:#667eea;border-bottom:2px solid #fff;z-index:1}
+  .nav button:hover:not(.active){background:#d8b4fe}
+  .tab{display:none;padding:24px}
+  .tab.active{display:block}
+  .tab-banner{width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:18px}
+  .tab h2{color:#667eea;margin-bottom:14px;font-size:1.1rem}
+  .tab h3{color:#4a0080;margin:14px 0 8px;font-size:1rem}
+
+  /* Timer */
+  .timer-bar{display:flex;align-items:center;gap:10px;background:#f3e8ff;border-radius:8px;padding:8px 14px;margin-bottom:16px;flex-wrap:wrap}
+  .timer-display{font-size:1.1rem;font-weight:700;color:#667eea;min-width:60px;font-family:monospace}
+  .timer-bar button{padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600}
+  .btn-start{background:#22c55e;color:#fff}.btn-stop{background:#ef4444;color:#fff}.btn-reset{background:#94a3b8;color:#fff}
+  .best-time{font-size:.8rem;color:#7c3aed;margin-left:4px}
+
+  /* Entdecken */
+  .dialog-box{background:#f3e8ff;border-left:4px solid #667eea;border-radius:8px;padding:14px 18px;margin-bottom:14px}
+  .dialog-line{margin:6px 0;font-size:.95rem;line-height:1.6}
+  .dialog-line strong{color:#667eea}
+  .highlight{background:#fef08a;border-radius:3px;padding:1px 3px;font-weight:700}
+
+  /* Regelkarte */
+  .regel-table{width:100%;border-collapse:collapse;margin:12px 0}
+  .regel-table th{background:#667eea;color:#fff;padding:10px 14px;text-align:left;font-size:.9rem}
+  .regel-table td{padding:10px 14px;border-bottom:1px solid #e9d5ff;font-size:.9rem;vertical-align:top}
+  .regel-table tr:nth-child(even) td{background:#f9f5ff}
+  .use-badge{display:inline-block;background:#e9d5ff;color:#4a0080;border-radius:12px;padding:3px 10px;font-size:.82rem;font-weight:700;margin-bottom:4px}
+  .use-badge.pln{background:#dbeafe;color:#1e40af}
+  .use-badge.pro{background:#dcfce7;color:#166534}
+  .use-badge.ver{background:#fce7f3;color:#9d174d}
+  .use-badge.auf{background:#fff3cd;color:#92400e}
+  .use-badge.verm{background:#f3e8ff;color:#667eea}
+
+  /* Konjugationstabelle */
+  .konj-table{width:100%;border-collapse:collapse;margin:12px 0}
+  .konj-table th{background:#4a0080;color:#fff;padding:8px 12px;text-align:left;font-size:.88rem}
+  .konj-table td{padding:8px 12px;border-bottom:1px solid #e9d5ff;font-size:.9rem}
+  .konj-table tr:nth-child(even) td{background:#f9f5ff}
+  .konj-table .pron{color:#667eea;font-weight:700}
+  .konj-table .form{color:#166534;font-weight:700}
+
+  /* Lückentext */
+  .luecke-item{margin-bottom:14px;line-height:2}
+  .luecke-item input{border:none;border-bottom:2px solid #667eea;background:#f3e8ff;padding:3px 8px;font-size:.95rem;color:#4a0080;border-radius:4px 4px 0 0;min-width:90px;outline:none}
+  .luecke-item input.correct{background:#dcfce7;border-color:#22c55e;color:#166534}
+  .luecke-item input.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+  .check-btn{margin-top:14px;padding:9px 22px;background:#667eea;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.95rem;font-weight:600}
+  .check-btn:hover{background:#4a0080}
+  .result-msg{margin-top:10px;font-weight:700;font-size:.97rem}
+
+  /* Satzbau */
+  .sb-sentence{margin-bottom:20px}
+  .sb-sentence p{color:#4a0080;font-size:.88rem;margin-bottom:8px;font-style:italic}
+  .sb-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;min-height:38px;border:2px dashed #d8b4fe;border-radius:8px;padding:6px}
+  .sb-chip{background:#e9d5ff;border:2px solid #b388d8;border-radius:16px;padding:6px 13px;cursor:grab;font-size:.88rem;color:#4a0080;font-weight:600;user-select:none;transition:transform .1s}
+  .sb-chip:active{cursor:grabbing;transform:scale(1.05)}
+  .sb-drop-zone{display:flex;flex-wrap:wrap;gap:7px;min-height:44px;border:2px dashed #667eea;border-radius:8px;padding:6px;background:#faf5ff}
+  .sb-drop-zone.drag-over{background:#e9d5ff}
+  .sb-drop-zone .sb-chip{background:#c4b5fd}
+  .sb-ok{color:#22c55e;font-weight:700;font-size:.9rem;margin-top:4px}
+  .sb-err{color:#ef4444;font-weight:700;font-size:.9rem;margin-top:4px}
+
+  /* Üben Tab */
+  .ueben-item{background:#f9f5ff;border:1px solid #d8b4fe;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  .ueben-item .aufgabe{font-size:.9rem;color:#555;margin-bottom:8px}
+  .ueben-item .aufgabe strong{color:#667eea}
+  .ueben-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .ueben-row input{border:none;border-bottom:2px solid #667eea;background:transparent;padding:4px 8px;font-size:.93rem;outline:none;color:#4a0080;min-width:140px}
+  .ueben-row input.correct{border-color:#22c55e;color:#166534}
+  .ueben-row input.wrong{border-color:#ef4444;color:#991b1b}
+  .ueben-label{font-size:.9rem;color:#4a0080}
+  .use-tag{display:inline-block;font-size:.75rem;font-weight:700;border-radius:8px;padding:2px 8px;margin-left:6px}
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>2022G – Zusätzliches über das Futur I</h1>
+  <div class="nav">
+    <button class="active" onclick="showTab(0)">1 · Entdecken</button>
+    <button onclick="showTab(1)">2 · Regeln</button>
+    <button onclick="showTab(2)">3 · Lückentext</button>
+    <button onclick="showTab(3)">4 · Satzbau</button>
+    <button onclick="showTab(4)">5 · Üben</button>
+    <button onclick="showTab(5)">🔤 Wortschatz</button>
+  </div>
+
+  <!-- TAB 1: ENTDECKEN -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Futur I">
+    <h2>Futur I entdecken</h2>
+    <p style="color:#555;font-size:.9rem;margin-bottom:16px">Lies die Sätze. Was fällt dir auf? Welche Form wird für die Zukunft verwendet?</p>
+
+    <div class="dialog-box">
+      <div class="dialog-line"><strong>Lena:</strong> Wir <span class="highlight">werden</span> heute viel Deutsch <span class="highlight">lernen</span>, obwohl das nicht so leicht <span class="highlight">sein wird</span>.</div>
+      <div class="dialog-line"><strong>Tom:</strong> Maria <span class="highlight">wird</span> uns morgen <span class="highlight">besuchen</span>. (Zukunft)</div>
+      <div class="dialog-line"><strong>Lena:</strong> Sie <span class="highlight">wird</span> wohl heute nicht mehr <span class="highlight">kommen</span>. (Vermutung)</div>
+      <div class="dialog-line"><strong>Tom:</strong> Du <span class="highlight">wirst</span> mir sofort das Geld <span class="highlight">zurückgeben</span>! (Aufforderung)</div>
+      <div class="dialog-line"><strong>Lena:</strong> Ab morgen <span class="highlight">werde</span> ich mehr <span class="highlight">lernen</span>. (Versprechen)</div>
+    </div>
+
+    <div style="background:#e9d5ff;border-radius:8px;padding:14px;margin-top:10px">
+      <p style="color:#4a0080;font-size:.9rem"><strong>Beobachtung:</strong> Das Futur I steht mit <strong>werden + Infinitiv</strong>. Es drückt verschiedene Bedeutungen aus: Zukunft, Vermutung, Aufforderung oder ein Versprechen.</p>
+    </div>
+
+    <h3 style="margin-top:20px">Konjugation von „werden"</h3>
+    <table class="konj-table">
+      <tr><th>Person</th><th>werden</th><th>Beispiel</th></tr>
+      <tr><td class="pron">ich</td><td class="form">werde</td><td>Ich werde morgen um 06:00 Uhr kommen.</td></tr>
+      <tr><td class="pron">du</td><td class="form">wirst</td><td>Du wirst mehr lernen.</td></tr>
+      <tr><td class="pron">er / sie / es</td><td class="form">wird</td><td>Er wird sich schnell anziehen.</td></tr>
+      <tr><td class="pron">wir</td><td class="form">werden</td><td>Wir werden dich am Nachmittag anrufen.</td></tr>
+      <tr><td class="pron">ihr</td><td class="form">werdet</td><td>Ihr werdet euch bestimmt freuen.</td></tr>
+      <tr><td class="pron">sie / Sie</td><td class="form">werden</td><td>Sie werden uns rechtzeitig informieren.</td></tr>
+    </table>
+  </div>
+
+  <!-- TAB 2: REGELN -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Regeln">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td1">00:00</span>
+      <button class="btn-start" onclick="startTimer(1)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(1)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(1)">Reset</button>
+      <span class="best-time" id="bt1"></span>
+    </div>
+    <h2>Futur I – Bildung &amp; Verwendung</h2>
+
+    <div style="background:#f3e8ff;border-radius:8px;padding:14px;margin-bottom:18px">
+      <p style="font-size:.95rem;color:#4a0080"><strong>Bildung:</strong> Das Futur I bildet man mit dem Hilfsverb <strong style="color:#667eea">werden</strong> + <strong style="color:#667eea">Infinitiv des Verbes</strong>.<br>
+      Der Infinitiv steht am <strong>Satzende</strong>.</p>
+      <div style="background:#fff;border-radius:6px;padding:10px;margin-top:10px;font-size:.93rem;color:#4a0080">
+        <strong>Schema:</strong> Subjekt + <span style="color:#667eea;font-weight:700">werden</span> + … + <span style="color:#166534;font-weight:700">Infinitiv</span>
+      </div>
+    </div>
+
+    <h3>Verwendungen des Futur I</h3>
+    <table class="regel-table">
+      <tr>
+        <th>Verwendung</th>
+        <th>Beschreibung</th>
+        <th>Beispiel</th>
+      </tr>
+      <tr>
+        <td><span class="use-badge pro">Prognose / Zukunft</span></td>
+        <td>Aussage über eine zukünftige Handlung oder Prognose</td>
+        <td><em>Heute wird es noch regnen.</em></td>
+      </tr>
+      <tr>
+        <td><span class="use-badge pln">Plan</span></td>
+        <td>Über Pläne sprechen</td>
+        <td><em>Er wird im Sommer seine Prüfung ablegen.</em></td>
+      </tr>
+      <tr>
+        <td><span class="use-badge ver">Versprechen</span></td>
+        <td>Ein Versprechen abgeben</td>
+        <td><em>Ab morgen werde ich mehr lernen.</em></td>
+      </tr>
+      <tr>
+        <td><span class="use-badge auf">Aufforderung</span></td>
+        <td>Alternative zum Imperativ</td>
+        <td><em>Du wirst mir sofort das Geld zurückgeben!</em></td>
+      </tr>
+      <tr>
+        <td><span class="use-badge verm">Vermutung</span></td>
+        <td>Vermutung in der Gegenwart; oft mit <strong>wohl, sicher, bestimmt</strong></td>
+        <td><em>Sie wird wohl krank sein.</em></td>
+      </tr>
+    </table>
+
+    <div style="background:#fef9c3;border-radius:8px;padding:12px;margin-top:14px;border-left:4px solid #eab308">
+      <p style="font-size:.88rem;color:#78350f"><strong>Tipp:</strong> Vermutungen werden oft mit <strong>wohl</strong>, <strong>sicher</strong> oder <strong>bestimmt</strong> verstärkt. Diese Wörter stehen direkt neben dem Verb.<br>
+      Beispiel: <em>Maria sieht sehr blass aus. Sie <strong>wird wohl</strong> krank <strong>sein</strong>.</em></p>
+    </div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Lückentext">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td2">00:00</span>
+      <button class="btn-start" onclick="startTimer(2)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(2)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(2)">Reset</button>
+      <span class="best-time" id="bt2"></span>
+    </div>
+    <h2>Lückentext – werden konjugieren</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:16px">Ergänze die richtige Form von <em>werden</em> oder den Infinitiv. Schreibe genau wie angegeben.</p>
+    <div id="luecken-container"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="luecken-result"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Satzbau">
+    <div class="timer-bar">
+      <span>⏱</span><span class="timer-display" id="td3">00:00</span>
+      <button class="btn-start" onclick="startTimer(3)">Start</button>
+      <button class="btn-stop" onclick="stopTimer(3)">Stop</button>
+      <button class="btn-reset" onclick="resetTimer(3)">Reset</button>
+      <span class="best-time" id="bt3"></span>
+    </div>
+    <h2>Satzbau – Futur I Sätze ordnen</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Ziehe die Wörter in die richtige Reihenfolge.</p>
+    <div id="sb-container"></div>
+    <button class="check-btn" onclick="checkAllSb()">Alle prüfen</button>
+    <div class="result-msg" id="sb-result"></div>
+  </div>
+
+  <!-- TAB 5: ÜBEN -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Üben">
+    <h2>Üben – Futur I anwenden</h2>
+    <p style="color:#555;font-size:.88rem;margin-bottom:16px">Bilde das Futur I. Ergänze die richtige Form von <strong>werden</strong>.</p>
+    <div id="ueben-container"></div>
+    <button class="check-btn" onclick="checkUeben()">Überprüfen</button>
+    <div class="result-msg" id="ueben-result"></div>
+  </div>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== TIMER =====
+const TIMER_PREFIX = 'best2022G';
+const timers = {1:{iv:null,s:0},2:{iv:null,s:0},3:{iv:null,s:0}};
+function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function startTimer(n){const t=timers[n];if(t.iv)return;t.iv=setInterval(()=>{t.s++;document.getElementById('td'+n).textContent=fmtTime(t.s)},1000)}
+function stopTimer(n){const t=timers[n];if(!t.iv)return;clearInterval(t.iv);t.iv=null;const k=TIMER_PREFIX+'_t'+n;const prev=localStorage.getItem(k);if(!prev||t.s<parseInt(prev)){localStorage.setItem(k,t.s)}
+loadBestTimes()}
+function resetTimer(n){const t=timers[n];clearInterval(t.iv);t.iv=null;t.s=0;document.getElementById('td'+n).textContent='00:00'}
+function 
+loadBestTimes(){[1,2,3].forEach(n=>{const k=TIMER_PREFIX+'_t'+n;const v=localStorage.getItem(k);const el=document.getElementById('bt'+n);if(el&&v)el.textContent='Bestzeit: '+fmtTime(parseInt(v))})}
+function timerAutoStart(n){if(!timers[n].iv)startTimer(n)}
+
+loadBestTimes();
+
+// ===== TABS =====
+function showTab(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',i===j)});
+  document.querySelectorAll('.nav button').forEach((b,j)=>{b.classList.toggle('active',i===j)});
+  if(i===1)timerAutoStart(1);
+  if(i===2)timerAutoStart(2);
+  if(i===3)timerAutoStart(3);
+}
+
+// ===== LÜCKENTEXT =====
+const LUECKEN_DATA = [
+  {pre:'Sie ',blank:'wird',post:' morgen nach Paris fliegen. (Singular)'},
+  {pre:'Wir ',blank:'werden',post:' in einer Woche nach Hause kommen.'},
+  {pre:'Ihr ',blank:'werdet',post:' eure Hausaufgaben machen!'},
+  {pre:'Sie ',blank:'werden',post:' sich über das Geschenk freuen. (Plural)'},
+  {pre:'Ich ',blank:'werde',post:' darüber nachdenken.'},
+  {pre:'Er ',blank:'wird',post:' das Buch kaufen.'},
+  {pre:'Du ',blank:'wirst',post:' deinen Vater fragen.'},
+  {pre:'Er ',blank:'wird',post:' an seine Mutter denken.'},
+  {pre:'Heute ',blank:'wird',post:' es noch regnen.'},
+  {pre:'Ab morgen ',blank:'werde',post:' ich mehr lernen.'},
+];
+(function buildLuecken(){
+  const c=document.getElementById('luecken-container');
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div');div.className='luecke-item';
+    div.innerHTML=`<span>${i+1}. ${d.pre}</span><input id="li${i}" type="text" placeholder="werden..."><span>${d.post}</span>`;
+    c.appendChild(div);
+    div.querySelector('input').addEventListener('input',()=>liveCheck(i));
+  });
+})();
+function liveCheck(i){
+  const inp=document.getElementById('li'+i);
+  const val=inp.value.trim();
+  const ans=LUECKEN_DATA[i].blank;
+  if(!val){inp.className='';return}
+  const correct=val===ans;
+  inp.classList.toggle('correct',correct);
+  inp.classList.toggle('wrong',!correct);
+  if(LUECKEN_DATA.every((_,j)=>document.getElementById('li'+j).value.trim()===LUECKEN_DATA[j].blank)){
+    stopTimer(2);document.getElementById('luecken-result').textContent='✅ Alle richtig!';document.getElementById('luecken-result').style.color='#22c55e';
+  }
+}
+function checkLuecken(){
+  let ok=0;
+  LUECKEN_DATA.forEach((d,i)=>{
+    const inp=document.getElementById('li'+i);
+    const correct=inp.value.trim()===d.blank;
+    inp.className=correct?'correct':'wrong';
+    if(correct)ok++;
+  });
+  const r=document.getElementById('luecken-result');
+  r.textContent=ok===LUECKEN_DATA.length?'✅ Alle richtig!':'⚠️ '+ok+'/'+LUECKEN_DATA.length+' richtig.';
+  r.style.color=ok===LUECKEN_DATA.length?'#22c55e':'#ef4444';
+  if(ok===LUECKEN_DATA.length)stopTimer(2);
+}
+
+// ===== SATZBAU =====
+const SATZBAU_DATA = [
+  {hint:'Futur I Bildung (Zukunft)',words:['Maria','wird','uns','morgen','besuchen','.']},
+  {hint:'Futur I mit Vermutung',words:['Sie','wird','wohl','heute','nicht','mehr','kommen','.']},
+  {hint:'Futur I als Aufforderung',words:['Du','wirst','mir','sofort','das','Geld','zurückgeben','!']},
+  {hint:'Futur I als Versprechen',words:['Ab','morgen','werde','ich','mehr','lernen','.']},
+  {hint:'Futur I Prognose',words:['Heute','wird','es','noch','regnen','.']},
+  {hint:'Futur I Plan',words:['Er','wird','im','Sommer','seine','Prüfung','ablegen','.']},
+];
+let sbState=[];
+(function buildSatzbau(){
+  const c=document.getElementById('sb-container');
+  SATZBAU_DATA.forEach((d,si)=>{
+    let sh=[...d.words.map((w,wi)=>({w,wi}))];
+    let ok=false;for(let t=0;t<50&&!ok;t++){for(let i=sh.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[sh[i],sh[j]]=[sh[i],sh[j]];}ok=sh.some((x,i)=>x.wi!==i)}
+    sbState.push({dropped:[],chips:sh});
+    const wrap=document.createElement('div');wrap.className='sb-sentence';
+    wrap.innerHTML=`<p>${d.hint}</p><div class="sb-chips" id="sbchips${si}"></div><div class="sb-drop-zone" id="sbdrop${si}"></div><div id="sbfb${si}"></div>`;
+    c.appendChild(wrap);
+    sh.forEach(({w},ci)=>sbMakeChip(si,ci,w,document.getElementById('sbchips'+si)));
+    sbRegisterZone(si,document.getElementById('sbdrop'+si));
+  });
+})();
+let sbDragged=null;
+function sbMakeChip(si,ci,w,parent){
+  const chip=document.createElement('div');chip.className='sb-chip';chip.textContent=w;chip.draggable=true;chip.dataset.si=si;chip.dataset.ci=ci;
+  chip.addEventListener('dragstart',e=>{sbDragged=chip;e.dataTransfer.effectAllowed='move'});
+  chip.addEventListener('dragend',()=>{sbDragged=null});
+  parent.appendChild(chip);
+}
+function sbRegisterZone(si,zone){
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over')});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');if(sbDragged){zone.appendChild(sbDragged)}setTimeout(()=>sbCheckAuto(si),500)});
+  const src=document.getElementById('sbchips'+si);
+  src.addEventListener('dragover',e=>e.preventDefault());
+  src.addEventListener('drop',e=>{e.preventDefault();if(sbDragged)src.appendChild(sbDragged)});
+}
+function sbCheckAuto(si){
+  const zone=document.getElementById('sbdrop'+si);
+  const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
+  const ans=SATZBAU_DATA[si].words;
+  const fb=document.getElementById('sbfb'+si);
+  if(chips.length!==ans.length){fb.textContent='';return}
+  const match=chips.every((w,i)=>w===ans[i]);
+  if(match){fb.className='sb-ok';fb.textContent='✅ Richtig!';}
+  else{fb.className='sb-err';fb.textContent='❌ Noch nicht richtig.';}
+}
+function checkAllSb(){
+  let ok=0;
+  SATZBAU_DATA.forEach((_,si)=>{
+    const zone=document.getElementById('sbdrop'+si);
+    const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
+    const ans=SATZBAU_DATA[si].words;
+    const fb=document.getElementById('sbfb'+si);
+    const match=chips.length===ans.length&&chips.every((w,i)=>w===ans[i]);
+    fb.className=match?'sb-ok':'sb-err';
+    fb.textContent=match?'✅ Richtig!':'❌ Noch nicht richtig.';
+    if(match)ok++;
+  });
+  const r=document.getElementById('sb-result');
+  r.textContent=ok===SATZBAU_DATA.length?'🎉 Alle Sätze richtig!':'⚠️ '+ok+'/'+SATZBAU_DATA.length+' richtig.';
+  r.style.color=ok===SATZBAU_DATA.length?'#22c55e':'#ef4444';
+  if(ok===SATZBAU_DATA.length)stopTimer(3);
+}
+
+// ===== ÜBEN =====
+// Fill in the correct form of "werden" in various Futur I sentences
+const UEBEN_DATA = [
+  {aufgabe:'Zukunft: Ich _____ darüber nachdenken.',subject:'ich',infinitiv:'nachdenken',ans:'werde',tag:'Zukunft',tagColor:'pro'},
+  {aufgabe:'Plan: Er _____ im Sommer seine Prüfung ablegen.',subject:'er',infinitiv:'ablegen',ans:'wird',tag:'Plan',tagColor:'pln'},
+  {aufgabe:'Versprechen: Wir _____ dich am Nachmittag anrufen.',subject:'wir',infinitiv:'anrufen',ans:'werden',tag:'Versprechen',tagColor:'ver'},
+  {aufgabe:'Aufforderung: Ihr _____ eure Hausaufgaben machen!',subject:'ihr',infinitiv:'machen',ans:'werdet',tag:'Aufforderung',tagColor:'auf'},
+  {aufgabe:'Vermutung: Sie _____ wohl krank sein. (Singular, weiblich)',subject:'sie',infinitiv:'sein',ans:'wird',tag:'Vermutung',tagColor:'verm'},
+  {aufgabe:'Zukunft: Du _____ mehr lernen.',subject:'du',infinitiv:'lernen',ans:'wirst',tag:'Zukunft',tagColor:'pro'},
+  {aufgabe:'Prognose: Heute _____ es noch regnen.',subject:'es',infinitiv:'regnen',ans:'wird',tag:'Prognose',tagColor:'pro'},
+  {aufgabe:'Plan: Sie _____ uns rechtzeitig informieren. (Plural)',subject:'sie (Pl.)',infinitiv:'informieren',ans:'werden',tag:'Plan',tagColor:'pln'},
+];
+(function buildUeben(){
+  const c=document.getElementById('ueben-container');
+  UEBEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div');div.className='ueben-item';
+    div.innerHTML=`<div class="aufgabe"><strong>${i+1}.</strong> ${d.aufgabe.replace('_____','<span style="color:#667eea">_____</span>')} <span class="use-tag use-badge ${d.tagColor}">${d.tag}</span></div>
+      <div class="ueben-row"><span class="ueben-label">${d.subject} + </span><input id="ui${i}" type="text" placeholder="werden..."> <span class="ueben-label">+ ${d.infinitiv}</span></div>`;
+    c.appendChild(div);
+  });
+})();
+function checkUeben(){
+  let ok=0;
+  UEBEN_DATA.forEach((d,i)=>{
+    const inp=document.getElementById('ui'+i);
+    const correct=inp.value.trim()===d.ans;
+    inp.className=correct?'correct':'wrong';
+    if(correct)ok++;
+  });
+  const r=document.getElementById('ueben-result');
+  r.textContent=ok===UEBEN_DATA.length?'🎉 Alle richtig!':'⚠️ '+ok+'/'+UEBEN_DATA.length+' richtig.';
+  r.style.color=ok===UEBEN_DATA.length?'#22c55e':'#ef4444';
+}
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the future', art: 'die', wort: 'Zukunft', plural: '-' },
+  { type: 'n', en: 'the promise', art: 'das', wort: 'Versprechen', plural: '-' },
+  { type: 'n', en: 'the conjecture', art: 'die', wort: 'Vermutung', plural: '-en' },
+  { type: 'v', en: 'will be / to become', de: 'werden' },
+  { type: 'v', en: 'to visit', de: 'besuchen' },
+  { type: 'v', en: 'to come', de: 'kommen' },
+  { type: 'v', en: 'to return', de: 'zurückgeben' },
+  { type: 'v', en: 'to learn', de: 'lernen' },
+  { type: 'v', en: 'to dress', de: 'anziehen' },
+  { type: 'v', en: 'to call', de: 'anrufen' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2048S: Shows und Programme</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #667eea;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    overflow: hidden;
+  }
+  header {
+    background: #667eea;
+    color: #fff;
+    padding: 18px 28px 10px 28px;
+  }
+  header h1 { font-size: 1.35rem; font-weight: 700; }
+  header p  { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+
+  /* NAV */
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 14px 18px;
+    background: #f3e8ff;
+    border-bottom: 2px solid #667eea;
+  }
+  nav button {
+    background: #fff;
+    border: 1.5px solid #667eea;
+    border-radius: 7px;
+    padding: 9px 14px;
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 5px;
+    color: #4a0080;
+    font-weight: 500;
+  }
+  nav button:last-child { margin-bottom: 0; }
+  nav button.active {
+    background: #667eea;
+    color: #fff;
+    font-weight: 700;
+  }
+  nav button:hover:not(.active) { background: #ede0fa; }
+
+  /* TAB CONTENT */
+  .tab { display: none; padding: 24px 28px 32px 28px; }
+  .tab.active { display: block; }
+
+  /* BANNER */
+  .tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+
+  h2 { color: #667eea; font-size: 1.15rem; margin-bottom: 12px; }
+  h3 { color: #4a0080; font-size: 1rem; margin: 16px 0 8px 0; }
+  p  { line-height: 1.65; color: #333; margin-bottom: 10px; }
+
+  /* AUSSPRACHE TAB */
+  .aussprache-box {
+    background: #f8f0ff;
+    border-left: 4px solid #667eea;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .aussprache-box p { margin-bottom: 6px; }
+  .zungenbrecher {
+    background: #fff3e0;
+    border: 1.5px solid #f0a030;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    font-style: italic;
+    color: #5a3800;
+    line-height: 1.8;
+  }
+  .tipp-box {
+    background: #e8f5e9;
+    border: 1.5px solid #4caf50;
+    border-radius: 7px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    color: #1a5c1a;
+    font-size: 0.93rem;
+  }
+
+  /* SPRECHEN TAB */
+  .sprechkarte {
+    background: #f3e8ff;
+    border: 1.5px solid #667eea;
+    border-radius: 9px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .sprechkarte .frage {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1.02rem;
+    margin-bottom: 8px;
+  }
+  .sprechkarte ul { padding-left: 20px; color: #333; line-height: 1.75; }
+  .rollenspiel-box {
+    background: #fff8e1;
+    border: 1.5px solid #f0b030;
+    border-radius: 9px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .rollenspiel-box .rolle {
+    font-weight: 700;
+    color: #7a4500;
+    font-size: 0.97rem;
+    margin-bottom: 8px;
+  }
+  .rollenspiel-box p { color: #5a3800; }
+  .aufgabe-box {
+    background: #e3f2fd;
+    border: 1.5px solid #1e88e5;
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    color: #0d47a1;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  /* KONNEKTOREN TAB */
+  .konnektoren-tabelle {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 18px;
+    font-size: 0.93rem;
+  }
+  .konnektoren-tabelle th {
+    background: #667eea;
+    color: #fff;
+    padding: 9px 12px;
+    text-align: left;
+    border: 1px solid #4a0080;
+  }
+  .konnektoren-tabelle td {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+  }
+  .konnektoren-tabelle tr:nth-child(even) td { background: #f8f0ff; }
+
+  /* LÜCKENTEXT */
+  .luecke-satz {
+    background: #f8f0ff;
+    border-radius: 7px;
+    padding: 11px 15px;
+    margin-bottom: 10px;
+    font-size: 0.97rem;
+    line-height: 1.7;
+    color: #222;
+  }
+  input.luecke {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    width: 130px;
+    font-size: 0.96rem;
+    color: #333;
+    padding: 2px 4px;
+    outline: none;
+  }
+  input.luecke.correct { border-bottom-color: #2e7d32; color: #2e7d32; background: #e8f5e9; border-radius: 4px; }
+  input.luecke.wrong   { border-bottom-color: #c62828; color: #c62828; background: #ffebee; border-radius: 4px; }
+  .feedback-inline { font-size: 0.82rem; margin-left: 6px; }
+  .feedback-inline.ok  { color: #2e7d32; }
+  .feedback-inline.err { color: #c62828; }
+
+  /* SATZBAU */
+  .sb-aufgabe { margin-bottom: 22px; }
+  .sb-chips-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    min-height: 44px;
+    background: #f3e8ff;
+    border: 1.5px dashed #9c4dcc;
+    border-radius: 7px;
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+  .sb-drop-zone {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    min-height: 44px;
+    background: #fff;
+    border: 1.5px solid #667eea;
+    border-radius: 7px;
+    padding: 8px;
+    margin-bottom: 6px;
+  }
+  .sb-chip {
+    background: #667eea;
+    color: #fff;
+    border-radius: 16px;
+    padding: 5px 13px;
+    font-size: 0.88rem;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity 0.15s;
+  }
+  .sb-chip:hover { opacity: 0.82; }
+  .sb-chip.placed { background: #4a0080; }
+  .sb-result { font-size: 0.87rem; margin-top: 4px; font-weight: 600; }
+  .sb-result.ok  { color: #2e7d32; }
+  .sb-result.err { color: #c62828; }
+
+  /* TIMER */
+  .timer-bar {
+    background: #f3e8ff;
+    border: 1px solid #c084fc;
+    border-radius: 8px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: #4a0080;
+  }
+  .timer-bar span { font-weight: 700; font-size: 1rem; }
+  .timer-bar button {
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 14px;
+    cursor: pointer;
+    font-size: 0.88rem;
+  }
+  .timer-bar button:hover { background: #4a0080; }
+
+  /* CHECK BUTTON */
+  .btn-check {
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 26px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 10px;
+    display: inline-block;
+  }
+  .btn-check:hover { background: #4a0080; }
+  .ergebnis {
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 0.97rem;
+    color: #4a0080;
+  }
+
+  /* GEFÜHLE TAB */
+  .gefuehle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .gefuehle-col {
+    border-radius: 9px;
+    padding: 14px 18px;
+  }
+  .gefuehle-col.positiv {
+    background: #e8f5e9;
+    border: 1.5px solid #4caf50;
+  }
+  .gefuehle-col.negativ {
+    background: #ffebee;
+    border: 1.5px solid #ef5350;
+  }
+  .gefuehle-col h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .gefuehle-col.positiv h3 { color: #1b5e20; }
+  .gefuehle-col.negativ h3 { color: #b71c1c; }
+  .gefuehle-col ul { padding-left: 18px; line-height: 1.85; color: #333; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    font-size: 0.78rem;
+    color: #888;
+    padding: 14px 0 10px 0;
+    border-top: 1px solid #eee;
+    margin-top: 8px;
+  }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>2048S · Shows und Programme</h1>
+    <p>B1.2 · Sprechen · Gefühle äußern &amp; Konnektoren anwenden</p>
+  </header>
+
+  <nav id="mainNav">
+    <button class="active" onclick="showTab(0)">🔊 Aussprache</button>
+    <button onclick="showTab(1)">💬 Über Shows sprechen</button>
+    <button onclick="showTab(2)">❤️ Gefühle ausdrücken</button>
+    <button onclick="showTab(3)">🔗 Konnektoren</button>
+    <button onclick="showTab(4)">🎭 Rollenspiele</button>
+  </nav>
+
+  <!-- TAB 0: AUSSPRACHE -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=860" alt="Aussprache">
+    <h2>🔊 Aussprache: Gleiche Konsonanten in verschiedenen Silben</h2>
+
+    <div class="aussprache-box">
+      <p>Im Deutschen gibt es Wörter, in denen <strong>ähnliche oder gleiche Konsonanten</strong> in verschiedenen Silben vorkommen. Das macht die Aussprache schwieriger.</p>
+      <p><strong>Beispiele:</strong></p>
+      <ul style="padding-left:20px; line-height:2;">
+        <li><strong>Schlitt·schuh·lau·fen</strong> — zwei „sch"-Laute in verschiedenen Silben</li>
+        <li><strong>Eich·hörn·chen</strong> — „ch" am Anfang und Ende</li>
+        <li><strong>Tsche·chisch</strong> — „tsch" und „ch" in einer Silbe</li>
+      </ul>
+    </div>
+
+    <div class="tipp-box">
+      💡 <strong>Tipp:</strong> Lies das Wort zuerst <strong>Silbe für Silbe</strong> laut vor:<br>
+      Schlitt – schuh – lau – fen → Schlittschuhlaufen ✓
+    </div>
+
+    <h3>🌀 Zungenbrecher — leichter Schwierigkeitsgrad</h3>
+
+    <div class="zungenbrecher">
+      „Schneiders Schere schneidet scharf,<br>
+      scharf schneidet Schneiders Schere."
+    </div>
+
+    <div class="zungenbrecher">
+      „Spinnende spanische Spanner<br>
+      spannen spannende Spanntücher."
+    </div>
+
+    <div class="zungenbrecher">
+      „Der Streusalzstreuer streut Streusalz auf die Straße."
+    </div>
+
+    <h3>🔥 Zungenbrecher — schwieriger Schwierigkeitsgrad</h3>
+
+    <div class="zungenbrecher" style="background:#fce4ec; border-color:#e91e63; color:#6a0032; font-weight:600;">
+      „Tschechische Regisseure schätzen schöne chinesische Schüsselchen."
+    </div>
+
+    <div class="aufgabe-box">
+      📌 Übung: Lies jeden Zungenbrecher zuerst langsam, dann immer schneller. Wie viele Male schaffst du ihn ohne Fehler?
+    </div>
+  </div>
+
+  <!-- TAB 1: ÜBER SHOWS SPRECHEN -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&w=860" alt="Shows und Programme">
+    <h2>💬 Über Shows und Programme sprechen</h2>
+
+    <div class="sprechkarte">
+      <div class="frage">🎬 Was schaust du gern? Wie oft? Wann? Mit wem?</div>
+      <ul>
+        <li>Ich schaue am liebsten …  (Serien / Filme / Shows / Dokumentationen)</li>
+        <li>Ich schaue … etwa … Mal pro Woche / jeden Abend / am Wochenende</li>
+        <li>Meistens schaue ich … alleine / mit der Familie / mit Freunden</li>
+        <li>Meine Lieblingssendung ist …, weil …</li>
+      </ul>
+    </div>
+
+    <div class="sprechkarte">
+      <div class="frage">📺 Welche Art von Programm bevorzugst du?</div>
+      <ul>
+        <li>Ich bevorzuge … Serien / Spielfilme / Talkshows / Reality-TV / Dokumentarfilme</li>
+        <li>Ich mag … besonders gern, da …</li>
+        <li>Ich finde … nicht so interessant, weil …</li>
+      </ul>
+    </div>
+
+    <div class="sprechkarte">
+      <div class="frage">📡 Was schaust du gar nicht gern? Warum nicht?</div>
+      <ul>
+        <li>Ich schaue nie …, denn es ist mir zu …</li>
+        <li>… gefällt mir überhaupt nicht, weil …</li>
+        <li>Ich finde … langweilig / zu aggressiv / zu oberflächlich</li>
+      </ul>
+    </div>
+
+    <h3>🗣️ Partnerübung</h3>
+    <div class="aufgabe-box">
+      Stellt euch gegenseitig die folgenden Fragen und antwortet mit <strong>vollständigen Sätzen</strong>:<br><br>
+      1. Welche Shows und Programme schaust du? Wie oft? Wann? Mit wem?<br>
+      2. Welche Art von Programmen bevorzugst du? Warum?<br>
+      3. Was schaust du gar nicht gern? Warum nicht?
+    </div>
+  </div>
+
+  <!-- TAB 2: GEFÜHLE AUSDRÜCKEN -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=860" alt="Gefühle">
+    <h2>❤️ Gefühle ausdrücken</h2>
+
+    <p>Wie kann man <strong>Gefühle ausdrücken</strong>? Es gibt positive und negative Gefühle.</p>
+
+    <div class="gefuehle-grid">
+      <div class="gefuehle-col positiv">
+        <h3>😊 Positive Gefühle</h3>
+        <ul>
+          <li>Ich bin begeistert von …</li>
+          <li>Ich freue mich auf …</li>
+          <li>Es macht mir Spaß, …</li>
+          <li>Ich finde es toll, dass …</li>
+          <li>Ich bin total entspannt, wenn …</li>
+          <li>Es gefällt mir sehr, …</li>
+          <li>Ich liebe es, wenn …</li>
+          <li>Es macht mich glücklich, …</li>
+        </ul>
+      </div>
+      <div class="gefuehle-col negativ">
+        <h3>😞 Negative Gefühle</h3>
+        <ul>
+          <li>Es nervt mich, wenn …</li>
+          <li>Ich finde es schrecklich, dass …</li>
+          <li>Es macht mich traurig, …</li>
+          <li>Ich bin aufgewühlt, weil …</li>
+          <li>Es ärgert mich, …</li>
+          <li>Ich finde es langweilig, …</li>
+          <li>Es stört mich, dass …</li>
+          <li>Ich mag es nicht, wenn …</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="aussprache-box">
+      <p>💬 <strong>Beispiel aus dem Unterricht:</strong></p>
+      <p style="font-style:italic; color:#4a0080;">„Wenn ich meine Lieblingssendung gucke, dann bin ich total entspannt und freue mich. Manchmal ist es auch total spannend und dann bin ich aufgewühlt."</p>
+    </div>
+
+    <div class="sprechkarte">
+      <div class="frage">❓ Welche Gefühle assoziierst du mit deiner Lieblingssendung? Was löst sie in dir aus?</div>
+      <ul>
+        <li>Wenn ich … schaue, fühle ich mich …, weil …</li>
+        <li>Meine Lieblingssendung ist für mich wichtig, da …</li>
+        <li>Sie löst in mir … aus, zumal …</li>
+      </ul>
+    </div>
+
+    <div class="aufgabe-box">
+      📌 Beschreibe deine Lieblingssendung und die Gefühle, die sie in dir auslöst. Benutze dabei die Ausdrücke aus der Tabelle und Konnektoren!
+    </div>
+  </div>
+
+  <!-- TAB 3: KONNEKTOREN -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=860" alt="Konnektoren">
+    <h2>🔗 Wiederholung: Konnektoren für Gründe</h2>
+
+    <div class="aussprache-box">
+      <p>Konnektoren sind wichtig für einen guten Schreibstil, denn sie verbinden Sätze miteinander.</p>
+      <p>Der Konnektor <strong>weil</strong> drückt einen Grund aus. Es gibt aber noch mehr Möglichkeiten!</p>
+    </div>
+
+    <h3>📋 Konnektoren zum Grund äußern — Übersicht</h3>
+
+    <table class="konnektoren-tabelle">
+      <tr>
+        <th>Kategorie</th>
+        <th>Konnektor</th>
+        <th>Stellung des Verbs</th>
+        <th>Beispiel</th>
+      </tr>
+      <tr>
+        <td><strong>Konjunktion</strong></td>
+        <td>weil, da, denn</td>
+        <td>weil/da: Verb am Ende<br>denn: Verb an 2. Stelle</td>
+        <td>Ich schaue es gern, <em>weil</em> es spannend ist.</td>
+      </tr>
+      <tr>
+        <td><strong>Adverb/Grund</strong></td>
+        <td>nämlich, zumal</td>
+        <td>nämlich: nach Verb<br>zumal: Verb am Ende</td>
+        <td>Ich finde es gut, <em>zumal</em> es sehr lehrreich ist.</td>
+      </tr>
+      <tr>
+        <td><strong>Adverb/Folge</strong></td>
+        <td>deshalb, darum, deswegen, daher, aus diesem Grund</td>
+        <td>Verb an 2. Stelle (Inversion)</td>
+        <td>Es ist spannend, <em>deshalb</em> schaue ich es oft.</td>
+      </tr>
+      <tr>
+        <td><strong>Präposition</strong></td>
+        <td>wegen, aufgrund, dank, aus, vor, angesichts</td>
+        <td>kein Verb (Nomen folgt)</td>
+        <td><em>Wegen</em> des guten Humors schaue ich es gern.</td>
+      </tr>
+    </table>
+
+    <h3>🔀 Aufgabe: Sortiere die Konnektoren!</h3>
+    <div class="aufgabe-box">
+      Mach eine Liste und sortiere die folgenden Konnektoren in die Kategorien:<br>
+      <strong>Konjunktion | Adverb/Grund | Adverb/Folge | Präposition</strong><br><br>
+      <em>weil · da · denn · nämlich · zumal · deshalb · deswegen · darum · daher · aus diesem Grund · wegen · aufgrund · dank · aus · vor · angesichts</em>
+    </div>
+
+    <div id="sortierErgebnis" style="display:none; margin-top:12px;"></div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;">
+      <div style="background:#f8f0ff; border:1.5px solid #667eea; border-radius:8px; padding:12px;">
+        <strong style="color:#667eea;">Konjunktion</strong>
+        <p style="margin-top:8px; color:#555; font-style:italic;">weil, da, denn</p>
+      </div>
+      <div style="background:#e8f5e9; border:1.5px solid #4caf50; border-radius:8px; padding:12px;">
+        <strong style="color:#2e7d32;">Adverb / Grund</strong>
+        <p style="margin-top:8px; color:#555; font-style:italic;">nämlich, zumal</p>
+      </div>
+      <div style="background:#fff3e0; border:1.5px solid #f57c00; border-radius:8px; padding:12px;">
+        <strong style="color:#e65100;">Adverb / Folge</strong>
+        <p style="margin-top:8px; color:#555; font-style:italic;">deshalb, deswegen, darum, daher, aus diesem Grund</p>
+      </div>
+      <div style="background:#e3f2fd; border:1.5px solid #1e88e5; border-radius:8px; padding:12px;">
+        <strong style="color:#0d47a1;">Präposition</strong>
+        <p style="margin-top:8px; color:#555; font-style:italic;">wegen, aufgrund, dank, aus, vor, angesichts</p>
+      </div>
+    </div>
+
+    <h3>✏️ Lückentext: Konnektoren einsetzen</h3>
+    <div class="timer-bar">
+      ⏱ Zeit: <span id="best2048S_L_display">00:00</span>
+      <button onclick="startTimer('best2048S_L')">Start</button>
+      <button onclick="stopTimer('best2048S_L')">Stop</button>
+    </div>
+
+    <div id="lueckenContainer"></div>
+
+    <button class="btn-check" onclick="checkAll()">Alle prüfen</button>
+    <div class="ergebnis" id="lueckenErgebnis"></div>
+  </div>
+
+  <!-- TAB 4: ROLLENSPIELE -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=860" alt="Rollenspiel">
+    <h2>🎭 Rollenspiele</h2>
+
+    <h3>🎬 Rollenspiel 1: Mein Lieblingsprogramm</h3>
+    <div class="rollenspiel-box">
+      <div class="rolle">📋 Aufgabe</div>
+      <p>Du verbringst den Abend mit deinem Partner und willst deine Lieblingssendung gucken, aber dein Partner ist dagegen. Ihm/ihr gefällt deine Auswahl nicht. <strong>Überzeuge ihn/sie!</strong></p>
+    </div>
+    <div class="aufgabe-box">
+      Begründe deine Position mit <strong>Fakten</strong> und <strong>subjektiven Gefühlen</strong>.<br>
+      Benutze dabei Konnektoren (weil, denn, zumal, nämlich, deshalb …).
+    </div>
+
+    <h3>🎥 Rollenspiel 2: Filmkritiker in der TV-Show</h3>
+    <div class="rollenspiel-box">
+      <div class="rolle">🎙️ Situation: Filmkritiker</div>
+      <p>Du bist Filmkritiker und bist in einer TV-Show. Ein Zuschauer ruft an und kritisiert deinen Lieblingsfilm:</p>
+      <p style="font-style:italic; margin-top:8px; color:#6a3800; background:#fff8e1; padding:10px; border-radius:6px;">
+        „Mir gefällt der Film nicht. Er ist ein Remake und deshalb ist er nicht spannend. Außerdem ist der Film wegen der neuen Schauspieler nicht mehr interessant und effektiv. Ich glaube, viele denken so."
+      </p>
+    </div>
+    <div class="aufgabe-box">
+      Versuche dem Zuschauer in <strong>einigen Aspekten zuzustimmen</strong> und in <strong>einigen zu widersprechen</strong>. Sei möglichst freundlich dabei!
+    </div>
+
+    <h3>💡 Nützliche Redewendungen</h3>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;">
+      <div style="background:#e8f5e9; border:1.5px solid #4caf50; border-radius:8px; padding:12px;">
+        <strong style="color:#1b5e20;">✅ Zustimmen</strong>
+        <ul style="margin-top:8px; padding-left:18px; line-height:1.9; color:#333; font-size:0.9rem;">
+          <li>Da haben Sie völlig Recht, …</li>
+          <li>Ich stimme Ihnen zu, dass …</li>
+          <li>Das sehe ich genauso.</li>
+          <li>In diesem Punkt gebe ich Ihnen Recht.</li>
+          <li>Das stimmt, allerdings …</li>
+        </ul>
+      </div>
+      <div style="background:#ffebee; border:1.5px solid #ef5350; border-radius:8px; padding:12px;">
+        <strong style="color:#b71c1c;">❌ Widersprechen</strong>
+        <ul style="margin-top:8px; padding-left:18px; line-height:1.9; color:#333; font-size:0.9rem;">
+          <li>Da bin ich anderer Meinung.</li>
+          <li>Ich sehe das etwas anders, …</li>
+          <li>Das stimmt nicht ganz, denn …</li>
+          <li>Ich kann dem nicht zustimmen, weil …</li>
+          <li>Im Gegenteil — meiner Meinung nach …</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>🗣️ Satzbau-Übung: Sätze mit Konnektoren bilden</h3>
+    <div class="timer-bar">
+      ⏱ Zeit: <span id="best2048S_S_display">00:00</span>
+      <button onclick="startTimer('best2048S_S')">Start</button>
+      <button onclick="stopTimer('best2048S_S')">Stop</button>
+    </div>
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <footer>Erstellt von FrankBurkert@fabdaf.onmicrosoft.com · B1.2 DaF-Übungen · 2048S</footer>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== TAB NAVIGATION =====
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('#mainNav button').forEach((b,i) => b.classList.toggle('active', i===idx));
+}
+
+// ===== TIMER =====
+const timers = {};
+function startTimer(key) {
+  if (timers[key] && timers[key].running) return;
+  const start = timers[key] ? timers[key].elapsed * 1000 : Date.now();
+  const actualStart = Date.now() - (timers[key] ? timers[key].elapsed * 1000 : 0);
+  timers[key] = { running: true, start: actualStart, elapsed: 0 };
+  timers[key].interval = setInterval(() => {
+    const sec = Math.floor((Date.now() - timers[key].start) / 1000);
+    timers[key].elapsed = sec;
+    const m = String(Math.floor(sec/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    const el = document.getElementById(key + '_display');
+    if (el) el.textContent = m + ':' + s;
+  }, 1000);
+}
+function stopTimer(key) {
+  if (timers[key] && timers[key].interval) {
+    clearInterval(timers[key].interval);
+    timers[key].running = false;
+  }
+}
+function autoStopIfDone(key, inputs) {
+  const done = Array.from(inputs).every(inp => inp.classList.contains('correct'));
+  if (done) stopTimer(key);
+}
+
+// ===== LÜCKENTEXT =====
+const LUECKEN_DATA = [
+  { pre: 'Ich schaue diese Serie gern, ', ans: 'weil', post: ' sie sehr spannend ist.' },
+  { pre: 'Er mag die Show, ', ans: 'denn', post: ' sie ist sehr lustig.' },
+  { pre: 'Die Sendung ist interessant. ', ans: 'Deshalb', post: ' schaue ich sie jeden Abend.' },
+  { pre: 'Ich finde den Film toll — er ist ', ans: 'nämlich', post: ' sehr gut gemacht.' },
+  { pre: 'Ich schaue es gern, ', ans: 'zumal', post: ' es auch noch lehrreich ist.' },
+  { pre: '', ans: 'Da', post: ' ich müde war, bin ich früh schlafen gegangen.' },
+  { pre: '', ans: 'Wegen', post: ' des schlechten Wetters blieben wir zu Hause und schauten TV.' },
+  { pre: '', ans: 'Dank', post: ' des Streamings kann man Filme jederzeit anschauen.' },
+  { pre: 'Er kam zu spät. ', ans: 'Darum', post: ' hat er den Anfang des Films verpasst.' },
+  { pre: '', ans: 'Aufgrund', post: ' der vielen Streaming-Plattformen hat man eine große Auswahl.' }
+];
+
+function buildLuecken() {
+  const container = document.getElementById('lueckenContainer');
+  LUECKEN_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'luecke-satz';
+    div.innerHTML = item.pre +
+      `<input class="luecke" id="luecke_${i}" type="text" autocomplete="off" placeholder="…" oninput="liveCheck(${i})">` +
+      `<span class="feedback-inline" id="fb_${i}"></span>` +
+      item.post;
+    container.appendChild(div);
+  });
+}
+
+function liveCheck(i) {
+  const inp = document.getElementById('luecke_' + i);
+  const fb  = document.getElementById('fb_' + i);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[i].ans;
+  if (val.length === 0) { inp.className='luecke'; fb.textContent=''; return; }
+  if (val.toLowerCase() === ans.toLowerCase()) {
+    inp.className = 'luecke correct';
+    fb.className  = 'feedback-inline ok';
+    fb.textContent = '✓';
+    autoStopIfDone('best2048S_L', document.querySelectorAll('.luecke'));
+  } else {
+    inp.className = 'luecke';
+    fb.className  = '';
+    fb.textContent = '';
+  }
+}
+
+function checkAll() {
+  let right = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('luecke_' + i);
+    const fb  = document.getElementById('fb_' + i);
+    const val = inp.value.trim();
+    if (val.toLowerCase() === item.ans.toLowerCase()) {
+      inp.className = 'luecke correct'; fb.className='feedback-inline ok'; fb.textContent='✓'; right++;
+    } else {
+      inp.className = 'luecke wrong'; fb.className='feedback-inline err'; fb.textContent='✗ ('+item.ans+')';
+    }
+  });
+  document.getElementById('lueckenErgebnis').textContent =
+    right + ' / ' + LUECKEN_DATA.length + ' richtig' + (right===LUECKEN_DATA.length ? ' 🎉' : '');
+  stopTimer('best2048S_L');
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich', 'schaue', 'diese', 'Serie', 'gern', ',', 'weil', 'sie', 'sehr', 'spannend', 'ist', '.'] },
+  { words: ['Er', 'mag', 'die', 'Show', ',', 'denn', 'sie', 'ist', 'sehr', 'lustig', '.'] },
+  { words: ['Deshalb', 'schaue', 'ich', 'sie', 'jeden', 'Abend', '.'] },
+  { words: ['Wegen', 'des', 'schlechten', 'Wetters', 'blieben', 'wir', 'zu', 'Hause', '.'] },
+  { words: ['Ich', 'finde', 'den', 'Film', 'toll', ',', 'zumal', 'er', 'sehr', 'gut', 'gemacht', 'ist', '.'] },
+  { words: ['Da', 'sie', 'müde', 'war', ',', 'blieb', 'sie', 'zu', 'Hause', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+// ===== INIT =====
+buildLuecken();
+buildSatzbau();
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the show', art: 'die', wort: 'Show', plural: '-s' },
+  { type: 'n', en: 'the program', art: 'das', wort: 'Programm', plural: '-e' },
+  { type: 'n', en: 'the episode', art: 'die', wort: 'Folge', plural: '-n' },
+  { type: 'n', en: 'the series', art: 'die', wort: 'Serie', plural: '-n' },
+  { type: 'v', en: 'to watch', de: 'anschauen' },
+  { type: 'v', en: 'to broadcast', de: 'ausstrahlen' },
+  { type: 'v', en: 'to recommend', de: 'empfehlen' },
+  { type: 'v', en: 'to enjoy', de: 'genießen' },
+  { type: 'v', en: 'to stream', de: 'streamen' },
+  { type: 'v', en: 'to follow', de: 'verfolgen' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

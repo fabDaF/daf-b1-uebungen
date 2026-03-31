@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2047X · Einen Grund äußern</title>
+<style>
+  :root { --main: #667eea; --main-light: #f3e5f5; --main-dark: #4a0080; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--main); min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); overflow: hidden; }
+  header { background: var(--main); color: #fff; padding: 22px 28px 16px; }
+  header h1 { font-size: 1.45rem; font-weight: 700; }
+  header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
+  nav { display: flex; flex-direction: column; background: #f8f0ff; border-bottom: 2px solid var(--main); }
+  nav button { background: transparent; border: none; border-bottom: 1px solid #ddd; padding: 11px 18px; text-align: left; cursor: pointer; font-size: 0.92rem; color: #333; transition: background 0.2s; }
+  nav button:last-child { border-bottom: none; }
+  nav button.active { background: var(--main); color: #fff; font-weight: 700; }
+  nav button:hover:not(.active) { background: #e8d5f5; }
+  .tab { display: none; padding: 24px 28px 32px; }
+  .tab.active { display: block; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; }
+  /* EXPRESSION BLOCKS */
+  .expr-section { margin-bottom: 24px; }
+  .expr-section h3 { color: var(--main-dark); font-size: 1rem; margin-bottom: 10px; border-left: 4px solid var(--main); padding-left: 10px; }
+  .expr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .expr-card { background: #f8f0ff; border: 1px solid #d0a0e8; border-radius: 8px; padding: 12px 14px; }
+  .expr-card .konnektor { font-weight: 700; color: var(--main-dark); font-size: 0.97rem; }
+  .expr-card .beispiel { font-size: 0.88rem; color: #444; margin-top: 5px; font-style: italic; line-height: 1.4; }
+  .expr-card .typ { font-size: 0.75rem; color: #888; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
+  /* REGEL TABLE */
+  .regel-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.92rem; }
+  .regel-table th { background: var(--main); color: #fff; padding: 9px 12px; text-align: left; }
+  .regel-table td { border: 1px solid #ddd; padding: 10px 12px; vertical-align: top; line-height: 1.5; }
+  .regel-table tr:nth-child(even) td { background: #f8f0ff; }
+  .highlight { color: var(--main-dark); font-weight: 700; }
+  .info-box { background: #e8f4fd; border-left: 4px solid #1565c0; border-radius: 6px; padding: 14px 18px; margin-bottom: 16px; font-size: 0.93rem; line-height: 1.6; }
+  .info-box strong { color: #1565c0; }
+  .warn-box { background: #fff8e1; border-left: 4px solid #f9a825; border-radius: 6px; padding: 12px 16px; margin-bottom: 14px; font-size: 0.9rem; }
+  /* LÜCKENTEXT */
+  .luecken-intro { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; font-size: 0.93rem; color: #555; }
+  .luecken-satz { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; line-height: 1.8; }
+  .luecke { border: none; border-bottom: 2px solid var(--main); background: transparent; font-size: 0.97rem; font-family: inherit; color: #222; padding: 2px 4px; min-width: 120px; outline: none; }
+  .luecke.correct { border-bottom-color: #27ae60; background: #e8f8ee; border-radius: 4px; }
+  .luecke.wrong { border-bottom-color: #e74c3c; background: #fdecea; border-radius: 4px; }
+  .check-btn { background: var(--main); color: #fff; border: none; padding: 10px 26px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; margin-top: 14px; transition: background 0.2s; }
+  .check-btn:hover { background: var(--main-dark); }
+  .result-msg { margin-top: 12px; font-weight: 600; font-size: 0.95rem; }
+  .result-msg.ok { color: #27ae60; }
+  .result-msg.nok { color: #e74c3c; }
+  /* SATZBAU */
+  .sb-task { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task p.aufgabe { font-size: 0.93rem; color: #555; margin-bottom: 10px; }
+  .chips-area { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; background: #fff; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; }
+  .chip { background: var(--main); color: #fff; border: none; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.88rem; font-weight: 500; user-select: none; transition: opacity 0.2s, transform 0.15s; }
+  .chip:hover { transform: scale(1.05); }
+  .chip.dragging { opacity: 0.4; }
+  .drop-zone { min-height: 44px; background: #fafafa; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .drop-zone.over { background: #e8d5f5; border-color: var(--main); }
+  .sb-feedback { font-size: 0.9rem; font-weight: 600; margin-top: 6px; min-height: 20px; }
+  .sb-feedback.ok { color: #27ae60; }
+  .sb-feedback.nok { color: #e74c3c; }
+  /* ZUORDNUNG */
+  .zuord-item { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; font-size: 0.93rem; }
+  .zuord-item span { flex: 1; line-height: 1.5; }
+  .zuord-item select { padding: 6px 10px; border: 2px solid #ccc; border-radius: 6px; font-size: 0.9rem; background: #fff; cursor: pointer; min-width: 150px; }
+  .zuord-item select.correct { border-color: #27ae60; background: #e8f8ee; }
+  .zuord-item select.wrong { border-color: #e74c3c; background: #fdecea; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 10px; background: #f8f0ff; border-radius: 8px; padding: 8px 16px; margin-bottom: 16px; font-size: 0.88rem; color: #555; }
+  .timer-display { font-size: 1rem; font-weight: 700; color: var(--main); min-width: 50px; }
+  .timer-btn { background: var(--main); color: #fff; border: none; padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+  footer { text-align: center; padding: 14px; font-size: 0.78rem; color: #aaa; border-top: 1px solid #eee; }
+
+  /* Wortschatz */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Einen Grund äußern</h1>
+    <p>B1.2 · Lektion 2047X · Kommunikation</p>
+  </header>
+
+  <nav id="mainNav">
+    <button class="active" onclick="showTab(0)">① Bekannte Konnektoren</button>
+    <button onclick="showTab(1)">② Neue Konnektoren</button>
+    <button onclick="showTab(2)">③ Zuordnung</button>
+    <button onclick="showTab(3)">④ Lückentext</button>
+    <button onclick="showTab(4)">⑤ Satzbau</button>
+  </nav>
+
+  <!-- TAB 0: BEKANNTE KONNEKTOREN -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=860" alt="Konnektoren" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:16px;">Bekannte Konnektoren – Einen Grund äußern</h2>
+
+    <div class="info-box">
+      <strong>Warum?</strong> Um einen Grund zu nennen, gibt es im Deutschen viele Möglichkeiten: Konnektoren, Adverbien und Präpositionen.
+    </div>
+
+    <div class="expr-section">
+      <h3>Konjunktionen und Adverbien (bekannt)</h3>
+      <div class="expr-grid">
+        <div class="expr-card">
+          <div class="typ">Konjunktion (Nebensatz)</div>
+          <div class="konnektor">weil</div>
+          <div class="beispiel">Ich habe keine Zeit, <strong>weil</strong> ich viel arbeite.</div>
+        </div>
+        <div class="expr-card">
+          <div class="typ">Konjunktion (Nebensatz, am Satzanfang)</div>
+          <div class="konnektor">da</div>
+          <div class="beispiel"><strong>Da</strong> ich kein Geld habe, kann ich mir kein Auto leisten.</div>
+        </div>
+        <div class="expr-card">
+          <div class="typ">Konjunktion (Hauptsatz + Hauptsatz)</div>
+          <div class="konnektor">denn</div>
+          <div class="beispiel">Die Fahrgäste waren aufgeregt, <strong>denn</strong> das Wetter war sehr schlecht.</div>
+        </div>
+        <div class="expr-card">
+          <div class="typ">Adverb (Folge)</div>
+          <div class="konnektor">deshalb</div>
+          <div class="beispiel">Das Buch war zu dick, <strong>deshalb</strong> hat er es nicht gelesen.</div>
+        </div>
+        <div class="expr-card">
+          <div class="typ">Adverb (Folge)</div>
+          <div class="konnektor">darum</div>
+          <div class="beispiel">Ich hatte keine Lust, <strong>darum</strong> bin ich nicht zur Feier gegangen.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expr-section">
+      <h3>Übersicht: Konnektoren-Typen</h3>
+      <table class="regel-table">
+        <tr><th>Typ</th><th>Konnektoren</th><th>Funktion</th></tr>
+        <tr><td><strong>Konjunktion</strong></td><td>weil, da, zumal</td><td>leitet Nebensatz ein → Verb am Ende</td></tr>
+        <tr><td><strong>Konjunktion</strong></td><td>denn</td><td>verbindet zwei Hauptsätze</td></tr>
+        <tr><td><strong>Adverb (Grund)</strong></td><td>nämlich, eben</td><td>steht hinter dem Verb</td></tr>
+        <tr><td><strong>Adverb (Folge)</strong></td><td>deshalb, darum, deswegen, daher</td><td>steht an Pos. 1 oder nach Verb</td></tr>
+        <tr><td><strong>Adverbial (Folge)</strong></td><td>aus diesem Grund</td><td>steht an Pos. 1 oder nach Verb</td></tr>
+        <tr><td><strong>Präposition</strong></td><td>wegen, aufgrund, angesichts (Gen.)</td><td>drückt Grund als Nominalgruppe aus</td></tr>
+        <tr><td><strong>Präposition</strong></td><td>dank (Gen.), kraft (Gen.)</td><td>positiver Grund / Fähigkeit</td></tr>
+        <tr><td><strong>Präposition</strong></td><td>aus, vor (Dativ)</td><td>Gefühle / Körperreaktionen</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 1: NEUE KONNEKTOREN -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=860" alt="Neue Konnektoren" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:16px;">Neue Konnektoren – zumal, nämlich &amp; Präpositionen</h2>
+
+    <div class="expr-section">
+      <h3>Konjunktion <em>zumal</em></h3>
+      <div class="info-box">
+        <strong>zumal</strong> ist ähnlich wie <em>weil</em>, nennt aber einen <strong>verstärkenden, zusätzlichen Grund</strong>. Das Verb steht am Ende. Die Umstellung von Haupt- und Nebensatz ist nicht möglich.
+      </div>
+      <div class="expr-grid">
+        <div class="expr-card">
+          <div class="konnektor">zumal</div>
+          <div class="beispiel">Wegen des schlechten Wetters gehen wir nicht spazieren, <strong>zumal</strong> wir den Regenschirm vergessen haben.</div>
+        </div>
+        <div class="expr-card">
+          <div class="konnektor">zumal</div>
+          <div class="beispiel">Handys sind für die Menschen total wichtig, <strong>zumal</strong> sie als Statussymbol dienen.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expr-section">
+      <h3>Adverb <em>nämlich</em></h3>
+      <div class="info-box">
+        <strong>nämlich</strong> steht <strong>hinter dem Verb</strong> und drückt eine Begründung des Gesagten aus.
+      </div>
+      <div class="expr-grid">
+        <div class="expr-card">
+          <div class="konnektor">nämlich</div>
+          <div class="beispiel">Handys sind für die Menschen total wichtig, sie dienen <strong>nämlich</strong> als Statussymbol.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expr-section">
+      <h3>Adverbien der Folge: <em>deswegen, daher, aus diesem Grund</em></h3>
+      <div class="info-box">
+        Diese Adverbien drücken eine <strong>Folge</strong> aus und können das Gesagte <strong>rechtfertigen</strong>. Sie stehen an erster Stelle oder hinter dem Verb.
+      </div>
+      <div class="expr-grid">
+        <div class="expr-card">
+          <div class="konnektor">aus diesem Grund</div>
+          <div class="beispiel">Ein Handy bietet schnelle Kommunikation. <strong>Aus diesem Grund</strong> ist es sehr wichtig für Menschen.</div>
+        </div>
+        <div class="expr-card">
+          <div class="konnektor">deswegen / daher</div>
+          <div class="beispiel">Ein Handy bietet schnelle Kommunikation. Es ist <strong>aus diesem Grund</strong> sehr wichtig.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expr-section">
+      <h3>Präpositionen: <em>wegen, aufgrund, angesichts</em> (+ Genitiv)</h3>
+      <table class="regel-table">
+        <tr><th>Präposition</th><th>Beispiel</th><th>Besonderheit</th></tr>
+        <tr><td><span class="highlight">wegen</span></td><td>Wegen der schweren Lebensbedingungen bleiben die Kinder zu Hause.</td><td>Standard: Genitiv; umgangssprachlich: Dativ</td></tr>
+        <tr><td><span class="highlight">halber</span></td><td>Der Übersichtlichkeit halber habe ich die Seite so formatiert.</td><td>nachgestellt, + Genitiv</td></tr>
+        <tr><td><span class="highlight">aufgrund</span></td><td>Das Handy gewann aufgrund der Kommunikationsnotwendigkeit an Bedeutung.</td><td>+ Genitiv</td></tr>
+        <tr><td><span class="highlight">angesichts</span></td><td>Angesichts der Kommunikationsnotwendigkeit ist das Handy wichtig.</td><td>+ Genitiv</td></tr>
+        <tr><td><span class="highlight">dank</span></td><td>Dank ihres Lebenslaufs hat sie die Arbeitsstelle bekommen.</td><td>positiver Grund, + Genitiv</td></tr>
+        <tr><td><span class="highlight">kraft</span></td><td>Kraft seines Amtes hat er den Angeklagten verurteilt.</td><td>nur Abstrakta, + Genitiv</td></tr>
+        <tr><td><span class="highlight">aus</span></td><td>Aus Langeweile haben wir viel Schokolade gegessen.</td><td>bewusste Handlung, kein Artikel</td></tr>
+        <tr><td><span class="highlight">vor</span></td><td>Vor Schreck wurde er ganz blass.</td><td>unbewusste Körperreaktion, kein Artikel</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: ZUORDNUNG -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=860" alt="Zuordnung" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Zuordnung: Welcher Konnektor passt?</h2>
+    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Wähle den richtigen Konnektor für jeden Satz.</p>
+
+    <div id="zuord-container"></div>
+    <button class="check-btn" onclick="checkZuordnung()">Alle prüfen</button>
+    <div class="result-msg" id="zuord-result"></div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=860" alt="Lückentext" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Lückentext: Einen Grund äußern</h2>
+
+    <div class="timer-bar">
+      <span>⏱ Zeit:</span>
+      <span class="timer-display" id="timer3">00:00</span>
+      <button class="timer-btn" onclick="startTimer(3)">Start</button>
+      <button class="timer-btn" onclick="stopTimer(3)" style="background:#999;">Stop</button>
+    </div>
+
+    <div class="luecken-intro">Ergänze den richtigen Konnektor oder die richtige Präposition.</div>
+    <div id="luecken-container"></div>
+    <button class="check-btn" onclick="checkLuecken()">Alle prüfen</button>
+    <div class="result-msg" id="luecken-result"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&w=860" alt="Satzbau" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Satzbau: Einen Grund äußern</h2>
+
+    <div class="timer-bar">
+      <span>⏱ Zeit:</span>
+      <span class="timer-display" id="timer4">00:00</span>
+      <button class="timer-btn" onclick="startTimer(4)">Start</button>
+      <button class="timer-btn" onclick="stopTimer(4)" style="background:#999;">Stop</button>
+    <button onclick="showTab(5)">🔤 Wortschatz</button>
+    </div>
+
+    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Bringe die Wörter in die richtige Reihenfolge.</p>
+    <div id="satzbau-container"></div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&w=860" alt="Vokabeln" loading="lazy">
+    <h2 style="color:var(--main);margin-bottom:12px;">Wortschatz: Konnektoren</h2>
+    <p style="font-size:0.82rem;color:#999;margin-bottom:14px;">Klicke auf eine Karte, um die Bedeutung zu sehen.</p>
+    <div class="expr-grid" id="vok-grid"></div>
+  </div>
+
+  <footer>© fabDaF · <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com" style="color:#aaa;">FrankBurkert@fabdaf.onmicrosoft.com</a></footer>
+
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
+    <div class="tab-content">
+      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
+      <div id="vocabContainer"></div>
+      <div style="margin-top:16px;display:flex;gap:10px;">
+        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── TAB NAVIGATION ───────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// ─── TIMER ────────────────────────────────────────────────────
+const TIMER_PREFIX = 'best2047X';
+let timers = {3:null, 4:null};
+let secs   = {3:0, 4:0};
+function startTimer(t) {
+  if (timers[t]) return;
+  secs[t] = 0;
+  timers[t] = setInterval(() => {
+    secs[t]++;
+    const m = String(Math.floor(secs[t]/60)).padStart(2,'0');
+    const s = String(secs[t]%60).padStart(2,'0');
+    document.getElementById('timer'+t).textContent = m+':'+s;
+  }, 1000);
+}
+function stopTimer(t) {
+  clearInterval(timers[t]); timers[t] = null;
+  const key = TIMER_PREFIX + '_T' + t;
+  const cur = localStorage.getItem(key);
+  if (!cur || secs[t] < parseInt(cur)) localStorage.setItem(key, secs[t]);
+}
+function autoStopIfDone(t, total, correct) {
+  if (correct === total) stopTimer(t);
+}
+
+// ─── ZUORDNUNG DATA ───────────────────────────────────────────
+const ZUORD_DATA = [
+  { satz: 'Ich habe keine Zeit, _______ ich viel arbeite.', answer: 'weil', options: ['weil', 'nämlich', 'darum', 'zumal'] },
+  { satz: 'Das Buch war zu dick, _______ hat er es nicht gelesen.', answer: 'deshalb', options: ['deshalb', 'weil', 'denn', 'zumal'] },
+  { satz: 'Handys sind wichtig, sie dienen _______ als Statussymbol.', answer: 'nämlich', options: ['nämlich', 'deshalb', 'darum', 'weil'] },
+  { satz: '_______ schlechten Wetters gehen wir nicht spazieren.', answer: 'Wegen', options: ['Wegen', 'Dank', 'Kraft', 'Vor'] },
+  { satz: 'Wir gehen nicht spazieren, _______ wir den Regenschirm vergessen haben.', answer: 'zumal', options: ['zumal', 'nämlich', 'deshalb', 'da'] },
+  { satz: '_______ Schreck wurde er ganz blass.', answer: 'Vor', options: ['Vor', 'Aus', 'Wegen', 'Dank'] },
+  { satz: 'Aus _______ haben wir viel Schokolade gegessen.', answer: 'Langeweile', options: ['Langeweile', 'Grund', 'Schreck', 'Freude'] },
+  { satz: '_______ ihres Lebenslaufs hat sie die Stelle bekommen.', answer: 'Dank', options: ['Dank', 'Wegen', 'Kraft', 'Vor'] },
+];
+
+(function buildZuordnung() {
+  const cont = document.getElementById('zuord-container');
+  ZUORD_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'zuord-item';
+    const span = document.createElement('span');
+    span.textContent = item.satz;
+    const sel = document.createElement('select');
+    sel.id = `z${i}`;
+    sel.innerHTML = '<option value="">– wählen –</option>';
+    [...item.options].sort(() => Math.random()-0.5).forEach(opt => {
+      const o = document.createElement('option');
+      o.value = opt; o.textContent = opt;
+      sel.appendChild(o);
+    });
+    div.appendChild(span);
+    div.appendChild(sel);
+    cont.appendChild(div);
+  });
+})();
+
+function checkZuordnung() {
+  let correct = 0;
+  ZUORD_DATA.forEach((item, i) => {
+    const sel = document.getElementById(`z${i}`);
+    sel.classList.remove('correct','wrong');
+    if (sel.value === item.answer) { sel.classList.add('correct'); correct++; }
+    else { sel.classList.add('wrong'); }
+  });
+  const r = document.getElementById('zuord-result');
+  r.textContent = correct===ZUORD_DATA.length ? '🎉 Alle '+ZUORD_DATA.length+' Zuordnungen richtig!' : correct+' / '+ZUORD_DATA.length+' richtig. Schau nochmal nach!';
+  r.className = 'result-msg '+(correct===ZUORD_DATA.length?'ok':'nok');
+}
+
+// ─── LÜCKENTEXT DATA ──────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Ich schreie, ', blank: 'weil', after: ' ich gewonnen habe!' },
+  { before: '', blank: 'Da', after: ' ich kein Geld habe, kann ich mir kein Auto leisten.' },
+  { before: 'Die Fahrgäste waren aufgeregt, ', blank: 'denn', after: ' das Wetter war sehr schlecht.' },
+  { before: 'Autos spielen eine große Rolle, ', blank: 'zumal', after: ' sie eine schnelle Bewegungsmöglichkeit bieten.' },
+  { before: 'Handys sind wichtig, sie dienen ', blank: 'nämlich', after: ' als Statussymbol.' },
+  { before: 'Ein Handy bietet schnelle Kommunikation. ', blank: 'Aus diesem Grund', after: ' ist es sehr wichtig für Menschen.' },
+  { before: '', blank: 'Wegen', after: ' des schlechten Wetters bleiben wir zu Hause.' },
+  { before: '', blank: 'Dank', after: ' ihres Lebenslaufs hat sie die Arbeitsstelle bekommen.' },
+  { before: '', blank: 'Vor', after: ' Schreck wurde er ganz blass.' },
+  { before: '', blank: 'Aufgrund', after: ' der Kommunikationsnotwendigkeit ist das Handy wichtig.' },
+];
+
+(function buildLuecken() {
+  const cont = document.getElementById('luecken-container');
+  LUECKEN_DATA.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'luecken-satz';
+    div.innerHTML = item.before +
+      `<input class="luecke" id="l${i}" type="text" autocomplete="off" placeholder="?" oninput="liveCheck(${i})">` +
+      item.after;
+    cont.appendChild(div);
+  });
+})();
+
+function normalize(s) { return s.trim().toLowerCase().replace(/\s+/g,' '); }
+function liveCheck(i) {
+  const inp = document.getElementById('l'+i);
+  const val = normalize(inp.value);
+  const sol = normalize(LUECKEN_DATA[i].blank);
+  if (val === sol) { inp.classList.add('correct'); inp.classList.remove('wrong'); }
+  else { inp.classList.remove('correct','wrong'); }
+  const allCorrect = LUECKEN_DATA.every((_,j) => normalize(document.getElementById('l'+j).value) === normalize(LUECKEN_DATA[j].blank));
+  if (allCorrect) autoStopIfDone(3, LUECKEN_DATA.length, LUECKEN_DATA.length);
+}
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('l'+i);
+    const val = normalize(inp.value);
+    const sol = normalize(item.blank);
+    inp.classList.remove('correct','wrong');
+    if (val === sol) { inp.classList.add('correct'); correct++; }
+    else { inp.classList.add('wrong'); inp.title = 'Lösung: ' + item.blank; }
+  });
+  const r = document.getElementById('luecken-result');
+  r.textContent = correct===LUECKEN_DATA.length ? '🎉 Alle '+LUECKEN_DATA.length+' Lücken richtig!' : correct+' / '+LUECKEN_DATA.length+' richtig. Versuche es nochmal!';
+  r.className = 'result-msg '+(correct===LUECKEN_DATA.length?'ok':'nok');
+  autoStopIfDone(3, LUECKEN_DATA.length, correct);
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Ich', 'habe', 'keine', 'Zeit', ',', 'weil', 'ich', 'viel', 'arbeite', '.'] },
+  { words: ['Wegen', 'des', 'schlechten', 'Wetters', 'bleiben', 'wir', 'zu', 'Hause', '.'] },
+  { words: ['Handys', 'sind', 'wichtig', ',', 'zumal', 'sie', 'als', 'Statussymbol', 'dienen', '.'] },
+  { words: ['Aus', 'diesem', 'Grund', 'ist', 'das', 'Handy', 'sehr', 'wichtig', '.'] },
+  { words: ['Dank', 'ihres', 'Lebenslaufs', 'hat', 'sie', 'die', 'Stelle', 'bekommen', '.'] },
+  { words: ['Vor', 'Schreck', 'wurde', 'er', 'ganz', 'blass', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// ── WORTSCHATZ ────────────────────────────────────────────────────
+const WORTSCHATZ = [
+  { type: 'n', en: 'the reason', art: 'der', wort: 'Grund', plural: '-e' },
+  { type: 'n', en: 'the cause', art: 'die', wort: 'Ursache', plural: '-n' },
+  { type: 'n', en: 'the consequence', art: 'die', wort: 'Folge', plural: '-n' },
+  { type: 'v', en: 'to express', de: 'äußern' },
+  { type: 'v', en: 'to explain', de: 'erklären' },
+  { type: 'v', en: 'to justify', de: 'rechtfertigen' },
+  { type: 'v', en: 'to argue', de: 'argumentieren' },
+  { type: 'v', en: 'to mention', de: 'erwähnen' },
+  { type: 'v', en: 'to point out', de: 'hinweisen auf' },
+  { type: 'v', en: 'to emphasize', de: 'betonen' },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
+      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
+    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

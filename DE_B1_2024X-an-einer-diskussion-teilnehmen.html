@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – An einer Diskussion teilnehmen</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #667eea; font-family: Arial, sans-serif; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; }
+  h1 { background: #667eea; color: #fff; text-align: center; padding: 18px 20px; font-size: 1.3em; }
+
+  /* NAV */
+  .nav { display: flex; flex-wrap: wrap; background: #f0e6ff; border-bottom: 2px solid #667eea; }
+  .nav button { flex: 1; min-width: 80px; padding: 10px 6px; border: 1px solid #667eea; background: #f0e6ff; color: #667eea; font-size: 0.8em; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+  .nav button.active { background: #667eea; color: #fff; }
+  .nav button:hover:not(.active) { background: #d9b3ff; }
+
+  /* TAB CONTENT */
+  .tab { display: none; padding: 24px; }
+  .tab.active { display: block; }
+
+  /* BANNER */
+  .tab-banner { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 18px; }
+
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; justify-content: space-between; background: #f0e6ff; border-radius: 8px; padding: 8px 14px; margin-bottom: 16px; font-size: 0.9em; }
+  .timer-display { font-size: 1.2em; font-weight: bold; color: #667eea; min-width: 56px; text-align: right; }
+  .timer-btn { padding: 4px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85em; }
+  .timer-btn.start { background: #667eea; color: #fff; }
+  .timer-btn.stop { background: #c0392b; color: #fff; }
+  .timer-btn.reset { background: #aaa; color: #fff; margin-left: 6px; }
+
+  /* SCORE */
+  .score-bar { text-align: right; font-size: 0.85em; color: #555; margin-bottom: 10px; }
+  .score-num { font-weight: bold; color: #667eea; }
+
+  /* MINDMAP */
+  .mindmap-center { background: #667eea; color: #fff; border-radius: 50%; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto 24px; font-size: 1em; font-weight: bold; padding: 12px; }
+  .vocab-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .vocab-card { border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 14px; background: #faf5ff; }
+  .vocab-card .word { font-size: 1.1em; font-weight: bold; color: #667eea; margin-bottom: 6px; }
+  .vocab-card .example { font-size: 0.88em; color: #555; font-style: italic; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+
+  /* DIALOG */
+  .dialog-box { background: #f9f9f9; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-bottom: 16px; }
+  .dialog-box p { margin-bottom: 8px; line-height: 1.6; }
+  .dialog-box p:last-child { margin-bottom: 0; }
+  .speaker { font-weight: bold; color: #667eea; }
+
+  /* REDEMITTEL CARDS */
+  .redemittel-section { margin-bottom: 24px; }
+  .redemittel-section h3 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 6px; margin-bottom: 14px; font-size: 1em; }
+  .redemittel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  .r-card { background: #e8d5ff; border-radius: 8px; padding: 12px 14px; }
+  .r-card .phrase { font-weight: bold; color: #4a0080; font-size: 0.95em; }
+  .r-card .example { font-size: 0.83em; color: #555; margin-top: 4px; font-style: italic; }
+
+  /* LÜCKENTEXT */
+  .luecke-item { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .luecke-item .num { font-weight: bold; color: #667eea; min-width: 24px; }
+  .luecke-item .sentence { flex: 1; line-height: 1.6; }
+  .luecke-input { border: none; border-bottom: 2px solid #667eea; background: transparent; font-size: 1em; padding: 2px 6px; min-width: 120px; outline: none; color: #222; }
+  .luecke-item.correct { background: #d4edda; border-color: #28a745; }
+  .luecke-item.wrong { background: #f8d7da; border-color: #dc3545; }
+  .feedback-icon { font-size: 1.2em; min-width: 20px; }
+  .hint-text { font-size: 0.8em; color: #888; margin-top: 4px; display: none; }
+
+  /* SATZBAU */
+  .sb-task { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
+  .sb-task .sb-hint { font-size: 0.88em; color: #888; margin-bottom: 10px; }
+  .sb-chips-source { display: flex; flex-wrap: wrap; gap: 8px; min-height: 38px; border: 1.5px dashed #bbb; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
+  .sb-zone { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; border: 2px dashed #667eea; border-radius: 6px; padding: 8px; background: #faf5ff; }
+  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.9em; user-select: none; transition: opacity 0.15s; }
+  .chip:active { cursor: grabbing; opacity: 0.7; }
+  .sb-feedback { font-size: 0.9em; margin-top: 8px; font-weight: bold; min-height: 20px; }
+  .sb-feedback.ok { color: #28a745; }
+  .sb-feedback.err { color: #dc3545; }
+
+  /* MATCHING */
+  .match-area { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
+  .match-col { display: flex; flex-direction: column; gap: 8px; }
+  .match-card { border-radius: 8px; padding: 10px 14px; font-size: 0.9em; cursor: pointer; transition: all 0.2s; text-align: center; line-height: 1.4; }
+  .term-card { background: #e8d5ff; border: 2px solid #c39bdd; color: #4a0080; font-weight: bold; }
+  .desc-card { background: #f0e6ff; border: 2px solid #d9b3ff; color: #333; }
+  .match-card.selected { border-color: #667eea; background: #d9b3ff; transform: scale(1.02); }
+  .match-card.matched-ok { background: #d4edda; border-color: #28a745; cursor: default; color: #155724; }
+  .match-card.matched-err { background: #f8d7da; border-color: #dc3545; }
+  #matchFeedback { text-align: center; font-weight: bold; font-size: 1em; min-height: 24px; }
+  #matchFeedback.ok { color: #28a745; }
+  #matchFeedback.err { color: #dc3545; }
+
+  /* VOCAB TRAIN */
+  .vocab-train { max-width: 500px; margin: 0 auto; text-align: center; }
+  .vocab-card-big { background: #667eea; color: #fff; border-radius: 12px; padding: 30px 20px; margin-bottom: 20px; font-size: 1.3em; font-weight: bold; min-height: 80px; display: flex; align-items: center; justify-content: center; }
+  .vocab-input { width: 100%; border: 2px solid #667eea; border-radius: 8px; padding: 12px; font-size: 1.1em; text-align: center; outline: none; margin-bottom: 10px; }
+  .vocab-check-btn { background: #667eea; color: #fff; border: none; border-radius: 8px; padding: 10px 28px; font-size: 1em; font-weight: bold; cursor: pointer; }
+  .vocab-result { font-size: 1em; font-weight: bold; min-height: 24px; margin-bottom: 10px; }
+  .vocab-result.ok { color: #28a745; }
+  .vocab-result.err { color: #dc3545; }
+  .vocab-progress { font-size: 0.85em; color: #888; margin-bottom: 12px; }
+  .vocab-next-btn { background: #aaa; color: #fff; border: none; border-radius: 8px; padding: 8px 22px; font-size: 0.95em; cursor: pointer; margin-left: 8px; }
+  .vocab-next-btn:hover { background: #888; }
+
+  /* BUTTONS */
+  .btn-check { background: #667eea; color: #fff; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95em; font-weight: bold; cursor: pointer; margin-top: 10px; }
+  .btn-check:hover { background: #4a0080; }
+  .btn-reset { background: #aaa; color: #fff; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95em; cursor: pointer; margin-top: 10px; margin-left: 8px; }
+  .btn-reset:hover { background: #888; }
+
+  /* INFO BOX */
+  .info-box { background: #f0e6ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.93em; line-height: 1.6; }
+  .info-box strong { color: #667eea; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 0.92em; }
+  th { background: #667eea; color: #fff; padding: 10px; text-align: left; }
+  td { padding: 9px 10px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+  tr:nth-child(even) td { background: #f9f5ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>An einer Diskussion teilnehmen – B1.2</h1>
+
+  <div class="nav">
+    <button class="active" onclick="showTab(0)">📋 Wortschatz</button>
+    <button onclick="showTab(1)">💬 Besprechung</button>
+    <button onclick="showTab(2)">🗣️ Redemittel</button>
+    <button onclick="showTab(3)">✏️ Lückentext</button>
+    <button onclick="showTab(4)">🔀 Satzbau</button>
+    <button onclick="showTab(5)">🔤 Wortschatz</button>
+  </div>
+
+  <!-- TAB 1: WORTSCHATZ -->
+  <div class="tab active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Besprechung">
+    <div class="info-box">
+      <strong>Lernziel:</strong> Neue Wörter rund um die Besprechung kennenlernen und in Beispielsätzen verstehen.
+    </div>
+    <h2 style="text-align:center; color:#667eea; margin-bottom:20px;">🔤 Wortschatz</h2>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: BESPRECHUNG (Dialog + Wort übernehmen) -->
+  <div class="tab" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Teammeeting">
+    <div class="timer-bar">
+      <span>⏱️ Timer</span>
+      <span>
+        <button class="timer-btn start" id="t1start" onclick="timerStart('t1')">▶ Start</button>
+        <button class="timer-btn stop" id="t1stop" onclick="timerStop('t1')" style="display:none">⏹ Stop</button>
+        <button class="timer-btn reset" onclick="timerReset('t1')">↺</button>
+      </span>
+      <span class="timer-display" id="t1disp">00:00</span>
+    </div>
+    <div class="info-box">
+      <strong>Dialog: Besprechung im Büro</strong><br>
+      Ergänze die fehlenden Wörter im Dialog. Dann schau dir die Redemittel an.
+    </div>
+
+    <div id="dialogArea">
+      <div class="dialog-box">
+        <p><span class="speaker">Chef:</span> Guten Morgen alle zusammen. Wir haben heute viel zu besprechen. Zunächst zur Aufgabenverteilung: Herr Müller, können Sie einige Aufgaben an Ihre Kollegin <input class="luecke-input" id="d1" placeholder="___________" style="min-width:100px">?</p>
+        <p><span class="speaker">Herr Müller:</span> Ja, natürlich. Das ist eine gute Idee.</p>
+        <p><span class="speaker">Chef:</span> Gut. Dann sollten wir auch eine <input class="luecke-input" id="d2" placeholder="___________" style="min-width:120px"> über den nächsten Termin treffen.</p>
+        <p><span class="speaker">Frau Koch:</span> Darf ich etwas dazu sagen? Ich habe den <input class="luecke-input" id="d3" placeholder="___________" style="min-width:100px"> geprüft. Wir haben noch zwei Wochen Zeit.</p>
+        <p><span class="speaker">Chef:</span> Danke. Und haben Sie die Situation <input class="luecke-input" id="d4" placeholder="___________" style="min-width:130px">?</p>
+        <p><span class="speaker">Frau Koch:</span> Ja, wir haben eine sehr <input class="luecke-input" id="d5" placeholder="___________" style="min-width:120px"> Kollegin, die das übernehmen kann.</p>
+        <p><span class="speaker">Chef:</span> Ausgezeichnet! Dann müssen wir nur noch <input class="luecke-input" id="d6" placeholder="___________" style="min-width:110px"> finden.</p>
+      </div>
+      <div class="score-bar">Punkte: <span class="score-num" id="dialogScore">0</span> / 6</div>
+      <button class="btn-check" onclick="checkDialog()">✔ Prüfen</button>
+      <button class="btn-reset" onclick="resetDialog()">↺ Zurücksetzen</button>
+    </div>
+
+    <div style="margin-top:24px">
+      <h3 style="color:#667eea; margin-bottom:12px">Das Wort übernehmen – Redemittel</h3>
+      <div class="info-box">
+        <strong>Sich zu Wort melden:</strong> höflich und formell
+      </div>
+      <div class="redemittel-grid">
+        <div class="r-card"><div class="phrase">Kann ich etwas dazu sagen?</div></div>
+        <div class="r-card"><div class="phrase">Darf ich Sie unterbrechen?</div></div>
+        <div class="r-card"><div class="phrase">Darf ich Ihnen eine Frage zu diesem Punkt stellen?</div></div>
+        <div class="r-card"><div class="phrase">Darf ich?</div></div>
+      </div>
+      <div class="info-box" style="margin-top:14px">
+        <strong>Struktur:</strong> Zunächst übernimmt man das Wort — anschließend führt man die Rede weiter — schließlich übergibt man das Wort an andere.
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: REDEMITTEL -->
+  <div class="tab" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Diskussion">
+
+    <div class="redemittel-section">
+      <h3>🔄 Die Rede weiterführen</h3>
+      <div class="info-box">
+        Wenn jemand dich unterbricht: <strong>„Dürfte ich darum bitten, nicht unterbrochen zu werden?"</strong>
+      </div>
+      <div class="redemittel-grid">
+        <div class="r-card">
+          <div class="phrase">Ich wollte noch etwas hinzufügen.</div>
+          <div class="example">Bitte warten Sie noch eine Sekunde. Ich wollte noch etwas hinzufügen.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Ich bin gleich fertig.</div>
+          <div class="example">Ich bin gleich fertig und dann können Sie das Wort übernehmen.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Lassen Sie mich bitte erst ausreden.</div>
+          <div class="example">Lassen Sie mich bitte erst ausreden.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Ich schließe mich dem an.</div>
+          <div class="example">Ich schließe mich dem an, was hier gesagt wurde.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Ich bin noch nicht fertig!</div>
+          <div class="example">Ich bin noch nicht fertig! Da gibt es noch etwas.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Ich möchte nur noch hinzufügen, dass …</div>
+          <div class="example">Ich möchte nur noch hinzufügen, dass der Zeitplan eingehalten werden muss.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Da gibt es auch das Problem mit …</div>
+          <div class="example">Da gibt es auch das Problem mit dem Haushalt für dieses Jahr.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Das ist die andere Sache.</div>
+          <div class="example">Und das ist die andere Sache. Wir brauchen mehr Finanzierung.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="redemittel-section">
+      <h3>➡️ Das Wort an andere übergeben</h3>
+      <div class="redemittel-grid">
+        <div class="r-card">
+          <div class="phrase">Sie möchte etwas dazu beitragen.</div>
+          <div class="example">Ruhe, bitte! Sie möchte etwas dazu beitragen.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Können Sie das näher ausführen?</div>
+          <div class="example">Können Sie das näher ausführen? Ich habe das nicht ganz verstanden.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Sie sind der Nächste / die Nächste.</div>
+          <div class="example">Sie sind der Nächste. Sie können jetzt das Wort übernehmen.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Was würden Sie dazu sagen?</div>
+          <div class="example">Ich habe einen Vorschlag. Was würden Sie dazu sagen?</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Bitte, fahren Sie fort.</div>
+          <div class="example">Entschuldigen Sie die Unterbrechung. Bitte, fahren Sie fort.</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Verstehen Sie, was ich meine?</div>
+          <div class="example">Das geht so nicht. Verstehen Sie, was ich meine?</div>
+        </div>
+        <div class="r-card">
+          <div class="phrase">Wenn Sie verstehen, was ich meine.</div>
+          <div class="example">Das ist schon ein Problem. Wenn Sie verstehen, was ich meine.</div>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <tr><th>Situation</th><th>Redemittel</th></tr>
+      <tr><td>Wort übernehmen</td><td>Kann ich etwas dazu sagen? · Darf ich Sie unterbrechen?</td></tr>
+      <tr><td>Rede weiterführen</td><td>Ich bin gleich fertig. · Ich bin noch nicht fertig!</td></tr>
+      <tr><td>Unterbrechung abwehren</td><td>Lassen Sie mich bitte erst ausreden.</td></tr>
+      <tr><td>Wort übergeben</td><td>Sie sind der Nächste. · Bitte, fahren Sie fort.</td></tr>
+      <tr><td>Zustimmung</td><td>Ich schließe mich dem an.</td></tr>
+    </table>
+  </div>
+
+  <!-- TAB 4: LÜCKENTEXT -->
+  <div class="tab" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Bürokonferenz">
+    <div class="timer-bar">
+      <span>⏱️ Timer</span>
+      <span>
+        <button class="timer-btn start" id="t3start" onclick="timerStart('t3')">▶ Start</button>
+        <button class="timer-btn stop" id="t3stop" onclick="timerStop('t3')" style="display:none">⏹ Stop</button>
+        <button class="timer-btn reset" onclick="timerReset('t3')">↺</button>
+      </span>
+      <span class="timer-display" id="t3disp">00:00</span>
+    </div>
+    <div class="info-box">
+      <strong>Ergänze die fehlenden Wörter in den Lücken.</strong>
+    </div>
+    <div id="lueckeArea">
+      <div class="luecke-item" id="l0">
+        <span class="num">1.</span>
+        <span class="sentence">Warten Sie, ich bin noch nicht <input class="luecke-input" id="l0i" oninput="liveCheck('l0i','fertig','l0')" placeholder="____________">!</span>
+        <span class="feedback-icon" id="l0f"></span>
+      </div>
+      <div class="luecke-item" id="l1">
+        <span class="num">2.</span>
+        <span class="sentence"><input class="luecke-input" id="l1i" oninput="liveCheck('l1i','Nebenbei','l1')" placeholder="____________"> wollte ich noch anmerken, dass ich für Vorschläge offen bin.</span>
+        <span class="feedback-icon" id="l1f"></span>
+      </div>
+      <div class="luecke-item" id="l2">
+        <span class="num">3.</span>
+        <span class="sentence">Einen Moment noch! Ich wollte noch etwas <input class="luecke-input" id="l2i" oninput="liveCheck('l2i','hinzufügen','l2')" placeholder="____________">.</span>
+        <span class="feedback-icon" id="l2f"></span>
+      </div>
+      <div class="luecke-item" id="l3">
+        <span class="num">4.</span>
+        <span class="sentence">Und das ist die <input class="luecke-input" id="l3i" oninput="liveCheck('l3i','andere Sache','l3')" placeholder="____________"> – wir haben leider kein Budget dafür.</span>
+        <span class="feedback-icon" id="l3f"></span>
+      </div>
+      <div class="luecke-item" id="l4">
+        <span class="num">5.</span>
+        <span class="sentence">Da gibt es auch das <input class="luecke-input" id="l4i" oninput="liveCheck('l4i','Problem','l4')" placeholder="____________"> mit den vielen Überstunden.</span>
+        <span class="feedback-icon" id="l4f"></span>
+      </div>
+    </div>
+    <div class="score-bar">Richtig: <span class="score-num" id="lueckeScore">0</span> / 5</div>
+  </div>
+
+  <!-- TAB 5: SATZBAU -->
+  <div class="tab" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Präsentation">
+    <div class="timer-bar">
+      <span>⏱️ Timer</span>
+      <span>
+        <button class="timer-btn start" id="t4start" onclick="timerStart('t4')">▶ Start</button>
+        <button class="timer-btn stop" id="t4stop" onclick="timerStop('t4')" style="display:none">⏹ Stop</button>
+        <button class="timer-btn reset" onclick="timerReset('t4')">↺</button>
+      </span>
+      <span class="timer-display" id="t4disp">00:00</span>
+    </div>
+    <div class="info-box">
+      <strong>Bringe die Wörter in die richtige Reihenfolge.</strong> Ziehe die Chips in das violette Feld.
+    </div>
+    <div id="sbContainer"></div>
+  </div>
+
+  <!-- TAB 6: VOKABELN -->
+  <div class="tab" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Wortschatz lernen">
+    <div class="vocab-train">
+      <div class="vocab-progress" id="vtProg">Karte 1 / 10</div>
+      <div class="vocab-card-big" id="vtWord">–</div>
+      <input class="vocab-input" id="vtInput" placeholder="Deutsch eingeben …" onkeydown="if(event.key==='Enter')vtCheck()">
+      <div class="vocab-result" id="vtResult"></div>
+      <button class="vocab-check-btn" onclick="vtCheck()">✔ Prüfen</button>
+      <button class="vocab-next-btn" onclick="vtNext()">→ Weiter</button>
+      <div style="margin-top:16px; font-size:0.85em; color:#888" id="vtDone" style="display:none"></div>
+    </div>
+  </div>
+
+</div><!-- end container -->
+
+<script>
+// ===================== TAB NAVIGATION =====================
+function showTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===n);});
+  document.querySelectorAll('.nav button').forEach((b,i)=>{b.classList.toggle('active',i===n);});
+}
+
+// ===================== TIMER =====================
+const TIMER_PREFIX = 'best2024X';
+const timers={};
+function timerStart(id){
+  if(timers[id]&&timers[id].running) return;
+  const start=Date.now()-(timers[id]?timers[id].elapsed:0);
+  timers[id]={running:true,elapsed:timers[id]?timers[id].elapsed:0,interval:setInterval(()=>{
+    const e=Date.now()-start; timers[id].elapsed=e;
+    document.getElementById(id+'disp').textContent=fmtTime(e);
+    const stored=localStorage.getItem(TIMER_PREFIX+'_'+id+'_best');
+    if(stored&&e>parseInt(stored)){timerStop(id);}
+  },500)};
+  document.getElementById(id+'start').style.display='none';
+  document.getElementById(id+'stop').style.display='';
+}
+function timerStop(id){
+  if(!timers[id]) return;
+  clearInterval(timers[id].interval); timers[id].running=false;
+  document.getElementById(id+'start').style.display='';
+  document.getElementById(id+'stop').style.display='none';
+  const e=timers[id].elapsed;
+  const k=TIMER_PREFIX+'_'+id+'_best';
+  const prev=localStorage.getItem(k);
+  if(!prev||e<parseInt(prev)){localStorage.setItem(k,e);}
+}
+function timerReset(id){
+  timerStop(id); timers[id]={running:false,elapsed:0};
+  document.getElementById(id+'disp').textContent='00:00';
+}
+function fmtTime(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+
+// ===================== DIALOG CHECK =====================
+const dialogAnswers=['delegieren','Vereinbarung','Zeitplan','unter Kontrolle','zuverlässige','Kompromisse'];
+function checkDialog(){
+  let score=0;
+  ['d1','d2','d3','d4','d5','d6'].forEach((id,i)=>{
+    const v=document.getElementById(id).value.trim();
+    const ok=v.toLowerCase()===dialogAnswers[i].toLowerCase();
+    if(ok) score++;
+    document.getElementById(id).style.borderBottomColor=ok?'#28a745':'#dc3545';
+  });
+  document.getElementById('dialogScore').textContent=score;
+  if(score===6) timerStop('t1');
+}
+function resetDialog(){
+  ['d1','d2','d3','d4','d5','d6'].forEach(id=>{document.getElementById(id).value=''; document.getElementById(id).style.borderBottomColor='#667eea';});
+  document.getElementById('dialogScore').textContent='0';
+}
+
+// ===================== LIVE CHECK (Lückentext) =====================
+const LUECKEN_ANSWERS={
+  'l0i':'fertig','l1i':'Nebenbei','l2i':'hinzufügen','l3i':'andere Sache','l4i':'Problem'
+};
+function liveCheck(inputId, answer, rowId){
+  const v=document.getElementById(inputId).value.trim();
+  const startUpper=answer[0]===answer[0].toUpperCase()&&answer[0]!==answer[0].toLowerCase();
+  const ok=startUpper?(v===answer):(v.toLowerCase()===answer.toLowerCase());
+  const row=document.getElementById(rowId);
+  const icon=document.getElementById(rowId+'f');
+  if(v===''){row.classList.remove('correct','wrong');icon.textContent='';return;}
+  row.classList.toggle('correct',ok);
+  row.classList.toggle('wrong',!ok);
+  icon.textContent=ok?'✅':'';
+  updateLueckeScore();
+  if(allLueckeCorrect()) timerStop('t3');
+}
+function updateLueckeScore(){
+  const answers=['fertig','Nebenbei','hinzufügen','andere Sache','Problem'];
+  const inputs=['l0i','l1i','l2i','l3i','l4i'];
+  let score=0;
+  inputs.forEach((id,i)=>{
+    const v=document.getElementById(id).value.trim();
+    const a=answers[i];
+    const startUpper=a[0]===a[0].toUpperCase()&&a[0]!==a[0].toLowerCase();
+    if(startUpper?v===a:v.toLowerCase()===a.toLowerCase()) score++;
+  });
+  document.getElementById('lueckeScore').textContent=score;
+}
+function allLueckeCorrect(){return parseInt(document.getElementById('lueckeScore').textContent)===5;}
+
+const SATZBAU_DATA = [
+  { words: ['Kann', 'ich', 'etwas', 'dazu', 'sagen', '?'] },
+  { words: ['Lassen', 'Sie', 'mich', 'bitte', 'erst', 'ausreden', '.'] },
+  { words: ['Ich', 'bin', 'noch', 'nicht', 'fertig', '!'] },
+  { words: ['Bitte', 'fahren', 'Sie', 'fort', '.'] },
+  { words: ['Ich', 'schließe', 'mich', 'dem', 'an', ',', 'was', 'gesagt', 'wurde', '.'] },
+  { words: ['Können', 'Sie', 'das', 'näher', 'ausführen', '?'] }
+];
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(1); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(1);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('sbContainer');
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    // Shuffle non-punct words
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    // Chip pool
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(1); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    // Drop zone
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    // Add punct chips to zone as static
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    // Register zone drop + chip-in-zone click returns to pool
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    // Patch: clicking a chip in zone returns it to pool
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(1); }
+
+// ===================== WORTSCHATZ INTERACTIVE =====================
+var WORTSCHATZ = [
+  { type: "n", en: "the interruption", art: "die", wort: "Unterbrechung", plural: "Unterbrechungen" },
+  { type: "v", en: "to make an agreement", de: "eine Vereinbarung treffen" },
+  { type: "v", en: "to delegate", de: "delegieren" },
+  { type: "v", en: "to control the situation", de: "die Situation unter Kontrolle haben" },
+  { type: "v", en: "to reschedule / postpone", de: "einen Termin verschieben" },
+  { type: "n", en: "the compromise", art: "der", wort: "Kompromiss", plural: "Kompromisse" },
+  { type: "v", en: "reliable (adjective)", de: "zuverlässig" },
+  { type: "n", en: "the schedule / timetable", art: "der", wort: "Zeitplan", plural: "Zeitpläne" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    var ok2 = w2 === item.de;
+    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+// ===================== VOCAB TRAINER =====================
+const VOCAB_DATA=[
+  {en:'the interruption',de:'die Unterbrechung'},
+  {en:'to delegate',de:'delegieren'},
+  {en:'the compromise',de:'der Kompromiss'},
+  {en:'reliable',de:'zuverlässig'},
+  {en:'to take the floor / speak up',de:'sich zu Wort melden'},
+  {en:'to hand over the word',de:'das Wort übergeben'},
+  {en:'to continue speaking',de:'die Rede weiterführen'},
+  {en:'schedule / timetable',de:'der Zeitplan'},
+  {en:'to make an agreement',de:'eine Vereinbarung treffen'},
+  {en:'Please carry on.',de:'Bitte, fahren Sie fort.'},
+];
+let vtIdx=0,vtData=[...VOCAB_DATA];
+function vtShuffle(){for(let i=vtData.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[vtData[i],vtData[j]]=[vtData[j],vtData[i]];}}
+vtShuffle();
+function vtShow(){
+  document.getElementById('vtProg').textContent=`Karte ${vtIdx+1} / ${vtData.length}`;
+  document.getElementById('vtWord').textContent=vtData[vtIdx].en;
+  document.getElementById('vtInput').value='';
+  document.getElementById('vtResult').textContent='';
+  document.getElementById('vtInput').focus();
+}
+function vtCheck(){
+  const v=document.getElementById('vtInput').value.trim();
+  const correct=vtData[vtIdx].de;
+  const ok=v.toLowerCase()===correct.toLowerCase();
+  const res=document.getElementById('vtResult');
+  res.textContent=ok?'✅ Richtig!':'❌ '+correct;
+  res.className='vocab-result '+(ok?'ok':'err');
+}
+function vtNext(){vtIdx=(vtIdx+1)%vtData.length;vtShow();}
+vtShow();
+initVocab();
+</script>
+</body>
+</html>

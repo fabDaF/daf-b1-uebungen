@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Was ist Liebe? – B1.2 Lektion 2037X</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #667eea; font-family: Arial, sans-serif; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; }
+  header { background: #667eea; color: #fff; padding: 18px 24px; }
+  header h1 { font-size: 1.3rem; font-weight: bold; }
+  header p { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
+
+  /* NAV */
+  nav { display: flex; flex-direction: column; gap: 0; border-bottom: 2px solid #667eea; }
+  nav button { background: #f3e8ff; color: #667eea; border: 1px solid #667eea; padding: 10px 14px; font-size: 0.88rem; font-weight: bold; cursor: pointer; text-align: left; transition: background 0.2s; }
+  nav button:hover { background: #e0c8f8; }
+  nav button.active { background: #667eea; color: #fff; }
+
+  /* TAB CONTENT */
+  .tab { display: none; padding: 24px; }
+  .tab.active { display: block; }
+
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 18px; }
+
+  /* VOCAB CARDS */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 12px; }
+  .vocab-card { background: #f3e8ff; border: 1px solid #c084fc; border-radius: 8px; padding: 14px; }
+  .vocab-card .word { font-size: 1.05rem; font-weight: bold; color: #667eea; margin-bottom: 4px; }
+  .vocab-card .example { font-size: 0.88rem; color: #444; font-style: italic; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+
+  /* TIMER */
+  .timer-box { background: #f3e8ff; border: 1px solid #c084fc; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .timer-display { font-size: 1.5rem; font-weight: bold; color: #667eea; min-width: 80px; }
+  .timer-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 7px 14px; cursor: pointer; font-size: 0.85rem; }
+  .timer-btn:hover { background: #5a0b9d; }
+  .timer-target { background: #e0c8f8; color: #667eea; border: 1px solid #c084fc; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 0.82rem; font-weight: bold; }
+  .timer-target:hover { background: #c084fc; color: #fff; }
+
+  /* LUECKENTEXT */
+  .luecke-sentence { margin-bottom: 14px; font-size: 1rem; line-height: 1.7; }
+  .luecke-sentence input { border: none; border-bottom: 2px solid #667eea; font-size: 1rem; width: 160px; padding: 2px 4px; color: #222; outline: none; background: transparent; }
+  .luecke-sentence input.correct { border-bottom-color: #16a34a; background: #dcfce7; border-radius: 4px 4px 0 0; }
+  .luecke-sentence input.wrong { border-bottom-color: #dc2626; background: #fee2e2; border-radius: 4px 4px 0 0; }
+  .check-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 9px 22px; cursor: pointer; font-size: 0.9rem; margin-top: 10px; }
+  .check-btn:hover { background: #5a0b9d; }
+  .luecke-feedback { margin-top: 12px; font-weight: bold; font-size: 0.95rem; }
+  .luecke-feedback.ok { color: #16a34a; }
+  .luecke-feedback.partial { color: #d97706; }
+
+  /* SATZBAU */
+  .sb-task { margin-bottom: 28px; }
+  .sb-label { font-size: 0.85rem; color: #888; margin-bottom: 6px; }
+  .sb-chips-pool { display: flex; flex-wrap: wrap; gap: 8px; min-height: 42px; background: #faf5ff; border: 1px dashed #c084fc; border-radius: 8px; padding: 8px; margin-bottom: 8px; }
+  .sb-drop-zone { display: flex; flex-wrap: wrap; gap: 8px; min-height: 42px; background: #f3e8ff; border: 2px solid #667eea; border-radius: 8px; padding: 8px; }
+  .sb-chip { background: #667eea; color: #fff; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.9rem; user-select: none; }
+  .sb-chip:active { cursor: grabbing; }
+  .sb-chip.in-drop { background: #5a0b9d; }
+  .sb-feedback { font-size: 0.88rem; margin-top: 4px; min-height: 20px; }
+  .sb-feedback.ok { color: #16a34a; font-weight: bold; }
+  .sb-feedback.wrong { color: #dc2626; }
+
+  /* VOKABELN */
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; margin-top: 10px; }
+  th { background: #667eea; color: #fff; padding: 9px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e9d5ff; }
+  tr:nth-child(even) td { background: #faf5ff; }
+
+  /* FOOTER */
+  footer { text-align: center; font-size: 0.75rem; color: #aaa; padding: 14px; border-top: 1px solid #e9d5ff; margin-top: 10px; }
+
+  /* RESULT */
+  .result-bar { background: #f3e8ff; border-radius: 8px; padding: 10px 16px; margin-top: 16px; font-size: 0.95rem; color: #667eea; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Was ist Liebe? 💕</h1>
+    <p>B1.2 · Lektion 2037X · Kommunikation</p>
+  </header>
+
+  <nav id="mainNav">
+    <button class="active" onclick="showTab(0)">💑 Liebe &amp; Beziehungen</button>
+    <button onclick="showTab(1)">💬 Dates</button>
+    <button onclick="showTab(2)">💔 Beziehungsprobleme</button>
+    <button onclick="showTab(3)">✏️ Lückentext</button>
+    <button onclick="showTab(4)">🔀 Satzbau</button>
+    <button onclick="showTab(5)">📋 Wortschatz</button>
+  </nav>
+
+  <!-- TAB 0: Liebe & Beziehungen -->
+  <div class="tab active" id="tab0">
+    <img src="https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Liebe" class="tab-banner">
+    <h2 style="color:#667eea;margin-bottom:16px;">💑 Liebe &amp; Beziehungen</h2>
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <div class="word">persönliche Beziehungen</div>
+        <div class="example">Jeder hat viele verschiedene persönliche Beziehungen.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">der/die Seelenverwandte</div>
+        <div class="example">Meine beste Freundin ist meine Seelenverwandte.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">die wahre Liebe</div>
+        <div class="example">Ich habe endlich die wahre Liebe gefunden.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">die bessere Hälfte</div>
+        <div class="example">Sie ist definitiv meine bessere Hälfte.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">die Fernbeziehung</div>
+        <div class="example">Er führt eine Fernbeziehung.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">anziehen (jdn. anziehen)</div>
+        <div class="example">Von Anfang an hat mich ihre Art magisch angezogen.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">fesseln</div>
+        <div class="example">Von Anfang an haben mich ihre Haare gefesselt.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: Dates -->
+  <div class="tab" id="tab1">
+    <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Dates" class="tab-banner">
+    <h2 style="color:#667eea;margin-bottom:16px;">💬 Dates</h2>
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <div class="word">flirten / der Flirt</div>
+        <div class="example">Johannes flirtet wirklich heftig mit mir.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">daten / das Date</div>
+        <div class="example">Ich will ihn nicht daten.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">das erste Date</div>
+        <div class="example">Ich weiß nicht, was ich beim ersten Date anziehen soll.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">das Blind Date</div>
+        <div class="example">Ich habe heute ein Blind Date im Museum.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">Liebe auf den ersten Blick</div>
+        <div class="example">Mit meinem neuen Freund war es Liebe auf den ersten Blick.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">anziehend</div>
+        <div class="example">Ich finde aufmerksame Männer sehr anziehend.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Beziehungsprobleme -->
+  <div class="tab" id="tab2">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Beziehungsprobleme" class="tab-banner">
+    <h2 style="color:#667eea;margin-bottom:16px;">💔 Beziehungsprobleme</h2>
+    <div class="vocab-grid">
+      <div class="vocab-card">
+        <div class="word">die Polyamorie</div>
+        <div class="example">Polyamor zu leben bedeutet, mehrere Menschen gleichzeitig zu lieben.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">das gebrochene Herz</div>
+        <div class="example">Er hat ihr das Herz gebrochen.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">untröstlich</div>
+        <div class="example">Sie ist untröstlich, denn sie waren verlobt.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">der Liebhaber / die Geliebte</div>
+        <div class="example">Seit einigen Wochen hat er heimlich eine Geliebte.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">der Seitensprung</div>
+        <div class="example">Er hat ihr seinen Seitensprung gebeichtet.</div>
+      </div>
+      <div class="vocab-card">
+        <div class="word">trösten</div>
+        <div class="example">Ich kann meine beste Freundin gerade nicht trösten.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Lückentext -->
+  <div class="tab" id="tab3">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Lückentext" class="tab-banner">
+    <h2 style="color:#667eea;margin-bottom:16px;">✏️ Lückentext – Was ist Liebe?</h2>
+
+    <div class="timer-box">
+      <span class="timer-display" id="best2037X_L_display">00:00</span>
+      <button class="timer-btn" onclick="timerStart('best2037X_L')">▶ Start</button>
+      <button class="timer-btn" onclick="timerStop('best2037X_L')">⏸ Stopp</button>
+      <button class="timer-btn" onclick="timerReset('best2037X_L')">↺ Reset</button>
+      <button class="timer-target" onclick="timerSetTarget('best2037X_L',3)">Ziel: 3 Min</button>
+      <button class="timer-target" onclick="timerSetTarget('best2037X_L',5)">Ziel: 5 Min</button>
+    </div>
+
+    <p style="font-size:0.88rem;color:#666;margin-bottom:16px;">Fülle die Lücken mit dem richtigen Wort aus dem Kasten.</p>
+
+    <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:8px;padding:12px 16px;margin-bottom:18px;font-size:0.88rem;">
+      <strong>Wortkasten:</strong> Seelenverwandte · Fernbeziehung · wahre Liebe · bessere Hälfte · anziehend · gefesselt · Blind Date · Seitensprung · untröstlich · Polyamorie
+    </div>
+
+    <div id="lueckeContainer"></div>
+    <button class="check-btn" onclick="checkAll()">✔ Alle prüfen</button>
+    <div class="luecke-feedback" id="lueckeFeedback"></div>
+  </div>
+
+  <!-- TAB 4: Satzbau -->
+  <div class="tab" id="tab4">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Satzbau" class="tab-banner">
+    <h2 style="color:#667eea;margin-bottom:16px;">🔀 Satzbau – Sätze über Liebe</h2>
+
+    <div class="timer-box">
+      <span class="timer-display" id="best2037X_S_display">00:00</span>
+      <button class="timer-btn" onclick="timerStart('best2037X_S')">▶ Start</button>
+      <button class="timer-btn" onclick="timerStop('best2037X_S')">⏸ Stopp</button>
+      <button class="timer-btn" onclick="timerReset('best2037X_S')">↺ Reset</button>
+      <button class="timer-target" onclick="timerSetTarget('best2037X_S',4)">Ziel: 4 Min</button>
+      <button class="timer-target" onclick="timerSetTarget('best2037X_S',6)">Ziel: 6 Min</button>
+    </div>
+
+    <p style="font-size:0.88rem;color:#666;margin-bottom:16px;">Bringe die Chips in die richtige Reihenfolge, um den Satz zu bilden.</p>
+
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <!-- TAB 5: Vokabeln -->
+  <div class="tab" id="tab5">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&h=180" alt="Wortschatz" class="tab-banner">
+    <h2 style="color:#667eea;margin-bottom:16px;">🔤 Wortschatz</h2>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+  </div>
+
+  <footer>
+    Erstellt von <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com" style="color:#667eea;">FrankBurkert@fabdaf.onmicrosoft.com</a> · B1.2 · 2037X · Was ist Liebe?
+  </footer>
+</div>
+
+<script>
+// ── TAB NAVIGATION ─────────────────────────────────────
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('#mainNav button').forEach((b,i) => b.classList.toggle('active', i===idx));
+}
+
+// ── WORTSCHATZ INTERACTIVE ────────────────────────────────
+var WORTSCHATZ = [
+  { type: "v", en: "personal relationships", de: "persönliche Beziehungen" },
+  { type: "n", en: "soulmate", art: "der/die", wort: "Seelenverwandte", plural: "Seelenverwandten" },
+  { type: "v", en: "true love", de: "die wahre Liebe" },
+  { type: "v", en: "better half", de: "die bessere Hälfte" },
+  { type: "n", en: "long-distance relationship", art: "die", wort: "Fernbeziehung", plural: "Fernbeziehungen" },
+  { type: "v", en: "to attract / attractive", de: "anziehen / anziehend" },
+  { type: "v", en: "to captivate, to fascinate", de: "fesseln" },
+  { type: "v", en: "to flirt / flirtation", de: "flirten / der Flirt" },
+  { type: "v", en: "to date / a date", de: "daten / das Date" },
+  { type: "n", en: "blind date", art: "das", wort: "Blind Date", plural: "Blind Dates" },
+  { type: "v", en: "love at first sight", de: "Liebe auf den ersten Blick" },
+  { type: "n", en: "polyamory", art: "die", wort: "Polyamorie", plural: "Polyamories" },
+  { type: "v", en: "broken heart", de: "das gebrochene Herz" },
+  { type: "v", en: "inconsolable", de: "untröstlich" },
+  { type: "v", en: "lover / mistress", de: "der Liebhaber / die Geliebte" },
+  { type: "n", en: "affair, infidelity", art: "der", wort: "Seitensprung", plural: "Seitensprünge" },
+  { type: "v", en: "to comfort, to console", de: "trösten" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    var ok2 = w2 === item.de;
+    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+// ── TIMER ENGINE ────────────────────────────────────────
+const timers = {};
+function _timerKey(id){ return id; }
+function timerStart(id){
+  if(timers[id] && timers[id].running) return;
+  if(!timers[id]) timers[id] = {elapsed:0, target:0, running:false, interval:null};
+  timers[id].running = true;
+  timers[id].interval = setInterval(()=>{
+    timers[id].elapsed++;
+    _timerUpdateDisplay(id);
+    if(timers[id].target>0 && timers[id].elapsed>=timers[id].target){
+      timerStop(id);
+    }
+  },1000);
+}
+function timerStop(id){
+  if(!timers[id]) return;
+  timers[id].running=false;
+  clearInterval(timers[id].interval);
+}
+function timerReset(id){
+  timerStop(id);
+  if(timers[id]) timers[id].elapsed=0;
+  _timerUpdateDisplay(id);
+}
+function timerSetTarget(id, minutes){
+  if(!timers[id]) timers[id]={elapsed:0,target:0,running:false,interval:null};
+  timers[id].target = minutes*60;
+}
+function _timerUpdateDisplay(id){
+  const el = document.getElementById(id+'_display');
+  if(!el) return;
+  const t = timers[id] ? timers[id].elapsed : 0;
+  const m = String(Math.floor(t/60)).padStart(2,'0');
+  const s = String(t%60).padStart(2,'0');
+  el.textContent = m+':'+s;
+}
+function autoStopIfDone(timerId, inputClass){
+  const inputs = document.querySelectorAll('.'+inputClass);
+  const allDone = [...inputs].every(i=>i.classList.contains('correct'));
+  if(allDone && timers[timerId] && timers[timerId].running) timerStop(timerId);
+}
+
+// ── LUECKENTEXT DATA ────────────────────────────────────
+const LUECKEN_DATA = [
+  { pre: 'Meine beste Freundin ist meine', answer: 'Seelenverwandte', post: '– wir verstehen uns ohne Worte.' },
+  { pre: 'Sie führt seit zwei Jahren eine', answer: 'Fernbeziehung', post: 'mit einem Mann in Kanada.' },
+  { pre: 'Er glaubt, dass er endlich die', answer: 'wahre Liebe', post: 'gefunden hat.' },
+  { pre: 'Mein Mann ist meine', answer: 'bessere Hälfte', post: '– ohne ihn kann ich mir das Leben nicht vorstellen.' },
+  { pre: 'Ich finde es sehr', answer: 'anziehend', post: 'wenn jemand gut zuhören kann.' },
+  { pre: 'Von Anfang an war ich von ihrer Stimme total', answer: 'gefesselt', post: '.' },
+  { pre: 'Heute Abend habe ich ein', answer: 'Blind Date', post: '– ich bin sehr aufgeregt!' },
+  { pre: 'Sie hat ihren Mann verlassen, nachdem sie von seinem', answer: 'Seitensprung', post: 'erfahren hat.' },
+  { pre: 'Nach der Trennung war sie wochenlang', answer: 'untröstlich', post: '.' },
+  { pre: 'Er lebt nach den Prinzipien der', answer: 'Polyamorie', post: 'und hat mehrere Liebesbeziehungen gleichzeitig.' },
+];
+
+function buildLueckentext(){
+  const c = document.getElementById('lueckeContainer');
+  c.innerHTML = '';
+  LUECKEN_DATA.forEach((item,i)=>{
+    const div = document.createElement('div');
+    div.className = 'luecke-sentence';
+    div.innerHTML = `<span>${item.pre} </span><input type="text" id="inp_${i}" placeholder="…" oninput="liveCheck(${i})"><span> ${item.post}</span>`;
+    c.appendChild(div);
+  });
+}
+
+function liveCheck(i){
+  const inp = document.getElementById('inp_'+i);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[i].answer;
+  // case-sensitive only if answer starts uppercase
+  const match = (ans[0]===ans[0].toUpperCase()) ? (val === ans) : (val.toLowerCase() === ans.toLowerCase());
+  if(match){
+    inp.classList.add('correct'); inp.classList.remove('wrong');
+    autoStopIfDone('best2037X_L', 'luecke-sentence input');
+  } else {
+    inp.classList.remove('correct','wrong');
+  }
+}
+
+function checkAll(){
+  let correct = 0;
+  LUECKEN_DATA.forEach((item,i)=>{
+    const inp = document.getElementById('inp_'+i);
+    const val = inp.value.trim();
+    const ans = item.answer;
+    const match = (ans[0]===ans[0].toUpperCase()) ? (val===ans) : (val.toLowerCase()===ans.toLowerCase());
+    if(match){ inp.classList.add('correct'); inp.classList.remove('wrong'); correct++; }
+    else { inp.classList.add('wrong'); inp.classList.remove('correct'); }
+  });
+  const fb = document.getElementById('lueckeFeedback');
+  if(correct===LUECKEN_DATA.length){
+    fb.textContent = '🎉 Alle Antworten richtig!'; fb.className='luecke-feedback ok';
+    autoStopIfDone('best2037X_L','luecke-sentence input');
+  } else {
+    fb.textContent = correct+' von '+LUECKEN_DATA.length+' richtig – versuch es noch einmal!';
+    fb.className='luecke-feedback partial';
+  }
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Meine', 'Freundin', 'ist', 'meine', 'Seelenverwandte'] },
+  { words: ['Er', 'führt', 'seit', 'Jahren', 'eine', 'Fernbeziehung'] },
+  { words: ['Sie', 'haben', 'sich', 'auf', 'einem', 'Blind', 'Date', 'kennengelernt'] },
+  { words: ['Er', 'hat', 'ihr', 'seinen', 'Seitensprung', 'gebeichtet'] },
+  { words: ['Ich', 'finde', 'aufmerksame', 'Menschen', 'sehr', 'anziehend'] },
+  { words: ['Sie', 'ist', 'untröstlich', 'nach', 'der', 'Trennung'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// ── INIT ────────────────────────────────────────────────
+buildLueckentext();
+buildSatzbau();
+initVocab();
+</script>
+</body>
+</html>

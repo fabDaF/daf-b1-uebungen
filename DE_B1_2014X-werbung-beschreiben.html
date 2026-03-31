@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Werbung beschreiben – B1.2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* TAB BANNER */
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 0; margin-bottom: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: block; }
+
+/* PADDING */
+.tab-content { padding: 28px 32px 32px 32px; }
+@media (max-width: 600px) { .tab-content { padding: 16px; } }
+
+/* HILFE-BOX */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+
+/* SEKTION-TITEL */
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* VOKABEL-KARTEN MINDMAP-STYLE */
+.vocab-mindmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.vocab-mindmap-center { grid-column: 1 / -1; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; padding: 18px 24px; text-align: center; font-size: 1.3em; font-weight: 700; margin-bottom: 6px; }
+.vk { background: #f3effd; border: 1.5px solid #c5b8e8; border-radius: 12px; padding: 14px 16px; border-left: 4px solid #667eea; }
+.vk .art { font-size: 0.78em; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.vk .wort { font-size: 1.1em; font-weight: 700; color: #5a3e9e; margin-bottom: 4px; }
+.vk .def { font-size: 0.82em; color: #555; line-height: 1.45; }
+
+/* WERBETYPEN KARTEN */
+.werbetyp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.wt-karte { background: #f8f9ff; border: 1.5px solid #e0daf5; border-radius: 12px; padding: 16px 18px; border-left: 4px solid #667eea; }
+.wt-karte .wt-name { font-size: 1.0em; font-weight: 700; color: #5a3e9e; margin-bottom: 6px; }
+.wt-karte .wt-def { font-size: 0.85em; color: #555; line-height: 1.5; }
+
+/* AIDA TABELLE */
+.aida-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.9em; }
+.aida-table th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 14px; text-align: left; }
+.aida-table td { padding: 10px 14px; border-bottom: 1px solid #e8e4f5; vertical-align: top; }
+.aida-table tr:nth-child(even) td { background: #f8f5ff; }
+.aida-letter { font-size: 1.8em; font-weight: 900; color: #667eea; line-height: 1; }
+
+/* LÜCKENTEXT */
+.luecke-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 0.93em; line-height: 1.9; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.93em; font-family: inherit; outline: none; transition: all 0.2s; min-width: 100px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* ZUORDNUNG */
+.match-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+@media (max-width: 600px) { .match-layout { grid-template-columns: 1fr; } }
+.match-col h4 { background: #ede9f8; color: #5a3e9e; border: 1px solid #d0c8f0; border-bottom: none; border-radius: 8px 8px 0 0; padding: 8px 12px; font-size: 0.88em; }
+.drop-zone { min-height: 100px; border-radius: 0 0 8px 8px; border: 1px solid #d0c8f0; background: #faf9ff; padding: 10px; transition: background 0.2s; display: flex; flex-direction: column; gap: 6px; }
+.drop-zone.drag-over { background: #ede8ff; border-color: #667eea; }
+.term-card { background: white; border: 1.5px solid #c5b8e8; border-radius: 8px; padding: 8px 12px; font-size: 0.85em; font-weight: 600; color: #5a3e9e; cursor: grab; user-select: none; transition: all 0.2s; }
+.term-card:hover { background: #f0ecff; transform: translateY(-1px); }
+.term-card.dragging { opacity: 0.5; }
+.term-card.matched { background: #e8f8f0; border-color: #27ae60; color: #27ae60; cursor: default; }
+.term-card.error { background: #fdeaea; border-color: #e74c3c; color: #e74c3c; animation: shake 0.4s; }
+.desc-card { background: #f8f9ff; border: 1.5px solid #e0daf5; border-radius: 8px; padding: 9px 12px; font-size: 0.83em; color: #444; line-height: 1.45; cursor: pointer; transition: all 0.2s; }
+.desc-card:hover { background: #ede8ff; border-color: #c5b8e8; }
+.desc-card.selected { background: #e8e0ff; border-color: #667eea; }
+.desc-card.matched { background: #e8f8f0; border-color: #27ae60; cursor: default; }
+.desc-card.error { background: #fdeaea; border-color: #e74c3c; animation: shake 0.4s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 60%{transform:translateX(6px)} }
+.match-feedback { margin-top: 14px; font-size: 0.9em; font-weight: 600; color: #27ae60; min-height: 22px; }
+
+/* SATZBAU */
+.sb-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.sb-prompt { font-size: 0.85em; color: #666; margin-bottom: 8px; font-style: italic; }
+.sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; min-height: 36px; }
+.sb-chip { background: #667eea; color: white; border-radius: 20px; padding: 5px 13px; font-size: 0.85em; font-weight: 600; cursor: grab; user-select: none; transition: all 0.2s; }
+.sb-chip:hover { background: #764ba2; transform: translateY(-1px); }
+.sb-chip.dragging { opacity: 0.45; }
+.sb-chip.static-chip { background: #9e9e9e; cursor: default; }
+.sb-drop { display: flex; flex-wrap: wrap; gap: 6px; min-height: 42px; background: #f0eeff; border: 2px dashed #c5b8e8; border-radius: 8px; padding: 6px 10px; transition: background 0.2s; }
+.sb-drop.drag-over { background: #e0d8ff; border-color: #667eea; }
+.sb-drop .sb-chip { cursor: grab; }
+.sb-feedback { font-size: 0.82em; margin-top: 6px; font-weight: 600; min-height: 18px; }
+.sb-feedback.ok { color: #27ae60; }
+.sb-feedback.err { color: #e74c3c; }
+
+/* TIMER */
+.timer-bar { display: flex; align-items: center; gap: 12px; background: #f8f5ff; border: 1px solid #e0daf5; border-radius: 8px; padding: 8px 14px; margin-bottom: 18px; }
+.timer-display { font-size: 1.1em; font-weight: 700; color: #667eea; min-width: 58px; font-variant-numeric: tabular-nums; }
+.timer-btn { background: #667eea; color: white; border: none; border-radius: 6px; padding: 5px 12px; font-size: 0.82em; cursor: pointer; font-weight: 600; }
+.timer-btn:hover { background: #764ba2; }
+.best-time { font-size: 0.78em; color: #888; margin-left: auto; }
+
+/* WORTSCHATZ TRAINING */
+.ws-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ws-en { font-size: 0.92em; color: #666; min-width: 160px; font-style: italic; }
+.ws-fields { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+input.ws-input { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 7px; font-size: 0.88em; font-family: inherit; outline: none; transition: all 0.2s; }
+input.ws-input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.ws-input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.ws-input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.ws-hint { font-size: 0.75em; color: #aaa; }
+.ws-score { font-size: 0.88em; color: #667eea; font-weight: 700; margin-left: auto; }
+.pruef-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95em; font-weight: 700; cursor: pointer; margin-top: 12px; }
+.pruef-btn:hover { opacity: 0.9; }
+.reset-btn { background: #f0f4ff; color: #667eea; border: 1.5px solid #667eea; border-radius: 8px; padding: 10px 20px; font-size: 0.9em; font-weight: 600; cursor: pointer; margin-top: 12px; margin-left: 8px; }
+.reset-btn:hover { background: #e0e7ff; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Werbung beschreiben</h1>
+    <p>B1.2 · Einheit 1 · Kommunikation</p>
+    <span class="big-emoji">📢</span>
+  </div>
+  <div class="nav">
+    <div class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">📖</span><span class="nav-label">Wortschatz</span></div>
+    <div class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">🎯</span><span class="nav-label">Werbetypen</span></div>
+    <div class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">🔗</span><span class="nav-label">Zuordnung</span></div>
+    <div class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🌟</span><span class="nav-label">Wortschatz</span></div>
+  </div>
+
+  <!-- TAB 0: WORTSCHATZ MINDMAP -->
+  <div class="section active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Werbung beschreiben">
+    <div class="tab-content">
+      <div class="hilfe-box">Der Marketingbereich ist sehr breit. <strong>Werbung beschreiben</strong> heißt: die Art, die Zielgruppe und die Botschaft einer Werbung analysieren und beurteilen.</div>
+      <div class="section-title">Schlüsselvokabular</div>
+      <div class="vocab-mindmap">
+        <div class="vocab-mindmap-center">💡 Werbung beschreiben</div>
+        <div class="vk"><div class="art">die / –</div><div class="wort">Marktforschung</div><div class="def">Analyse des Marktes und der Zielgruppe vor der Werbeerstellung</div></div>
+        <div class="vk"><div class="art">der / -en</div><div class="wort">Werbetyp</div><div class="def">Art und Form der Werbung (z.B. digital, Print, TV)</div></div>
+        <div class="vk"><div class="art">die / -en</div><div class="wort">Zielgruppe</div><div class="def">Gruppe von Menschen, die eine Werbung ansprechen soll</div></div>
+        <div class="vk"><div class="art">das / -e</div><div class="wort">AIDA-Konzept</div><div class="def">Marketingmodell: Attention, Interest, Desire, Action</div></div>
+        <div class="vk"><div class="art">die / -en</div><div class="wort">Werbebotschaft</div><div class="def">Die zentrale Aussage einer Werbung</div></div>
+        <div class="vk"><div class="art">die / –</div><div class="wort">Schleichwerbung</div><div class="def">Versteckte Werbung, die nicht klar als solche erkennbar ist</div></div>
+        <div class="vk"><div class="art">die / -en</div><div class="wort">Anzeige</div><div class="def">Werbeanzeige in Print oder online</div></div>
+        <div class="vk"><div class="art">der / -s</div><div class="wort">Werbespot</div><div class="def">Kurzer Werbefilm, z.B. im TV oder online</div></div>
+        <div class="vk"><div class="art">adj.</div><div class="wort">irreführend</div><div class="def">Täuschend, nicht der Wahrheit entsprechend</div></div>
+        <div class="vk"><div class="art">adj.</div><div class="wort">verantwortungsvoll</div><div class="def">Allen gesetzlichen Normen entsprechend; seriös</div></div>
+        <div class="vk"><div class="art">adj.</div><div class="wort">gezielt</div><div class="def">Auf eine bestimmte Gruppe ausgerichtet</div></div>
+        <div class="vk"><div class="art">adj.</div><div class="wort">personalisiert</div><div class="def">Individuell auf eine Person zugeschnitten</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: WERBETYPEN + AIDA -->
+  <div class="section" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Werbetypen">
+    <div class="tab-content">
+      <div class="section-title">Werbetypen im Überblick</div>
+      <div class="hilfe-box">Vor der Werbeerstellung muss man viel <strong>Marktforschung</strong> durchführen, um zu entscheiden, welcher <strong>Werbetyp</strong> am besten passt.</div>
+      <div class="werbetyp-grid">
+        <div class="wt-karte"><div class="wt-name">🌐 Die digitale Werbung</div><div class="wt-def">Werbung im Internet — auf Websites, in sozialen Netzwerken und in Apps.</div></div>
+        <div class="wt-karte"><div class="wt-name">🎯 Die gezielte Werbung</div><div class="wt-def">Anzeigen und Werbespots, die nur von potenziellen Kunden gesehen werden sollen.</div></div>
+        <div class="wt-karte"><div class="wt-name">👤 Die personalisierte Werbung</div><div class="wt-def">Werbung, die individuell auf eine bestimmte Person zugeschnitten ist.</div></div>
+        <div class="wt-karte"><div class="wt-name">💻 Die Online-Werbung</div><div class="wt-def">Banner, Pop-ups, Videos und gesponserte Beiträge im digitalen Raum.</div></div>
+        <div class="wt-karte"><div class="wt-name">🎭 Die Schleichwerbung</div><div class="wt-def">Versteckte Werbung — die Werbebotschaft ist nicht klar und eindeutig erkennbar.</div></div>
+        <div class="wt-karte"><div class="wt-name">⚠️ Die irreführende Werbung</div><div class="wt-def">Werbung, die falsche Informationen enthält oder den Verbraucher täuscht.</div></div>
+        <div class="wt-karte"><div class="wt-name">✅ Die verantwortungsvolle Werbung</div><div class="wt-def">Werbung, die allen gesetzlichen Normen in vollem Maße entspricht.</div></div>
+      </div>
+
+      <div class="section-title">Das AIDA-Konzept</div>
+      <div class="hilfe-box">Das <strong>AIDA-Modell</strong> beschreibt die 4 Phasen einer wirksamen Werbung.</div>
+      <table class="aida-table">
+        <tr><th>Buchstabe</th><th>Begriff</th><th>Bedeutung</th><th>Beispiel</th></tr>
+        <tr><td><div class="aida-letter">A</div></td><td><strong>Attention</strong> (Aufmerksamkeit)</td><td>Die Werbung erregt die Aufmerksamkeit des Kunden</td><td>Auffälliges Bild, starke Farben</td></tr>
+        <tr><td><div class="aida-letter">I</div></td><td><strong>Interest</strong> (Interesse)</td><td>Das Interesse des Kunden wird geweckt</td><td>Spannende Produktbeschreibung</td></tr>
+        <tr><td><div class="aida-letter">D</div></td><td><strong>Desire</strong> (Verlangen)</td><td>Der Wunsch, das Produkt zu besitzen, wird erzeugt</td><td>Emotionale Appelle, Rabatte</td></tr>
+        <tr><td><div class="aida-letter">A</div></td><td><strong>Action</strong> (Handlung)</td><td>Der Kunde wird zur Kaufhandlung aufgerufen</td><td>„Jetzt kaufen!", „Angebot sichern"</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="section" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6476808/pexels-photo-6476808.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Lückentext">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td2">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(2)">↺</button>
+        <span class="best-time" id="bt2"></span>
+      </div>
+      <div class="hilfe-box">Fülle die Lücken mit dem richtigen Wort aus. Die Wörter stehen im Kasten.</div>
+      <div class="wortkasten">📦 <strong>Wortkasten:</strong> Marktforschung · Zielgruppe · Werbespot · Schleichwerbung · AIDA-Konzept · Aufmerksamkeit · personalisierte · verantwortungsvolle · Werbetyp · irreführende</div>
+      <div id="luecken-container"></div>
+      <button class="reset-btn" onclick="resetLuecken()">↺ Zurücksetzen</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: ZUORDNUNG -->
+  <div class="section" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Zuordnung">
+    <div class="tab-content">
+      <div class="hilfe-box">Ordne jeden Begriff der richtigen Beschreibung zu. Klicke zuerst auf einen Begriff, dann auf die passende Erklärung.</div>
+      <div id="match-container"></div>
+      <div class="match-feedback" id="match-feedback"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Satzbau">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td4">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(4)">↺</button>
+        <span class="best-time" id="bt4"></span>
+      </div>
+      <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge. Ziehe die Chips in das Feld darunter.</div>
+      <div id="sb-container"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="section" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Vokabeln">
+    <div class="tab-content">
+      <div class="timer-bar">
+        <span>⏱</span>
+        <span class="timer-display" id="td5">0:00</span>
+        <button class="timer-btn" onclick="resetTimer(5)">↺</button>
+        <span class="best-time" id="bt5"></span>
+      </div>
+      <div class="hilfe-box">Tippe den deutschen Artikel und das Wort (sowie den Plural wenn angegeben). Groß-/Kleinschreibung bei Artikel und Wort beachten!</div>
+      <div id="ws-container"></div>
+      <button class="pruef-btn" onclick="vocabLiveCheck()">✔ Prüfen</button>
+      <button class="reset-btn" onclick="wsReset()">↺ Zurücksetzen</button>
+      <div style="margin-top:12px; font-size:0.9em; color:#667eea; font-weight:700;" id="ws-score"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── TAB NAVIGATION ──────────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  if (n===2 && !timers[2].started) timerAutoStart(2);
+  if (n===4 && !timers[4].started) timerAutoStart(4);
+  if (n===5 && !timers[5].started) timerAutoStart(5);
+}
+
+// ── TIMER ────────────────────────────────────────────────────────
+const TIMER_PREFIX = 'best2014X';
+const timers = {};
+[2,4,5].forEach(n => { timers[n] = { s:0, iv:null, started:false }; });
+function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
+function startTimer(n){
+  if(timers[n].iv) return;
+  timers[n].iv = setInterval(()=>{ timers[n].s++; document.getElementById('td'+n).textContent=fmtTime(timers[n].s); },1000);
+}
+function stopTimer(n){
+  clearInterval(timers[n].iv); timers[n].iv=null;
+  const key=TIMER_PREFIX+'_t'+n;
+  const best=parseInt(localStorage.getItem(key)||'99999');
+  if(timers[n].s>0 && timers[n].s<best){ localStorage.setItem(key,timers[n].s); showBest(n,timers[n].s); }
+  else showBest(n,best);
+}
+function resetTimer(n){
+  clearInterval(timers[n].iv); timers[n].iv=null; timers[n].s=0; timers[n].started=false;
+  document.getElementById('td'+n).textContent='0:00';
+  startTimer(n); timers[n].started=true;
+}
+function showBest(n,s){ const el=document.getElementById('bt'+n); if(el&&s<99999) el.textContent='Best: '+fmtTime(s); }
+function loadBestTimes(){ [2,4,5].forEach(n=>{ const v=localStorage.getItem(TIMER_PREFIX+'_t'+n); if(v) showBest(n,parseInt(v)); }); }
+function timerAutoStart(n){ startTimer(n); timers[n].started=true; }
+
+// ── LÜCKENTEXT ───────────────────────────────────────────────────
+const LUECKEN_DATA = [
+  { pre:'Vor der Werbeerstellung muss man viel ', blank:'Marktforschung', post:' durchführen, um den Markt zu verstehen.' },
+  { pre:'Die ', blank:'Zielgruppe', post:' ist die Gruppe von Menschen, die eine Werbung ansprechen soll.' },
+  { pre:'Ein kurzer Werbefilm im Fernsehen heißt ', blank:'Werbespot', post:'.' },
+  { pre:'Das ', blank:'AIDA-Konzept', post:' beschreibt die vier Phasen einer wirksamen Werbung.' },
+  { pre:'', blank:'Schleichwerbung', post:' ist Werbung, deren Botschaft nicht klar und eindeutig ist.' },
+  { pre:'Eine ', blank:'verantwortungsvolle', post:' Werbung entspricht allen gesetzlichen Normen.' },
+  { pre:'Das erste A im AIDA-Modell steht für ', blank:'Aufmerksamkeit', post:'.' },
+  { pre:'Bei einer ', blank:'personalisierten', post:' Werbung wird die Botschaft individuell auf eine Person zugeschnitten.' },
+  { pre:'Um zu entscheiden, welcher ', blank:'Werbetyp', post:' am besten passt, ist Marktforschung nötig.' },
+  { pre:'Eine ', blank:'irreführende', post:' Werbung enthält falsche Informationen und täuscht den Verbraucher.' },
+];
+
+function buildLuecken(){
+  const c=document.getElementById('luecken-container'); c.innerHTML='';
+  LUECKEN_DATA.forEach((d,i)=>{
+    const div=document.createElement('div'); div.className='luecke-item';
+    div.innerHTML=d.pre+'<input class="blank" id="lb'+i+'" type="text" autocomplete="off" oninput="liveCheck('+i+')" placeholder="…">'+d.post;
+    c.appendChild(div);
+  });
+}
+function liveCheck(i){
+  const inp=document.getElementById('lb'+i);
+  const ans=LUECKEN_DATA[i].blank;
+  const v=inp.value;
+  if(!v){ inp.className='blank'; return; }
+  const caseSensitive = ans[0]===ans[0].toUpperCase() && ans[0]!==ans[0].toLowerCase();
+  const match = caseSensitive ? ans.startsWith(v) : ans.toLowerCase().startsWith(v.toLowerCase());
+  if(ans===v || (!caseSensitive && ans.toLowerCase()===v.toLowerCase())){
+    inp.className='blank correct';
+    if(!document.getElementById('lh'+i)){
+      const sp=document.createElement('span'); sp.className='correction-hint'; sp.id='lh'+i; sp.textContent='✓';
+      inp.parentNode.insertBefore(sp,inp.nextSibling);
+    }
+    if(!timers[2].iv) stopTimer(2);
+  } else {
+    inp.className='blank'+(match?' ':' wrong');
+  }
+}
+function resetLuecken(){ buildLuecken(); }
+
+// ── ZUORDNUNG ────────────────────────────────────────────────────
+const MATCH_DATA = [
+  { term:'das AIDA-Konzept',         desc:'Marketingmodell mit 4 Phasen: Attention, Interest, Desire, Action' },
+  { term:'die Schleichwerbung',      desc:'Werbung, bei der die Botschaft nicht klar erkennbar ist' },
+  { term:'die Zielgruppe',           desc:'Gruppe von Menschen, die eine Werbung ansprechen soll' },
+  { term:'die Marktforschung',       desc:'Analyse des Marktes vor der Werbeerstellung' },
+  { term:'die digitale Werbung',     desc:'Werbung im Internet, in sozialen Netzwerken und Apps' },
+  { term:'die irreführende Werbung', desc:'Werbung, die falsche Informationen enthält und täuscht' },
+  { term:'die gezielte Werbung',     desc:'Anzeigen, die nur potenzielle Kunden sehen sollen' },
+  { term:'der Werbespot',            desc:'Kurzer Werbefilm im Fernsehen oder im Internet' },
+  { term:'verantwortungsvolle W.',   desc:'Werbung, die allen gesetzlichen Normen entspricht' },
+  { term:'die Werbebotschaft',       desc:'Die zentrale Aussage und Kernaussage einer Werbung' },
+];
+
+let matchSelected = null;
+let matchSolved = 0;
+
+function shuffleArr(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function buildMatch(){
+  const c=document.getElementById('match-container'); c.innerHTML='';
+  const layout=document.createElement('div'); layout.className='match-layout';
+
+  // left: terms shuffled
+  const leftCol=document.createElement('div'); leftCol.className='match-col';
+  const lh=document.createElement('h4'); lh.textContent='Begriff'; leftCol.appendChild(lh);
+  const lz=document.createElement('div'); lz.className='drop-zone'; leftCol.appendChild(lz);
+
+  // right: descriptions shuffled
+  const rightCol=document.createElement('div'); rightCol.className='match-col';
+  const rh=document.createElement('h4'); rh.textContent='Bedeutung'; rightCol.appendChild(rh);
+  const rz=document.createElement('div'); rz.className='drop-zone'; rightCol.appendChild(rz);
+
+  const idxs=MATCH_DATA.map((_,i)=>i);
+  let descIdxs=[...idxs];
+  // shuffle desc with conflict prevention
+  let ok=false;
+  for(let attempt=0;attempt<50&&!ok;attempt++){
+    shuffleArr(descIdxs);
+    ok=descIdxs.every((v,i)=>v!==i);
+  }
+
+  shuffleArr(idxs).forEach(i=>{
+    const tc=document.createElement('div'); tc.className='term-card'; tc.textContent=MATCH_DATA[i].term;
+    tc.dataset.idx=i;
+    tc.onclick=()=>selectTermCard(tc);
+    lz.appendChild(tc);
+  });
+
+  descIdxs.forEach(i=>{
+    const dc=document.createElement('div'); dc.className='desc-card'; dc.textContent=MATCH_DATA[i].desc;
+    dc.dataset.idx=i;
+    dc.onclick=()=>matchDescCard(dc);
+    rz.appendChild(dc);
+  });
+
+  layout.appendChild(leftCol); layout.appendChild(rightCol);
+  c.appendChild(layout);
+  matchSelected=null; matchSolved=0;
+}
+
+function selectTermCard(tc){
+  if(tc.classList.contains('matched')) return;
+  document.querySelectorAll('.term-card').forEach(c=>c.classList.remove('selected'));
+  tc.classList.add('selected');
+  matchSelected=tc;
+}
+
+function matchDescCard(dc){
+  if(dc.classList.contains('matched')) return;
+  if(!matchSelected) return;
+  const ti=parseInt(matchSelected.dataset.idx);
+  const di=parseInt(dc.dataset.idx);
+  if(ti===di){
+    matchSelected.classList.remove('selected'); matchSelected.classList.add('matched');
+    dc.classList.add('matched');
+    matchSolved++;
+    matchSelected=null;
+    if(matchSolved===MATCH_DATA.length) document.getElementById('match-feedback').textContent='🎉 Alle '+MATCH_DATA.length+' Paare korrekt!';
+  } else {
+    matchSelected.classList.add('error'); dc.classList.add('error');
+    setTimeout(()=>{ matchSelected&&matchSelected.classList.remove('error','selected'); dc.classList.remove('error'); matchSelected=null; },800);
+  }
+}
+
+// ── SATZBAU ──────────────────────────────────────────────────────
+const SATZBAU_DATA = [
+  { prompt:'Warum muss man Marktforschung machen?', chips:['Vor','der','Werbeerstellung','muss','man','viel','Marktforschung','durchführen','.'], correct:'Vor der Werbeerstellung muss man viel Marktforschung durchführen .' },
+  { prompt:'Was beschreibt das AIDA-Modell?', chips:['Das','AIDA-Konzept','beschreibt','die','vier','Phasen','einer','wirksamen','Werbung','.'], correct:'Das AIDA-Konzept beschreibt die vier Phasen einer wirksamen Werbung .' },
+  { prompt:'Was ist Schleichwerbung?', chips:['Bei','Schleichwerbung','ist','die','Werbebotschaft','nicht','klar','und','eindeutig','.'], correct:'Bei Schleichwerbung ist die Werbebotschaft nicht klar und eindeutig .' },
+  { prompt:'Was bedeutet „gezielte Werbung"?', chips:['Gezielte','Werbung','soll','nur','von','potenziellen','Kunden','gesehen','werden','.'], correct:'Gezielte Werbung soll nur von potenziellen Kunden gesehen werden .' },
+  { prompt:'Was ist verantwortungsvolle Werbung?', chips:['Verantwortungsvolle','Werbung','entspricht','allen','gesetzlichen','Normen','in','vollem','Maße','.'], correct:'Verantwortungsvolle Werbung entspricht allen gesetzlichen Normen in vollem Maße .' },
+  { prompt:'Was macht das erste A im AIDA-Modell?', chips:['Das','erste','A','steht','für','Aufmerksamkeit','—','die','Werbung','erregt','die','Aufmerksamkeit','des','Kunden','.'], correct:'Das erste A steht für Aufmerksamkeit — die Werbung erregt die Aufmerksamkeit des Kunden .' },
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isStatic=false){
+  const span=document.createElement('span');
+  span.className='sb-chip'+(isStatic?' static-chip':'');
+  span.textContent=word;
+  if(!isStatic){
+    span.draggable=true;
+    span.ondragstart=e=>{ sbDragged=span; span.classList.add('dragging'); };
+    span.ondragend=e=>{ span.classList.remove('dragging'); sbDragged=null; };
+  }
+  return span;
+}
+
+function sbRegisterZone(zone, idx){
+  zone.ondragover=e=>{ e.preventDefault(); zone.classList.add('drag-over'); };
+  zone.ondragleave=e=>zone.classList.remove('drag-over');
+  zone.ondrop=e=>{
+    e.preventDefault(); zone.classList.remove('drag-over');
+    if(sbDragged) zone.appendChild(sbDragged);
+    setTimeout(()=>sbCheckAuto(idx),500);
+  };
+}
+
+function sbUpdateCapitalization(zone){
+  const chips=[...zone.querySelectorAll('.sb-chip:not(.static-chip)')];
+  chips.forEach((ch,i)=>{
+    const w=ch.dataset.original||ch.textContent;
+    if(!ch.dataset.original) ch.dataset.original=w;
+    if(i===0) ch.textContent=w[0].toUpperCase()+w.slice(1);
+    else ch.textContent=w;
+  });
+}
+
+function sbCheckAuto(idx){
+  const zone=document.getElementById('sb_drop_'+idx);
+  const fb=document.getElementById('sb_fb_'+idx);
+  sbUpdateCapitalization(zone);
+  const chips=[...zone.querySelectorAll('.sb-chip')];
+  const attempt=chips.map(c=>c.textContent).join(' ');
+  const correct=SATZBAU_DATA[idx].correct;
+  if(chips.length===0){ fb.textContent=''; return; }
+  if(attempt===correct){
+    fb.className='sb-feedback ok'; fb.textContent='✓ Richtig!';
+    const allDone=[...document.querySelectorAll('.sb-feedback')].every(f=>f.classList.contains('ok'));
+    if(allDone) stopTimer(4);
+  } else if(chips.length===correct.split(' ').length){
+    fb.className='sb-feedback err'; fb.textContent='✗ Noch nicht richtig.';
+  } else {
+    fb.textContent='';
+  }
+}
+
+function buildSatzbau(){
+  const c=document.getElementById('sb-container'); c.innerHTML='';
+  SATZBAU_DATA.forEach((d,idx)=>{
+    // Fisher-Yates shuffle with conflict prevention
+    let shuffled=[...d.chips];
+    let ok=false;
+    for(let attempt=0;attempt<50&&!ok;attempt++){
+      for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; }
+      ok=shuffled.some((w,i)=>w!==d.chips[i]);
+    }
+
+    const div=document.createElement('div'); div.className='sb-item';
+    const prompt=document.createElement('div'); prompt.className='sb-prompt'; prompt.textContent=(idx+1)+'. '+d.prompt;
+    div.appendChild(prompt);
+
+    const chipArea=document.createElement('div'); chipArea.className='sb-chips'; chipArea.id='sb_src_'+idx;
+    shuffled.forEach(w=>{
+      const isPunct=/^[.,!?;:—–]$/.test(w);
+      chipArea.appendChild(sbMakeChip(w, isPunct));
+    });
+
+    const dropZone=document.createElement('div'); dropZone.className='sb-drop'; dropZone.id='sb_drop_'+idx;
+    sbRegisterZone(dropZone, idx);
+    sbRegisterZone(chipArea, idx);
+
+    const fb=document.createElement('div'); fb.className='sb-feedback'; fb.id='sb_fb_'+idx;
+    div.appendChild(chipArea); div.appendChild(dropZone); div.appendChild(fb);
+    c.appendChild(div);
+  });
+}
+
+// ── WORTSCHATZ ───────────────────────────────────────────────────
+const VOCAB_DATA = [
+  { en:'market research', art:'die', wort:'Marktforschung', plural:'–' },
+  { en:'advertising type', art:'der', wort:'Werbetyp', plural:'-en' },
+  { en:'target group', art:'die', wort:'Zielgruppe', plural:'-n' },
+  { en:'advertising message', art:'die', wort:'Werbebotschaft', plural:'-en' },
+  { en:'attention', art:'die', wort:'Aufmerksamkeit', plural:'–' },
+  { en:'advertisement (print/online)', art:'die', wort:'Anzeige', plural:'-n' },
+  { en:'advertising spot', art:'der', wort:'Werbespot', plural:'-s' },
+  { en:'covert advertising', art:'die', wort:'Schleichwerbung', plural:'–' },
+  { en:'product description', art:'die', wort:'Produktbeschreibung', plural:'-en' },
+  { en:'consumer', art:'der', wort:'Verbraucher', plural:'–' },
+  { en:'campaign', art:'die', wort:'Kampagne', plural:'-n' },
+  { en:'brand awareness', art:'die', wort:'Markenbekanntheit', plural:'–' },
+];
+
+function buildWortschatz(){
+  const c=document.getElementById('ws-container'); c.innerHTML='';
+  VOCAB_DATA.forEach((d,i)=>{
+    const div=document.createElement('div'); div.className='ws-item';
+    div.innerHTML=`<span class="ws-en">${d.en}</span>
+      <div class="ws-fields">
+        <span class="ws-hint">Artikel:</span>
+        <input class="ws-input" id="ws_art_${i}" style="width:50px" type="text" autocomplete="off" placeholder="der/die/das">
+        <span class="ws-hint">Nomen:</span>
+        <input class="ws-input" id="ws_wort_${i}" style="width:160px" type="text" autocomplete="off" placeholder="…">
+        <span class="ws-hint">Pl.:</span>
+        <input class="ws-input" id="ws_pl_${i}" style="width:60px" type="text" autocomplete="off" placeholder="…">
+      </div>`;
+    c.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(){
+  let correct=0;
+  VOCAB_DATA.forEach((d,i)=>{
+    const artEl=document.getElementById('ws_art_'+i);
+    const wortEl=document.getElementById('ws_wort_'+i);
+    const plEl=document.getElementById('ws_pl_'+i);
+    const artOk=artEl.value.trim()===d.art;
+    const wortOk=wortEl.value.trim()===d.wort;
+    const plOk=plEl.value.trim()===d.plural;
+    artEl.className='ws-input '+(artEl.value.trim()===''?'':(artOk?'correct':'wrong'));
+    wortEl.className='ws-input '+(wortEl.value.trim()===''?'':(wortOk?'correct':'wrong'));
+    plEl.className='ws-input '+(plEl.value.trim()===''?'':(plOk?'correct':'wrong'));
+    if(artOk&&wortOk&&plOk) correct++;
+  });
+  document.getElementById('ws-score').textContent=correct+' / '+VOCAB_DATA.length+' richtig';
+  if(correct===VOCAB_DATA.length) stopTimer(5);
+}
+
+function wsReset(){
+  VOCAB_DATA.forEach((_,i)=>{
+    ['ws_art_','ws_wort_','ws_pl_'].forEach(p=>{ const el=document.getElementById(p+i); el.value=''; el.className='ws-input'; });
+  });
+  document.getElementById('ws-score').textContent='';
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+buildLuecken();
+buildMatch();
+buildSatzbau();
+buildWortschatz();
+loadBestTimes();
+function initVocab() { buildWortschatz(); }
+</script>
+</body>
+</html>

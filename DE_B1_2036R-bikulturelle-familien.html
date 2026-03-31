@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – 2036R Bikulturelle Familien</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #667eea; font-family: Arial, sans-serif; min-height: 100vh; padding: 20px; }
+  .container { background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); max-width: 860px; margin: 0 auto; overflow: hidden; }
+  h1 { background: #667eea; color: #fff; padding: 18px 24px; font-size: 1.25rem; }
+  h1 span { font-size: 0.95rem; font-weight: normal; opacity: 0.85; margin-left: 10px; }
+
+  /* NAV */
+  .nav { display: flex; flex-direction: column; gap: 0; border-bottom: 2px solid #667eea; }
+  .nav button {
+    background: #f3e8ff; border: 1px solid #b589d6; color: #4a007a;
+    padding: 10px 16px; cursor: pointer; font-size: 0.9rem; text-align: left;
+    transition: background 0.2s; border-left: none; border-right: none;
+  }
+  .nav button:first-child { border-top: none; }
+  .nav button.active { background: #667eea; color: #fff; font-weight: bold; }
+  .nav button:hover:not(.active) { background: #e0c8f8; }
+
+  /* TAB CONTENT */
+  .tab { display: none; padding: 20px 24px 28px; }
+  .tab.active { display: block; }
+
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 18px; }
+
+  /* VOCAB CARDS */
+  .vocab-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .vocab-card {
+    background: #f3e8ff; border: 1px solid #b589d6; border-radius: 8px;
+    padding: 10px 14px; min-width: 160px; flex: 1 1 160px;
+  }
+  .vocab-card .word { font-weight: bold; color: #4a007a; font-size: 0.95rem; }
+  .vocab-card .meaning { font-size: 0.82rem; color: #666; margin-top: 3px; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+
+  /* LESETEXT */
+  .story-text {
+    font-family: Georgia, serif; font-size: 0.97rem; line-height: 1.85;
+    text-align: justify; hyphens: auto; max-width: 680px; margin: 0 auto;
+    color: #222;
+  }
+  .story-text p { text-indent: 1.5em; margin-bottom: 0.8em; }
+  .story-text p:first-child { text-indent: 0; }
+  .story-text h3 { font-size: 1rem; color: #4a007a; margin: 16px 0 6px; text-indent: 0; font-family: Arial, sans-serif; }
+  .vocab-hl { background: #ffe066; border-radius: 3px; padding: 0 2px; cursor: help; position: relative; }
+  .vocab-hl .tooltip {
+    display: none; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+    background: #4a007a; color: #fff; padding: 4px 10px; border-radius: 6px;
+    font-size: 0.78rem; white-space: nowrap; z-index: 10; pointer-events: none;
+  }
+  .vocab-hl:hover .tooltip { display: block; }
+
+  /* RICHTIG / FALSCH */
+  .rf-list { list-style: none; padding: 0; }
+  .rf-item { background: #f9f3ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+  .rf-question { font-size: 0.93rem; color: #222; margin-bottom: 8px; }
+  .rf-buttons { display: flex; gap: 8px; }
+  .rf-btn {
+    padding: 6px 18px; border: 2px solid #b589d6; border-radius: 6px;
+    cursor: pointer; font-size: 0.88rem; background: #f3e8ff; color: #4a007a;
+    font-weight: bold; transition: background 0.15s;
+  }
+  .rf-btn:hover { background: #e0c8f8; }
+  .rf-btn.correct { background: #eafaf1; border-color: #27ae60; color: #1a7a40; }
+  .rf-btn.wrong   { background: #fdf2f2; border-color: #e74c3c; color: #a93226; }
+  .rf-correction  { font-size: 0.83rem; color: #27ae60; margin-top: 6px; display: none; font-style: italic; }
+
+  /* LÜCKENTEXT */
+  .sentence-block { background: #f9f3ff; border-radius: 8px; padding: 14px 18px; margin: 10px 0; line-height: 2.4; font-size: 0.95rem; }
+  .gap-input {
+    border: none; border-bottom: 2px solid #667eea; background: transparent;
+    width: 160px; font-size: 0.93rem; padding: 2px 4px; outline: none; color: #333;
+  }
+  .gap-input.correct { border-color: #27ae60; color: #27ae60; background: #eafaf1; border-radius: 4px; }
+  .gap-input.wrong   { border-color: #e74c3c; color: #e74c3c; background: #fdf2f2; border-radius: 4px; }
+
+  /* TIMER */
+  .timer-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .tc-buttons { display: flex; gap: 6px; }
+  .tc-times   { display: flex; gap: 6px; }
+  .timer-btn  { padding: 7px 14px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+  .btn-start  { background: #27ae60; color: #fff; }
+  .btn-stop   { background: #e74c3c; color: #fff; }
+  .btn-reset  { background: #888; color: #fff; }
+  .time-btn   { background: #e8d5ff; color: #4a007a; padding: 7px 10px; border: 1px solid #b589d6; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
+  .time-btn.active-t { background: #667eea; color: #fff; }
+  #timerDisplay_L, #timerDisplay_S {
+    font-weight: bold; font-size: 1.1rem; color: #4a007a;
+    background: #f3e8ff; padding: 6px 14px; border-radius: 8px; min-width: 64px; text-align: center;
+  }
+
+  /* SATZBAU */
+  .chip-group { background: #f0f0f0; border-radius: 6px; padding: 10px 14px; margin: 10px 0; display: flex; flex-wrap: wrap; gap: 6px; min-height: 48px; }
+  .chip {
+    background: #667eea; color: #fff; padding: 6px 12px; border-radius: 20px;
+    cursor: grab; font-size: 0.88rem; user-select: none; border: none;
+    transition: background 0.15s; display: inline-block;
+  }
+  .chip:active { cursor: grabbing; }
+  .chip.dragging { opacity: 0.5; }
+  .chip.correct-chip { background: #27ae60; cursor: default; }
+  .chip.wrong-chip { background: #e74c3c; animation: shake 0.3s; }
+  .drop-zone {
+    background: #f9f3ff; border: 2px dashed #b589d6; border-radius: 8px;
+    min-height: 54px; padding: 10px; display: flex; flex-wrap: wrap; gap: 6px;
+    align-items: center; margin: 8px 0; transition: background 0.2s;
+  }
+  .drop-zone.drag-over { background: #e8d5ff; border-color: #667eea; }
+  .drop-zone .placeholder { color: #aaa; font-size: 0.85rem; font-style: italic; pointer-events: none; }
+
+  /* FEEDBACK */
+  .check-btn {
+    background: #667eea; color: #fff; border: none; border-radius: 6px;
+    padding: 10px 20px; cursor: pointer; font-size: 0.92rem; margin-top: 14px;
+  }
+  .check-btn:hover { background: #5a0090; }
+  .feedback { margin-top: 10px; font-weight: bold; font-size: 0.95rem; padding: 8px 14px; border-radius: 6px; }
+  .feedback.ok  { background: #eafaf1; color: #27ae60; }
+  .feedback.err { background: #fdf2f2; color: #e74c3c; }
+
+  /* VOKABELN */
+  .vok-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .vok-table th { background: #667eea; color: #fff; padding: 8px 12px; }
+  .vok-table td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; }
+  .vok-table tr:nth-child(even) td { background: #f9f3ff; }
+
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}
+  }
+  .author-footer { text-align: center; font-size: 0.78rem; color: #999; padding: 14px 0 8px; border-top: 1px solid #eee; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>B1.2 – Lektion 2036R <span>Bikulturelle Familien</span></h1>
+
+  <div class="nav">
+    <button class="active" onclick="showTab(0)">🌍 Vorentlastung</button>
+    <button onclick="showTab(1)">📖 Lesetext</button>
+    <button onclick="showTab(2)">✅ Text &amp; Fragen</button>
+    <button onclick="showTab(3)">✏️ Lückentext</button>
+    <button onclick="showTab(4)">🔀 Satzbau</button>
+    <button onclick="showTab(5)">📚 Wortschatz</button>
+  </div>
+
+  <!-- TAB 0: WORTSCHATZ -->
+  <div class="tab active" id="tab0">
+    <img src="https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Bikulturelle Familien">
+    <h2 style="color:#4a007a;margin-bottom:14px;">🔤 Wortschatz</h2>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="tab" id="tab1">
+    <img src="https://images.pexels.com/photos/1682497/pexels-photo-1682497.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Lesetext">
+    <h2 style="color:#4a007a;margin-bottom:16px;">📖 Bikulturelle Familien</h2>
+    <div class="story-text">
+      <h3>Was ist eine bikulturelle Familie?</h3>
+      <p>Die Kultur beeinflusst unser Leben. Viele Werte, die in unserem Leben wichtig für uns sind, übernehmen wir von unseren Eltern, von den Kulturen, in denen wir aufgewachsen sind. Wenn beide Eltern die gleiche Nationalität haben und zur gleichen Kultur gehören, ist das kein Problem. Das Kind wird mit den gleichen Werten und <span class="vocab-hl">Traditionen<span class="tooltip">Traditionen — customs passed down</span></span> aufwachsen. Doch was passiert, wenn die Eltern aus unterschiedlichen Kulturen stammen?</p>
+
+      <h3>Kulturelle Unterschiede</h3>
+      <p>Die kulturellen Unterschiede in der Familie können wirklich groß sein. Die Eltern können aus den unterschiedlichsten Teilen der Welt stammen und bis zum Ende in einem anderen Land leben. In diesem Fall wächst das Kind mit drei verschiedenen Kulturen auf. Nicht zuletzt spielt auch die Religion eine wichtige Rolle. Ein Kind mit deutsch-französischen Eltern wird anders erzogen als ein Kind, das in einer italienisch-türkischen Familie aufwächst.</p>
+
+      <h3>Herausforderungen</h3>
+      <p>In einer bikulturellen Familie gibt es viele <span class="vocab-hl">Herausforderungen<span class="tooltip">Herausforderungen — challenges</span></span> und viele Fragen. Zum Beispiel: Wie ist die <span class="vocab-hl">Rollenverteilung<span class="tooltip">Rollenverteilung — distribution of roles</span></span> in einer marokkanischen Familie? Wie werden die Kinder in einer arabischen Familie erzogen? Was erwartet eine deutsche Frau von ihrem ausländischen Mann? Es gibt unzählige Fragen und auch so viele Unterschiede. In manchen Ländern zählt die Großfamilie, in anderen, insbesondere in den europäischen Ländern, gehört nur die Kleinfamilie zum Familienkreis.</p>
+
+      <h3>Kinder aus bikulturellen Familien</h3>
+      <p>Die Kinder aus bikulturellen Familien wachsen oft mit zwei oder sogar drei Sprachen auf. Für sie ist es normal, im Alltag eine andere Sprache zu sprechen als zu Hause, andere <span class="vocab-hl">Traditionen<span class="tooltip">Traditionen — customs passed down</span></span> und Religionen anzutreffen als jene, mit denen sie aufgewachsen sind. Das kann ihnen in der Zukunft helfen, sich weiterzuentwickeln und auch viel toleranter zu sein. Es kann aber auch vorkommen, dass sich diese Kinder zu keiner Kultur zugehörig fühlen.</p>
+
+      <h3>Sprache und Schule</h3>
+      <p>Kinder, die aus bikulturellen Familien stammen, wachsen zweisprachig auf. Oft besuchen sie zusätzlich zur Regelschule auch noch einen Sprachunterricht, um die Hauptsprache aus dem Land zu lernen, in dem sie wohnen. Es kommt oft vor, dass für fremdsprachige Elternteile wichtig ist, dass die Kinder die Sprache des Herkunftslandes erlernen und weniger die des Landes, in dem sie tatsächlich wohnen. Das ist auch wichtig, um den Kontakt mit der Familie aus dem Heimatland pflegen zu können.</p>
+
+      <h3>Zweisprachigkeit als Vorteil</h3>
+      <p>Kinder, die neben der eigentlichen <span class="vocab-hl">Muttersprache<span class="tooltip">Muttersprache — mother tongue / first language</span></span> noch eine zweite Muttersprache lernen, haben später im beruflichen Leben viel mehr Chancen sich weiterzuentwickeln. Viele Kinder, die aus einer ausländischen Familie stammen, gehen in den Kindergarten oder die Schule, um dort die Sprache des betreffenden Landes besser lernen zu können. Im Gegensatz dazu besuchen einheimische Kinder Kindergärten oder Schulen, um soziale Kontakte pflegen zu können.</p>
+
+      <h3>Identität und Zugehörigkeit</h3>
+      <p>Oft werden Kinder, die aus bikulturellen Familien stammen, gefragt, in welchem Land sie leben möchten. In dem Land, in dem sie aktuell leben, oder in dem Land, aus dem ein Elternteil stammt? Die Frage ist schwierig zu beantworten, denn sie sind mit beiden Kulturen aufgewachsen und fühlen sich zu beiden Kulturen hingezogen. Interessant ist, dass insbesondere Frauen es bevorzugen, irgendwo an der Grenze zu bleiben und so gut es geht beide Kulturen zu pflegen.</p>
+
+      <h3>Harmonie durch Verständnis</h3>
+      <p>Eine wichtige <span class="vocab-hl">Voraussetzung<span class="tooltip">Voraussetzung — prerequisite / necessary condition</span></span>, damit sich Kinder aus bikulturellen Familien auch harmonisch entwickeln, ist, dass beide Elternteile die Kultur des anderen Partners kennen und auch verstehen. Es ist nicht unbedingt notwendig, dass kulturelle Unterschiede nur dann vorkommen, wenn die Partner von verschiedenen Kontinenten stammen. Kulturelle Unterschiede trifft man auch in Europa. In einem Fall gibt es auch verschiedene Feiertage. In diesen Familien wird zum Beispiel Ostern oft zweimal gefeiert. Wichtig ist aber, dass die Kinder harmonisch und tolerant erzogen werden und dass sie so viel wie möglich über die <span class="vocab-hl">Traditionen<span class="tooltip">Traditionen — customs passed down</span></span> ihrer Familie erfahren, aber auch die <span class="vocab-hl">Bräuche<span class="tooltip">Bräuche — customs / cultural practices</span></span> des Gastlandes kennen und respektieren.</p>
+    </div>
+  </div>
+
+  <!-- TAB 2: TEXT & FRAGEN (RICHTIG/FALSCH) -->
+  <div class="tab" id="tab2">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Text und Fragen">
+    <h2 style="color:#4a007a;margin-bottom:14px;">✅ Richtig oder Falsch?</h2>
+    <p style="color:#666;font-size:0.88rem;margin-bottom:16px;">Klicke auf R (Richtig) oder F (Falsch).</p>
+    <ul class="rf-list" id="rfList"></ul>
+    <button class="check-btn" onclick="checkAllRF()">Alle prüfen</button>
+    <div id="rfFeedback" class="feedback" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab" id="tab3">
+    <img src="https://images.pexels.com/photos/1128318/pexels-photo-1128318.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Lückentext">
+    <h2 style="color:#4a007a;margin-bottom:6px;">✏️ Lückentext</h2>
+    <p style="color:#666;font-size:0.88rem;margin-bottom:14px;">Ergänze die fehlenden Wörter.</p>
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="timer-btn btn-start" onclick="startTimer('L')">▶ Start</button>
+        <button class="timer-btn btn-stop"  onclick="stopTimer('L')">⏹ Stop</button>
+        <button class="timer-btn btn-reset" onclick="resetTimer('L')">↺ Reset</button>
+      </div>
+      <div id="timerDisplay_L">0:00</div>
+      <div class="tc-times">
+        <button class="time-btn" onclick="setTarget('L',60)">1 min</button>
+        <button class="time-btn" onclick="setTarget('L',90)">1:30</button>
+        <button class="time-btn" onclick="setTarget('L',120)">2 min</button>
+      </div>
+    </div>
+    <div id="lueckenContainer"></div>
+    <button class="check-btn" onclick="checkLuecken()">Prüfen</button>
+    <div id="lueckenFeedback" class="feedback" style="display:none;"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab" id="tab4">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Satzbau">
+    <h2 style="color:#4a007a;margin-bottom:6px;">🔀 Satzbau</h2>
+    <p style="color:#666;font-size:0.88rem;margin-bottom:14px;">Bringe die Wörter in die richtige Reihenfolge.</p>
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button class="timer-btn btn-start" onclick="startTimer('S')">▶ Start</button>
+        <button class="timer-btn btn-stop"  onclick="stopTimer('S')">⏹ Stop</button>
+        <button class="timer-btn btn-reset" onclick="resetTimer('S')">↺ Reset</button>
+      </div>
+      <div id="timerDisplay_S">0:00</div>
+      <div class="tc-times">
+        <button class="time-btn" onclick="setTarget('S',90)">1:30</button>
+        <button class="time-btn" onclick="setTarget('S',120)">2 min</button>
+        <button class="time-btn" onclick="setTarget('S',180)">3 min</button>
+      </div>
+    </div>
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="tab" id="tab5">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=200&fit=crop" class="tab-banner" alt="Vokabeln">
+    <h2 style="color:#4a007a;margin-bottom:14px;">📚 Wortschatz</h2>
+    <table class="vok-table">
+      <tr><th>Deutsch</th><th>Artikel / Plural</th><th>Englisch</th></tr>
+      <tr><td>die Mehrsprachigkeit</td><td>—, kein Pl.</td><td>multilingualism</td></tr>
+      <tr><td>die Muttersprache</td><td>—, -n</td><td>mother tongue</td></tr>
+      <tr><td>die Identität</td><td>—, -en</td><td>identity</td></tr>
+      <tr><td>die Tradition</td><td>—, -en</td><td>tradition</td></tr>
+      <tr><td>das Volk</td><td>—, Völker</td><td>people / nation</td></tr>
+      <tr><td>die Nation</td><td>—, -en</td><td>nation</td></tr>
+      <tr><td>das Fest</td><td>—, -e</td><td>festival / celebration</td></tr>
+      <tr><td>mehrsprachig</td><td>—</td><td>multilingual</td></tr>
+      <tr><td>die Herausforderung</td><td>—, -en</td><td>challenge</td></tr>
+      <tr><td>die Rollenverteilung</td><td>—, -en</td><td>distribution of roles</td></tr>
+      <tr><td>die Voraussetzung</td><td>—, -en</td><td>prerequisite / condition</td></tr>
+      <tr><td>der Brauch</td><td>—, Bräuche</td><td>custom / practice</td></tr>
+    </table>
+  </div>
+
+  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+</div>
+
+<script>
+// ==================== TAB NAV ====================
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
+}
+
+// ==================== WORTSCHATZ INTERACTIVE ====================
+var WORTSCHATZ = [
+  { type: "n", en: "multilingualism", art: "die", wort: "Mehrsprachigkeit", plural: "Mehrsprachigkeiten" },
+  { type: "n", en: "mother tongue", art: "die", wort: "Muttersprache", plural: "Muttersprachen" },
+  { type: "n", en: "identity", art: "die", wort: "Identität", plural: "Identitäten" },
+  { type: "n", en: "tradition", art: "die", wort: "Tradition", plural: "Traditionen" },
+  { type: "n", en: "the people / nation", art: "das", wort: "Volk", plural: "Völker" },
+  { type: "n", en: "nation", art: "die", wort: "Nation", plural: "Nationen" },
+  { type: "v", en: "multilingual (adj.)", de: "mehrsprachig" },
+  { type: "n", en: "celebration / festival", art: "das", wort: "Fest", plural: "Feste" },
+  { type: "n", en: "challenge", art: "die", wort: "Herausforderung", plural: "Herausforderungen" },
+  { type: "n", en: "distribution of roles", art: "die", wort: "Rollenverteilung", plural: "Rollenverteilungen" },
+  { type: "n", en: "prerequisite", art: "die", wort: "Voraussetzung", plural: "Voraussetzungen" },
+  { type: "n", en: "custom", art: "der", wort: "Brauch", plural: "Bräuche" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    var ok2 = w2 === item.de;
+    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+// ==================== RICHTIG / FALSCH ====================
+const RF_DATA = [
+  { q:'Wenn beide Eltern aus der gleichen Kultur stammen, wächst das Kind mit denselben Werten und Traditionen auf.', correct:true, correction:'' },
+  { q:'In bikulturellen Familien spielt Religion keine Rolle.', correct:false, correction:'Nicht zuletzt spielt auch die Religion eine wichtige Rolle.' },
+  { q:'Kinder aus bikulturellen Familien fühlen sich immer zu einer Kultur zugehörig.', correct:false, correction:'Es kann vorkommen, dass sich diese Kinder zu keiner Kultur zugehörig fühlen.' },
+  { q:'Zweisprachige Kinder haben später im Beruf mehr Chancen sich weiterzuentwickeln.', correct:true, correction:'' },
+  { q:'Kulturelle Unterschiede gibt es nur, wenn die Partner von verschiedenen Kontinenten stammen.', correct:false, correction:'Es ist nicht notwendig, dass die Partner von verschiedenen Kontinenten stammen — Unterschiede gibt es auch in Europa.' },
+  { q:'Beide Elternteile sollten die Kultur des anderen Partners kennen und verstehen.', correct:true, correction:'' },
+];
+
+let rfState = RF_DATA.map(()=>({answered:false, chosen:null}));
+
+(function buildRF(){
+  const list = document.getElementById('rfList');
+  RF_DATA.forEach((item,i)=>{
+    const li = document.createElement('li');
+    li.className='rf-item';
+    li.innerHTML=`
+      <div class="rf-question">${item.q}</div>
+      <div class="rf-buttons">
+        <button class="rf-btn" onclick="checkRF(${i},true)">R</button>
+        <button class="rf-btn" onclick="checkRF(${i},false)">F</button>
+      </div>
+      <div class="rf-correction" id="rfCorr${i}">${item.correction}</div>`;
+    list.appendChild(li);
+  });
+})();
+
+function checkRF(i, chosen) {
+  if(rfState[i].answered) return;
+  rfState[i].answered=true; rfState[i].chosen=chosen;
+  const item=RF_DATA[i];
+  const btns=document.querySelectorAll(`#rfList .rf-item:nth-child(${i+1}) .rf-btn`);
+  const chosenBtn = chosen ? btns[0] : btns[1];
+  btns.forEach(b=>b.disabled=true);
+  if(chosen===item.correct){
+    chosenBtn.classList.add('correct');
+  } else {
+    chosenBtn.classList.add('wrong');
+    const corrBtn = item.correct ? btns[0] : btns[1];
+    corrBtn.classList.add('correct');
+    if(item.correction){
+      document.getElementById('rfCorr'+i).style.display='block';
+    }
+  }
+}
+
+function checkAllRF(){
+  let correct=0;
+  RF_DATA.forEach((_,i)=>{
+    if(!rfState[i].answered){ checkRF(i, null); return; }
+    if(rfState[i].chosen===RF_DATA[i].correct) correct++;
+  });
+  // count already answered
+  let c2=0;
+  RF_DATA.forEach((_,i)=>{ if(rfState[i].answered && rfState[i].chosen===RF_DATA[i].correct) c2++; });
+  const fb=document.getElementById('rfFeedback');
+  fb.style.display='block';
+  if(c2===RF_DATA.length){fb.className='feedback ok';fb.textContent='✓ Alle '+c2+' Aussagen richtig!';}
+  else{fb.className='feedback err';fb.textContent=c2+' von '+RF_DATA.length+' richtig.';}
+}
+
+// ==================== TIMER ====================
+let timers={L:{iv:null,sec:0,target:0,running:false},S:{iv:null,sec:0,target:0,running:false}};
+function fmt(s){return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60;}
+function startTimer(k){if(timers[k].running)return;timers[k].running=true;timers[k].iv=setInterval(()=>{timers[k].sec++;document.getElementById('timerDisplay_'+k).textContent=fmt(timers[k].sec);if(timers[k].target>0&&timers[k].sec>=timers[k].target){stopTimer(k);document.getElementById('timerDisplay_'+k).style.color='#e74c3c';}},1000);}
+function stopTimer(k){clearInterval(timers[k].iv);timers[k].running=false;}
+function resetTimer(k){stopTimer(k);timers[k].sec=0;document.getElementById('timerDisplay_'+k).textContent='0:00';document.getElementById('timerDisplay_'+k).style.color='#4a007a';}
+function setTarget(k,t){timers[k].target=t;event.target.closest('.tc-times').querySelectorAll('.time-btn').forEach(b=>b.classList.remove('active-t'));event.target.classList.add('active-t');}
+function autoStopIfDone(k){if(timers[k].running)stopTimer(k);}
+
+// ==================== LÜCKENTEXT ====================
+const LUECKEN_DATA = [
+  {before:'Die Kultur beeinflusst unser Leben durch', gap:'Traditionen', after:'und Werte.'},
+  {before:'In einer bikulturellen Familie gibt es viele', gap:'Herausforderungen', after:'und Fragen.'},
+  {before:'Die Kinder wachsen oft mit mehreren Sprachen auf und sind damit', gap:'mehrsprachig', after:'.'},
+  {before:'Die', gap:'Muttersprache', after:'ist die erste Sprache, die ein Kind lernt.'},
+  {before:'Es ist wichtig, die', gap:'Identität', after:'der Kinder zu fördern.'},
+  {before:'In bikulturellen Familien wird die', gap:'Rollenverteilung', after:'oft diskutiert.'},
+  {before:'Beide Elternteile sollten eine wichtige', gap:'Voraussetzung', after:'erfüllen: die Kultur des anderen verstehen.'},
+  {before:'Einige Familien feiern Ostern zweimal, um beide', gap:'Bräuche', after:'zu respektieren.'},
+  {before:'Das', gap:'Volk', after:'kann das Ergebnis der Wahlen beeinflussen.'},
+  {before:'Weihnachten ist ein sehr wichtiges', gap:'Fest', after:'in Deutschland.'},
+];
+
+(function buildLuecken(){
+  const c=document.getElementById('lueckenContainer');
+  LUECKEN_DATA.forEach((item,i)=>{
+    const d=document.createElement('div');
+    d.className='sentence-block';
+    d.innerHTML=item.before+' <input class="gap-input" id="gap'+i+'" type="text" placeholder="…" oninput="liveCheck('+i+')">'+(item.after?' '+item.after:'');
+    c.appendChild(d);
+  });
+})();
+
+function liveCheck(i){
+  const inp=document.getElementById('gap'+i);
+  const val=inp.value.trim();
+  const ans=LUECKEN_DATA[i].gap;
+  const cs=ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+  const ok=cs?val===ans:val.toLowerCase()===ans.toLowerCase();
+  inp.classList.toggle('correct',ok);
+  inp.classList.toggle('wrong',val.length>0&&!ok);
+  const allCorrect=LUECKEN_DATA.every((_,j)=>{const v=document.getElementById('gap'+j).value.trim();const a=LUECKEN_DATA[j].gap;const c2=a[0]===a[0].toUpperCase()&&a[0]!==a[0].toLowerCase();return c2?v===a:v.toLowerCase()===a.toLowerCase();});
+  if(allCorrect)autoStopIfDone('L');
+}
+
+function checkLuecken(){
+  let correct=0;
+  LUECKEN_DATA.forEach((_,i)=>{
+    const inp=document.getElementById('gap'+i);
+    const val=inp.value.trim();
+    const ans=LUECKEN_DATA[i].gap;
+    const cs=ans[0]===ans[0].toUpperCase()&&ans[0]!==ans[0].toLowerCase();
+    const ok=cs?val===ans:val.toLowerCase()===ans.toLowerCase();
+    inp.classList.toggle('correct',ok);
+    inp.classList.toggle('wrong',!ok);
+    if(ok)correct++;
+  });
+  const fb=document.getElementById('lueckenFeedback');
+  fb.style.display='block';
+  if(correct===LUECKEN_DATA.length){fb.className='feedback ok';fb.textContent='✓ Alle '+correct+' Lücken richtig!';autoStopIfDone('L');}
+  else{fb.className='feedback err';fb.textContent=correct+' von '+LUECKEN_DATA.length+' richtig. Versuche es nochmal!';}
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Die', 'Kinder', 'wachsen', 'mit', 'zwei', 'Kulturen', 'auf', '.'] },
+  { words: ['Mehrsprachigkeit', 'ist', 'heute', 'etwas', 'ganz', 'Normales', '.'] },
+  { words: ['Beide', 'Elternteile', 'sollten', 'die', 'Kultur', 'des', 'anderen', 'verstehen', '.'] },
+  { words: ['In', 'bikulturellen', 'Familien', 'gibt', 'es', 'viele', 'Herausforderungen', '.'] },
+  { words: ['Kinder', 'aus', 'bikulturellen', 'Familien', 'sind', 'oft', 'toleranter', '.'] },
+  { words: ['Weihnachten', 'wird', 'manchmal', 'zweimal', 'gefeiert', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+initVocab();
+</script>
+</body>
+</html>

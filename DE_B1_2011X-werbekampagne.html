@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Werbekampagne – B1.2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* TAB BANNER */
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 0; margin-bottom: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: block; }
+
+/* PADDING */
+.tab-content { padding: 28px 32px 32px 32px; }
+@media (max-width: 600px) { .tab-content { padding: 16px; } }
+
+/* HILFE-BOX */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.hilfe-box strong { color: #5a3e9e; }
+
+/* SEKTION-TITEL */
+.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* VOKABEL-KARTEN MINDMAP-STYLE */
+.vocab-mindmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.vocab-mindmap-center { grid-column: 1 / -1; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 12px; padding: 18px 24px; text-align: center; font-size: 1.3em; font-weight: 700; margin-bottom: 6px; }
+.vk { background: #f3effd; border: 1.5px solid #c5b8e8; border-radius: 12px; padding: 14px 16px; border-left: 4px solid #667eea; }
+.vk .art { font-size: 0.78em; color: #888; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.vk .wort { font-size: 1.1em; font-weight: 700; color: #5a3e9e; margin-bottom: 4px; }
+.vk .def { font-size: 0.82em; color: #555; line-height: 1.45; }
+
+/* 6-SCHRITTE PLAN */
+.schritte-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+.schritt-row { display: flex; align-items: flex-start; gap: 14px; background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 18px; }
+.schritt-nr { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 8px; padding: 6px 12px; font-size: 0.8em; font-weight: 700; min-width: 80px; text-align: center; line-height: 1.3; }
+.schritt-nr .step-label { font-size: 0.75em; opacity: 0.85; }
+.schritt-nr .step-word { font-size: 1.05em; }
+.schritt-desc { font-size: 0.9em; color: #444; line-height: 1.5; align-self: center; }
+
+/* PHRASEN-KARTEN */
+.phrasen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.phrasen-karte { background: #f8f9ff; border: 1.5px solid #e0daf5; border-radius: 12px; padding: 16px 18px; border-left: 4px solid #667eea; }
+.phrasen-karte .phrase { font-size: 1.0em; font-weight: 700; color: #5a3e9e; margin-bottom: 6px; }
+.phrasen-karte .beispiel { font-size: 0.85em; color: #555; line-height: 1.5; }
+
+/* LÜCKENTEXT */
+.luecke-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; font-size: 0.93em; line-height: 1.9; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.93em; font-family: inherit; outline: none; transition: all 0.2s; min-width: 100px; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78em; color: #27ae60; font-weight: 700; margin-left: 4px; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* ZUORDNUNG */
+.match-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+@media (max-width: 600px) { .match-layout { grid-template-columns: 1fr; } }
+.match-col h4 { background: #ede9f8; color: #5a3e9e; border: 1px solid #d0c8f0; border-bottom: none; border-radius: 8px 8px 0 0; padding: 8px 12px; font-size: 0.88em; }
+.drop-zone { min-height: 100px; border-radius: 0 0 8px 8px; border: 1px solid #d0c8f0; background: #faf9ff; padding: 10px; transition: background 0.2s; display: flex; flex-direction: column; gap: 6px; }
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.chip-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: #f8f9fa; border: 1px solid #e8e4f5; border-radius: 10px; margin-bottom: 14px; min-height: 54px; }
+.zuo-chip { padding: 7px 14px; border-radius: 20px; background: white; border: 1.5px solid #667eea; color: #5a3e9e; cursor: grab; font-size: 0.83em; font-weight: 600; user-select: none; transition: all 0.15s; white-space: nowrap; }
+.zuo-chip:active { cursor: grabbing; }
+.zuo-chip.correct { background: #e8f8f0; border-color: #27ae60; color: #1a7a40; cursor: default; }
+.zuo-chip.wrong { background: #fdeaea; border-color: #e74c3c; color: #c0392b; }
+.term-card { background: #f0ecfd; border: 1.5px solid #c5b8e8; border-radius: 8px; padding: 8px 12px; font-size: 0.88em; font-weight: 700; color: #5a3e9e; cursor: pointer; transition: all 0.2s; }
+.term-card.selected { background: #667eea; color: white; border-color: #667eea; }
+.term-card.matched { background: #e8f8f0; border-color: #27ae60; color: #1a7a40; cursor: default; }
+.term-card.error { background: #fdeaea; border-color: #e74c3c; color: #c0392b; }
+.desc-card { background: #fafbff; border: 1.5px solid #d0c8f0; border-radius: 8px; padding: 8px 12px; font-size: 0.85em; color: #444; cursor: pointer; transition: all 0.2s; line-height: 1.4; }
+.desc-card.matched { background: #e8f8f0; border-color: #27ae60; color: #1a7a40; cursor: default; }
+.desc-card.error { background: #fdeaea; border-color: #e74c3c; color: #c0392b; }
+.match-terms { display: flex; flex-direction: column; gap: 8px; }
+.match-descs { display: flex; flex-direction: column; gap: 8px; }
+
+/* SATZBAU */
+.satzbau-item { background: #fafbff; border: 1px solid #e0e7ff; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; cursor: move; }
+.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* WORTSCHATZ */
+#vocabContainer { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.vocab-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 140px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 150px; }
+.vocab-inputs input.plural { width: 150px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+@media (max-width: 700px) { #vocabContainer { grid-template-columns: 1fr; } .vocab-item { flex-direction: column; align-items: flex-start; } }
+
+/* CONTROL-BAR */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+
+/* KRITERIEN-KARTEN */
+.kriterien-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.kriterium-karte { background: #f3effd; border: 1.5px solid #c5b8e8; border-radius: 10px; padding: 14px; text-align: center; font-size: 0.95em; font-weight: 600; color: #5a3e9e; }
+
+/* AUTHOR FOOTER */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Werbekampagne</h1>
+    <p style="font-family: Georgia, serif;">B1.2 · Lektion 2011X · Kommunikation</p>
+    <div class="big-emoji">📢</div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">💡</span><span class="nav-label">Wortschatz</span></div>
+    <div class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">📋</span><span class="nav-label">Struktur</span></div>
+    <div class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">🔗</span><span class="nav-label">Zuordnung</span></div>
+    <div class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+  </div>
+
+  <!-- TAB 0: WORTSCHATZ MINDMAP -->
+  <div class="section active" id="tab0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Werbung und Marketing">
+    <div class="tab-content">
+      <div class="section-title">💡 Wortschatz: Werbung &amp; Marketing</div>
+      <div class="hilfe-box">
+        Das Wort <strong>ad campaign</strong> ist die Abkürzung vom englischen <em>advertising campaign</em> — auf Deutsch: die <strong>Werbekampagne</strong>. Lerne die wichtigsten Begriffe rund um Werbung!
+      </div>
+
+      <div class="vocab-mindmap">
+        <div class="vocab-mindmap-center">🎯 die Werbung</div>
+
+        <div class="vk">
+          <div class="art">die • -en</div>
+          <div class="wort">Werbekampagne</div>
+          <div class="def">Eine Werbeaktion eines Unternehmens — ihre Planung und Realisierung.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">das • Ø</div>
+          <div class="wort">Marketing</div>
+          <div class="def">Umfasst Werbung, Marktanalyse und Produktionsentwicklung eines Unternehmens.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">das • -e</div>
+          <div class="wort">Werbeziel</div>
+          <div class="def">Bestimmt, was mit der Werbekampagne erreicht werden soll.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">die • -n</div>
+          <div class="wort">Zielgruppe</div>
+          <div class="def">Eine bestimmte Gruppe von Menschen, die das Produkt besonders interessieren könnte.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">die • -n</div>
+          <div class="wort">Werbeanzeige</div>
+          <div class="def">Eine öffentliche Bekanntmachung von bestimmten Produkten oder Veranstaltungen.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">das • -s</div>
+          <div class="wort">Werbedesign</div>
+          <div class="def">Das Design einer Werbung — die Art und Weise ihrer Darstellung.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">die • -en</div>
+          <div class="wort">Werbeagentur</div>
+          <div class="def">Ein Unternehmen, das für Beratung, Planung und Realisierung von Werbung zuständig ist.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">die • -n</div>
+          <div class="wort">Werbestrategie</div>
+          <div class="def">Ein detaillierter Plan einer Werberealisierung.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">der • -s</div>
+          <div class="wort">Slogan</div>
+          <div class="def">Der Werbespruch einer Kampagne, meistens im Imperativ formuliert.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">das • -e</div>
+          <div class="wort">Kampagnenziel</div>
+          <div class="def">Das übergeordnete Ziel einer gesamten Werbekampagne.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">das • -</div>
+          <div class="wort">Werbemittel</div>
+          <div class="def">Wie für etwas geworben wird — z. B. Plakat, TV-Spot, Banner.</div>
+        </div>
+
+        <div class="vk">
+          <div class="art">der • -</div>
+          <div class="wort">Werbeträger</div>
+          <div class="def">Wo für etwas geworben wird — z. B. Radio, Internet, Events.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: STRUKTUR -->
+  <div class="section" id="tab1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/7376/startup-photos.jpg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Werbekampagne planen">
+    <div class="tab-content">
+      <div class="section-title">📋 So plant man eine Werbekampagne</div>
+      <div class="hilfe-box">
+        Eine Werbekampagne folgt einer klaren <strong>Werbestruktur</strong> — einem detaillierten Plan. Die 6 Schritte musst du kennen!
+      </div>
+
+      <div class="schritte-list">
+        <div class="schritt-row">
+          <div class="schritt-nr"><div class="step-label">Schritt 1</div><div class="step-word">Werbeziel</div></div>
+          <div class="schritt-desc">Zuerst muss ein bestimmtes Ziel der Werbekampagne <strong>formuliert</strong> werden. Was soll die Kampagne erreichen?</div>
+        </div>
+        <div class="schritt-row">
+          <div class="schritt-nr"><div class="step-label">Schritt 2</div><div class="step-word">Werbebotschaft</div></div>
+          <div class="schritt-desc">Dann muss ein <strong>Hauptkonzept</strong> festgelegt werden. Was ist die zentrale Botschaft der Kampagne?</div>
+        </div>
+        <div class="schritt-row">
+          <div class="schritt-nr"><div class="step-label">Schritt 3</div><div class="step-word">Werbemittel</div></div>
+          <div class="schritt-desc">Dann müssen die passenden Werbemittel ausgewählt werden — also <strong>wie</strong> für etwas geworben wird.</div>
+        </div>
+        <div class="schritt-row">
+          <div class="schritt-nr"><div class="step-label">Schritt 4</div><div class="step-word">Werbeträger</div></div>
+          <div class="schritt-desc">Dann müssen die Werbeträger ausgewählt werden — d.h. <strong>wo</strong> für etwas geworben wird (TV, Radio, Internet…).</div>
+        </div>
+        <div class="schritt-row">
+          <div class="schritt-nr"><div class="step-label">Schritt 5</div><div class="step-word">Pre-Test</div></div>
+          <div class="schritt-desc">Dann muss ein <strong>Pre-Test</strong> durchgeführt werden, um die Werbung vor dem Launch zu testen.</div>
+        </div>
+        <div class="schritt-row">
+          <div class="schritt-nr"><div class="step-label">Schritt 6</div><div class="step-word">Werbekontrolle</div></div>
+          <div class="schritt-desc">Am Ende kommt die <strong>Werbekontrolle</strong> — die Überprüfung, ob das Werbeziel erreicht wurde.</div>
+        </div>
+      </div>
+
+      <div class="section-title">🎯 Kriterien eines guten Slogans</div>
+      <div class="hilfe-box">
+        Ein <strong>Slogan</strong> ist der Werbespruch im <strong>Imperativ</strong>. Gute Slogans haben diese Eigenschaften:
+      </div>
+      <div class="kriterien-grid">
+        <div class="kriterium-karte">🏆 Unterschied zur Konkurrenz</div>
+        <div class="kriterium-karte">😄 Humor</div>
+        <div class="kriterium-karte">💬 Einfache Aussage</div>
+        <div class="kriterium-karte">🎁 Produkt gut vorstellen</div>
+        <div class="kriterium-karte">👋 Direkte Anrede</div>
+        <div class="kriterium-karte">❤️ Positive Gefühle</div>
+      </div>
+
+      <div class="section-title">📌 Imperativ (Wiederholung)</div>
+      <div style="overflow-x:auto; margin-bottom:20px;">
+        <table style="width:100%; border-collapse:collapse; font-size:0.88em;">
+          <thead>
+            <tr style="background:#ede9f8;">
+              <th style="padding:10px 14px; text-align:left; color:#5a3e9e; border:1px solid #d0c8f0;">Form</th>
+              <th style="padding:10px 14px; text-align:left; color:#5a3e9e; border:1px solid #d0c8f0;">Regel</th>
+              <th style="padding:10px 14px; text-align:left; color:#5a3e9e; border:1px solid #d0c8f0;">Beispiel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#fff;">
+              <td style="padding:9px 14px; border:1px solid #e0daf5; font-weight:700; color:#5a3e9e;">du → Imperativ</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">2. Pers. Sing. ohne -(e)st</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">du liest → <strong>Lies!</strong></td>
+            </tr>
+            <tr style="background:#faf9ff;">
+              <td style="padding:9px 14px; border:1px solid #e0daf5; font-weight:700; color:#5a3e9e;">du (Stammauslaut -t/-d)</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">+ zusätzliches -e</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">du wartest → <strong>Warte!</strong></td>
+            </tr>
+            <tr style="background:#fff;">
+              <td style="padding:9px 14px; border:1px solid #e0daf5; font-weight:700; color:#5a3e9e;">ihr → Imperativ</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">Verbform ohne Pronomen</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">Ihr lest → <strong>Lest!</strong></td>
+            </tr>
+            <tr style="background:#faf9ff;">
+              <td style="padding:9px 14px; border:1px solid #e0daf5; font-weight:700; color:#5a3e9e;">wir → Imperativ</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">Infinitiv + wir (nachgestellt)</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">wir machen → <strong>Machen wir!</strong></td>
+            </tr>
+            <tr style="background:#fff;">
+              <td style="padding:9px 14px; border:1px solid #e0daf5; font-weight:700; color:#5a3e9e;">Sie → Imperativ</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">Infinitiv + Sie (nachgestellt)</td>
+              <td style="padding:9px 14px; border:1px solid #e0daf5;">Sie singen → <strong>Singen Sie!</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div class="section" id="tab2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Lückentext Werbung">
+    <div class="tab-content">
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="resetTimer(2)">↺ Timer</button>
+          <button class="btn" onclick="resetLuecken()">↺ Übung</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer2">0:00</span></span>
+          <span>🏆 <span id="best2">–</span></span>
+        </div>
+      </div>
+
+      <div class="section-title">✏️ Lückentext: Werbekampagne</div>
+      <div class="wortkasten" id="wortkasten2">
+        <strong>Wörter:</strong> Werbekampagne · Werbeziel · Zielgruppe · Werbebotschaft · Werbemittel · Werbeträger · Slogan · Werbedesign · Werbeagentur · Werbekontrolle
+      </div>
+      <div id="lueckenContainer"></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: ZUORDNUNG -->
+  <div class="section" id="tab3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Zuordnung Marketing">
+    <div class="tab-content">
+      <div class="section-title">🔗 Zuordnung: Begriff → Definition</div>
+      <div class="hilfe-box">Klicke zuerst auf einen Begriff links, dann auf die passende Erklärung rechts.</div>
+      <div class="match-layout">
+        <div>
+          <h4>🏷️ Begriffe</h4>
+          <div class="match-terms" id="matchTerms"></div>
+        </div>
+        <div>
+          <h4>📖 Erklärungen</h4>
+          <div class="match-descs" id="matchDescs"></div>
+        </div>
+      </div>
+      <div style="margin-top:14px; display:flex; gap:8px;">
+        <button class="btn" onclick="resetMatch()">↺ Neu starten</button>
+        <span id="matchScore" style="font-size:0.85em; color:#888; align-self:center;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="section" id="tab4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6476589/pexels-photo-6476589.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Satzbau Werbung">
+    <div class="tab-content">
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="resetTimer(4)">↺ Timer</button>
+          <button class="btn" onclick="resetSatzbau()">↺ Übung</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer4">0:00</span></span>
+          <span>🏆 <span id="best4">–</span></span>
+        </div>
+      </div>
+      <div class="section-title">🧩 Satzbau: Sätze über Werbung</div>
+      <div class="hilfe-box">Ziehe die Wörter in die richtige Reihenfolge. Die Sätze werden automatisch überprüft.</div>
+      <div id="satzbauContainer"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="section" id="tab5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=1200&h=400&fit=crop" alt="Vokabeln lernen">
+    <div class="tab-content">
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="resetTimer(5)">↺ Timer</button>
+          <button class="btn" onclick="resetVocab()">↺ Übung</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer5">0:00</span></span>
+          <span>🏆 <span id="best5">–</span></span>
+        </div>
+      </div>
+      <div class="section-title">🔠 Wortschatz-Training: Englisch → Deutsch</div>
+      <div class="hilfe-box">Tippe Artikel, deutsches Wort und Plural. <strong>Der Artikel</strong> zählt nicht zur Großschreibung. <strong>Nomen</strong> müssen groß geschrieben werden.</div>
+      <div id="vocabContainer"></div>
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+<div class="author-footer">
+  <span>Erstellt von <span class="author-name">Frank Burkert</span> · DaF B1.2 · 2026</span>
+</div>
+
+<script>
+const TIMER_PREFIX = 'best2011X';
+
+// ── LUECKEN DATA ──────────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Eine ', blank: 'Werbekampagne', after: ' ist die geplante Werbeaktion eines Unternehmens, von der Idee bis zur Realisierung.' },
+  { before: 'Das ', blank: 'Werbeziel', after: ' bestimmt, was mit der Werbung erreicht werden soll — zum Beispiel mehr Bekanntheit.' },
+  { before: 'Die ', blank: 'Zielgruppe', after: ' ist die Gruppe von Menschen, die das Produkt besonders interessieren könnte.' },
+  { before: 'Die ', blank: 'Werbebotschaft', after: ' ist das Hauptkonzept der Kampagne — was der Konsument denken oder fühlen soll.' },
+  { before: 'Das ', blank: 'Werbemittel', after: ' zeigt, wie für etwas geworben wird — z. B. durch einen Flyer oder ein Video.' },
+  { before: 'Der ', blank: 'Werbeträger', after: ' zeigt, wo die Werbung erscheint — z. B. im Internet oder im Radio.' },
+  { before: 'Ein guter ', blank: 'Slogan', after: ' ist kurz, im Imperativ formuliert und leicht zu merken.' },
+  { before: 'Das ', blank: 'Werbedesign', after: ' ist die visuelle Darstellung der Werbung — Farben, Schrift und Bilder.' },
+  { before: 'Eine ', blank: 'Werbeagentur', after: ' ist ein Unternehmen, das Kampagnen für andere Unternehmen plant und gestaltet.' },
+  { before: 'Die ', blank: 'Werbekontrolle', after: ' findet nach der Kampagne statt und prüft, ob das Werbeziel erreicht wurde.' },
+];
+
+// ── MATCH DATA ────────────────────────────────────────────────
+const MATCH_DATA = [
+  { term: 'die Werbekampagne', desc: 'Geplante Werbeaktion eines Unternehmens von der Idee bis zur Umsetzung' },
+  { term: 'das Werbeziel', desc: 'Was mit der Kampagne erreicht werden soll' },
+  { term: 'die Zielgruppe', desc: 'Gruppe von Menschen, die das Produkt besonders interessiert' },
+  { term: 'der Slogan', desc: 'Kurzer Werbespruch, meistens im Imperativ' },
+  { term: 'das Werbemittel', desc: 'Zeigt, wie für etwas geworben wird (Flyer, Video, Plakat)' },
+  { term: 'der Werbeträger', desc: 'Zeigt, wo Werbung erscheint (TV, Radio, Internet)' },
+  { term: 'die Werbeagentur', desc: 'Unternehmen, das Werbung für andere plant und gestaltet' },
+  { term: 'das Werbedesign', desc: 'Visuelle Gestaltung der Werbung — Farben, Schrift, Bilder' },
+  { term: 'die Werbebotschaft', desc: 'Hauptkonzept der Kampagne — was der Konsument denken soll' },
+  { term: 'die Werbekontrolle', desc: 'Überprüfung am Ende, ob das Werbeziel erreicht wurde' },
+];
+
+// ── SATZBAU DATA ──────────────────────────────────────────────
+const SATZBAU_DATA = [
+  { words: ['Eine', 'Werbekampagne', 'braucht', 'ein', 'klares', 'Werbeziel', '.'] },
+  { words: ['Die', 'Zielgruppe', 'bestimmt', ',', 'für', 'wen', 'die', 'Werbung', 'gemacht', 'wird', '.'] },
+  { words: ['Der', 'Slogan', 'sollte', 'kurz', ',', 'einprägsam', 'und', 'humorvoll', 'sein', '.'] },
+  { words: ['Die', 'Werbeagentur', 'plant', 'und', 'gestaltet', 'die', 'Werbekampagne', '.'] },
+  { words: ['Kaufe', 'jetzt', 'und', 'spare', 'bis', 'zu', 'fünfzig', 'Prozent', '!'] },
+  { words: ['Das', 'Werbedesign', 'muss', 'zur', 'Zielgruppe', 'passen', '.'] },
+];
+
+// ── VOCAB DATA ────────────────────────────────────────────────
+const VOCAB_DATA = [
+  { en: 'advertising campaign', art: 'die', wort: 'Werbekampagne', plural: 'Werbekampagnen' },
+  { en: 'advertising goal', art: 'das', wort: 'Werbeziel', plural: 'Werbeziele' },
+  { en: 'target group', art: 'die', wort: 'Zielgruppe', plural: 'Zielgruppen' },
+  { en: 'advertising message', art: 'die', wort: 'Werbebotschaft', plural: 'Werbebotschaften' },
+  { en: 'advertising medium', art: 'das', wort: 'Werbemittel', plural: 'Werbemittel' },
+  { en: 'advertising channel', art: 'der', wort: 'Werbeträger', plural: 'Werbeträger' },
+  { en: 'slogan', art: 'der', wort: 'Slogan', plural: 'Slogans' },
+  { en: 'advertising design', art: 'das', wort: 'Werbedesign', plural: 'Werbedesigns' },
+  { en: 'advertising agency', art: 'die', wort: 'Werbeagentur', plural: 'Werbeagenturen' },
+  { en: 'advertising strategy', art: 'die', wort: 'Werbestrategie', plural: 'Werbestrategien' },
+  { en: 'marketing', art: 'das', wort: 'Marketing', plural: '–' },
+  { en: 'ad control / review', art: 'die', wort: 'Werbekontrolle', plural: 'Werbekontrollen' },
+];
+
+// ══════════════════════════════════════════════
+// TIMER SYSTEM
+// ══════════════════════════════════════════════
+const timers = {};
+function fmtTime(s) {
+  const m = Math.floor(s / 60);
+  return m + ':' + String(s % 60).padStart(2, '0');
+}
+function loadBestTimes() {
+  [2, 4, 5].forEach(n => {
+    const b = localStorage.getItem(TIMER_PREFIX + '_tab' + n);
+    const el = document.getElementById('best' + n);
+    if (el) el.textContent = b ? fmtTime(parseInt(b)) : '–';
+  });
+}
+function startTimer(n) {
+  if (timers[n] && timers[n].running) return;
+  timers[n] = { running: true, seconds: 0 };
+  timers[n].interval = setInterval(() => {
+    timers[n].seconds++;
+    const el = document.getElementById('timer' + n);
+    if (el) el.textContent = fmtTime(timers[n].seconds);
+  }, 1000);
+}
+function stopTimer(n) {
+  if (!timers[n] || !timers[n].running) return;
+  clearInterval(timers[n].interval);
+  timers[n].running = false;
+  const key = TIMER_PREFIX + '_tab' + n;
+  const prev = localStorage.getItem(key);
+  if (!prev || timers[n].seconds < parseInt(prev)) {
+    localStorage.setItem(key, timers[n].seconds);
+    const el = document.getElementById('best' + n);
+    if (el) el.textContent = fmtTime(timers[n].seconds);
+  }
+}
+function resetTimer(n) {
+  if (timers[n]) { clearInterval(timers[n].interval); timers[n] = null; }
+  const el = document.getElementById('timer' + n);
+  if (el) el.textContent = '0:00';
+}
+function timerAutoStart(n) { startTimer(n); }
+
+// ══════════════════════════════════════════════
+// TAB NAVIGATION
+// ══════════════════════════════════════════════
+function showTab(n) {
+  document.querySelectorAll('.section').forEach((s, i) => {
+    s.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.nav-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === n);
+  });
+  if (n === 2) timerAutoStart(2);
+  if (n === 4) timerAutoStart(4);
+  if (n === 5) timerAutoStart(5);
+}
+
+// ══════════════════════════════════════════════
+// LÜCKENTEXT
+// ══════════════════════════════════════════════
+function buildLuecken() {
+  const cont = document.getElementById('lueckenContainer');
+  cont.innerHTML = '';
+  LUECKEN_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'luecke-item';
+    div.innerHTML = item.before +
+      `<input class="blank" id="lb${idx}" type="text" autocomplete="off" placeholder="…" oninput="liveCheck(${idx})">` +
+      `<span class="correction-hint" id="lh${idx}"></span>` +
+      item.after;
+    cont.appendChild(div);
+  });
+}
+function liveCheck(idx) {
+  const inp = document.getElementById('lb' + idx);
+  const hint = document.getElementById('lh' + idx);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[idx].blank;
+  const caseSensitive = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
+  const match = caseSensitive ? val === ans : val.toLowerCase() === ans.toLowerCase();
+  if (val === '') { inp.className = 'blank'; hint.textContent = ''; return; }
+  if (match) {
+    inp.className = 'blank correct'; hint.textContent = '✓';
+    checkLueckenComplete();
+  } else if (ans.toLowerCase().startsWith(val.toLowerCase()) && val.length < ans.length) {
+    inp.className = 'blank'; hint.textContent = '';
+  } else {
+    inp.className = 'blank wrong'; hint.textContent = '';
+  }
+}
+function checkLueckenComplete() {
+  const allCorrect = LUECKEN_DATA.every((item, idx) => {
+    const inp = document.getElementById('lb' + idx);
+    return inp && inp.classList.contains('correct');
+  });
+  if (allCorrect) stopTimer(2);
+}
+function resetLuecken() {
+  buildLuecken();
+  resetTimer(2);
+}
+
+// ══════════════════════════════════════════════
+// ZUORDNUNG (MATCH)
+// ══════════════════════════════════════════════
+let matchSelected = null;
+let matchCorrect = 0;
+let shuffledDescs = [];
+
+function shuffleArr(a) {
+  const arr = [...a];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildMatch() {
+  matchCorrect = 0;
+  matchSelected = null;
+  document.getElementById('matchScore').textContent = '';
+
+  // Shuffle descs with conflict prevention (50 attempts)
+  let ok = false;
+  for (let attempt = 0; attempt < 50; attempt++) {
+    shuffledDescs = shuffleArr(MATCH_DATA);
+    if (shuffledDescs.every((d, i) => d.term !== MATCH_DATA[i].term)) { ok = true; break; }
+  }
+  if (!ok) shuffledDescs = shuffleArr(MATCH_DATA);
+
+  const termsEl = document.getElementById('matchTerms');
+  const descsEl = document.getElementById('matchDescs');
+  termsEl.innerHTML = '';
+  descsEl.innerHTML = '';
+
+  MATCH_DATA.forEach((item, i) => {
+    const tc = document.createElement('div');
+    tc.className = 'term-card';
+    tc.textContent = item.term;
+    tc.dataset.idx = i;
+    tc.onclick = () => selectTermCard(i);
+    termsEl.appendChild(tc);
+  });
+
+  shuffledDescs.forEach((item, i) => {
+    const dc = document.createElement('div');
+    dc.className = 'desc-card';
+    dc.textContent = item.desc;
+    dc.dataset.sidx = i;
+    dc.onclick = () => matchDescCard(i);
+    descsEl.appendChild(dc);
+  });
+}
+
+function selectTermCard(idx) {
+  const cards = document.querySelectorAll('.term-card');
+  cards.forEach(c => { if (!c.classList.contains('matched')) c.classList.remove('selected'); });
+  const card = document.querySelector(`.term-card[data-idx="${idx}"]`);
+  if (card && !card.classList.contains('matched')) {
+    card.classList.add('selected');
+    matchSelected = idx;
+  }
+}
+
+function matchDescCard(sidx) {
+  if (matchSelected === null) return;
+  const termCard = document.querySelector(`.term-card[data-idx="${matchSelected}"]`);
+  const descCard = document.querySelector(`.desc-card[data-sidx="${sidx}"]`);
+  if (!termCard || !descCard || descCard.classList.contains('matched')) return;
+
+  const selectedTerm = MATCH_DATA[matchSelected].term;
+  const clickedDesc = shuffledDescs[sidx].desc;
+  const correctDesc = MATCH_DATA[matchSelected].desc;
+
+  if (clickedDesc === correctDesc) {
+    termCard.classList.remove('selected'); termCard.classList.add('matched');
+    descCard.classList.add('matched');
+    matchCorrect++;
+    matchSelected = null;
+    document.getElementById('matchScore').textContent = matchCorrect + ' / ' + MATCH_DATA.length + ' richtig';
+  } else {
+    termCard.classList.add('error'); descCard.classList.add('error');
+    setTimeout(() => {
+      termCard.classList.remove('error');
+      descCard.classList.remove('error');
+    }, 800);
+  }
+}
+
+function resetMatch() { buildMatch(); }
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    // Shuffle non-punct words
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    // Chip pool
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    // Drop zone
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    // Add punct chips to zone as static
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    // Register zone drop + chip-in-zone click returns to pool
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    // Patch: clicking a chip in zone returns it to pool
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// ══════════════════════════════════════════════
+// WORTSCHATZ
+// ══════════════════════════════════════════════
+function initVocab() {
+  const cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  VOCAB_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'vocab-item';
+    div.innerHTML = `<span class="vocab-en">${item.en}</span><span class="vocab-arrow">→</span>
+      <div class="vocab-inputs">
+        <input type="text" class="art" id="va${idx}" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(${idx})">
+        <input type="text" class="wort" id="vw${idx}" placeholder="Nomen" autocomplete="off" oninput="vocabLiveCheck(${idx})">
+        <input type="text" class="plural" id="vp${idx}" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(${idx})">
+        <span class="vocab-hint" id="vh${idx}"></span>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  const artEl = document.getElementById('va' + idx);
+  const wortEl = document.getElementById('vw' + idx);
+  const pluralEl = document.getElementById('vp' + idx);
+  const hint = document.getElementById('vh' + idx);
+  const item = VOCAB_DATA[idx];
+
+  function checkField(el, answer, field) {
+    const val = el.value.trim();
+    if (val === '') { el.className = field; return false; }
+    const match = field === 'art' ? val.toLowerCase() === answer.toLowerCase()
+                                  : val === answer;
+    el.className = field + (match ? ' correct' : ' wrong');
+    return match;
+  }
+
+  const a1 = checkField(artEl, item.art, 'art');
+  const a2 = checkField(wortEl, item.wort, 'wort');
+  const a3 = checkField(pluralEl, item.plural, 'plural');
+
+  if (a1 && a2 && a3) { hint.textContent = '✓'; checkVocabComplete(); }
+  else hint.textContent = '';
+}
+
+function checkVocabComplete() {
+  const allOk = VOCAB_DATA.every((_, i) => {
+    const h = document.getElementById('vh' + i);
+    return h && h.textContent === '✓';
+  });
+  if (allOk) stopTimer(5);
+}
+
+function resetVocab() { initVocab(); resetTimer(5); }
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadBestTimes();
+  buildLuecken();
+  buildMatch();
+  buildSatzbau();
+  initVocab();
+});
+</script>
+</body>
+</html>

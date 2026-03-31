@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – Reisen als Subkultur</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; font-size: 16px; }
+  .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 6px 32px rgba(0,0,0,0.28); overflow: hidden; }
+  h1 { background: #667eea; color: #fff; text-align: center; padding: 20px 20px 14px; font-size: 1.3em; }
+  .subtitle { background: #667eea; color: #d9b3ff; text-align: center; padding: 0 20px 16px; font-size: 0.88em; }
+
+  /* NAV */
+  .nav { display: flex; flex-wrap: wrap; background: #f0e6ff; border-bottom: 2px solid #667eea; }
+  .nav button { flex: 1; min-width: 80px; padding: 10px 4px 8px; border: 1px solid #667eea; background: #f0e6ff; color: #667eea; font-size: 0.75em; font-weight: bold; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .nav button .nav-emoji { font-size: 1.3em; }
+  .nav button .nav-label { font-size: 0.85em; }
+  .nav button.active { background: #667eea; color: #fff; }
+  .nav button:hover:not(.active) { background: #d9b3ff; }
+
+  /* TAB */
+  .tab { display: none; padding: 26px; }
+  .tab.aktiv { display: block; }
+
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; display: block; }
+
+  /* TIMER-CONTROLS */
+  .timer-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 6px; }
+  .tc-buttons { display: flex; gap: 6px; }
+  .tc-buttons button { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+  .tc-buttons button:hover { background: #f0f0f0; color: #555; }
+  .tc-times { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+  .timer-display { color: #667eea; font-weight: 700; }
+  .best-display { color: #f39c12; font-weight: 600; }
+
+  /* VORENTLASTUNG */
+  .vocab-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .vocab-card { border: 1.5px solid #d9b3ff; border-radius: 10px; padding: 14px; background: #faf5ff; }
+  .vocab-card .word { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 4px; }
+  .vocab-card .example { font-size: 0.87em; color: #555; font-style: italic; line-height: 1.5; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+
+  /* LESETEXT */
+  .story-text { max-width: 640px; margin: 0 auto; font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 1.85; color: #1a1a1a; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+  .story-text h2 { font-size: 1.1em; color: #667eea; margin: 22px 0 10px; font-family: 'Segoe UI', Arial, sans-serif; }
+  .story-text p { margin-bottom: 14px; text-indent: 1.4em; }
+  .story-text p:first-of-type { text-indent: 0; }
+  .vocab-hl { background: #fff176; border-radius: 3px; padding: 0 2px; cursor: pointer; position: relative; }
+  .vocab-hl .tooltip { display: none; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #333; color: #fff; font-size: 0.78em; padding: 4px 8px; border-radius: 5px; white-space: nowrap; z-index: 10; pointer-events: none; font-family: 'Segoe UI', sans-serif; }
+  .vocab-hl:hover .tooltip { display: block; }
+
+  /* RICHTIG/FALSCH */
+  .rf-list { display: flex; flex-direction: column; gap: 12px; }
+  .rf-item { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
+  .rf-item .rf-text { flex: 1; min-width: 200px; line-height: 1.6; font-size: 0.95em; }
+  .rf-btns { display: flex; gap: 8px; flex-shrink: 0; }
+  .rf-btn { padding: 6px 16px; border: 2px solid #667eea; border-radius: 6px; background: #fff; color: #667eea; font-weight: bold; cursor: pointer; font-size: 0.88em; transition: all 0.15s; }
+  .rf-btn:hover { background: #f0e6ff; }
+  .rf-btn.selected-correct { background: #28a745; border-color: #28a745; color: #fff; }
+  .rf-btn.selected-wrong { background: #dc3545; border-color: #dc3545; color: #fff; }
+  .rf-item.correct { background: #d4edda; border-color: #28a745; }
+  .rf-item.wrong { background: #f8d7da; border-color: #dc3545; }
+
+  /* LÜCKENTEXT */
+  .luecke-item { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .luecke-item .sentence { line-height: 1.8; }
+  .luecke-input { border: none; border-bottom: 2px solid #667eea; background: transparent; font-size: 1em; padding: 2px 6px; min-width: 120px; outline: none; color: #222; transition: border-color 0.2s; }
+  .luecke-input.ok { border-color: #28a745; color: #28a745; }
+  .luecke-input.no { border-color: #dc3545; color: #dc3545; }
+  .luecke-item.correct { background: #d4edda; border-color: #28a745; }
+  .luecke-item.wrong { background: #f8d7da; border-color: #dc3545; }
+  .feedback-icon { font-size: 1.1em; margin-left: 6px; }
+
+  /* SATZBAU */
+  .sb-task { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
+  .sb-bank { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; border: 1.5px dashed #bbb; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
+  .sb-zone { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; border: 2px dashed #667eea; border-radius: 6px; padding: 8px; background: #faf5ff; }
+  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.88em; user-select: none; transition: opacity 0.15s; }
+  .chip:active { cursor: grabbing; opacity: 0.7; }
+  .sb-feedback { font-size: 0.9em; margin-top: 8px; font-weight: bold; min-height: 20px; }
+  .sb-feedback.ok { color: #28a745; }
+  .sb-feedback.err { color: #dc3545; }
+
+  /* VOKABEL-TRAINER */
+  .vt-card { background: linear-gradient(135deg, #667eea 0%, #9b59b6 100%); color: #fff; border-radius: 12px; padding: 28px 24px; text-align: center; margin-bottom: 20px; min-height: 120px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; }
+  .vt-card .vt-de { font-size: 1.3em; font-weight: bold; }
+  .vt-card .vt-en { font-size: 0.9em; opacity: 0.8; }
+  .vt-input-row { display: flex; gap: 10px; margin-bottom: 14px; }
+  .vt-input { flex: 1; padding: 10px 14px; border: 2px solid #d9b3ff; border-radius: 8px; font-size: 1em; outline: none; transition: border-color 0.2s; }
+  .vt-input.ok { border-color: #28a745; background: #d4edda; }
+  .vt-input.no { border-color: #dc3545; background: #f8d7da; }
+  .vt-nav { display: flex; gap: 10px; justify-content: center; }
+  .vt-btn { padding: 8px 20px; background: #667eea; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background 0.2s; }
+  .vt-btn:hover { background: #4a0080; }
+  .vt-progress { text-align: center; font-size: 0.85em; color: #888; margin-bottom: 14px; }
+
+  /* INFO/TIP BOXES */
+  .info-box { background: #f0e6ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.92em; line-height: 1.6; }
+  .info-box strong { color: #667eea; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e0c4ff; }
+
+  /* FOOTER */
+  footer { background: #f0e6ff; border-top: 1px solid #d9b3ff; text-align: center; padding: 12px; font-size: 0.78em; color: #888; }
+  footer a { color: #667eea; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>✈️ Reisen als Subkultur</h1>
+  <div class="subtitle">B1.2 – Lektion 2026R</div>
+
+  <nav class="nav">
+    <button class="active" onclick="showTab(0,this)"><span class="nav-emoji">🌅</span><span class="nav-label">Vorentlastung</span></button>
+    <button onclick="showTab(1,this)"><span class="nav-emoji">📖</span><span class="nav-label">Lesetext</span></button>
+    <button onclick="showTab(2,this)"><span class="nav-emoji">❓</span><span class="nav-label">Verständnis</span></button>
+    <button onclick="showTab(3,this)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></button>
+    <button onclick="showTab(4,this)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></button>
+    <button onclick="showTab(5,this)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></button>
+  </nav>
+
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="tab aktiv" id="tab-0">
+    <img src="https://images.pexels.com/photos/1008155/pexels-photo-1008155.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Reisen">
+    <div class="section-title">🔤 Wortschatz</div>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="tab" id="tab-1">
+    <img src="https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Wohnmobil Reisen">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button onclick="timerResetOne(1)">↺ Neustart</button>
+      </div>
+      <div class="tc-times">
+        <span>⏱ <span class="timer-display" id="timer-1">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-1">–</span></span>
+      </div>
+    </div>
+    <div class="story-text" id="lesetext"></div>
+  </div>
+
+  <!-- TAB 2: RICHTIG/FALSCH -->
+  <div class="tab" id="tab-2">
+    <img src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Fragen">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button onclick="showRFLoesung()">💡 Lösungen</button>
+        <button onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
+      </div>
+      <div class="tc-times">
+        <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-2">–</span></span>
+      </div>
+    </div>
+    <div class="section-title">❓ Richtig oder Falsch?</div>
+    <div class="rf-list" id="rf-list"></div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab" id="tab-3">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Schreiben">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button onclick="showLueckenLoesung()">💡 Lösungen</button>
+        <button onclick="timerResetOne(3); resetLuecken()">↺ Neustart</button>
+      </div>
+      <div class="tc-times">
+        <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-3">–</span></span>
+      </div>
+    </div>
+    <div class="info-box"><strong>Tipp:</strong> Ergänze die Lücken mit den passenden Wörtern aus dem Lesetext.</div>
+    <div id="luecken-container"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab" id="tab-4">
+    <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Satzbau">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button onclick="showSbLoesung()">💡 Lösungen</button>
+        <button onclick="timerResetOne(4); resetSatzbau()">↺ Neustart</button>
+      </div>
+      <div class="tc-times">
+        <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-4">–</span></span>
+      </div>
+    </div>
+    <div class="info-box"><strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge, um einen korrekten Satz zu bilden.</div>
+    <div id="satzbau-container"></div>
+  </div>
+
+  <!-- TAB 5: WORTSCHATZ -->
+  <div class="tab" id="tab-5">
+    <img src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Wortschatz">
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button onclick="timerResetOne(5); resetVokabeln()">↺ Neustart</button>
+      </div>
+      <div class="tc-times">
+        <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
+        <span>🏆 <span class="best-display" id="best-5">–</span></span>
+      </div>
+    </div>
+    <div class="vt-progress" id="vt-progress">Karte 1 von 10</div>
+    <div class="vt-card" id="vt-card">
+      <div class="vt-en" id="vt-en">–</div>
+    </div>
+    <div class="vt-input-row">
+      <input class="vt-input" id="vt-input" type="text" placeholder="Artikel + Wort + Plural" oninput="vtCheck()" onkeydown="if(event.key==='Enter') vtNext()">
+    </div>
+    <div class="vt-nav">
+      <button class="vt-btn" onclick="vtPrev()">◀ Zurück</button>
+      <button class="vt-btn" onclick="vtNext()">Weiter ▶</button>
+    </div>
+    <div id="vt-feedback" style="text-align:center;margin-top:12px;font-size:0.9em;min-height:20px;"></div>
+  </div>
+
+  <footer>
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+  </footer>
+</div>
+
+<script>
+// ===================== TIMER =====================
+const TIMER_PREFIX = 'best2026R';
+const timers = {};
+const bestTimes = {};
+
+function timerKey(n) { return TIMER_PREFIX + n; }
+
+function timerStart(n) {
+  if (timers[n] && timers[n].running) return;
+  if (!timers[n]) timers[n] = { elapsed: 0, running: false };
+  timers[n].startTime = Date.now() - (timers[n].elapsed || 0) * 1000;
+  timers[n].running = true;
+  timers[n].interval = setInterval(() => {
+    const secs = Math.floor((Date.now() - timers[n].startTime) / 1000);
+    timers[n].elapsed = secs;
+    const el = document.getElementById('timer-' + n);
+    if (el) el.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
+  }, 500);
+}
+
+function timerStop(n) {
+  if (!timers[n] || !timers[n].running) return;
+  clearInterval(timers[n].interval);
+  timers[n].running = false;
+  const secs = timers[n].elapsed || 0;
+  const stored = parseInt(localStorage.getItem(timerKey(n)) || '9999');
+  if (secs < stored) {
+    localStorage.setItem(timerKey(n), secs);
+    const el = document.getElementById('best-' + n);
+    if (el) el.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
+  }
+}
+
+function timerResetOne(n) {
+  if (timers[n]) { clearInterval(timers[n].interval); }
+  timers[n] = { elapsed: 0, running: false };
+  const el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '0:00';
+}
+
+function loadBestTimes() {
+  [1,2,3,4,5].forEach(n => {
+    const stored = parseInt(localStorage.getItem(timerKey(n)) || '0');
+    if (stored > 0) {
+      const el = document.getElementById('best-' + n);
+      if (el) el.textContent = Math.floor(stored/60) + ':' + String(stored%60).padStart(2,'0');
+    }
+  });
+}
+
+function timerAutoStart(n) {
+  if (!timers[n] || !timers[n].running) timerStart(n);
+}
+
+// ===================== TABS =====================
+function showTab(idx, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('aktiv'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + idx).classList.add('aktiv');
+  btn.classList.add('active');
+  if (idx === 1) timerAutoStart(1);
+}
+
+// ===================== WORTSCHATZ INTERACTIVE =====================
+var WORTSCHATZ = [
+  { type: "n", en: "freedom of travel", art: "die", wort: "Reisefreiheit", plural: "Reisefreiheiten" },
+  { type: "n", en: "metropolis / big city", art: "die", wort: "Metropole", plural: "Metropolen" },
+  { type: "n", en: "old town", art: "die", wort: "Altstadt", plural: "Altstädte" },
+  { type: "v", en: "to move (to another city)", de: "umziehen" },
+  { type: "v", en: "to be homesick", de: "Heimweh haben" },
+  { type: "v", en: "to live abroad", de: "im Ausland leben" },
+  { type: "v", en: "nostalgic (adjective)", de: "nostalgisch" },
+  { type: "n", en: "citizen", art: "der", wort: "Bürger", plural: "Bürger" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    var ok2 = w2 === item.de;
+    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+// ===================== VORENTLASTUNG =====================
+const VORENTLASTUNG = [
+  { word: 'die Reisefreiheit', example: 'Die Reisefreiheit ermöglicht es uns, überall hinzureisen.' },
+  { word: 'die Metropole, -n', example: 'Sydney ist eine Metropole mit Millionen von Einwohnern.' },
+  { word: 'die Altstadt, -städte', example: 'Es gibt hier eine wunderschöne Altstadt mit alten Häusern.' },
+  { word: 'umziehen (zieht um)', example: 'Ich möchte nach Paris umziehen und dort leben.' },
+  { word: 'Heimweh haben', example: 'Immer wenn ich im Urlaub bin, habe ich Heimweh nach der Familie.' },
+  { word: 'im Ausland leben', example: 'Ich lebe schon seit fünf Jahren im Ausland und spreche die Sprache.' },
+  { word: 'nostalgisch', example: 'Wenn sie diese alten Fotos ansieht, wird sie nostalgisch.' },
+  { word: 'der Bürger, -', example: 'Er ist ein Bürger dieser Stadt und kennt alle Straßen.' },
+];
+
+function buildVorentlastung() {
+  // This function is kept for compatibility but no longer needed as we use initVocab()
+}
+
+// ===================== LESETEXT =====================
+const LESETEXT_HTML = `
+<h2>Reisen als Subkultur</h2>
+<p>Wenn man von Subkulturen spricht, denkt man vielleicht zuerst an Musik oder Mode. Aber auch das Reisen kann eine eigene Subkultur sein — mit Menschen, die bewusst anders reisen als die meisten.</p>
+
+<h2>Das Wohnmobil als Zuhause</h2>
+<p>Mitten in Deutschland steht ein Wohnmobil. Es ist nicht besonders groß, aber es ist das Zuhause von Anna und Klaus seit drei Jahren. Das Fahrzeug wiegt 6,4 Tonnen und hat alles, was man zum Leben braucht: eine kleine Küche, ein Bett, ein Bad und sogar einen Internetanschluss.</p>
+<p>„Wir wollten weit weg vom Stress der Großstadt", sagt Anna. „Jetzt haben wir die Freiheit, jeden Tag an einem anderen Ort aufzuwachen." Das Paar bereist Europa und macht kurze Stopps an Orten, die sie interessieren.</p>
+<p>Was kostet so ein Leben? Die Parkplätze auf dem Land und die Campingplätze sind oft günstiger als eine Mietwohnung in der Stadt. Natürlich kommen noch Kosten für Treibstoff, Gas und Versicherungen dazu, aber insgesamt leben Anna und Klaus günstiger als früher.</p>
+
+<h2>Die New-Age-Bewegung</h2>
+<p>Eine andere Art der Reise-Subkultur entstand in den 70er- und 80er-Jahren in den USA: die New-Age-Bewegung. Menschen aus aller Welt reisen in die kleinen Stadt Sedona im Bundesstaat Arizona. Sedona liegt nördlich von Phoenix und hat nur 17.000 Einwohner — aber Hunderttausende von Besuchern pro Jahr.</p>
+<p>Was macht Sedona so besonders? Die roten Felsen, die Wüstenlandschaft, und laut den Anhängern der Bewegung: spezielle Energiepunkte in der Erde. Die Menschen kommen hierher, um Energie zu tanken, zu meditieren und spirituelle Erfahrungen zu machen.</p>
+<p>Sedona war früher eine Mormonensiedlung. Theodore Schnebly war einer der ersten Siedler und gab der Stadt ihren Namen. Heute findet man dort neben alten Kirchen auch Kristallläden, UFO-Tourismusangebote und spirituelle Heilungszentren.</p>
+
+<h2>Besondere Wohnorte</h2>
+<p>Nicht alle Reise-Subkulturen sind so groß wie die New-Age-Bewegung. In der Nähe von Dublin, Irland, hat eine Familie eine alte Scheune in Ardcath umgebaut und lebt dort seit Jahren ohne fließendes Wasser aus dem Hahn. Sie holen ihr Wasser selbst.</p>
+<p>In Tyringham, Massachusetts, hat jemand ein altes Silo in ein Wohnhaus umgewandelt. Der runde Grundriss ist ungewöhnlich, aber das Gebäude ist warm und gemütlich.</p>
+<p>Was diese Menschen gemeinsam haben: Sie suchen eine Alternative zum normalen Leben. Das Reisen und das Leben in ungewöhnlichen Orten ist für sie keine Notlösung — es ist eine bewusste Entscheidung. Und für immer mehr Menschen auf der Welt wird diese Lebensweise attraktiv.</p>
+`;
+
+function buildLesetext() {
+  const el = document.getElementById('lesetext');
+  el.innerHTML = LESETEXT_HTML;
+  highlightVocab(el);
+}
+
+// Vokabel-Highlighting
+const HIGHLIGHT_WORDS = [
+  { de: 'Reisefreiheit', tip: 'freedom of travel' },
+  { de: 'Metropole', tip: 'metropolis, big city' },
+  { de: 'Altstadt', tip: 'old town' },
+  { de: 'umziehen', tip: 'to move (to a new place)' },
+  { de: 'Heimweh', tip: 'homesickness' },
+  { de: 'im Ausland', tip: 'abroad' },
+  { de: 'nostalgisch', tip: 'nostalgic' },
+  { de: 'Bürger', tip: 'citizen' },
+];
+
+function highlightVocab(container) {
+  HIGHLIGHT_WORDS.forEach(({ de, tip }) => {
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
+    const nodes = [];
+    let node;
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(textNode => {
+      const re = new RegExp(`(${de})`, 'g');
+      if (re.test(textNode.textContent)) {
+        const span = document.createElement('span');
+        span.innerHTML = textNode.textContent.replace(
+          new RegExp(`(${de})`, 'g'),
+          `<span class="vocab-hl">$1<span class="tooltip">${tip}</span></span>`
+        );
+        textNode.parentNode.replaceChild(span, textNode);
+      }
+    });
+  });
+}
+
+// ===================== RICHTIG / FALSCH =====================
+const RF_DATA = [
+  { text: 'Anna und Klaus leben seit drei Jahren in einem Wohnmobil.', answer: true },
+  { text: 'Das Wohnmobil von Anna und Klaus wiegt 6,4 Tonnen.', answer: true },
+  { text: 'Das Leben im Wohnmobil ist immer teurer als eine Mietwohnung.', answer: false },
+  { text: 'Die New-Age-Bewegung entstand in den 70er- und 80er-Jahren.', answer: true },
+  { text: 'Sedona liegt südlich von Phoenix in Arizona.', answer: false },
+  { text: 'Sedona hat mehr als eine Million Einwohner.', answer: false },
+  { text: 'Sedona war ursprünglich eine Mormonensiedlung.', answer: true },
+  { text: 'In Ardcath bei Dublin hat eine Familie eine alte Scheune umgebaut.', answer: true },
+];
+
+let rfState = {};
+let rfTimerStarted = false;
+
+function buildRF() {
+  const list = document.getElementById('rf-list');
+  list.innerHTML = RF_DATA.map((item, i) => `
+    <div class="rf-item" id="rf-item-${i}">
+      <div class="rf-text">${item.text}</div>
+      <div class="rf-btns">
+        <button class="rf-btn" id="rf-r-${i}" onclick="selectRF(${i}, true)">Richtig</button>
+        <button class="rf-btn" id="rf-f-${i}" onclick="selectRF(${i}, false)">Falsch</button>
+      </div>
+    </div>
+  `).join('');
+  rfState = {};
+  rfTimerStarted = false;
+}
+
+function selectRF(i, val) {
+  if (!rfTimerStarted) { timerAutoStart(2); rfTimerStarted = true; }
+  rfState[i] = val;
+  const correct = RF_DATA[i].answer;
+  const item = document.getElementById('rf-item-' + i);
+  const btnR = document.getElementById('rf-r-' + i);
+  const btnF = document.getElementById('rf-f-' + i);
+  btnR.className = 'rf-btn';
+  btnF.className = 'rf-btn';
+  if (val === correct) {
+    item.className = 'rf-item correct';
+    (val ? btnR : btnF).className = 'rf-btn selected-correct';
+  } else {
+    item.className = 'rf-item wrong';
+    (val ? btnR : btnF).className = 'rf-btn selected-wrong';
+  }
+  checkRFComplete();
+}
+
+function checkRFComplete() {
+  if (Object.keys(rfState).length === RF_DATA.length) {
+    const allOk = RF_DATA.every((item, i) => rfState[i] === item.answer);
+    if (allOk) timerStop(2);
+  }
+}
+
+function showRFLoesung() {
+  RF_DATA.forEach((item, i) => {
+    rfState[i] = item.answer;
+    const el = document.getElementById('rf-item-' + i);
+    el.className = 'rf-item correct';
+    document.getElementById('rf-r-' + i).className = 'rf-btn' + (item.answer ? ' selected-correct' : '');
+    document.getElementById('rf-f-' + i).className = 'rf-btn' + (!item.answer ? ' selected-correct' : '');
+  });
+}
+
+function resetRF() {
+  rfTimerStarted = false;
+  buildRF();
+}
+
+// ===================== LÜCKENTEXT =====================
+const LUECKEN_DATA = [
+  { before: 'Sie wollten weit weg vom Stress der', blank: 'Großstadt', after: 'leben.' },
+  { before: 'Das Fahrzeug hat einen', blank: 'Internetanschluss', after: 'und alle Grundausstattung.' },
+  { before: 'Campingplätze sind oft günstiger als eine', blank: 'Mietwohnung', after: 'in der Stadt.' },
+  { before: 'Die New-Age-Bewegung entstand in den 70er- und 80er-Jahren und zieht Menschen nach', blank: 'Sedona', after: '.' },
+  { before: 'Sedona liegt', blank: 'nördlich', after: 'von Phoenix im Bundesstaat Arizona.' },
+  { before: 'Die Menschen kommen nach Sedona, um Energie zu tanken und zu', blank: 'meditieren', after: '.' },
+  { before: 'Theodore Schnebly war einer der ersten Siedler und gab der Stadt ihren', blank: 'Namen', after: '.' },
+  { before: 'Eine Familie in der Nähe von Dublin hat eine alte', blank: 'Scheune', after: 'umgebaut.' },
+  { before: 'Das Reisen ist für diese Menschen eine bewusste', blank: 'Entscheidung', after: ', keine Notlösung.' },
+  { before: 'Diese Lebensweise wird für immer mehr Menschen auf der Welt', blank: 'attraktiv', after: '.' },
+];
+
+let lueckenTimerStarted = false;
+let lueckenDone = [];
+
+function buildLuecken() {
+  const c = document.getElementById('luecken-container');
+  lueckenDone = new Array(LUECKEN_DATA.length).fill(false);
+  lueckenTimerStarted = false;
+  c.innerHTML = LUECKEN_DATA.map((item, i) => `
+    <div class="luecke-item" id="luecke-${i}">
+      <div class="sentence">
+        ${item.before}
+        <input class="luecke-input" id="li-${i}" type="text" placeholder=""
+          oninput="liveCheck(${i})" autocomplete="off">
+        <span class="feedback-icon" id="lf-${i}"></span>
+        ${item.after}
+      </div>
+    </div>
+  `).join('');
+}
+
+function liveCheck(i) {
+  if (!lueckenTimerStarted) { timerAutoStart(3); lueckenTimerStarted = true; }
+  const inp = document.getElementById('li-' + i);
+  const icon = document.getElementById('lf-' + i);
+  const item = document.getElementById('luecke-' + i);
+  const val = inp.value.trim();
+  const ans = LUECKEN_DATA[i].blank;
+  const caseSensitive = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
+  const match = caseSensitive ? (val === ans) : (val.toLowerCase() === ans.toLowerCase());
+  const prefix = caseSensitive ? ans.startsWith(val) : ans.toLowerCase().startsWith(val.toLowerCase());
+
+  if (match) {
+    inp.className = 'luecke-input ok';
+    item.className = 'luecke-item correct';
+    icon.textContent = '✅';
+    lueckenDone[i] = true;
+  } else if (val.length > 0 && prefix) {
+    inp.className = 'luecke-input';
+    inp.style.borderColor = '#667eea';
+    item.className = 'luecke-item';
+    icon.textContent = '';
+    lueckenDone[i] = false;
+  } else if (val.length > 0) {
+    inp.className = 'luecke-input no';
+    item.className = 'luecke-item wrong';
+    icon.textContent = '❌';
+    lueckenDone[i] = false;
+  } else {
+    inp.className = 'luecke-input';
+    inp.style.borderColor = '';
+    item.className = 'luecke-item';
+    icon.textContent = '';
+    lueckenDone[i] = false;
+  }
+  if (lueckenDone.every(Boolean)) timerStop(3);
+}
+
+function showLueckenLoesung() {
+  LUECKEN_DATA.forEach((item, i) => {
+    const inp = document.getElementById('li-' + i);
+    inp.value = item.blank;
+    liveCheck(i);
+  });
+}
+
+function resetLuecken() {
+  lueckenTimerStarted = false;
+  buildLuecken();
+}
+
+// ===================== SATZBAU =====================
+const SATZBAU_DATA = [
+  { chips: ['Die', 'Reisefreiheit', 'ermöglicht', 'uns,', 'überall', 'hinzureisen.'] },
+  { chips: ['Das', 'Wohnmobil', 'hat', 'einen', 'Internetanschluss', 'und', 'eine', 'kleine', 'Küche.'] },
+  { chips: ['Campingplätze', 'auf', 'dem', 'Land', 'sind', 'oft', 'günstiger', 'als', 'eine', 'Mietwohnung.'] },
+  { chips: ['Sedona', 'liegt', 'nördlich', 'von', 'Phoenix', 'in', 'Arizona.'] },
+  { chips: ['Die', 'Menschen', 'kommen', 'hierher,', 'um', 'Energie', 'zu', 'tanken.'] },
+  { chips: ['Das', 'Reisen', 'ist', 'für', 'sie', 'eine', 'bewusste', 'Entscheidung.'] },
+];
+
+let sbDragged = null;
+let sbTimerStarted = false;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function sbMakeChip(text) {
+  const chip = document.createElement('div');
+  chip.className = 'chip';
+  chip.textContent = text;
+  chip.draggable = true;
+  chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; });
+  chip.addEventListener('dragend', () => { sbDragged = null; });
+  return chip;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    if (sbDragged) { zone.appendChild(sbDragged); sbDragged = null; }
+  });
+}
+
+function buildSatzbau() {
+  const c = document.getElementById('satzbau-container');
+  sbTimerStarted = false;
+  c.innerHTML = SATZBAU_DATA.map((item, i) => {
+    let shuffled = shuffle(item.chips);
+    let attempts = 0;
+    while (attempts < 50 && shuffled.join('') === item.chips.join('')) {
+      shuffled = shuffle(item.chips);
+      attempts++;
+    }
+    return `
+      <div class="sb-task">
+        <div class="sb-bank" id="sb-bank-${i}"></div>
+        <div class="sb-zone" id="sb-row-${i}"></div>
+        <div class="sb-feedback" id="sb-fb-${i}"></div>
+      </div>
+    `;
+  }).join('');
+
+  SATZBAU_DATA.forEach((item, i) => {
+    let shuffled = shuffle(item.chips);
+    let attempts = 0;
+    while (attempts < 50 && shuffled.join('') === item.chips.join('')) {
+      shuffled = shuffle(item.chips);
+      attempts++;
+    }
+    const bank = document.getElementById('sb-bank-' + i);
+    const row = document.getElementById('sb-row-' + i);
+    sbRegisterZone(bank);
+    sbRegisterZone(row);
+    shuffled.forEach(text => { bank.appendChild(sbMakeChip(text)); });
+    row.addEventListener('drop', () => setTimeout(() => sbCheckAuto(i), 500));
+    bank.addEventListener('drop', () => setTimeout(() => sbCheckAuto(i), 500));
+  });
+}
+
+function sbCheckAuto(i) {
+  if (!sbTimerStarted) { timerAutoStart(4); sbTimerStarted = true; }
+  const row = document.getElementById('sb-row-' + i);
+  const bank = document.getElementById('sb-bank-' + i);
+  const fb = document.getElementById('sb-fb-' + i);
+  const placed = Array.from(row.children).map(c => c.textContent);
+  const correct = SATZBAU_DATA[i].chips;
+  if (bank.children.length === 0 && placed.length > 0) {
+    if (JSON.stringify(placed) === JSON.stringify(correct)) {
+      fb.textContent = '✅ Richtig!';
+      fb.className = 'sb-feedback ok';
+      checkSatzbauComplete();
+    } else {
+      fb.textContent = '❌ Noch nicht ganz richtig.';
+      fb.className = 'sb-feedback err';
+    }
+  } else {
+    fb.textContent = '';
+    fb.className = 'sb-feedback';
+  }
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const fb = document.getElementById('sb-fb-' + i);
+    return fb && fb.classList.contains('ok');
+  });
+  if (allOk) timerStop(4);
+}
+
+function showSbLoesung() {
+  SATZBAU_DATA.forEach((item, i) => {
+    const bank = document.getElementById('sb-bank-' + i);
+    const row = document.getElementById('sb-row-' + i);
+    const fb = document.getElementById('sb-fb-' + i);
+    while (row.firstChild) bank.appendChild(row.firstChild);
+    item.chips.forEach(text => { row.appendChild(sbMakeChip(text)); });
+    bank.innerHTML = '';
+    fb.textContent = '✅ Richtig!';
+    fb.className = 'sb-feedback ok';
+  });
+}
+
+function resetSatzbau() {
+  sbTimerStarted = false;
+  buildSatzbau();
+}
+
+// ===================== VOKABELN =====================
+const VOCAB_DATA = [
+  { de: 'die Reisefreiheit', plural: 'die Reisefreiheiten', en: 'freedom of travel' },
+  { de: 'die Metropole', plural: 'die Metropolen', en: 'metropolis / big city' },
+  { de: 'die Altstadt', plural: 'die Altstädte', en: 'old town' },
+  { de: 'umziehen', plural: '(er zieht um)', en: 'to move (to a new place)' },
+  { de: 'Heimweh haben', plural: '–', en: 'to be homesick' },
+  { de: 'im Ausland leben', plural: '–', en: 'to live abroad' },
+  { de: 'nostalgisch', plural: '–', en: 'nostalgic' },
+  { de: 'der Bürger', plural: 'die Bürger', en: 'citizen' },
+  { de: 'die Subkultur', plural: 'die Subkulturen', en: 'subculture' },
+  { de: 'die Entscheidung', plural: 'die Entscheidungen', en: 'decision' },
+];
+
+let vtIndex = 0;
+let vtTimerStarted = false;
+
+function vtRender() {
+  const item = VOCAB_DATA[vtIndex];
+  document.getElementById('vt-en').textContent = item.en;
+  document.getElementById('vt-progress').textContent = `Karte ${vtIndex + 1} von ${VOCAB_DATA.length}`;
+  document.getElementById('vt-input').value = '';
+  document.getElementById('vt-input').className = 'vt-input';
+  document.getElementById('vt-feedback').textContent = '';
+}
+
+function vtCheck() {
+  if (!vtTimerStarted) { timerAutoStart(5); vtTimerStarted = true; }
+  const inp = document.getElementById('vt-input');
+  const val = inp.value.trim().toLowerCase();
+  const item = VOCAB_DATA[vtIndex];
+  const correct = item.de.toLowerCase();
+  if (val === correct) {
+    inp.className = 'vt-input ok';
+    document.getElementById('vt-feedback').textContent = '✅ ' + item.de + ' | Pl.: ' + item.plural;
+  } else if (correct.startsWith(val)) {
+    inp.className = 'vt-input';
+  } else if (val.length > 0) {
+    inp.className = 'vt-input no';
+  }
+}
+
+function vtNext() {
+  if (vtIndex < VOCAB_DATA.length - 1) {
+    vtIndex++;
+    vtRender();
+  } else {
+    timerStop(5);
+    document.getElementById('vt-feedback').textContent = '🏆 Alle Karten abgeschlossen!';
+  }
+}
+
+function vtPrev() {
+  if (vtIndex > 0) {
+    vtIndex--;
+    vtRender();
+  }
+}
+
+function resetVokabeln() {
+  vtIndex = 0;
+  vtTimerStarted = false;
+  vtRender();
+}
+
+// ===================== INIT =====================
+initVocab();
+buildLesetext();
+buildRF();
+buildLuecken();
+buildSatzbau();
+vtRender();
+loadBestTimes();
+</script>
+</body>
+</html>

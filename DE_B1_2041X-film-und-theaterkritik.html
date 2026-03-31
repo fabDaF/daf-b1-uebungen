@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Film- und Theaterkritik – B1.2 Lektion 2041X</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #667eea; font-family: Arial, sans-serif; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; }
+  header { background: #667eea; color: #fff; padding: 18px 24px; }
+  header h1 { font-size: 1.3rem; font-weight: bold; }
+  header p { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
+
+  nav { display: flex; flex-direction: column; gap: 0; border-bottom: 2px solid #667eea; }
+  nav button { background: #f3e8ff; color: #667eea; border: 1px solid #667eea; padding: 10px 14px; font-size: 0.88rem; font-weight: bold; cursor: pointer; text-align: left; transition: background 0.2s; }
+  nav button:hover { background: #e0c8f8; }
+  nav button.active { background: #667eea; color: #fff; }
+
+  .tab { display: none; padding: 24px; }
+  .tab.active { display: block; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 18px; }
+
+  .section-title { font-size: 1rem; font-weight: bold; color: #667eea; margin-bottom: 16px; border-left: 4px solid #667eea; padding-left: 12px; }
+
+  /* SATZBAU */
+  .satzbau-item { background: #f3e8ff; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+  .chips-container { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; background: #fff; border: 2px dashed #c084fc; border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 5px 12px; font-size: 0.85rem; cursor: grab; user-select: none; border: none; }
+  .chip.punct-chip { cursor: default; }
+  .sentence-builder { min-height: 44px; background: #fff; border: 2px solid #c084fc; border-radius: 6px; padding: 8px; margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
+  .sentence-builder.correct { background: #f0fdf4; border-color: #22c55e; }
+  .sentence-builder.incorrect { background: #fee2e2; border-color: #dc2626; }
+  .chip.correct { background: #22c55e; }
+  .satzbau-feedback { font-size: 0.9rem; margin-top: 6px; min-height: 20px; }
+  .satzbau-feedback.correct { color: #22c55e; font-weight: bold; }
+  .satzbau-feedback.incorrect { color: #dc2626; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+
+  button.action-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 600; margin-top: 10px; }
+  button.action-btn:hover { background: #5a0b9d; }
+
+  footer { text-align: center; font-size: 0.75rem; color: #aaa; padding: 16px; border-top: 1px solid #eee; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Film- und Theaterkritik</h1>
+    <p>B1.2 · Lektion 2041X</p>
+  </header>
+
+  <nav>
+    <button class="active" onclick="showTab(0)">📚 Wortschatz</button>
+    <button onclick="showTab(1)">🎬 Satzbau</button>
+  </nav>
+
+  <!-- TAB 0: WORTSCHATZ -->
+  <div class="tab active" id="tab-0">
+    <img src="https://images.pexels.com/photos/4072349/pexels-photo-4072349.jpeg?auto=compress&w=800" class="tab-banner" alt="Film">
+    <div class="section-title">Wortschatz: Film- und Theaterkritik</div>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button class="action-btn" onclick="showVocabLoesung()">💡 Lösung</button>
+      <button class="action-btn" onclick="resetVocab()">↺ Neustart</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: SATZBAU -->
+  <div class="tab" id="tab-1">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&w=800" class="tab-banner" alt="Satzbau">
+    <div class="section-title">Satzbau: Sätze zu Film und Theater</div>
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <footer>FrankBurkert@fabdaf.onmicrosoft.com · B1.2 · 2041X · Film- und Theaterkritik</footer>
+</div>
+
+<script>
+// ── TAB NAVIGATION ───────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// ── WORTSCHATZ ──────────────────────────────────────────────
+var WORTSCHATZ = [
+  { type: "n", en: "the film", art: "der", wort: "Film", plural: "Filme" },
+  { type: "n", en: "the theater", art: "das", wort: "Theater", plural: "Theater" },
+  { type: "n", en: "the review/critique", art: "die", wort: "Kritik", plural: "Kritiken" },
+  { type: "v", en: "to review", de: "kritisieren" },
+  { type: "n", en: "the screenplay", art: "das", wort: "Drehbuch", plural: "Drehbücher" },
+  { type: "n", en: "the actor", art: "der", wort: "Schauspieler", plural: "Schauspieler" },
+  { type: "n", en: "the scene", art: "die", wort: "Szene", plural: "Szenen" },
+  { type: "n", en: "the director", art: "der", wort: "Regisseur", plural: "Regisseure" },
+  { type: "v", en: "to cast a role", de: "besetzen" },
+  { type: "n", en: "the special effect", art: "der", wort: "Spezialeffekt", plural: "Spezialeffekte" },
+  { type: "v", en: "to impress", de: "beeindrucken" },
+  { type: "v", en: "to shock", de: "schockieren" },
+  { type: "n", en: "the ending", art: "das", wort: "Ende", plural: "Enden" },
+  { type: "v", en: "to develop", de: "entwickeln" },
+  { type: "n", en: "the opinion", art: "die", wort: "Meinung", plural: "Meinungen" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+
+// ── SATZBAU ──────────────────────────────────────────────
+const SATZBAU_DATA = [
+  { words: ['Meiner', 'Meinung', 'nach', 'war', 'der', 'Film', 'zu', 'lang'] },
+  { words: ['Die', 'Spezialeffekte', 'des', 'Films', 'sind', 'wirklich', 'beeindruckend'] },
+  { words: ['Das', 'Ende', 'des', 'Theaterstücks', 'war', 'sehr', 'schockierend'] },
+  { words: ['Der', 'Regisseur', 'entwickelt', 'die', 'Geschichte', 'in', 'Szenen'] },
+  { words: ['Die', 'Kritik', 'des', 'Films', 'war', 'sehr', 'negativ'] },
+  { words: ['Ich', 'bin', 'mir', 'sicher,', 'dass', 'dieser', 'Film', 'berühmt', 'wird'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled = nonPunct.sort(() => Math.random() - 0.5);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); }
+
+buildSatzbau();
+</script>
+</body>
+</html>

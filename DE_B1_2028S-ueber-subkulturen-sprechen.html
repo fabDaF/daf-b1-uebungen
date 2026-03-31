@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1.2 – Über Subkulturen sprechen</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; font-size: 16px; }
+  .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 6px 32px rgba(0,0,0,0.28); overflow: hidden; }
+  h1 { background: #667eea; color: #fff; text-align: center; padding: 20px 20px 14px; font-size: 1.3em; }
+  .subtitle { background: #667eea; color: #d9b3ff; text-align: center; padding: 0 20px 16px; font-size: 0.88em; }
+
+  /* NAV */
+  .nav { display: flex; flex-wrap: wrap; background: #f0e6ff; border-bottom: 2px solid #667eea; }
+  .nav button { flex: 1; min-width: 80px; padding: 10px 4px 8px; border: 1px solid #667eea; background: #f0e6ff; color: #667eea; font-size: 0.75em; font-weight: bold; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .nav button .nav-emoji { font-size: 1.3em; }
+  .nav button .nav-label { font-size: 0.85em; }
+  .nav button.active { background: #667eea; color: #fff; }
+  .nav button:hover:not(.active) { background: #d9b3ff; }
+
+  /* TAB */
+  .tab { display: none; padding: 26px; }
+  .tab.aktiv { display: block; }
+
+  /* BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; display: block; }
+
+  /* TIMER-CONTROLS */
+  .timer-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 6px; }
+  .tc-buttons { display: flex; gap: 6px; }
+  .tc-buttons button { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+  .tc-buttons button:hover { background: #f0f0f0; color: #555; }
+  .tc-times { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+  .timer-display { color: #667eea; font-weight: 700; }
+  .best-display { color: #f39c12; font-weight: 600; }
+
+  /* VOCAB CARDS */
+  .vocab-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .vocab-card { border: 1.5px solid #d9b3ff; border-radius: 10px; padding: 14px; background: #faf5ff; }
+  .vocab-card .word { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 4px; }
+  .vocab-card .example { font-size: 0.87em; color: #555; font-style: italic; line-height: 1.5; }
+
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+
+  /* INFO BOX */
+  .info-box { background: #f0e6ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.92em; line-height: 1.6; }
+  .info-box strong { color: #667eea; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e0c4ff; }
+
+  /* AUSSPRACHE */
+  .pronunc-box { background: #faf5ff; border: 1.5px solid #d9b3ff; border-radius: 10px; padding: 18px; margin-bottom: 18px; }
+  .pronunc-box .rule { font-size: 0.93em; color: #555; margin-bottom: 12px; line-height: 1.6; }
+  .word-chips-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .word-chip { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 20px; padding: 6px 16px; font-size: 0.95em; color: #667eea; font-weight: 600; }
+  .highlight-syl { color: #e74c3c; font-weight: bold; }
+  .redewendung-box { background: #fff9e6; border: 1.5px solid #f39c12; border-radius: 10px; padding: 14px 18px; margin-top: 14px; font-size: 0.95em; }
+  .redewendung-box .label { font-weight: bold; color: #f39c12; margin-bottom: 4px; }
+
+  /* LÜCKENTEXT */
+  .luecken-list { list-style: none; padding: 0; }
+  .luecken-item { background: #faf5ff; border: 1.5px solid #e0c4ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; font-size: 0.95em; line-height: 1.7; }
+  .luecken-item input { border: none; border-bottom: 2px solid #aaa; outline: none; font-size: 0.97em; padding: 0 4px; min-width: 100px; background: transparent; transition: border-color 0.15s; }
+  .luecken-item input.ok { border-color: #27ae60; color: #27ae60; }
+  .luecken-item input.err { border-color: #e74c3c; color: #e74c3c; }
+  .wortkasten { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 10px 14px; margin-bottom: 18px; font-size: 0.9em; color: #667eea; }
+  .wortkasten strong { display: block; margin-bottom: 6px; }
+
+  /* SATZBAU */
+  .sb-exercise { background: #faf5ff; border: 1.5px solid #e0c4ff; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+  .sb-drop-zone { min-height: 44px; border: 2px dashed #d9b3ff; border-radius: 8px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; background: #fff; transition: background 0.2s; }
+  .sb-drop-zone.drag-over { background: #f0e6ff; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sb-chip { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 20px; padding: 6px 14px; font-size: 0.9em; cursor: grab; user-select: none; color: #5a189a; font-weight: 600; transition: background 0.15s, transform 0.1s; }
+  .sb-chip:active { transform: scale(0.97); }
+  .sb-chip.placed { background: #e8f5e9; border-color: #81c784; color: #2e7d32; }
+  .sb-chip.placed.wrong { background: #fdecea; border-color: #e57373; color: #c62828; }
+  .sb-chip.source { background: #e0e0e0; border-color: #bbb; color: #888; cursor: default; }
+  .sb-result { font-size: 0.85em; color: #888; margin-top: 6px; min-height: 18px; }
+
+  /* DISKUSSION */
+  .diskussion-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .disk-card { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; border-radius: 12px; padding: 18px; text-align: center; font-size: 0.95em; font-weight: bold; line-height: 1.5; }
+  .disk-card .disk-emoji { font-size: 1.8em; display: block; margin-bottom: 8px; }
+  .redemittel-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .redemittel-chip { background: #f0e6ff; border: 1.5px solid #667eea; border-radius: 20px; padding: 6px 14px; font-size: 0.87em; color: #667eea; font-weight: 600; }
+  .zukunft-list { list-style: none; padding: 0; }
+  .zukunft-item { background: #faf5ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 10px 14px; margin-bottom: 8px; font-size: 0.93em; line-height: 1.6; color: #333; }
+
+  /* AUTHOR FOOTER */
+  .author-footer { background: #f8f8f8; text-align: center; padding: 12px; font-size: 0.78em; color: #999; border-top: 1px solid #eee; }
+  .author-footer a { color: #667eea; text-decoration: none; }
+  .author-name { font-weight: bold; }
+
+  /* SCORE */
+  .score-box { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 8px 14px; display: inline-flex; gap: 14px; font-size: 0.88em; margin-bottom: 14px; }
+  .score-box span { color: #667eea; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🗣️ Über Subkulturen sprechen</h1>
+  <div class="subtitle">B1.2 · Einheit 202x · Lektion 2028S</div>
+
+  <nav class="nav">
+    <button class="active" onclick="showTab(0)"><span class="nav-emoji">🗣️</span><span class="nav-label">Aussprache</span></button>
+    <button onclick="showTab(1)"><span class="nav-emoji">📸</span><span class="nav-label">Wortschatz</span></button>
+    <button onclick="showTab(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></button>
+    <button onclick="showTab(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></button>
+    <button onclick="showTab(4)"><span class="nav-emoji">💬</span><span class="nav-label">Diskussion</span></button>
+  </nav>
+
+  <!-- TAB 0: AUSSPRACHE -->
+  <div id="tab0" class="tab aktiv">
+    <img src="https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Aussprache">
+
+    <div class="section-title">🗣️ Aussprache: schw und qu</div>
+
+    <div class="pronunc-box">
+      <div class="section-title" style="font-size:0.97em;">schw</div>
+      <div class="rule">
+        <strong>Regel:</strong> <em>sch</em> ist ein Reibelaut und beansprucht die Zunge in einer gewissen Weise. Das <em>w</em> wird normal gelesen.
+        Man spricht die Kombination <strong>schw</strong> aus wie <strong>sch + w</strong>.
+      </div>
+      <div><strong style="color:#667eea;">Übungswörter:</strong></div>
+      <div class="word-chips-row">
+        <div class="word-chip"><span class="highlight-syl">schw</span>änzen</div>
+        <div class="word-chip"><span class="highlight-syl">schw</span>immen</div>
+        <div class="word-chip"><span class="highlight-syl">Schw</span>eizer</div>
+        <div class="word-chip"><span class="highlight-syl">schw</span>arz</div>
+        <div class="word-chip"><span class="highlight-syl">Schw</span>ein</div>
+        <div class="word-chip"><span class="highlight-syl">Schw</span>eden</div>
+        <div class="word-chip"><span class="highlight-syl">schw</span>ach</div>
+        <div class="word-chip"><span class="highlight-syl">schw</span>ierig</div>
+        <div class="word-chip"><span class="highlight-syl">schw</span>eben</div>
+      </div>
+    </div>
+
+    <div class="pronunc-box">
+      <div class="section-title" style="font-size:0.97em;">qu</div>
+      <div class="rule">
+        <strong>Regel:</strong> <em>qu</em> spricht man auf Deutsch so wie <strong>kw</strong> aus.
+        Anders als im Englischen oder Französischen — immer <strong>kw</strong>!
+      </div>
+      <div><strong style="color:#667eea;">Übungswörter:</strong></div>
+      <div class="word-chips-row">
+        <div class="word-chip"><span class="highlight-syl">Qu</span>artal</div>
+        <div class="word-chip"><span class="highlight-syl">Qu</span>elle</div>
+        <div class="word-chip"><span class="highlight-syl">Qu</span>adrat</div>
+        <div class="word-chip"><span class="highlight-syl">Qu</span>ote</div>
+        <div class="word-chip"><span class="highlight-syl">Qu</span>alle</div>
+        <div class="word-chip"><span class="highlight-syl">Qu</span>alität</div>
+        <div class="word-chip"><span class="highlight-syl">qu</span>alifizieren</div>
+        <div class="word-chip"><span class="highlight-syl">qu</span>er</div>
+        <div class="word-chip"><span class="highlight-syl">Qu</span>al</div>
+        <div class="word-chip"><span class="highlight-syl">qu</span>ieken</div>
+      </div>
+      <div class="redewendung-box">
+        <div class="label">💡 Redewendung</div>
+        <em>„Du hast die Qual der Wahl!"</em>
+        <div style="font-size:0.85em; color:#777; margin-top:4px;">= You have the agony of choice! (too many options)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 1: WORTSCHATZ -->
+  <div id="tab1" class="tab">
+    <img src="https://images.pexels.com/photos/1190298/pexels-photo-1190298.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Subkulturen Wortschatz">
+    <div class="section-title">🔤 Wortschatz</div>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: LÜCKENTEXT -->
+  <div id="tab2" class="tab">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Lückentext">
+
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button onclick="resetLuecken()">↺ Neu</button>
+      </div>
+      <div class="tc-times">
+        <span>⏱ <span class="timer-display" id="lTimer">0:00</span></span>
+        <span>🏆 <span class="best-display" id="lBest">–</span></span>
+      </div>
+    </div>
+
+    <div class="score-box">
+      Richtig: <span id="lScore">0</span> / <span id="lTotal">10</span>
+    </div>
+
+    <div class="wortkasten">
+      <strong>Wortkasten:</strong>
+      Symbol · außergewöhnlich · engagiert · darstellen · Tattoo · Subkultur · nebenbei · Toleranz · anspruchsvoll · Respekt
+    </div>
+
+    <ul class="luecken-list" id="lueckenList"></ul>
+  </div>
+
+  <!-- TAB 3: SATZBAU -->
+  <div id="tab3" class="tab">
+    <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Satzbau">
+
+    <div class="timer-controls">
+      <div class="tc-buttons">
+        <button onclick="sbResetAll()">↺ Neu</button>
+      </div>
+      <div class="tc-times">
+        <span>⏱ <span class="timer-display" id="sbTimer">0:00</span></span>
+        <span>🏆 <span class="best-display" id="sbBest">–</span></span>
+      </div>
+    </div>
+
+    <div class="score-box">
+      Richtig: <span id="sbScore">0</span> / <span id="sbTotal">6</span>
+    </div>
+
+    <div id="sbContainer"></div>
+  </div>
+
+  <!-- TAB 4: DISKUSSION -->
+  <div id="tab4" class="tab">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Diskussion">
+
+    <div class="section-title">💬 Diskussion: Subkulturen</div>
+
+    <div class="info-box" style="margin-bottom:18px;">
+      <strong>Lernziel:</strong> Über Subkulturen sprechen · Meinungen ausdrücken · Zukunft beschreiben
+    </div>
+
+    <div class="section-title" style="font-size:0.93em; margin-bottom:10px;">Redemittel für die Diskussion</div>
+    <div class="redemittel-row">
+      <div class="redemittel-chip">übernimmt das Wort</div>
+      <div class="redemittel-chip">führt weiter</div>
+      <div class="redemittel-chip">beendet</div>
+      <div class="redemittel-chip">Meiner Meinung nach …</div>
+      <div class="redemittel-chip">Ich bin der Meinung, dass …</div>
+      <div class="redemittel-chip">Einerseits … andererseits …</div>
+      <div class="redemittel-chip">Das hängt davon ab, …</div>
+    </div>
+
+    <div class="section-title" style="font-size:0.93em; margin-bottom:10px;">Diskussionskarten</div>
+    <div class="diskussion-cards">
+      <div class="disk-card">
+        <span class="disk-emoji">🎨</span>
+        Hipster, Hippies, Emos —<br>Welche Subkultur kennst du?<br>Beschreibe sie!
+      </div>
+      <div class="disk-card">
+        <span class="disk-emoji">📸</span>
+        Beschreibe das Foto:<br>Wie sehen die Menschen aus?<br>Welche Adjektive passen?
+      </div>
+      <div class="disk-card">
+        <span class="disk-emoji">🌍</span>
+        Mainstream Kultur —<br>Was bedeutet das?<br>Bist du Mainstream oder Subkultur?
+      </div>
+    </div>
+
+    <div class="section-title" style="font-size:0.93em; margin-bottom:10px;">🔮 Zukunftsvisionen 2050</div>
+    <div class="info-box">
+      <strong>Frage:</strong> Wie wird die Welt im Jahr 2050 aussehen?
+    </div>
+    <ul class="zukunft-list">
+      <li class="zukunft-item">Nach dem Schulabschluss — was <strong>kannst / musst / darfst</strong> du dann tun?</li>
+      <li class="zukunft-item">Wird es noch Subkulturen geben, oder wird alles Mainstream sein?</li>
+      <li class="zukunft-item">Wie werden Tattoos und Piercings in der Gesellschaft akzeptiert sein?</li>
+      <li class="zukunft-item">Was bedeutet „individuell sein" in einer globalisierten Welt?</li>
+    </ul>
+
+    <div class="section-title" style="font-size:0.93em; margin-bottom:10px; margin-top:20px;">🙋 Und du?</div>
+    <div class="info-box">
+      Bist du eher <strong>Mainstream</strong> oder <strong>Subkultur</strong>?<br>
+      Was macht dich zu einer einzigartigen Person?<br>
+      Wie zeigst du deine Persönlichkeit nach außen?
+    </div>
+  </div>
+
+  <div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+  </div>
+</div>
+
+<script>
+// ─── TAB NAVIGATION ───────────────────────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('aktiv', i === n);
+  });
+  document.querySelectorAll('.nav button').forEach((b,i) => {
+    b.classList.toggle('active', i === n);
+  });
+}
+
+// ─── WORTSCHATZ INTERACTIVE ───────────────────────────────────────────────────
+var WORTSCHATZ = [
+  { type: "n", en: "symbol", art: "das", wort: "Symbol", plural: "Symbole" },
+  { type: "v", en: "extraordinary (adjective)", de: "außergewöhnlich" },
+  { type: "n", en: "tattoo", art: "das", wort: "Tattoo", plural: "Tattoos" },
+  { type: "v", en: "engaged (adjective)", de: "engagiert" },
+  { type: "v", en: "to represent / depict", de: "darstellen" },
+  { type: "v", en: "by the way (adverb)", de: "nebenbei" },
+  { type: "v", en: "demanding (adjective)", de: "anspruchsvoll" },
+  { type: "v", en: "to speak / take the floor", de: "sich zu Wort melden" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    var ok2 = w2 === item.de;
+    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+// ─── TIMER SYSTEM ─────────────────────────────────────────────────────────────
+const TIMER_PREFIX = 'best2028S';
+
+function fmtTime(s) {
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+}
+
+// Lückentext Timer
+let lSec = 0, lRunning = false, lInterval = null;
+function lStartTimer() {
+  if (lRunning) return;
+  lRunning = true;
+  lInterval = setInterval(() => {
+    lSec++;
+    document.getElementById('lTimer').textContent = fmtTime(lSec);
+  }, 1000);
+}
+function lStopTimer() {
+  if (!lRunning) return;
+  clearInterval(lInterval);
+  lRunning = false;
+  const key = TIMER_PREFIX + '_L';
+  const prev = parseInt(localStorage.getItem(key)||'0');
+  if (!prev || lSec < prev) {
+    localStorage.setItem(key, lSec);
+    document.getElementById('lBest').textContent = fmtTime(lSec);
+  }
+}
+function lLoadBest() {
+  const key = TIMER_PREFIX + '_L';
+  const b = parseInt(localStorage.getItem(key)||'0');
+  if (b) document.getElementById('lBest').textContent = fmtTime(b);
+}
+
+// Satzbau Timer
+let sbSec = 0, sbRunning = false, sbInterval = null;
+function sbStartTimer() {
+  if (sbRunning) return;
+  sbRunning = true;
+  sbInterval = setInterval(() => {
+    sbSec++;
+    document.getElementById('sbTimer').textContent = fmtTime(sbSec);
+  }, 1000);
+}
+function sbStopTimer() {
+  if (!sbRunning) return;
+  clearInterval(sbInterval);
+  sbRunning = false;
+  const key = TIMER_PREFIX + '_S';
+  const prev = parseInt(localStorage.getItem(key)||'0');
+  if (!prev || sbSec < prev) {
+    localStorage.setItem(key, sbSec);
+    document.getElementById('sbBest').textContent = fmtTime(sbSec);
+  }
+}
+function sbLoadBest() {
+  const key = TIMER_PREFIX + '_S';
+  const b = parseInt(localStorage.getItem(key)||'0');
+  if (b) document.getElementById('sbBest').textContent = fmtTime(b);
+}
+
+// ─── LÜCKENTEXT ───────────────────────────────────────────────────────────────
+const LUECKEN_DATA = [
+  { before: 'Blumen sind ein', blank: 'Symbol', after: 'der Hippie-Kultur.' },
+  { before: 'Was du da erzählst, ist wirklich', blank: 'außergewöhnlich', after: '.' },
+  { before: 'Möchtest du dir wirklich ein', blank: 'Tattoo', after: 'stechen lassen?' },
+  { before: 'Die Bürger einer Stadt sollten', blank: 'engagiert', after: 'und motiviert sein.' },
+  { before: 'Ich kann dir die ganze Geschichte', blank: 'darstellen', after: '.' },
+  { before: '', blank: 'Nebenbei', after: 'möchte ich noch hinzufügen, dass es keine gute Idee ist.' },
+  { before: 'Hipsters sind oft', blank: 'anspruchsvoll', after: 'e Personen.' },
+  { before: 'Eine', blank: 'Subkultur', after: 'entsteht oft aus dem Wunsch nach Individualität.' },
+  { before: 'Gegenseitiger', blank: 'Respekt', after: 'ist die Grundlage des Zusammenlebens.' },
+  { before: 'Wir brauchen mehr', blank: 'Toleranz', after: 'gegenüber anderen Lebensweisen.' }
+];
+
+let lDone = 0;
+
+function buildLuecken() {
+  const ul = document.getElementById('lueckenList');
+  ul.innerHTML = '';
+  lDone = 0;
+  document.getElementById('lScore').textContent = '0';
+  document.getElementById('lTotal').textContent = LUECKEN_DATA.length;
+  LUECKEN_DATA.forEach((item, idx) => {
+    const li = document.createElement('li');
+    li.className = 'luecken-item';
+    li.innerHTML = item.before +
+      ' <input type="text" id="li' + idx + '" oninput="liveCheck(this,' + idx + ')" autocomplete="off" spellcheck="false"> ' +
+      item.after;
+    ul.appendChild(li);
+  });
+}
+
+function liveCheck(inp, idx) {
+  lStartTimer();
+  const target = LUECKEN_DATA[idx].blank;
+  const val = inp.value;
+  if (val.length === 0) { inp.className = ''; return; }
+  const caseSensitive = target[0] === target[0].toUpperCase() && target[0] !== target[0].toLowerCase();
+  const vCmp = caseSensitive ? val : val.toLowerCase();
+  const tCmp = caseSensitive ? target : target.toLowerCase();
+  if (vCmp === tCmp) {
+    if (!inp.classList.contains('ok')) {
+      inp.className = 'ok';
+      inp.disabled = true;
+      lDone++;
+      document.getElementById('lScore').textContent = lDone;
+      if (lDone === LUECKEN_DATA.length) lStopTimer();
+    }
+  } else if (!tCmp.startsWith(vCmp)) {
+    inp.className = 'err';
+  } else {
+    inp.className = '';
+  }
+}
+
+function resetLuecken() {
+  clearInterval(lInterval);
+  lRunning = false;
+  lSec = 0;
+  document.getElementById('lTimer').textContent = '0:00';
+  buildLuecken();
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Blumen', 'sind', 'ein', 'Symbol', 'der', 'Hippie-Kultur', '.'] },
+  { words: ['Hipsters', 'sind', 'oft', 'anspruchsvolle', 'Personen', '.'] },
+  { words: ['Möchten', 'Sie', 'sich', 'zu', 'Wort', 'melden', '?'] },
+  { words: ['Nebenbei', 'möchte', 'ich', 'noch', 'hinzufügen', ',', 'dass', 'es', 'keine', 'gute', 'Idee', 'ist', '.'] },
+  { words: ['Die', 'Bürger', 'einer', 'Stadt', 'sollten', 'engagiert', 'und', 'motiviert', 'sein', '.'] },
+  { words: ['Was', 'du', 'da', 'erzählst', ',', 'ist', 'wirklich', 'außergewöhnlich', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('sbContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+
+initVocab();
+</script>
+</body>
+</html>

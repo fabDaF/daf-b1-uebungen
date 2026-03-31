@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2056R · Sprachassistenz in Deutschland</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  /* NAV */
+  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
+  .nav button { padding: 11px 16px; border: 1px solid #b388e8; background: #f3e8ff; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; color: #5a0090; text-align: left;
+    transition: background 0.2s; border-radius: 0; }
+  .nav button:hover { background: #e1c6ff; }
+  .nav button.active { background: #667eea; color: #fff; border-color: #667eea; }
+  /* CONTENT */
+  .tab-content { display: none; padding: 28px 32px; }
+  .tab-content.active { display: block; }
+  h2 { color: #667eea; margin-bottom: 18px; font-size: 1.25rem; }
+  h3 { color: #5a0090; margin: 18px 0 10px; font-size: 1.05rem; }
+  /* TAB BANNER */
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px;
+    margin-bottom: 20px; display: block; }
+  /* VORENTLASTUNG */
+  .vocab-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+  .vocab-card { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 12px 16px; min-width: 180px; flex: 1 1 180px; cursor: pointer;
+    transition: background 0.2s; }
+  .vocab-card:hover { background: #e1c6ff; }
+  .vocab-card .word { font-weight: 700; color: #667eea; font-size: 1rem; }
+  .vocab-card .translation { font-size: 0.85rem; color: #555; margin-top: 4px; display: none; }
+  .vocab-card.revealed .translation { display: block; }
+  /* STORY TEXT */
+  .story-text { font-family: Georgia, serif; font-size: 1rem; line-height: 1.75;
+    max-width: 600px; margin: 0 auto; text-align: justify; hyphens: auto; }
+  .story-text p { text-indent: 1.4em; margin-bottom: 1em; }
+  .story-text p:first-child { text-indent: 0; }
+  .story-img { display: block; margin: 18px auto; max-width: 100%; max-height: 220px;
+    object-fit: cover; border-radius: 8px; }
+  .img-caption { text-align: center; font-size: 0.8rem; color: #888; margin-bottom: 14px; }
+  /* VOCAB HIGHLIGHT */
+  .vocab-hl { background: #ffe066; border-radius: 3px; padding: 0 2px; cursor: help; }
+  /* RF FRAGEN */
+  .rf-list { list-style: none; max-width: 650px; margin: 0 auto; }
+  .rf-item { display: flex; flex-direction: column; background: #f9f3ff; border: 1px solid #d4b8f5;
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .rf-question { font-size: 0.97rem; margin-bottom: 10px; }
+  .rf-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .rf-btn { padding: 7px 22px; border-radius: 6px; border: 2px solid #b388e8;
+    background: #fff; cursor: pointer; font-weight: 700; font-size: 0.92rem;
+    transition: background 0.15s; }
+  .rf-btn:hover { background: #e1c6ff; }
+  .rf-btn.correct { background: #c8f7c5; border-color: #3a9a36; color: #1a5e17; }
+  .rf-btn.wrong { background: #ffd5d5; border-color: #cc3333; color: #7a0000; }
+  .rf-feedback { font-size: 0.85rem; margin-top: 8px; min-height: 1.2em; }
+  /* OFFENE FRAGEN */
+  .open-q { background: #f3e8ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; }
+  .open-q p { font-size: 0.97rem; color: #333; }
+  /* LÜCKENTEXT */
+  .luecken-text { font-size: 1rem; line-height: 2; max-width: 680px; margin: 0 auto; }
+  .luecken-text input { border: none; border-bottom: 2px solid #b388e8; background: transparent;
+    font-size: 0.97rem; width: 160px; outline: none; padding: 2px 6px; color: #333;
+    transition: border-color 0.2s; }
+  .luecken-text input:focus { border-color: #667eea; }
+  .luecken-text input.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .luecken-text input.err { border-color: #cc3333; background: #ffd5d5; }
+  .check-btn { margin-top: 18px; padding: 10px 28px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+  .check-btn:hover { background: #5a0090; }
+  .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
+  /* SATZBAU */
+  .sb-task { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task .aufgabe { font-size: 0.85rem; color: #888; margin-bottom: 8px; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 36px; }
+  .sb-chip { background: #667eea; color: #fff; border-radius: 6px; padding: 6px 12px;
+    cursor: grab; font-size: 0.92rem; user-select: none; border: 2px solid transparent; }
+  .sb-chip:active { cursor: grabbing; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-chip.selected { border-color: #ffcc00; }
+  .sb-drop { border: 2px dashed #b388e8; border-radius: 8px; min-height: 40px;
+    padding: 4px 8px; display: flex; flex-wrap: wrap; gap: 6px;
+    background: #faf5ff; transition: background 0.2s; }
+  .sb-drop.drag-over { background: #e1c6ff; }
+  .sb-feedback { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 60px; }
+  .timer-btn { padding: 6px 16px; border-radius: 6px; border: 2px solid #667eea;
+    background: #fff; color: #667eea; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+  .timer-btn:hover { background: #f3e8ff; }
+  .timer-best { font-size: 0.85rem; color: #888; }
+  /* WORTSCHATZ TAB */
+  .wort-card { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
+  .wort-de { font-weight: 700; color: #667eea; min-width: 200px; }
+  .wort-en { color: #555; font-size: 0.92rem; }
+  /* FOOTER */
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
+    font-size: 0.75rem; color: #aaa; text-align: center; }
+  /* SPRECHAUFGABE */
+  .sprech-card { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 12px; }
+  /* WORTSCHATZ INTERACTIVE */
+  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
+  .vocab-arrow { color: #999; font-size: 1.1em; }
+  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .vocab-inputs input.art { width: 70px; }
+  .vocab-inputs input.wort { width: 160px; }
+  .vocab-inputs input.wide { width: 240px; }
+  .vocab-inputs input.plural { width: 140px; }
+  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
+  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
+  .vocab-hint { font-size: 1.1em; min-width: 24px; }
+  .vocab-hint.correct { color: #22c55e; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- NAV -->
+  <div class="nav" id="nav">
+    <button class="active" onclick="showTab(0)">📖 Vorentlastung</button>
+    <button onclick="showTab(1)">📄 Lesetext</button>
+    <button onclick="showTab(2)">❓ Text &amp; Fragen</button>
+    <button onclick="showTab(3)">✏️ Lückentext</button>
+    <button onclick="showTab(4)">🧩 Satzbau</button>
+    <button onclick="showTab(5)">📚 Wortschatz</button>
+  </div>
+
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="tab-content active" id="tab0">
+    <img src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         onerror="this.src='https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1'"
+         alt="Sprachassistenz" class="tab-banner">
+    <h2>Vorentlastung — Schlüsselvokabeln</h2>
+    <p style="margin-bottom:16px;color:#555;font-size:0.93rem;">Klicke auf eine Karte, um die Übersetzung zu sehen.</p>
+    <div class="vocab-grid" id="vorentlastungGrid"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lesetext" class="tab-banner">
+    <h2>Sprachassistenz in Deutschland — Luisas Geschichte</h2>
+    <div class="story-text" id="storyText">
+
+      <img src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=600&h=220&dpr=1" class="story-img" alt="Schule">
+      <p class="img-caption">Eine Schule in Deutschland</p>
+
+      <p>Luisa Ferreira stammt aus Brasilien und hat immer davon geträumt, ihre Deutschkenntnisse im Alltag einzusetzen. Als sie von einem <strong>Sprachassistenzprogramm</strong> an einer Schule in München hörte, bewarb sie sich sofort. Innerhalb weniger Wochen hatte sie eine <strong>Zusage</strong> bekommen und begann, ihren Aufenthalt zu planen.</p>
+
+      <p>Die erste Herausforderung war die <strong>Wohnungssuche</strong>. München ist bekannt für seinen angespannten <strong>Wohnungsmarkt</strong>, und Luisa musste viele Inserate durchsuchen, bevor sie eine <strong>Wohngemeinschaft</strong> in Schwabing fand. Ihre Mitbewohner waren freundlich und halfen ihr, sich schnell <strong>einzuleben</strong>.</p>
+
+      <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600&h=220&dpr=1" class="story-img" alt="Unterricht">
+      <p class="img-caption">Luisa im Unterricht</p>
+
+      <p>Im <strong>Unterricht</strong> unterstützte Luisa die Fachlehrerin beim Englischunterricht. Sie brachte ihre eigene <strong>Perspektive</strong> als Nicht-Muttersprachlerin ein und ermutigte die Schülerinnen und Schüler, keine Angst vor Fehlern zu haben. Die Schüler waren begeistert: Sie konnten eine echte Auslandserfahrung im Klassenzimmer erleben.</p>
+
+      <p>Natürlich gab es auch <strong>Missverständnisse</strong>. Luisa bemerkte, dass der Umgang miteinander in Deutschland anders war als in Brasilien — direkter, manchmal sogar <strong>reserviert</strong>. Doch mit der Zeit lernte sie, diese kulturellen Unterschiede zu schätzen und als Teil ihrer persönlichen <strong>Entwicklung</strong> zu sehen.</p>
+
+      <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=600&h=220&dpr=1" class="story-img" alt="Stadtleben München">
+      <p class="img-caption">München — Luisas neue Heimat</p>
+
+      <p>Am Ende des Schuljahres hatte Luisa nicht nur ihr Deutsch verbessert, sondern auch neue <strong>Freundschaften</strong> geschlossen. Ihr <strong>Selbstvertrauen</strong> war gewachsen, und sie hatte gelernt, mit unbekannten Situationen <strong>umzugehen</strong>. Für Luisa war die Sprachassistenz mehr als ein Job — sie war ein <strong>Wendepunkt</strong> in ihrem Leben.</p>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 2: TEXT & FRAGEN -->
+  <div class="tab-content" id="tab2">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Fragen" class="tab-banner">
+    <h2>Text &amp; Fragen</h2>
+
+    <h3>Richtig oder falsch?</h3>
+    <ul class="rf-list" id="rfList"></ul>
+
+    <h3>Sprechaufgaben</h3>
+    <div class="sprech-card">
+      <strong>A) Hast du schon einmal in einem anderen Land gelebt oder gearbeitet? Erzähle davon.</strong>
+    </div>
+    <div class="sprech-card">
+      <strong>B) Was waren für Luisa die größten Herausforderungen? Nenne mindestens zwei.</strong>
+    </div>
+    <div class="sprech-card">
+      <strong>C) Was hat Luisa durch die Sprachassistenz gelernt? Formuliere in eigenen Worten.</strong>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 3: LÜCKENTEXT -->
+  <div class="tab-content" id="tab3">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lückentext" class="tab-banner">
+    <h2>Lückentext</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerL">0:00</span>
+      <button class="timer-btn" id="timerLBtn" onclick="timerToggle('L')">▶ Start</button>
+      <span class="timer-best" id="timerLBest"></span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="lueckenResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
+  <div class="tab-content" id="tab4">
+    <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Satzbau" class="tab-banner">
+    <h2>Satzbau</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerS">0:00</span>
+      <button class="timer-btn" id="timerSBtn" onclick="timerToggle('S')">▶ Start</button>
+      <span class="timer-best" id="timerSBest"></span>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 5: VOKABELN -->
+  <div class="tab-content" id="tab5">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Vokabeln" class="tab-banner">
+    <h2>Wortschatz</h2>
+    <div id="vocabContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showVocabLoesung()">💡 Lösung</button>
+      <button onclick="resetVocab()">↺ Neustart</button>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ===================== DATA =====================
+const TIMER_PREFIX = 'best2056R';
+
+const VORENTLASTUNG = [
+  { word: 'die Sprachassistenz', en: 'language assistant programme' },
+  { word: 'die Zusage', en: 'acceptance / confirmation' },
+  { word: 'die Wohnungssuche', en: 'flat search / apartment hunting' },
+  { word: 'der Wohnungsmarkt', en: 'housing market' },
+  { word: 'die Wohngemeinschaft (WG)', en: 'shared flat / house share' },
+  { word: 'sich einleben', en: 'to settle in' },
+  { word: 'der Unterricht', en: 'lessons / teaching' },
+  { word: 'die Perspektive', en: 'perspective' },
+  { word: 'das Missverständnis', en: 'misunderstanding' },
+  { word: 'reserviert', en: 'reserved / standoffish' },
+  { word: 'die Entwicklung', en: 'development' },
+  { word: 'die Freundschaft', en: 'friendship' },
+  { word: 'das Selbstvertrauen', en: 'self-confidence' },
+  { word: 'umgehen mit', en: 'to deal with / handle' },
+  { word: 'der Wendepunkt', en: 'turning point' },
+  { word: 'ermutigen', en: 'to encourage' },
+  { word: 'das Inserat', en: 'advertisement / listing' },
+  { word: 'angespannt', en: 'tense / strained' },
+];
+
+const RF_FRAGEN = [
+  { q: 'Luisa kommt aus Spanien.', correct: 'F',
+    feedback: 'Falsch — Luisa kommt aus Brasilien.' },
+  { q: 'Luisa fand sofort eine Wohnung für sich allein.', correct: 'F',
+    feedback: 'Falsch — Sie fand eine Wohngemeinschaft in Schwabing.' },
+  { q: 'Luisa arbeitete als Sprachassistentin im Englischunterricht.', correct: 'R',
+    feedback: 'Richtig — sie unterstützte die Fachlehrerin beim Englischunterricht.' },
+  { q: 'Luisa fand den deutschen Umgangsstil reservierter als in Brasilien.', correct: 'R',
+    feedback: 'Richtig — sie beschreibt den Umgang als direkter und manchmal reserviert.' },
+  { q: 'Am Ende war Luisa unzufrieden mit ihrer Erfahrung.', correct: 'F',
+    feedback: 'Falsch — sie bezeichnete die Erfahrung als Wendepunkt in ihrem Leben.' },
+];
+
+const LUECKEN = [
+  { before: 'Luisa bewarb sich für ein ', blank: 'Sprachassistenzprogramm', after: ' an einer Schule in München.' },
+  { before: 'Die ', blank: 'Wohnungssuche', after: ' in München war schwierig wegen des angespannten Marktes.' },
+  { before: 'Sie fand eine ', blank: 'Wohngemeinschaft', after: ' in Schwabing.' },
+  { before: 'Im Unterricht brachte Luisa ihre eigene ', blank: 'Perspektive', after: ' als Nicht-Muttersprachlerin ein.' },
+  { before: 'Sie ermutigte die Schüler, keine Angst vor ', blank: 'Missverständnissen', after: ' zu haben.' },
+  { before: 'Der Umgang in Deutschland war direkter und manchmal ', blank: 'reserviert', after: '.' },
+  { before: 'Ihr ', blank: 'Selbstvertrauen', after: ' war am Ende des Schuljahres gewachsen.' },
+  { before: 'Die Sprachassistenz war ein ', blank: 'Wendepunkt', after: ' in Luisas Leben.' },
+];
+
+const SATZBAU_SAETZE = [
+  ['Luisa', 'bewarb sich', 'für das Sprachassistenzprogramm', 'in München.'],
+  ['Die Wohnungssuche', 'in München', 'war', 'sehr schwierig.'],
+  ['Sie fand', 'eine Wohngemeinschaft', 'in Schwabing', 'nach langer Suche.'],
+  ['Luisa', 'ermutigte die Schüler', 'keine Angst vor Fehlern', 'zu haben.'],
+  ['Am Ende des Schuljahres', 'hatte Luisa', 'viele Freundschaften', 'geschlossen.'],
+  ['Die Sprachassistenz', 'war', 'ein Wendepunkt', 'in Luisas Leben.'],
+];
+
+// ===================== TABS =====================
+function showTab(n) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => {
+    t.classList.toggle('active', i===n);
+  });
+  document.querySelectorAll('.nav button').forEach((b,i) => {
+    b.classList.toggle('active', i===n);
+  });
+}
+
+// ===================== VORENTLASTUNG =====================
+(function buildVorentlastung() {
+  const grid = document.getElementById('vorentlastungGrid');
+  VORENTLASTUNG.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'vocab-card';
+    card.innerHTML = `<div class="word">${v.word}</div><div class="translation">${v.en}</div>`;
+    card.addEventListener('click', () => card.classList.toggle('revealed'));
+    grid.appendChild(card);
+  });
+})();
+
+// ===================== VOCAB HIGHLIGHT =====================
+function highlightVocabInText() {
+  const story = document.getElementById('storyText');
+  if (!story) return;
+  const words = VORENTLASTUNG.map(v => v.word.replace(/^(der |die |das |sich )/, '').trim());
+  let html = story.innerHTML;
+  words.forEach(w => {
+    if (w.length < 4) return;
+    const re = new RegExp(`(?<![\\w])${w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?![\\w])`, 'g');
+    html = html.replace(re, `<span class="vocab-hl" title="${w}">${w}</span>`);
+  });
+  story.innerHTML = html;
+}
+setTimeout(highlightVocabInText, 100);
+
+// ===================== RF FRAGEN =====================
+(function buildRF() {
+  const list = document.getElementById('rfList');
+  RF_FRAGEN.forEach((item, idx) => {
+    const li = document.createElement('li');
+    li.className = 'rf-item';
+    li.innerHTML = `
+      <div class="rf-question">${idx+1}. ${item.q}</div>
+      <div class="rf-btns">
+        <button class="rf-btn" onclick="checkRF(this,'R',${idx})">Richtig</button>
+        <button class="rf-btn" onclick="checkRF(this,'F',${idx})">Falsch</button>
+      </div>
+      <div class="rf-feedback" id="rf-fb-${idx}"></div>`;
+    list.appendChild(li);
+  });
+})();
+
+function checkRF(btn, choice, idx) {
+  const item = RF_FRAGEN[idx];
+  const fb = document.getElementById(`rf-fb-${idx}`);
+  const btns = btn.parentElement.querySelectorAll('.rf-btn');
+  btns.forEach(b => { b.classList.remove('correct','wrong'); });
+  if (choice === item.correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✅ ' + item.feedback;
+    fb.style.color = '#1a5e17';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '❌ ' + item.feedback;
+    fb.style.color = '#7a0000';
+  }
+}
+
+// ===================== LÜCKENTEXT =====================
+(function buildLuecken() {
+  const container = document.getElementById('lueckenText');
+  LUECKEN.forEach((item, idx) => {
+    const p = document.createElement('p');
+    p.style.marginBottom = '10px';
+    p.innerHTML = `${item.before}<input type="text" id="luecke-${idx}"
+      data-answer="${item.blank.toLowerCase()}"
+      placeholder="..."
+      oninput="liveCheck(this)"
+      style="width:${Math.max(120, item.blank.length*11)}px"
+    />${item.after}`;
+    container.appendChild(p);
+  });
+})();
+
+function liveCheck(inp) {
+  const val = inp.value.trim().toLowerCase();
+  const ans = inp.dataset.answer.toLowerCase();
+  inp.classList.remove('ok','err');
+  if (val === ans) { inp.classList.add('ok'); }
+  autoStopIfDone();
+}
+
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN.forEach((item, idx) => {
+    const inp = document.getElementById(`luecke-${idx}`);
+    const val = inp.value.trim().toLowerCase();
+    const ans = item.blank.toLowerCase();
+    inp.classList.remove('ok','err');
+    if (val === ans) { inp.classList.add('ok'); correct++; }
+    else { inp.classList.add('err'); }
+  });
+  const res = document.getElementById('lueckenResult');
+  if (correct === LUECKEN.length) {
+    res.textContent = `✅ Alle ${LUECKEN.length} Lücken richtig!`;
+    res.style.color = '#1a5e17';
+    stopTimer('L');
+    saveBest('L');
+  } else {
+    res.textContent = `${correct} von ${LUECKEN.length} richtig. Versuche es nochmal!`;
+    res.style.color = '#7a0000';
+  }
+}
+
+function autoStopIfDone() {
+  const inputs = document.querySelectorAll('#lueckenText input');
+  const allOk = [...inputs].every(inp => inp.classList.contains('ok'));
+  if (allOk) {
+    stopTimer('L');
+    saveBest('L');
+    const res = document.getElementById('lueckenResult');
+    res.textContent = `✅ Alle ${LUECKEN.length} Lücken richtig!`;
+    res.style.color = '#1a5e17';
+  }
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Luisa', 'bewarb sich', 'für das Sprachassistenzprogramm', 'in München', '.'] },
+  { words: ['Die Wohnungssuche', 'in München', 'war', 'sehr schwierig', '.'] },
+  { words: ['Sie fand', 'eine Wohngemeinschaft', 'in Schwabing', 'nach langer Suche', '.'] },
+  { words: ['Luisa', 'ermutigte die Schüler', 'keine Angst vor Fehlern', 'zu haben', '.'] },
+  { words: ['Am Ende des Schuljahres', 'hatte Luisa', 'viele Freundschaften', 'geschlossen', '.'] },
+  { words: ['Die Sprachassistenz', 'war', 'ein Wendepunkt', 'in Luisas Leben', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// ===================== VOKABELN =====================
+(function buildVokabeln() {
+  const list = document.getElementById('vokabelnList');
+  VORENTLASTUNG.forEach(v => {
+    const card = document.createElement('div');
+    card.className = 'wort-card';
+    card.innerHTML = `<div class="wort-de">${v.word}</div><div class="wort-en">${v.en}</div>`;
+    list.appendChild(card);
+  });
+})();
+
+// ===================== TIMER =====================
+let timerIntervals = { L: null, S: null };
+let timerSeconds   = { L: 0, S: 0 };
+let timerRunning   = { L: false, S: false };
+
+function timerToggle(key) {
+  if (timerRunning[key]) { stopTimer(key); }
+  else { startTimer(key); }
+}
+
+function startTimer(key) {
+  if (timerRunning[key]) return;
+  timerRunning[key] = true;
+  document.getElementById(`timer${key}Btn`).textContent = '⏸ Pause';
+  timerIntervals[key] = setInterval(() => {
+    timerSeconds[key]++;
+    document.getElementById(`timer${key}`).textContent = formatTime(timerSeconds[key]);
+  }, 1000);
+}
+
+function stopTimer(key) {
+  clearInterval(timerIntervals[key]);
+  timerRunning[key] = false;
+  document.getElementById(`timer${key}Btn`).textContent = '▶ Weiter';
+}
+
+function saveBest(key) {
+  const storageKey = TIMER_PREFIX + '_' + key;
+  const prev = parseInt(localStorage.getItem(storageKey) || '999999');
+  if (timerSeconds[key] < prev) {
+    localStorage.setItem(storageKey, timerSeconds[key]);
+    document.getElementById(`timer${key}Best`).textContent =
+      '🏆 Neue Bestzeit: ' + formatTime(timerSeconds[key]);
+  } else {
+    document.getElementById(`timer${key}Best`).textContent =
+      'Bestzeit: ' + formatTime(prev);
+  }
+}
+
+function formatTime(s) {
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+}
+
+(function loadBestTimes() {
+  ['L','S'].forEach(key => {
+    const v = localStorage.getItem(TIMER_PREFIX+'_'+key);
+    if (v) document.getElementById(`timer${key}Best`).textContent = 'Bestzeit: ' + formatTime(parseInt(v));
+  });
+})();
+
+// ── WORTSCHATZ ──────────────────────────────────────────────
+var WORTSCHATZ = [
+  { type: "n", en: "the language assistant", art: "der", wort: "Sprachassistent", plural: "Sprachassistenten" },
+  { type: "v", en: "to teach", de: "unterrichten" },
+  { type: "n", en: "the language", art: "die", wort: "Sprache", plural: "Sprachen" },
+  { type: "n", en: "the school", art: "die", wort: "Schule", plural: "Schulen" },
+  { type: "n", en: "the student", art: "der", wort: "Student", plural: "Studenten" },
+  { type: "n", en: "the lesson", art: "die", wort: "Stunde", plural: "Stunden" },
+  { type: "v", en: "to correct", de: "korrigieren" },
+  { type: "n", en: "the grammar", art: "die", wort: "Grammatik", plural: "Grammatiken" },
+  { type: "v", en: "to practice", de: "üben" },
+  { type: "n", en: "the conversation", art: "das", wort: "Gespräch", plural: "Gespräche" },
+  { type: "v", en: "to improve", de: "verbessern" },
+  { type: "n", en: "the certificate", art: "das", wort: "Zertifikat", plural: "Zertifikate" },
+];
+
+function initVocab() {
+  var cont = document.getElementById('vocabContainer');
+  cont.innerHTML = '';
+  WORTSCHATZ.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'vocab-item';
+    if (item.type === 'n') {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    } else {
+      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
+        '<div class="vocab-inputs">' +
+        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
+        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    }
+    cont.appendChild(div);
+  });
+}
+
+function vocabLiveCheck(idx) {
+  var item = WORTSCHATZ[idx];
+  var hint = document.getElementById('vh' + idx);
+  if (item.type === 'n') {
+    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
+    var w = document.getElementById('vw' + idx).value.trim();
+    var p = document.getElementById('vp' + idx).value.trim();
+    var okA = a === item.art.toLowerCase();
+    var okW = w === item.wort;
+    var okP = p === item.plural;
+    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  } else {
+    var w2 = document.getElementById('vw' + idx).value.trim();
+    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
+    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+  }
+}
+
+function showVocabLoesung() {
+  WORTSCHATZ.forEach(function(item, idx) {
+    if (item.type === 'n') {
+      document.getElementById('va' + idx).value = item.art;
+      document.getElementById('vw' + idx).value = item.wort;
+      document.getElementById('vp' + idx).value = item.plural;
+    } else {
+      document.getElementById('vw' + idx).value = item.de;
+    }
+    vocabLiveCheck(idx);
+  });
+}
+
+function resetVocab() { initVocab(); }
+
+initVocab();
+</script>
+</body>
+</html>

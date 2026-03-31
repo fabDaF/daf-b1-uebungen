@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2057X · Möglichkeiten ausdrücken</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
+  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
+  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
+  .nav button { padding: 11px 16px; border: 1px solid #b388e8; background: #f3e8ff; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; color: #5a0090; text-align: left; transition: background 0.2s; }
+  .nav button:hover { background: #e1c6ff; }
+  .nav button.active { background: #667eea; color: #fff; border-color: #667eea; }
+  .tab-content { display: none; padding: 28px 32px; }
+  .tab-content.active { display: block; }
+  h2 { color: #667eea; margin-bottom: 18px; font-size: 1.25rem; }
+  h3 { color: #5a0090; margin: 18px 0 10px; font-size: 1.05rem; }
+  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; display: block; }
+  /* VOCAB */
+  .vocab-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+  .vocab-card { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 12px 16px; min-width: 200px; flex: 1 1 200px; cursor: pointer; transition: background 0.2s; }
+  .vocab-card:hover { background: #e1c6ff; }
+  .vocab-card .word { font-weight: 700; color: #667eea; font-size: 1rem; }
+  .vocab-card .translation { font-size: 0.85rem; color: #555; margin-top: 4px; display: none; }
+  .vocab-card.revealed .translation { display: block; }
+  /* KOMMUNIKATION KARTEN */
+  .komm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
+  .komm-card { background: #f9f3ff; border: 2px solid #b388e8; border-radius: 10px; padding: 16px 18px; }
+  .komm-card .phrase { font-weight: 700; color: #667eea; font-size: 0.95rem; margin-bottom: 6px; }
+  .komm-card .example { font-size: 0.87rem; color: #444; font-style: italic; }
+  /* ZUORDNUNG */
+  .zuord-list { list-style: none; max-width: 680px; margin: 0 auto; }
+  .zuord-item { display: flex; align-items: center; gap: 12px; background: #f9f3ff;
+    border: 1px solid #d4b8f5; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
+  .zuord-item .satz { flex: 1; font-size: 0.95rem; }
+  .zuord-item select { border: 2px solid #b388e8; border-radius: 6px; padding: 6px 10px;
+    font-size: 0.9rem; background: #fff; cursor: pointer; }
+  .zuord-item select.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .zuord-item select.err { border-color: #cc3333; background: #ffd5d5; }
+  .check-btn { margin-top: 14px; padding: 10px 28px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+  .check-btn:hover { background: #5a0090; }
+  .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
+  /* LÜCKENTEXT */
+  .luecken-text { font-size: 1rem; line-height: 2.1; max-width: 680px; }
+  .luecken-text p { margin-bottom: 10px; }
+  .luecken-text input { border: none; border-bottom: 2px solid #b388e8; background: transparent;
+    font-size: 0.97rem; outline: none; padding: 2px 6px; color: #333; transition: border-color 0.2s; }
+  .luecken-text input:focus { border-color: #667eea; }
+  .luecken-text input.ok { border-color: #3a9a36; background: #c8f7c5; }
+  .luecken-text input.err { border-color: #cc3333; background: #ffd5d5; }
+  /* SATZBAU */
+  .sb-task { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .sb-task .aufgabe { font-size: 0.85rem; color: #888; margin-bottom: 8px; }
+  .sb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 36px; }
+  .sb-chip { background: #667eea; color: #fff; border-radius: 6px; padding: 6px 12px;
+    cursor: grab; font-size: 0.92rem; user-select: none; border: 2px solid transparent; }
+  .sb-chip:active { cursor: grabbing; }
+  .sb-chip.dragging { opacity: 0.5; }
+  .sb-chip.selected { border-color: #ffcc00; }
+  .sb-drop { border: 2px dashed #b388e8; border-radius: 8px; min-height: 40px; padding: 4px 8px;
+    display: flex; flex-wrap: wrap; gap: 6px; background: #faf5ff; transition: background 0.2s; }
+  .sb-drop.drag-over { background: #e1c6ff; }
+  .sb-feedback { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 60px; }
+  .timer-btn { padding: 6px 16px; border-radius: 6px; border: 2px solid #667eea;
+    background: #fff; color: #667eea; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+  .timer-btn:hover { background: #f3e8ff; }
+  .timer-best { font-size: 0.85rem; color: #888; }
+  /* SPRECHAUFGABE */
+  .sprech-card { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; }
+  /* WORTSCHATZ */
+  .wort-card { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
+  .wort-de { font-weight: 700; color: #667eea; min-width: 210px; }
+  .wort-en { color: #555; font-size: 0.92rem; }
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
+    font-size: 0.75rem; color: #aaa; text-align: center; }
+  /* INFO BOX */
+  .info-box { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6; }
+  .info-box strong { color: #667eea; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="nav" id="nav">
+    <button class="active" onclick="showTab(0)">💬 Ausdrücke</button>
+    <button onclick="showTab(1)">📚 Wortschatz</button>
+    <button onclick="showTab(2)">🔗 Zuordnung</button>
+    <button onclick="showTab(3)">❓ Dialog &amp; Fragen</button>
+    <button onclick="showTab(4)">✏️ Lückentext</button>
+    <button onclick="showTab(5)">🧩 Satzbau</button>
+  </div>
+
+  <!-- TAB 0: AUSDRÜCKE -->
+  <div class="tab-content active" id="tab0">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Möglichkeiten ausdrücken" class="tab-banner">
+    <h2>Möglichkeiten ausdrücken</h2>
+    <div class="info-box">
+      Im Deutschen gibt es viele Wege, Möglichkeiten und Alternativen auszudrücken.
+      Hier lernst du die wichtigsten Redemittel — zum Vorschlagen, Einschränken und Begründen.
+    </div>
+    <h3>Möglichkeiten vorschlagen</h3>
+    <div class="komm-grid">
+      <div class="komm-card">
+        <div class="phrase">Du könntest …</div>
+        <div class="example">„Du könntest dich um eine Stelle im Ausland bewerben."</div>
+      </div>
+      <div class="komm-card">
+        <div class="phrase">Eine Möglichkeit wäre, …</div>
+        <div class="example">„Eine Möglichkeit wäre, ein Freiwilliges Soziales Jahr zu machen."</div>
+      </div>
+      <div class="komm-card">
+        <div class="phrase">Es ist möglich, …</div>
+        <div class="example">„Es ist möglich, ein Visum online zu beantragen."</div>
+      </div>
+      <div class="komm-card">
+        <div class="phrase">Man könnte auch …</div>
+        <div class="example">„Man könnte auch an einem Austauschprogramm teilnehmen."</div>
+      </div>
+    </div>
+    <h3>Einschränkungen ausdrücken</h3>
+    <div class="komm-grid">
+      <div class="komm-card">
+        <div class="phrase">Leider ist es nicht möglich, …</div>
+        <div class="example">„Leider ist es nicht möglich, ohne Visum einzureisen."</div>
+      </div>
+      <div class="komm-card">
+        <div class="phrase">Es wäre besser, …</div>
+        <div class="example">„Es wäre besser, sich frühzeitig zu informieren."</div>
+      </div>
+      <div class="komm-card">
+        <div class="phrase">Das hängt davon ab, ob …</div>
+        <div class="example">„Das hängt davon ab, ob du ein Stipendium bekommst."</div>
+      </div>
+      <div class="komm-card">
+        <div class="phrase">Ich würde empfehlen, …</div>
+        <div class="example">„Ich würde empfehlen, mehrere Optionen zu vergleichen."</div>
+      </div>
+    </div>
+    <h3>Sprechaufgaben</h3>
+    <div class="sprech-card"><strong>A)</strong> Dein Freund möchte ins Ausland gehen, aber er weiß nicht wie. Gib ihm drei Vorschläge.</div>
+    <div class="sprech-card"><strong>B)</strong> Welche Möglichkeiten gibt es, Deutsch im Alltag zu üben? Nenne mindestens vier.</div>
+    <div class="sprech-card"><strong>C)</strong> Beschreibe eine Situation, in der du einer Person eine Möglichkeit empfohlen hast.</div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 1: VOKABELN -->
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Vokabeln" class="tab-banner">
+    <h2>Vokabeln — Möglichkeiten ausdrücken</h2>
+    <p style="margin-bottom:16px;color:#555;font-size:0.93rem;">Klicke auf eine Karte, um die Übersetzung zu sehen.</p>
+    <div class="vocab-grid" id="vocabGrid"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 2: ZUORDNUNG -->
+  <div class="tab-content" id="tab2">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Zuordnung" class="tab-banner">
+    <h2>Zuordnung — Welche Funktion hat der Satz?</h2>
+    <p style="margin-bottom:16px;color:#555;">Ordne jeden Satz der richtigen Kategorie zu.</p>
+    <ul class="zuord-list" id="zuordList"></ul>
+    <button class="check-btn" onclick="checkZuordnung()">Überprüfen</button>
+    <div class="result-msg" id="zuordResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 3: DIALOG & FRAGEN -->
+  <div class="tab-content" id="tab3">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Dialog" class="tab-banner">
+    <h2>Dialog &amp; Fragen</h2>
+    <div class="info-box">
+      <strong>Lies den Dialog und beantworte die Fragen.</strong>
+    </div>
+    <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:18px 20px;margin-bottom:20px;font-size:0.97rem;line-height:1.8;">
+      <p><strong>Sarah:</strong> „Ich würde so gerne ein Auslandssemester machen, aber ich weiß nicht, wie ich das finanzieren soll."</p>
+      <p><strong>Jonas:</strong> „Eine Möglichkeit wäre, ein Stipendium zu beantragen. Du könntest dich auch um einen Ferienjob bewerben."</p>
+      <p><strong>Sarah:</strong> „Ich hatte auch schon überlegt, ob ich einen Teilzeitjob während des Studiums nehmen könnte."</p>
+      <p><strong>Jonas:</strong> „Das hängt davon ab, wie viel Zeit du neben dem Studium hast. Ich würde empfehlen, zuerst die Stipendienmöglichkeiten zu prüfen."</p>
+      <p><strong>Sarah:</strong> „Stimmt. Leider ist es nicht möglich, ohne finanzielle Unterstützung ins Ausland zu gehen."</p>
+      <p><strong>Jonas:</strong> „Es wäre besser, wenn du frühzeitig anfängst zu planen — am besten ein Jahr im Voraus."</p>
+    </div>
+    <h3>Fragen zum Dialog</h3>
+    <div style="max-width:650px;">
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>1.</strong> Was ist Sarahs Problem?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>2.</strong> Welche zwei Vorschläge macht Jonas?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>3.</strong> Was empfiehlt Jonas am Ende?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>4.</strong> Welche Redemittel für Möglichkeiten findest du im Dialog? Nenne drei.
+      </div>
+    </div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 4: LÜCKENTEXT -->
+  <div class="tab-content" id="tab4">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lückentext" class="tab-banner">
+    <h2>Lückentext</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerL">0:00</span>
+      <button class="timer-btn" id="timerLBtn" onclick="timerToggle('L')">▶ Start</button>
+      <span class="timer-best" id="timerLBest"></span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="lueckenResult"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+  <!-- TAB 5: SATZBAU -->
+  <div class="tab-content" id="tab5">
+    <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Satzbau" class="tab-banner">
+    <h2>Satzbau</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerS">0:00</span>
+      <button class="timer-btn" id="timerSBtn" onclick="timerToggle('S')">▶ Start</button>
+      <span class="timer-best" id="timerSBest"></span>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="footer">FrankBurkert@fabdaf.onmicrosoft.com</div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+const TIMER_PREFIX = 'best2057X';
+
+const WORTSCHATZ = [
+  { word: 'die Möglichkeit, -en', en: 'possibility / option' },
+  { word: 'vorschlagen (schlägt vor)', en: 'to suggest' },
+  { word: 'empfehlen (empfiehlt)', en: 'to recommend' },
+  { word: 'einschränken', en: 'to limit / restrict' },
+  { word: 'davon abhängen', en: 'to depend on it' },
+  { word: 'das Stipendium, -ien', en: 'scholarship / grant' },
+  { word: 'beantragen', en: 'to apply for (official)' },
+  { word: 'finanzieren', en: 'to finance / fund' },
+  { word: 'die Unterstützung, -en', en: 'support / assistance' },
+  { word: 'frühzeitig', en: 'early on / in good time' },
+  { word: 'die Alternative, -n', en: 'alternative' },
+  { word: 'in Betracht kommen', en: 'to be considered / come into question' },
+  { word: 'infrage kommen', en: 'to be an option / qualify' },
+  { word: 'vergleichen', en: 'to compare' },
+  { word: 'der Vorschlag, -¨e', en: 'suggestion / proposal' },
+  { word: 'die Einschränkung, -en', en: 'restriction / limitation' },
+];
+
+const ZUORDNUNG_ITEMS = [
+  { satz: '„Du könntest ein Praktikum im Ausland machen."', cat: 'Vorschlag' },
+  { satz: '„Leider ist es nicht möglich, ohne Visum einzureisen."', cat: 'Einschränkung' },
+  { satz: '„Ich würde empfehlen, frühzeitig zu planen."', cat: 'Empfehlung' },
+  { satz: '„Das hängt davon ab, ob du ein Stipendium bekommst."', cat: 'Bedingung' },
+  { satz: '„Eine Möglichkeit wäre, sich zu bewerben."', cat: 'Vorschlag' },
+  { satz: '„Es wäre besser, mehrere Optionen zu vergleichen."', cat: 'Empfehlung' },
+  { satz: '„Man könnte auch ein Freiwilligenjahr einplanen."', cat: 'Vorschlag' },
+  { satz: '„Ohne finanzielle Unterstützung ist es kaum möglich."', cat: 'Einschränkung' },
+];
+
+const LUECKEN = [
+  { before: 'Du ', blank: 'könntest', after: ' dich um ein Stipendium bewerben.' },
+  { before: 'Eine ', blank: 'Möglichkeit', after: ' wäre, einen Sprachkurs zu besuchen.' },
+  { before: 'Es ', blank: 'wäre', after: ' besser, frühzeitig mit der Planung zu beginnen.' },
+  { before: 'Das hängt davon ', blank: 'ab', after: ', wie viel Zeit du hast.' },
+  { before: 'Ich würde ', blank: 'empfehlen', after: ', mehrere Optionen zu vergleichen.' },
+  { before: 'Leider ist es nicht ', blank: 'möglich', after: ', ohne Visum einzureisen.' },
+  { before: 'Man könnte auch an einem ', blank: 'Austauschprogramm', after: ' teilnehmen.' },
+  { before: 'Ohne finanzielle ', blank: 'Unterstützung', after: ' ist ein Auslandssemester schwierig.' },
+  { before: 'Das Stipendium muss rechtzeitig ', blank: 'beantragt', after: ' werden.' },
+  { before: 'Es gibt viele ', blank: 'Alternativen', after: ' zum klassischen Studium.' },
+];
+
+const SATZBAU_SAETZE = [
+  ['Du', 'könntest', 'ein Praktikum', 'im Ausland machen.'],
+  ['Eine Möglichkeit wäre,', 'ein Stipendium', 'rechtzeitig', 'zu beantragen.'],
+  ['Das hängt', 'davon ab,', 'ob du', 'genug Zeit hast.'],
+  ['Ich würde empfehlen,', 'mehrere Optionen', 'sorgfältig', 'zu vergleichen.'],
+  ['Leider ist es', 'nicht möglich,', 'ohne Visum', 'einzureisen.'],
+  ['Man könnte', 'auch', 'einen Ferienjob', 'in Betracht ziehen.'],
+];
+
+// TABS
+function showTab(n) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// VOCAB
+initVocab = function() {
+  const g = document.getElementById('vocabGrid');
+  WORTSCHATZ.forEach(v => {
+    const c = document.createElement('div'); c.className = 'vocab-card';
+    c.innerHTML = `<div class="word">${v.word}</div><div class="translation">${v.en}</div>`;
+    c.addEventListener('click', () => c.classList.toggle('revealed'));
+    g.appendChild(c);
+  });
+})();
+
+// ZUORDNUNG
+(function buildZuordnung() {
+  const list = document.getElementById('zuordList');
+  const cats = ['Vorschlag', 'Einschränkung', 'Empfehlung', 'Bedingung'];
+  ZUORDNUNG_ITEMS.forEach((item, idx) => {
+    const li = document.createElement('li'); li.className = 'zuord-item';
+    const opts = cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    li.innerHTML = `<div class="satz">${idx+1}. ${item.satz}</div>
+      <select id="zuord-${idx}"><option value="">— wählen —</option>${opts}</select>`;
+    list.appendChild(li);
+  });
+})();
+
+function checkZuordnung() {
+  let correct = 0;
+  ZUORDNUNG_ITEMS.forEach((item, idx) => {
+    const sel = document.getElementById(`zuord-${idx}`);
+    sel.classList.remove('ok','err');
+    if (sel.value === item.cat) { sel.classList.add('ok'); correct++; }
+    else { sel.classList.add('err'); }
+  });
+  const res = document.getElementById('zuordResult');
+  if (correct === ZUORDNUNG_ITEMS.length) {
+    res.textContent = `✅ Alle ${ZUORDNUNG_ITEMS.length} Zuordnungen richtig!`;
+    res.style.color = '#1a5e17';
+  } else {
+    res.textContent = `${correct} von ${ZUORDNUNG_ITEMS.length} richtig.`;
+    res.style.color = '#7a0000';
+  }
+}
+
+// LÜCKENTEXT
+(function buildLuecken() {
+  const container = document.getElementById('lueckenText');
+  LUECKEN.forEach((item, idx) => {
+    const p = document.createElement('p'); p.style.marginBottom = '10px';
+    p.innerHTML = `${item.before}<input type="text" id="luecke-${idx}"
+      data-answer="${item.blank.toLowerCase()}"
+      placeholder="..."
+      oninput="liveCheck(this)"
+      style="width:${Math.max(100, item.blank.length*11)}px"
+    />${item.after}`;
+    container.appendChild(p);
+  });
+})();
+
+function liveCheck(inp) {
+  const val = inp.value.trim().toLowerCase();
+  const ans = inp.dataset.answer.toLowerCase();
+  inp.classList.remove('ok','err');
+  if (val === ans) inp.classList.add('ok');
+  autoStopIfDone();
+}
+
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN.forEach((item, idx) => {
+    const inp = document.getElementById(`luecke-${idx}`);
+    inp.classList.remove('ok','err');
+    if (inp.value.trim().toLowerCase() === item.blank.toLowerCase()) { inp.classList.add('ok'); correct++; }
+    else { inp.classList.add('err'); }
+  });
+  const res = document.getElementById('lueckenResult');
+  if (correct === LUECKEN.length) {
+    res.textContent = `✅ Alle ${LUECKEN.length} Lücken richtig!`; res.style.color = '#1a5e17';
+    stopTimer('L'); saveBest('L');
+  } else {
+    res.textContent = `${correct} von ${LUECKEN.length} richtig.`; res.style.color = '#7a0000';
+  }
+}
+
+function autoStopIfDone() {
+  const inputs = document.querySelectorAll('#lueckenText input');
+  if ([...inputs].every(i => i.classList.contains('ok'))) {
+    stopTimer('L'); saveBest('L');
+    const res = document.getElementById('lueckenResult');
+    res.textContent = `✅ Alle ${LUECKEN.length} Lücken richtig!`; res.style.color='#1a5e17';
+  }
+}
+
+// ══════════════════════════════════════════════
+// SATZBAU
+// ══════════════════════════════════════════════
+const SATZBAU_DATA = [
+  { words: ['Du', 'könntest', 'ein Praktikum', 'im Ausland machen', '.'] },
+  { words: ['Eine Möglichkeit wäre', ',', 'ein Stipendium', 'rechtzeitig', 'zu beantragen', '.'] },
+  { words: ['Das hängt', 'davon ab', ',', 'ob du', 'genug Zeit hast', '.'] },
+  { words: ['Ich würde empfehlen', ',', 'mehrere Optionen', 'sorgfältig', 'zu vergleichen', '.'] },
+  { words: ['Leider ist es', 'nicht möglich', ',', 'ohne Visum', 'einzureisen', '.'] },
+  { words: ['Man könnte', 'auch', 'einen Ferienjob', 'in Betracht ziehen', '.'] }
+];
+
+let sbDragged = null;
+
+function sbMakeChip(word, isTarget) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (isPunct) { span.draggable = false; return span; }
+  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+  span.addEventListener('dragend', () => { sbDragged = null; });
+  if (isTarget) {
+    span.addEventListener('dragover', e => e.preventDefault());
+    span.addEventListener('drop', e => {
+      e.preventDefault();
+      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+    });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(itemIdx) {
+  setTimeout(() => {
+    const zone = document.getElementById('sb_zone_' + itemIdx);
+    if (!zone) return;
+    const chips = zone.querySelectorAll('.chip');
+    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
+    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(itemIdx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+    checkSatzbauComplete();
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    const orig = chip.textContent;
+    if (i === 0) {
+      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+    }
+  });
+}
+
+function checkSatzbauComplete() {
+  const allOk = SATZBAU_DATA.every((_, i) => {
+    const zone = document.getElementById('sb_zone_' + i);
+    return zone && zone.classList.contains('correct');
+  });
+  if (allOk) stopTimer(4);
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    let shuffled;
+    let ok2 = false;
+    for (let a = 0; a < 50; a++) {
+      shuffled = shuffleArr(nonPunct);
+      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+    }
+    if (!ok2) shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w, false);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
+      const pc = sbMakeChip(w, false);
+      zone.appendChild(pc);
+    });
+
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    div.appendChild(pool);
+    div.appendChild(zone);
+    div.appendChild(fb);
+    cont.appendChild(div);
+  });
+}
+
+function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+
+// TIMER
+let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
+function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}
+function startTimer(k){
+  if(timerRunning[k])return; timerRunning[k]=true;
+  document.getElementById(`timer${k}Btn`).textContent='⏸ Pause';
+  timerIntervals[k]=setInterval(()=>{timerSeconds[k]++;document.getElementById(`timer${k}`).textContent=formatTime(timerSeconds[k]);},1000);
+}
+function stopTimer(k){
+  clearInterval(timerIntervals[k]); timerRunning[k]=false;
+  document.getElementById(`timer${k}Btn`).textContent='▶ Weiter';
+}
+function saveBest(k){
+  const sk=TIMER_PREFIX+'_'+k, prev=parseInt(localStorage.getItem(sk)||'999999');
+  if(timerSeconds[k]<prev){localStorage.setItem(sk,timerSeconds[k]);document.getElementById(`timer${k}Best`).textContent='🏆 Neue Bestzeit: '+formatTime(timerSeconds[k]);}
+  else{document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(prev);}
+}
+function formatTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+(function loadBest(){['L','S'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
+</script>
+</body>
+</html>

@@ -352,8 +352,8 @@ function sbCheckAuto(itemIdx) {{
   if(!zone) return;
   setTimeout(function() {{
     var chips=Array.from(zone.querySelectorAll('.chip'));
-    var ans=SATZBAU_DATA[itemIdx].words;
-    var got=chips.map(function(c){{return c.dataset.orig;}});
+    var ans=SATZBAU_DATA[itemIdx].words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
+    var got=chips.filter(function(c){{return !/^[.,!?;:]$/.test(c.dataset.orig);}}).map(function(c){{return c.dataset.orig;}});
     if(got.length===0) return;
     var ok=JSON.stringify(got)===JSON.stringify(ans);
     chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
@@ -376,7 +376,8 @@ function buildSatzbau() {{
   cont.innerHTML='';
   SATZBAU_DATA.forEach(function(item,idx) {{
     var div=document.createElement('div'); div.className='satzbau-item';
-    var shuffled=shuffleArr(item.words);
+    var nonPunct=item.words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
+    var shuffled=shuffleArr(nonPunct);
     var pool=document.createElement('div'); pool.className='chips-container'; pool.id='sb_pool_'+idx;
     shuffled.forEach(function(w) {{
       var chip=sbMakeChip(w,false);
@@ -385,10 +386,13 @@ function buildSatzbau() {{
     }});
     sbRegisterZone(pool);
     var zone=document.createElement('div'); zone.className='sentence-builder'; zone.id='sb_zone_'+idx;
+    item.words.filter(function(w){{return /^[.,!?;:]$/.test(w);}}).forEach(function(w) {{
+      var pc=sbMakeChip(w,true); zone.appendChild(pc);
+    }});
     sbRegisterZone(zone);
     zone.addEventListener('drop',function(){{ sbUpdateCapitalization(zone); setTimeout(function(){{sbCheckAuto(idx);}},50); }});
     zone.addEventListener('click',function(e) {{
-      var chip=e.target.closest('.chip');
+      var chip=e.target.closest('.chip:not(.punct-chip)');
       if(chip&&zone.contains(chip)) {{ pool.appendChild(chip); sbUpdateCapitalization(zone); sbCheckAuto(idx); }}
     }});
     var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb_fb_'+idx;

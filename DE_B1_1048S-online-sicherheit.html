@@ -151,10 +151,11 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 
     <div class="nav">
         <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔊</span><span class="nav-label">Aussprache</span></div>
-        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🗣️</span><span class="nav-label">Zungenbrecher</span></div>
-        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">📚</span><span class="nav-label">Vokabeln</span></div>
-        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">💬</span><span class="nav-label">Diskussion</span></div>
-        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🎯</span><span class="nav-label">Sortieren</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🗣️</span><span class="nav-label">Zungenbrecher</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">📚</span><span class="nav-label">Vokabeln</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">💬</span><span class="nav-label">Diskussion</span></div>
+        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
     </div>
 
     <!-- TAB 0: Aussprache ch -->
@@ -237,40 +238,57 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
                 </div>
             </div>
 
-            <div class="ausspache-section">
-                <h3>🎯 Übung: Sortiere die Wörter nach dem ch-Laut</h3>
-                <div class="sort-container">
-                    <div class="sort-title">Klicke auf ein Wort in der Bank, dann auf die richtige Kategorie:</div>
-                    <div class="word-pool" id="chWordPool"></div>
-                    <div class="sort-bins">
-                        <div class="sort-bin ich-bin" onclick="placeToBin('ich')">
-                            <div class="sort-bin-label">Ich-Laut [ç]</div>
-                            <div class="sort-bin-words" id="bin-ich"></div>
-                        </div>
-                        <div class="sort-bin ach-bin" onclick="placeToBin('ach')">
-                            <div class="sort-bin-label">Ach-Laut [x]</div>
-                            <div class="sort-bin-words" id="bin-ach"></div>
-                        </div>
-                        <div class="sort-bin k-bin" onclick="placeToBin('k')">
-                            <div class="sort-bin-label">k-Laut [k]</div>
-                            <div class="sort-bin-words" id="bin-k"></div>
-                        </div>
-                        <div class="sort-bin sch-bin" onclick="placeToBin('sch')">
-                            <div class="sort-bin-label">sch-Laut [ʃ]</div>
-                            <div class="sort-bin-words" id="bin-sch"></div>
-                        </div>
-                    </div>
-                    <div style="margin-top:12px;display:flex;gap:8px;">
-                        <button class="btn" onclick="resetChSort()">↺ Neustart</button>
-                    </div>
-                    <div id="chSortFeedback" style="margin-top:10px;font-size:0.9em;font-weight:600;min-height:1.2em;"></div>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- TAB 1: Zungenbrecher -->
+    <!-- TAB 1: Sortier-Übung -->
     <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/4145153/pexels-photo-4145153.jpeg?w=1000&h=180&fit=crop" alt="Aussprache üben">
+        <div class="section-content">
+            <div class="section-title">🎯 Sortiere die Wörter nach dem ch-Laut</div>
+            <div class="section-sub">Klicke auf ein Wort, dann auf die richtige Kategorie. Sofortiges Feedback!</div>
+
+            <div class="hilfe-box">
+                <strong>Tipp:</strong> Denke an die Regeln aus Tab 1: Nach <em>e, i, ä, ö, ü</em> → Ich-Laut [ç]. Nach <em>a, o, u</em> → Ach-Laut [x]. Vor <em>-s</em> → k-Laut [k]. <em>sch</em> → [ʃ].
+            </div>
+
+            <div class="timer-controls">
+                <div class="tc-buttons">
+                    <button onclick="resetChSort()">↺ Neustart</button>
+                </div>
+                <div class="tc-times">
+                    <span>⏱ <span class="timer-display" id="timer-1">0:00</span></span>
+                    <span>🏆 <span class="best-display" id="best-1">–</span></span>
+                </div>
+            </div>
+
+            <div class="sort-container">
+                <div class="word-pool" id="chWordPool"></div>
+                <div class="sort-bins">
+                    <div class="sort-bin ich-bin" onclick="placeToBin('ich')">
+                        <div class="sort-bin-label">Ich-Laut [ç]</div>
+                        <div class="sort-bin-words" id="bin-ich"></div>
+                    </div>
+                    <div class="sort-bin ach-bin" onclick="placeToBin('ach')">
+                        <div class="sort-bin-label">Ach-Laut [x]</div>
+                        <div class="sort-bin-words" id="bin-ach"></div>
+                    </div>
+                    <div class="sort-bin k-bin" onclick="placeToBin('k')">
+                        <div class="sort-bin-label">k-Laut [k]</div>
+                        <div class="sort-bin-words" id="bin-k"></div>
+                    </div>
+                    <div class="sort-bin sch-bin" onclick="placeToBin('sch')">
+                        <div class="sort-bin-label">sch-Laut [ʃ]</div>
+                        <div class="sort-bin-words" id="bin-sch"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="chSortFeedback" style="margin-top:12px;font-size:0.95em;font-weight:600;min-height:1.2em;"></div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Zungenbrecher -->
+    <div class="section" id="sec-2">
         <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?w=1000&h=180&fit=crop" alt="Wörterbuch">
         <div class="section-content">
             <div class="section-title">🗣️ Zungenbrecher</div>
@@ -326,8 +344,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
         </div>
     </div>
 
-    <!-- TAB 2: Vokabeln -->
-    <div class="section" id="sec-2">
+    <!-- TAB 3: Vokabeln -->
+    <div class="section" id="sec-3">
         <img class="tab-banner" src="https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?w=1000&h=180&fit=crop" alt="Online-Sicherheit">
         <div class="section-content">
             <div class="section-title">📚 Vokabeln: Online-Sicherheit &amp; Datenschutz</div>
@@ -336,11 +354,11 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
             <div class="control-bar">
                 <div class="btn-row">
                     <button class="btn" onclick="showVocabLoesung()">Lösungen</button>
-                    <button class="btn" onclick="resetVocab(); resetTimer(2);">↺ Neustart</button>
+                    <button class="btn" onclick="resetVocab(); resetTimer(3);">↺ Neustart</button>
                 </div>
                 <div class="timer-display">
-                    <span class="current-time">⏱ <span id="timer-2">0:00</span></span>
-                    <span class="best-time">🏆 <span id="best-2">–</span></span>
+                    <span class="current-time">⏱ <span id="timer-3">0:00</span></span>
+                    <span class="best-time">🏆 <span id="best-3">–</span></span>
                 </div>
             </div>
 
@@ -348,8 +366,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
         </div>
     </div>
 
-    <!-- TAB 3: Diskussion -->
-    <div class="section" id="sec-3">
+    <!-- TAB 4: Diskussion -->
+    <div class="section" id="sec-4">
         <img class="tab-banner" src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?w=1000&h=180&fit=crop" alt="Gruppendiskussion">
         <div class="section-content">
             <div class="section-title">💬 Diskussion</div>
@@ -411,8 +429,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
         </div>
     </div>
 
-    <!-- TAB 4: Satzbau -->
-    <div class="section" id="sec-4">
+    <!-- TAB 5: Satzbau -->
+    <div class="section" id="sec-5">
         <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?w=1000&h=180&fit=crop" alt="Team Online">
         <div class="section-content">
             <div class="section-title">🧩 Satzbau</div>
@@ -421,11 +439,11 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
             <div class="control-bar">
                 <div class="btn-row">
                     <button class="btn" onclick="sbShowAllSolutions()">Lösungen</button>
-                    <button class="btn" onclick="initSatzbau(); resetTimer(4);">↺ Neustart</button>
+                    <button class="btn" onclick="initSatzbau(); resetTimer(5);">↺ Neustart</button>
                 </div>
                 <div class="timer-display">
-                    <span class="current-time">⏱ <span id="timer-4">0:00</span></span>
-                    <span class="best-time">🏆 <span id="best-4">–</span></span>
+                    <span class="current-time">⏱ <span id="timer-5">0:00</span></span>
+                    <span class="best-time">🏆 <span id="best-5">–</span></span>
                 </div>
             </div>
 
@@ -533,6 +551,7 @@ function selectSortWord(el) {
 var chCorrect = 0;
 function placeToBin(bin) {
     if (!selectedSortWord) return;
+    timerAutoStart(1);
     var word = selectedSortWord.dataset.word;
     var laut = selectedSortWord.dataset.laut;
     var isOk = (laut === bin);
@@ -568,6 +587,7 @@ function placeToBin(bin) {
     // Feedback aktualisieren
     var fb = document.getElementById('chSortFeedback');
     if (chCorrect === CH_WORDS.length) {
+        timerStop(1);
         fb.textContent = '✅ Perfekt! Alle ' + CH_WORDS.length + ' Wörter richtig zugeordnet!';
         fb.style.color = '#27ae60';
     } else {
@@ -621,12 +641,12 @@ function initVocab() {
             var artInp = document.createElement('input');
             artInp.className = 'art'; artInp.type = 'text';
             artInp.placeholder = 'Artikel'; artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
-            artInp.oninput = function() { vocabLiveCheck(this); timerAutoStart(2); checkVocabAllDone(); };
+            artInp.oninput = function() { vocabLiveCheck(this); timerAutoStart(3); checkVocabAllDone(); };
             fields.appendChild(artInp);
             var wordInp = document.createElement('input');
             wordInp.className = 'wort'; wordInp.type = 'text';
             wordInp.placeholder = 'Deutsch'; wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
-            wordInp.oninput = function() { vocabLiveCheck(this); timerAutoStart(2); checkVocabAllDone(); };
+            wordInp.oninput = function() { vocabLiveCheck(this); timerAutoStart(3); checkVocabAllDone(); };
             fields.appendChild(wordInp);
             var plInp = document.createElement('input');
             plInp.className = 'plural'; plInp.type = 'text';
@@ -635,14 +655,14 @@ function initVocab() {
                 plInp.value = '–'; plInp.disabled = true; plInp.classList.add('correct'); plInp.style.opacity = '0.6';
                 plInp.title = 'Dieses Wort hat keinen Plural';
             } else {
-                plInp.oninput = function() { vocabLiveCheck(this); timerAutoStart(2); checkVocabAllDone(); };
+                plInp.oninput = function() { vocabLiveCheck(this); timerAutoStart(3); checkVocabAllDone(); };
             }
             fields.appendChild(plInp);
         } else {
             var inp = document.createElement('input');
             inp.className = 'wort'; inp.type = 'text';
             inp.placeholder = 'Deutsch'; inp.style.width = '220px'; inp.dataset.answer = item.de; inp.dataset.field = 'word';
-            inp.oninput = function() { vocabLiveCheck(this); timerAutoStart(2); checkVocabAllDone(); };
+            inp.oninput = function() { vocabLiveCheck(this); timerAutoStart(3); checkVocabAllDone(); };
             fields.appendChild(inp);
         }
         row.appendChild(fields);
@@ -668,11 +688,11 @@ function checkVocabAllDone() {
     var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
         return i.disabled || i.classList.contains('correct');
     });
-    if (allOk) timerStop(2);
+    if (allOk) timerStop(3);
 }
 
 function showVocabLoesung() {
-    timerStop(2);
+    timerStop(3);
     document.querySelectorAll('#sec-2 input').forEach(function(inp) {
         if (!inp.disabled) {
             inp.value = inp.dataset.answer;
@@ -749,7 +769,7 @@ function sbMakeChip(word) {
     var chip = document.createElement('div');
     chip.className = 'chip'; chip.textContent = word; chip.dataset.orig = word; chip.draggable = true;
     chip.addEventListener('dragstart', function(e) {
-        sbDragged = chip; timerAutoStart(4);
+        sbDragged = chip; timerAutoStart(5);
         e.dataTransfer.setData('text/plain', '');
         setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
     });
@@ -810,7 +830,7 @@ function sbCheckAuto(idx) {
         row.classList.remove('correct','incorrect'); fb.textContent = ''; return;
     }
     setTimeout(function() {
-        timerAutoStart(4);
+        timerAutoStart(5);
         var ok = sbColorRow(idx);
         if (ok) {
             row.classList.add('correct'); row.classList.remove('incorrect');
@@ -827,7 +847,7 @@ function sbCheckAllDone() {
         var row = document.getElementById('sb-row-' + i);
         return row && row.classList.contains('correct');
     });
-    if (allOk) timerStop(4);
+    if (allOk) timerStop(5);
 }
 function sbShowSolution(idx) {
     var bank = document.getElementById('sb-bank-' + idx);

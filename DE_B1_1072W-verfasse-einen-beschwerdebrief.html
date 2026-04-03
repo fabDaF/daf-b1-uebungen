@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verfasse einen Beschwerdebrief – B1 Interaktive DaF-Übung</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* Tab banner */
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+
+/* General layout */
+.tab-content { padding: 28px 30px; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.warn-box { background: #fff8e1; border-left: 4px solid #f0b429; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #555; line-height: 1.6; }
+
+/* ===== TAB 0 — STRUKTUR ===== */
+.struktur-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+@media (max-width: 600px) { .struktur-grid { grid-template-columns: 1fr; } }
+.struktur-card { border-radius: 10px; padding: 14px 16px; }
+.struktur-card .sk-title { font-weight: 700; font-size: 1.0em; margin-bottom: 4px; }
+.struktur-card .sk-desc { font-size: 0.88em; line-height: 1.5; color: #555; }
+.sk-briefkopf   { background: #e8f0ff; border-left: 4px solid #4a6cf7; }
+.sk-betreff     { background: #fff0e8; border-left: 4px solid #f7774a; }
+.sk-anrede      { background: #e8fff0; border-left: 4px solid #4af77a; }
+.sk-einleitung  { background: #f8e8ff; border-left: 4px solid #b44af7; }
+.sk-hauptteil   { background: #fff8e8; border-left: 4px solid #f7c44a; }
+.sk-schluss     { background: #e8fffc; border-left: 4px solid #4af7e8; }
+
+.regel-liste { list-style: none; padding: 0; margin-bottom: 24px; }
+.regel-liste li { padding: 9px 14px 9px 38px; position: relative; background: #fafbff; border-radius: 8px; margin-bottom: 7px; font-size: 0.92em; color: #333; line-height: 1.5; }
+.regel-liste li::before { content: "⚠️"; position: absolute; left: 10px; top: 9px; font-size: 0.9em; }
+
+.demo-letter { background: #fafbff; border: 1px solid #dde3ff; border-radius: 10px; padding: 20px 24px; font-family: Georgia, serif; font-size: 0.92em; line-height: 1.8; margin-bottom: 20px; }
+.demo-letter .letter-part { border-radius: 4px; padding: 2px 6px; display: inline; }
+.lp-briefkopf   { background: #c8d8ff; }
+.lp-betreff     { background: #ffd8c8; }
+.lp-anrede      { background: #c8ffd8; }
+.lp-einleitung  { background: #f0c8ff; }
+.lp-hauptteil   { background: #fff0c8; }
+.lp-schluss     { background: #c8fff8; }
+
+.legende { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; margin-bottom: 24px; }
+.legende-item { display: flex; align-items: center; gap: 5px; font-size: 0.82em; color: #444; }
+.legende-dot { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+/* ===== TAB 1 — PHRASEN ===== */
+.phrasen-gruppe { margin-bottom: 28px; }
+.phrasen-titel { font-size: 1.05em; font-weight: 700; color: #667eea; border-bottom: 2px solid #e8ecff; padding-bottom: 6px; margin-bottom: 14px; }
+.phrase-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 13px 16px; margin-bottom: 10px; }
+.phrase-de { font-weight: 600; color: #2a2a2a; font-size: 0.95em; line-height: 1.5; }
+.phrase-en { color: #999; font-size: 0.82em; font-style: italic; margin-top: 3px; }
+
+/* ===== TIMER / CONTROL BAR ===== */
+.timer-bar { display: flex; align-items: center; gap: 12px; background: white; border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.07); font-size: 0.85rem; color: #666; }
+.timer-display { font-weight: 700; color: #667eea; font-size: 1rem; }
+.best-display  { color: #f39c12; font-weight: 600; }
+.btn-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; padding-top: 12px; border-top: 1px solid #eee; }
+.btn-row button { background: none; border: 1px solid #c0b0e8; border-radius: 16px; padding: 5px 16px; cursor: pointer; font-size: .88rem; color: #5a3e9e; transition: background .2s; }
+.btn-row button:hover { background: #f0edf8; }
+
+/* ===== TAB 2 — LÜCKENTEXT ===== */
+.luecken-item { background: #f8f9ff; border: 1px solid #dde3ff; border-left: 4px solid #667eea; border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; font-size: 0.95em; line-height: 2.0; }
+.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1em; padding: 1px 4px; transition: border-color 0.2s; vertical-align: baseline; }
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok  { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no  { border-bottom-color: #e74c3c; color: #e74c3c; }
+
+/* ===== TAB 3 — SATZBAU ===== */
+.satzbau-item { margin-bottom: 22px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct   { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* ===== TAB 4 — ZUORDNUNG ===== */
+.match-exercise { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+@media (max-width: 600px) { .match-exercise { grid-template-columns: 1fr; gap: 20px; } }
+.match-label { font-weight: 700; color: #667eea; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; }
+.match-card { padding: 11px 14px; background: white; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; transition: all 0.2s; user-select: none; font-size: 0.88em; line-height: 1.45; margin-bottom: 8px; }
+.match-card.selected { background: #e8ecff; border-color: #667eea; font-weight: 600; }
+.match-card.matched  { background: #d4edda; border-color: #28a745; opacity: 0.75; pointer-events: none; }
+.match-card.error    { animation: shake 0.4s; background: #f8d7da !important; border-color: #dc3545 !important; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
+.match-score { text-align: center; font-size: 1.05em; font-weight: 600; color: #555; margin-top: 16px; padding: 12px; background: #f0f4ff; border-radius: 8px; }
+.match-score.complete { background: #d4edda; color: #155724; }
+.match-reset-link { color: #667eea; cursor: pointer; text-decoration: underline; margin-left: 8px; font-size: 0.9em; }
+
+/* ===== TAB 5 — WORTSCHATZ ===== */
+.vocab-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 140px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong   { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art   { width: 70px; }
+.vocab-inputs input.wort  { width: 130px; }
+.vocab-inputs input.plural { width: 140px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+@media (max-width: 600px) { .vocab-item { flex-direction: column; align-items: flex-start; } }
+
+/* author footer */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Verfasse einen Beschwerdebrief</h1>
+    <p style="font-family: Georgia, serif;">B1 – Lektion 1072W &nbsp;|&nbsp; Schreiben</p>
+    <div class="big-emoji">✉️</div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📋</span><span class="nav-label">Struktur</span></div>
+    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">💬</span><span class="nav-label">Phrasen</span></div>
+    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">📑</span><span class="nav-label">Zuordnung</span></div>
+    <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+  </div>
+
+  <!-- ===== TAB 0: STRUKTUR ===== -->
+  <div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Formeller Brief">
+    <div class="tab-content">
+      <div class="section-title">📋 Struktur eines Beschwerdebriefes</div>
+      <div class="section-sub">Lerne den Aufbau — ein Beschwerdebrief folgt immer diesem Schema.</div>
+
+      <div class="struktur-grid">
+        <div class="struktur-card sk-briefkopf">
+          <div class="sk-title">📌 Briefkopf</div>
+          <div class="sk-desc">Adresse des Absenders und des Empfängers, Datum, Ort.</div>
+        </div>
+        <div class="struktur-card sk-betreff">
+          <div class="sk-title">📄 Betreffzeile</div>
+          <div class="sk-desc">Der „Titel" des Briefes — kurz und präzise formuliert.</div>
+        </div>
+        <div class="struktur-card sk-anrede">
+          <div class="sk-title">🤝 Anrede</div>
+          <div class="sk-desc">Formell: „Sehr geehrte Frau …" / „Sehr geehrte Damen und Herren,"</div>
+        </div>
+        <div class="struktur-card sk-einleitung">
+          <div class="sk-title">🔑 Einleitung</div>
+          <div class="sk-desc">1–2 Sätze — fasst zusammen, worum es im Brief geht.</div>
+        </div>
+        <div class="struktur-card sk-hauptteil">
+          <div class="sk-title">📝 Hauptteil</div>
+          <div class="sk-desc">Das Problem höflich, aber bestimmt auf den Punkt bringen. Lösungsvorschläge anbieten.</div>
+        </div>
+        <div class="struktur-card sk-schluss">
+          <div class="sk-title">✅ Schlusssatz &amp; Verabschiedung</div>
+          <div class="sk-desc">Auf keinen Fall beleidigend oder unhöflich! „Mit freundlichen Grüßen …"</div>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <strong>⚠️ Wichtige Regel:</strong> Je aggressiver der Inhalt, umso höflicher die Form! Ein Beschwerdebrief sollte stets sachlich und nüchtern geschrieben sein. Beleidigungen und Sarkasmus sind nicht angebracht.
+      </div>
+
+      <div class="section-title" style="margin-bottom:14px;">📌 Regeln beim Schreiben</div>
+      <ul class="regel-liste">
+        <li>Sachlich und nüchtern schreiben — die Dinge auf den Punkt bringen.</li>
+        <li>Sätze knapp formulieren, keine unnötigen Floskeln.</li>
+        <li>In der Einleitung, wenn möglich, auch etwas Positives einbauen.</li>
+        <li>Bitten und ersuchen — nicht befehlen.</li>
+        <li>Lösungsvorschläge anbieten, wenn möglich.</li>
+        <li>Den Brief einen Tag liegen lassen und noch einmal durchlesen, bevor man ihn abschickt.</li>
+      </ul>
+
+      <div class="section-title" style="margin-bottom:10px;">✉️ Beispielbrief (farbig markiert)</div>
+      <div class="legende">
+        <div class="legende-item"><div class="legende-dot" style="background:#c8d8ff;"></div> Briefkopf</div>
+        <div class="legende-item"><div class="legende-dot" style="background:#ffd8c8;"></div> Betreff</div>
+        <div class="legende-item"><div class="legende-dot" style="background:#c8ffd8;"></div> Anrede</div>
+        <div class="legende-item"><div class="legende-dot" style="background:#f0c8ff;"></div> Einleitung</div>
+        <div class="legende-item"><div class="legende-dot" style="background:#fff0c8;"></div> Hauptteil</div>
+        <div class="legende-item"><div class="legende-dot" style="background:#c8fff8;"></div> Schluss</div>
+      </div>
+      <div class="demo-letter">
+        <p><span class="letter-part lp-briefkopf">Anna Maier · Musterstraße 12 · 10115 Berlin | Mustermann Kongress GmbH · Hauptstraße 1 · 80331 München | Berlin, 15. März 2026</span></p>
+        <br>
+        <p><span class="letter-part lp-betreff"><strong>Betreff: Beschwerde bezüglich der Organisation des diesjährigen Königspudel-Kongresses</strong></span></p>
+        <br>
+        <p><span class="letter-part lp-anrede">Sehr geehrter Herr Mustermann,</span></p>
+        <br>
+        <p><span class="letter-part lp-einleitung">zuerst möchte ich Ihnen mitteilen, dass die Vorträge und Workshops auf dem diesjährigen Kongress höchst interessant und ein großer Erfolg waren. Leider muss ich Ihnen jedoch mitteilen, dass wir zahlreiche Beschwerden unserer Vereinsmitglieder bezüglich der Organisation bekamen.</span></p>
+        <br>
+        <p><span class="letter-part lp-hauptteil">Viele berichteten, dass die Workshops und Vorträge nicht zu der auf dem Programm angegebenen Zeit begannen. Dadurch hatten die Teilnehmer Schwierigkeiten, sich rechtzeitig zu den gewünschten Workshops zu gelangen. Des Weiteren wurden mehrere Personen zu Workshops nicht mehr zugelassen, obwohl sie sich im Voraus angemeldet hatten. Die Preise des Kongresses sind angemessen, jedoch hat man als zahlender Teilnehmer das Recht, die gebuchten Workshops zu besuchen.</span></p>
+        <br>
+        <p><span class="letter-part lp-schluss">Ich würde Sie bitten, eine kleine Entschädigung für die Teilnehmer unseres Vereins in Erwägung zu ziehen. Mit freundlichen Grüßen und in der Hoffnung auf eine baldige Antwort, Anna Maier, Bsc.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 1: PHRASEN ===== -->
+  <div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4065891/pexels-photo-4065891.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Person schreibt am Laptop">
+    <div class="tab-content">
+      <div class="section-title">💬 Nützliche Phrasen</div>
+      <div class="section-sub">Typische Formulierungen für jeden Teil des Beschwerdebriefes.</div>
+
+      <div class="phrasen-gruppe">
+        <div class="phrasen-titel">🤝 Begrüßungen &amp; Einleitungssätze</div>
+        <div class="phrase-card">
+          <div class="phrase-de">Sehr geehrte Frau / Herr …</div>
+          <div class="phrase-en">Dear Ms. / Mr. …</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">Sehr geehrte Damen und Herren,</div>
+          <div class="phrase-en">Dear Sir or Madam,</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">ich schreibe Ihnen bezüglich meines kürzlich bei Ihnen erworbenen …</div>
+          <div class="phrase-en">I am writing to you regarding the … I recently purchased from you.</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">es ist mir ein Anliegen, Ihnen mitzuteilen, dass ich die Organisation Ihres Kongresses am … als nicht ausreichend zufriedenstellend empfand.</div>
+          <div class="phrase-en">I feel obliged to inform you that I found the organisation of your conference on … to be not sufficiently satisfactory.</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">Ihre Serviceleistung im Zuge des / der … war leider nur unzureichend zufriedenstellend.</div>
+          <div class="phrase-en">Your service in connection with the … was unfortunately only insufficiently satisfactory.</div>
+        </div>
+      </div>
+
+      <div class="phrasen-gruppe">
+        <div class="phrasen-titel">📝 Hilfreiche Sätze für den Hauptteil</div>
+        <div class="phrase-card">
+          <div class="phrase-de">Leider erfüllte das Produkt nicht Ihre Versprechungen.</div>
+          <div class="phrase-en">Unfortunately, the product did not live up to your promises.</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">Da die Serviceleistung Ihrer Firma leider nur unzureichend erbracht wurde, ist der Vertrag meiner Ansicht nach ungültig.</div>
+          <div class="phrase-en">Since your company's service was unfortunately only insufficiently provided, the contract is in my opinion invalid.</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">Zuerst möchte ich Ihnen mitteilen, dass wir mit Ihrer bisher geleisteten Arbeit sehr zufrieden sind. Leider mussten wir jedoch feststellen, dass …</div>
+          <div class="phrase-en">First, I would like to inform you that we are very satisfied with the work you have done so far. Unfortunately, however, we had to find that …</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">Des Weiteren wurde uns mitgeteilt, dass …</div>
+          <div class="phrase-en">Furthermore, we were informed that …</div>
+        </div>
+      </div>
+
+      <div class="phrasen-gruppe">
+        <div class="phrasen-titel">✅ Schlusssätze &amp; Verabschiedungen</div>
+        <div class="phrase-card">
+          <div class="phrase-de">Ich wäre Ihnen sehr dankbar, wenn Sie mein Anliegen schnellstmöglich bearbeiten und mir eine Rückmeldung bezüglich der Lösung des Problems zukommen lassen könnten.</div>
+          <div class="phrase-en">I would be very grateful if you could process my concern as quickly as possible and get back to me regarding a solution to the problem.</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">Es wäre schön, wenn Sie sich sobald wie möglich bezüglich meines Anliegens melden.</div>
+          <div class="phrase-en">It would be nice if you could get back to me regarding my concern as soon as possible.</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">Mit freundlichen Grüßen und in der Hoffnung auf eine schnelle Klärung des Problems,</div>
+          <div class="phrase-en">Kind regards and hoping for a swift resolution to the problem,</div>
+        </div>
+        <div class="phrase-card">
+          <div class="phrase-de">In Erwartung einer umgehenden Aufklärung,</div>
+          <div class="phrase-en">In anticipation of a prompt clarification,</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 2: LÜCKENTEXT ===== -->
+  <div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/210661/pexels-photo-210661.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Hand schreibt">
+    <div class="tab-content">
+      <div class="section-title">✏️ Lückentext</div>
+      <div class="section-sub">Ergänze die fehlenden Wörter.</div>
+
+      <div class="timer-bar">
+        <span>&#9201; <span class="timer-display" id="timer-2">0:00</span></span>
+        <span>&#127942; <span class="best-display" id="best-2">–</span></span>
+      </div>
+
+      <div class="hilfe-box">
+        <strong>Tipp:</strong> Das Eingabefeld wird <span style="color:#27ae60;font-weight:700;">grün</span>, sobald du die richtige Antwort eingibst. Kein Prüfen-Button — Live-Feedback!
+      </div>
+
+      <div id="lueckenContainer"></div>
+
+      <div class="btn-row">
+        <button onclick="showLueckenLoesung()">&#128161; Lösungen</button>
+        <button onclick="resetLuecken()">&#8635; Neustart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 3: SATZBAU ===== -->
+  <div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4101143/pexels-photo-4101143.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Zwei Personen im Gespräch">
+    <div class="tab-content">
+      <div class="section-title">🧩 Satzbau</div>
+      <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge.</div>
+
+      <div class="timer-bar">
+        <span>&#9201; <span class="timer-display" id="timer-3">0:00</span></span>
+        <span>&#127942; <span class="best-display" id="best-3">–</span></span>
+      </div>
+
+      <div class="hilfe-box">
+        Ziehe die Chips in die richtige Reihenfolge. Das Feedback erscheint automatisch.
+      </div>
+
+      <div id="satzbauContainer"></div>
+
+      <div class="btn-row">
+        <button onclick="showAllSolutionsSb()">&#128161; Lösungen</button>
+        <button onclick="resetSatzbau()">&#8635; Neustart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 4: ZUORDNUNG ===== -->
+  <div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3760514/pexels-photo-3760514.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Formelle Person">
+    <div class="tab-content">
+      <div class="section-title">📑 Zuordnung</div>
+      <div class="section-sub">Ordne die Textpassagen dem richtigen Briefteil zu.</div>
+
+      <div class="hilfe-box">
+        Klicke zuerst auf eine <strong>Textpassage links</strong>, dann auf den passenden <strong>Briefteil rechts</strong>. Richtige Zuordnungen werden sofort grün markiert.
+      </div>
+
+      <div class="match-exercise" id="matchExercise">
+        <div>
+          <div class="match-label">Textpassagen:</div>
+          <div id="matchTerms"></div>
+        </div>
+        <div>
+          <div class="match-label">Briefteile:</div>
+          <div id="matchDescs"></div>
+        </div>
+      </div>
+
+      <div id="matchScore" class="match-score" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 5: WORTSCHATZ ===== -->
+  <div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4019754/pexels-photo-4019754.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Schüler im Unterricht">
+    <div class="tab-content">
+      <div class="section-title">🔠 Wortschatz</div>
+      <div class="section-sub">Übersetze die Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+
+      <div class="timer-bar">
+        <span>&#9201; <span class="timer-display" id="timer-5">0:00</span></span>
+        <span>&#127942; <span class="best-display" id="best-5">–</span></span>
+      </div>
+
+      <div id="vocabContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+
+      <div class="btn-row">
+        <button onclick="showVocabLoesung()">&#128161; Lösungen</button>
+        <button onclick="resetVocab()">&#8635; Neustart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ===== NAVIGATION =====
+function showSection(idx) {
+  document.querySelectorAll('.section').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
+  document.querySelectorAll('.nav-btn').forEach(function(b, i) { b.classList.toggle('active', i === idx); });
+}
+
+// ===== TIMER SYSTEM =====
+var TIMER_PREFIX = 'best1072W';
+var timers = {};
+
+function fmtTime(s) {
+  var m = Math.floor(s / 60);
+  var sec = s % 60;
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function startTimer(n) {
+  if (!timers[n]) timers[n] = { running: false, elapsed: 0, interval: null };
+  if (timers[n].running) return;
+  timers[n].running = true;
+  timers[n].interval = setInterval(function() {
+    timers[n].elapsed++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = fmtTime(timers[n].elapsed);
+  }, 1000);
+}
+
+function stopTimer(n) {
+  if (!timers[n] || !timers[n].running) return;
+  clearInterval(timers[n].interval);
+  timers[n].running = false;
+  var elapsed = timers[n].elapsed;
+  var key = TIMER_PREFIX + '-best-' + n;
+  var stored = parseInt(localStorage.getItem(key) || '0');
+  if (!stored || elapsed < stored) {
+    localStorage.setItem(key, elapsed);
+    var bestEl = document.getElementById('best-' + n);
+    if (bestEl) bestEl.textContent = fmtTime(elapsed);
+  }
+}
+
+function resetTimer(n) {
+  if (timers[n]) {
+    clearInterval(timers[n].interval);
+    timers[n] = { running: false, elapsed: 0, interval: null };
+  }
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '0:00';
+}
+
+function timerAutoStart(n) { startTimer(n); }
+
+function loadBestTimes() {
+  [2, 3, 5].forEach(function(n) {
+    var key = TIMER_PREFIX + '-best-' + n;
+    var stored = parseInt(localStorage.getItem(key) || '0');
+    if (stored) {
+      var el = document.getElementById('best-' + n);
+      if (el) el.textContent = fmtTime(stored);
+    }
+  });
+}
+
+// ===== TAB 2: LÜCKENTEXT =====
+var LUECKEN_DATA = [
+  { text: 'Ein Beschwerdebrief sollte stets ___ und nüchtern geschrieben sein.', ans: 'sachlich' },
+  { text: 'Die Sätze sollten knapp formuliert sein und keine unnötigen ___ enthalten.', ans: 'Floskeln' },
+  { text: 'Man sollte bitten beziehungsweise ___, anstatt zu befehlen.', ans: 'ersuchen' },
+  { text: '___ und Sarkasmus sind in einem Beschwerdebrief nicht angebracht.', ans: 'Beleidigungen' },
+  { text: 'Wenn möglich, biete ___ an.', ans: 'Lösungsvorschläge' },
+  { text: 'Die Betreffzeile ist sozusagen der ___ des Briefes.', ans: 'Titel' },
+  { text: 'Leider erfüllte das Produkt nicht Ihre ___.', ans: 'Versprechungen' },
+  { text: 'Ich schreibe Ihnen bezüglich meines kürzlich bei Ihnen ___ Produktes.', ans: 'erworbenen' },
+  { text: 'Ich würde Sie bitten, eine kleine ___ in Erwägung zu ziehen.', ans: 'Entschädigung' },
+  { text: 'In ___ einer umgehenden Aufklärung verbleibe ich mit freundlichen Grüßen.', ans: 'Erwartung' }
+];
+
+function buildLuecken() {
+  var container = document.getElementById('lueckenContainer');
+  container.innerHTML = '';
+  LUECKEN_DATA.forEach(function(item, i) {
+    var div = document.createElement('div');
+    div.className = 'luecken-item';
+    var parts = item.text.split('___');
+    var inputWidth = Math.max(80, item.ans.length * 11) + 'px';
+    div.innerHTML = parts[0]
+      + '<input type="text" class="luecken-inp" placeholder="" data-ans="' + item.ans + '" data-idx="' + i + '" style="width:' + inputWidth + ';" autocomplete="off">'
+      + (parts[1] || '');
+    container.appendChild(div);
+  });
+  container.querySelectorAll('.luecken-inp').forEach(function(inp) {
+    inp.addEventListener('input', function() {
+      liveCheck(inp);
+    });
+  });
+}
+
+function liveCheck(inp) {
+  var ans = inp.dataset.ans || '';
+  var val = inp.value.trim();
+  var caseSensitive = ans.charAt(0) === ans.charAt(0).toUpperCase() && ans.charAt(0) !== ans.charAt(0).toLowerCase();
+  var cmpVal  = caseSensitive ? val : val.toLowerCase();
+  var cmpAns  = caseSensitive ? ans : ans.toLowerCase();
+  inp.classList.remove('ok', 'no');
+  if (!cmpVal) return;
+  if (cmpVal === cmpAns) {
+    inp.classList.add('ok');
+    timerAutoStart(2);
+    checkLueckenAllOk();
+    return;
+  }
+  if (cmpAns.indexOf(cmpVal) === 0) { timerAutoStart(2); return; }
+  inp.classList.add('no');
+}
+
+function checkLueckenAllOk() {
+  var all = Array.from(document.querySelectorAll('#sec-2 .luecken-inp'));
+  if (all.length > 0 && all.every(function(i) { return i.classList.contains('ok'); })) stopTimer(2);
+}
+
+function showLueckenLoesung() {
+  stopTimer(2);
+  document.querySelectorAll('#sec-2 .luecken-inp').forEach(function(inp) {
+    inp.value = inp.dataset.ans;
+    inp.classList.remove('no');
+    inp.classList.add('ok');
+  });
+}
+
+function resetLuecken() {
+  document.querySelectorAll('#sec-2 .luecken-inp').forEach(function(inp) {
+    inp.value = '';
+    inp.classList.remove('ok', 'no');
+  });
+  resetTimer(2);
+}
+
+// ===== TAB 3: SATZBAU =====
+var sbDragged = null;
+
+var satzbauData = [
+  {
+    parts: ['ich', 'schreibe', 'Ihnen', 'bezüglich', 'meines', 'kürzlich', 'erworbenen', 'Produktes'],
+    valid: [['ich', 'schreibe', 'Ihnen', 'bezüglich', 'meines', 'kürzlich', 'erworbenen', 'Produktes']],
+    punct: '.'
+  },
+  {
+    parts: ['Leider', 'erfüllte', 'das', 'Produkt', 'nicht', 'Ihre', 'Versprechungen'],
+    valid: [['Leider', 'erfüllte', 'das', 'Produkt', 'nicht', 'Ihre', 'Versprechungen']],
+    punct: '.'
+  },
+  {
+    parts: ['Die', 'Sätze', 'sollten', 'knapp', 'formuliert', 'sein', 'und', 'keine', 'unnötigen', 'Floskeln', 'enthalten'],
+    valid: [['Die', 'Sätze', 'sollten', 'knapp', 'formuliert', 'sein', 'und', 'keine', 'unnötigen', 'Floskeln', 'enthalten']],
+    punct: '.'
+  },
+  {
+    parts: ['Ich', 'würde', 'Sie', 'bitten', ',', 'eine', 'Entschädigung', 'in', 'Erwägung', 'zu', 'ziehen'],
+    valid: [['Ich', 'würde', 'Sie', 'bitten', ',', 'eine', 'Entschädigung', 'in', 'Erwägung', 'zu', 'ziehen']],
+    punct: '.'
+  },
+  {
+    parts: ['Je', 'aggressiver', 'der', 'Inhalt', ',', 'umso', 'höflicher', 'die', 'Form'],
+    valid: [['Je', 'aggressiver', 'der', 'Inhalt', ',', 'umso', 'höflicher', 'die', 'Form']],
+    punct: '!'
+  },
+  {
+    parts: ['Ich', 'wäre', 'Ihnen', 'sehr', 'dankbar', ',', 'wenn', 'Sie', 'mir', 'eine', 'Rückmeldung', 'zukommen', 'lassen', 'könnten'],
+    valid: [['Ich', 'wäre', 'Ihnen', 'sehr', 'dankbar', ',', 'wenn', 'Sie', 'mir', 'eine', 'Rückmeldung', 'zukommen', 'lassen', 'könnten']],
+    punct: '.'
+  }
+];
+
+function getSbCursor() {
+  var c = document.getElementById('sb-insert-cursor');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'sb-insert-cursor';
+    c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+  }
+  return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+  var chips = Array.from(zone.querySelectorAll('.chip'));
+  for (var i = 0; i < chips.length; i++) {
+    var r = chips[i].getBoundingClientRect();
+    if (clientX < r.left + r.width / 2) return chips[i];
+  }
+  return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  chips.forEach(function(c, i) {
+    var orig = c.dataset.orig;
+    if (orig === ',' || orig === ';' || orig === '?') return;
+    var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+    if (isProper) { c.textContent = orig; }
+    else { c.textContent = (i === 0) ? sbCapitalize(orig) : orig; }
+  });
+}
+
+function sbMakeChip(word) {
+  var chip = document.createElement('div');
+  chip.className = 'chip';
+  chip.textContent = word;
+  chip.dataset.orig = word;
+  chip.draggable = true;
+  if (word === ',' || word === ';' || word === '?') {
+    chip.style.cssText += 'font-size:1.2em;min-width:18px;text-align:center;';
+  }
+  chip.addEventListener('dragstart', function(e) {
+    sbDragged = chip;
+    timerAutoStart(3);
+    e.dataTransfer.setData('text/plain', '');
+    setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+  });
+  chip.addEventListener('dragend', function() {
+    chip.style.opacity = '';
+    sbDragged = null;
+    var c = document.getElementById('sb-insert-cursor');
+    if (c && c.parentNode) c.parentNode.removeChild(c);
+  });
+  return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    if (!sbDragged) return;
+    var cursor = getSbCursor();
+    var before = getSbInsertPos(zone, e.clientX);
+    if (before) zone.insertBefore(cursor, before);
+    else zone.appendChild(cursor);
+  });
+  zone.addEventListener('dragleave', function(e) {
+    if (!zone.contains(e.relatedTarget)) {
+      var c = document.getElementById('sb-insert-cursor');
+      if (c && c.parentNode === zone) zone.removeChild(c);
+    }
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    if (!sbDragged) return;
+    var cursor = document.getElementById('sb-insert-cursor');
+    if (cursor && cursor.parentNode === zone) {
+      zone.insertBefore(sbDragged, cursor);
+      zone.removeChild(cursor);
+    } else {
+      zone.appendChild(sbDragged);
+    }
+    sbDragged = null;
+    var row = document.getElementById('sb-row-' + idx);
+    sbUpdateCapitalization(row);
+    sbCheckAuto(idx);
+  });
+}
+
+function sbColorRow(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  var order = chips.map(function(c) { return c.dataset.orig; });
+  var ok = satzbauData[idx].valid.some(function(v) {
+    return JSON.stringify(v) === JSON.stringify(order);
+  });
+  chips.forEach(function(c) {
+    c.classList.remove('correct', 'incorrect');
+    c.classList.add(ok ? 'correct' : 'incorrect');
+  });
+  var existing = row.querySelector('.sb-punkt');
+  if (existing) existing.parentNode.removeChild(existing);
+  if (ok) {
+    var punkt = document.createElement('span');
+    punkt.className = 'sb-punkt';
+    punkt.textContent = satzbauData[idx].punct || '.';
+    row.appendChild(punkt);
+  }
+  return ok;
+}
+
+function sbCheckAuto(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-' + idx);
+  var fb   = document.getElementById('sb-fb-' + idx);
+  if (bank.querySelectorAll('.chip').length > 0) {
+    row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    return;
+  }
+  setTimeout(function() {
+    timerAutoStart(3);
+    var ok = sbColorRow(idx);
+    if (ok) {
+      row.classList.add('correct'); row.classList.remove('incorrect');
+      fb.className = 'satzbau-feedback correct';
+      fb.textContent = '✓ Korrekt!';
+      sbCheckAllDone();
+    } else {
+      row.classList.add('incorrect'); row.classList.remove('correct');
+      fb.className = 'satzbau-feedback incorrect';
+      fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+    }
+  }, 500);
+}
+
+function sbCheckAllDone() {
+  var allOk = satzbauData.every(function(_, i) {
+    var row = document.getElementById('sb-row-' + i);
+    return row && row.classList.contains('correct');
+  });
+  if (allOk) stopTimer(3);
+}
+
+function sbShowSolution(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-' + idx);
+  var fb   = document.getElementById('sb-fb-' + idx);
+  var solution = satzbauData[idx].valid[0];
+  var allChips = {};
+  Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild)  row.removeChild(row.firstChild);
+  solution.forEach(function(word, i) {
+    var chip = allChips[word];
+    if (chip) {
+      if (word !== ',' && word !== ';' && word !== '?') {
+        chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+      }
+      chip.classList.remove('correct', 'incorrect');
+      row.appendChild(chip);
+    }
+  });
+  fb.textContent = '';
+  setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-' + idx);
+  var fb   = document.getElementById('sb-fb-' + idx);
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild)  row.removeChild(row.firstChild);
+  row.classList.remove('correct', 'incorrect');
+  fb.textContent = '';
+  fb.className = 'satzbau-feedback';
+  var existing = row.querySelector('.sb-punkt');
+  if (existing) existing.parentNode.removeChild(existing);
+  var parts = satzbauData[idx].parts.slice();
+  for (var i = parts.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+  }
+  parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+  var container = document.getElementById('satzbauContainer');
+  container.innerHTML = '';
+  satzbauData.forEach(function(ex, idx) {
+    var item = document.createElement('div');
+    item.className = 'satzbau-item';
+    var bank = document.createElement('div');
+    bank.className = 'chips-container';
+    bank.id = 'sb-bank-' + idx;
+    var row = document.createElement('div');
+    row.className = 'sentence-builder';
+    row.id = 'sb-row-' + idx;
+    var fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb-fb-' + idx;
+    var parts = ex.parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+    sbRegisterZone(bank, idx);
+    sbRegisterZone(row, idx);
+    var btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+    var solveBtn = document.createElement('button');
+    solveBtn.className = 'btn';
+    solveBtn.style.cssText = 'background:none;border:1px solid #c0b0e8;border-radius:16px;padding:5px 16px;cursor:pointer;font-size:.88rem;color:#5a3e9e;';
+    solveBtn.textContent = 'Lösen';
+    solveBtn.setAttribute('data-idx', idx);
+    solveBtn.addEventListener('click', function() { sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'btn';
+    resetBtn.style.cssText = 'background:none;border:1px solid #c0b0e8;border-radius:16px;padding:5px 16px;cursor:pointer;font-size:.88rem;color:#5a3e9e;';
+    resetBtn.textContent = '↺ Neustart';
+    resetBtn.setAttribute('data-idx', idx);
+    resetBtn.addEventListener('click', function() { sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+    btnRow.appendChild(solveBtn);
+    btnRow.appendChild(resetBtn);
+    item.appendChild(bank);
+    item.appendChild(row);
+    item.appendChild(fb);
+    item.appendChild(btnRow);
+    container.appendChild(item);
+  });
+}
+
+function showAllSolutionsSb() {
+  satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
+  stopTimer(3);
+}
+
+function resetSatzbau() { initSatzbau(); resetTimer(3); }
+
+// ===== TAB 4: ZUORDNUNG =====
+var MATCH_DATA = [
+  { term: '„Sehr geehrte Damen und Herren,"', desc: 'Anrede' },
+  { term: '„ich schreibe Ihnen bezüglich meines kürzlich erworbenen Produktes."', desc: 'Einleitungssatz' },
+  { term: '„Zuerst möchte ich Ihnen mitteilen, dass wir mit Ihrer Arbeit sehr zufrieden sind."', desc: 'Positiver Einstieg im Hauptteil' },
+  { term: '„Leider mussten wir feststellen, dass das Produkt nicht funktioniert."', desc: 'Problembeschreibung' },
+  { term: '„Des Weiteren wurde uns mitgeteilt, dass …"', desc: 'Weiteres Problem einleiten' },
+  { term: '„Ich würde Sie bitten, eine Entschädigung in Erwägung zu ziehen."', desc: 'Lösungsvorschlag' },
+  { term: '„Ich wäre Ihnen dankbar, wenn Sie mir eine Rückmeldung zukommen lassen könnten."', desc: 'Schlusssatz' },
+  { term: '„Mit freundlichen Grüßen und in der Hoffnung auf eine baldige Antwort,"', desc: 'Verabschiedung' },
+  { term: '„Betreff: Beschwerde bezüglich des Haushaltsroboters ST 400"', desc: 'Betreffzeile' },
+  { term: '„Anna Maier · Musterstraße 12 · 10115 Berlin"', desc: 'Briefkopf' }
+];
+
+var matchState = { selectedTerm: null, correctCount: 0, total: MATCH_DATA.length };
+
+function shuffleArr(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+function initMatching() {
+  matchState = { selectedTerm: null, correctCount: 0, total: MATCH_DATA.length };
+  var termsDiv = document.getElementById('matchTerms');
+  var descsDiv = document.getElementById('matchDescs');
+  var scoreDiv = document.getElementById('matchScore');
+  termsDiv.innerHTML = ''; descsDiv.innerHTML = '';
+  if (scoreDiv) { scoreDiv.style.display = 'none'; scoreDiv.className = 'match-score'; }
+
+  var shuffledTerms = shuffleArr(MATCH_DATA);
+  var shuffledDescs = shuffleArr(MATCH_DATA);
+  for (var attempts = 0; attempts < 50; attempts++) {
+    var conflict = false;
+    for (var i = 0; i < shuffledTerms.length; i++) {
+      if (shuffledTerms[i].term === shuffledDescs[i].term) { conflict = true; break; }
+    }
+    if (!conflict) break;
+    shuffledDescs = shuffleArr(MATCH_DATA);
+  }
+
+  shuffledTerms.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'match-card';
+    card.textContent = item.term;
+    card.dataset.term = item.term;
+    card.onclick = function() { selectTermCard(this); };
+    termsDiv.appendChild(card);
+  });
+
+  shuffledDescs.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'match-card';
+    card.textContent = item.desc;
+    card.dataset.term = item.term;
+    card.onclick = function() { matchDescCard(this); };
+    descsDiv.appendChild(card);
+  });
+}
+
+function selectTermCard(el) {
+  if (el.classList.contains('matched')) return;
+  var wasSelected = el.classList.contains('selected');
+  document.querySelectorAll('#matchTerms .match-card').forEach(function(c) { c.classList.remove('selected'); });
+  if (!wasSelected) { el.classList.add('selected'); matchState.selectedTerm = el.dataset.term; }
+  else { matchState.selectedTerm = null; }
+}
+
+function matchDescCard(el) {
+  if (el.classList.contains('matched') || !matchState.selectedTerm) return;
+  var termCard = document.querySelector('#matchTerms .match-card.selected');
+  if (!termCard) return;
+  if (el.dataset.term === matchState.selectedTerm) {
+    el.classList.add('matched');
+    termCard.classList.add('matched');
+    termCard.classList.remove('selected');
+    matchState.correctCount++;
+    matchState.selectedTerm = null;
+    updateMatchScore();
+  } else {
+    el.classList.add('error'); termCard.classList.add('error');
+    setTimeout(function() { el.classList.remove('error'); termCard.classList.remove('error'); }, 500);
+  }
+}
+
+function updateMatchScore() {
+  var scoreDiv = document.getElementById('matchScore');
+  if (!scoreDiv) return;
+  scoreDiv.style.display = 'block';
+  scoreDiv.textContent = matchState.correctCount + ' von ' + matchState.total + ' richtig zugeordnet';
+  if (matchState.correctCount === matchState.total) {
+    scoreDiv.classList.add('complete');
+    scoreDiv.innerHTML = '✅ Perfekt! Alle ' + matchState.total + ' Zuordnungen sind korrekt! <span class="match-reset-link" onclick="initMatching()">Nochmal spielen</span>';
+  }
+}
+
+// ===== TAB 5: WORTSCHATZ =====
+var WS_DATA = [
+  { id:1,  type:'n', en:'📝 the complaint',            artikel:'die', de:'Beschwerde',        plural:'Beschwerden' },
+  { id:2,  type:'n', en:'💡 the suggestion for a solution', artikel:'der', de:'Lösungsvorschlag', plural:'Lösungsvorschläge' },
+  { id:3,  type:'n', en:'💰 the refund',               artikel:'die', de:'Rückerstattung',   plural:'Rückerstattungen' },
+  { id:4,  type:'n', en:'⚖️ the defect (product)',     artikel:'der', de:'Sachmangel',        plural:'Sachmängel' },
+  { id:5,  type:'n', en:'🤝 the service',               artikel:'die', de:'Dienstleistung',   plural:'Dienstleistungen' },
+  { id:6,  type:'n', en:'📄 the set of facts',          artikel:'der', de:'Sachverhalt',      plural:'Sachverhalte' },
+  { id:7,  type:'n', en:'🏷️ the phrase / filler',       artikel:'die', de:'Floskel',          plural:'Floskeln' },
+  { id:8,  type:'n', en:'😤 the insult',                artikel:'die', de:'Beleidigung',      plural:'Beleidigungen' },
+  { id:9,  type:'v', en:'📬 to complain / file a complaint', de:'reklamieren' },
+  { id:10, type:'v', en:'🔄 to replace / substitute',   de:'ersetzen' },
+  { id:11, type:'v', en:'↩️ to return / give back',     de:'zurückgeben' },
+  { id:12, type:'v', en:'✉️ to compose / write (formal)',de:'verfassen' }
+];
+
+function initVocab() {
+  var container = document.getElementById('vocabContainer');
+  container.innerHTML = '';
+  var shuffled = WS_DATA.slice().sort(function() { return Math.random() - 0.5; });
+  shuffled.forEach(function(item) {
+    var row = document.createElement('div');
+    row.className = 'vocab-item';
+    row.style.marginBottom = '0';
+    var enDiv = document.createElement('div');
+    enDiv.className = 'vocab-en';
+    enDiv.textContent = item.en;
+    var arrow = document.createElement('div');
+    arrow.className = 'vocab-arrow';
+    arrow.textContent = '→';
+    var inputs = document.createElement('div');
+    inputs.className = 'vocab-inputs';
+    if (item.type === 'n') {
+      var artInp = document.createElement('input');
+      artInp.className = 'art'; artInp.type = 'text'; artInp.placeholder = 'Artikel';
+      artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+      artInp.oninput = function() { wsCheck(this); };
+      var wordInp = document.createElement('input');
+      wordInp.className = 'wort'; wordInp.type = 'text'; wordInp.placeholder = 'Deutsch';
+      wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
+      wordInp.oninput = function() { wsCheck(this); };
+      var plInp = document.createElement('input');
+      plInp.className = 'plural'; plInp.type = 'text'; plInp.placeholder = 'Plural';
+      plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+      if (item.plural === '\u2013') {
+        plInp.value = '\u2013'; plInp.disabled = true; plInp.classList.add('correct'); plInp.style.opacity = '0.6';
+      } else {
+        plInp.oninput = function() { wsCheck(this); };
+      }
+      inputs.appendChild(artInp);
+      inputs.appendChild(wordInp);
+      inputs.appendChild(plInp);
+    } else {
+      var inp = document.createElement('input');
+      inp.style.width = '200px'; inp.type = 'text'; inp.placeholder = 'Deutsch';
+      inp.dataset.answer = item.de; inp.dataset.field = 'word';
+      inp.oninput = function() { wsCheck(this); };
+      inputs.appendChild(inp);
+    }
+    row.appendChild(enDiv);
+    row.appendChild(arrow);
+    row.appendChild(inputs);
+    container.appendChild(row);
+  });
+}
+
+function wsCheck(inp) {
+  var user = inp.value;
+  var answer = inp.dataset.answer;
+  var field = inp.dataset.field;
+  inp.classList.remove('correct', 'wrong');
+  if (!user) return;
+  var cmpUser   = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+  var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+  if (cmpUser === cmpAnswer) {
+    inp.classList.add('correct');
+    timerAutoStart(5);
+    checkVocabAllDone();
+  } else if (cmpAnswer.indexOf(cmpUser) === 0) {
+    timerAutoStart(5);
+  } else {
+    inp.classList.add('wrong');
+  }
+}
+
+function checkVocabAllDone() {
+  var inputs = document.querySelectorAll('#sec-5 input');
+  var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.disabled || i.classList.contains('correct'); });
+  if (allOk) stopTimer(5);
+}
+
+function showVocabLoesung() {
+  stopTimer(5);
+  document.querySelectorAll('#sec-5 input').forEach(function(inp) {
+    if (!inp.disabled) { inp.value = inp.dataset.answer; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+  });
+}
+
+function resetVocab() {
+  document.querySelectorAll('#sec-5 input').forEach(function(inp) {
+    if (!inp.disabled) { inp.value = ''; inp.classList.remove('correct', 'wrong'); }
+  });
+  resetTimer(5);
+}
+
+// ===== INIT =====
+buildLuecken();
+initSatzbau();
+initMatching();
+initVocab();
+loadBestTimes();
+</script>
+</body>
+</html>

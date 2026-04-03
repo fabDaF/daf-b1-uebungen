@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historische Persönlichkeiten – B1 Kommunikation 1064X</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.content-pad { padding: 28px 30px; }
+
+/* Control bar */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn-row button { background: none; border: 1px solid #c0b0e8; border-radius: 16px; padding: 5px 16px; cursor: pointer; font-size: 0.88rem; color: #5a3e9e; transition: background 0.2s; }
+.btn-row button:hover { background: #f0edf8; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-display .timer-val { font-weight: 700; color: #667eea; }
+.timer-display .best-val { color: #f39c12; font-weight: 600; }
+
+/* Section title */
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+
+/* Hilfe box */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+
+/* Lebensphasen cards */
+.phase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.phase-card { background: linear-gradient(135deg, #f8f9ff, #f0ecff); border: 1px solid #dde3ff; border-radius: 12px; padding: 18px; }
+.phase-word { font-size: 1.1em; font-weight: 700; color: #667eea; margin-bottom: 4px; }
+.phase-en { color: #999; font-size: 0.85em; font-style: italic; margin-bottom: 6px; }
+.phase-example { color: #444; font-size: 0.9em; line-height: 1.5; border-left: 3px solid #c5cae9; padding-left: 10px; }
+
+/* Info box (Gandhi) */
+.info-box { background: #fff8e1; border-left: 4px solid #f39c12; border-radius: 0 10px 10px 0; padding: 16px 20px; margin-bottom: 20px; }
+.info-box h3 { color: #e67e22; margin-bottom: 8px; font-size: 1em; }
+.info-box p { color: #555; font-size: 0.92em; line-height: 1.6; }
+
+/* Lückentext */
+.luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; font-size: 0.95em; line-height: 1.8; color: #333; }
+.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1em; width: 130px; padding: 2px 4px; transition: border-color 0.2s; }
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+
+/* Satzbau */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; cursor: move; }
+.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-item { margin-bottom: 24px; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.sb-btns { display: flex; gap: 8px; margin-top: 6px; }
+
+/* Zuordnung */
+.match-exercise { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+.match-label { font-weight: 700; color: #667eea; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; }
+.match-card { padding: 12px 15px; background: white; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; transition: all 0.2s; user-select: none; margin-bottom: 8px; font-size: 0.9em; line-height: 1.4; }
+.match-card:hover { border-color: #667eea; background: #f0f4ff; }
+.match-card.selected { background: #e8ecff; border-color: #667eea; font-weight: 600; }
+.match-card.matched { background: #d4edda; border-color: #28a745; opacity: 0.7; pointer-events: none; }
+.match-card.error { animation: shake 0.4s; background: #f8d7da !important; border-color: #dc3545 !important; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+.match-score { text-align: center; font-size: 1.05em; font-weight: 600; color: #555; margin-top: 16px; padding: 12px; background: #f0f4ff; border-radius: 8px; }
+.match-score.complete { background: #d4edda; color: #155724; }
+.match-reset-link { cursor: pointer; color: #667eea; text-decoration: underline; margin-left: 8px; }
+
+/* Wortschatz */
+.ws-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ws-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; }
+.ws-prompt { font-weight: 600; color: #667eea; margin-bottom: 6px; font-size: 1.05em; }
+.ws-fields { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ws-inp { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.ws-inp.art { width: 70px; }
+.ws-inp.wort { width: 150px; }
+.ws-inp.plural { width: 140px; }
+.ws-inp.verb { width: 200px; }
+.ws-inp:focus { border-bottom-color: #764ba2; }
+.ws-inp.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.ws-inp.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+
+/* Footer */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .match-exercise { grid-template-columns: 1fr; }
+    .ws-grid { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Historische Persönlichkeiten</h1>
+        <p style="font-family: Georgia, serif;">B1.1 – Lektion 1064X &nbsp;|&nbsp; Kommunikation &amp; Wortschatz</p>
+        <div class="big-emoji">🌍</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📚</span><span class="nav-label">Lebensphasen</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🎯</span><span class="nav-label">Zuordnung</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- TAB 0: LEBENSPHASEN -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1166990/pexels-photo-1166990.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Baby im blauen Himmel">
+        <div class="content-pad">
+            <div class="section-title">📚 Lebensphasen &amp; Lebenszyklus</div>
+            <div class="section-sub">Lerne die wichtigsten Wörter für die Phasen eines Menschenlebens.</div>
+
+            <div class="info-box">
+                <h3>🇮🇳 Mahatma Gandhi (1869–1948)</h3>
+                <p>Gandhi wurde in der Stadt Porbandar geboren und verbrachte dort seine Kindheit. Mitten in der Pubertät, mit 16 Jahren, brachte seine Frau ein Kind zur Welt. Während seines Erwachsenenlebens engagierte er sich gegen Rassentrennung und für Gleichberechtigung. Als Senior erlebte er den größten Erfolg: Indien wurde unabhängig von Großbritannien.</p>
+            </div>
+
+            <div class="phase-grid" id="phaseGrid"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: LÜCKENTEXT -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Glückliche Familie mit Kindern">
+        <div class="content-pad">
+            <div class="section-title">✏️ Lückentext</div>
+            <div class="section-sub">Ergänze die fehlenden Wörter über Mahatma Gandhi und Lebensphasen.</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button onclick="showLueckenLoesung()">💡 Lösungen</button>
+                    <button onclick="resetLuecken()">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-1">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-1">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Setze das passende Wort ein. Das Feedback erscheint sofort beim Tippen.</div>
+            <div id="lueckenContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 2: SATZBAU -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Erwachsener Mechaniker bei der Arbeit">
+        <div class="content-pad">
+            <div class="section-title">🧩 Satzbau</div>
+            <div class="section-sub">Bring die Wörter in die richtige Reihenfolge.</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button onclick="showAllSolutions()">💡 Lösungen</button>
+                    <button onclick="resetSatzbau()">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-2">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-2">–</span></span>
+                </div>
+            </div>
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: ZUORDNUNG -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3831645/pexels-photo-3831645.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Älterer Mann mit Kopfhörern tanzt">
+        <div class="content-pad">
+            <div class="section-title">🎯 Zuordnung</div>
+            <div class="section-sub">Ordne die Lebensphase der passenden Beschreibung zu. Klicke zuerst auf einen Begriff links, dann auf die passende Erklärung rechts.</div>
+            <div class="match-exercise">
+                <div>
+                    <div class="match-label">Begriff</div>
+                    <div id="matchTerms"></div>
+                </div>
+                <div>
+                    <div class="match-label">Beschreibung</div>
+                    <div id="matchDescriptions"></div>
+                </div>
+            </div>
+            <div id="matchScore" class="match-score" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: WORTSCHATZ -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Team gibt sich die Hand">
+        <div class="content-pad">
+            <div class="section-title">🔠 Wortschatz-Training</div>
+            <div class="section-sub">Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural tippen.</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button onclick="showWsLoesung()">💡 Lösungen</button>
+                    <button onclick="resetWs()">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="timer-val" id="timer-4">0:00</span></span>
+                    <span>🏆 <span class="best-val" id="best-4">–</span></span>
+                </div>
+            </div>
+            <div class="ws-grid" id="wsContainer"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+// ===== NAVIGATION =====
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+// ===== LEBENSPHASEN DATA =====
+var PHASEN = [
+    { word: 'das Kleinkind', en: 'toddler', plural: 'die Kleinkinder', example: '„Die Zeit ist so schnell vergangen: Meine Tochter ist kein Baby mehr, sondern ein Kleinkind."' },
+    { word: 'der Jugendliche', en: 'teenager / young person', plural: 'die Jugendlichen', example: '„Als Jugendlicher sind die Freunde manchmal wichtiger als die Familie."' },
+    { word: 'der Erwachsene', en: 'adult', plural: 'die Erwachsenen', example: '„Erwachsene sind immer so schrecklich ernst."' },
+    { word: 'der Rentner', en: 'retiree / pensioner', plural: 'die Rentner', example: '„Seit meine Oma aufgehört hat zu arbeiten, genießt sie ihr Leben als Rentnerin."' },
+    { word: 'das Säuglingsalter', en: 'infancy', plural: '–', example: '„Das Säuglingsalter ist schnell vorbei."' },
+    { word: 'die Kindheit', en: 'childhood', plural: '–', example: '„Ich hatte eine glückliche Kindheit."' },
+    { word: 'die Pubertät', en: 'puberty', plural: '–', example: '„Die Pubertät ist eine schwierige Zeit für Eltern und Kinder."' },
+    { word: 'die Generation', en: 'generation', plural: 'die Generationen', example: '„Auf diesem Foto sieht man drei Generationen zusammen."' },
+    { word: 'der Lebenszyklus', en: 'life cycle', plural: 'die Lebenszyklen', example: '„Die Kindheit, Jugend und das Erwachsenenalter sind die Phasen eines Lebenszyklus."' },
+    { word: 'der Einfluss', en: 'influence', plural: 'die Einflüsse', example: '„Früher war er aggressiv, aber seine neuen Freunde haben einen guten Einfluss auf ihn."' },
+    { word: 'der Ehrgeiz', en: 'ambition', plural: '–', example: '„Sein Ehrgeiz wird ihn noch weit bringen."' },
+    { word: 'der Nachwuchs', en: 'offspring / children', plural: '–', example: '„Ich liebe Kinder und wollte schon immer eigenen Nachwuchs haben."' },
+];
+
+function initPhasen() {
+    var grid = document.getElementById('phaseGrid');
+    PHASEN.forEach(function(p) {
+        var card = document.createElement('div');
+        card.className = 'phase-card';
+        card.innerHTML = '<div class="phase-word">' + p.word +
+            (p.plural !== '–' ? ' &nbsp;<span style="color:#aaa;font-size:0.8em;font-weight:400;">Pl.: ' + p.plural + '</span>' : '') +
+            '</div>' +
+            '<div class="phase-en">' + p.en + '</div>' +
+            '<div class="phase-example">' + p.example + '</div>';
+        grid.appendChild(card);
+    });
+}
+initPhasen();
+
+// ===== TIMER =====
+var timers = {};
+var TIMER_PREFIX = 'best1064X';
+
+function fmtTime(s) {
+    var m = Math.floor(s/60);
+    var sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function startTimer(n) {
+    if (timers[n] && timers[n].running) return;
+    if (!timers[n]) timers[n] = { secs: 0, running: false, iv: null };
+    timers[n].running = true;
+    timers[n].iv = setInterval(function() {
+        timers[n].secs++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timers[n].secs);
+    }, 1000);
+}
+
+function stopTimer(n) {
+    if (!timers[n] || !timers[n].running) return;
+    clearInterval(timers[n].iv);
+    timers[n].running = false;
+    var best = localStorage.getItem(TIMER_PREFIX + '-best-' + n);
+    if (!best || timers[n].secs < parseInt(best)) {
+        localStorage.setItem(TIMER_PREFIX + '-best-' + n, timers[n].secs);
+        var bEl = document.getElementById('best-' + n);
+        if (bEl) bEl.textContent = fmtTime(timers[n].secs);
+    }
+}
+
+function resetTimer(n) {
+    if (timers[n]) { clearInterval(timers[n].iv); timers[n] = { secs: 0, running: false, iv: null }; }
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function loadBestTimes() {
+    [1, 2, 4].forEach(function(n) {
+        var best = localStorage.getItem(TIMER_PREFIX + '-best-' + n);
+        if (best) {
+            var el = document.getElementById('best-' + n);
+            if (el) el.textContent = fmtTime(parseInt(best));
+        }
+    });
+}
+loadBestTimes();
+
+// ===== LÜCKENTEXT =====
+var LUECKEN = [
+    { text: 'Mahatma Gandhi wurde in der Stadt ___ geboren.', ans: 'Porbandar' },
+    { text: 'Seine Familie arbeitete seit vielen ___ für den Fürsten.', ans: 'Generationen' },
+    { text: 'Mit 7 Jahren, fast noch als ___, wurde er verlobt.', ans: 'Kleinkind' },
+    { text: 'Mitten in der ___, mit 16 Jahren, brachte seine Frau ein Kind zur Welt.', ans: 'Pubertät' },
+    { text: 'Während seines Erwachsenenlebens engagierte er sich gegen Rassentrennung und für ___.', ans: 'Gleichberechtigung' },
+    { text: 'Als Senior hatte er endlich Erfolg: Indien wurde ___ von Großbritannien.', ans: 'unabhängig' },
+    { text: 'Gandhi hatte einen großen ___ auf seine Kinder.', ans: 'Einfluss' },
+    { text: 'Gandhi starb am 30. Januar 1948 bei einem ___.', ans: 'Attentat' },
+    { text: 'Gandhis jüngster Sohn verliebte sich in die Tochter eines anderen ___.', ans: 'Freiheitskämpfers' },
+    { text: 'Hätte Gandhi ein Testament gemacht, hätte er seine Passion an seine Söhne ___.', ans: 'weitergegeben' },
+];
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN.forEach(function(item, idx) {
+        var parts = item.text.split('___');
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
+        var html = parts[0];
+        html += '<input class="luecken-inp" type="text" placeholder="" data-ans="' + item.ans + '" data-idx="' + idx + '">';
+        html += parts[1] || '';
+        div.innerHTML = html;
+        container.appendChild(div);
+    });
+    container.querySelectorAll('.luecken-inp').forEach(function(inp) {
+        inp.addEventListener('input', function() {
+            liveCheck(inp, 1);
+        });
+    });
+}
+
+function liveCheck(inp, timerN) {
+    var ans = inp.dataset.ans || '';
+    var val = inp.value.trim();
+    var caseSens = ans.charAt(0) === ans.charAt(0).toUpperCase() && ans.charAt(0) !== ans.charAt(0).toLowerCase();
+    var cmpVal = caseSens ? val : val.toLowerCase();
+    var cmpAns = caseSens ? ans : ans.toLowerCase();
+    inp.classList.remove('ok', 'no');
+    if (!cmpVal) return;
+    if (cmpVal === cmpAns) {
+        inp.classList.add('ok');
+        startTimer(timerN);
+        checkLueckenAllOk();
+        return;
+    }
+    if (cmpAns.indexOf(cmpVal) === 0) { startTimer(timerN); return; }
+    inp.classList.add('no');
+}
+
+function checkLueckenAllOk() {
+    var all = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    if (Array.from(all).every(function(i){ return i.classList.contains('ok'); })) stopTimer(1);
+}
+
+function showLueckenLoesung() {
+    stopTimer(1);
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans;
+        inp.classList.add('ok'); inp.classList.remove('no');
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = ''; inp.classList.remove('ok', 'no');
+    });
+    resetTimer(1);
+}
+
+initLuecken();
+
+// ===== SATZBAU =====
+var sbDragged = null;
+
+var satzbauData = [
+    {
+        parts: ['Gandhi', 'wurde', 'in', 'Indien', 'geboren'],
+        valid: [['Gandhi', 'wurde', 'in', 'Indien', 'geboren']],
+        punct: '.'
+    },
+    {
+        parts: ['seine', 'Kindheit', 'verbrachte', 'er', 'in', 'Porbandar'],
+        valid: [['seine', 'Kindheit', 'verbrachte', 'er', 'in', 'Porbandar']],
+        punct: '.'
+    },
+    {
+        parts: ['er', 'engagierte', 'sich', 'gegen', 'Rassentrennung'],
+        valid: [['er', 'engagierte', 'sich', 'gegen', 'Rassentrennung']],
+        punct: '.'
+    },
+    {
+        parts: ['als', 'Senior', 'erlebte', 'er', 'die', 'Unabhängigkeit'],
+        valid: [['als', 'Senior', 'erlebte', 'er', 'die', 'Unabhängigkeit']],
+        punct: '.'
+    },
+    {
+        parts: ['Gandhi', 'hatte', 'großen', 'Einfluss', 'auf', 'seine', 'Kinder'],
+        valid: [['Gandhi', 'hatte', 'großen', 'Einfluss', 'auf', 'seine', 'Kinder']],
+        punct: '.'
+    },
+    {
+        parts: ['er', 'starb', 'am', '30. Januar', '1948', 'bei', 'einem', 'Attentat'],
+        valid: [['er', 'starb', 'am', '30. Januar', '1948', 'bei', 'einem', 'Attentat']],
+        punct: '.'
+    },
+];
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === ';') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) { c.textContent = orig; }
+        else { c.textContent = (i === 0) ? sbCapitalize(orig) : orig; }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        startTimer(2);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function(){ chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) { zone.insertBefore(sbDragged, cursor); zone.removeChild(cursor); }
+        else zone.appendChild(sbDragged);
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c){ return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(order); });
+    chips.forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok ? 'correct' : 'incorrect'); });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var p = document.createElement('span');
+        p.className = 'sb-punkt';
+        p.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(p);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+        row.classList.remove('correct','incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        startTimer(2);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect'; fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) stopTimer(2);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var sol  = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    sol.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct','incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function(){ sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-'  + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct','incorrect');
+    fb.textContent = ''; fb.className = 'satzbau-feedback';
+    var ex = row.querySelector('.sb-punkt');
+    if (ex) ex.parentNode.removeChild(ex);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(w){ bank.appendChild(sbMakeChip(w)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container'; bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder'; row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback'; fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(w){ bank.appendChild(sbMakeChip(w)); });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btns';
+        var solveBtn = document.createElement('button');
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function(){ sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn = document.createElement('button');
+        resetBtn.textContent = '↺';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function(){ sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function showAllSolutions() {
+    satzbauData.forEach(function(_, i){ sbShowSolution(i); });
+}
+
+function resetSatzbau() { initSatzbau(); resetTimer(2); }
+initSatzbau();
+
+// ===== ZUORDNUNG =====
+var MATCH_DATA = [
+    { term: 'das Kleinkind', desc: 'Kind im Alter von 1–3 Jahren, das noch nicht zur Schule geht' },
+    { term: 'die Pubertät', desc: 'Phase des Körper- und Gefühlswandels zwischen Kindheit und Erwachsensein' },
+    { term: 'der Erwachsene', desc: 'Person, die volljährig ist und Verantwortung trägt' },
+    { term: 'der Rentner', desc: 'Person, die nicht mehr arbeitet und Rente bekommt' },
+    { term: 'die Kindheit', desc: 'Die Zeit des Lebens, bevor man erwachsen wird' },
+    { term: 'der Einfluss', desc: 'Wirkung einer Person oder Sache auf jemanden oder etwas' },
+    { term: 'der Ehrgeiz', desc: 'Starker Wunsch, Erfolg zu haben und Ziele zu erreichen' },
+    { term: 'die Generation', desc: 'Alle Menschen, die ungefähr zur gleichen Zeit geboren wurden' },
+];
+
+var matchState = { selected: null, correct: 0 };
+
+function shuffleArr(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+}
+
+function initMatch() {
+    matchState = { selected: null, correct: 0 };
+    var termsDiv = document.getElementById('matchTerms');
+    var descsDiv = document.getElementById('matchDescriptions');
+    var scoreDiv = document.getElementById('matchScore');
+    termsDiv.innerHTML = ''; descsDiv.innerHTML = '';
+    if (scoreDiv) { scoreDiv.style.display = 'none'; scoreDiv.className = 'match-score'; }
+
+    var shuffledTerms = shuffleArr(MATCH_DATA);
+    var shuffledDescs = shuffleArr(MATCH_DATA);
+    for (var att = 0; att < 50; att++) {
+        var conflict = false;
+        for (var i = 0; i < shuffledTerms.length; i++) {
+            if (shuffledTerms[i].term === shuffledDescs[i].term) { conflict = true; break; }
+        }
+        if (!conflict) break;
+        shuffledDescs = shuffleArr(MATCH_DATA);
+    }
+
+    shuffledTerms.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'match-card'; card.textContent = item.term;
+        card.dataset.term = item.term;
+        card.onclick = function() {
+            if (card.classList.contains('matched')) return;
+            document.querySelectorAll('#matchTerms .match-card').forEach(function(c){ c.classList.remove('selected'); });
+            card.classList.toggle('selected');
+            matchState.selected = card.classList.contains('selected') ? item.term : null;
+        };
+        termsDiv.appendChild(card);
+    });
+
+    shuffledDescs.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'match-card'; card.textContent = item.desc;
+        card.dataset.term = item.term;
+        card.onclick = function() {
+            if (card.classList.contains('matched') || !matchState.selected) return;
+            var termCard = document.querySelector('#matchTerms .match-card.selected');
+            if (!termCard) return;
+            if (item.term === matchState.selected) {
+                card.classList.add('matched');
+                termCard.classList.add('matched'); termCard.classList.remove('selected');
+                matchState.correct++;
+                matchState.selected = null;
+                updateMatchScore();
+            } else {
+                card.classList.add('error'); termCard.classList.add('error');
+                setTimeout(function(){ card.classList.remove('error'); termCard.classList.remove('error'); }, 500);
+            }
+        };
+        descsDiv.appendChild(card);
+    });
+}
+
+function updateMatchScore() {
+    var scoreDiv = document.getElementById('matchScore');
+    if (!scoreDiv) return;
+    scoreDiv.style.display = 'block';
+    scoreDiv.textContent = matchState.correct + ' von ' + MATCH_DATA.length + ' richtig zugeordnet';
+    if (matchState.correct === MATCH_DATA.length) {
+        scoreDiv.classList.add('complete');
+        scoreDiv.innerHTML = '✅ Perfekt! Alle ' + MATCH_DATA.length + ' Zuordnungen sind korrekt! <span class="match-reset-link" onclick="initMatch()">Nochmal spielen</span>';
+    }
+}
+
+initMatch();
+
+// ===== WORTSCHATZ =====
+var WS_DATA = [
+    { type: 'n', en: '👶 toddler', artikel: 'das', de: 'Kleinkind', plural: 'Kleinkinder' },
+    { type: 'n', en: '🧒 childhood', artikel: 'die', de: 'Kindheit', plural: '–' },
+    { type: 'n', en: '🧑 puberty', artikel: 'die', de: 'Pubertät', plural: '–' },
+    { type: 'n', en: '👴 pensioner', artikel: 'der', de: 'Rentner', plural: 'Rentner' },
+    { type: 'n', en: '🌱 life cycle', artikel: 'der', de: 'Lebenszyklus', plural: 'Lebenszyklen' },
+    { type: 'n', en: '💡 influence', artikel: 'der', de: 'Einfluss', plural: 'Einflüsse' },
+    { type: 'n', en: '🔥 ambition', artikel: 'der', de: 'Ehrgeiz', plural: '–' },
+    { type: 'n', en: '👨‍👩‍👧 generation', artikel: 'die', de: 'Generation', plural: 'Generationen' },
+    { type: 'v', en: '❤️ to fall in love', de: 'sich verlieben' },
+    { type: 'v', en: '🏛️ independence', de: 'die Unabhängigkeit' },
+];
+
+function initWs() {
+    var container = document.getElementById('wsContainer');
+    container.innerHTML = '';
+    WS_DATA.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'ws-item';
+        var prompt = document.createElement('div');
+        prompt.className = 'ws-prompt';
+        prompt.textContent = item.en;
+        div.appendChild(prompt);
+        var fields = document.createElement('div');
+        fields.className = 'ws-fields';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'ws-inp art'; artInp.type = 'text'; artInp.placeholder = 'Artikel';
+            artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+            artInp.oninput = function(){ wsCheck(this); startTimer(4); checkWsAllOk(); };
+            fields.appendChild(artInp);
+            var wordInp = document.createElement('input');
+            wordInp.className = 'ws-inp wort'; wordInp.type = 'text'; wordInp.placeholder = 'Wort';
+            wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
+            wordInp.oninput = function(){ wsCheck(this); startTimer(4); checkWsAllOk(); };
+            fields.appendChild(wordInp);
+            var plInp = document.createElement('input');
+            plInp.className = 'ws-inp plural'; plInp.type = 'text'; plInp.placeholder = 'Plural';
+            plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+            if (item.plural === '–') {
+                plInp.value = '–'; plInp.disabled = true;
+                plInp.classList.add('correct'); plInp.style.opacity = '0.6';
+                plInp.title = 'Kein Plural';
+            } else {
+                plInp.oninput = function(){ wsCheck(this); startTimer(4); checkWsAllOk(); };
+            }
+            fields.appendChild(plInp);
+        } else {
+            var verbInp = document.createElement('input');
+            verbInp.className = 'ws-inp verb'; verbInp.type = 'text'; verbInp.placeholder = 'Deutsch';
+            verbInp.dataset.answer = item.de; verbInp.dataset.field = 'word';
+            verbInp.oninput = function(){ wsCheck(this); startTimer(4); checkWsAllOk(); };
+            fields.appendChild(verbInp);
+        }
+        div.appendChild(fields);
+        container.appendChild(div);
+    });
+}
+
+function wsCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser   = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { /* prefix neutral */ }
+    else { inp.classList.add('wrong'); }
+}
+
+function checkWsAllOk() {
+    var inputs = document.querySelectorAll('#wsContainer .ws-inp');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i){ return i.disabled || i.classList.contains('correct'); });
+    if (allOk) stopTimer(4);
+}
+
+function showWsLoesung() {
+    stopTimer(4);
+    document.querySelectorAll('#wsContainer .ws-inp').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
+}
+
+function resetWs() {
+    document.querySelectorAll('#wsContainer .ws-inp').forEach(function(inp) {
+        if (!inp.disabled) { inp.value = ''; inp.classList.remove('correct','wrong'); }
+    });
+    resetTimer(4);
+}
+
+initWs();
+</script>
+</body>
+</html>

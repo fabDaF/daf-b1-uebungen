@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kulturelle Angebote in der Großstadt – B1 Lesetext 1053R</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.tab-content { padding: 28px 30px; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+
+/* Vorentlastung */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+
+/* Lesetext */
+.story-text { max-width: 620px; margin: 0 auto; font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 1.8; color: #1a1a1a; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text strong { color: #333; }
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+.vocab-hl { background: #ffe9a0; border-radius: 3px; padding: 1px 3px; font-weight: 600; cursor: help; }
+
+/* Richtig/Falsch */
+.rf-list { list-style: none; margin-top: 0; }
+.rf-item { display: flex; align-items: flex-start; gap: 16px; background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+.rf-question { flex: 1; font-size: 0.97em; color: #333; line-height: 1.5; padding-top: 2px; }
+.rf-buttons { display: flex; gap: 8px; flex-shrink: 0; }
+.rf-btn { padding: 5px 14px; border: 1.5px solid #c5cae9; border-radius: 20px; background: #fff; cursor: pointer; font-size: 11px; letter-spacing: 0.3px; transition: all .2s; font-weight: 600; }
+.rf-btn:hover { border-color: #667eea; background: #eef0ff; }
+.rf-btn.correct { border-color: #27ae60; background: #e8f5e9; color: #2e7d32; }
+.rf-btn.wrong { border-color: #e74c3c; background: #ffebee; color: #c62828; }
+.rf-feedback { margin-top: 12px; font-size: 0.88em; font-weight: 600; min-height: 1.2em; }
+.rf-feedback.ok { color: #27ae60; }
+.rf-feedback.no { color: #e74c3c; }
+
+/* Lückentext */
+.luecken-box { background: #f8f9ff; border-radius: 10px; border-left: 4px solid #667eea; padding: 18px 20px; margin-bottom: 14px; font-size: 1.0em; line-height: 2; color: #333; }
+.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1em; width: 140px; padding: 0 4px; transition: border-color 0.2s; }
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.ctrl-btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.ctrl-btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-display .current-time { color: #888; }
+.timer-display .best-time { color: #f39c12; font-weight: 600; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+
+/* Satzbau */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 20px; }
+.timer-bar { display: flex; align-items: center; gap: 12px; background: white; border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.07); font-size: 0.85rem; color: #666; }
+.timer-display2 { font-weight: 700; color: #667eea; font-size: 1rem; }
+.best-display2 { color: #f39c12; font-weight: 600; }
+.btn-row2 { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; padding-top: 12px; border-top: 1px solid #eee; }
+.btn-row2 button { background: none; border: 1px solid #c0b0e8; border-radius: 16px; padding: 5px 16px; cursor: pointer; font-size: .88rem; color: #5a3e9e; transition: background .2s; }
+.btn-row2 button:hover { background: #f0edf8; }
+
+/* Wortschatz */
+.ws-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ws-item { background: #f8f9ff; padding: 14px 18px; border-radius: 10px; border-left: 4px solid #667eea; }
+.ws-prompt { font-weight: 600; color: #667eea; margin-bottom: 6px; font-size: 1.05em; }
+.ws-fields { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ws-fields input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.ws-fields input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.ws-fields input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.ws-fields input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.ws-fields input.art { width: 70px; }
+.ws-fields input.wort { width: 130px; }
+.ws-fields input.plural { width: 130px; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .ws-container { grid-template-columns: 1fr; }
+}
+
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Kulturelle Angebote in der Großstadt</h1>
+        <p style="font-family: Georgia, serif;">B1 &ndash; Lektion 1053R &nbsp;|&nbsp; Lesen &amp; Verstehen</p>
+        <div class="big-emoji">🎤</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🌅</span><span class="nav-label">Vorentlastung</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">📖</span><span class="nav-label">Lesetext</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">❓</span><span class="nav-label">Verständnis</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- TAB 0: Vorentlastung -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Konzert und kulturelles Leben">
+        <div class="tab-content">
+            <div class="section-title">🌅 Vorentlastung</div>
+            <div class="section-sub">Lerne diese Schlüsselwörter, bevor du den Text liest.</div>
+            <div class="vocab-grid" id="vocabGrid"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: Lesetext -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1268850/pexels-photo-1268850.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Stadtleben bei Nacht">
+        <div class="tab-content">
+            <div class="section-title">📖 Kulturelle Angebote in der Großstadt</div>
+            <div class="story-text" id="storyText">
+                <p>Großstädte folgen zwar einem hektischen Lebensstil und lassen den Bewohnern oftmals kaum Freizeit, dennoch halten sie meist vielfältige <strong>kulturelle</strong> Angebote parat. Einerseits liegen <strong>traditionelle</strong> Angebote wie Theater, Kinos, Museen und Ausstellungen immer noch <strong>im Trend</strong>, andererseits entstehen immer neue Möglichkeiten, die Freizeit nach dem eigenen Geschmack zu gestalten. Manche Aktivitäten werden sozusagen aus anderen Ländern und Kulturen &#8222;importiert&#8220; und finden dann auch hierzulande ein so breites Publikum, dass sie teilweise in unseren Alltag integriert oder zumindest sehr bekannt werden. So z. B. <strong>Karaoke-Bars</strong>.</p>
+
+                <p>Der Begriff <em>Karaoke</em> kommt aus dem Japanischen und bezeichnet eine weltweit verbreitete Freizeitbeschäftigung. Hierbei singt man <strong>Lieder</strong> in ein Mikrofon und kann dabei den Liedtext auf einem laufenden <strong>Bildschirm</strong> mitlesen. <strong>Kara</strong> bedeutet <strong>leer</strong>, <strong>Oke</strong> &ndash; <strong>Orchester</strong>. Dieses Phänomen wurde in den 1970er-Jahren in Japan hauptsächlich für Bars erfunden. Im Laufe der Zeit verbreitete es sich auch in anderen Ländern und anderen Lebensbereichen. Heutzutage kann man im Internet <strong>Karaoketitel herunterladen</strong> und sie auf <strong>diversen</strong> Geräten abspielen.</p>
+
+                <p>Im Internet gibt es sogar Karaoke-Gemeinschaften und in asiatischen Ländern kann man <strong>Karaokekabinen</strong> mieten. In Deutschland hat sich eine neue Form des Karaokes verbreitet &ndash; das <strong>Rudelsingen</strong>. Dabei singt das gesamte Publikum, das live vom Sänger begleitet wird, gleichzeitig. Wenn man Karaoke-Star werden möchte, sollte man folgende Regeln befolgen: 1. Du musst nicht perfekt singen. 2. Versuche, Spaß zu haben. 3. Es sollte unterhaltsam und lustig sein. 4. Sei nicht zurückhaltend.</p>
+
+                <p>Spiele, die auf Simulationen basieren, so zum Beispiel <strong>Fluchträume</strong> (englisch: <em>escape rooms</em>), nehmen einen großen Teil der Freizeit vieler Jugendlicher ein. Auch der Fluchtraum wurde in Japan erfunden, wobei die Spieler <strong>Rätsel</strong> mithilfe von Hinweisen lösen sollen. Ihnen ist meist ein Zeitlimit von einer Stunde gegeben. Die Räume sind je nach Thema unterschiedlich gestaltet und eingerichtet. Genauso beliebt ist das Spiel <strong>Laser Tag</strong>, das mit <strong>Infrarotsignalgebern</strong>, auch <strong>Laser</strong> genannt, gespielt wird. Dabei versuchen zwei oder mehrere Spieler, verschiedene Aufgaben in mehreren Räumen zu erfüllen. Wird man vom <strong>Infrarotstrahl</strong> getroffen, werden Punkte abgezogen.</p>
+
+                <p>Auch sportliche Aktivitäten sind in Großstädten angesagt. Nach all dem Stadtlärm und Stress sollte man sich entspannen. Neue <strong>Trendsportarten</strong> bieten dafür wunderbare Möglichkeiten. Man braucht kein Profi zu sein, denn das macht die neuen Sportarten aus. Allerdings verschwinden sie oft genauso schnell, wie sie erschienen sind. Ein wesentliches Merkmal von Trendsportarten ist die kulturelle Ausdrucksform, die nur den <strong>Trendsportlern</strong> bekannt ist.</p>
+
+                <p>Beliebte Trendsportarten sind z. B. <strong>Parcours</strong> und <strong>Bouldern</strong>. Parcours ist eine Art der Fortbewegung, die es zum Ziel hat, mit der <strong>Geschicklichkeit</strong> des eigenen Körpers möglichst effizient zu einem bestimmten Ort zu gelangen. Der <strong>Parcoursläufer</strong> versucht dabei, die Architekturhindernisse zu überwinden. Parcours wird auch als Kunst der effizienten Fortbewegung bezeichnet. Bouldern entspricht dem <strong>Klettern</strong> ohne Seil oder Sicherung an künstlichen Wänden oder Felswänden.</p>
+
+                <p>Eine andere Freizeitbeschäftigung ist <strong>Klettern</strong>, oder <em>rock climbing</em> auf Englisch. Es wird in Großstädten meistens in Hallen an künstlichen Felsen mit einem Seil ausgeübt. Es ist eine tolle Möglichkeit für <strong>Extremsportler</strong> oder diejenigen, die einen Kick suchen. Menschen, die kein Extrem mögen, beschäftigen sich trotzdem mit Sport. <strong>Fitnessstudios</strong> sind für viele <strong>Büromensch</strong> und <strong>Fitnessfreaks</strong> gut geeignet. Manche Studios bieten einen 24-Stunden-Service an, so kann man jederzeit trainieren gehen.</p>
+
+                <p>In entwickelten Ländern gibt es nicht nur Angebote für junge Menschen, sondern auch für <strong>Senioren</strong>. Es gibt <strong>Seniorenverbände</strong>, die ihren Mitgliedern zahlreiche Aktivitäten anbieten. Unter Senioren sind unter anderem Tischtennis, Badminton, Schwimmen oder Gymnastik beliebt. So bieten die Großstädte zahlreiche Möglichkeiten für die Freizeitbeschäftigung dem Alter und dem Interesse entsprechend. Wichtig ist, dass man die Zeit findet und man frei wählen kann, welchem Hobby man nachgehen möchte.</p>
+            </div>
+            <div class="story-source">Quelle: B1 &ndash; Lektion 1053R &ndash; Kulturelle Angebote in der Großstadt</div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Verständnis -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3760316/pexels-photo-3760316.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Freizeitangebote und Unterhaltung">
+        <div class="tab-content">
+            <div class="section-title">❓ Verständnisfragen</div>
+            <div class="section-sub">Richtig oder falsch? Klicke auf die richtige Antwort.</div>
+            <ul class="rf-list" id="rfList"></ul>
+            <div id="rfScore" style="margin-top:16px;font-size:0.95em;font-weight:600;color:#667eea;min-height:1.4em;"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: Lückentext -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3764011/pexels-photo-3764011.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Sport und Bewegung">
+        <div class="tab-content">
+            <div class="section-title">✏️ Lückentext</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="ctrl-btn" onclick="showLueckenLoesung()">&#128161; Lösungen</button>
+                    <button class="ctrl-btn" onclick="resetLuecken(); resetTimer3();">&#8635; Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">&#9201; <span id="timer-3">00:00</span></span>
+                    <span class="best-time">&#127942; <span id="best-3">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Ergänze die fehlenden Wörter aus dem Lesetext.</div>
+            <div id="lueckenContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: Satzbau -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1701202/pexels-photo-1701202.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Bewegung und Sport">
+        <div class="tab-content">
+            <div class="section-title">🧩 Satzbau</div>
+            <div class="timer-bar">
+                <span>&#9201; <span class="timer-display2" id="timer-4">0:00</span></span>
+                <span>&#127942; <span class="best-display2" id="best-4">&ndash;</span></span>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Ziehe die Wörter in die richtige Reihenfolge.</div>
+            <div id="satzbauContainer"></div>
+            <div class="btn-row2">
+                <button onclick="showAllSolutions()">&#128161; Alle Lösungen</button>
+                <button onclick="resetSatzbau()">&#8635; Neu starten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: Wortschatz -->
+    <div class="section" id="sec-5">
+        <img class="tab-banner" src="https://images.pexels.com/photos/2261477/pexels-photo-2261477.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Fitness und Sport">
+        <div class="tab-content">
+            <div class="section-title">🔠 Wortschatz-Training</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="ctrl-btn" onclick="showWsLoesung()">&#128161; Lösungen</button>
+                    <button class="ctrl-btn" onclick="resetWs(); resetTimer5();">&#8635; Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">&#9201; <span id="timer-5">00:00</span></span>
+                    <span class="best-time">&#127942; <span id="best-5">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box"><strong>Aufgabe:</strong> Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+            <div class="ws-container" id="wsContainer"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+// ─── Navigation ──────────────────────────────────────────────────────────────
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+// ─── VORENTLASTUNG ───────────────────────────────────────────────────────────
+var VORENTLASTUNG = [
+    { term: 'das Angebot, -e', en: 'offer / option', def: 'Etwas, das man machen oder kaufen kann.' },
+    { term: 'die Karaoke-Bar, -s', en: 'karaoke bar', def: 'Ein Lokal, wo man Lieder mit Mikrofon singt.' },
+    { term: 'das Rudelsingen, –', en: 'group singing event', def: 'Alle singen zusammen, begleitet von einem Sänger.' },
+    { term: 'der Fluchtraum, Fluchträume', en: 'escape room', def: 'Ein Raum, aus dem man durch Rätsel entkommen muss.' },
+    { term: 'die Trendsportart, -en', en: 'trend sport', def: 'Eine neue, modische Sportart, die sich schnell verbreitet.' },
+    { term: 'der Parcours, –', en: 'parkour', def: 'Effizienten Fortbewegung durch Überwindung von Hindernissen.' },
+    { term: 'das Bouldern, –', en: 'bouldering', def: 'Klettern ohne Seil an niedrigen Wänden oder Felsen.' },
+    { term: 'das Fitnessstudio, -s', en: 'fitness studio / gym', def: 'Ein Ort mit Sportgeräten zum Trainieren.' },
+];
+
+function initVorentlastung() {
+    var grid = document.getElementById('vocabGrid');
+    VORENTLASTUNG.forEach(function(v) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + v.term + '</div>'
+            + '<div class="vocab-en">' + v.en + '</div>'
+            + '<div class="vocab-def">' + v.def + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+// ─── LESETEXT HIGHLIGHTING ───────────────────────────────────────────────────
+function highlightVocabInText() {
+    var storyText = document.getElementById('storyText');
+    if (!storyText) return;
+    var words = VORENTLASTUNG.map(function(item) {
+        var term = item.term.replace(/^(der|die|das)\s+/i, '');
+        return term.split(',')[0].trim();
+    }).filter(function(w) { return w && w.length > 3; });
+
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('(?<![a-zA-Z\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df])(' + escaped + ')(?![a-zA-Z\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df])', 'g');
+                replaced = replaced.replace(regex, '\x01\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHighlight = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHighlight = !isHighlight; return; }
+                    if (isHighlight) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHighlight = !isHighlight;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
+    }
+    walkAndHighlight(storyText);
+}
+
+// ─── VERSTÄNDNIS (Richtig/Falsch) ────────────────────────────────────────────
+var RF_DATA = [
+    { q: 'Fluchtraum ist ein Videospiel.', ans: false },
+    { q: 'In Fluchträumen (engl. escape rooms) wird den Spielern kein Zeitlimit gegeben.', ans: false },
+    { q: 'Laser-Tag gehört nicht zu den Trendsportarten.', ans: false },
+    { q: 'Bouldern ist Klettern ohne Seil.', ans: true },
+    { q: 'Parcoursläufer versuchen, Architekturhindernisse zu überwinden.', ans: true },
+];
+
+var rfAnswered = 0;
+
+function initRF() {
+    var list = document.getElementById('rfList');
+    RF_DATA.forEach(function(item, idx) {
+        var li = document.createElement('li');
+        li.className = 'rf-item';
+        li.innerHTML = '<div class="rf-question">' + item.q + '</div>'
+            + '<div class="rf-buttons">'
+            + '<button class="rf-btn" data-idx="' + idx + '" data-val="true" onclick="checkRF(this)">Richtig</button>'
+            + '<button class="rf-btn" data-idx="' + idx + '" data-val="false" onclick="checkRF(this)">Falsch</button>'
+            + '</div>';
+        list.appendChild(li);
+    });
+}
+
+function checkRF(btn) {
+    var idx = parseInt(btn.dataset.idx);
+    var val = btn.dataset.val === 'true';
+    var item = RF_DATA[idx];
+    var li = btn.closest('.rf-item');
+    if (li.querySelector('.rf-feedback')) return; // already answered
+    var allBtns = li.querySelectorAll('.rf-btn');
+    allBtns.forEach(function(b) { b.style.pointerEvents = 'none'; });
+    if (val === item.ans) {
+        btn.classList.add('correct');
+    } else {
+        btn.classList.add('wrong');
+        allBtns.forEach(function(b) {
+            if (b.dataset.val === String(item.ans)) b.classList.add('correct');
+        });
+    }
+    var fb = document.createElement('div');
+    fb.className = 'rf-feedback ' + (val === item.ans ? 'ok' : 'no');
+    fb.textContent = val === item.ans ? '✓ Richtig!' : '✗ Falsch!';
+    li.appendChild(fb);
+    rfAnswered++;
+    if (rfAnswered === RF_DATA.length) {
+        document.getElementById('rfScore').textContent = '✅ Alle ' + RF_DATA.length + ' Fragen beantwortet!';
+    }
+}
+
+// ─── LÜCKENTEXT ──────────────────────────────────────────────────────────────
+var LUECKEN = [
+    { before: 'Großstädte halten vielfältige ', ans: 'kulturelle', after: ' Angebote parat.' },
+    { before: 'Das Phänomen Karaoke wurde in den 1970er-Jahren in ', ans: 'Japan', after: ' erfunden.' },
+    { before: 'Beim Rudelsingen singt das gesamte ', ans: 'Publikum', after: ' gleichzeitig.' },
+    { before: 'Beim Laser Tag werden Punkte abgezogen, wenn man vom ', ans: 'Infrarotstrahl', after: ' getroffen wird.' },
+    { before: 'Bouldern entspricht dem Klettern ohne ', ans: 'Seil', after: ' an künstlichen Wänden.' },
+];
+
+var timer3Running = false, timer3Secs = 0, timer3Interval = null;
+var timer3Best = parseInt(localStorage.getItem('best1053R_3') || '0');
+
+function fmtTime3(s) {
+    return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + (s%60);
+}
+function startTimer3() {
+    if (timer3Running) return;
+    timer3Running = true;
+    timer3Interval = setInterval(function() {
+        timer3Secs++;
+        document.getElementById('timer-3').textContent = fmtTime3(timer3Secs);
+    }, 1000);
+}
+function stopTimer3() {
+    if (!timer3Running) return;
+    clearInterval(timer3Interval);
+    timer3Running = false;
+    if (!timer3Best || timer3Secs < timer3Best) {
+        timer3Best = timer3Secs;
+        localStorage.setItem('best1053R_3', timer3Best);
+        document.getElementById('best-3').textContent = fmtTime3(timer3Best);
+    }
+}
+function resetTimer3() {
+    clearInterval(timer3Interval);
+    timer3Running = false;
+    timer3Secs = 0;
+    document.getElementById('timer-3').textContent = '00:00';
+}
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN.forEach(function(item, idx) {
+        var box = document.createElement('div');
+        box.className = 'luecken-box';
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'luecken-inp';
+        inp.placeholder = '';
+        inp.dataset.ans = item.ans;
+        inp.dataset.idx = idx;
+        inp.addEventListener('input', function() {
+            startTimer3();
+            liveCheck3(inp);
+        });
+        box.appendChild(document.createTextNode(item.before));
+        box.appendChild(inp);
+        box.appendChild(document.createTextNode(item.after));
+        container.appendChild(box);
+    });
+    if (timer3Best) document.getElementById('best-3').textContent = fmtTime3(timer3Best);
+}
+
+function liveCheck3(inp) {
+    var ans = inp.dataset.ans;
+    var val = inp.value.trim();
+    var caseSensitive = ans.charAt(0) === ans.charAt(0).toUpperCase() && ans.charAt(0) !== ans.charAt(0).toLowerCase();
+    var cmpVal = caseSensitive ? val : val.toLowerCase();
+    var cmpAns = caseSensitive ? ans : ans.toLowerCase();
+    inp.classList.remove('ok', 'no');
+    if (!cmpVal) return;
+    if (cmpVal === cmpAns) {
+        inp.classList.add('ok');
+        checkAllLueckenDone();
+        return;
+    }
+    if (cmpAns.indexOf(cmpVal) === 0) return;
+    inp.classList.add('no');
+}
+
+function checkAllLueckenDone() {
+    var all = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    if (Array.from(all).every(function(i) { return i.classList.contains('ok'); })) stopTimer3();
+}
+
+function showLueckenLoesung() {
+    stopTimer3();
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans;
+        inp.classList.remove('no');
+        inp.classList.add('ok');
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'no');
+    });
+}
+
+// ─── SATZBAU ─────────────────────────────────────────────────────────────────
+var sbDragged = null;
+
+var satzbauData = [
+    {
+        parts: ['vielfältige', 'kulturelle', 'Großstädte', 'parat', 'Angebote', 'halten'],
+        valid: [['Großstädte', 'halten', 'vielfältige', 'kulturelle', 'Angebote', 'parat']],
+        punct: '.'
+    },
+    {
+        parts: ['eine', 'Karaoke', 'verbreitete', 'bezeichnet', 'weltweit', 'Freizeitbeschäftigung'],
+        valid: [['Karaoke', 'bezeichnet', 'eine', 'weltweit', 'verbreitete', 'Freizeitbeschäftigung']],
+        punct: '.'
+    },
+    {
+        parts: ['das', 'gleichzeitig', 'Publikum', 'Rudelsingen', 'beim', 'singt', 'gesamte'],
+        valid: [['Beim', 'Rudelsingen', 'singt', 'das', 'gesamte', 'Publikum', 'gleichzeitig'],
+                ['Das', 'gesamte', 'Publikum', 'singt', 'beim', 'Rudelsingen', 'gleichzeitig']],
+        punct: '.'
+    },
+    {
+        parts: ['Parcoursläufer', 'zu', 'Architekturhindernisse', 'versucht', 'überwinden', 'der'],
+        valid: [['Der', 'Parcoursläufer', 'versucht', ',', 'Architekturhindernisse', 'zu', 'überwinden'],
+                ['Der', 'Parcoursläufer', 'versucht', 'Architekturhindernisse', 'zu', 'überwinden']],
+        punct: '.'
+    },
+    {
+        parts: ['Klettern', 'Bouldern', 'ohne', 'Seil', 'entspricht', 'dem'],
+        valid: [['Bouldern', 'entspricht', 'dem', 'Klettern', 'ohne', 'Seil']],
+        punct: '.'
+    },
+];
+
+var timer4Running = false, timer4Secs = 0, timer4Interval = null;
+var timer4Best = localStorage.getItem('best1053R_4') ? parseInt(localStorage.getItem('best1053R_4')) : 0;
+
+function fmtTime4(s) { return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + (s%60); }
+
+function timerAutoStart4() {
+    if (timer4Running) return;
+    timer4Running = true;
+    timer4Interval = setInterval(function() {
+        timer4Secs++;
+        document.getElementById('timer-4').textContent = fmtTime4(timer4Secs);
+    }, 1000);
+}
+
+function timerStop4() {
+    if (!timer4Running) return;
+    clearInterval(timer4Interval);
+    timer4Running = false;
+    if (!timer4Best || timer4Secs < timer4Best) {
+        timer4Best = timer4Secs;
+        localStorage.setItem('best1053R_4', timer4Best);
+        document.getElementById('best-4').textContent = fmtTime4(timer4Best);
+    }
+}
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart4();
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart4();
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop4();
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'ctrl-btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'ctrl-btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+    if (timer4Best) document.getElementById('best-4').textContent = fmtTime4(timer4Best);
+}
+
+function showAllSolutions() {
+    satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
+}
+
+function resetSatzbau() {
+    clearInterval(timer4Interval);
+    timer4Running = false;
+    timer4Secs = 0;
+    document.getElementById('timer-4').textContent = '0:00';
+    initSatzbau();
+}
+
+// ─── WORTSCHATZ ──────────────────────────────────────────────────────────────
+var WS_DATA = [
+    { type: 'n', en: '🎵 cultural offer', artikel: 'das', de: 'Angebot', plural: 'Angebote' },
+    { type: 'n', en: '🎤 karaoke bar', artikel: 'die', de: 'Karaoke-Bar', plural: 'Karaoke-Bars' },
+    { type: 'n', en: '🎶 group singing event', artikel: 'das', de: 'Rudelsingen', plural: '–' },
+    { type: 'n', en: '🔐 escape room', artikel: 'der', de: 'Fluchtraum', plural: 'Fluchträume' },
+    { type: 'n', en: '⚡ trend sport', artikel: 'die', de: 'Trendsportart', plural: 'Trendsportarten' },
+    { type: 'n', en: '🏃 parkour', artikel: 'der', de: 'Parcours', plural: '–' },
+    { type: 'n', en: '🧗 bouldering', artikel: 'das', de: 'Bouldern', plural: '–' },
+    { type: 'n', en: '💪 fitness studio', artikel: 'das', de: 'Fitnessstudio', plural: 'Fitnessstudios' },
+    { type: 'n', en: '👥 audience / public', artikel: 'das', de: 'Publikum', plural: '–' },
+    { type: 'p', en: '📱 to download', de: 'herunterladen' },
+    { type: 'p', en: '🏋 fitness fanatic', de: 'Fitnessfreak' },
+    { type: 'p', en: '🎭 to be widespread / spread', de: 'verbreitet sein' },
+];
+
+var timer5Running = false, timer5Secs = 0, timer5Interval = null;
+var timer5Best = parseInt(localStorage.getItem('best1053R_5') || '0');
+
+function fmtTime5(s) { return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + (s%60); }
+function startTimer5() {
+    if (timer5Running) return;
+    timer5Running = true;
+    timer5Interval = setInterval(function() {
+        timer5Secs++;
+        document.getElementById('timer-5').textContent = fmtTime5(timer5Secs);
+    }, 1000);
+}
+function stopTimer5() {
+    if (!timer5Running) return;
+    clearInterval(timer5Interval);
+    timer5Running = false;
+    if (!timer5Best || timer5Secs < timer5Best) {
+        timer5Best = timer5Secs;
+        localStorage.setItem('best1053R_5', timer5Best);
+        document.getElementById('best-5').textContent = fmtTime5(timer5Best);
+    }
+}
+function resetTimer5() {
+    clearInterval(timer5Interval);
+    timer5Running = false;
+    timer5Secs = 0;
+    document.getElementById('timer-5').textContent = '00:00';
+}
+
+function initWs() {
+    var container = document.getElementById('wsContainer');
+    WS_DATA.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'ws-item';
+        var prompt = document.createElement('div');
+        prompt.className = 'ws-prompt';
+        prompt.textContent = item.en;
+        row.appendChild(prompt);
+        var fields = document.createElement('div');
+        fields.className = 'ws-fields';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.type = 'text'; artInp.placeholder = 'Artikel'; artInp.className = 'art';
+            artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+            artInp.oninput = function() { wsCheck(this); startTimer5(); checkWsAllDone(); };
+            fields.appendChild(artInp);
+
+            var wordInp = document.createElement('input');
+            wordInp.type = 'text'; wordInp.placeholder = 'Deutsch'; wordInp.className = 'wort';
+            wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
+            wordInp.oninput = function() { wsCheck(this); startTimer5(); checkWsAllDone(); };
+            fields.appendChild(wordInp);
+
+            var plInp = document.createElement('input');
+            plInp.type = 'text'; plInp.placeholder = 'Plural'; plInp.className = 'plural';
+            plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+            if (item.plural === '–') {
+                plInp.value = '–';
+                plInp.disabled = true;
+                plInp.classList.add('correct');
+                plInp.style.opacity = '0.6';
+                plInp.title = 'Dieses Wort hat keinen Plural';
+            } else {
+                plInp.oninput = function() { wsCheck(this); startTimer5(); checkWsAllDone(); };
+            }
+            fields.appendChild(plInp);
+        } else {
+            var inp = document.createElement('input');
+            inp.type = 'text'; inp.placeholder = 'Deutsch'; inp.className = 'wort';
+            inp.style.width = '200px';
+            inp.dataset.answer = item.de; inp.dataset.field = 'word';
+            inp.oninput = function() { wsCheck(this); startTimer5(); checkWsAllDone(); };
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields);
+        container.appendChild(row);
+    });
+    if (timer5Best) document.getElementById('best-5').textContent = fmtTime5(timer5Best);
+}
+
+function wsCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { /* prefix neutral */ }
+    else { inp.classList.add('wrong'); }
+}
+
+function checkWsAllDone() {
+    var inputs = document.querySelectorAll('#wsContainer input');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.disabled || i.classList.contains('correct');
+    });
+    if (allOk) stopTimer5();
+}
+
+function showWsLoesung() {
+    stopTimer5();
+    document.querySelectorAll('#wsContainer input').forEach(function(inp) {
+        if (!inp.disabled) {
+            inp.value = inp.dataset.answer;
+            inp.classList.remove('wrong');
+            inp.classList.add('correct');
+        }
+    });
+}
+
+function resetWs() {
+    document.querySelectorAll('#wsContainer input').forEach(function(inp) {
+        if (!inp.disabled) {
+            inp.value = '';
+            inp.classList.remove('correct', 'wrong');
+        }
+    });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+initVorentlastung();
+initRF();
+initLuecken();
+initSatzbau();
+initWs();
+highlightVocabInText();
+</script>
+</body>
+</html>

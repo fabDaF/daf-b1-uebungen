@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heimweh – B1.1 Lektion 1057X</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 {
+    font-size: 2.2em;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: white;
+    margin-bottom: 8px;
+    border: none;
+    padding: 0;
+}
+.header p {
+    font-size: 1.1em;
+    font-family: Georgia, 'Times New Roman', serif;
+    opacity: 0.95;
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+}
+.header .big-emoji {
+    font-size: 2.6em;
+    display: block;
+    margin-top: 8px;
+}
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 700;
+    border-bottom: 3px solid #667eea;
+}
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+.tab-content { padding: 28px 30px; }
+/* Control bar */
+.control-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    padding: 6px 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+.btn-row { display: flex; gap: 6px; }
+.btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.82em;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+}
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display {
+    display: flex;
+    gap: 14px;
+    font-size: 0.82em;
+    color: #bbb;
+    font-variant-numeric: tabular-nums;
+}
+.timer-val { font-weight: 700; color: #667eea; }
+.best-val { color: #f39c12; font-weight: 600; }
+/* Section titles */
+.section-title {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 16px;
+}
+.section-sub {
+    color: #888;
+    font-size: 0.92em;
+    margin-bottom: 20px;
+}
+/* Hilfe-Box */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+/* Vocab cards (Tab 0) */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+.vocab-card {
+    background: #f8f9ff;
+    border: 1px solid #dde3ff;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+.vocab-term {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1.05em;
+    margin-bottom: 2px;
+}
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+/* Adjective cards (Tab 0 extra) */
+.adj-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.adj-col h3 {
+    font-size: 0.95em;
+    font-weight: 700;
+    color: #764ba2;
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #f0ecff;
+}
+.adj-col.neg h3 { background: #fff0f0; color: #c0392b; }
+.adj-chip {
+    display: inline-block;
+    background: white;
+    border: 1.5px solid #c5cae9;
+    color: #444;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 0.88em;
+    margin: 3px;
+}
+.adj-col.neg .adj-chip { border-color: #f5c6cb; color: #8b0000; }
+/* Redemittel (Tab 1) — Q&A drag-drop */
+.chip-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #f0f0f8;
+    border-radius: 10px;
+    min-height: 56px;
+    margin-bottom: 16px;
+    border: 1px dashed #bbb;
+}
+.qa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.qa-frage-cell {
+    background: #f0ecff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-weight: 600;
+    color: #4a148c;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid #764ba2;
+}
+.drop-zone {
+    min-height: 52px;
+    border-radius: 10px;
+    border: 2px dashed #c5cae9;
+    padding: 8px 10px;
+    background: #fafbff;
+    transition: background .2s;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.qa-chip {
+    background: white;
+    border: 2px solid #667eea;
+    color: #667eea;
+    padding: 6px 12px;
+    border-radius: 16px;
+    cursor: move;
+    font-size: 0.88em;
+    font-weight: 500;
+    user-select: none;
+    white-space: normal;
+}
+.qa-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.qa-chip.wrong   { background: #e74c3c; border-color: #e74c3c; color: white; }
+.qa-chip.selected { background: #e8ecff; border-color: #764ba2; }
+/* Trösten cards (Tab 2) */
+.trosten-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.trosten-card {
+    background: #f8f9ff;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-left: 4px solid #27ae60;
+    font-size: 0.93em;
+    color: #333;
+    line-height: 1.5;
+}
+.trosten-card .num {
+    font-weight: 700;
+    color: #27ae60;
+    margin-right: 6px;
+}
+/* Lückentext */
+.luecken-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    font-size: 0.97em;
+    line-height: 1.8;
+    color: #333;
+}
+.luecken-inp {
+    border: none;
+    border-bottom: 2px solid #c5cae9;
+    background: transparent;
+    outline: none;
+    font-family: inherit;
+    font-size: 1em;
+    padding: 2px 4px;
+    width: 160px;
+    transition: border-color 0.2s;
+}
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+/* Satzbau */
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px; padding: 14px;
+    background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px; padding: 14px;
+    background: white; border: 2px dashed #ccc; border-radius: 10px;
+    min-height: 56px; align-items: center; margin-bottom: 6px;
+}
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white; border: 2px solid #667eea; color: #667eea;
+    padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500;
+    font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap;
+}
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.punct-chip {
+    background: #f8f8f8; border: 2px solid #667eea;
+    padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em;
+    min-width: 18px; text-align: center;
+}
+.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 24px; }
+/* Wortschatz */
+.ws-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ws-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.ws-en { font-weight: 600; color: #764ba2; min-width: 150px; font-size: 0.95em; }
+.ws-arrow { color: #ccc; font-size: 1.2em; }
+.ws-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ws-inp {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: #fff;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+}
+.ws-inp:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.ws-inp.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.ws-inp.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+/* Footer */
+.author-footer {
+    text-align: center;
+    margin-top: 40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .qa-grid { grid-template-columns: 1fr; }
+    .adj-grid { grid-template-columns: 1fr; }
+    .ws-grid { grid-template-columns: 1fr; }
+    .ws-item { flex-direction: column; align-items: flex-start; }
+}
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>Heimweh</h1>
+        <p style="font-family: Georgia, serif;">B1.1 – Lektion 1057X &nbsp;|&nbsp; Kommunikation &amp; Wortschatz</p>
+        <div class="big-emoji">🏠</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📚</span><span class="nav-label">Wortschatz</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">💬</span><span class="nav-label">Redemittel</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🤝</span><span class="nav-label">Trösten</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Üben</span></div>
+    </div>
+
+    <!-- TAB 0: Wortschatz zum Thema Heimweh -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner"
+             src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop"
+             alt="Glückliche Familie">
+        <div class="tab-content">
+            <div class="section-title">📚 Wortschatz zum Thema Heimweh</div>
+            <div class="section-sub">Lerne die wichtigsten Wörter und Adjektive zum Thema.</div>
+
+            <div class="section-title" style="font-size:1em; margin-bottom:12px;">Adjektive &amp; Emotionen</div>
+            <div class="adj-grid">
+                <div class="adj-col pos">
+                    <h3>😊 Positiv (Fernweh / Abenteuer)</h3>
+                    <span class="adj-chip">abenteuerlustig</span>
+                    <span class="adj-chip">neugierig</span>
+                    <span class="adj-chip">aufgeregt</span>
+                    <span class="adj-chip">nostalgisch</span>
+                    <span class="adj-chip">optimistisch</span>
+                </div>
+                <div class="adj-col neg">
+                    <h3>😞 Negativ (Heimweh / Einsamkeit)</h3>
+                    <span class="adj-chip">vereinsamt</span>
+                    <span class="adj-chip">melancholisch</span>
+                    <span class="adj-chip">pessimistisch</span>
+                    <span class="adj-chip">traurig</span>
+                    <span class="adj-chip">gelangweilt</span>
+                </div>
+            </div>
+
+            <div class="section-title" style="font-size:1em; margin-bottom:12px; margin-top:8px;">Nomen &amp; Verben</div>
+            <div class="vocab-grid" id="vocabGrid0"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: Redemittel — Q&A Zuordnung -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner"
+             src="https://images.pexels.com/photos/3807332/pexels-photo-3807332.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop"
+             alt="Familie zusammen">
+        <div class="tab-content">
+            <div class="section-title">💬 Redemittel: Über Heimweh sprechen</div>
+            <div class="hilfe-box">Ordne die Antworten den richtigen Fragen zu. Klicke auf einen Antwort-Chip und dann auf die passende Frage-Box, oder nutze Drag &amp; Drop.</div>
+            <div id="qaBank" class="chip-bank"></div>
+            <div id="qaGrid" class="qa-grid"></div>
+            <div style="margin-top:14px;">
+                <button class="btn" onclick="resetQa()">&#8635; Neu starten</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Andere trösten -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner"
+             src="https://images.pexels.com/photos/4101137/pexels-photo-4101137.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop"
+             alt="Beratungsgespräch">
+        <div class="tab-content">
+            <div class="section-title">🤝 Andere trösten &amp; Empfehlungen geben</div>
+            <div class="hilfe-box">Diese Empfehlungen kann man geben, wenn jemand Heimweh hat. Lese sie durch und merke dir die Ausdrücke.</div>
+
+            <div class="trosten-grid" id="trostenGrid"></div>
+
+            <div class="section-title" style="font-size:1em; margin-top:8px; margin-bottom:12px;">Heimweh oder Fernweh?</div>
+            <div style="background:#f8f9ff; border-radius:10px; padding:18px 20px; font-size:0.95em; line-height:1.8; color:#333;">
+                <p><strong style="color:#667eea;">Heimweh</strong> — Jemand, der sich nach der <em>Heimat</em> sehnt, hat Heimweh. Man fühlt sich vereinsamt, melancholisch und traurig.</p>
+                <p style="margin-top:10px;"><strong style="color:#764ba2;">Fernweh</strong> — Das Gegenteil von Heimweh. Jemand mit Fernweh möchte die Welt erkunden und Neues erleben. Er sehnt sich nach der <em>Ferne</em>.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: Lückentext -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner"
+             src="https://images.pexels.com/photos/1139556/pexels-photo-1139556.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop"
+             alt="Stadtpanorama durch Fenster">
+        <div class="tab-content">
+            <div class="section-title">✏️ Lückentext</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showLueckenLoesung()">&#128161; Lösungen</button>
+                    <button class="btn" onclick="resetLuecken(); timerReset(3);">&#8635; Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>&#9201; <span class="timer-val" id="timer-3">0:00</span></span>
+                    <span>&#127942; <span class="best-val" id="best-3">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">Ergänze die fehlenden Wörter aus dem Wortschatz zum Thema Heimweh.</div>
+            <div id="lueckenContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: Satzbau -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner"
+             src="https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop"
+             alt="Hand mit Globus">
+        <div class="tab-content">
+            <div class="section-title">🧩 Satzbau</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showAllSolutions()">&#128161; Lösungen</button>
+                    <button class="btn" onclick="resetSatzbau(); timerReset(4);">&#8635; Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>&#9201; <span class="timer-val" id="timer-4">0:00</span></span>
+                    <span>&#127942; <span class="best-val" id="best-4">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge.</div>
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 5: Wortschatz üben -->
+    <div class="section" id="sec-5">
+        <img class="tab-banner"
+             src="https://images.pexels.com/photos/1310532/pexels-photo-1310532.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop"
+             alt="Person mit Smartphone">
+        <div class="tab-content">
+            <div class="section-title">🔠 Wortschatz üben</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showWsLoesung()">&#128161; Lösungen</button>
+                    <button class="btn" onclick="resetWortschatz(); timerReset(5);">&#8635; Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>&#9201; <span class="timer-val" id="timer-5">0:00</span></span>
+                    <span>&#127942; <span class="best-val" id="best-5">–</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural.</div>
+            <div class="ws-grid" id="wortschatzContainer"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+// ===== NAVIGATION =====
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+// ===== TIMER =====
+var TIMER_PREFIX = 'best1057X';
+var timers = [null,null,null,null,null,null];
+var timerSecs = [0,0,0,0,0,0];
+var timerRunning = [false,false,false,false,false,false];
+function fmtTime(s) { var m=Math.floor(s/60); var sec=s%60; return m+':'+(sec<10?'0':'')+sec; }
+function timerAutoStart(n) {
+    if (timerRunning[n]) return;
+    timerRunning[n] = true;
+    timers[n] = setInterval(function(){
+        timerSecs[n]++;
+        var el = document.getElementById('timer-'+n);
+        if (el) el.textContent = fmtTime(timerSecs[n]);
+    }, 1000);
+}
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timers[n]); timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX+'-best-'+n)||'999999');
+    if (timerSecs[n] < best) {
+        localStorage.setItem(TIMER_PREFIX+'-best-'+n, timerSecs[n]);
+        var bEl = document.getElementById('best-'+n);
+        if (bEl) bEl.textContent = fmtTime(timerSecs[n]);
+    }
+}
+function timerReset(n) {
+    clearInterval(timers[n]); timerRunning[n]=false; timerSecs[n]=0;
+    var el=document.getElementById('timer-'+n); if(el) el.textContent='0:00';
+}
+function loadBestTimes() {
+    [3,4,5].forEach(function(n){
+        var v = localStorage.getItem(TIMER_PREFIX+'-best-'+n);
+        if (v) { var el=document.getElementById('best-'+n); if(el) el.textContent=fmtTime(parseInt(v)); }
+    });
+}
+
+// ===== TAB 0: WORTSCHATZ =====
+var VOCAB_DATA = [
+    { term: 'das Heimweh, –', en: 'homesickness', def: 'Das Gefühl, wenn man sich nach seiner Heimat sehnt.' },
+    { term: 'die Sehnsucht, Sehnsüchte', en: 'longing / yearning', def: 'Ein starkes Verlangen nach etwas oder jemandem.' },
+    { term: 'die Einsamkeit, –', en: 'loneliness', def: 'Das Gefühl, allein zu sein und niemanden zu haben.' },
+    { term: 'die Entfernung, -en', en: 'distance', def: 'Der Abstand zwischen zwei Orten oder Menschen.' },
+    { term: 'die Langeweile, –', en: 'boredom', def: 'Das Gefühl, wenn man nichts Interessantes zu tun hat.' },
+    { term: 'das Fernweh, –', en: 'wanderlust', def: 'Das Verlangen, die Welt zu reisen und Neues zu erleben.' },
+    { term: 'vermissen', en: 'to miss (someone/something)', def: 'Das Gefühl, wenn man eine Person oder einen Ort nicht hat und sie/ihn haben möchte.' },
+    { term: 'sich sehnen (nach)', en: 'to long for / to yearn for', def: 'Sich sehr nach etwas oder jemandem wünschen.' },
+    { term: 'herbeisehnen', en: 'to long for eagerly', def: 'Etwas ganz sehnlichst erwarten oder wünschen.' },
+    { term: 'sich fremd fühlen', en: 'to feel like a stranger', def: 'Sich in einer neuen Umgebung nicht heimisch fühlen.' },
+    { term: 'leiden (unter)', en: 'to suffer (from)', def: 'Unter etwas Unangenehmem oder Schmerzhaftem sein.' },
+    { term: 'trösten', en: 'to comfort / to console', def: 'Jemandem in einer schwierigen Situation helfen, sich besser zu fühlen.' }
+];
+
+function initVocab0() {
+    var grid = document.getElementById('vocabGrid0');
+    grid.innerHTML = '';
+    VOCAB_DATA.forEach(function(v) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">'+v.term+'</div>'
+            +'<div class="vocab-en">'+v.en+'</div>'
+            +'<div class="vocab-def">'+v.def+'</div>';
+        grid.appendChild(card);
+    });
+}
+
+// ===== TAB 2: TRÖSTEN =====
+var TROSTEN_DATA = [
+    'Mit der Familie oder Freunden per Video-Chat telefonieren.',
+    'Einige Aktivitäten zur Routine machen — zum Beispiel jeden Morgen spazieren gehen.',
+    'Einen vertrauten Platz finden, wo man sich wohlfühlt.',
+    'Keine Langeweile — die Zeit komplett ausnutzen.',
+    'Neue Leute kennenlernen und Freundschaften schließen.',
+    'Fotos von der Heimat, der Familie und Freunden machen.',
+    'Etwas von der Heimat mitnehmen — Essen, Musik, Bücher.',
+    'Ins Theater, Kino oder zu Konzerten gehen.',
+    'Wandern gehen und die neue Umgebung entdecken.'
+];
+
+function initTrosten() {
+    var grid = document.getElementById('trostenGrid');
+    grid.innerHTML = '';
+    TROSTEN_DATA.forEach(function(tip, i) {
+        var card = document.createElement('div');
+        card.className = 'trosten-card';
+        card.innerHTML = '<span class="num">'+(i+1)+'.</span>'+tip;
+        grid.appendChild(card);
+    });
+}
+
+// ===== TAB 1: REDEMITTEL Q&A =====
+var QA_DATA = [
+    { frage: 'Warum bist du so traurig?', antwort: '„Ich habe Heimweh. Ich vermisse meine Familie sehr."' },
+    { frage: 'Wie lange bist du schon im Ausland?', antwort: '„Ich lebe seit sechs Monaten in Deutschland."' },
+    { frage: 'Was vermisst du am meisten?', antwort: '„Das Essen meiner Mutter und meine alten Freunde."' },
+    { frage: 'Hast du auch manchmal Fernweh?', antwort: '„Ja, manchmal sehne ich mich nach Abenteuer und neuen Orten."' },
+    { frage: 'Was machst du gegen das Heimweh?', antwort: '„Ich telefoniere per Video-Chat mit meiner Familie."' },
+    { frage: 'Wie kann ich dir helfen?', antwort: '„Sei einfach für mich da und hör mir zu."' }
+];
+
+var draggedQaChip = null;
+
+function shuffleArr(arr) {
+    var a = arr.slice();
+    for (var i=a.length-1; i>0; i--) {
+        var j=Math.floor(Math.random()*(i+1)); var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+    }
+    return a;
+}
+
+function initQa() {
+    var bank = document.getElementById('qaBank');
+    var grid = document.getElementById('qaGrid');
+    bank.innerHTML = ''; grid.innerHTML = '';
+
+    // Chips
+    shuffleArr(QA_DATA.map(function(q){ return q.antwort; })).forEach(function(ans) {
+        var chip = document.createElement('div');
+        chip.className = 'qa-chip'; chip.textContent = ans;
+        chip.dataset.ans = ans; chip.draggable = true;
+        chip.addEventListener('dragstart', function(e) {
+            draggedQaChip = chip; e.dataTransfer.setData('text/plain','');
+        });
+        chip.addEventListener('dragend', function() { colorAllQaChips(); });
+        chip.addEventListener('click', function() {
+            if (chip.classList.contains('correct')) return;
+            if (chip.classList.contains('selected')) { chip.classList.remove('selected'); return; }
+            document.querySelectorAll('.qa-chip.selected').forEach(function(c){ c.classList.remove('selected'); });
+            chip.classList.add('selected');
+        });
+        bank.appendChild(chip);
+    });
+
+    // Bank drop
+    bank.addEventListener('dragover', function(e){ e.preventDefault(); });
+    bank.addEventListener('drop', function(e){
+        e.preventDefault();
+        if (!draggedQaChip) return;
+        bank.appendChild(draggedQaChip); draggedQaChip=null; colorAllQaChips();
+    });
+    bank.addEventListener('click', function(e) {
+        if (e.target === bank) {
+            var sel = document.querySelector('.qa-chip.selected');
+            if (sel) { bank.appendChild(sel); sel.classList.remove('selected'); colorAllQaChips(); }
+        }
+    });
+
+    // Frage + Drop-Zone pairs
+    QA_DATA.forEach(function(q) {
+        var frageCell = document.createElement('div');
+        frageCell.className = 'qa-frage-cell';
+        frageCell.textContent = q.frage;
+        grid.appendChild(frageCell);
+
+        var zone = document.createElement('div');
+        zone.className = 'drop-zone qa-drop-cell';
+        zone.dataset.ans = q.antwort;
+        zone.addEventListener('dragover', function(e){
+            e.preventDefault(); zone.classList.add('dragover');
+        });
+        zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
+        zone.addEventListener('drop', function(e){
+            e.preventDefault(); zone.classList.remove('dragover');
+            if (!draggedQaChip) return;
+            zone.appendChild(draggedQaChip); draggedQaChip=null; colorAllQaChips();
+        });
+        zone.addEventListener('click', function() {
+            var sel = document.querySelector('.qa-chip.selected');
+            if (sel) { zone.appendChild(sel); sel.classList.remove('selected'); colorAllQaChips(); }
+        });
+        grid.appendChild(zone);
+    });
+}
+
+function colorAllQaChips() {
+    document.querySelectorAll('.qa-drop-cell').forEach(function(zone) {
+        var chip = zone.querySelector('.qa-chip');
+        if (!chip) return;
+        chip.classList.remove('correct','wrong');
+        if (chip.dataset.ans === zone.dataset.ans) chip.classList.add('correct');
+        else chip.classList.add('wrong');
+    });
+    document.querySelectorAll('#qaBank .qa-chip').forEach(function(chip) {
+        chip.classList.remove('correct','wrong');
+    });
+}
+
+function resetQa() { initQa(); }
+
+// ===== TAB 3: LÜCKENTEXT =====
+var LUECKEN_DATA = [
+    { pre: 'Ich habe ', blank: 'Heimweh', post: '. Ich vermisse meine Heimat und meine Familie.' },
+    { pre: 'Er leidet unter großer ', blank: 'Einsamkeit', post: ', weil er niemanden in der neuen Stadt kennt.' },
+    { pre: 'Sie hat eine starke ', blank: 'Sehnsucht', post: ' nach ihrer Heimat und ihren alten Freunden.' },
+    { pre: 'Die große ', blank: 'Entfernung', post: ' macht es schwer, die Familie oft zu besuchen.' },
+    { pre: 'Wenn man nichts zu tun hat, entsteht schnell ', blank: 'Langeweile', post: '.' },
+    { pre: 'Jemand mit ', blank: 'Fernweh', post: ' möchte am liebsten die ganze Welt bereisen.' },
+    { pre: 'Ich ', blank: 'vermisse', post: ' meine beste Freundin sehr, seit ich im Ausland lebe.' },
+    { pre: 'Sie fühlt sich ', blank: 'fremd', post: ' in der neuen Stadt, weil sie niemanden kennt.' },
+    { pre: 'Er versucht, seinen Bruder zu ', blank: 'trösten', post: ', weil der sehr traurig ist.' },
+    { pre: 'Nach einem Jahr im Ausland ', blank: 'sehnt', post: ' er sich nach dem Essen seiner Mutter.' }
+];
+
+function initLueckentext() {
+    var cont = document.getElementById('lueckenContainer');
+    cont.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
+        var inp = document.createElement('input');
+        inp.className = 'luecken-inp'; inp.type='text'; inp.placeholder='';
+        inp.dataset.ans = item.blank; inp.id = 'linp-'+idx;
+        inp.addEventListener('input', function(){ liveCheckLuecke(inp); timerAutoStart(3); checkLueckenAllDone(); });
+        div.appendChild(document.createTextNode(item.pre+' '));
+        div.appendChild(inp);
+        div.appendChild(document.createTextNode(' '+item.post));
+        cont.appendChild(div);
+    });
+}
+function liveCheckLuecke(inp) {
+    var ans = inp.dataset.ans;
+    var val = inp.value.trim();
+    inp.classList.remove('ok','no');
+    if (!val) return;
+    if (val.toLowerCase() === ans.toLowerCase()) { inp.classList.add('ok'); return; }
+    if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) return;
+    inp.classList.add('no');
+}
+function checkLueckenAllDone() {
+    var all = document.querySelectorAll('#lueckenContainer .luecken-inp');
+    if (all.length > 0 && Array.from(all).every(function(i){ return i.classList.contains('ok'); })) timerStop(3);
+}
+function showLueckenLoesung() {
+    timerStop(3);
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp){
+        inp.value=inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no');
+    });
+}
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp){
+        inp.value=''; inp.classList.remove('ok','no');
+    });
+}
+
+// ===== TAB 4: SATZBAU =====
+var sbDragged = null;
+var satzbauData = [
+    {
+        parts: ['Ich', 'meine', 'Familie', 'sehr', 'vermisse'],
+        valid: [['Ich', 'vermisse', 'meine', 'Familie', 'sehr']],
+        punct: '.'
+    },
+    {
+        parts: ['Er', 'unter', 'großer', 'Einsamkeit', 'leidet', 'im', 'Ausland'],
+        valid: [
+            ['Er', 'leidet', 'im', 'Ausland', 'unter', 'großer', 'Einsamkeit'],
+            ['Im', 'Ausland', 'leidet', 'er', 'unter', 'großer', 'Einsamkeit']
+        ],
+        punct: '.'
+    },
+    {
+        parts: ['Sie', 'sich', 'nach', 'ihrer', 'Heimat', 'sehnt'],
+        valid: [
+            ['Sie', 'sehnt', 'sich', 'nach', 'ihrer', 'Heimat'],
+            ['Nach', 'ihrer', 'Heimat', 'sehnt', 'sie', 'sich']
+        ],
+        punct: '.'
+    },
+    {
+        parts: ['Ich', 'fremd', 'mich', 'hier', 'fühle'],
+        valid: [
+            ['Ich', 'fühle', 'mich', 'hier', 'fremd'],
+            ['Hier', 'fühle', 'ich', 'mich', 'fremd']
+        ],
+        punct: '.'
+    },
+    {
+        parts: ['Er', 'hat', 'Fernweh', 'möchte', 'und', 'Welt', 'die', 'bereisen'],
+        valid: [['Er', 'hat', 'Fernweh', 'und', 'möchte', 'die', 'Welt', 'bereisen']],
+        punct: '.'
+    },
+    {
+        parts: ['kann', 'man', 'Video-Chat', 'per', 'mit', 'Familie', 'der', 'telefonieren'],
+        valid: [
+            ['Man', 'kann', 'per', 'Video-Chat', 'mit', 'der', 'Familie', 'telefonieren'],
+            ['Per', 'Video-Chat', 'kann', 'man', 'mit', 'der', 'Familie', 'telefonieren']
+        ],
+        punct: '.'
+    }
+];
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div'); c.id='sb-insert-cursor';
+        c.style.cssText='width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i=0; i<chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left+r.width/2) return chips[i];
+    }
+    return null;
+}
+function sbCapitalize(str) { return str.charAt(0).toUpperCase()+str.slice(1); }
+function sbUpdateCapitalization(row) {
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig===','||orig===';') return;
+        var isProper = orig.charAt(0)===orig.charAt(0).toUpperCase()&&orig.charAt(0)!==orig.charAt(0).toLowerCase();
+        c.textContent = isProper ? orig : (i===0 ? sbCapitalize(orig) : orig);
+    });
+}
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className='chip'; chip.textContent=word; chip.dataset.orig=word; chip.draggable=true;
+    if (word===','||word===';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e){
+        sbDragged=chip; timerAutoStart(4); e.dataTransfer.setData('text/plain','');
+        setTimeout(function(){ chip.style.opacity='0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function(){
+        chip.style.opacity=''; sbDragged=null;
+        var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e){
+        e.preventDefault(); if(!sbDragged) return;
+        var cursor=getSbCursor(); var before=getSbInsertPos(zone,e.clientX);
+        if(before) zone.insertBefore(cursor,before); else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e){
+        if(!zone.contains(e.relatedTarget)){
+            var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode===zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e){
+        e.preventDefault(); if(!sbDragged) return;
+        var cursor=document.getElementById('sb-insert-cursor');
+        if(cursor&&cursor.parentNode===zone){zone.insertBefore(sbDragged,cursor);zone.removeChild(cursor);}
+        else zone.appendChild(sbDragged);
+        sbDragged=null;
+        sbUpdateCapitalization(document.getElementById('sb-row-'+idx));
+        sbCheckAuto(idx);
+    });
+}
+function sbColorRow(idx) {
+    var row=document.getElementById('sb-row-'+idx);
+    var chips=Array.from(row.querySelectorAll('.chip'));
+    var order=chips.map(function(c){return c.dataset.orig;});
+    var ok=satzbauData[idx].valid.some(function(v){return JSON.stringify(v)===JSON.stringify(order);});
+    chips.forEach(function(c){c.classList.remove('correct','incorrect');c.classList.add(ok?'correct':'incorrect');});
+    var ex=row.querySelector('.sb-punkt'); if(ex) ex.parentNode.removeChild(ex);
+    if(ok){var p=document.createElement('span');p.className='sb-punkt';p.textContent=satzbauData[idx].punct||'.';row.appendChild(p);}
+    return ok;
+}
+function sbCheckAuto(idx) {
+    var bank=document.getElementById('sb-bank-'+idx);
+    var row=document.getElementById('sb-row-'+idx);
+    var fb=document.getElementById('sb-fb-'+idx);
+    if(bank.querySelectorAll('.chip').length>0){
+        row.querySelectorAll('.chip').forEach(function(c){c.classList.remove('correct','incorrect');});
+        row.classList.remove('correct','incorrect'); fb.textContent=''; return;
+    }
+    setTimeout(function(){
+        timerAutoStart(4); var ok=sbColorRow(idx);
+        if(ok){row.classList.add('correct');row.classList.remove('incorrect');fb.className='satzbau-feedback correct';fb.textContent='✓ Korrekt!';sbCheckAllDone();}
+        else{row.classList.add('incorrect');row.classList.remove('correct');fb.className='satzbau-feedback incorrect';fb.textContent='✗ Falsche Reihenfolge – verschiebe die Chips!';}
+    },500);
+}
+function sbCheckAllDone() {
+    if(satzbauData.every(function(_,i){var r=document.getElementById('sb-row-'+i);return r&&r.classList.contains('correct');})) timerStop(4);
+}
+function sbShowSolution(idx) {
+    var bank=document.getElementById('sb-bank-'+idx);
+    var row=document.getElementById('sb-row-'+idx);
+    var fb=document.getElementById('sb-fb-'+idx);
+    var sol=satzbauData[idx].valid[0];
+    var allChips={};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){allChips[c.dataset.orig]=c;});
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){allChips[c.dataset.orig]=c;});
+    while(bank.firstChild) bank.removeChild(bank.firstChild);
+    while(row.firstChild) row.removeChild(row.firstChild);
+    sol.forEach(function(word,i){
+        var chip=allChips[word];
+        if(chip){
+            if(word!==','&&word!==';') chip.textContent=(i===0)?sbCapitalize(word):word;
+            chip.classList.remove('correct','incorrect'); row.appendChild(chip);
+        }
+    });
+    fb.textContent=''; setTimeout(function(){sbCheckAuto(idx);},100);
+}
+function sbResetOne(idx) {
+    var bank=document.getElementById('sb-bank-'+idx);
+    var row=document.getElementById('sb-row-'+idx);
+    var fb=document.getElementById('sb-fb-'+idx);
+    while(bank.firstChild) bank.removeChild(bank.firstChild);
+    while(row.firstChild) row.removeChild(row.firstChild);
+    row.classList.remove('correct','incorrect'); fb.textContent=''; fb.className='satzbau-feedback';
+    var ex=row.querySelector('.sb-punkt'); if(ex) ex.parentNode.removeChild(ex);
+    var parts=satzbauData[idx].parts.slice();
+    for(var i=parts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp;}
+    parts.forEach(function(w){bank.appendChild(sbMakeChip(w));});
+}
+function initSatzbau() {
+    var container=document.getElementById('satzbauContainer');
+    container.innerHTML='';
+    satzbauData.forEach(function(ex,idx){
+        var item=document.createElement('div'); item.className='satzbau-item';
+        var bank=document.createElement('div'); bank.className='chips-container'; bank.id='sb-bank-'+idx;
+        var row=document.createElement('div'); row.className='sentence-builder'; row.id='sb-row-'+idx;
+        var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb-fb-'+idx;
+        var parts=ex.parts.slice();
+        for(var i=parts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp;}
+        parts.forEach(function(w){bank.appendChild(sbMakeChip(w));});
+        sbRegisterZone(bank,idx); sbRegisterZone(row,idx);
+        var btnRow=document.createElement('div'); btnRow.style.cssText='display:flex;gap:8px;margin-top:6px;';
+        var solveBtn=document.createElement('button'); solveBtn.className='btn'; solveBtn.textContent='Lösen';
+        solveBtn.setAttribute('data-idx',idx);
+        solveBtn.addEventListener('click',function(){sbShowSolution(parseInt(this.getAttribute('data-idx')));});
+        var resetBtn=document.createElement('button'); resetBtn.className='btn'; resetBtn.textContent='↺ Neustart';
+        resetBtn.setAttribute('data-idx',idx);
+        resetBtn.addEventListener('click',function(){sbResetOne(parseInt(this.getAttribute('data-idx')));});
+        btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+function resetSatzbau() { initSatzbau(); }
+function showAllSolutions() { satzbauData.forEach(function(_,idx){sbShowSolution(idx);}); }
+
+// ===== TAB 5: WORTSCHATZ ÜBEN =====
+var WORTSCHATZ = [
+    { id:1,  type:'n', en:'🏠 homesickness',           artikel:'das', de:'Heimweh',       plural:'–' },
+    { id:2,  type:'n', en:'💭 longing / yearning',      artikel:'die', de:'Sehnsucht',     plural:'Sehnsüchte' },
+    { id:3,  type:'n', en:'😔 loneliness',              artikel:'die', de:'Einsamkeit',    plural:'–' },
+    { id:4,  type:'n', en:'📏 distance',                artikel:'die', de:'Entfernung',    plural:'Entfernungen' },
+    { id:5,  type:'n', en:'😴 boredom',                 artikel:'die', de:'Langeweile',    plural:'–' },
+    { id:6,  type:'n', en:'✈️ wanderlust',              artikel:'das', de:'Fernweh',       plural:'–' },
+    { id:7,  type:'v', en:'to miss (s.o./sth.)',        de:'vermissen' },
+    { id:8,  type:'v', en:'to long for (s.o.)',         de:'sich sehnen' },
+    { id:9,  type:'v', en:'to feel like a stranger',    de:'sich fremd fühlen' },
+    { id:10, type:'v', en:'to suffer from',             de:'leiden unter' },
+    { id:11, type:'v', en:'to comfort / to console',    de:'trösten' },
+    { id:12, type:'v', en:'to long for eagerly',        de:'herbeisehnen' }
+];
+
+function initWortschatz() {
+    var cont = document.getElementById('wortschatzContainer');
+    cont.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'ws-item';
+        var prompt = document.createElement('div');
+        prompt.className = 'ws-en'; prompt.textContent = item.en;
+        row.appendChild(prompt);
+        var arrow = document.createElement('div');
+        arrow.className = 'ws-arrow'; arrow.textContent = '→';
+        row.appendChild(arrow);
+        var fields = document.createElement('div');
+        fields.className = 'ws-inputs';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className='ws-inp'; artInp.type='text'; artInp.placeholder='Artikel'; artInp.style.width='70px';
+            artInp.dataset.answer=item.artikel; artInp.dataset.field='art';
+            artInp.addEventListener('input', function(){ wsCheck(this); timerAutoStart(5); checkWsAllDone(); });
+            fields.appendChild(artInp);
+            var wordInp = document.createElement('input');
+            wordInp.className='ws-inp'; wordInp.type='text'; wordInp.placeholder='Deutsch'; wordInp.style.width='150px';
+            wordInp.dataset.answer=item.de; wordInp.dataset.field='word';
+            wordInp.addEventListener('input', function(){ wsCheck(this); timerAutoStart(5); checkWsAllDone(); });
+            fields.appendChild(wordInp);
+            var plInp = document.createElement('input');
+            plInp.className='ws-inp'; plInp.type='text'; plInp.placeholder='Plural'; plInp.style.width='130px';
+            plInp.dataset.answer=item.plural; plInp.dataset.field='plural';
+            if (item.plural==='–') {
+                plInp.value='–'; plInp.disabled=true; plInp.classList.add('correct'); plInp.style.opacity='0.6';
+                plInp.title='Dieses Wort hat keinen Plural';
+            } else {
+                plInp.addEventListener('input', function(){ wsCheck(this); timerAutoStart(5); checkWsAllDone(); });
+            }
+            fields.appendChild(plInp);
+        } else {
+            var inp = document.createElement('input');
+            inp.className='ws-inp'; inp.type='text'; inp.placeholder='Deutsch'; inp.style.width='200px';
+            inp.dataset.answer=item.de; inp.dataset.field='word';
+            inp.addEventListener('input', function(){ wsCheck(this); timerAutoStart(5); checkWsAllDone(); });
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields);
+        cont.appendChild(row);
+    });
+}
+function wsCheck(inp) {
+    var user=inp.value, answer=inp.dataset.answer, field=inp.dataset.field;
+    inp.classList.remove('correct','wrong');
+    if (!user) return;
+    var cmpUser = (field==='art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field==='art') ? answer.toLowerCase() : answer;
+    if (cmpUser===cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser)===0) { /* Präfix */ }
+    else { inp.classList.add('wrong'); }
+}
+function checkWsAllDone() {
+    var inputs = document.querySelectorAll('#wortschatzContainer .ws-inp');
+    if (inputs.length>0 && Array.from(inputs).every(function(i){return i.disabled||i.classList.contains('correct');})) timerStop(5);
+}
+function showWsLoesung() {
+    timerStop(5);
+    document.querySelectorAll('#wortschatzContainer .ws-inp').forEach(function(inp){
+        inp.value=inp.dataset.answer; inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
+}
+function resetWortschatz() {
+    document.querySelectorAll('#wortschatzContainer .ws-inp').forEach(function(inp){
+        if(!inp.disabled){ inp.value=''; inp.classList.remove('correct','wrong'); }
+    });
+}
+
+// ===== INIT =====
+initVocab0();
+initTrosten();
+initQa();
+initLueckentext();
+initSatzbau();
+initWortschatz();
+loadBestTimes();
+</script>
+</body>
+</html>

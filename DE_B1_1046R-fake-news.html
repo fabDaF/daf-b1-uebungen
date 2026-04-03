@@ -46,13 +46,13 @@ body {
 }
 .nav-btn {
     flex: 1;
-    padding: 12px 8px;
+    padding: 14px 10px;
     text-align: center;
     cursor: pointer;
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     transition: all 0.3s;
-    font-size: 0.85em;
+    font-size: 0.92em;
     font-weight: 500;
     color: #666;
     display: flex;
@@ -61,10 +61,10 @@ body {
     justify-content: center;
 }
 .nav-btn:last-child { border-right: none; }
-.nav-btn:hover { background: #e8ecff; color: #667eea; }
-.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
-.nav-emoji { font-size: 1.2em; line-height: 1.2; }
-.nav-label { font-size: 0.72em; margin-top: 2px; line-height: 1.2; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 600; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
 
 /* ── SECTIONS ── */
 .section { display: none; }
@@ -238,11 +238,17 @@ body {
 .vocab-inp.pl-inp   { width: 130px; }
 
 /* ── TIMER ── */
-.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+.timer-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 10px 16px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .btn-row { display:flex; gap:6px; }
 .btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
-.btn:hover { background:#f0f0f0; color:#555; }
-.timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
+.btn:hover { background:#eee; color:#444; }
+.btn-show { color: #667eea; border-color: #667eea; font-weight: 600; }
+.btn-show:hover { background: #f0f4ff; }
+.btn-reset { color: #e74c3c; border-color: #e74c3c; font-weight: 600; }
+.btn-reset:hover { background: #fff5f5; }
+.timer-display { display:flex; gap:14px; font-size:0.82em; color:#666; font-variant-numeric:tabular-nums; font-weight: 600; }
+.current-time { color: #667eea; }
+.best-time { color: #27ae60; }
 
 /* ── AUTHOR FOOTER ── */
 .author-footer { text-align:center; margin-top:40px; padding:16px; font-size:0.8rem; color:#aaa; }
@@ -376,16 +382,10 @@ body {
         <div class="section-title">Verständnis: Richtig oder Falsch?</div>
         <div class="section-sub">Beantworte die Fragen zu „Karims Nachricht“</div>
 
-        <div class="timer-controls">
-            <span class="timer-display">
-                <span>Zeit: <span id="timer2">10:00</span></span>
-                <span id="best-time-2" style="display:none;">Persönlich: <span id="best2">--:--</span></span>
-            </span>
-            <div class="btn-row">
-                <button class="btn" onclick="timerAutoStart(2)">Start</button>
-                <button class="btn" onclick="timerStop(2)">Stop</button>
-                <button class="btn" onclick="resetRF()">Zurücksetzen</button>
-            </div>
+        <div class="timer-bar">
+            <div class="btn-row"><button class="btn btn-show" onclick="showRFLoesung()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetRF(); resetTimer(2);">Neu starten</button></div>
+            <div class="timer-display"><span class="current-time">⏱ <span id="timer-2">00:00</span></span> <span class="best-time">🏆 <span id="best-2">--:--</span></span></div>
         </div>
 
         <div class="rf-title">Welche Aussagen sind richtig?</div>
@@ -407,17 +407,10 @@ body {
         <div class="section-title">Lückentext</div>
         <div class="section-sub">Fülle die Lücken mit passenden Wörtern aus der Geschichte ein</div>
 
-        <div class="timer-controls">
-            <span class="timer-display">
-                <span>Zeit: <span id="timer3">08:00</span></span>
-                <span id="best-time-3" style="display:none;">Persönlich: <span id="best3">--:--</span></span>
-            </span>
-            <div class="btn-row">
-                <button class="btn" onclick="timerAutoStart(3)">Start</button>
-                <button class="btn" onclick="timerStop(3)">Stop</button>
-                <button class="btn" onclick="resetLuecken()">Zurücksetzen</button>
-                <button class="btn" onclick="showLueckenLoesung()">Lösung</button>
-            </div>
+        <div class="timer-bar">
+            <div class="btn-row"><button class="btn btn-show" onclick="showLueckenLoesung()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetLuecken(); resetTimer(3);">Neu starten</button></div>
+            <div class="timer-display"><span class="current-time">⏱ <span id="timer-3">00:00</span></span> <span class="best-time">🏆 <span id="best-3">--:--</span></span></div>
         </div>
 
         <div id="luecken-container"></div>
@@ -433,17 +426,10 @@ body {
         <div class="section-title">Satzbau</div>
         <div class="section-sub">Bilde korrekte Sätze — ziehe die Wörter in die richtige Reihenfolge</div>
 
-        <div class="timer-controls">
-            <span class="timer-display">
-                <span>Zeit: <span id="timer4">10:00</span></span>
-                <span id="best-time-4" style="display:none;">Persönlich: <span id="best4">--:--</span></span>
-            </span>
-            <div class="btn-row">
-                <button class="btn" onclick="timerAutoStart(4)">Start</button>
-                <button class="btn" onclick="timerStop(4)">Stop</button>
-                <button class="btn" onclick="resetSatzbau()">Zurücksetzen</button>
-                <button class="btn" onclick="sbShowSolution()">Lösung</button>
-            </div>
+        <div class="timer-bar">
+            <div class="btn-row"><button class="btn btn-show" onclick="sbShowSolution()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetSatzbau(); resetTimer(4);">Neu starten</button></div>
+            <div class="timer-display"><span class="current-time">⏱ <span id="timer-4">00:00</span></span> <span class="best-time">🏆 <span id="best-4">--:--</span></span></div>
         </div>
 
         <div id="satzbau-container"></div>
@@ -459,17 +445,10 @@ body {
         <div class="section-title">Wortschatz</div>
         <div class="section-sub">Trainiere die wichtigen Wörter aus der Lektion</div>
 
-        <div class="timer-controls">
-            <span class="timer-display">
-                <span>Zeit: <span id="timer5">12:00</span></span>
-                <span id="best-time-5" style="display:none;">Persönlich: <span id="best5">--:--</span></span>
-            </span>
-            <div class="btn-row">
-                <button class="btn" onclick="timerAutoStart(5)">Start</button>
-                <button class="btn" onclick="timerStop(5)">Stop</button>
-                <button class="btn" onclick="resetWortschatz()">Zurücksetzen</button>
-                <button class="btn" onclick="showWortschatzLoesung()">Lösung</button>
-            </div>
+        <div class="timer-bar">
+            <div class="btn-row"><button class="btn btn-show" onclick="showWortschatzLoesung()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetWortschatz(); resetTimer(5);">Neu starten</button></div>
+            <div class="timer-display"><span class="current-time">⏱ <span id="timer-5">00:00</span></span> <span class="best-time">🏆 <span id="best-5">--:--</span></span></div>
         </div>
 
         <div id="wortschatz-container"></div>
@@ -592,29 +571,54 @@ var WORTSCHATZ_ITEMS = [
 /* ════════════════════════════════════════════════════════════════════════════════════════ */
 /* TIMER SYSTEM */
 /* ════════════════════════════════════════════════════════════════════════════════════════ */
-var timers = {};
-function formatTime(seconds) {
-    var m = Math.floor(seconds / 60);
-    var s = seconds % 60;
-    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+var TIMER_PREFIX = 'b1-1046r-fake-news';
+var timerState = {};
+
+function initTimer(idx) {
+    timerState[idx] = { interval: null, seconds: 0, running: false, stopped: false };
 }
-function timerAutoStart(tabIdx) {
-    if (timers[tabIdx]) return;
-    var initialTime = tabIdx === 2 ? 600 : tabIdx === 3 ? 480 : tabIdx === 4 ? 600 : 720;
-    timers[tabIdx] = setInterval(function() {
-        initialTime--;
-        document.getElementById('timer' + tabIdx).textContent = formatTime(initialTime);
-        if (initialTime <= 0) {
-            timerStop(tabIdx);
-            initialTime = 0;
-        }
+
+function startTimer(idx) {
+    var s = timerState[idx];
+    if (s.running || s.stopped) return;
+    s.running = true;
+    s.interval = setInterval(function() {
+        s.seconds++;
+        document.getElementById('timer-' + idx).textContent = formatTime(s.seconds);
     }, 1000);
 }
-function timerStop(tabIdx) {
-    if (timers[tabIdx]) {
-        clearInterval(timers[tabIdx]);
-        timers[tabIdx] = null;
+
+function stopTimer(idx) {
+    var s = timerState[idx];
+    if (!s.running) return;
+    clearInterval(s.interval);
+    s.running = false;
+    s.stopped = true;
+    var key = TIMER_PREFIX + '-best-' + idx;
+    var prev = localStorage.getItem(key);
+    if (!prev || s.seconds < parseInt(prev)) {
+        localStorage.setItem(key, s.seconds);
+        document.getElementById('best-' + idx).textContent = formatTime(s.seconds);
     }
+}
+
+function resetTimer(idx) {
+    var s = timerState[idx];
+    clearInterval(s.interval);
+    s.seconds = 0; s.running = false; s.stopped = false;
+    document.getElementById('timer-' + idx).textContent = '00:00';
+}
+
+function formatTime(sec) {
+    return String(Math.floor(sec / 60)).padStart(2, '0') + ':' + String(sec % 60).padStart(2, '0');
+}
+
+function loadBestTimes() {
+    document.querySelectorAll('[id^="best-"]').forEach(function(el) {
+        var idx = el.id.split('-')[1];
+        var val = localStorage.getItem(TIMER_PREFIX + '-best-' + idx);
+        if (val) el.textContent = formatTime(parseInt(val));
+    });
 }
 
 /* ════════════════════════════════════════════════════════════════════════════════════════ */
@@ -666,6 +670,7 @@ function initRF() {
     container.innerHTML = html;
 }
 function checkRF(idx, selected) {
+    startTimer(2);
     var item = document.querySelector('.rf-item[data-idx="' + idx + '"]');
     var result = item.querySelector('.rf-result');
     var stmt = RF_STATEMENTS[idx];
@@ -677,6 +682,25 @@ function checkRF(idx, selected) {
     var buttons = item.querySelectorAll('.rf-btn');
     buttons.forEach(function(btn) { btn.classList.remove('sel-r', 'sel-f'); });
     buttons[selected ? 0 : 1].classList.add(selected ? 'sel-r' : 'sel-f');
+
+    var allAnswered = RF_STATEMENTS.every(function(stmt, i) {
+        var item = document.querySelector('.rf-item[data-idx="' + i + '"]');
+        return item.querySelector('.rf-result').textContent !== '';
+    });
+    if (allAnswered) {
+        stopTimer(2);
+    }
+}
+function showRFLoesung() {
+    RF_STATEMENTS.forEach(function(stmt, idx) {
+        var item = document.querySelector('.rf-item[data-idx="' + idx + '"]');
+        var buttons = item.querySelectorAll('.rf-btn');
+        buttons.forEach(function(btn) { btn.classList.remove('sel-r', 'sel-f'); });
+        buttons[stmt.answer ? 0 : 1].classList.add(stmt.answer ? 'sel-r' : 'sel-f');
+        var result = item.querySelector('.rf-result');
+        result.textContent = '✓';
+        result.className = 'rf-result ok';
+    });
 }
 function resetRF() {
     document.querySelectorAll('.rf-item').forEach(function(item) {
@@ -706,17 +730,24 @@ function initLuecken() {
     });
 }
 function lueckenCheck() {
+    startTimer(3);
     var inputs = document.querySelectorAll('.luecken-inp');
+    var allCorrect = true;
     inputs.forEach(function(inp) {
         var answer = inp.dataset.answer;
         var value = inp.value.trim();
         if (value) {
             var correct = value.toLowerCase() === answer.toLowerCase();
             inp.className = 'luecken-inp ' + (correct ? 'ok' : 'no');
+            if (!correct || !value) allCorrect = false;
         } else {
             inp.className = 'luecken-inp';
+            allCorrect = false;
         }
     });
+    if (allCorrect && inputs.length > 0) {
+        stopTimer(3);
+    }
 }
 function showLueckenLoesung() {
     var inputs = document.querySelectorAll('.luecken-inp');
@@ -837,6 +868,7 @@ function sbColorRow(builder, correct) {
 }
 
 function sbCheckAuto(itemIdx) {
+    startTimer(4);
     var item = document.querySelector('.satzbau-item[data-idx="' + itemIdx + '"]');
     var builder = item.querySelector('.sentence-builder');
     var feedback = item.querySelector('.satzbau-feedback');
@@ -851,6 +883,10 @@ function sbCheckAuto(itemIdx) {
     sbColorRow(builder, isValid);
     feedback.textContent = isValid ? 'Richtig!' : '';
     feedback.className = 'satzbau-feedback' + (isValid ? ' correct' : '');
+
+    if (sbCheckAllDone()) {
+        stopTimer(4);
+    }
 }
 
 function sbCheckAllDone() {
@@ -951,6 +987,7 @@ function initWortschatz() {
 }
 
 function wortschatzCheck() {
+    startTimer(5);
     var inputs = document.querySelectorAll('.vocab-inp');
     inputs.forEach(function(inp) {
         var answer = inp.dataset.answer;
@@ -962,6 +999,9 @@ function wortschatzCheck() {
             inp.className = 'vocab-inp ' + inp.dataset.field + '-inp';
         }
     });
+    if (checkWortschatzAllOk()) {
+        stopTimer(5);
+    }
 }
 
 function checkWortschatzAllOk() {
@@ -989,33 +1029,17 @@ function highlightVocabInText() {
 }
 
 /* ════════════════════════════════════════════════════════════════════════════════════════ */
-/* LOCALSTORAGE & BEST TIMES */
-/* ════════════════════════════════════════════════════════════════════════════════════════ */
-function loadBestTimes() {
-    for (var i = 2; i <= 5; i++) {
-        var key = 'best1046R_tab' + i;
-        var best = localStorage.getItem(key);
-        if (best) {
-            var elem = document.getElementById('best-time-' + i);
-            if (elem) {
-                elem.style.display = 'inline';
-                document.getElementById('best' + i).textContent = best;
-            }
-        }
-    }
-}
-
-/* ════════════════════════════════════════════════════════════════════════════════════════ */
 /* INITIALIZATION */
 /* ════════════════════════════════════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', function() {
+    for (var i = 0; i < 6; i++) initTimer(i);
+    loadBestTimes();
     initVorentlastung();
     initRF();
     initLuecken();
     initSatzbau();
     initWortschatz();
     highlightVocabInText();
-    loadBestTimes();
 });
 </script>
 

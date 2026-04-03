@@ -261,7 +261,6 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
                         </div>
                     </div>
                     <div style="margin-top:12px;display:flex;gap:8px;">
-                        <button class="btn" onclick="checkChSort()">Prüfen</button>
                         <button class="btn" onclick="resetChSort()">↺ Neustart</button>
                     </div>
                     <div id="chSortFeedback" style="margin-top:10px;font-size:0.9em;font-weight:600;min-height:1.2em;"></div>
@@ -531,53 +530,52 @@ function selectSortWord(el) {
     selectedSortWord = el;
     el.style.outline = '3px solid #333';
 }
+var chCorrect = 0;
 function placeToBin(bin) {
     if (!selectedSortWord) return;
     var word = selectedSortWord.dataset.word;
     var laut = selectedSortWord.dataset.laut;
+    var isOk = (laut === bin);
     chPlaced[word] = bin;
     var binEl = document.getElementById('bin-'+bin);
     var clone = document.createElement('div');
-    clone.className = 'sort-word placed-'+bin;
+    clone.className = 'sort-word ' + (isOk ? 'correct-final' : 'wrong-final');
     clone.textContent = word;
     clone.dataset.word = word;
     clone.dataset.laut = laut;
-    clone.onclick = function() {
-        // return to pool
-        binEl.removeChild(clone);
-        delete chPlaced[word];
-        var pool = document.getElementById('chWordPool');
-        selectedSortWord.style.outline = '';
-        pool.appendChild(selectedSortWord);
-        selectedSortWord = null;
-    };
+    if (isOk) {
+        chCorrect++;
+        clone.style.pointerEvents = 'none';
+    } else {
+        // Falsch: nach kurzer Verzögerung zurück in den Pool
+        setTimeout(function() {
+            if (clone.parentNode) clone.parentNode.removeChild(clone);
+            delete chPlaced[word];
+            var pool = document.getElementById('chWordPool');
+            var orig = document.createElement('div');
+            orig.className = 'sort-word';
+            orig.textContent = word;
+            orig.dataset.word = word;
+            orig.dataset.laut = laut;
+            orig.onclick = function() { selectSortWord(orig); };
+            pool.appendChild(orig);
+        }, 800);
+    }
     binEl.appendChild(clone);
     selectedSortWord.style.outline = '';
     selectedSortWord.parentNode.removeChild(selectedSortWord);
     selectedSortWord = null;
-}
-function checkChSort() {
-    var allPlaced = Object.keys(chPlaced).length === CH_WORDS.length;
-    if (!allPlaced) {
-        document.getElementById('chSortFeedback').textContent = '⚠️ Bitte ordne alle Wörter zu!';
-        document.getElementById('chSortFeedback').style.color = '#e67e22';
-        return;
-    }
-    var correct = 0;
-    ['ich','ach','k','sch'].forEach(function(bin) {
-        var binEl = document.getElementById('bin-'+bin);
-        binEl.querySelectorAll('.sort-word').forEach(function(el) {
-            var isOk = el.dataset.laut === bin;
-            el.classList.remove('placed-ich','placed-ach','placed-k','placed-sch');
-            el.classList.add(isOk ? 'correct-final' : 'wrong-final');
-            if (isOk) correct++;
-        });
-    });
+    // Feedback aktualisieren
     var fb = document.getElementById('chSortFeedback');
-    fb.textContent = correct + ' von ' + CH_WORDS.length + ' richtig!';
-    fb.style.color = correct === CH_WORDS.length ? '#27ae60' : '#e74c3c';
+    if (chCorrect === CH_WORDS.length) {
+        fb.textContent = '✅ Perfekt! Alle ' + CH_WORDS.length + ' Wörter richtig zugeordnet!';
+        fb.style.color = '#27ae60';
+    } else {
+        fb.textContent = chCorrect + ' von ' + CH_WORDS.length + ' richtig';
+        fb.style.color = isOk ? '#27ae60' : '#e74c3c';
+    }
 }
-function resetChSort() { initChSort(); }
+function resetChSort() { chCorrect = 0; initChSort(); }
 
 // ===== Laut-Toggle (Tab 1) =====
 function toggleLaut(el, type) {

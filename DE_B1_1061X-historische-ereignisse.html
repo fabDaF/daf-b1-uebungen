@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historische Ereignisse – Kommunikation B1.1</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.section-content { padding: 28px 30px; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-display span.current-time { color: #667eea; font-weight: 600; }
+.timer-display span.best-time { color: #f39c12; font-weight: 600; }
+
+/* Vokabelkarten */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+.vocab-example { color: #764ba2; font-size: 0.88em; margin-top: 6px; font-style: italic; border-top: 1px solid #eee; padding-top: 6px; }
+
+/* Zeitformen */
+.zeit-tabelle { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.zeit-tabelle th { background: #667eea; color: white; padding: 10px 14px; text-align: left; font-size: 0.9em; }
+.zeit-tabelle td { padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 0.92em; vertical-align: top; }
+.zeit-tabelle tr:hover td { background: #f8f9ff; }
+.zeit-tabelle .form-name { font-weight: 700; color: #764ba2; }
+.zeit-tabelle .beispiel { font-style: italic; color: #555; }
+.zeit-tabelle .verwendung { color: #444; }
+
+/* Lückentext */
+.luecken-list { list-style: none; padding: 0; }
+.luecken-list li { background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 10px; font-size: 0.95em; line-height: 1.7; color: #333; }
+.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 0.95em; padding: 2px 6px; min-width: 120px; transition: border-color 0.2s; }
+.luecken-inp:focus { border-bottom-color: #667eea; }
+.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+
+/* Satzbau */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 20px; }
+.timer-bar { display:flex; align-items:center; gap:12px; background:white; border-radius:10px; padding:10px 16px; margin-bottom:16px; box-shadow:0 2px 6px rgba(0,0,0,0.07); font-size:0.85rem; color:#666; }
+.timer-display2 { font-weight:700; color:#667eea; font-size:1rem; }
+.best-display2 { color:#f39c12; font-weight:600; }
+.btn-row2 { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid #eee; }
+.btn-row2 button { background:none; border:1px solid #c0b0e8; border-radius:16px; padding:5px 16px; cursor:pointer; font-size:.88rem; color:#5a3e9e; transition:background .2s; }
+.btn-row2 button:hover { background:#f0edf8; }
+
+/* Wortschatz Tab */
+.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 0; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en2 { font-weight: 600; color: #764ba2; min-width: 160px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 160px; }
+.vocab-inputs input.plural { width: 150px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+.vocab-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .vocab-container { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Historische Ereignisse</h1>
+        <p style="font-family: Georgia, serif;">B1.1 – Lektion 1061X &nbsp;|&nbsp; Kommunikation &amp; Geschichte</p>
+        <div class="big-emoji">🏛️</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📚</span><span class="nav-label">Wortschatz</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">⏳</span><span class="nav-label">Zeitformen</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🔠</span><span class="nav-label">Üben</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    </div>
+
+    <!-- TAB 0: WORTSCHATZ -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3832028/pexels-photo-3832028.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Historische Ereignisse">
+        <div class="section-content">
+            <div class="section-title">📚 Wortschatz: Historische Ereignisse</div>
+            <div class="section-sub">Wichtige Wörter, um über Geschichte zu sprechen.</div>
+
+            <div class="vocab-grid">
+                <div class="vocab-card">
+                    <div class="vocab-term">das Jahrhundert, -e</div>
+                    <div class="vocab-en">century</div>
+                    <div class="vocab-def">Ein Zeitraum von 100 Jahren. Man schreibt „das 19. Jahrhundert" (1800–1899).</div>
+                    <div class="vocab-example">Das 17. Jahrhundert wurde vom 30-jährigen Krieg geprägt.</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-term">die Erfindung, -en</div>
+                    <div class="vocab-en">invention</div>
+                    <div class="vocab-def">Wenn jemand etwas Neues schafft oder entwickelt (ein Gerät, ein Verfahren).</div>
+                    <div class="vocab-example">Die Dampflokomotive gilt als eine der wichtigsten Erfindungen.</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-term">die Entdeckung, -en</div>
+                    <div class="vocab-en">discovery</div>
+                    <div class="vocab-def">Wenn man etwas findet, das schon existierte, aber noch nicht bekannt war.</div>
+                    <div class="vocab-example">Die Ankunft von Kolumbus wird als Entdeckung Amerikas bezeichnet.</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-term">die Niederlage, -n</div>
+                    <div class="vocab-en">defeat / loss</div>
+                    <div class="vocab-def">Wenn jemand einen Krieg, Kampf oder Wettbewerb verliert.</div>
+                    <div class="vocab-example">Die Niederlage Napoleons im Russlandfeldzug veränderte Europa.</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-term">die Wiedervereinigung, –</div>
+                    <div class="vocab-en">reunification</div>
+                    <div class="vocab-def">Das Zusammenkommen von getrennten Teilen. 1990 wurde Deutschland wiedervereinigt.</div>
+                    <div class="vocab-example">1990 kam es zur deutschen Wiedervereinigung.</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-term">die Revolution, -en</div>
+                    <div class="vocab-en">revolution</div>
+                    <div class="vocab-def">Ein grundlegender, oft gewaltsamer Wandel in Gesellschaft oder Technik.</div>
+                    <div class="vocab-example">Die industrielle Revolution veränderte die Arbeitswelt grundlegend.</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-term">das Ereignis, -se</div>
+                    <div class="vocab-en">event</div>
+                    <div class="vocab-def">Etwas, das passiert — besonders ein wichtiger Vorfall in der Geschichte.</div>
+                    <div class="vocab-example">Der Fall der Mauer war ein historisches Ereignis.</div>
+                </div>
+                <div class="vocab-card">
+                    <div class="vocab-term">prägen</div>
+                    <div class="vocab-en">to shape / to mark</div>
+                    <div class="vocab-def">Starken Einfluss auf jemanden oder eine Zeit haben.</div>
+                    <div class="vocab-example">Die beiden Weltkriege prägten das 20. Jahrhundert.</div>
+                </div>
+            </div>
+
+            <div class="hilfe-box">
+                <strong>Zeitadverbien für historische Texte:</strong><br>
+                <strong>damals</strong> — back then &nbsp;|&nbsp; <strong>früher</strong> — in earlier times &nbsp;|&nbsp; <strong>einst</strong> — once / formerly &nbsp;|&nbsp; <strong>anfangs</strong> — at first &nbsp;|&nbsp; <strong>zunächst</strong> — initially &nbsp;|&nbsp; <strong>schließlich</strong> — finally &nbsp;|&nbsp; <strong>seitdem</strong> — since then
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 1: ZEITFORMEN -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3785927/pexels-photo-3785927.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Zeitformen der Vergangenheit">
+        <div class="section-content">
+            <div class="section-title">⏳ Vergangenheitsformen im Überblick</div>
+            <div class="section-sub">Drei Zeitformen für die Vergangenheit — wann verwendet man welche?</div>
+
+            <table class="zeit-tabelle">
+                <thead>
+                    <tr>
+                        <th>Zeitform</th>
+                        <th>Bildung</th>
+                        <th>Verwendung</th>
+                        <th>Beispiel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="form-name">Präteritum</span></td>
+                        <td>Verbstamm + Präteritum-Endung<br><em>-te, -test, -ten …</em></td>
+                        <td class="verwendung">Im Schriftlichen (Bücher, Zeitungen, historische Texte)</td>
+                        <td class="beispiel">Gutenberg <strong>erfand</strong> die Druckerpresse.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-name">Perfekt</span></td>
+                        <td>haben/sein + Partizip II<br><em>hat … erfunden</em></td>
+                        <td class="verwendung">Im Mündlichen (Gespräche, mündliche Berichte)</td>
+                        <td class="beispiel">Gutenberg <strong>hat</strong> die Druckerpresse <strong>erfunden</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="form-name">Plusquamperfekt</span></td>
+                        <td>hatte/war + Partizip II<br><em>hatte … gedauert</em></td>
+                        <td class="verwendung">Für eine Handlung VOR einer anderen in der Vergangenheit</td>
+                        <td class="beispiel">Der Krieg <strong>hatte</strong> schon 4 Jahre <strong>gedauert</strong>, als sie geboren wurde.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="hilfe-box">
+                <strong>Zeitangaben für historische Ereignisse:</strong><br>
+                • <strong>Jahreszahl:</strong> 1492 kam Kolumbus in Amerika an.<br>
+                • <strong>Jahrhundert:</strong> Das 20. Jahrhundert wurde von Kriegen geprägt.<br>
+                • <strong>Zeitadverb:</strong> Früher glaubte man, dass die Erde eine Scheibe sei.<br>
+                • <strong>Zeitraum:</strong> Zwischen 1452 und 1454 druckte Gutenberg eine Bibel.
+            </div>
+
+            <div class="section-title" style="margin-top:24px; font-size:1.1em;">Historische Zeitlinie: Wichtige Ereignisse</div>
+            <div style="margin-top:14px;">
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:10px 14px; background:#f8f9ff; border-radius:8px;">
+                        <span style="color:#667eea; font-weight:700; min-width:50px;">~450</span>
+                        <span style="color:#333; font-size:0.92em;">Gutenberg erfand die Druckerpresse — Buchdruck revolutionierte die Kommunikation.</span>
+                    </div>
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:10px 14px; background:#f8f9ff; border-radius:8px;">
+                        <span style="color:#667eea; font-weight:700; min-width:50px;">1492</span>
+                        <span style="color:#333; font-size:0.92em;">Christoph Kolumbus entdeckte Amerika auf seiner Reise nach Indien.</span>
+                    </div>
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:10px 14px; background:#f8f9ff; border-radius:8px;">
+                        <span style="color:#667eea; font-weight:700; min-width:50px;">1789</span>
+                        <span style="color:#333; font-size:0.92em;">Die Französische Revolution begann — Ende der Monarchie in Frankreich.</span>
+                    </div>
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:10px 14px; background:#f8f9ff; border-radius:8px;">
+                        <span style="color:#667eea; font-weight:700; min-width:50px;">1989</span>
+                        <span style="color:#333; font-size:0.92em;">Die Berliner Mauer fiel — Beginn der deutschen Wiedervereinigung.</span>
+                    </div>
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:10px 14px; background:#f8f9ff; border-radius:8px;">
+                        <span style="color:#667eea; font-weight:700; min-width:50px;">1990</span>
+                        <span style="color:#333; font-size:0.92em;">Die deutsche Wiedervereinigung wurde am 3. Oktober offiziell vollzogen.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: LÜCKENTEXT -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/259984/pexels-photo-259984.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Lückentext Geschichte">
+        <div class="section-content">
+            <div class="section-title">✏️ Lückentext — Historisches Vokabular</div>
+            <div class="section-sub">Trage die richtigen Wörter ein. Live-Feedback bei jeder Eingabe!</div>
+
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetLuecken()">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">⏱ <span id="timer-2">0:00</span></span>
+                    <span class="best-time">🏆 <span id="best-2">–</span></span>
+                </div>
+            </div>
+
+            <div class="hilfe-box">Wähle aus: Jahrhundert · Erfindung · Wiedervereinigung · Entdeckung · Niederlage · prägten · Ereignis · Revolution</div>
+
+            <ul class="luecken-list" id="lueckenList">
+                <li>Die Renaissance beschreibt eine Epoche zwischen dem 15. und 16. <input class="luecken-inp" data-ans="Jahrhundert" placeholder=""> .</li>
+                <li>Die Druckerpresse war eine wichtige <input class="luecken-inp" data-ans="Erfindung" placeholder=""> des 15. Jahrhunderts.</li>
+                <li>Der Begriff <input class="luecken-inp" data-ans="Wiedervereinigung" placeholder=""> bezeichnet den Zusammenschluss von Ost- und Westdeutschland.</li>
+                <li>Die <input class="luecken-inp" data-ans="Entdeckung" placeholder=""> des Feuers ist vermutlich dem Zufall zu verdanken.</li>
+                <li>Verliert ein Land einen Krieg, spricht man von einer <input class="luecken-inp" data-ans="Niederlage" placeholder=""> .</li>
+                <li>Die beiden Weltkriege <input class="luecken-inp" data-ans="prägten" placeholder=""> das 20. Jahrhundert nachhaltig.</li>
+                <li>Der Fall der Berliner Mauer war ein historisches <input class="luecken-inp" data-ans="Ereignis" placeholder=""> .</li>
+                <li>Die industrielle <input class="luecken-inp" data-ans="Revolution" placeholder=""> veränderte die Arbeitswelt im 19. Jahrhundert grundlegend.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TAB 3: WORTSCHATZ-ÜBEN -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/2159/flight-sky-earth-space.jpg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Historische Erfindungen">
+        <div class="section-content">
+            <div class="section-title">🔠 Wortschatz üben</div>
+            <div class="section-sub">Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showVocabLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetVocab()">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">⏱ <span id="timer-3">0:00</span></span>
+                    <span class="best-time">🏆 <span id="best-3">–</span></span>
+                </div>
+            </div>
+
+            <div class="vocab-container" id="vocabContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: SATZBAU -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1181243/pexels-photo-1181243.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Geschichte Satzbau">
+        <div class="section-content">
+            <div class="section-title">🧩 Satzbau — Historische Sätze</div>
+            <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge!</div>
+
+            <div class="timer-bar">
+                <span>⏱ <span class="timer-display2" id="timer-4">0:00</span></span>
+                <span>🏆 <span class="best-display2" id="best-4">–</span></span>
+            </div>
+            <div class="btn-row2">
+                <button onclick="timerReset(4)">↺ Neustart</button>
+                <button onclick="sbShowAllSolutions()">💡 Lösungen</button>
+            </div>
+
+            <div id="satzbauContainer" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<style>
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+
+<script>
+var TIMER_PREFIX = 'best1061X';
+
+// ===== LÜCKENTEXT (Tab 2) =====
+var lt2Running = false, lt2Start = 0, lt2Interval = null;
+
+function fmtTime(s) { var m = Math.floor(s/60), sec = s%60; return m+':'+(sec<10?'0':'')+sec; }
+
+function startLt2() {
+    if (lt2Running) return;
+    lt2Running = true; lt2Start = Date.now();
+    lt2Interval = setInterval(function() {
+        document.getElementById('timer-2').textContent = fmtTime(Math.floor((Date.now()-lt2Start)/1000));
+    }, 1000);
+}
+
+function stopLt2() {
+    if (!lt2Running) return;
+    lt2Running = false; clearInterval(lt2Interval);
+    var el = Math.floor((Date.now()-lt2Start)/1000);
+    var key = TIMER_PREFIX+'-best-2';
+    var best = localStorage.getItem(key);
+    if (!best || el < parseInt(best)) { localStorage.setItem(key, el); document.getElementById('best-2').textContent = fmtTime(el); }
+}
+
+function liveCheck(inp) {
+    var ans = inp.dataset.ans || '';
+    var val = inp.value.trim();
+    inp.classList.remove('ok','no');
+    if (!val) return;
+    startLt2();
+    if (val === ans) { inp.classList.add('ok'); checkAllLueckenOk(); return; }
+    if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) return;
+    inp.classList.add('no');
+}
+
+function checkAllLueckenOk() {
+    var inps = document.querySelectorAll('#sec-2 .luecken-inp');
+    if (Array.from(inps).every(function(i){ return i.classList.contains('ok'); })) stopLt2();
+}
+
+function showLueckenLoesung() {
+    stopLt2();
+    document.querySelectorAll('#sec-2 .luecken-inp').forEach(function(inp) {
+        inp.value = inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no');
+    });
+}
+
+function resetLuecken() {
+    lt2Running = false; clearInterval(lt2Interval); document.getElementById('timer-2').textContent = '0:00';
+    document.querySelectorAll('#sec-2 .luecken-inp').forEach(function(inp) {
+        inp.value = ''; inp.classList.remove('ok','no');
+    });
+}
+
+document.querySelectorAll('#sec-2 .luecken-inp').forEach(function(inp) {
+    inp.addEventListener('input', function() { liveCheck(inp); });
+});
+
+var best2 = localStorage.getItem(TIMER_PREFIX+'-best-2');
+if (best2) document.getElementById('best-2').textContent = fmtTime(parseInt(best2));
+
+// ===== VOKABELN (Tab 3) =====
+var VOCAB_DATA = [
+    { type:'n', en:'the century', artikel:'das', de:'Jahrhundert', plural:'Jahrhunderte' },
+    { type:'n', en:'the invention', artikel:'die', de:'Erfindung', plural:'Erfindungen' },
+    { type:'n', en:'the discovery', artikel:'die', de:'Entdeckung', plural:'Entdeckungen' },
+    { type:'n', en:'the defeat', artikel:'die', de:'Niederlage', plural:'Niederlagen' },
+    { type:'n', en:'the reunification', artikel:'die', de:'Wiedervereinigung', plural:'–' },
+    { type:'n', en:'the event / occurrence', artikel:'das', de:'Ereignis', plural:'Ereignisse' },
+    { type:'v', en:'to shape / to mark', de:'prägen' },
+    { type:'v', en:'to influence', de:'beeinflussen' },
+    { type:'v', en:'to celebrate / commemorate', de:'feiern' },
+    { type:'v', en:'to represent / symbolize', de:'darstellen' }
+];
+
+var vt3Running = false, vt3Start = 0, vt3Interval = null;
+
+function startVt3() {
+    if (vt3Running) return;
+    vt3Running = true; vt3Start = Date.now();
+    vt3Interval = setInterval(function() {
+        document.getElementById('timer-3').textContent = fmtTime(Math.floor((Date.now()-vt3Start)/1000));
+    }, 1000);
+}
+
+function stopVt3() {
+    if (!vt3Running) return;
+    vt3Running = false; clearInterval(vt3Interval);
+    var el = Math.floor((Date.now()-vt3Start)/1000);
+    var key = TIMER_PREFIX+'-best-3';
+    var best = localStorage.getItem(key);
+    if (!best || el < parseInt(best)) { localStorage.setItem(key, el); document.getElementById('best-3').textContent = fmtTime(el); }
+}
+
+function initVocab() {
+    var container = document.getElementById('vocabContainer');
+    container.innerHTML = '';
+    VOCAB_DATA.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'vocab-item';
+        var enDiv = document.createElement('div');
+        enDiv.className = 'vocab-en2';
+        enDiv.textContent = item.en;
+        row.appendChild(enDiv);
+        var arrow = document.createElement('span');
+        arrow.className = 'vocab-arrow';
+        arrow.textContent = '→';
+        row.appendChild(arrow);
+        var inputs = document.createElement('div');
+        inputs.className = 'vocab-inputs';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'art'; artInp.placeholder = 'Artikel';
+            artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+            artInp.oninput = function() { wsCheck(this); startVt3(); checkVocabAllDone(); };
+            inputs.appendChild(artInp);
+            var wortInp = document.createElement('input');
+            wortInp.className = 'wort'; wortInp.placeholder = 'Deutsch';
+            wortInp.dataset.answer = item.de; wortInp.dataset.field = 'word';
+            wortInp.oninput = function() { wsCheck(this); startVt3(); checkVocabAllDone(); };
+            inputs.appendChild(wortInp);
+            var plInp = document.createElement('input');
+            plInp.className = 'plural'; plInp.placeholder = 'Plural';
+            plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+            if (item.plural === '\u2013') {
+                plInp.value = '\u2013'; plInp.disabled = true; plInp.classList.add('correct'); plInp.style.opacity = '0.6';
+            } else {
+                plInp.oninput = function() { wsCheck(this); startVt3(); checkVocabAllDone(); };
+            }
+            inputs.appendChild(plInp);
+        } else {
+            var vInp = document.createElement('input');
+            vInp.className = 'wort'; vInp.placeholder = 'Deutsch';
+            vInp.dataset.answer = item.de; vInp.dataset.field = 'word';
+            vInp.oninput = function() { wsCheck(this); startVt3(); checkVocabAllDone(); };
+            inputs.appendChild(vInp);
+        }
+        row.appendChild(inputs);
+        container.appendChild(row);
+    });
+}
+
+function wsCheck(inp) {
+    var user = inp.value, answer = inp.dataset.answer, field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { }
+    else { inp.classList.add('wrong'); }
+}
+
+function checkVocabAllDone() {
+    var inputs = document.querySelectorAll('#sec-3 .vocab-inputs input');
+    if (inputs.length > 0 && Array.from(inputs).every(function(i){ return i.disabled || i.classList.contains('correct'); })) stopVt3();
+}
+
+function showVocabLoesung() {
+    stopVt3();
+    document.querySelectorAll('#sec-3 .vocab-inputs input').forEach(function(inp) {
+        if (!inp.disabled) { inp.value = inp.dataset.answer; inp.classList.add('correct'); inp.classList.remove('wrong'); }
+    });
+}
+
+function resetVocab() {
+    vt3Running = false; clearInterval(vt3Interval); document.getElementById('timer-3').textContent = '0:00';
+    initVocab();
+}
+
+var best3 = localStorage.getItem(TIMER_PREFIX+'-best-3');
+if (best3) document.getElementById('best-3').textContent = fmtTime(parseInt(best3));
+
+// ===== SATZBAU (Tab 4) =====
+var satzbauData = [
+    {
+        parts: ['Johannes', 'Gutenberg', 'erfand', 'im', '15.', 'Jahrhundert', 'die', 'Druckerpresse'],
+        valid: [['Johannes', 'Gutenberg', 'erfand', 'im', '15.', 'Jahrhundert', 'die', 'Druckerpresse']],
+        punct: '.'
+    },
+    {
+        parts: ['1990', 'kam', 'es', 'zur', 'deutschen', 'Wiedervereinigung'],
+        valid: [['1990', 'kam', 'es', 'zur', 'deutschen', 'Wiedervereinigung']],
+        punct: '.'
+    },
+    {
+        parts: ['die', 'industrielle', 'Revolution', 'veränderte', 'die', 'Arbeitswelt', 'im', '19.', 'Jahrhundert'],
+        valid: [['die', 'industrielle', 'Revolution', 'veränderte', 'die', 'Arbeitswelt', 'im', '19.', 'Jahrhundert']],
+        punct: '.'
+    },
+    {
+        parts: ['damals', 'hatte', 'die', 'Mauer', 'Ost-', 'und', 'Westdeutschland', 'getrennt'],
+        valid: [['damals', 'hatte', 'die', 'Mauer', 'Ost-', 'und', 'Westdeutschland', 'getrennt']],
+        punct: '.'
+    },
+    {
+        parts: ['früher', 'glaubte', 'man', ',', 'dass', 'die', 'Erde', 'eine', 'Scheibe', 'sei'],
+        valid: [['früher', 'glaubte', 'man', ',', 'dass', 'die', 'Erde', 'eine', 'Scheibe', 'sei']],
+        punct: '.'
+    },
+    {
+        parts: ['das', 'antike', 'Griechenland', 'beeinflusste', 'die', 'Entwicklung', 'europäischer', 'Zivilisationen'],
+        valid: [['das', 'antike', 'Griechenland', 'beeinflusste', 'die', 'Entwicklung', 'europäischer', 'Zivilisationen']],
+        punct: '.'
+    }
+];
+
+var sbDragged = null;
+var sb4Running = false, sb4Start = 0, sb4Interval = null;
+
+function timerAutoStart(n) {
+    if (n !== 4 || sb4Running) return;
+    sb4Running = true; sb4Start = Date.now();
+    sb4Interval = setInterval(function() {
+        document.getElementById('timer-4').textContent = fmtTime(Math.floor((Date.now()-sb4Start)/1000));
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (n !== 4 || !sb4Running) return;
+    sb4Running = false; clearInterval(sb4Interval);
+    var el = Math.floor((Date.now()-sb4Start)/1000);
+    var key = TIMER_PREFIX+'-best-4';
+    var best = localStorage.getItem(key);
+    if (!best || el < parseInt(best)) { localStorage.setItem(key, el); document.getElementById('best-4').textContent = fmtTime(el); }
+}
+
+function timerReset(n) {
+    if (n !== 4) return;
+    sb4Running = false; clearInterval(sb4Interval); document.getElementById('timer-4').textContent = '0:00';
+    initSatzbau();
+}
+
+var best4 = localStorage.getItem(TIMER_PREFIX+'-best-4');
+if (best4) document.getElementById('best-4').textContent = fmtTime(parseInt(best4));
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) { c = document.createElement('div'); c.id = 'sb-insert-cursor'; c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;'; }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width/2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === ';') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        c.textContent = isProper ? orig : (i === 0 ? sbCapitalize(orig) : orig);
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip'; chip.textContent = word; chip.dataset.orig = word; chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip; timerAutoStart(4); e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = ''; sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault(); if (!sbDragged) return;
+        var cursor = getSbCursor(); var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before); else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) { var c = document.getElementById('sb-insert-cursor'); if (c && c.parentNode === zone) zone.removeChild(c); }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault(); if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) { zone.insertBefore(sbDragged, cursor); zone.removeChild(cursor); } else { zone.appendChild(sbDragged); }
+        sbDragged = null;
+        sbUpdateCapitalization(document.getElementById('sb-row-'+idx));
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-'+idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) { return JSON.stringify(v) === JSON.stringify(order); });
+    chips.forEach(function(c) { c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
+    var existing = row.querySelector('.sb-punkt'); if (existing) existing.parentNode.removeChild(existing);
+    if (ok) { var p = document.createElement('span'); p.className = 'sb-punkt'; p.textContent = satzbauData[idx].punct||'.'; row.appendChild(p); }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-'+idx);
+    var row = document.getElementById('sb-row-'+idx);
+    var fb = document.getElementById('sb-fb-'+idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+        row.classList.remove('correct','incorrect'); fb.textContent = ''; return;
+    }
+    setTimeout(function() {
+        timerAutoStart(4);
+        var ok = sbColorRow(idx);
+        if (ok) { row.classList.add('correct'); row.classList.remove('incorrect'); fb.className='satzbau-feedback correct'; fb.textContent='✓ Korrekt!'; sbCheckAllDone(); }
+        else { row.classList.add('incorrect'); row.classList.remove('correct'); fb.className='satzbau-feedback incorrect'; fb.textContent='✗ Falsche Reihenfolge – verschiebe die Chips!'; }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    if (satzbauData.every(function(_,i){ var row=document.getElementById('sb-row-'+i); return row&&row.classList.contains('correct'); })) timerStop(4);
+}
+
+function sbShowSolution(idx) {
+    var bank=document.getElementById('sb-bank-'+idx), row=document.getElementById('sb-row-'+idx), fb=document.getElementById('sb-fb-'+idx);
+    var solution=satzbauData[idx].valid[0], allChips={};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){allChips[c.dataset.orig]=c;});
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){allChips[c.dataset.orig]=c;});
+    while(bank.firstChild)bank.removeChild(bank.firstChild);
+    while(row.firstChild)row.removeChild(row.firstChild);
+    solution.forEach(function(word,i){
+        var chip=allChips[word];
+        if(chip){ if(word!==','&&word!==';'){chip.textContent=(i===0)?sbCapitalize(word):word;} chip.classList.remove('correct','incorrect'); row.appendChild(chip); }
+    });
+    fb.textContent=''; setTimeout(function(){sbCheckAuto(idx);},100);
+}
+
+function sbShowAllSolutions() { satzbauData.forEach(function(_,i){sbShowSolution(i);}); }
+
+function sbResetOne(idx) {
+    var bank=document.getElementById('sb-bank-'+idx), row=document.getElementById('sb-row-'+idx), fb=document.getElementById('sb-fb-'+idx);
+    while(bank.firstChild)bank.removeChild(bank.firstChild);
+    while(row.firstChild)row.removeChild(row.firstChild);
+    row.classList.remove('correct','incorrect'); fb.textContent=''; fb.className='satzbau-feedback';
+    var existing=row.querySelector('.sb-punkt'); if(existing)existing.parentNode.removeChild(existing);
+    var parts=satzbauData[idx].parts.slice();
+    for(var i=parts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=parts[i];parts[i]=parts[j];parts[j]=t;}
+    parts.forEach(function(word){bank.appendChild(sbMakeChip(word));});
+}
+
+function initSatzbau() {
+    var container=document.getElementById('satzbauContainer'); container.innerHTML='';
+    satzbauData.forEach(function(ex,idx){
+        var item=document.createElement('div'); item.className='satzbau-item';
+        var bank=document.createElement('div'); bank.className='chips-container'; bank.id='sb-bank-'+idx;
+        var row=document.createElement('div'); row.className='sentence-builder'; row.id='sb-row-'+idx;
+        var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb-fb-'+idx;
+        var parts=ex.parts.slice();
+        for(var i=parts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=parts[i];parts[i]=parts[j];parts[j]=t;}
+        parts.forEach(function(word){bank.appendChild(sbMakeChip(word));});
+        sbRegisterZone(bank,idx); sbRegisterZone(row,idx);
+        var btnRow=document.createElement('div'); btnRow.style.cssText='display:flex;gap:8px;margin-top:6px;';
+        var solveBtn=document.createElement('button'); solveBtn.className='btn'; solveBtn.textContent='Lösen';
+        solveBtn.setAttribute('data-idx',idx); solveBtn.addEventListener('click',function(){sbShowSolution(parseInt(this.getAttribute('data-idx')));});
+        var resetBtn=document.createElement('button'); resetBtn.className='btn'; resetBtn.textContent='↺ Neustart';
+        resetBtn.setAttribute('data-idx',idx); resetBtn.addEventListener('click',function(){sbResetOne(parseInt(this.getAttribute('data-idx')));});
+        btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){s.classList.toggle('active',i===idx);});
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){b.classList.toggle('active',i===idx);});
+}
+
+initVocab();
+initSatzbau();
+</script>
+</body>
+</html>

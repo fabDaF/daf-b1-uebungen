@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mehr über den Genitiv – Interaktive DaF-Übung (B1.1)</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.tab-content { padding: 28px 30px; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-display .tval { color: #667eea; font-weight: 700; }
+.timer-display .bval { color: #f39c12; font-weight: 600; }
+
+/* Grammar tables */
+.gram-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.92em; }
+.gram-table th { background: #667eea; color: white; padding: 10px 14px; text-align: left; font-weight: 600; }
+.gram-table td { padding: 10px 14px; border-bottom: 1px solid #eee; }
+.gram-table tr:nth-child(even) td { background: #f8f9ff; }
+.gram-table .accent { color: #667eea; font-weight: 700; }
+.gram-table .masc { color: #2196f3; }
+.gram-table .fem { color: #e91e63; }
+.gram-table .neut { color: #4caf50; }
+.gram-table .pl { color: #9c27b0; }
+
+/* Info boxes */
+.info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.info-card { background: #f8f9ff; border-radius: 10px; padding: 16px 18px; border-top: 3px solid #667eea; }
+.info-card h4 { color: #667eea; font-size: 0.95em; font-weight: 700; margin-bottom: 8px; }
+.info-card .example { font-style: italic; color: #555; font-size: 0.9em; margin-top: 6px; }
+.info-card .example strong { color: #667eea; font-style: normal; }
+
+/* Lückentext */
+.luecken-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.luecken-item { background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 0.97em; line-height: 1.8; }
+.blank { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1em; padding: 2px 6px; transition: border-color 0.2s; }
+.blank:focus { border-bottom-color: #667eea; }
+.blank.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.blank.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.hint-text { color: #999; font-size: 0.85em; font-style: italic; }
+
+/* MC quiz */
+.mc-exercise { margin-bottom: 18px; }
+.mc-question { font-size: 0.97em; font-weight: 600; color: #333; margin-bottom: 8px; line-height: 1.5; }
+.mc-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-opt { padding: 4px 14px; border: 1.5px solid #c5cae9; border-radius: 20px; background: #fff; cursor: pointer; font-size: 11px; letter-spacing: 0.3px; transition: all .2s; }
+.mc-opt:hover { border-color: #667eea; background: #eef0ff; }
+.mc-opt.correct { border-color: #27ae60; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-opt.wrong { border-color: #e74c3c; background: #ffebee; color: #c62828; }
+
+/* Verb cards */
+.verb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.verb-card { background: #f8f9ff; border-left: 4px solid #764ba2; border-radius: 0 10px 10px 0; padding: 12px 16px; }
+.verb-name { font-weight: 700; color: #764ba2; font-size: 1.05em; margin-bottom: 4px; }
+.verb-example { color: #555; font-size: 0.9em; font-style: italic; line-height: 1.5; }
+.verb-example strong { color: #764ba2; font-style: normal; }
+
+/* Satzbau */
+.satzbau-item { margin-bottom: 22px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+/* Wortschatz */
+.ws-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ws-item { background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 14px; }
+.ws-prompt { font-weight: 600; color: #667eea; font-size: 0.95em; margin-bottom: 6px; }
+.ws-fields { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ws-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 0.95em; padding: 2px 6px; transition: border-color 0.2s; }
+.ws-inp:focus { border-bottom-color: #667eea; }
+.ws-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+.ws-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+.ws-inp.art { width: 70px; }
+.ws-inp.wort { width: 160px; }
+.ws-inp.plural { width: 140px; }
+
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .info-row { grid-template-columns: 1fr; }
+    .ws-container { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Mehr über den Genitiv</h1>
+        <p style="font-family: Georgia, serif;">B1.1 – Lektion 1052G &nbsp;|&nbsp; Grammatik</p>
+        <div class="big-emoji">📖</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📖</span><span class="nav-label">Grundlagen</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">📌</span><span class="nav-label">Präpositionen</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🔤</span><span class="nav-label">Verben &amp; Possessiv</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- TAB 0: Genitiv Grundlagen -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/256395/pexels-photo-256395.jpeg?w=1000&h=180&fit=crop" alt="Klassenraum">
+        <div class="tab-content">
+            <div class="section-title">📖 Genitiv – Grundlagen</div>
+            <div class="section-sub">Der Genitiv ist der zweite Fall (Wessen-Fall) in der deutschen Grammatik.</div>
+
+            <div class="hilfe-box">
+                <strong>Merke:</strong> Der Genitiv zeigt Zugehörigkeit oder Besitz. Die Frage lautet: <strong>Wessen?</strong><br>
+                Bei maskulinen und neutralen Nomen wird <strong>-s</strong> oder <strong>-es</strong> hinzugefügt.
+            </div>
+
+            <h3 style="color:#667eea;margin-bottom:12px;">Artikel im Genitiv</h3>
+            <table class="gram-table">
+                <thead>
+                    <tr><th>Genus / Numerus</th><th>Nominativ</th><th>Genitiv (bestimmt)</th><th>Genitiv (unbestimmt)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="masc">maskulin</td><td class="masc">der, ein</td><td><strong>des</strong> Freundes</td><td><strong>eines</strong> Freundes</td></tr>
+                    <tr><td class="fem">feminin</td><td class="fem">die, eine</td><td><strong>der</strong> Freundin</td><td><strong>einer</strong> Freundin</td></tr>
+                    <tr><td class="neut">neutral</td><td class="neut">das, ein</td><td><strong>des</strong> Kindes</td><td><strong>eines</strong> Kindes</td></tr>
+                    <tr><td class="pl">Plural</td><td class="pl">die, –</td><td><strong>der</strong> Freunde</td><td><strong>–</strong></td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="color:#667eea;margin-bottom:12px;">Funktion des Genitivs</h3>
+            <div class="info-row">
+                <div class="info-card">
+                    <h4>🏷️ Eigenschaft</h4>
+                    <div class="example">Diplom <strong>zweiter Stufe</strong></div>
+                </div>
+                <div class="info-card">
+                    <h4>✍️ Urheberschaft</h4>
+                    <div class="example"><strong>Goethes</strong> Faust</div>
+                </div>
+                <div class="info-card">
+                    <h4>🎯 Ziel einer Handlung</h4>
+                    <div class="example">die Markierung <strong>des Textes</strong></div>
+                </div>
+                <div class="info-card">
+                    <h4>📊 Anteil</h4>
+                    <div class="example">die Hälfte <strong>des Geldes</strong></div>
+                </div>
+                <div class="info-card">
+                    <h4>🏠 Besitz</h4>
+                    <div class="example">die Tasche <strong>meiner Schwester</strong></div>
+                </div>
+                <div class="info-card">
+                    <h4>👥 Zugehörigkeit</h4>
+                    <div class="example">die Bücher <strong>der Bibliothek</strong></div>
+                </div>
+            </div>
+
+            <h3 style="color:#667eea;margin-bottom:12px;">🧠 Quiz: Welche Genitiv-Funktion?</h3>
+            <div id="mcContainer0"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: Präpositionen -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1370295/pexels-photo-1370295.jpeg?w=1000&h=180&fit=crop" alt="Bücher">
+        <div class="tab-content">
+            <div class="section-title">📌 Präpositionen mit dem Genitiv</div>
+            <div class="section-sub">Diese Präpositionen verlangen den Genitiv — besonders in der Schriftsprache.</div>
+
+            <table class="gram-table">
+                <thead>
+                    <tr><th>Präposition</th><th>Bedeutung</th><th>Beispiel</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="accent">anstelle / statt</td><td>alternativ</td><td><strong>Anstelle des Buches</strong> hat sie die Hefte genommen.</td></tr>
+                    <tr><td class="accent">außerhalb</td><td>lokal / temporal</td><td><strong>Außerhalb der Arbeitszeiten</strong> darf niemand hier bleiben.</td></tr>
+                    <tr><td class="accent">innerhalb</td><td>lokal / temporal</td><td><strong>Innerhalb der Stadt</strong> darf man nicht schnell fahren.</td></tr>
+                    <tr><td class="accent">oberhalb</td><td>lokal</td><td>Fische findet man nur <strong>unterhalb der Wasseroberfläche</strong>.</td></tr>
+                    <tr><td class="accent">unterhalb</td><td>lokal</td><td><strong>Unterhalb der Brücke</strong> ist Camping erlaubt.</td></tr>
+                    <tr><td class="accent">aufgrund</td><td>kausal</td><td><strong>Aufgrund der schlechten Noten</strong> bleibt er zu Hause.</td></tr>
+                    <tr><td class="accent">wegen</td><td>kausal</td><td><strong>Wegen des Unfalls</strong> verspätete ich mich.</td></tr>
+                    <tr><td class="accent">während</td><td>temporal</td><td><strong>Während des Urlaubs</strong> war er nicht erreichbar.</td></tr>
+                    <tr><td class="accent">trotz</td><td>konzessiv</td><td><strong>Trotz des Geldmangels</strong> kaufte er ein teures Handy.</td></tr>
+                </tbody>
+            </table>
+
+            <div class="hilfe-box">
+                <strong>⚠️ Achtung Umgangssprache:</strong> Die Präpositionen <em>(an)statt, während, wegen</em> und <em>trotz</em> werden im Alltag oft auch mit dem <strong>Dativ</strong> benutzt:<br>
+                „Wegen <u>dem</u> Unfall" (Dativ, umgangssprachlich) → „Wegen <u>des</u> Unfalls" (Genitiv, schriftlich/formal)
+            </div>
+
+            <div class="section-title" style="margin-top:20px;">✏️ Lückentext: Präpositionen üben</div>
+            <div class="section-sub">Ergänze die richtige Genitiv-Form in Klammern.</div>
+            <ul class="luecken-list">
+                <li class="luecken-item">Unterhalb <input class="blank" data-ans="der Grenze" placeholder="________"> <span class="hint-text">(die Grenze)</span> ist Camping erlaubt.</li>
+                <li class="luecken-item">Aufgrund <input class="blank" data-ans="der schlechten Ergebnisse" placeholder="________"> <span class="hint-text">(die schlechten Ergebnisse)</span> darf er nicht mehr ins Ausland fahren.</li>
+                <li class="luecken-item">Innerhalb <input class="blank" data-ans="der Vorlesungszeit" placeholder="________"> <span class="hint-text">(die Vorlesungszeit)</span> sollte man aufmerksam sein.</li>
+                <li class="luecken-item">Anstelle <input class="blank" data-ans="des Orangensafts" placeholder="________"> <span class="hint-text">(der Orangensaft)</span> hat er Cola gekauft.</li>
+                <li class="luecken-item">Außerhalb <input class="blank" data-ans="der Stadt" placeholder="________"> <span class="hint-text">(die Stadt)</span> ist es auch möglich zu leben.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TAB 2: Verben + Possessiv -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?w=1000&h=180&fit=crop" alt="Dokument">
+        <div class="tab-content">
+            <div class="section-title">🔤 Verben mit Genitiv</div>
+            <div class="section-sub">Diese Verben verlangen den Genitiv als Ergänzung.</div>
+
+            <div class="verb-grid">
+                <div class="verb-card">
+                    <div class="verb-name">bedürfen</div>
+                    <div class="verb-example">Die Opfer <strong>bedürfen</strong> internationaler Hilfe.</div>
+                </div>
+                <div class="verb-card">
+                    <div class="verb-name">beschuldigen</div>
+                    <div class="verb-example">Er wird <strong>des Mordes</strong> beschuldigt.</div>
+                </div>
+                <div class="verb-card">
+                    <div class="verb-name">verdächtigen</div>
+                    <div class="verb-example">Sie verdächtigt ihn <strong>der Lüge</strong>.</div>
+                </div>
+                <div class="verb-card">
+                    <div class="verb-name">anklagen</div>
+                    <div class="verb-example">Er ist <strong>des Diebstahls</strong> angeklagt.</div>
+                </div>
+                <div class="verb-card">
+                    <div class="verb-name">gedenken</div>
+                    <div class="verb-example">Wir <strong>gedenken der Gefallenen</strong>.</div>
+                </div>
+                <div class="verb-card">
+                    <div class="verb-name">überführen</div>
+                    <div class="verb-example">Sie wurden <strong>der Tat</strong> überführt.</div>
+                </div>
+                <div class="verb-card">
+                    <div class="verb-name">bezichtigen</div>
+                    <div class="verb-example">Sie bezichtigt ihn <strong>der Untreue</strong>.</div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top:24px;">👤 Possessivartikel im Genitiv</div>
+            <div class="section-sub">Possessivartikel werden wie unbestimmte Artikel dekliniert.</div>
+
+            <table class="gram-table">
+                <thead>
+                    <tr><th>Personalpronomen</th><th>Possessivpronomen</th><th>maskulin/neutral (-es)</th><th>feminin/Plural (-er)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>ich</td><td>mein</td><td>mein<strong>es</strong></td><td>mein<strong>er</strong></td></tr>
+                    <tr><td>du</td><td>dein</td><td>dein<strong>es</strong></td><td>dein<strong>er</strong></td></tr>
+                    <tr><td>er / es</td><td>sein</td><td>sein<strong>es</strong></td><td>sein<strong>er</strong></td></tr>
+                    <tr><td>sie (Sg.)</td><td>ihr</td><td>ihr<strong>es</strong></td><td>ihr<strong>er</strong></td></tr>
+                    <tr><td>wir</td><td>unser</td><td>unser<strong>es</strong></td><td>unser<strong>er</strong></td></tr>
+                    <tr><td>ihr</td><td>euer</td><td>eur<strong>es</strong></td><td>eur<strong>er</strong></td></tr>
+                    <tr><td>sie / Sie</td><td>ihr / Ihr</td><td>ihr<strong>es</strong> / Ihr<strong>es</strong></td><td>ihr<strong>er</strong> / Ihr<strong>er</strong></td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="color:#667eea;margin-bottom:12px;">✏️ Possessivartikel ergänzen</h3>
+            <div class="hilfe-box">Ergänze die Possessivartikel im Genitiv. Achte auf das Genus des Nomens!</div>
+            <ul class="luecken-list">
+                <li class="luecken-item">Die Sachen <input class="blank" data-ans="eures" placeholder="____"> (<em>ihr</em>) Vaters liegen herum.</li>
+                <li class="luecken-item">Viele Gebäude stehen im Zentrum <input class="blank" data-ans="unserer" placeholder="____"> (<em>wir</em>) Stadt.</li>
+                <li class="luecken-item">In deiner Stadt sieht man überall die Spuren <input class="blank" data-ans="seines" placeholder="____"> (<em>er</em>) Lebens.</li>
+                <li class="luecken-item">Auf jeder Haltestelle kann man die Poster <input class="blank" data-ans="deiner" placeholder="____"> (<em>du</em>) Kandidatin sehen.</li>
+                <li class="luecken-item">Das Gehalt <input class="blank" data-ans="ihrer" placeholder="____"> (<em>sie – Plural</em>) Eltern ist sehr niedrig.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TAB 3: Satzbau -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/974314/pexels-photo-974314.jpeg?w=1000&h=180&fit=crop" alt="Felder">
+        <div class="tab-content">
+            <div class="section-title">🧩 Satzbau</div>
+            <div class="section-sub">Ordne die Wörter zum richtigen Satz mit Genitiv.</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="sbShowAllSolutions()">Lösungen</button>
+                    <button class="btn" onclick="resetSatzbau(); resetTimer(3);">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="tval" id="timer-3">0:00</span></span>
+                    <span>🏆 <span class="bval" id="best-3">–</span></span>
+                </div>
+            </div>
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: Wortschatz -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/4492126/pexels-photo-4492126.jpeg?w=1000&h=180&fit=crop" alt="Lernen">
+        <div class="tab-content">
+            <div class="section-title">🔠 Wortschatz-Training</div>
+            <div class="section-sub">Tippe die deutsche Übersetzung. Bei Nomen: Artikel + Wort + Plural.</div>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showWsLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetWs(); resetTimer(4);">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span class="tval" id="timer-4">0:00</span></span>
+                    <span>🏆 <span class="bval" id="best-4">–</span></span>
+                </div>
+            </div>
+            <div class="ws-container" id="wsContainer"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+</div><!-- /container -->
+
+<script>
+// ─── Tab navigation ───────────────────────────────────────────────────────
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+// ─── Timer system ─────────────────────────────────────────────────────────
+var timers = {};
+function fmtTime(s) { var m = Math.floor(s/60); return m + ':' + (s%60 < 10 ? '0' : '') + (s%60); }
+function timerAutoStart(n) {
+    if (timers[n] && timers[n].running) return;
+    if (!timers[n]) timers[n] = { s: 0, running: false, iv: null };
+    timers[n].running = true;
+    timers[n].iv = setInterval(function() {
+        timers[n].s++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timers[n].s);
+    }, 1000);
+}
+function timerStop(n) {
+    if (!timers[n] || !timers[n].running) return;
+    clearInterval(timers[n].iv); timers[n].running = false;
+    var key = 'best1052G_' + n;
+    var best = parseInt(localStorage.getItem(key) || '9999');
+    if (timers[n].s < best) {
+        localStorage.setItem(key, timers[n].s);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timers[n].s);
+    }
+}
+function resetTimer(n) {
+    if (timers[n]) { clearInterval(timers[n].iv); timers[n] = { s: 0, running: false, iv: null }; }
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+function loadBestTimes() {
+    [3, 4].forEach(function(n) {
+        var best = localStorage.getItem('best1052G_' + n);
+        if (best) { var el = document.getElementById('best-' + n); if (el) el.textContent = fmtTime(parseInt(best)); }
+    });
+}
+
+// ─── MC Quiz (Tab 0) ───────────────────────────────────────────────────────
+var MC_DATA = [
+    { q: '„Goethes Faust" — welche Genitiv-Funktion?', opts: ['Urheberschaft', 'Besitz', 'Anteil', 'Eigenschaft'], correct: 0 },
+    { q: '„die Hälfte des Geldes" — welche Funktion?', opts: ['Ziel einer Handlung', 'Anteil', 'Besitz', 'Zugehörigkeit'], correct: 1 },
+    { q: '„die Tasche meiner Schwester" — welche Funktion?', opts: ['Urheberschaft', 'Eigenschaft', 'Besitz', 'Anteil'], correct: 2 },
+    { q: '„die Bücher der Bibliothek" — welche Funktion?', opts: ['Besitz', 'Anteil', 'Urheberschaft', 'Zugehörigkeit'], correct: 3 },
+    { q: 'Wie lautet der Genitiv von „der Freund"?', opts: ['dem Freund', 'den Freund', 'des Freundes', 'der Freundes'], correct: 2 },
+];
+
+function initMcQuiz() {
+    var c = document.getElementById('mcContainer0');
+    c.innerHTML = '';
+    MC_DATA.forEach(function(item) {
+        var ex = document.createElement('div');
+        ex.className = 'mc-exercise';
+        var q = document.createElement('div');
+        q.className = 'mc-question'; q.textContent = item.q;
+        ex.appendChild(q);
+        var opts = document.createElement('div');
+        opts.className = 'mc-opts';
+        item.opts.forEach(function(opt, i) {
+            var btn = document.createElement('button');
+            btn.className = 'mc-opt'; btn.textContent = opt;
+            btn.addEventListener('click', function() {
+                if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return;
+                if (i === item.correct) { btn.classList.add('correct'); }
+                else {
+                    btn.classList.add('wrong');
+                    opts.querySelectorAll('.mc-opt')[item.correct].classList.add('correct');
+                }
+            });
+            opts.appendChild(btn);
+        });
+        ex.appendChild(opts);
+        c.appendChild(ex);
+    });
+}
+
+// ─── Lückentext live check ─────────────────────────────────────────────────
+function setupLiveCheck(selector) {
+    document.querySelectorAll(selector).forEach(function(inp) {
+        inp.addEventListener('input', function() {
+            var ans = inp.dataset.ans;
+            var val = inp.value.trim();
+            inp.classList.remove('ok', 'no');
+            if (!val) return;
+            // case-insensitive for Genitiv forms
+            if (val.toLowerCase() === ans.toLowerCase()) { inp.classList.add('ok'); return; }
+            if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) return;
+            inp.classList.add('no');
+        });
+    });
+}
+
+// ─── Satzbau data ──────────────────────────────────────────────────────────
+var satzbauData = [
+    {
+        parts: ['die', 'Tasche', 'meiner', 'Schwester', 'ist', 'sehr', 'groß'],
+        valid: [['die', 'Tasche', 'meiner', 'Schwester', 'ist', 'sehr', 'groß']],
+        punct: '.'
+    },
+    {
+        parts: ['wegen', 'des', 'Unfalls', 'verspätete', 'ich', 'mich'],
+        valid: [['wegen', 'des', 'Unfalls', 'verspätete', 'ich', 'mich']],
+        punct: '.'
+    },
+    {
+        parts: ['trotz', 'des', 'Geldmangels', 'kaufte', 'er', 'ein', 'teures', 'Handy'],
+        valid: [['trotz', 'des', 'Geldmangels', 'kaufte', 'er', 'ein', 'teures', 'Handy']],
+        punct: '.'
+    },
+    {
+        parts: ['innerhalb', 'der', 'Stadt', 'darf', 'man', 'nicht', 'schnell', 'fahren'],
+        valid: [['innerhalb', 'der', 'Stadt', 'darf', 'man', 'nicht', 'schnell', 'fahren']],
+        punct: '.'
+    },
+    {
+        parts: ['er', 'wird', 'des', 'Diebstahls', 'angeklagt'],
+        valid: [['er', 'wird', 'des', 'Diebstahls', 'angeklagt']],
+        punct: '.'
+    }
+];
+
+// ─── Satzbau engine ────────────────────────────────────────────────────────
+var sbDragged = null;
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) { c = document.createElement('div'); c.id = 'sb-insert-cursor'; c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;'; }
+    return c;
+}
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) { var r = chips[i].getBoundingClientRect(); if (clientX < r.left + r.width / 2) return chips[i]; }
+    return null;
+}
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+function sbUpdateCapitalization(row) {
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        c.textContent = isProper ? orig : (i === 0 ? sbCapitalize(orig) : orig);
+    });
+}
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip'; chip.textContent = word; chip.dataset.orig = word; chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) { sbDragged = chip; timerAutoStart(3); e.dataTransfer.setData('text/plain', ''); setTimeout(function() { chip.style.opacity = '0.4'; }, 0); });
+    chip.addEventListener('dragend', function() { chip.style.opacity = ''; sbDragged = null; var c = document.getElementById('sb-insert-cursor'); if (c && c.parentNode) c.parentNode.removeChild(c); });
+    return chip;
+}
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); if (!sbDragged) return; var cursor = getSbCursor(); var before = getSbInsertPos(zone, e.clientX); if (before) zone.insertBefore(cursor, before); else zone.appendChild(cursor); });
+    zone.addEventListener('dragleave', function(e) { if (!zone.contains(e.relatedTarget)) { var c = document.getElementById('sb-insert-cursor'); if (c && c.parentNode === zone) zone.removeChild(c); } });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault(); if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) { zone.insertBefore(sbDragged, cursor); zone.removeChild(cursor); } else { zone.appendChild(sbDragged); }
+        sbDragged = null;
+        sbUpdateCapitalization(document.getElementById('sb-row-' + idx));
+        sbCheckAuto(idx);
+    });
+}
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) { return JSON.stringify(v) === JSON.stringify(order); });
+    chips.forEach(function(c) { c.classList.remove('correct', 'incorrect'); c.classList.add(ok ? 'correct' : 'incorrect'); });
+    var ex = row.querySelector('.sb-punkt'); if (ex) ex.parentNode.removeChild(ex);
+    if (ok) { var p = document.createElement('span'); p.className = 'sb-punkt'; p.textContent = satzbauData[idx].punct || '.'; row.appendChild(p); }
+    return ok;
+}
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) { row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); }); row.classList.remove('correct', 'incorrect'); fb.textContent = ''; return; }
+    setTimeout(function() {
+        timerAutoStart(3);
+        var ok = sbColorRow(idx);
+        if (ok) { row.classList.add('correct'); row.classList.remove('incorrect'); fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Korrekt!'; sbCheckAllDone(); }
+        else { row.classList.add('incorrect'); row.classList.remove('correct'); fb.className = 'satzbau-feedback incorrect'; fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!'; }
+    }, 500);
+}
+function sbCheckAllDone() {
+    if (satzbauData.every(function(_, i) { var r = document.getElementById('sb-row-' + i); return r && r.classList.contains('correct'); })) timerStop(3);
+}
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx); var row = document.getElementById('sb-row-' + idx); var fb = document.getElementById('sb-fb-' + idx);
+    var allChips = {}; Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; }); Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild); while (row.firstChild) row.removeChild(row.firstChild);
+    satzbauData[idx].valid[0].forEach(function(word, i) { var chip = allChips[word]; if (chip) { chip.textContent = (i === 0) ? sbCapitalize(word) : word; chip.classList.remove('correct', 'incorrect'); row.appendChild(chip); } });
+    fb.textContent = ''; setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+function sbShowAllSolutions() { satzbauData.forEach(function(_, i) { sbShowSolution(i); }); }
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx); var row = document.getElementById('sb-row-' + idx); var fb = document.getElementById('sb-fb-' + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild); while (row.firstChild) row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect'); fb.textContent = ''; fb.className = 'satzbau-feedback';
+    var ex = row.querySelector('.sb-punkt'); if (ex) ex.parentNode.removeChild(ex);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp; }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer'); container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div'); item.className = 'satzbau-item';
+        var bank = document.createElement('div'); bank.className = 'chips-container'; bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div'); row.className = 'sentence-builder'; row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div'); fb.className = 'satzbau-feedback'; fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp; }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+        sbRegisterZone(bank, idx); sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div'); btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+        var sb = document.createElement('button'); sb.className = 'btn'; sb.textContent = 'Lösen'; sb.setAttribute('data-idx', idx);
+        sb.addEventListener('click', function() { sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var rb = document.createElement('button'); rb.className = 'btn'; rb.textContent = '↺ Neustart'; rb.setAttribute('data-idx', idx);
+        rb.addEventListener('click', function() { sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(sb); btnRow.appendChild(rb);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+function resetSatzbau() { initSatzbau(); }
+
+// ─── Wortschatz data ───────────────────────────────────────────────────────
+var WS_DATA = [
+    { type:'n', en:'📚 genitive (grammar case)', artikel:'der', de:'Genitiv', plural:'–' },
+    { type:'n', en:'⚖️ accusation / charge', artikel:'die', de:'Anklage', plural:'Anklagen' },
+    { type:'n', en:'📌 preposition', artikel:'die', de:'Präposition', plural:'Präpositionen' },
+    { type:'n', en:'👤 possessive article', artikel:'der', de:'Possessivartikel', plural:'Possessivartikel' },
+    { type:'n', en:'🏠 ownership / possession', artikel:'der', de:'Besitz', plural:'–' },
+    { type:'n', en:'✍️ authorship', artikel:'die', de:'Urheberschaft', plural:'–' },
+    { type:'p', en:'🤔 instead of', de:'anstelle / statt' },
+    { type:'p', en:'🌍 outside of', de:'außerhalb' },
+    { type:'p', en:'🎯 because of / due to', de:'aufgrund' },
+    { type:'p', en:'⏰ despite / in spite of', de:'trotz' },
+    { type:'p', en:'📅 during', de:'während' },
+    { type:'p', en:'🔍 to accuse (sb. of sth.)', de:'beschuldigen' },
+];
+
+function initWs() {
+    var c = document.getElementById('wsContainer'); c.innerHTML = '';
+    WS_DATA.forEach(function(item) {
+        var row = document.createElement('div'); row.className = 'ws-item';
+        var prompt = document.createElement('div'); prompt.className = 'ws-prompt'; prompt.textContent = item.en;
+        row.appendChild(prompt);
+        var fields = document.createElement('div'); fields.className = 'ws-fields';
+        if (item.type === 'n') {
+            var ai = document.createElement('input'); ai.className = 'ws-inp art'; ai.type = 'text'; ai.placeholder = 'Artikel'; ai.dataset.ans = item.artikel; ai.dataset.field = 'art';
+            ai.oninput = function() { wsCheck(this); timerAutoStart(4); checkWsAllDone(); };
+            fields.appendChild(ai);
+            var wi = document.createElement('input'); wi.className = 'ws-inp wort'; wi.type = 'text'; wi.placeholder = 'Deutsch'; wi.dataset.ans = item.de; wi.dataset.field = 'word';
+            wi.oninput = function() { wsCheck(this); timerAutoStart(4); checkWsAllDone(); };
+            fields.appendChild(wi);
+            var pi = document.createElement('input'); pi.className = 'ws-inp plural'; pi.type = 'text'; pi.placeholder = 'Plural'; pi.dataset.ans = item.plural; pi.dataset.field = 'plural';
+            if (item.plural === '–') { pi.value = '–'; pi.disabled = true; pi.classList.add('ok'); pi.style.opacity = '0.6'; }
+            else { pi.oninput = function() { wsCheck(this); timerAutoStart(4); checkWsAllDone(); }; }
+            fields.appendChild(pi);
+        } else {
+            var inp = document.createElement('input'); inp.className = 'ws-inp wort'; inp.type = 'text'; inp.placeholder = 'Deutsch'; inp.style.width = '200px'; inp.dataset.ans = item.de; inp.dataset.field = 'word';
+            inp.oninput = function() { wsCheck(this); timerAutoStart(4); checkWsAllDone(); };
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields); c.appendChild(row);
+    });
+}
+function wsCheck(inp) {
+    var user = inp.value; var answer = inp.dataset.ans; var field = inp.dataset.field;
+    inp.classList.remove('ok', 'no');
+    if (!user) return;
+    var cmpUser = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('ok'); return; }
+    if (cmpAnswer.indexOf(cmpUser) === 0) return;
+    inp.classList.add('no');
+}
+function checkWsAllDone() {
+    var inputs = document.querySelectorAll('#sec-4 .ws-inp');
+    if (inputs.length > 0 && Array.from(inputs).every(function(i) { return i.disabled || i.classList.contains('ok'); })) timerStop(4);
+}
+function showWsLoesung() {
+    timerStop(4);
+    document.querySelectorAll('#sec-4 .ws-inp').forEach(function(inp) { inp.value = inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no'); });
+}
+function resetWs() {
+    document.querySelectorAll('#sec-4 .ws-inp').forEach(function(inp) { if (!inp.disabled) { inp.value = ''; inp.classList.remove('ok', 'no'); } });
+}
+
+// ─── Init ──────────────────────────────────────────────────────────────────
+initMcQuiz();
+initSatzbau();
+initWs();
+setupLiveCheck('#sec-1 .blank');
+setupLiveCheck('#sec-2 .blank');
+loadBestTimes();
+</script>
+</body>
+</html>

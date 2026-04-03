@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Der beste Ort zum Leben – Sprechen B1.1</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.section-content { padding: 28px 30px; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 6px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.timer-display span.current-time { color: #667eea; font-weight: 600; }
+.timer-display span.best-time { color: #f39c12; font-weight: 600; }
+
+/* ===== Aussprache Tab ===== */
+.ausspache-section { margin-bottom: 28px; }
+.ausspache-section h3 { font-size: 1.1em; font-weight: 700; color: #764ba2; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e8e0ff; }
+.regel-box { background: #f0ecff; border-left: 4px solid #764ba2; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 14px; font-size: 0.92em; color: #333; line-height: 1.7; }
+.regel-box strong { color: #764ba2; }
+.wort-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.wort-card { background: white; border: 2px solid #c5cae9; border-radius: 8px; padding: 10px 18px; font-size: 0.95em; font-weight: 600; color: #444; cursor: default; }
+.wort-card .laut { font-size: 0.75em; color: #667eea; font-weight: 700; margin-left: 6px; }
+.stimmhaft { border-color: #764ba2; background: #f5f0ff; }
+.stimmlos { border-color: #27ae60; background: #eefaf5; }
+.eszett { border-color: #e67e22; background: #fff5eb; }
+.stsp { border-color: #2980b9; background: #eaf4fb; }
+
+/* Sortierübung */
+.sort-container { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-top: 16px; }
+.sort-title { font-weight: 700; color: #444; margin-bottom: 14px; font-size: 0.95em; }
+.word-pool { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: white; border: 2px dashed #c5cae9; border-radius: 8px; min-height: 56px; margin-bottom: 16px; }
+.sort-word { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: all 0.2s; user-select: none; }
+.sort-word.placed-haft { border-color: #764ba2; background: #f5f0ff; color: #764ba2; }
+.sort-word.placed-los { border-color: #27ae60; background: #eefaf5; color: #27ae60; }
+.sort-word.correct-final { background: #27ae60; border-color: #27ae60; color: white; }
+.sort-word.wrong-final { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sort-bins { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sort-bin { border-radius: 10px; padding: 12px; min-height: 80px; }
+.sort-bin.haft-bin { background: #f5f0ff; border: 2px solid #764ba2; }
+.sort-bin.los-bin { background: #eefaf5; border: 2px solid #27ae60; }
+.sort-bin-label { font-weight: 700; font-size: 0.85em; margin-bottom: 8px; }
+.sort-bin.haft-bin .sort-bin-label { color: #764ba2; }
+.sort-bin.los-bin .sort-bin-label { color: #27ae60; }
+.sort-bin-words { display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; }
+
+/* ===== Zungenbrecher Tab ===== */
+.zungenbrecher-grid { display: grid; gap: 14px; }
+.zb-card { background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 16px 20px; }
+.zb-card .zb-text { font-family: Georgia, serif; font-size: 1.1em; line-height: 1.8; color: #1a1a1a; font-style: italic; }
+.zb-card .zb-hint { font-size: 0.8em; color: #888; margin-top: 6px; }
+.zb-card.sz-card { border-color: #764ba2; }
+.zb-card.ss-card { border-color: #27ae60; }
+.zb-card.stsp-card { border-color: #2980b9; }
+.zb-tip { background: #fff8e1; border-left: 4px solid #f39c12; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 16px; font-size: 0.88em; color: #555; line-height: 1.6; }
+
+/* ===== Vokabeln Tab ===== */
+.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 160px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.vocab-inputs input.art { width: 70px; }
+.vocab-inputs input.wort { width: 160px; }
+.vocab-inputs input.plural { width: 150px; }
+.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
+.vocab-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ===== Diskussion Tab ===== */
+.disk-section { margin-bottom: 28px; }
+.disk-section h3 { font-size: 1.05em; font-weight: 700; color: #764ba2; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e8e0ff; }
+.vergleich-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.vergleich-karte { border-radius: 10px; padding: 18px; }
+.vergleich-karte.stadt-karte { background: #eaf4fb; border: 2px solid #2980b9; }
+.vergleich-karte.land-karte { background: #eefaf5; border: 2px solid #27ae60; }
+.vergleich-karte h4 { font-size: 1.05em; font-weight: 700; margin-bottom: 12px; }
+.vergleich-karte.stadt-karte h4 { color: #2980b9; }
+.vergleich-karte.land-karte h4 { color: #27ae60; }
+.vergleich-karte ul { padding-left: 18px; }
+.vergleich-karte ul li { margin-bottom: 6px; font-size: 0.9em; line-height: 1.5; color: #333; }
+.redemittel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.redemittel-karte { background: #f0ecff; border-radius: 8px; padding: 12px 16px; font-size: 0.88em; color: #444; line-height: 1.5; border-left: 3px solid #764ba2; }
+.redemittel-karte strong { color: #764ba2; display: block; margin-bottom: 4px; }
+.frage-liste { list-style: none; padding: 0; }
+.frage-liste li { background: #f8f9ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; font-size: 0.92em; color: #444; display: flex; align-items: flex-start; gap: 10px; }
+.frage-liste li::before { content: '🗣️'; flex-shrink: 0; }
+
+/* ===== Satzbau Tab ===== */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.satzbau-item { margin-bottom: 20px; }
+
+/* Timer-Bar */
+.timer-bar { display:flex; align-items:center; gap:12px; background:white; border-radius:10px; padding:10px 16px; margin-bottom:16px; box-shadow:0 2px 6px rgba(0,0,0,0.07); font-size:0.85rem; color:#666; }
+.timer-display2 { font-weight:700; color:#667eea; font-size:1rem; }
+.best-display2 { color:#f39c12; font-weight:600; }
+.btn-row2 { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid #eee; }
+.btn-row2 button { background:none; border:1px solid #c0b0e8; border-radius:16px; padding:5px 16px; cursor:pointer; font-size:.88rem; color:#5a3e9e; transition:background .2s; }
+.btn-row2 button:hover { background:#f0edf8; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .vergleich-grid { grid-template-columns: 1fr; }
+    .redemittel-grid { grid-template-columns: 1fr; }
+    .vocab-container { grid-template-columns: 1fr; }
+    .sort-bins { grid-template-columns: 1fr; }
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Der beste Ort zum Leben</h1>
+        <p style="font-family: Georgia, serif;">B1.1 – Lektion 1058S &nbsp;|&nbsp; Sprechen &amp; Aussprache</p>
+        <div class="big-emoji">🏡</div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔊</span><span class="nav-label">Aussprache</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">🗣️</span><span class="nav-label">Zungenbrecher</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">📚</span><span class="nav-label">Vokabeln</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">💬</span><span class="nav-label">Diskussion</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    </div>
+
+    <!-- ===== TAB 0: AUSSPRACHE ===== -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3769120/pexels-photo-3769120.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Aussprache">
+        <div class="section-content">
+            <div class="section-title">🔊 Das s im Deutschen</div>
+            <div class="section-sub">Wann ist das s stimmhaft, wann stimmlos? Und wann schreibt man ss oder ß?</div>
+
+            <div class="ausspache-section">
+                <h3>1. Stimmhaftes s [z]</h3>
+                <div class="regel-box">
+                    Das s klingt wie ein <strong>weiches z</strong> (stimmhaft) in diesen Positionen:<br>
+                    • <strong>Am Wortanfang vor Vokal:</strong> Salz, sehen, segeln, Sonne<br>
+                    • <strong>Zwischen zwei Vokalen:</strong> Rose, Vase, reisen, lesen<br><br>
+                    <em>Tipp: Leg die Hand auf die Kehle — bei stimmhaftem s spürst du eine Vibration.</em>
+                </div>
+                <div class="wort-grid">
+                    <div class="wort-card stimmhaft">Salz <span class="laut">[z]</span></div>
+                    <div class="wort-card stimmhaft">segeln <span class="laut">[z]</span></div>
+                    <div class="wort-card stimmhaft">Rose <span class="laut">[z]</span></div>
+                    <div class="wort-card stimmhaft">Vase <span class="laut">[z]</span></div>
+                    <div class="wort-card stimmhaft">reisen <span class="laut">[z]</span></div>
+                    <div class="wort-card stimmhaft">lesen <span class="laut">[z]</span></div>
+                </div>
+            </div>
+
+            <div class="ausspache-section">
+                <h3>2. Stimmloses s [s]</h3>
+                <div class="regel-box">
+                    Das s klingt wie ein <strong>scharfes s</strong> (stimmlos) in diesen Positionen:<br>
+                    • <strong>Am Wortende:</strong> Haus, Glas, Fluss, Genuss<br>
+                    • <strong>ss nach kurzem Vokal:</strong> essen, wissen, müssen, lassen<br>
+                    • <strong>ß nach langem Vokal oder Doppelvokal:</strong> Straße, Füße, groß, heißen
+                </div>
+                <div class="wort-grid">
+                    <div class="wort-card stimmlos">Haus <span class="laut">[s]</span></div>
+                    <div class="wort-card stimmlos">essen <span class="laut">[s]</span></div>
+                    <div class="wort-card stimmlos">Straße <span class="laut">[s]</span></div>
+                    <div class="wort-card stimmlos">groß <span class="laut">[s]</span></div>
+                    <div class="wort-card stimmlos">wissen <span class="laut">[s]</span></div>
+                    <div class="wort-card stimmlos">heißen <span class="laut">[s]</span></div>
+                </div>
+            </div>
+
+            <div class="ausspache-section">
+                <h3>3. ss oder ß?</h3>
+                <div class="regel-box">
+                    <strong>Regel:</strong><br>
+                    • <strong>ss</strong> nach <em>kurzem</em> Vokal: essen (kurzes e), müssen (kurzes ü), lassen (kurzes a)<br>
+                    • <strong>ß</strong> nach <em>langem</em> Vokal oder Doppelvokal: Straße (langes a), heißen (ei), groß (langes o)<br><br>
+                    <strong>Verb → Partizip II → Nomen:</strong><br>
+                    genießen → genossen → der Genuss<br>
+                    reißen → gerissen → der Riss<br>
+                    fließen → geflossen → der Fluss
+                </div>
+            </div>
+
+            <div class="ausspache-section">
+                <h3>4. st und sp am Wort-/Silbenanfang</h3>
+                <div class="regel-box">
+                    Am <strong>Wort- oder Silbenanfang</strong> spricht man st als <strong>[scht]</strong> und sp als <strong>[schp]</strong>:<br>
+                    • Stadt → [schtat], sprechen → [schprächen], Stein → [schtain]<br>
+                    • Aber: Fenster, Brust (st <em>nicht</em> am Silbenanfang → bleibt [st])
+                </div>
+                <div class="wort-grid">
+                    <div class="wort-card stsp">Stadt <span class="laut">[scht]</span></div>
+                    <div class="wort-card stsp">sprechen <span class="laut">[schp]</span></div>
+                    <div class="wort-card stsp">Stein <span class="laut">[scht]</span></div>
+                    <div class="wort-card stsp">spielen <span class="laut">[schp]</span></div>
+                    <div class="wort-card stsp">Stunde <span class="laut">[scht]</span></div>
+                    <div class="wort-card stsp">spät <span class="laut">[schp]</span></div>
+                </div>
+            </div>
+
+            <div class="sort-container">
+                <div class="sort-title">Übung: Sortiere die Wörter — stimmhaft [z] oder stimmlos [s]?</div>
+                <div class="word-pool" id="sortPool0">
+                    <!-- Befüllt per JS -->
+                </div>
+                <div class="sort-bins">
+                    <div class="sort-bin haft-bin">
+                        <div class="sort-bin-label">Stimmhaft [z] — wie in Rose</div>
+                        <div class="sort-bin-words" id="sortBin0-haft"></div>
+                    </div>
+                    <div class="sort-bin los-bin">
+                        <div class="sort-bin-label">Stimmlos [s] — wie in Haus</div>
+                        <div class="sort-bin-words" id="sortBin0-los"></div>
+                    </div>
+                </div>
+                <div style="margin-top:12px; text-align:right;">
+                    <button class="btn" onclick="resetSort0()">↺ Neustart</button>
+                    <button class="btn" onclick="checkSort0()">Prüfen ✓</button>
+                </div>
+                <div id="sortFb0" style="margin-top:10px; font-size:0.9em; font-weight:600; min-height:1.2em;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TAB 1: ZUNGENBRECHER ===== -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/5212317/pexels-photo-5212317.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Zungenbrecher">
+        <div class="section-content">
+            <div class="section-title">🗣️ Zungenbrecher</div>
+            <div class="section-sub">Sprich die Zungenbrecher zuerst langsam — dann immer schneller. Achte auf die s-Laute!</div>
+
+            <div class="zungenbrecher-grid">
+                <div class="zb-card sz-card">
+                    <div class="zb-text">„Schneiders Schere schneidet scharf, scharf schneidet Schneiders Schere."</div>
+                    <div class="zb-hint">Fokus: sch + ei + ar — stimmlose Laute am Wortanfang</div>
+                </div>
+                <div class="zb-card ss-card">
+                    <div class="zb-text">„Wenn Fliegen hinter Fliegen fliegen, fliegen Fliegen Fliegen nach."</div>
+                    <div class="zb-hint">Fokus: fl + ie + ss-Wörter — Unterschied lang/kurz</div>
+                </div>
+                <div class="zb-card stsp-card">
+                    <div class="zb-text">„Auf dem Rasen rasen Hasen, auf dem Besen reisen Riesen."</div>
+                    <div class="zb-hint">Fokus: stimmhaftes s in rasen/Hasen/reisen/Riesen — zwischen Vokalen</div>
+                </div>
+                <div class="zb-card sz-card">
+                    <div class="zb-text">„Zwischen zwei Zwetschgenzweigen sitzen zwei zwitschernde Schwalben."</div>
+                    <div class="zb-hint">Fokus: zw + tz + sch — stimmloses s in verschiedenen Verbindungen</div>
+                </div>
+                <div class="zb-card stsp-card">
+                    <div class="zb-text">„Sprechen Sie schnell: steter Stein schleift still, stilles Wasser spült Steine."</div>
+                    <div class="zb-hint">Fokus: st → [scht] und sp → [schp] am Wortanfang</div>
+                </div>
+            </div>
+
+            <div class="zb-tip">
+                💡 <strong>Lerntipp:</strong> Nimm dich beim Sprechen auf (z.B. mit dem Handy). Vergleiche deine Aussprache mit der Originalaufnahme. Stimmhaftes [z] klingt wie „s" auf Englisch in „rose". Stimmloses [s] klingt wie „s" in „sun".
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TAB 2: VOKABELN ===== -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1438248/pexels-photo-1438248.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Stadt und Land Vokabeln">
+        <div class="section-content">
+            <div class="section-title">📚 Vokabeln — Stadt und Land</div>
+            <div class="section-sub">Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
+
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showVocabLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetVocab()">↺ Neustart</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">⏱ <span id="timer-2">0:00</span></span>
+                    <span class="best-time">🏆 <span id="best-2">–</span></span>
+                </div>
+            </div>
+
+            <div class="vocab-container" id="vocabContainer"></div>
+        </div>
+    </div>
+
+    <!-- ===== TAB 3: DISKUSSION ===== -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Bester Ort zum Leben">
+        <div class="section-content">
+            <div class="section-title">💬 Stadt oder Land — der beste Ort zum Leben?</div>
+            <div class="section-sub">Diskutiere mit deinen Mitlernenden oder bereite deine Argumente vor.</div>
+
+            <div class="disk-section">
+                <h3>Vor- und Nachteile im Überblick</h3>
+                <div class="vergleich-grid">
+                    <div class="vergleich-karte stadt-karte">
+                        <h4>🏙️ In der Stadt</h4>
+                        <ul>
+                            <li>✅ Viele Arbeitsplätze und Karrieremöglichkeiten</li>
+                            <li>✅ Gute Infrastruktur und Verkehr (ÖPNV)</li>
+                            <li>✅ Breites Kulturangebot (Theater, Kinos, Museen)</li>
+                            <li>✅ Viele Einkaufsmöglichkeiten und Restaurants</li>
+                            <li>❌ Hohe Mietpreise und Lebenshaltungskosten</li>
+                            <li>❌ Lärm, Stress und Luftverschmutzung</li>
+                            <li>❌ Weniger Natur und Grünflächen</li>
+                            <li>❌ Höhere Kriminalitätsrate</li>
+                        </ul>
+                    </div>
+                    <div class="vergleich-karte land-karte">
+                        <h4>🌿 Auf dem Land</h4>
+                        <ul>
+                            <li>✅ Günstige Mieten und viel Platz</li>
+                            <li>✅ Frische Luft, Natur und Ruhe</li>
+                            <li>✅ Enge Gemeinschaft und Zusammenhalt</li>
+                            <li>✅ Niedrige Kriminalitätsrate</li>
+                            <li>❌ Wenige Arbeitsplätze (Arbeitslosigkeit)</li>
+                            <li>❌ Schlechte Infrastruktur — kein schnelles Internet</li>
+                            <li>❌ Begrenzte Einkaufs- und Freizeitangebote</li>
+                            <li>❌ Landflucht — viele junge Menschen ziehen weg</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="disk-section">
+                <h3>Redemittel für die Diskussion</h3>
+                <div class="redemittel-grid">
+                    <div class="redemittel-karte">
+                        <strong>Meinung äußern</strong>
+                        Ich finde, dass … / Meiner Meinung nach … / Ich bin der Meinung, dass …
+                    </div>
+                    <div class="redemittel-karte">
+                        <strong>Zustimmen</strong>
+                        Das stimmt. / Genau. / Da bin ich ganz deiner Meinung. / Du hast recht, dass …
+                    </div>
+                    <div class="redemittel-karte">
+                        <strong>Widersprechen</strong>
+                        Das sehe ich anders. / Ich bin anderer Meinung. / Aber man muss bedenken, dass …
+                    </div>
+                    <div class="redemittel-karte">
+                        <strong>Abwägen</strong>
+                        Einerseits … andererseits … / Zwar … aber … / Es hängt davon ab, ob …
+                    </div>
+                    <div class="redemittel-karte">
+                        <strong>Begründen</strong>
+                        … weil / … da / … denn … / Der Grund dafür ist, dass …
+                    </div>
+                    <div class="redemittel-karte">
+                        <strong>Beispiele nennen</strong>
+                        Zum Beispiel … / Wie man an … sieht … / Das zeigt sich daran, dass …
+                    </div>
+                </div>
+            </div>
+
+            <div class="disk-section">
+                <h3>Diskussionsfragen</h3>
+                <ul class="frage-liste">
+                    <li>Wo möchtest du am liebsten leben — in der Stadt oder auf dem Land? Warum?</li>
+                    <li>Was sind für dich die wichtigsten Faktoren bei der Wohnortwahl?</li>
+                    <li>Warum verlassen viele junge Menschen das Land und ziehen in die Stadt? (Landflucht)</li>
+                    <li>Wie kann man das Leben auf dem Land attraktiver machen?</li>
+                    <li>Glaubst du, dass das Internet die Unterschiede zwischen Stadt und Land verringert?</li>
+                    <li>Hast du selbst schon in verschiedenen Orten gelebt? Was waren deine Erfahrungen?</li>
+                </ul>
+            </div>
+
+            <div class="hilfe-box">
+                <strong>Heimweh und Fernweh:</strong> Wenn jemand weit weg von zuhause lebt, kann er Heimweh bekommen — er vermisst die Heimat, die Familie und die vertraute Umgebung. Manche Menschen haben aber auch Fernweh — sie wollen die Welt entdecken und an neuen Orten leben. Was fühlst du eher — Heimweh oder Fernweh?
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TAB 4: SATZBAU ===== -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3771089/pexels-photo-3771089.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Stadtleben Satzbau">
+        <div class="section-content">
+            <div class="section-title">🧩 Satzbau</div>
+            <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge!</div>
+
+            <div class="timer-bar">
+                <span>⏱ <span class="timer-display2" id="timer-4">0:00</span></span>
+                <span>🏆 <span class="best-display2" id="best-4">–</span></span>
+            </div>
+            <div class="btn-row2">
+                <button onclick="timerReset(4)">↺ Neustart</button>
+                <button onclick="sbShowAllSolutions()">💡 Lösungen</button>
+            </div>
+
+            <div id="satzbauContainer" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+
+</div><!-- /container -->
+
+<style>
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+
+<script>
+var TIMER_PREFIX = 'best1058S';
+
+// ===== SORT-ÜBUNG (Tab 0) =====
+var sortData0 = [
+    { word: 'sehen', correct: 'haft' },
+    { word: 'reisen', correct: 'haft' },
+    { word: 'Sonne', correct: 'haft' },
+    { word: 'Vase', correct: 'haft' },
+    { word: 'Haus', correct: 'los' },
+    { word: 'essen', correct: 'los' },
+    { word: 'Straße', correct: 'los' },
+    { word: 'wissen', correct: 'los' }
+];
+var sortPlacements0 = {};
+
+function initSort0() {
+    sortPlacements0 = {};
+    var pool = document.getElementById('sortPool0');
+    var binHaft = document.getElementById('sortBin0-haft');
+    var binLos = document.getElementById('sortBin0-los');
+    pool.innerHTML = '';
+    binHaft.innerHTML = '';
+    binLos.innerHTML = '';
+    document.getElementById('sortFb0').textContent = '';
+    var shuffled = sortData0.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+    }
+    shuffled.forEach(function(item) {
+        var w = document.createElement('div');
+        w.className = 'sort-word';
+        w.textContent = item.word;
+        w.dataset.word = item.word;
+        w.onclick = function() { clickSort0(this); };
+        pool.appendChild(w);
+    });
+}
+
+function clickSort0(el) {
+    var word = el.dataset.word;
+    var binHaft = document.getElementById('sortBin0-haft');
+    var binLos = document.getElementById('sortBin0-los');
+    var pool = document.getElementById('sortPool0');
+    if (el.parentElement === pool) {
+        sortPlacements0[word] = 'haft';
+        el.classList.add('placed-haft');
+        el.classList.remove('placed-los');
+        binHaft.appendChild(el);
+    } else if (el.parentElement === binHaft) {
+        sortPlacements0[word] = 'los';
+        el.classList.add('placed-los');
+        el.classList.remove('placed-haft');
+        binLos.appendChild(el);
+    } else {
+        delete sortPlacements0[word];
+        el.classList.remove('placed-haft', 'placed-los');
+        pool.appendChild(el);
+    }
+}
+
+function checkSort0() {
+    var allOk = true;
+    sortData0.forEach(function(item) {
+        var placed = sortPlacements0[item.word];
+        var binHaft = document.getElementById('sortBin0-haft');
+        var binLos = document.getElementById('sortBin0-los');
+        var el = Array.from(binHaft.children).find(function(c) { return c.dataset.word === item.word; })
+               || Array.from(binLos.children).find(function(c) { return c.dataset.word === item.word; });
+        if (el) {
+            el.classList.remove('correct-final', 'wrong-final');
+            if (placed === item.correct) {
+                el.classList.add('correct-final');
+            } else {
+                el.classList.add('wrong-final');
+                allOk = false;
+            }
+        } else {
+            allOk = false;
+        }
+    });
+    var fb = document.getElementById('sortFb0');
+    fb.style.color = allOk ? '#27ae60' : '#e74c3c';
+    fb.textContent = allOk ? '✓ Perfekt! Alle Wörter richtig sortiert!' : '✗ Noch nicht ganz richtig. Prüfe die roten Wörter.';
+}
+
+function resetSort0() {
+    initSort0();
+}
+
+// ===== VOKABELN (Tab 2) =====
+var VOCAB_DATA = [
+    { type:'n', en:'the urban sprawl / growth of cities', artikel:'die', de:'Stadtentwicklung', plural:'–' },
+    { type:'n', en:'the residential area', artikel:'das', de:'Wohngebiet', plural:'Wohngebiete' },
+    { type:'n', en:'the infrastructure', artikel:'die', de:'Infrastruktur', plural:'–' },
+    { type:'n', en:'the public transport', artikel:'der', de:'Nahverkehr', plural:'–' },
+    { type:'n', en:'the rural exodus', artikel:'die', de:'Landflucht', plural:'–' },
+    { type:'n', en:'the air pollution', artikel:'die', de:'Luftverschmutzung', plural:'–' },
+    { type:'n', en:'the community / sense of belonging', artikel:'die', de:'Gemeinschaft', plural:'Gemeinschaften' },
+    { type:'n', en:'the noise', artikel:'der', de:'Lärm', plural:'–' },
+    { type:'v', en:'to commute / travel to work', de:'pendeln' },
+    { type:'v', en:'to move away / emigrate', de:'wegziehen' },
+    { type:'v', en:'to appreciate / value', de:'schätzen' },
+    { type:'v', en:'to get used to / adapt', de:'sich gewöhnen' }
+];
+
+var vocabTimerRunning2 = false, vocabTimerStart2 = 0, vocabTimerInterval2 = null;
+
+function fmtTime2(s) {
+    var m = Math.floor(s / 60), sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function startTimer2() {
+    if (vocabTimerRunning2) return;
+    vocabTimerRunning2 = true;
+    vocabTimerStart2 = Date.now();
+    vocabTimerInterval2 = setInterval(function() {
+        var elapsed = Math.floor((Date.now() - vocabTimerStart2) / 1000);
+        document.getElementById('timer-2').textContent = fmtTime2(elapsed);
+    }, 1000);
+}
+
+function stopTimer2() {
+    if (!vocabTimerRunning2) return;
+    vocabTimerRunning2 = false;
+    clearInterval(vocabTimerInterval2);
+    var elapsed = Math.floor((Date.now() - vocabTimerStart2) / 1000);
+    var key = TIMER_PREFIX + '-best-2';
+    var best = localStorage.getItem(key);
+    if (!best || elapsed < parseInt(best)) {
+        localStorage.setItem(key, elapsed);
+        document.getElementById('best-2').textContent = fmtTime2(elapsed);
+    }
+}
+
+function loadBestTime2() {
+    var key = TIMER_PREFIX + '-best-2';
+    var best = localStorage.getItem(key);
+    if (best) document.getElementById('best-2').textContent = fmtTime2(parseInt(best));
+}
+
+function initVocab() {
+    var container = document.getElementById('vocabContainer');
+    container.innerHTML = '';
+    VOCAB_DATA.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'vocab-item';
+        var enDiv = document.createElement('div');
+        enDiv.className = 'vocab-en';
+        enDiv.textContent = item.en;
+        row.appendChild(enDiv);
+        var arrow = document.createElement('span');
+        arrow.className = 'vocab-arrow';
+        arrow.textContent = '→';
+        row.appendChild(arrow);
+        var inputs = document.createElement('div');
+        inputs.className = 'vocab-inputs';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'art';
+            artInp.placeholder = 'Artikel';
+            artInp.dataset.answer = item.artikel;
+            artInp.dataset.field = 'art';
+            artInp.oninput = function() { wsCheck(this); startTimer2(); checkVocabAllDone(); };
+            inputs.appendChild(artInp);
+            var wortInp = document.createElement('input');
+            wortInp.className = 'wort';
+            wortInp.placeholder = 'Deutsch';
+            wortInp.dataset.answer = item.de;
+            wortInp.dataset.field = 'word';
+            wortInp.oninput = function() { wsCheck(this); startTimer2(); checkVocabAllDone(); };
+            inputs.appendChild(wortInp);
+            var plInp = document.createElement('input');
+            plInp.className = 'plural';
+            plInp.placeholder = 'Plural';
+            plInp.dataset.answer = item.plural;
+            plInp.dataset.field = 'plural';
+            if (item.plural === '\u2013') {
+                plInp.value = '\u2013';
+                plInp.disabled = true;
+                plInp.classList.add('correct');
+                plInp.style.opacity = '0.6';
+                plInp.title = 'Dieses Wort hat keinen Plural';
+            } else {
+                plInp.oninput = function() { wsCheck(this); startTimer2(); checkVocabAllDone(); };
+            }
+            inputs.appendChild(plInp);
+        } else {
+            var vInp = document.createElement('input');
+            vInp.className = 'wort';
+            vInp.placeholder = 'Deutsch';
+            vInp.dataset.answer = item.de;
+            vInp.dataset.field = 'word';
+            vInp.oninput = function() { wsCheck(this); startTimer2(); checkVocabAllDone(); };
+            inputs.appendChild(vInp);
+        }
+        row.appendChild(inputs);
+        container.appendChild(row);
+    });
+}
+
+function wsCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) {
+        inp.classList.add('correct');
+    } else if (cmpAnswer.indexOf(cmpUser) === 0) {
+        // prefix match — neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkVocabAllDone() {
+    var inputs = document.querySelectorAll('#sec-2 .vocab-inputs input');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.disabled || i.classList.contains('correct');
+    });
+    if (allOk) stopTimer2();
+}
+
+function showVocabLoesung() {
+    stopTimer2();
+    document.querySelectorAll('#sec-2 .vocab-inputs input').forEach(function(inp) {
+        if (!inp.disabled) {
+            inp.value = inp.dataset.answer;
+            inp.classList.add('correct');
+            inp.classList.remove('wrong');
+        }
+    });
+}
+
+function resetVocab() {
+    vocabTimerRunning2 = false;
+    clearInterval(vocabTimerInterval2);
+    document.getElementById('timer-2').textContent = '0:00';
+    initVocab();
+}
+
+// ===== SATZBAU (Tab 4) =====
+var satzbauData = [
+    {
+        parts: ['ich', 'lebe', 'lieber', 'in', 'der', 'Stadt', ',', 'weil', 'es', 'viele', 'Arbeitsplätze', 'gibt'],
+        valid: [['ich', 'lebe', 'lieber', 'in', 'der', 'Stadt', ',', 'weil', 'es', 'viele', 'Arbeitsplätze', 'gibt']],
+        punct: '.'
+    },
+    {
+        parts: ['auf', 'dem', 'Land', 'ist', 'die', 'Luft', 'frischer', 'als', 'in', 'der', 'Stadt'],
+        valid: [['auf', 'dem', 'Land', 'ist', 'die', 'Luft', 'frischer', 'als', 'in', 'der', 'Stadt']],
+        punct: '.'
+    },
+    {
+        parts: ['viele', 'junge', 'Menschen', 'verlassen', 'das', 'Dorf', 'wegen', 'der', 'Landflucht'],
+        valid: [['viele', 'junge', 'Menschen', 'verlassen', 'das', 'Dorf', 'wegen', 'der', 'Landflucht']],
+        punct: '.'
+    },
+    {
+        parts: ['obwohl', 'die', 'Miete', 'hoch', 'ist', ',', 'wohnen', 'wir', 'gerne', 'in', 'München'],
+        valid: [['obwohl', 'die', 'Miete', 'hoch', 'ist', ',', 'wohnen', 'wir', 'gerne', 'in', 'München']],
+        punct: '.'
+    },
+    {
+        parts: ['einerseits', 'ist', 'das', 'Land', 'ruhig', ',', 'andererseits', 'fehlen', 'Freizeitmöglichkeiten'],
+        valid: [['einerseits', 'ist', 'das', 'Land', 'ruhig', ',', 'andererseits', 'fehlen', 'Freizeitmöglichkeiten']],
+        punct: '.'
+    },
+    {
+        parts: ['ich', 'habe', 'mich', 'an', 'das', 'Stadtleben', 'gewöhnt', ',', 'obwohl', 'ich', 'auf', 'dem', 'Land', 'aufgewachsen', 'bin'],
+        valid: [['ich', 'habe', 'mich', 'an', 'das', 'Stadtleben', 'gewöhnt', ',', 'obwohl', 'ich', 'auf', 'dem', 'Land', 'aufgewachsen', 'bin']],
+        punct: '.'
+    }
+];
+
+var sbDragged = null;
+var sbTimerRunning4 = false, sbTimerStart4 = 0, sbTimerInterval4 = null;
+
+function fmtTime4(s) {
+    var m = Math.floor(s / 60), sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function timerAutoStart(n) {
+    if (n !== 4) return;
+    if (sbTimerRunning4) return;
+    sbTimerRunning4 = true;
+    sbTimerStart4 = Date.now();
+    sbTimerInterval4 = setInterval(function() {
+        var elapsed = Math.floor((Date.now() - sbTimerStart4) / 1000);
+        document.getElementById('timer-4').textContent = fmtTime4(elapsed);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (n !== 4) return;
+    if (!sbTimerRunning4) return;
+    sbTimerRunning4 = false;
+    clearInterval(sbTimerInterval4);
+    var elapsed = Math.floor((Date.now() - sbTimerStart4) / 1000);
+    var key = TIMER_PREFIX + '-best-4';
+    var best = localStorage.getItem(key);
+    if (!best || elapsed < parseInt(best)) {
+        localStorage.setItem(key, elapsed);
+        document.getElementById('best-4').textContent = fmtTime4(elapsed);
+    }
+}
+
+function timerReset(n) {
+    if (n !== 4) return;
+    sbTimerRunning4 = false;
+    clearInterval(sbTimerInterval4);
+    document.getElementById('timer-4').textContent = '0:00';
+    initSatzbau();
+}
+
+function loadBestTime4() {
+    var key = TIMER_PREFIX + '-best-4';
+    var best = localStorage.getItem(key);
+    if (best) document.getElementById('best-4').textContent = fmtTime4(parseInt(best));
+}
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (orig === ',' || orig === ';') return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(4);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(4);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbShowAllSolutions() {
+    satzbauData.forEach(function(_, i) { sbShowSolution(i); });
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+// ===== TAB NAVIGATION =====
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) { b.classList.toggle('active', i === idx); });
+}
+
+// ===== INIT =====
+initSort0();
+initVocab();
+initSatzbau();
+loadBestTime2();
+loadBestTime4();
+</script>
+</body>
+</html>

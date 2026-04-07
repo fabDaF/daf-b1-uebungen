@@ -3,810 +3,1113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 – Reisen als Subkultur</title>
+<title>B1.1 – Lektion 2026R · Lesen</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; font-size: 16px; }
-  .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 6px 32px rgba(0,0,0,0.28); overflow: hidden; }
-  h1 { background: #667eea; color: #fff; text-align: center; padding: 20px 20px 14px; font-size: 1.3em; }
-  .subtitle { background: #667eea; color: #d9b3ff; text-align: center; padding: 0 20px 16px; font-size: 0.88em; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* NAV */
-  .nav { display: flex; flex-wrap: wrap; background: #f0e6ff; border-bottom: 2px solid #667eea; }
-  .nav button { flex: 1; min-width: 80px; padding: 10px 4px 8px; border: 1px solid #667eea; background: #f0e6ff; color: #667eea; font-size: 0.75em; font-weight: bold; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-  .nav button .nav-emoji { font-size: 1.3em; }
-  .nav button .nav-label { font-size: 0.85em; }
-  .nav button.active { background: #667eea; color: #fff; }
-  .nav button:hover:not(.active) { background: #d9b3ff; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
 
-  /* TAB */
-  .tab { display: none; padding: 26px; }
-  .tab.aktiv { display: block; }
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
 
-  /* BANNER */
-  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; display: block; }
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
 
-  /* TIMER-CONTROLS */
-  .timer-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 6px; }
-  .tc-buttons { display: flex; gap: 6px; }
-  .tc-buttons button { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-  .tc-buttons button:hover { background: #f0f0f0; color: #555; }
-  .tc-times { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
-  .timer-display { color: #667eea; font-weight: 700; }
-  .best-display { color: #f39c12; font-weight: 600; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header .subtitle, .header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
 
-  /* VORENTLASTUNG */
-  .vocab-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-  .vocab-card { border: 1.5px solid #d9b3ff; border-radius: 10px; padding: 14px; background: #faf5ff; }
-  .vocab-card .word { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 4px; }
-  .vocab-card .example { font-size: 0.87em; color: #555; font-style: italic; line-height: 1.5; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
 
-  /* WORTSCHATZ INTERACTIVE */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-  /* LESETEXT */
-  .story-text { max-width: 640px; margin: 0 auto; font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 1.85; color: #1a1a1a; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
-  .story-text h2 { font-size: 1.1em; color: #667eea; margin: 22px 0 10px; font-family: 'Segoe UI', Arial, sans-serif; }
-  .story-text p { margin-bottom: 14px; text-indent: 1.4em; }
-  .story-text p:first-of-type { text-indent: 0; }
-  .vocab-hl { background: #fff176; border-radius: 3px; padding: 0 2px; cursor: pointer; position: relative; }
-  .vocab-hl .tooltip { display: none; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #333; color: #fff; font-size: 0.78em; padding: 4px 8px; border-radius: 5px; white-space: nowrap; z-index: 10; pointer-events: none; font-family: 'Segoe UI', sans-serif; }
-  .vocab-hl:hover .tooltip { display: block; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+}
 
-  /* RICHTIG/FALSCH */
-  .rf-list { display: flex; flex-direction: column; gap: 12px; }
-  .rf-item { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 14px 16px; display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
-  .rf-item .rf-text { flex: 1; min-width: 200px; line-height: 1.6; font-size: 0.95em; }
-  .rf-btns { display: flex; gap: 8px; flex-shrink: 0; }
-  .rf-btn { padding: 6px 16px; border: 2px solid #667eea; border-radius: 6px; background: #fff; color: #667eea; font-weight: bold; cursor: pointer; font-size: 0.88em; transition: all 0.15s; }
-  .rf-btn:hover { background: #f0e6ff; }
-  .rf-btn.selected-correct { background: #28a745; border-color: #28a745; color: #fff; }
-  .rf-btn.selected-wrong { background: #dc3545; border-color: #dc3545; color: #fff; }
-  .rf-item.correct { background: #d4edda; border-color: #28a745; }
-  .rf-item.wrong { background: #f8d7da; border-color: #dc3545; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
 
-  /* LÜCKENTEXT */
-  .luecke-item { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
-  .luecke-item .sentence { line-height: 1.8; }
-  .luecke-input { border: none; border-bottom: 2px solid #667eea; background: transparent; font-size: 1em; padding: 2px 6px; min-width: 120px; outline: none; color: #222; transition: border-color 0.2s; }
-  .luecke-input.ok { border-color: #28a745; color: #28a745; }
-  .luecke-input.no { border-color: #dc3545; color: #dc3545; }
-  .luecke-item.correct { background: #d4edda; border-color: #28a745; }
-  .luecke-item.wrong { background: #f8d7da; border-color: #dc3545; }
-  .feedback-icon { font-size: 1.1em; margin-left: 6px; }
+.section { display: none; }
+.section.active { display: block; }
 
-  /* SATZBAU */
-  .sb-task { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
-  .sb-bank { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; border: 1.5px dashed #bbb; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
-  .sb-zone { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; border: 2px dashed #667eea; border-radius: 6px; padding: 8px; background: #faf5ff; }
-  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.88em; user-select: none; transition: opacity 0.15s; }
-  .chip:active { cursor: grabbing; opacity: 0.7; }
-  .sb-feedback { font-size: 0.9em; margin-top: 8px; font-weight: bold; min-height: 20px; }
-  .sb-feedback.ok { color: #28a745; }
-  .sb-feedback.err { color: #dc3545; }
+.tab-banner {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
 
-  /* VOKABEL-TRAINER */
-  .vt-card { background: linear-gradient(135deg, #667eea 0%, #9b59b6 100%); color: #fff; border-radius: 12px; padding: 28px 24px; text-align: center; margin-bottom: 20px; min-height: 120px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; }
-  .vt-card .vt-de { font-size: 1.3em; font-weight: bold; }
-  .vt-card .vt-en { font-size: 0.9em; opacity: 0.8; }
-  .vt-input-row { display: flex; gap: 10px; margin-bottom: 14px; }
-  .vt-input { flex: 1; padding: 10px 14px; border: 2px solid #d9b3ff; border-radius: 8px; font-size: 1em; outline: none; transition: border-color 0.2s; }
-  .vt-input.ok { border-color: #28a745; background: #d4edda; }
-  .vt-input.no { border-color: #dc3545; background: #f8d7da; }
-  .vt-nav { display: flex; gap: 10px; justify-content: center; }
-  .vt-btn { padding: 8px 20px; background: #667eea; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background 0.2s; }
-  .vt-btn:hover { background: #4a0080; }
-  .vt-progress { text-align: center; font-size: 0.85em; color: #888; margin-bottom: 14px; }
+.sec-inner {
+    padding: 26px;
+}
 
-  /* INFO/TIP BOXES */
-  .info-box { background: #f0e6ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.92em; line-height: 1.6; }
-  .info-box strong { color: #667eea; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
 
-  /* SECTION TITLE */
-  .section-title { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e0c4ff; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 
-  /* FOOTER */
-  footer { background: #f0e6ff; border-top: 1px solid #d9b3ff; text-align: center; padding: 12px; font-size: 0.78em; color: #888; }
-  footer a { color: #667eea; text-decoration: none; }
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text .dialog {
+    font-style: normal;
+    text-indent: 0;
+    padding-left: 1.1em;
+    border-left: 3px solid #667eea;
+    color: #2a2a6e;
+    margin-left: 0;
+}
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+
+.rf-list {
+    display: flex; flex-direction: column; gap: 8px;
+    max-width: 650px; margin-left: auto; margin-right: auto;
+}
+.rf-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; background: #f9f9f9; border-radius: 8px;
+    font-size: 0.95em; cursor: pointer; border: 1.5px solid #ddd;
+}
+.rf-item:hover { background: #f3e5f5; }
+.rf-btns { display: flex; gap: 6px; }
+.rf-btn {
+    padding: 4px 14px; border-radius: 14px; border: 1.5px solid #9b59b6;
+    background: #fff; color: #6c3483; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; }
+.rf-result.ok { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-title { font-size: 1.0em; color: #555; margin-bottom: 12px; font-weight: 600; max-width: 650px; margin-left: auto; margin-right: auto; }
+
+input.blank {
+  border: 2px solid #c5cae9; border-radius: 6px;
+  padding: 3px 8px; font-size: 0.9rem;
+  font-family: inherit; outline: none;
+  transition: border-color .2s, background .2s;
+  background: white; margin: 0 2px;
+}
+input.blank:focus { border-color: #667eea; }
+input.blank.correct { border-color: #27ae60; background: #e8f5e9; }
+input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
+
+.correction-hint {
+  font-size: 0.78rem; color: #27ae60; font-weight: 700;
+  margin-left: 4px; white-space: nowrap;
+}
+
+.luecken-item { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+
+/* Satzbau */
+.satzbau-item { margin-bottom: 20px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px; min-height: 54px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; padding: 8px 10px; border-radius: 8px; border: 2px dashed #c5cae9; background: #fafbff; }
+.sentence-builder.dragover { background: #e8eaff; border-color: #667eea; }
+
+.chip {
+  padding: 6px 14px; border-radius: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; cursor: grab; font-size: 0.85rem;
+  font-weight: 600; user-select: none;
+  transition: transform .15s, opacity .15s;
+  white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+
+#sb-insert-cursor { width: 3px; min-height: 32px; background: #e67e22; border-radius: 2px; align-self: stretch; pointer-events: none; flex-shrink: 0; }
+
+.satzbau-feedback { font-size: 0.9em; margin-top: 8px; font-weight: bold; min-height: 20px; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+.sb-punkt { margin-left: 4px; font-size: 1.2em; color: #667eea; font-weight: 700; }
+
+/* Wortschatz */
+#wortschatzContainer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn {
+        flex: 1 1 33%;
+        min-width: 0;
+        font-size: 0.8em;
+        padding: 10px 6px;
+        border-right: 1px solid #ddd;
+    }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .tab-banner { max-height: 120px; }
+}
 </style>
 </head>
 <body>
+
 <div class="container">
-  <h1>✈️ Reisen als Subkultur</h1>
-  <div class="subtitle">B1.2 – Lektion 2026R</div>
+    <div class="header">
+        <h1>Reisen als Subkultur</h1>
+        <p>B1.1 – Lektion 2026R · Lesen</p>
+        <div class="big-emoji">✈️</div>
+    </div>
 
-  <nav class="nav">
-    <button class="active" onclick="showTab(0,this)"><span class="nav-emoji">🌅</span><span class="nav-label">Vorentlastung</span></button>
-    <button onclick="showTab(1,this)"><span class="nav-emoji">📖</span><span class="nav-label">Lesetext</span></button>
-    <button onclick="showTab(2,this)"><span class="nav-emoji">❓</span><span class="nav-label">Verständnis</span></button>
-    <button onclick="showTab(3,this)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></button>
-    <button onclick="showTab(4,this)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></button>
-    <button onclick="showTab(5,this)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></button>
-  </nav>
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)">
+            <span class="nav-emoji">📖</span>
+            <span class="nav-label">Vorentlastung</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(1)">
+            <span class="nav-emoji">📄</span>
+            <span class="nav-label">Lesetext</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(2)">
+            <span class="nav-emoji">❓</span>
+            <span class="nav-label">Text & Fragen</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(3)">
+            <span class="nav-emoji">✏️</span>
+            <span class="nav-label">Lückentext</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(4)">
+            <span class="nav-emoji">🧩</span>
+            <span class="nav-label">Satzbau</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(5)">
+            <span class="nav-emoji">📚</span>
+            <span class="nav-label">Wortschatz</span>
+        </div>
+    </div>
 
-  <!-- TAB 0: VORENTLASTUNG -->
-  <div class="tab aktiv" id="tab-0">
-    <img src="https://images.pexels.com/photos/1008155/pexels-photo-1008155.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Reisen">
-    <div class="section-title">🔤 Wortschatz</div>
-    <div id="vocabContainer"></div>
-    <div style="margin-top:16px;display:flex;gap:10px;">
-      <button onclick="showVocabLoesung()">💡 Lösung</button>
-      <button onclick="resetVocab()">↺ Neustart</button>
+    <!-- SECTION 0: VORENTLASTUNG -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1008155/pexels-photo-1008155.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Reisende am Flughafen">
+        <div class="sec-inner">
+            <h2 class="section-title">📖 Vorentlastung — Schlüsselbegriffe</h2>
+            <div class="section-sub">Lerne die wichtigsten Vokabeln zum Thema „Reisen als Subkultur".</div>
+            <div id="vorentlastungContainer"></div>
+        </div>
     </div>
-  </div>
 
-  <!-- TAB 1: LESETEXT -->
-  <div class="tab" id="tab-1">
-    <img src="https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Wohnmobil Reisen">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="timerResetOne(1)">↺ Neustart</button>
-      </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-1">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-1">–</span></span>
-      </div>
+    <!-- SECTION 1: LESETEXT -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/1174732/pexels-photo-1174732.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Karim sitzt nachdenklich mit Karte">
+        <div class="sec-inner">
+            <h2 class="section-title">📄 Die Rucksack-Philosophie</h2>
+            <div class="section-sub">Eine Geschichte von Karim aus Casablanca, der die Welt auf neue Weise entdeckt.</div>
+            <div class="story-text" id="lese-text"></div>
+            <div class="story-source">Quelle: B1.1 – Lektion 2026R – Reisen als Subkultur</div>
+        </div>
     </div>
-    <div class="story-text" id="lesetext"></div>
-  </div>
 
-  <!-- TAB 2: RICHTIG/FALSCH -->
-  <div class="tab" id="tab-2">
-    <img src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Fragen">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="showRFLoesung()">💡 Lösungen</button>
-        <button onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
-      </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-2">–</span></span>
-      </div>
+    <!-- SECTION 2: TEXT & FRAGEN -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Fragen zum Text">
+        <div class="sec-inner">
+            <h2 class="section-title">❓ Text & Fragen — Richtig oder Falsch?</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn btn-show" onclick="showRFLoesung()">Lösungen</button>
+                    <button class="btn btn-reset" onclick="resetRF(); resetTimer(2);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">⏱ <span id="timer-2">00:00</span></span>
+                    <span class="best-time">🏆 <span id="best-2">--:--</span></span>
+                </div>
+            </div>
+            <div class="rf-list" id="rf-list"></div>
+        </div>
     </div>
-    <div class="section-title">❓ Richtig oder Falsch?</div>
-    <div class="rf-list" id="rf-list"></div>
-  </div>
 
-  <!-- TAB 3: LÜCKENTEXT -->
-  <div class="tab" id="tab-3">
-    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Schreiben">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="showLueckenLoesung()">💡 Lösungen</button>
-        <button onclick="timerResetOne(3); resetLuecken()">↺ Neustart</button>
-      </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-3">–</span></span>
-      </div>
+    <!-- SECTION 3: LÜCKENTEXT -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schreiben am Laptop">
+        <div class="sec-inner">
+            <h2 class="section-title">✏️ Lückentext — Worte aus dem Text</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn btn-show" onclick="showLueckenLoesung()">Lösungen</button>
+                    <button class="btn btn-reset" onclick="resetLuecken(); resetTimer(3);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+                    <span class="best-time">🏆 <span id="best-3">--:--</span></span>
+                </div>
+            </div>
+            <div id="lueckenContainer"></div>
+        </div>
     </div>
-    <div class="info-box"><strong>Tipp:</strong> Ergänze die Lücken mit den passenden Wörtern aus dem Lesetext.</div>
-    <div id="luecken-container"></div>
-  </div>
 
-  <!-- TAB 4: SATZBAU -->
-  <div class="tab" id="tab-4">
-    <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Satzbau">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="showSbLoesung()">💡 Lösungen</button>
-        <button onclick="timerResetOne(4); resetSatzbau()">↺ Neustart</button>
-      </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-4">–</span></span>
-      </div>
+    <!-- SECTION 4: SATZBAU -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/924675/pexels-photo-924675.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Sätze ordnen">
+        <div class="sec-inner">
+            <h2 class="section-title">🧩 Satzbau — Satzteile in die richtige Reihenfolge</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn btn-show" onclick="showSBLoesung()">Lösungen</button>
+                    <button class="btn btn-reset" onclick="resetSB(); resetTimer(4);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">⏱ <span id="timer-4">00:00</span></span>
+                    <span class="best-time">🏆 <span id="best-4">--:--</span></span>
+                </div>
+            </div>
+            <div id="satzbauContainer"></div>
+        </div>
     </div>
-    <div class="info-box"><strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge, um einen korrekten Satz zu bilden.</div>
-    <div id="satzbau-container"></div>
-  </div>
 
-  <!-- TAB 5: WORTSCHATZ -->
-  <div class="tab" id="tab-5">
-    <img src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Wortschatz">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="timerResetOne(5); resetVokabeln()">↺ Neustart</button>
-      </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-5">–</span></span>
-      </div>
+    <!-- SECTION 5: WORTSCHATZ -->
+    <div class="section" id="sec-5">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wortschatz">
+        <div class="sec-inner">
+            <h2 class="section-title">📚 Wortschatz — Artikel · Wort · Plural</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn btn-show" onclick="showWortschatzLoesung()">Lösungen</button>
+                    <button class="btn btn-reset" onclick="resetWortschatz(); resetTimer(5);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span class="current-time">⏱ <span id="timer-5">00:00</span></span>
+                    <span class="best-time">🏆 <span id="best-5">--:--</span></span>
+                </div>
+            </div>
+            <div id="wortschatzContainer"></div>
+        </div>
     </div>
-    <div class="vt-progress" id="vt-progress">Karte 1 von 10</div>
-    <div class="vt-card" id="vt-card">
-      <div class="vt-en" id="vt-en">–</div>
-    </div>
-    <div class="vt-input-row">
-      <input class="vt-input" id="vt-input" type="text" placeholder="Artikel + Wort + Plural" oninput="vtCheck()" onkeydown="if(event.key==='Enter') vtNext()">
-    </div>
-    <div class="vt-nav">
-      <button class="vt-btn" onclick="vtPrev()">◀ Zurück</button>
-      <button class="vt-btn" onclick="vtNext()">Weiter ▶</button>
-    </div>
-    <div id="vt-feedback" style="text-align:center;margin-top:12px;font-size:0.9em;min-height:20px;"></div>
-  </div>
 
-  <footer>
-    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
-    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
-  </footer>
-</div>
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+</div><!-- /container -->
 
 <script>
-// ===================== TIMER =====================
-const TIMER_PREFIX = 'best2026R';
-const timers = {};
-const bestTimes = {};
+var TIMER_PREFIX = 'REISEN_SUBKULTUR_';
+var timerStarted  = [false, false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null, null];
 
-function timerKey(n) { return TIMER_PREFIX + n; }
-
-function timerStart(n) {
-  if (timers[n] && timers[n].running) return;
-  if (!timers[n]) timers[n] = { elapsed: 0, running: false };
-  timers[n].startTime = Date.now() - (timers[n].elapsed || 0) * 1000;
-  timers[n].running = true;
-  timers[n].interval = setInterval(() => {
-    const secs = Math.floor((Date.now() - timers[n].startTime) / 1000);
-    timers[n].elapsed = secs;
-    const el = document.getElementById('timer-' + n);
-    if (el) el.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
-  }, 500);
-}
-
-function timerStop(n) {
-  if (!timers[n] || !timers[n].running) return;
-  clearInterval(timers[n].interval);
-  timers[n].running = false;
-  const secs = timers[n].elapsed || 0;
-  const stored = parseInt(localStorage.getItem(timerKey(n)) || '9999');
-  if (secs < stored) {
-    localStorage.setItem(timerKey(n), secs);
-    const el = document.getElementById('best-' + n);
-    if (el) el.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
-  }
-}
-
-function timerResetOne(n) {
-  if (timers[n]) { clearInterval(timers[n].interval); }
-  timers[n] = { elapsed: 0, running: false };
-  const el = document.getElementById('timer-' + n);
-  if (el) el.textContent = '0:00';
-}
-
-function loadBestTimes() {
-  [1,2,3,4,5].forEach(n => {
-    const stored = parseInt(localStorage.getItem(timerKey(n)) || '0');
-    if (stored > 0) {
-      const el = document.getElementById('best-' + n);
-      if (el) el.textContent = Math.floor(stored/60) + ':' + String(stored%60).padStart(2,'0');
-    }
-  });
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
 }
 
 function timerAutoStart(n) {
-  if (!timers[n] || !timers[n].running) timerStart(n);
+  if (timerStarted[n]) return;
+  timerStarted[n] = true;
+  timerRunning[n] = true;
+  timerIntervals[n] = setInterval(function() {
+    timerSeconds[n]++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }, 1000);
 }
 
-// ===================== TABS =====================
-function showTab(idx, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('aktiv'));
-  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + idx).classList.add('aktiv');
-  btn.classList.add('active');
-  if (idx === 1) timerAutoStart(1);
-}
-
-// ===================== WORTSCHATZ INTERACTIVE =====================
-var WORTSCHATZ = [
-  { type: "n", en: "freedom of travel", art: "die", wort: "Reisefreiheit", plural: "Reisefreiheiten" },
-  { type: "n", en: "metropolis / big city", art: "die", wort: "Metropole", plural: "Metropolen" },
-  { type: "n", en: "old town", art: "die", wort: "Altstadt", plural: "Altstädte" },
-  { type: "v", en: "to move (to another city)", de: "umziehen" },
-  { type: "v", en: "to be homesick", de: "Heimweh haben" },
-  { type: "v", en: "to live abroad", de: "im Ausland leben" },
-  { type: "v", en: "nostalgic (adjective)", de: "nostalgisch" },
-  { type: "n", en: "citizen", art: "der", wort: "Bürger", plural: "Bürger" },
-];
-
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    }
-    cont.appendChild(div);
-  });
-}
-
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    var okA = a === item.art.toLowerCase();
-    var okW = w === item.wort;
-    var okP = p === item.plural;
-    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    var ok2 = w2 === item.de;
-    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+function stopTimer(n) {
+  if (!timerRunning[n]) return;
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+  if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+    localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+    var el = document.getElementById('best-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
   }
 }
 
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
+function resetTimer(n) {
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  timerStarted[n] = false;
+  timerSeconds[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '00:00';
+}
+
+function fmtTime(s) {
+  return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+
+function loadBestTimes() {
+  for (var i = 2; i <= 5; i++) {
+    var v = localStorage.getItem(TIMER_PREFIX + i);
+    if (v) {
+      var el = document.getElementById('best-' + i);
+      if (el) el.textContent = fmtTime(parseInt(v));
     }
-    vocabLiveCheck(idx);
-  });
+  }
 }
 
-function resetVocab() { initVocab(); }
-
-// ===================== VORENTLASTUNG =====================
-const VORENTLASTUNG = [
-  { word: 'die Reisefreiheit', example: 'Die Reisefreiheit ermöglicht es uns, überall hinzureisen.' },
-  { word: 'die Metropole, -n', example: 'Sydney ist eine Metropole mit Millionen von Einwohnern.' },
-  { word: 'die Altstadt, -städte', example: 'Es gibt hier eine wunderschöne Altstadt mit alten Häusern.' },
-  { word: 'umziehen (zieht um)', example: 'Ich möchte nach Paris umziehen und dort leben.' },
-  { word: 'Heimweh haben', example: 'Immer wenn ich im Urlaub bin, habe ich Heimweh nach der Familie.' },
-  { word: 'im Ausland leben', example: 'Ich lebe schon seit fünf Jahren im Ausland und spreche die Sprache.' },
-  { word: 'nostalgisch', example: 'Wenn sie diese alten Fotos ansieht, wird sie nostalgisch.' },
-  { word: 'der Bürger, -', example: 'Er ist ein Bürger dieser Stadt und kennt alle Straßen.' },
+// ===== VORENTLASTUNG =====
+var VORENTLASTUNG = [
+    { term: 'die Rucksacktouristin, -nen', en: 'backpacker (female)', def: 'Junge Frau, die mit Rucksack und kleinem Budget reist.' },
+    { term: 'die Subkultur, -en', en: 'subculture', def: 'Lebensweise und Werte einer Gruppe, die sich von der Gesellschaft unterscheiden.' },
+    { term: 'das Abenteuer, -', en: 'adventure', def: 'Ein riskantes und spannungsvolles Erlebnis.' },
+    { term: 'das Couchsurfing', en: 'couchsurfing', def: 'Im Internet kostenlose Übernachtungen bei Fremden suchen und anbieten.' },
+    { term: 'nomadisch (Adj.)', en: 'nomadic', def: 'Ohne festen Wohnsitz von Ort zu Ort reisend.' },
+    { term: 'authentisch (Adj.)', en: 'authentic', def: 'Echt und ehrlich; nicht künstlich oder gespielt.' },
 ];
 
-function buildVorentlastung() {
-  // This function is kept for compatibility but no longer needed as we use initVocab()
-}
+function initVorentlastung() {
+    var container = document.getElementById('vorentlastungContainer');
+    container.innerHTML = '';
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(280px, 1fr))';
+    container.style.gap = '14px';
+    container.style.marginBottom = '20px';
 
-// ===================== LESETEXT =====================
-const LESETEXT_HTML = `
-<h2>Reisen als Subkultur</h2>
-<p>Wenn man von Subkulturen spricht, denkt man vielleicht zuerst an Musik oder Mode. Aber auch das Reisen kann eine eigene Subkultur sein — mit Menschen, die bewusst anders reisen als die meisten.</p>
+    VORENTLASTUNG.forEach(function(item) {
+        var card = document.createElement('div');
+        card.style.cssText = 'background:#f8f9ff; border:1px solid #dde3ff; border-radius:10px; padding:14px 16px;';
 
-<h2>Das Wohnmobil als Zuhause</h2>
-<p>Mitten in Deutschland steht ein Wohnmobil. Es ist nicht besonders groß, aber es ist das Zuhause von Anna und Klaus seit drei Jahren. Das Fahrzeug wiegt 6,4 Tonnen und hat alles, was man zum Leben braucht: eine kleine Küche, ein Bett, ein Bad und sogar einen Internetanschluss.</p>
-<p>„Wir wollten weit weg vom Stress der Großstadt", sagt Anna. „Jetzt haben wir die Freiheit, jeden Tag an einem anderen Ort aufzuwachen." Das Paar bereist Europa und macht kurze Stopps an Orten, die sie interessieren.</p>
-<p>Was kostet so ein Leben? Die Parkplätze auf dem Land und die Campingplätze sind oft günstiger als eine Mietwohnung in der Stadt. Natürlich kommen noch Kosten für Treibstoff, Gas und Versicherungen dazu, aber insgesamt leben Anna und Klaus günstiger als früher.</p>
+        var term = document.createElement('div');
+        term.style.cssText = 'font-weight:700; color:#667eea; font-size:1.05em; margin-bottom:2px;';
+        term.textContent = item.term;
+        card.appendChild(term);
 
-<h2>Die New-Age-Bewegung</h2>
-<p>Eine andere Art der Reise-Subkultur entstand in den 70er- und 80er-Jahren in den USA: die New-Age-Bewegung. Menschen aus aller Welt reisen in die kleinen Stadt Sedona im Bundesstaat Arizona. Sedona liegt nördlich von Phoenix und hat nur 17.000 Einwohner — aber Hunderttausende von Besuchern pro Jahr.</p>
-<p>Was macht Sedona so besonders? Die roten Felsen, die Wüstenlandschaft, und laut den Anhängern der Bewegung: spezielle Energiepunkte in der Erde. Die Menschen kommen hierher, um Energie zu tanken, zu meditieren und spirituelle Erfahrungen zu machen.</p>
-<p>Sedona war früher eine Mormonensiedlung. Theodore Schnebly war einer der ersten Siedler und gab der Stadt ihren Namen. Heute findet man dort neben alten Kirchen auch Kristallläden, UFO-Tourismusangebote und spirituelle Heilungszentren.</p>
+        var en = document.createElement('div');
+        en.style.cssText = 'color:#999; font-size:0.85em; margin-bottom:5px; font-style:italic;';
+        en.textContent = item.en;
+        card.appendChild(en);
 
-<h2>Besondere Wohnorte</h2>
-<p>Nicht alle Reise-Subkulturen sind so groß wie die New-Age-Bewegung. In der Nähe von Dublin, Irland, hat eine Familie eine alte Scheune in Ardcath umgebaut und lebt dort seit Jahren ohne fließendes Wasser aus dem Hahn. Sie holen ihr Wasser selbst.</p>
-<p>In Tyringham, Massachusetts, hat jemand ein altes Silo in ein Wohnhaus umgewandelt. Der runde Grundriss ist ungewöhnlich, aber das Gebäude ist warm und gemütlich.</p>
-<p>Was diese Menschen gemeinsam haben: Sie suchen eine Alternative zum normalen Leben. Das Reisen und das Leben in ungewöhnlichen Orten ist für sie keine Notlösung — es ist eine bewusste Entscheidung. Und für immer mehr Menschen auf der Welt wird diese Lebensweise attraktiv.</p>
-`;
+        var def = document.createElement('div');
+        def.style.cssText = 'color:#555; font-size:0.92em; line-height:1.5;';
+        def.textContent = item.def;
+        card.appendChild(def);
 
-function buildLesetext() {
-  const el = document.getElementById('lesetext');
-  el.innerHTML = LESETEXT_HTML;
-  highlightVocab(el);
-}
-
-// Vokabel-Highlighting
-const HIGHLIGHT_WORDS = [
-  { de: 'Reisefreiheit', tip: 'freedom of travel' },
-  { de: 'Metropole', tip: 'metropolis, big city' },
-  { de: 'Altstadt', tip: 'old town' },
-  { de: 'umziehen', tip: 'to move (to a new place)' },
-  { de: 'Heimweh', tip: 'homesickness' },
-  { de: 'im Ausland', tip: 'abroad' },
-  { de: 'nostalgisch', tip: 'nostalgic' },
-  { de: 'Bürger', tip: 'citizen' },
-];
-
-function highlightVocab(container) {
-  HIGHLIGHT_WORDS.forEach(({ de, tip }) => {
-    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
-    const nodes = [];
-    let node;
-    while ((node = walker.nextNode())) nodes.push(node);
-    nodes.forEach(textNode => {
-      const re = new RegExp(`(${de})`, 'g');
-      if (re.test(textNode.textContent)) {
-        const span = document.createElement('span');
-        span.innerHTML = textNode.textContent.replace(
-          new RegExp(`(${de})`, 'g'),
-          `<span class="vocab-hl">$1<span class="tooltip">${tip}</span></span>`
-        );
-        textNode.parentNode.replaceChild(span, textNode);
-      }
+        container.appendChild(card);
     });
-  });
 }
 
-// ===================== RICHTIG / FALSCH =====================
-const RF_DATA = [
-  { text: 'Anna und Klaus leben seit drei Jahren in einem Wohnmobil.', answer: true },
-  { text: 'Das Wohnmobil von Anna und Klaus wiegt 6,4 Tonnen.', answer: true },
-  { text: 'Das Leben im Wohnmobil ist immer teurer als eine Mietwohnung.', answer: false },
-  { text: 'Die New-Age-Bewegung entstand in den 70er- und 80er-Jahren.', answer: true },
-  { text: 'Sedona liegt südlich von Phoenix in Arizona.', answer: false },
-  { text: 'Sedona hat mehr als eine Million Einwohner.', answer: false },
-  { text: 'Sedona war ursprünglich eine Mormonensiedlung.', answer: true },
-  { text: 'In Ardcath bei Dublin hat eine Familie eine alte Scheune umgebaut.', answer: true },
+// ===== LESETEXT =====
+var LESETEXT_HTML = `<p>Karim sitzt im Hostel in Budapest und liest ein abgegriffenes Buch über Couchsurfing-Etikette. Das Buch ist klein, die Seiten krümeln, und doch hält er es wie einen Schatz. Vor drei Monaten hatte er E.ON verlassen – nicht wirklich verlassen, nur unbezahlten Urlaub genommen – und beschlossen, dass sein Leben nicht in Düsseldorf enden durfte.</p>
+
+<p>„Die Subkultur der Backpacker ist nicht nur eine Reiseart", heißt es auf Seite 47. „Sie ist eine Philosophie, eine Art zu sehen, was man besitzt: nicht Dinge, sondern Erfahrungen." Karim notiert das Datum in sein Notizbuch. 14. März. Ein Dienstag.</p>
+
+<figure style="margin:18px 0;text-align:center;">
+    <img src="https://images.pexels.com/photos/1629174/pexels-photo-1629174.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Backpacker-Gruppe auf einer Zugfahrt" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+    <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Auf Zugreisen trifft Karim andere Nomaden.</figcaption>
+</figure>
+
+<p>In Düsseldorf war Karim ein ruhiger Mann gewesen, der sein Gehalt pünktlich erhielt und sich am Samstag im selben Café Kaffee bestellte. Seine Mutter fragte nicht, warum er nicht heiratete. Seine Kollegen fragten nicht, warum er nichts sagte. Aber hier, im Hostel mit den bunten Wandgemälden und der Musik aus siebzehn verschiedenen Ländern, fragte niemand, was man <span class="vocab-hl">verdient</span>. Man fragte, woher man kam und wohin man fahren würde.</p>
+
+<p>Elena war am zweiten Tag angekommen. Sie kochte <span class="vocab-hl">Burek</span> in der Gemeinschaftsküche und erzählte von Sofia, von Bergen, von Menschen, die Musik spielten, bis die Sonne aufging. „Und du?", fragte sie. Karim antwortete nicht sofort. „Ich bin auf der Flucht", sagte er schließlich. Sie lachte. „Nein", sagte sie. „Du bist angekommen."</p>
+
+<figure style="margin:18px 0;text-align:center;">
+    <img src="https://images.pexels.com/photos/3584994/pexels-photo-3584994.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Jugendherberge mit Reisenden verschiedener Herkunft" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+    <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Im Hostel treffen sich Menschen aus aller Welt.</figcaption>
+</figure>
+
+<p>An dem Morgen, an dem Karim Budapest verlassen würde – nach elf Tagen, nicht nach drei Monaten, nicht nach einem Jahr – würde er sich nicht ändern. Aber er würde verstehen, was das Buch meinte. Sein Leben war nicht die Karriere, nicht die Wohnung in der Immanuelkirchstraße mit dem blick auf die <span class="vocab-hl">Düsseldorf</span>-Skyline. Sein Leben waren die Gespräche mit Elena, die Zugfahrt nach Prag, die Tatsache, dass ein Hostel irgendwo auf der Welt jetzt sein Zuhause sein konnte.</p>`;
+
+function initLesetext() {
+    var container = document.getElementById('lese-text');
+    container.innerHTML = LESETEXT_HTML;
+    highlightVocabInText();
+}
+
+function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text');
+    if (!storyText) return;
+
+    var words = VORENTLASTUNG.map(function(item) {
+        var term = item.term.replace(/^(der|die|das)\s+/i, '');
+        return term.split(',')[0].trim();
+    });
+
+    words = words.filter(function(w) { return w && w.length > 3; });
+
+    // Zu aktualisierende Wörter (die bereits mit vocab-hl markiert sind)
+    words.push('verdient', 'Burek', 'Düsseldorf');
+    words = words.filter(function(w, i, arr) { return w && w.length > 2 && arr.indexOf(w) === i; });
+
+    if (words.length === 0) return;
+
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+                replaced = replaced.replace(regex, '\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHighlight = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHighlight = !isHighlight; return; }
+                    if (isHighlight) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHighlight = !isHighlight;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
+    }
+    walkAndHighlight(storyText);
+}
+
+// ===== TEXT & FRAGEN =====
+var RF_DATA = [
+    { text: 'Karim arbeitet als Manager bei E.ON in Casablanca.', answer: 'f' },
+    { text: 'Elena kommt aus Bulgarien und erzählt von ihrer Heimat Sofia.', answer: 'r' },
+    { text: 'Die Backpacker-Subkultur misst den Wert eines Menschen an seinem Einkommen.', answer: 'f' },
+    { text: 'Karim nimmt sich nur drei Monate Zeit, um Europa zu bereisen.', answer: 'f' },
+    { text: 'Im Hostel treffen sich Menschen aus verschiedenen Ländern und Kulturen.', answer: 'r' },
+    { text: 'Karim bleibt elf Tage in Budapest und versteht dort, dass Erfahrungen wichtiger als materielle Dinge sind.', answer: 'r' },
 ];
 
-let rfState = {};
-let rfTimerStarted = false;
+function initRF() {
+    var container = document.getElementById('rf-list');
+    container.innerHTML = '';
+    RF_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'rf-item';
+        div.dataset.idx = idx;
+        div.dataset.answer = item.answer;
 
-function buildRF() {
-  const list = document.getElementById('rf-list');
-  list.innerHTML = RF_DATA.map((item, i) => `
-    <div class="rf-item" id="rf-item-${i}">
-      <div class="rf-text">${item.text}</div>
-      <div class="rf-btns">
-        <button class="rf-btn" id="rf-r-${i}" onclick="selectRF(${i}, true)">Richtig</button>
-        <button class="rf-btn" id="rf-f-${i}" onclick="selectRF(${i}, false)">Falsch</button>
-      </div>
-    </div>
-  `).join('');
-  rfState = {};
-  rfTimerStarted = false;
+        var text = document.createElement('span');
+        text.style.flex = '1';
+        text.textContent = item.text;
+        div.appendChild(text);
+
+        var btns = document.createElement('div');
+        btns.className = 'rf-btns';
+
+        var rBtn = document.createElement('button');
+        rBtn.className = 'rf-btn';
+        rBtn.textContent = 'R';
+        rBtn.onclick = function(e) { checkRF(idx, 'r'); e.stopPropagation(); };
+        btns.appendChild(rBtn);
+
+        var fBtn = document.createElement('button');
+        fBtn.className = 'rf-btn';
+        fBtn.textContent = 'F';
+        fBtn.onclick = function(e) { checkRF(idx, 'f'); e.stopPropagation(); };
+        btns.appendChild(fBtn);
+
+        var result = document.createElement('span');
+        result.className = 'rf-result';
+        result.style.display = 'none';
+        result.dataset.idx = idx;
+        btns.appendChild(result);
+
+        div.appendChild(btns);
+        container.appendChild(div);
+    });
 }
 
-function selectRF(i, val) {
-  if (!rfTimerStarted) { timerAutoStart(2); rfTimerStarted = true; }
-  rfState[i] = val;
-  const correct = RF_DATA[i].answer;
-  const item = document.getElementById('rf-item-' + i);
-  const btnR = document.getElementById('rf-r-' + i);
-  const btnF = document.getElementById('rf-f-' + i);
-  btnR.className = 'rf-btn';
-  btnF.className = 'rf-btn';
-  if (val === correct) {
-    item.className = 'rf-item correct';
-    (val ? btnR : btnF).className = 'rf-btn selected-correct';
-  } else {
-    item.className = 'rf-item wrong';
-    (val ? btnR : btnF).className = 'rf-btn selected-wrong';
-  }
-  checkRFComplete();
+function checkRF(idx, answer) {
+    timerAutoStart(2);
+    var item = document.querySelector('.rf-item[data-idx="' + idx + '"]');
+    var correct = answer === RF_DATA[idx].answer;
+
+    item.querySelectorAll('.rf-btn').forEach(function(b) { b.disabled = true; });
+    var result = item.querySelector('.rf-result');
+    result.style.display = 'inline';
+    result.textContent = correct ? '✓' : '✗';
+    result.classList.remove('ok', 'err');
+    result.classList.add(correct ? 'ok' : 'err');
+
+    item.classList.add(correct ? 'correct' : 'wrong');
+
+    if (checkRFAllDone()) stopTimer(2);
 }
 
-function checkRFComplete() {
-  if (Object.keys(rfState).length === RF_DATA.length) {
-    const allOk = RF_DATA.every((item, i) => rfState[i] === item.answer);
-    if (allOk) timerStop(2);
-  }
+function checkRFAllDone() {
+    var items = document.querySelectorAll('.rf-item');
+    var allDone = Array.from(items).every(function(item) {
+        return item.classList.contains('correct') || item.classList.contains('wrong');
+    });
+    return allDone;
 }
 
 function showRFLoesung() {
-  RF_DATA.forEach((item, i) => {
-    rfState[i] = item.answer;
-    const el = document.getElementById('rf-item-' + i);
-    el.className = 'rf-item correct';
-    document.getElementById('rf-r-' + i).className = 'rf-btn' + (item.answer ? ' selected-correct' : '');
-    document.getElementById('rf-f-' + i).className = 'rf-btn' + (!item.answer ? ' selected-correct' : '');
-  });
+    RF_DATA.forEach(function(item, idx) {
+        checkRF(idx, item.answer);
+    });
 }
 
 function resetRF() {
-  rfTimerStarted = false;
-  buildRF();
+    document.querySelectorAll('.rf-item').forEach(function(item) {
+        item.classList.remove('correct', 'wrong');
+        item.querySelectorAll('.rf-btn').forEach(function(b) { b.disabled = false; });
+        var result = item.querySelector('.rf-result');
+        result.style.display = 'none';
+        result.textContent = '';
+    });
 }
 
-// ===================== LÜCKENTEXT =====================
-const LUECKEN_DATA = [
-  { before: 'Sie wollten weit weg vom Stress der', blank: 'Großstadt', after: 'leben.' },
-  { before: 'Das Fahrzeug hat einen', blank: 'Internetanschluss', after: 'und alle Grundausstattung.' },
-  { before: 'Campingplätze sind oft günstiger als eine', blank: 'Mietwohnung', after: 'in der Stadt.' },
-  { before: 'Die New-Age-Bewegung entstand in den 70er- und 80er-Jahren und zieht Menschen nach', blank: 'Sedona', after: '.' },
-  { before: 'Sedona liegt', blank: 'nördlich', after: 'von Phoenix im Bundesstaat Arizona.' },
-  { before: 'Die Menschen kommen nach Sedona, um Energie zu tanken und zu', blank: 'meditieren', after: '.' },
-  { before: 'Theodore Schnebly war einer der ersten Siedler und gab der Stadt ihren', blank: 'Namen', after: '.' },
-  { before: 'Eine Familie in der Nähe von Dublin hat eine alte', blank: 'Scheune', after: 'umgebaut.' },
-  { before: 'Das Reisen ist für diese Menschen eine bewusste', blank: 'Entscheidung', after: ', keine Notlösung.' },
-  { before: 'Diese Lebensweise wird für immer mehr Menschen auf der Welt', blank: 'attraktiv', after: '.' },
+// ===== LÜCKENTEXT =====
+var LUECKEN_DATA = [
+    { segs: [
+        {t: 'Karim sitzt im Hostel in Budapest und liest ein abgegriffenes Buch über '},
+        {b: 'Couchsurfing', s: 'l'},
+        {t: '-Etikette.'}
+      ], hint: 'Übernachtungsform' },
+    { segs: [
+        {t: 'Vor drei Monaten hatte er E.ON verlassen und beschlossen, dass sein Leben nicht in '},
+        {b: 'Düsseldorf', s: 'l'},
+        {t: ' enden durfte.'}
+      ], hint: 'Stadt (Artikel: die)' },
+    { segs: [
+        {t: 'Die '},
+        {b: 'Subkultur', s: 'm'},
+        {t: ' der Backpacker ist nicht nur eine Reiseart.'}
+      ], hint: 'Kultur einer Minderheit' },
+    { segs: [
+        {t: 'Sie ist eine Philosophie, eine Art zu sehen, was man besitzt: nicht Dinge, sondern '},
+        {b: 'Erfahrungen', s: 'l'},
+        {t: '.'}
+      ], hint: 'Erlebtes (Plural)' },
+    { segs: [
+        {t: 'Elena war am zweiten Tag angekommen und erzählte von Sofia, von Bergen, von Menschen, die Musik spielten bis die '},
+        {b: 'Sonne', s: 'm'},
+        {t: ' aufging.'}
+      ], hint: 'Himmelskörper' },
+    { segs: [
+        {t: 'An dem Morgen, an dem Karim Budapest verlassen würde, würde er sich nicht '},
+        {b: 'ändern', s: 'm'},
+        {t: '.'}
+      ], hint: 'Verb: sich transformieren' },
 ];
 
-let lueckenTimerStarted = false;
-let lueckenDone = [];
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
 
-function buildLuecken() {
-  const c = document.getElementById('luecken-container');
-  lueckenDone = new Array(LUECKEN_DATA.length).fill(false);
-  lueckenTimerStarted = false;
-  c.innerHTML = LUECKEN_DATA.map((item, i) => `
-    <div class="luecke-item" id="luecke-${i}">
-      <div class="sentence">
-        ${item.before}
-        <input class="luecke-input" id="li-${i}" type="text" placeholder=""
-          oninput="liveCheck(${i})" autocomplete="off">
-        <span class="feedback-icon" id="lf-${i}"></span>
-        ${item.after}
-      </div>
-    </div>
-  `).join('');
+        var p = document.createElement('p');
+        p.style.lineHeight = '1.8';
+        p.style.marginBottom = '0';
+
+        item.segs.forEach(function(seg) {
+            if (seg.t) {
+                p.appendChild(document.createTextNode(seg.t));
+            } else if (seg.b) {
+                var inp = document.createElement('input');
+                inp.className = 'blank';
+                inp.type = 'text';
+                inp.dataset.answer = seg.b.toLowerCase();
+                inp.dataset.hint = item.hint;
+                inp.dataset.id = idx;
+
+                var widths = { s: '50px', m: '90px', l: '150px', xl: '200px' };
+                inp.style.width = widths[seg.s] || '90px';
+
+                inp.addEventListener('input', function() {
+                    timerAutoStart(3);
+                    liveCheckLuecke(inp);
+                    checkLueckenAllDone();
+                });
+
+                p.appendChild(inp);
+            }
+        });
+
+        var hint = document.createElement('div');
+        hint.style.cssText = 'font-size:0.82em; color:#999; margin-top:4px;';
+        hint.textContent = '💡 ' + item.hint;
+
+        div.appendChild(p);
+        div.appendChild(hint);
+        container.appendChild(div);
+    });
 }
 
-function liveCheck(i) {
-  if (!lueckenTimerStarted) { timerAutoStart(3); lueckenTimerStarted = true; }
-  const inp = document.getElementById('li-' + i);
-  const icon = document.getElementById('lf-' + i);
-  const item = document.getElementById('luecke-' + i);
-  const val = inp.value.trim();
-  const ans = LUECKEN_DATA[i].blank;
-  const caseSensitive = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
-  const match = caseSensitive ? (val === ans) : (val.toLowerCase() === ans.toLowerCase());
-  const prefix = caseSensitive ? ans.startsWith(val) : ans.toLowerCase().startsWith(val.toLowerCase());
+function liveCheckLuecke(inp) {
+    var val = inp.value.trim().toLowerCase();
+    var ans = inp.dataset.answer.toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('correct');
+    } else if (ans.indexOf(val) === 0) {
+        // gültiger Präfix — neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
 
-  if (match) {
-    inp.className = 'luecke-input ok';
-    item.className = 'luecke-item correct';
-    icon.textContent = '✅';
-    lueckenDone[i] = true;
-  } else if (val.length > 0 && prefix) {
-    inp.className = 'luecke-input';
-    inp.style.borderColor = '#667eea';
-    item.className = 'luecke-item';
-    icon.textContent = '';
-    lueckenDone[i] = false;
-  } else if (val.length > 0) {
-    inp.className = 'luecke-input no';
-    item.className = 'luecke-item wrong';
-    icon.textContent = '❌';
-    lueckenDone[i] = false;
-  } else {
-    inp.className = 'luecke-input';
-    inp.style.borderColor = '';
-    item.className = 'luecke-item';
-    icon.textContent = '';
-    lueckenDone[i] = false;
-  }
-  if (lueckenDone.every(Boolean)) timerStop(3);
+function checkLueckenAllDone() {
+    var inputs = document.querySelectorAll('#sec-3 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('correct');
+    });
+    if (allOk) stopTimer(3);
 }
 
 function showLueckenLoesung() {
-  LUECKEN_DATA.forEach((item, i) => {
-    const inp = document.getElementById('li-' + i);
-    inp.value = item.blank;
-    liveCheck(i);
-  });
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct');
+        inp.classList.remove('wrong');
+    });
+    stopTimer(3);
 }
 
 function resetLuecken() {
-  lueckenTimerStarted = false;
-  buildLuecken();
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
 }
 
-// ===================== SATZBAU =====================
-const SATZBAU_DATA = [
-  { chips: ['Die', 'Reisefreiheit', 'ermöglicht', 'uns,', 'überall', 'hinzureisen.'] },
-  { chips: ['Das', 'Wohnmobil', 'hat', 'einen', 'Internetanschluss', 'und', 'eine', 'kleine', 'Küche.'] },
-  { chips: ['Campingplätze', 'auf', 'dem', 'Land', 'sind', 'oft', 'günstiger', 'als', 'eine', 'Mietwohnung.'] },
-  { chips: ['Sedona', 'liegt', 'nördlich', 'von', 'Phoenix', 'in', 'Arizona.'] },
-  { chips: ['Die', 'Menschen', 'kommen', 'hierher,', 'um', 'Energie', 'zu', 'tanken.'] },
-  { chips: ['Das', 'Reisen', 'ist', 'für', 'sie', 'eine', 'bewusste', 'Entscheidung.'] },
+// ===== SATZBAU =====
+var satzbauData = [
+    { parts: ['Karim', 'sitzt', 'im', 'Hostel', 'in', 'Budapest'], valid: [['Karim', 'sitzt', 'im', 'Hostel', 'in', 'Budapest']], punct: '.' },
+    { parts: ['Die', 'Subkultur', 'der', 'Backpacker', 'ist', 'eine', 'Philosophie'], valid: [['Die', 'Subkultur', 'der', 'Backpacker', 'ist', 'eine', 'Philosophie']], punct: '.' },
+    { parts: ['Elena', 'kommt', 'aus', 'Sofia'], valid: [['Elena', 'kommt', 'aus', 'Sofia']], punct: '.' },
+    { parts: ['Man', 'misst', 'den', 'Wert', 'nicht', 'am', 'Gehalt'], valid: [['Man', 'misst', 'den', 'Wert', 'nicht', 'am', 'Gehalt']], punct: '.' },
 ];
 
-let sbDragged = null;
-let sbTimerStarted = false;
+var sbDragged = null;
 
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-function sbMakeChip(text) {
-  const chip = document.createElement('div');
-  chip.className = 'chip';
-  chip.textContent = text;
-  chip.draggable = true;
-  chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; });
-  chip.addEventListener('dragend', () => { sbDragged = null; });
-  return chip;
-}
-
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault();
-    if (sbDragged) { zone.appendChild(sbDragged); sbDragged = null; }
-  });
-}
-
-function buildSatzbau() {
-  const c = document.getElementById('satzbau-container');
-  sbTimerStarted = false;
-  c.innerHTML = SATZBAU_DATA.map((item, i) => {
-    let shuffled = shuffle(item.chips);
-    let attempts = 0;
-    while (attempts < 50 && shuffled.join('') === item.chips.join('')) {
-      shuffled = shuffle(item.chips);
-      attempts++;
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
     }
-    return `
-      <div class="sb-task">
-        <div class="sb-bank" id="sb-bank-${i}"></div>
-        <div class="sb-zone" id="sb-row-${i}"></div>
-        <div class="sb-feedback" id="sb-fb-${i}"></div>
-      </div>
-    `;
-  }).join('');
+    return c;
+}
 
-  SATZBAU_DATA.forEach((item, i) => {
-    let shuffled = shuffle(item.chips);
-    let attempts = 0;
-    while (attempts < 50 && shuffled.join('') === item.chips.join('')) {
-      shuffled = shuffle(item.chips);
-      attempts++;
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
     }
-    const bank = document.getElementById('sb-bank-' + i);
-    const row = document.getElementById('sb-row-' + i);
-    sbRegisterZone(bank);
-    sbRegisterZone(row);
-    shuffled.forEach(text => { bank.appendChild(sbMakeChip(text)); });
-    row.addEventListener('drop', () => setTimeout(() => sbCheckAuto(i), 500));
-    bank.addEventListener('drop', () => setTimeout(() => sbCheckAuto(i), 500));
-  });
+    return null;
 }
 
-function sbCheckAuto(i) {
-  if (!sbTimerStarted) { timerAutoStart(4); sbTimerStarted = true; }
-  const row = document.getElementById('sb-row-' + i);
-  const bank = document.getElementById('sb-bank-' + i);
-  const fb = document.getElementById('sb-fb-' + i);
-  const placed = Array.from(row.children).map(c => c.textContent);
-  const correct = SATZBAU_DATA[i].chips;
-  if (bank.children.length === 0 && placed.length > 0) {
-    if (JSON.stringify(placed) === JSON.stringify(correct)) {
-      fb.textContent = '✅ Richtig!';
-      fb.className = 'sb-feedback ok';
-      checkSatzbauComplete();
-    } else {
-      fb.textContent = '❌ Noch nicht ganz richtig.';
-      fb.className = 'sb-feedback err';
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'wrong');
+        c.classList.add(ok ? 'correct' : 'wrong');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
     }
-  } else {
-    fb.textContent = '';
-    fb.className = 'sb-feedback';
-  }
+    return ok;
 }
 
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const fb = document.getElementById('sb-fb-' + i);
-    return fb && fb.classList.contains('ok');
-  });
-  if (allOk) timerStop(4);
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'wrong');
+        });
+        row.classList.remove('correct', 'wrong');
+        fb.textContent = '';
+        return;
+    }
+
+    setTimeout(function() {
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '\u2713 Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('wrong');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '\u2717 Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
 }
 
-function showSbLoesung() {
-  SATZBAU_DATA.forEach((item, i) => {
-    const bank = document.getElementById('sb-bank-' + i);
-    const row = document.getElementById('sb-row-' + i);
-    const fb = document.getElementById('sb-fb-' + i);
-    while (row.firstChild) bank.appendChild(row.firstChild);
-    item.chips.forEach(text => { row.appendChild(sbMakeChip(text)); });
-    bank.innerHTML = '';
-    fb.textContent = '✅ Richtig!';
-    fb.className = 'sb-feedback ok';
-  });
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) stopTimer(4);
 }
 
-function resetSatzbau() {
-  sbTimerStarted = false;
-  buildSatzbau();
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+
+        parts.forEach(function(word) {
+            bank.appendChild(sbMakeChip(word));
+        });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        container.appendChild(item);
+    });
 }
 
-// ===================== VOKABELN =====================
-const VOCAB_DATA = [
-  { de: 'die Reisefreiheit', plural: 'die Reisefreiheiten', en: 'freedom of travel' },
-  { de: 'die Metropole', plural: 'die Metropolen', en: 'metropolis / big city' },
-  { de: 'die Altstadt', plural: 'die Altstädte', en: 'old town' },
-  { de: 'umziehen', plural: '(er zieht um)', en: 'to move (to a new place)' },
-  { de: 'Heimweh haben', plural: '–', en: 'to be homesick' },
-  { de: 'im Ausland leben', plural: '–', en: 'to live abroad' },
-  { de: 'nostalgisch', plural: '–', en: 'nostalgic' },
-  { de: 'der Bürger', plural: 'die Bürger', en: 'citizen' },
-  { de: 'die Subkultur', plural: 'die Subkulturen', en: 'subculture' },
-  { de: 'die Entscheidung', plural: 'die Entscheidungen', en: 'decision' },
+function showSBLoesung() {
+    satzbauData.forEach(function(ex, idx) {
+        var bank = document.getElementById('sb-bank-' + idx);
+        var row  = document.getElementById('sb-row-' + idx);
+        var solution = ex.valid[0];
+
+        var allChips = {};
+        Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+        Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+
+        while (bank.firstChild) bank.removeChild(bank.firstChild);
+        while (row.firstChild)  row.removeChild(row.firstChild);
+
+        solution.forEach(function(word, i) {
+            var chip = allChips[word];
+            if (chip) {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+                chip.classList.remove('correct', 'wrong');
+                row.appendChild(chip);
+            }
+        });
+
+        var fb = document.getElementById('sb-fb-' + idx);
+        fb.textContent = '';
+        setTimeout(function() { sbCheckAuto(idx); }, 100);
+    });
+    stopTimer(4);
+}
+
+function resetSB() {
+    satzbauData.forEach(function(ex, idx) {
+        var bank = document.getElementById('sb-bank-' + idx);
+        var row  = document.getElementById('sb-row-' + idx);
+        var fb   = document.getElementById('sb-fb-' + idx);
+
+        while (bank.firstChild) bank.removeChild(bank.firstChild);
+        while (row.firstChild)  row.removeChild(row.firstChild);
+
+        row.classList.remove('correct', 'wrong');
+        fb.textContent = '';
+
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+    });
+}
+
+// ===== WORTSCHATZ =====
+var WORTSCHATZ = [
+    { en: 'backpacker', de: 'Backpacker', artikel: 'der', plural: '-', type: 'n' },
+    { en: 'subculture', de: 'Subkultur', artikel: 'die', plural: '-en', type: 'n' },
+    { en: 'adventure', de: 'Abenteuer', artikel: 'das', plural: '-', type: 'n' },
+    { en: 'couchsurfing', de: 'Couchsurfing', artikel: 'das', plural: '-', type: 'n' },
+    { en: 'hostel', de: 'Hostel', artikel: 'das', plural: '-s', type: 'n' },
+    { en: 'to travel', de: 'reisen', artikel: '', plural: '', type: 'v' },
+    { en: 'authentic', de: 'authentisch', artikel: '', plural: '', type: 'a' },
+    { en: 'nomadic', de: 'nomadisch', artikel: '', plural: '', type: 'a' },
 ];
 
-let vtIndex = 0;
-let vtTimerStarted = false;
+function initWortschatz() {
+    var container = document.getElementById('wortschatzContainer');
+    container.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        row.style.marginBottom = '0';
 
-function vtRender() {
-  const item = VOCAB_DATA[vtIndex];
-  document.getElementById('vt-en').textContent = item.en;
-  document.getElementById('vt-progress').textContent = `Karte ${vtIndex + 1} von ${VOCAB_DATA.length}`;
-  document.getElementById('vt-input').value = '';
-  document.getElementById('vt-input').className = 'vt-input';
-  document.getElementById('vt-feedback').textContent = '';
+        var prompt = document.createElement('div');
+        prompt.style.cssText = 'font-weight:600; color:#667eea; margin-bottom:6px; font-size:1.05em;';
+        prompt.textContent = item.en;
+        row.appendChild(prompt);
+
+        var fields = document.createElement('div');
+        fields.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; align-items:center;';
+
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'blank'; artInp.type = 'text';
+            artInp.placeholder = 'Artikel'; artInp.style.width = '70px';
+            artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+            artInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(artInp);
+
+            var wordInp = document.createElement('input');
+            wordInp.className = 'blank'; wordInp.type = 'text';
+            wordInp.placeholder = 'Wort'; wordInp.style.width = '160px';
+            wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
+            wordInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(wordInp);
+
+            var plInp = document.createElement('input');
+            plInp.className = 'blank'; plInp.type = 'text';
+            plInp.placeholder = 'Plural'; plInp.style.width = '140px';
+            plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+            if (item.plural === '\u2013' || item.plural === '-') {
+                plInp.value = '\u2013';
+                plInp.disabled = true;
+                plInp.classList.add('correct');
+                plInp.style.opacity = '0.6';
+                plInp.title = 'Dieses Wort hat keinen Plural';
+            } else {
+                plInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            }
+            fields.appendChild(plInp);
+        } else {
+            var inp = document.createElement('input');
+            inp.className = 'blank'; inp.type = 'text';
+            inp.placeholder = 'Deutsch'; inp.style.width = '220px';
+            inp.dataset.answer = item.de; inp.dataset.field = 'word';
+            inp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields);
+        container.appendChild(row);
+    });
 }
 
-function vtCheck() {
-  if (!vtTimerStarted) { timerAutoStart(5); vtTimerStarted = true; }
-  const inp = document.getElementById('vt-input');
-  const val = inp.value.trim().toLowerCase();
-  const item = VOCAB_DATA[vtIndex];
-  const correct = item.de.toLowerCase();
-  if (val === correct) {
-    inp.className = 'vt-input ok';
-    document.getElementById('vt-feedback').textContent = '✅ ' + item.de + ' | Pl.: ' + item.plural;
-  } else if (correct.startsWith(val)) {
-    inp.className = 'vt-input';
-  } else if (val.length > 0) {
-    inp.className = 'vt-input no';
-  }
+function wortschatzCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser   = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { }
+    else { inp.classList.add('wrong'); }
 }
 
-function vtNext() {
-  if (vtIndex < VOCAB_DATA.length - 1) {
-    vtIndex++;
-    vtRender();
-  } else {
-    timerStop(5);
-    document.getElementById('vt-feedback').textContent = '🏆 Alle Karten abgeschlossen!';
-  }
+function checkWortschatzAllOk() {
+    var inputs = document.querySelectorAll('#sec-5 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.disabled || i.classList.contains('correct');
+    });
+    if (allOk) stopTimer(5);
 }
 
-function vtPrev() {
-  if (vtIndex > 0) {
-    vtIndex--;
-    vtRender();
-  }
+function showWortschatzLoesung() {
+    stopTimer(5);
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
 }
 
-function resetVokabeln() {
-  vtIndex = 0;
-  vtTimerStarted = false;
-  vtRender();
+function resetWortschatz() {
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        if (!inp.disabled) {
+            inp.value = ''; inp.classList.remove('correct', 'wrong');
+        }
+    });
 }
 
-// ===================== INIT =====================
-initVocab();
-buildLesetext();
-buildRF();
-buildLuecken();
-buildSatzbau();
-vtRender();
+// ===== INITIALISIERUNG =====
+initVorentlastung();
+initLesetext();
+initRF();
+initLuecken();
+initSatzbau();
+initWortschatz();
 loadBestTimes();
 </script>
+
 </body>
 </html>

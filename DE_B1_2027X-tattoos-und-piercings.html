@@ -1,629 +1,1157 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 – Tattoos und Piercings</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; font-size: 16px; }
-  .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 6px 32px rgba(0,0,0,0.28); overflow: hidden; }
-  h1 { background: #667eea; color: #fff; text-align: center; padding: 20px 20px 14px; font-size: 1.3em; }
-  .subtitle { background: #667eea; color: #d9b3ff; text-align: center; padding: 0 20px 16px; font-size: 0.88em; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1.1 – Lektion 2027X · Textarbeit – Tattoos und Piercings</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* NAV */
-  .nav { display: flex; flex-wrap: wrap; background: #f0e6ff; border-bottom: 2px solid #667eea; }
-  .nav button { flex: 1; min-width: 80px; padding: 10px 4px 8px; border: 1px solid #667eea; background: #f0e6ff; color: #667eea; font-size: 0.75em; font-weight: bold; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-  .nav button .nav-emoji { font-size: 1.3em; }
-  .nav button .nav-label { font-size: 0.85em; }
-  .nav button.active { background: #667eea; color: #fff; }
-  .nav button:hover:not(.active) { background: #d9b3ff; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-  /* TAB */
-  .tab { display: none; padding: 26px; }
-  .tab.aktiv { display: block; }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
 
-  /* BANNER */
-  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; display: block; }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
 
-  /* TIMER-CONTROLS */
-  .timer-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 6px; }
-  .tc-buttons { display: flex; gap: 6px; }
-  .tc-buttons button { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-  .tc-buttons button:hover { background: #f0f0f0; color: #555; }
-  .tc-times { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
-  .timer-display { color: #667eea; font-weight: 700; }
-  .best-display { color: #f39c12; font-weight: 600; }
+    .header h1 {
+      font-size: 2.2em;
+      font-family: Georgia, 'Times New Roman', serif;
+      color: white;
+      margin-bottom: 8px;
+      border: none;
+      padding: 0;
+    }
 
-  /* VOCAB CARDS */
-  .vocab-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-  .vocab-card { border: 1.5px solid #d9b3ff; border-radius: 10px; padding: 14px; background: #faf5ff; }
-  .vocab-card .word { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 4px; }
-  .vocab-card .example { font-size: 0.87em; color: #555; font-style: italic; line-height: 1.5; }
+    .header .subtitle, .header p {
+      font-size: 1.1em;
+      font-family: Georgia, 'Times New Roman', serif;
+      opacity: 0.95;
+      color: rgba(255,255,255,0.9);
+      margin: 0;
+    }
 
-  /* INFO BOX */
-  .info-box { background: #f0e6ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 16px; font-size: 0.92em; line-height: 1.6; }
-  .info-box strong { color: #667eea; }
+    .header .big-emoji {
+      font-size: 2.6em;
+      display: block;
+      margin-top: 8px;
+    }
 
-  /* SECTION TITLE */
-  .section-title { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e0c4ff; }
+    .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      background: #f8f9fa;
+      border-top: 1px solid #ddd;
+      border-left: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+    }
 
-  /* VOR/NACHTEIL TABLE */
-  .vn-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-  .vn-table th { background: #667eea; color: #fff; padding: 10px 14px; font-size: 0.95em; text-align: left; }
-  .vn-table td { padding: 10px 14px; border-bottom: 1px solid #e0c4ff; font-size: 0.92em; line-height: 1.5; vertical-align: top; }
-  .vn-table tr:nth-child(even) td { background: #faf5ff; }
-  .vn-plus { color: #28a745; font-weight: bold; }
-  .vn-minus { color: #dc3545; font-weight: bold; }
+    .nav-btn {
+      flex: 1;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      border-right: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      transition: all 0.3s;
+      font-size: 0.92em;
+      font-weight: 500;
+      color: #666;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-  /* LÜCKENTEXT */
-  .luecke-item { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
-  .luecke-item .sentence { line-height: 1.8; }
-  .luecke-input { border: none; border-bottom: 2px solid #667eea; background: transparent; font-size: 1em; padding: 2px 6px; min-width: 130px; outline: none; color: #222; transition: border-color 0.2s; }
-  .luecke-input.ok { border-color: #28a745; color: #28a745; }
-  .luecke-input.no { border-color: #dc3545; color: #dc3545; }
-  .luecke-item.correct { background: #d4edda; border-color: #28a745; }
-  .luecke-item.wrong { background: #f8d7da; border-color: #dc3545; }
-  .feedback-icon { font-size: 1.1em; margin-left: 6px; }
+    .nav-btn:last-child { border-right: none; }
+    .nav-btn:hover { background: #e9ecef; color: #495057; }
+    .nav-btn.active {
+      background: white;
+      color: #667eea;
+      font-weight: 600;
+      border-bottom: 3px solid #667eea;
+    }
 
-  /* SATZBAU */
-  .sb-task { background: #f9f9f9; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 16px; margin-bottom: 18px; }
-  .sb-bank { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; border: 1.5px dashed #bbb; border-radius: 6px; padding: 8px; margin-bottom: 10px; }
-  .sb-zone { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; border: 2px dashed #667eea; border-radius: 6px; padding: 8px; background: #faf5ff; }
-  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.88em; user-select: none; transition: opacity 0.15s; }
-  .chip:active { cursor: grabbing; opacity: 0.7; }
-  .sb-feedback { font-size: 0.9em; margin-top: 8px; font-weight: bold; min-height: 20px; }
-  .sb-feedback.ok { color: #28a745; }
-  .sb-feedback.err { color: #dc3545; }
+    .nav-emoji { font-size: 1.3em; line-height: 1.2; }
+    .nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
 
-  /* VOKABEL TRAINER */
-  .vt-card { background: linear-gradient(135deg, #667eea 0%, #9b59b6 100%); color: #fff; border-radius: 12px; padding: 28px 24px; text-align: center; margin-bottom: 20px; min-height: 120px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; }
-  .vt-card .vt-de { font-size: 1.3em; font-weight: bold; }
-  .vt-card .vt-en { font-size: 0.9em; opacity: 0.8; }
-  .vt-input-row { display: flex; gap: 10px; margin-bottom: 14px; }
-  .vt-input { flex: 1; padding: 10px 14px; border: 2px solid #d9b3ff; border-radius: 8px; font-size: 1em; outline: none; transition: border-color 0.2s; }
-  .vt-input.ok { border-color: #28a745; background: #d4edda; }
-  .vt-input.no { border-color: #dc3545; background: #f8d7da; }
-  .vt-nav { display: flex; gap: 10px; justify-content: center; }
-  .vt-btn { padding: 8px 20px; background: #667eea; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: bold; transition: background 0.2s; }
-  .vt-btn:hover { background: #4a0080; }
-  .vt-progress { text-align: center; font-size: 0.85em; color: #888; margin-bottom: 14px; }
+    .section { display: none; }
+    .section.active { display: block; }
 
-  /* DISCUSSION */
-  .disc-card { background: #f0e6ff; border-radius: 10px; padding: 20px 22px; margin-bottom: 14px; }
-  .disc-card .question { font-weight: bold; color: #4a0080; font-size: 1em; margin-bottom: 10px; }
-  .disc-card .starter { font-size: 0.88em; color: #777; font-style: italic; }
-  .redemittel-box { background: #fff8e1; border: 1.5px solid #f39c12; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px; }
-  .redemittel-box h4 { color: #e67e22; font-size: 0.9em; margin-bottom: 8px; }
-  .rm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .rm-chip { background: #fff3cd; border: 1px solid #f39c12; border-radius: 20px; padding: 4px 12px; font-size: 0.85em; color: #7d5a00; }
+    .sec-inner {
+      padding: 26px;
+    }
 
-  /* FOOTER */
-  footer { background: #f0e6ff; border-top: 1px solid #d9b3ff; text-align: center; padding: 12px; font-size: 0.78em; color: #888; }
-  footer a { color: #667eea; text-decoration: none; }
-</style>
+    .tab-banner {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 600px) {
+      .tab-banner { max-height: 120px; }
+    }
+
+    .control-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding: 6px 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .btn-row { display: flex; gap: 6px; }
+    .btn {
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 0.82em;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 500;
+    }
+    .btn:hover { border-color: #667eea; color: #667eea; }
+
+    .timer-display {
+      display: flex;
+      gap: 14px;
+      font-size: 0.82em;
+      color: #bbb;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* VORENTLASTUNG */
+    .vorentlastung-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .vorentlastung-card {
+      background: #f8f9ff;
+      border: 1px solid #dde3ff;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .vorentlastung-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .vorentlastung-card .label {
+      font-weight: 600;
+      color: #667eea;
+      font-size: 0.85em;
+      line-height: 1.4;
+    }
+
+    /* LESETEXT */
+    .story-text {
+      max-width: 600px;
+      margin: 0 auto;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.05em;
+      line-height: 1.8;
+      color: #1a1a1a;
+      text-align: justify;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+    }
+
+    .story-text p {
+      margin-bottom: 1em;
+      text-indent: 1.4em;
+    }
+
+    .story-text p:first-child {
+      text-indent: 0;
+    }
+
+    .vocab-hl {
+      background: #ffe9a0;
+      border-radius: 3px;
+      padding: 1px 3px;
+      font-weight: 600;
+      cursor: help;
+    }
+
+    .story-source {
+      margin-top: 24px;
+      color: #aaa;
+      font-size: 0.8em;
+      text-align: right;
+    }
+
+    /* GENUS TAB */
+    .genus-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .genus-cat {
+      background: #f8f9fa;
+      border: 2px dashed #c5cae9;
+      border-radius: 10px;
+      min-height: 200px;
+      padding: 10px;
+      transition: background 0.2s;
+    }
+
+    .genus-cat.dragover {
+      background: #e8eaff;
+      border-color: #667eea;
+    }
+
+    .genus-cat .label {
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 1.05em;
+    }
+
+    /* CHIP */
+    .chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      cursor: grab;
+      font-size: 0.85rem;
+      font-weight: 600;
+      user-select: none;
+      transition: transform 0.15s, opacity 0.15s;
+      white-space: nowrap;
+      display: inline-block;
+      margin: 4px;
+    }
+
+    .chip:active { cursor: grabbing; transform: scale(1.04); }
+    .chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+    .chip.wrong { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+
+    /* LÜCKENTEXT */
+    .luecken-item {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+      line-height: 1.8;
+    }
+
+    input.blank {
+      border: 2px solid #c5cae9;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      background: white;
+      margin: 0 2px;
+    }
+
+    input.blank:focus { border-color: #667eea; }
+    input.blank.correct { border-color: #27ae60; background: #e8f5e9; }
+    input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
+
+    /* MC */
+    .mc-item {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .mc-question {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 0.95em;
+    }
+
+    .mc-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mc-btn {
+      padding: 9px 14px;
+      border: 2px solid #c5cae9;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.92rem;
+      transition: all 0.2s;
+    }
+
+    .mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+    .mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+    .mc-btn.wrong { border-color: #e53935; background: #ffebee; color: #c62828; }
+
+    /* SATZBAU */
+    .satzbau-item {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .sb-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      min-height: 54px;
+    }
+
+    .drop-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 44px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 2px dashed #c5cae9;
+      background: #fafbff;
+    }
+
+    .drop-row.dragover { background: #e8eaff; border-color: #667eea; }
+
+    .satzbau-feedback {
+      font-size: 0.9em;
+      margin-top: 8px;
+      font-weight: 600;
+      min-height: 1.3em;
+      color: #999;
+    }
+
+    .satzbau-feedback.correct { color: #27ae60; }
+    .satzbau-feedback.incorrect { color: #e74c3c; }
+
+    /* FOOTER */
+    .author-footer {
+      text-align: center;
+      margin-top: 40px;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 16px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    .author-footer a { color: #aaa; }
+    .author-name { font-weight: 700; }
+
+    @media (max-width: 600px) {
+      body { padding: 8px; }
+      .nav { flex-wrap: wrap; }
+      .nav-btn {
+        flex: 1 1 33%;
+        min-width: 0;
+        font-size: 0.8em;
+        padding: 10px 6px;
+        border-right: 1px solid #ddd;
+      }
+      .nav-btn:last-child { border-right: 1px solid #ddd; }
+      .genus-container { grid-template-columns: repeat(2, 1fr); }
+      .vorentlastung-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    h2 {
+      font-size: 1.2em;
+      margin-bottom: 12px;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
-  <h1>🎨 Tattoos und Piercings</h1>
-  <div class="subtitle">B1.2 – Lektion 2027X</div>
-
-  <nav class="nav">
-    <button class="active" onclick="showTab(0,this)"><span class="nav-emoji">📸</span><span class="nav-label">Wortschatz</span></button>
-    <button onclick="showTab(1,this)"><span class="nav-emoji">🔖</span><span class="nav-label">Tattoos</span></button>
-    <button onclick="showTab(2,this)"><span class="nav-emoji">💎</span><span class="nav-label">Piercings</span></button>
-    <button onclick="showTab(3,this)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></button>
-    <button onclick="showTab(4,this)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></button>
-    <button onclick="showTab(5,this)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></button>
-  </nav>
-
-  <!-- TAB 0: WORTSCHATZ TRADITIONEN -->
-  <div class="tab aktiv" id="tab-0">
-    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Traditionen">
-    <div class="section-title">📸 Wortschatz — Traditionen &amp; Gesellschaft</div>
-    <div class="vocab-cards" id="vocab-traditionen"></div>
+  <div class="header">
+    <h1>Tattoos und Piercings</h1>
+    <p>B1.1 – Lektion 2027X · Textarbeit</p>
+    <div class="big-emoji">💉</div>
   </div>
 
-  <!-- TAB 1: TATTOOS -->
-  <div class="tab" id="tab-1">
-    <img src="https://images.pexels.com/photos/1193743/pexels-photo-1193743.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Tattoo">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="timerResetOne(1)">↺ Neustart</button>
-      </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-1">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-1">–</span></span>
-      </div>
+  <div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+      <span class="nav-emoji">📖</span>
+      <span class="nav-label">Vorentlastung</span>
     </div>
-    <div class="section-title">🔖 Tattoos — Wortschatz &amp; Vor-/Nachteile</div>
-    <div class="vocab-cards" id="vocab-tattoos"></div>
-    <br>
-    <div class="section-title">⚖️ Vor- und Nachteile von Tattoos</div>
-    <table class="vn-table">
-      <thead>
-        <tr><th><span class="vn-plus">✚</span> Vorteile</th><th><span class="vn-minus">−</span> Nachteile</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Tattoos sind eine Form der Kunst und des Ausdrucks der Persönlichkeit.</td><td>Tattoos hinterlassen permanente Spuren auf dem Körper.</td></tr>
-        <tr><td>Viele Menschen fühlen sich mit Tattoos individueller und einzigartiger.</td><td>Das Entfernen eines Tattoos ist teuer und schmerzhaft.</td></tr>
-        <tr><td>Tattoos können eine kulturelle oder spirituelle Bedeutung haben.</td><td>Im Berufsleben können Tattoos manchmal Schwierigkeiten machen.</td></tr>
-        <tr><td>Farbenfroh gestaltete Tattoos können wie Kunstwerke aussehen.</td><td>Das Tätowieren kann Risiken für die Haut mit sich bringen.</td></tr>
-      </tbody>
-    </table>
-    <div class="disc-card">
-      <div class="question">💬 Was denkst du? Sind Tattoos wahre Kunstwerke oder stellen sie eine Gefahr für den Körper dar?</div>
-      <div class="starter">„Meiner Meinung nach sind Tattoos ..."</div>
+    <div class="nav-btn" onclick="showSection(1)">
+      <span class="nav-emoji">📄</span>
+      <span class="nav-label">Lesetext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+      <span class="nav-emoji">🔤</span>
+      <span class="nav-label">Genus</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+      <span class="nav-emoji">✏️</span>
+      <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+      <span class="nav-emoji">☑️</span>
+      <span class="nav-label">Multiple-Choice</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(5)">
+      <span class="nav-emoji">🧩</span>
+      <span class="nav-label">Satzbau</span>
     </div>
   </div>
 
-  <!-- TAB 2: PIERCINGS -->
-  <div class="tab" id="tab-2">
-    <img src="https://images.pexels.com/photos/2269872/pexels-photo-2269872.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Piercing">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="timerResetOne(2)">↺ Neustart</button>
-      </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-2">–</span></span>
-      </div>
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Körperschmuck und Kultur">
+    <div class="sec-inner">
+      <h2>📖 Vorentlastung – Körperschmuck und Ausdrucksformen</h2>
+      <div class="vorentlastung-cards" id="vorentlastungContainer"></div>
     </div>
-    <div class="section-title">💎 Piercings — Wortschatz &amp; Diskussion</div>
-    <div class="vocab-cards" id="vocab-piercings"></div>
-    <br>
-    <div class="redemittel-box">
-      <h4>💬 Redemittel — Meinung äußern</h4>
-      <div class="rm-chips">
-        <span class="rm-chip">Ich bin der Meinung, dass ...</span>
-        <span class="rm-chip">Ich denke, dass ...</span>
-        <span class="rm-chip">Meiner Meinung nach ...</span>
-        <span class="rm-chip">Ich kann mich damit identifizieren, weil ...</span>
-        <span class="rm-chip">Ich finde es wichtig, dass ...</span>
-        <span class="rm-chip">Einerseits ... andererseits ...</span>
-        <span class="rm-chip">Das hängt davon ab, ob ...</span>
+  </div>
+
+  <!-- TAB 1: LESETEXT -->
+  <div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Lesetext Tattoos">
+    <div class="sec-inner">
+      <h2>📄 Lesetext – Tattoos und Piercings als Ausdrucksform der Identität</h2>
+      <div class="story-text" id="storyText">
+        <p>Tattoos und Piercings sind längst kein Zeichen von Rebellion mehr. Im 21. Jahrhundert nutzen Millionen von Menschen diese Formen der Körpermodifikation, um ihre Identität auszudrücken und ihre Persönlichkeit nach außen zu zeigen. Doch was steckt wirklich hinter diesem globalen Phänomen?</p>
+        <p>Die Geschichte der Tätowierung reicht Tausende von Jahren zurück. Archäologische Funde deuten darauf hin, dass bereits die alten Ägypter und Kulturen in Polynesien ihre Körper mit Mustern und Symbolen schmückten. Diese frühen Tattoos hatten oft eine kulturelle oder spirituelle Bedeutung und markierten die Zugehörigkeit zu einer bestimmten Gruppe oder eines erreichten Status.</p>
+        <p>In der modernen Subkultur jedoch hat sich die Bedeutung gewandelt. Für viele junge Menschen sind Tattoos nicht länger nur Mode, sondern ein intimes Statement über ihre Werte, ihre Leidenschaften oder prägenden Erlebnisse. Ein Tattoo kann ein Kunstwerk sein, das die innere Welt nach außen trägt. Ein Piercing im Ohr, in der Nase oder an den Lippen wird zum Symbol der Selbstbestimmung und Unabhängigkeit.</p>
+        <p>Die psychologische Forschung hat gezeigt, dass Menschen, die sich tätowieren lassen, oft ein stärkeres Bedürfnis nach Selbstausdruck haben. Sie nutzen ihren Körper als Leinwand, um ihre Geschichte zu erzählen. Jedes Tattoo kann ein Kapitel ihres Lebens repräsentieren—eine Liebe, einen Traum, einen verstorbenen Menschen oder eine persönliche Überwindung.</p>
+        <p>Piercings hingegen werden häufig als experimenteller Weg wahrgenommen, die Grenzen des eigenen Körperbildes zu erforschen. Sie können flüchtig sein oder dauerhaft—je nachdem, wie der Träger sich selbst entdeckt. Die Kultur des Body Modding verbindet Mode, Kunst und tiefe persönliche Bedeutung.</p>
+        <p>Allerdings bleibt das gesellschaftliche Urteil gespalten. Während einige Tattoos und Piercings als kreative Ausdrucksformen schätzen, sehen andere darin immer noch ein Zeichen mangelnder Konformität. In manchen Berufsfeldern können sichtbare Tattoos oder Piercings berufliche Nachteile mit sich bringen. Diese Realität zeigt, dass der Körperschmuck zwar persönlich bedeutsam ist, aber auch im sozialen Kontext interpretiert wird.</p>
+        <p>Die Zukunft wird zeigen, ob diese Formen der Selbstgestaltung vollständig in die Mainstream-Gesellschaft aufgenommen werden oder ob sie weiterhin als Marker von Nonkonformität gelten. Was sicher ist: Tattoos und Piercings werden Menschen weiterhin ermöglichen, ihre Geschichte auf ihrer Haut zu schreiben.</p>
       </div>
+      <div class="story-source">Quelle: B1.1 – Lektion 2027X · Textarbeit</div>
     </div>
-    <div class="disc-card">
-      <div class="question">💬 Stellen Tattoos und Piercings einen Modetrend oder einen Teil der Persönlichkeit dar?</div>
-      <div class="starter">„Ich denke, dass Tattoos und Piercings ..."</div>
-    </div>
-    <div class="disc-card">
-      <div class="question">💬 Warum sind viele junge Leute von Tattoos und Piercings begeistert, ältere Personen aber nicht?</div>
-      <div class="starter">„Ich glaube, das liegt daran, dass ..."</div>
+  </div>
+
+  <!-- TAB 2: GENUS -->
+  <div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wortschatz Kategorien">
+    <div class="sec-inner">
+      <h2>🔤 Genus – Richtige Artikel zuordnen</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn btn-show" onclick="showGenusSolution()">Lösungen</button>
+          <button class="btn btn-reset" onclick="resetGenus(); timerResetOne(2);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span class="current-time">⏱ <span id="timer-2">00:00</span></span>
+          <span class="best-time">🏆 <span id="best-2">--:--</span></span>
+        </div>
+      </div>
+      <div class="genus-container" id="genusContainer"></div>
     </div>
   </div>
 
   <!-- TAB 3: LÜCKENTEXT -->
-  <div class="tab" id="tab-3">
-    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Schreiben">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="showLueckenLoesung()">💡 Lösungen</button>
-        <button onclick="timerResetOne(3); resetLuecken()">↺ Neustart</button>
+  <div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/7974/pexels-photo-7974.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schreiben">
+    <div class="sec-inner">
+      <h2>✏️ Lückentext – Sätze ergänzen</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn btn-show" onclick="showLueckenLoesungen()">Lösungen</button>
+          <button class="btn btn-reset" onclick="resetLuecken(); timerResetOne(3);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+          <span class="best-time">🏆 <span id="best-3">--:--</span></span>
+        </div>
       </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-3">–</span></span>
-      </div>
+      <div id="lueckenContainer"></div>
     </div>
-    <div class="info-box"><strong>Tipp:</strong> Ergänze die Lücken mit dem passenden Wort.</div>
-    <div id="luecken-container"></div>
   </div>
 
-  <!-- TAB 4: SATZBAU -->
-  <div class="tab" id="tab-4">
-    <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Satzbau">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="showSbLoesung()">💡 Lösungen</button>
-        <button onclick="timerResetOne(4); resetSatzbau()">↺ Neustart</button>
+  <!-- TAB 4: MULTIPLE-CHOICE -->
+  <div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3808215/pexels-photo-3808215.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Fragen beantworten">
+    <div class="sec-inner">
+      <h2>☑️ Multiple-Choice – Textverständnis prüfen</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn btn-show" onclick="showMCLoesungen()">Lösungen</button>
+          <button class="btn btn-reset" onclick="resetMC(); timerResetOne(4);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span class="current-time">⏱ <span id="timer-4">00:00</span></span>
+          <span class="best-time">🏆 <span id="best-4">--:--</span></span>
+        </div>
       </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-4">–</span></span>
-      </div>
+      <div id="mcContainer"></div>
     </div>
-    <div class="info-box"><strong>Aufgabe:</strong> Bringe die Wörter in die richtige Reihenfolge.</div>
-    <div id="satzbau-container"></div>
   </div>
 
-  <!-- TAB 5: VOKABELN -->
-  <div class="tab" id="tab-5">
-    <img src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Vokabeln">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button onclick="timerResetOne(5); resetVokabeln()">↺ Neustart</button>
+  <!-- TAB 5: SATZBAU -->
+  <div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3808215/pexels-photo-3808215.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Satzteile ordnen">
+    <div class="sec-inner">
+      <h2>🧩 Satzbau – Satzteile ordnen</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn btn-show" onclick="showSatzbauLoesungen()">Lösungen</button>
+          <button class="btn btn-reset" onclick="resetSatzbau(); timerResetOne(5);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span class="current-time">⏱ <span id="timer-5">00:00</span></span>
+          <span class="best-time">🏆 <span id="best-5">--:--</span></span>
+        </div>
       </div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
-        <span>🏆 <span class="best-display" id="best-5">–</span></span>
-      </div>
+      <div id="satzbauContainer"></div>
     </div>
-    <div class="vt-progress" id="vt-progress">Karte 1 von 10</div>
-    <div class="vt-card" id="vt-card">
-      <div class="vt-en" id="vt-en">–</div>
-    </div>
-    <div class="vt-input-row">
-      <input class="vt-input" id="vt-input" type="text" placeholder="Artikel + Wort + Plural" oninput="vtCheck()" onkeydown="if(event.key==='Enter') vtNext()">
-    </div>
-    <div class="vt-nav">
-      <button class="vt-btn" onclick="vtPrev()">◀ Zurück</button>
-      <button class="vt-btn" onclick="vtNext()">Weiter ▶</button>
-    </div>
-    <div id="vt-feedback" style="text-align:center;margin-top:12px;font-size:0.9em;min-height:20px;"></div>
   </div>
 
-  <footer>
+  <div class="author-footer">
     <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
     <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
-  </footer>
-</div>
+  </div>
+</div><!-- /container -->
 
 <script>
-// ===================== TIMER =====================
-const TIMER_PREFIX = 'best2027X';
-const timers = {};
+  // ========== VORENTLASTUNG ==========
+  var VORENTLASTUNG = [
+    { term: "das Tattoo, -s", def: "eine permanente Zeichnung auf der Haut mit Tinte" },
+    { term: "das Piercing, -s", def: "ein Loch in der Haut oder einem Körperteil, in das Schmuck eingesetzt wird" },
+    { term: "die Identität, -en", def: "die Besonderheit, die eine Person einzigartig macht" },
+    { term: "die Persönlichkeit, -en", def: "die charakteristischen Merkmale und Eigenschaften eines Menschen" },
+    { term: "die Subkultur, -en", def: "eine Gruppe von Menschen mit gemeinsamen Werten, die anders als die Gesellschaft lebt" },
+    { term: "der Körperschmuck, –", def: "Schmuck, den man an der Haut oder dem Körper trägt" },
+    { term: "die Rebellion, -en", def: "der Widerstand gegen Regeln oder Autoritäten" },
+    { term: "das Symbol, -e", def: "ein Zeichen, das für etwas Größeres oder Bedeutsameres steht" },
+    { term: "der Status, –", def: "die Position oder Rang einer Person in der Gesellschaft" },
+    { term: "die Selbstbestimmung, –", def: "das Recht, selbst über sein Leben und seinen Körper zu entscheiden" }
+  ];
 
-function timerKey(n) { return TIMER_PREFIX + n; }
-
-function timerStart(n) {
-  if (timers[n] && timers[n].running) return;
-  if (!timers[n]) timers[n] = { elapsed: 0, running: false };
-  timers[n].startTime = Date.now() - (timers[n].elapsed || 0) * 1000;
-  timers[n].running = true;
-  timers[n].interval = setInterval(() => {
-    const secs = Math.floor((Date.now() - timers[n].startTime) / 1000);
-    timers[n].elapsed = secs;
-    const el = document.getElementById('timer-' + n);
-    if (el) el.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
-  }, 500);
-}
-
-function timerStop(n) {
-  if (!timers[n] || !timers[n].running) return;
-  clearInterval(timers[n].interval);
-  timers[n].running = false;
-  const secs = timers[n].elapsed || 0;
-  const stored = parseInt(localStorage.getItem(timerKey(n)) || '9999');
-  if (secs < stored) {
-    localStorage.setItem(timerKey(n), secs);
-    const el = document.getElementById('best-' + n);
-    if (el) el.textContent = Math.floor(secs/60) + ':' + String(secs%60).padStart(2,'0');
+  function initVorentlastung() {
+    var container = document.getElementById('vorentlastungContainer');
+    container.innerHTML = '';
+    VORENTLASTUNG.forEach(function(item) {
+      var card = document.createElement('div');
+      card.className = 'vorentlastung-card';
+      var label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = item.term + ': ' + item.def;
+      card.appendChild(label);
+      container.appendChild(card);
+    });
   }
-}
 
-function timerResetOne(n) {
-  if (timers[n]) clearInterval(timers[n].interval);
-  timers[n] = { elapsed: 0, running: false };
-  const el = document.getElementById('timer-' + n);
-  if (el) el.textContent = '0:00';
-}
-
-function loadBestTimes() {
-  [1,2,3,4,5].forEach(n => {
-    const stored = parseInt(localStorage.getItem(timerKey(n)) || '0');
-    if (stored > 0) {
-      const el = document.getElementById('best-' + n);
-      if (el) el.textContent = Math.floor(stored/60) + ':' + String(stored%60).padStart(2,'0');
+  // ========== HIGHLIGHT VOKABELN ==========
+  function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text');
+    if (!storyText) return;
+    var words = VORENTLASTUNG.map(function(item) {
+      var term = item.term.replace(/^(der|die|das)\s+/i, '').split(',')[0].trim();
+      return term;
+    }).filter(function(w) { return w && w.length > 3; });
+    if (words.length === 0) return;
+    function walkAndHighlight(node) {
+      if (node.nodeType === 3) {
+        var text = node.nodeValue;
+        var replaced = text;
+        words.forEach(function(word) {
+          var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+          var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+          replaced = replaced.replace(regex, '\x01$1\x02');
+        });
+        if (replaced !== text) {
+          var span = document.createElement('span');
+          var parts = replaced.split(/\x01|\x02/);
+          var isHighlight = false;
+          parts.forEach(function(part) {
+            if (!part) { isHighlight = !isHighlight; return; }
+            if (isHighlight) {
+              var hl = document.createElement('span');
+              hl.className = 'vocab-hl';
+              hl.title = '📖 Vokabel aus der Vorentlastung';
+              hl.textContent = part;
+              span.appendChild(hl);
+            } else {
+              span.appendChild(document.createTextNode(part));
+            }
+            isHighlight = !isHighlight;
+          });
+          node.parentNode.replaceChild(span, node);
+        }
+      } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+        Array.from(node.childNodes).forEach(walkAndHighlight);
+      }
     }
-  });
-}
-
-function timerAutoStart(n) {
-  if (!timers[n] || !timers[n].running) timerStart(n);
-}
-
-// ===================== TABS =====================
-function showTab(idx, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('aktiv'));
-  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + idx).classList.add('aktiv');
-  btn.classList.add('active');
-  if (idx === 1) timerAutoStart(1);
-  if (idx === 2) timerAutoStart(2);
-}
-
-// ===================== WORTSCHATZ-DATEN =====================
-const VOCAB_TRADITIONEN = [
-  { word: 'individuell', example: 'Das ist eine individuelle Entscheidung.' },
-  { word: 'die Schwierigkeit, -en', example: 'Es gibt keine Schwierigkeiten, die man nicht überwinden kann.' },
-  { word: 'die Sicherheit', example: 'Wenn du eine Arbeitsstelle hast, verfügst du auch über Sicherheit.' },
-  { word: 'die Gleichheit', example: 'Nicht in jeder Gesellschaft kann man über Gleichheit zwischen den Menschen sprechen.' },
-  { word: 'sich identifizieren (mit)', example: 'Ich kann mich mit diesen modernen Ideen nur schwer identifizieren.' },
-  { word: 'die Moral', example: 'Die Moral ist eine besondere Tugend.' },
-  { word: 'die Toleranz', example: 'Um die Welt besser zu verstehen, braucht man mehr Toleranz.' },
-  { word: 'der Respekt', example: 'In einer Gesellschaft spielt Respekt eine wichtige Rolle.' },
-];
-
-const VOCAB_TATTOOS = [
-  { word: 'die Tinte, -n', example: 'Um Tattoos auf der Haut zu malen, braucht man Tinte.' },
-  { word: 'die Nadel, -n', example: 'Ich könnte mir keine Tattoos machen, denn ich habe Angst vor Nadeln.' },
-  { word: 'die Tätowierung, -en', example: 'Tätowierung bedeutet, sich ein Symbol auf die Haut stechen zu lassen.' },
-  { word: 'das Tribal, -s', example: 'Das Tribal ist ein oft gewähltes Motiv bei einer Tätowierung.' },
-  { word: 'symmetrisch', example: 'Ist es wichtig, dass Tattoos symmetrisch sind?' },
-  { word: 'farbenfroh', example: 'Tattoos können auch farbenfroh sein.' },
-  { word: 'das Muster, -', example: 'Dein Tattoo hat ein interessantes Muster.' },
-  { word: 'das Symbol, -e', example: 'Das Symbol dieses Tattoos ist sehr interessant.' },
-];
-
-const VOCAB_PIERCINGS = [
-  { word: 'durchstechen', example: 'Piercings durchstechen die Haut und das kann wehtun.' },
-  { word: 'der Ohrring, -e', example: 'Wo möchtest du dir einen Ohrring stechen lassen?' },
-  { word: 'das Risiko, Risiken', example: 'Im Falle des Piercings gibt es schon einige Risiken.' },
-  { word: 'unangenehm', example: 'Ein Piercing kann manchmal unangenehm sein.' },
-  { word: 'darstellen', example: 'Was stellt eigentlich dein Tattoo dar?' },
-  { word: 'kennzeichnen', example: 'Piercings kennzeichnen deinen Körper.' },
-  { word: 'außergewöhnlich', example: 'Dein Piercing hat eine wirklich außergewöhnliche Form.' },
-  { word: 'die Symbolik', example: 'Ich verstehe die Symbolik dieses Piercings nicht.' },
-];
-
-function buildVocabCards(data, containerId) {
-  const c = document.getElementById(containerId);
-  c.innerHTML = data.map(v => `
-    <div class="vocab-card">
-      <div class="word">${v.word}</div>
-      <div class="example">${v.example}</div>
-    </div>
-  `).join('');
-}
-
-// ===================== LÜCKENTEXT =====================
-const LUECKEN_DATA = [
-  { before: 'Sowohl Tattoos als auch Piercings sind heute ein', blank: 'Trend', after: '.' },
-  { before: 'Um Tattoos auf der Haut zu malen, braucht man', blank: 'Tinte', after: '.' },
-  { before: 'Tattoos waren insbesondere in den 90er Jahren sehr', blank: 'beliebt', after: '.' },
-  { before: 'Piercings', blank: 'durchstechen', after: 'die Haut und das kann wehtun.' },
-  { before: 'In einer Gesellschaft spielt', blank: 'Respekt', after: 'eine wichtige Rolle.' },
-  { before: 'Das Symbol dieses Tattoos ist sehr', blank: 'interessant', after: '.' },
-  { before: 'Oft haben Tattoos und Piercings auch eine', blank: 'Nebenbedeutung', after: '.' },
-  { before: 'Piercings können schon ein Zeichen einer alternativen', blank: 'Lebensweise', after: 'sein.' },
-  { before: 'Um die Welt besser zu verstehen, braucht man mehr', blank: 'Toleranz', after: '.' },
-  { before: 'Oft gibt es schon einen', blank: 'Zusammenhang', after: 'zwischen dem alltäglichen Leben und einem Tattoo.' },
-];
-
-let lueckenTimerStarted = false;
-let lueckenDone = [];
-
-function buildLuecken() {
-  const c = document.getElementById('luecken-container');
-  lueckenDone = new Array(LUECKEN_DATA.length).fill(false);
-  lueckenTimerStarted = false;
-  c.innerHTML = LUECKEN_DATA.map((item, i) => `
-    <div class="luecke-item" id="luecke-${i}">
-      <div class="sentence">
-        ${item.before}
-        <input class="luecke-input" id="li-${i}" type="text" placeholder=""
-          oninput="liveCheck(${i})" autocomplete="off">
-        <span class="feedback-icon" id="lf-${i}"></span>
-        ${item.after}
-      </div>
-    </div>
-  `).join('');
-}
-
-function liveCheck(i) {
-  if (!lueckenTimerStarted) { timerAutoStart(3); lueckenTimerStarted = true; }
-  const inp = document.getElementById('li-' + i);
-  const icon = document.getElementById('lf-' + i);
-  const item = document.getElementById('luecke-' + i);
-  const val = inp.value.trim();
-  const ans = LUECKEN_DATA[i].blank;
-  const caseSensitive = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
-  const match = caseSensitive ? (val === ans) : (val.toLowerCase() === ans.toLowerCase());
-  const prefix = caseSensitive ? ans.startsWith(val) : ans.toLowerCase().startsWith(val.toLowerCase());
-
-  if (match) {
-    inp.className = 'luecke-input ok';
-    item.className = 'luecke-item correct';
-    icon.textContent = '✅';
-    lueckenDone[i] = true;
-  } else if (val.length > 0 && prefix) {
-    inp.className = 'luecke-input';
-    inp.style.borderColor = '#667eea';
-    item.className = 'luecke-item';
-    icon.textContent = '';
-    lueckenDone[i] = false;
-  } else if (val.length > 0) {
-    inp.className = 'luecke-input no';
-    item.className = 'luecke-item wrong';
-    icon.textContent = '❌';
-    lueckenDone[i] = false;
-  } else {
-    inp.className = 'luecke-input';
-    inp.style.borderColor = '';
-    item.className = 'luecke-item';
-    icon.textContent = '';
-    lueckenDone[i] = false;
+    walkAndHighlight(storyText);
   }
-  if (lueckenDone.every(Boolean)) timerStop(3);
-}
 
-function showLueckenLoesung() {
-  LUECKEN_DATA.forEach((item, i) => {
-    const inp = document.getElementById('li-' + i);
-    inp.value = item.blank;
-    liveCheck(i);
-  });
-}
+  // ========== GENUS ==========
+  var GENUS_DATA = [
+    { word: "💉 Tattoo", cat: "das" },
+    { word: "💍 Piercing", cat: "das" },
+    { word: "🎨 Identität", cat: "die" },
+    { word: "👤 Persönlichkeit", cat: "die" },
+    { word: "👥 Subkultur", cat: "die" },
+    { word: "⚱️ Körperschmuck", cat: "der" },
+    { word: "✊ Rebellion", cat: "die" },
+    { word: "⚡ Symbol", cat: "das" },
+    { word: "🏆 Status", cat: "der" },
+    { word: "🗽 Selbstbestimmung", cat: "die" },
+    { word: "🖼️ Kunstwerk", cat: "das" },
+    { word: "📖 Geschichte", cat: "die" },
+    { word: "🌍 Kultur", cat: "die" },
+    { word: "💭 Gedanke", cat: "der" },
+    { word: "🎭 Ausdrucksform", cat: "die" }
+  ];
 
-function resetLuecken() {
-  lueckenTimerStarted = false;
-  buildLuecken();
-}
+  var draggedChip = null;
 
-// ===================== SATZBAU =====================
-const SATZBAU_DATA = [
-  { chips: ['Tattoos', 'waren', 'insbesondere', 'in', 'den', '90er', 'Jahren', 'sehr', 'beliebt.'] },
-  { chips: ['In', 'einer', 'Gesellschaft', 'spielt', 'Respekt', 'eine', 'wichtige', 'Rolle.'] },
-  { chips: ['Das', 'Tribal', 'ist', 'ein', 'oft', 'gewähltes', 'Motiv', 'bei', 'einer', 'Tätowierung.'] },
-  { chips: ['Piercings', 'können', 'schon', 'ein', 'Zeichen', 'einer', 'alternativen', 'Lebensweise', 'sein.'] },
-  { chips: ['Ich', 'kann', 'mich', 'mit', 'diesen', 'modernen', 'Ideen', 'nur', 'schwer', 'identifizieren.'] },
-  { chips: ['Oft', 'haben', 'Tattoos', 'und', 'Piercings', 'auch', 'eine', 'Nebenbedeutung.'] },
-];
-
-let sbDragged = null;
-let sbTimerStarted = false;
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+  function initGenus() {
+    var container = document.getElementById('genusContainer');
+    container.innerHTML = '';
+    var categories = ['der', 'die', 'das'];
+    categories.forEach(function(cat) {
+      var zone = document.createElement('div');
+      zone.className = 'genus-cat';
+      zone.dataset.cat = cat;
+      zone.ondragover = allowDrop;
+      zone.ondrop = function(e) { dropGenus(e, zone); };
+      var label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = cat;
+      zone.appendChild(label);
+      container.appendChild(zone);
+    });
+    var bank = document.createElement('div');
+    bank.id = 'genus-bank';
+    bank.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#f8f9fa;border-radius:10px;margin-bottom:14px;';
+    var shuffled = shuffle(GENUS_DATA);
+    shuffled.forEach(function(item) {
+      var chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = item.word;
+      chip.dataset.cat = item.cat;
+      chip.draggable = true;
+      chip.addEventListener('dragstart', function(e) {
+        draggedChip = chip;
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      chip.addEventListener('dragend', function() {
+        draggedChip = null;
+        colorAllGenusChips();
+      });
+      bank.appendChild(chip);
+    });
+    container.parentElement.insertBefore(bank, container);
   }
-  return a;
-}
 
-function sbMakeChip(text) {
-  const chip = document.createElement('div');
-  chip.className = 'chip';
-  chip.textContent = text;
-  chip.draggable = true;
-  chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; });
-  chip.addEventListener('dragend', () => { sbDragged = null; });
-  return chip;
-}
+  function allowDrop(e) { e.preventDefault(); }
 
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; });
-  zone.addEventListener('drop', e => {
+  function dropGenus(e, zone) {
     e.preventDefault();
-    if (sbDragged) { zone.appendChild(sbDragged); sbDragged = null; }
-  });
-}
+    if (!draggedChip) return;
+    zone.appendChild(draggedChip);
+    draggedChip = null;
+    colorAllGenusChips();
+    timerAutoStart(2);
+  }
 
-function buildSatzbau() {
-  const c = document.getElementById('satzbau-container');
-  sbTimerStarted = false;
-  c.innerHTML = SATZBAU_DATA.map((item, i) => `
-    <div class="sb-task">
-      <div class="sb-bank" id="sb-bank-${i}"></div>
-      <div class="sb-zone" id="sb-row-${i}"></div>
-      <div class="sb-feedback" id="sb-fb-${i}"></div>
-    </div>
-  `).join('');
+  function colorAllGenusChips() {
+    document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
+      var zone = chip.closest('.genus-cat');
+      chip.classList.remove('correct', 'wrong');
+      if (zone) {
+        chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+      }
+    });
+    checkGenusAllOk();
+  }
 
-  SATZBAU_DATA.forEach((item, i) => {
-    let shuffled = shuffle(item.chips);
-    let attempts = 0;
-    while (attempts < 50 && shuffled.join('') === item.chips.join('')) {
-      shuffled = shuffle(item.chips); attempts++;
-    }
-    const bank = document.getElementById('sb-bank-' + i);
-    const row = document.getElementById('sb-row-' + i);
-    sbRegisterZone(bank);
-    sbRegisterZone(row);
-    shuffled.forEach(text => bank.appendChild(sbMakeChip(text)));
-    row.addEventListener('drop', () => setTimeout(() => sbCheckAuto(i), 500));
-    bank.addEventListener('drop', () => setTimeout(() => sbCheckAuto(i), 500));
-  });
-}
+  function checkGenusAllOk() {
+    var cats = document.querySelectorAll('#sec-2 .genus-cat');
+    var allOk = Array.from(cats).every(function(cat) {
+      var chips = cat.querySelectorAll('.chip');
+      return Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+    });
+    if (allOk) timerStop(2);
+  }
 
-function sbCheckAuto(i) {
-  if (!sbTimerStarted) { timerAutoStart(4); sbTimerStarted = true; }
-  const row = document.getElementById('sb-row-' + i);
-  const bank = document.getElementById('sb-bank-' + i);
-  const fb = document.getElementById('sb-fb-' + i);
-  const placed = Array.from(row.children).map(c => c.textContent);
-  const correct = SATZBAU_DATA[i].chips;
-  if (bank.children.length === 0 && placed.length > 0) {
-    if (JSON.stringify(placed) === JSON.stringify(correct)) {
-      fb.textContent = '✅ Richtig!';
-      fb.className = 'sb-feedback ok';
-      checkSatzbauComplete();
+  function showGenusSolution() {
+    var bank = document.getElementById('genus-bank');
+    var cats = document.querySelectorAll('#sec-2 .genus-cat');
+    cats.forEach(function(cat) {
+      while (cat.querySelector('.chip')) cat.querySelector('.chip').remove();
+    });
+    GENUS_DATA.forEach(function(item) {
+      var zone = Array.from(cats).find(function(z) { return z.dataset.cat === item.cat; });
+      if (zone) {
+        var chip = document.createElement('div');
+        chip.className = 'chip correct';
+        chip.textContent = item.word;
+        chip.dataset.cat = item.cat;
+        chip.style.pointerEvents = 'none';
+        zone.appendChild(chip);
+      }
+    });
+    timerStop(2);
+  }
+
+  function resetGenus() {
+    document.getElementById('genus-bank').remove();
+    initGenus();
+  }
+
+  // ========== LÜCKENTEXT ==========
+  var LUECKEN_DATA = [
+    { segs: [{t: 'Tattoos sind '}, {b: 'längst', s: 'm'}, {t: ' kein Zeichen von Rebellion mehr.'}], hint: 'Zeitadverb' },
+    { segs: [{t: 'Die Geschichte der Tätowierung reicht '}, {b: 'Tausende', s: 'm'}, {t: ' von Jahren zurück.'}], hint: 'Zahlwort' },
+    { segs: [{t: 'Diese frühen Tattoos hatten oft eine '}, {b: 'kulturelle', s: 'l'}, {t: ' Bedeutung.'}], hint: 'Adjektiv' },
+    { segs: [{t: 'Ein Tattoo kann ein '}, {b: 'Kunstwerk', s: 'm'}, {t: ' sein, das die innere Welt zeigt.'}], hint: 'Nomen' },
+    { segs: [{t: 'Piercings werden häufig als '}, {b: 'experimenteller', s: 'l'}, {t: ' Weg wahrgenommen.'}], hint: 'Komparativ-Adjektiv' },
+    { segs: [{t: 'Sie können '}, {b: 'flüchtig', s: 'm'}, {t: ' oder dauerhaft sein.'}], hint: 'Adjektiv' },
+    { segs: [{t: 'In manchen Berufsfeldern können Tattoos '}, {b: 'berufliche', s: 'l'}, {t: ' Nachteile mit sich bringen.'}], hint: 'Adjektiv' },
+    { segs: [{t: 'Diese Realität zeigt, dass der Körperschmuck '}, {b: 'persönlich', s: 'l'}, {t: ' bedeutsam ist.'}], hint: 'Adverb' },
+    { segs: [{t: 'Tattoos und Piercings werden Menschen weiterhin '}, {b: 'ermöglichen', s: 'l'}, {t: ', ihre Geschichte zu schreiben.'}], hint: 'Verb' },
+    { segs: [{t: 'Die Zukunft wird zeigen, ob diese Formen '}, {b: 'vollständig', s: 'l'}, {t: ' aufgenommen werden.'}], hint: 'Adverb' }
+  ];
+
+  function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(ex, idx) {
+      var item = document.createElement('div');
+      item.className = 'luecken-item';
+      var sentence = document.createElement('span');
+      sentence.style.lineHeight = '1.8';
+      ex.segs.forEach(function(seg) {
+        if (seg.t) {
+          sentence.appendChild(document.createTextNode(seg.t));
+        } else {
+          var inp = document.createElement('input');
+          inp.className = 'blank';
+          inp.type = 'text';
+          inp.dataset.answer = seg.b;
+          inp.dataset.hint = ex.hint;
+          var widths = { s: '50px', m: '90px', l: '150px', xl: '200px' };
+          inp.style.width = widths[seg.s] || '90px';
+          inp.oninput = function() {
+            timerAutoStart(3);
+            liveCheck(inp);
+            checkLueckenAllOk();
+          };
+          sentence.appendChild(inp);
+        }
+      });
+      item.appendChild(sentence);
+      container.appendChild(item);
+    });
+  }
+
+  function liveCheck(inp) {
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.answer || '').toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) {
+      inp.classList.add('correct');
+    } else if (ans.indexOf(val) === 0) {
+      // gültiger Präfix
     } else {
-      fb.textContent = '❌ Noch nicht ganz richtig.';
-      fb.className = 'sb-feedback err';
+      inp.classList.add('wrong');
     }
-  } else {
-    fb.textContent = '';
-    fb.className = 'sb-feedback';
   }
-}
 
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const fb = document.getElementById('sb-fb-' + i);
-    return fb && fb.classList.contains('ok');
-  });
-  if (allOk) timerStop(4);
-}
-
-function showSbLoesung() {
-  SATZBAU_DATA.forEach((item, i) => {
-    const bank = document.getElementById('sb-bank-' + i);
-    const row = document.getElementById('sb-row-' + i);
-    const fb = document.getElementById('sb-fb-' + i);
-    while (row.firstChild) bank.appendChild(row.firstChild);
-    item.chips.forEach(text => row.appendChild(sbMakeChip(text)));
-    bank.innerHTML = '';
-    fb.textContent = '✅ Richtig!';
-    fb.className = 'sb-feedback ok';
-  });
-}
-
-function resetSatzbau() { sbTimerStarted = false; buildSatzbau(); }
-
-// ===================== VOKABELN =====================
-const VOCAB_DATA = [
-  { de: 'das Tattoo', plural: 'die Tattoos', en: 'tattoo' },
-  { de: 'die Tätowierung', plural: 'die Tätowierungen', en: 'tattooing / tattoo' },
-  { de: 'die Nadel', plural: 'die Nadeln', en: 'needle' },
-  { de: 'das Piercing', plural: 'die Piercings', en: 'piercing' },
-  { de: 'die Toleranz', plural: '–', en: 'tolerance' },
-  { de: 'der Respekt', plural: '–', en: 'respect' },
-  { de: 'die Symbolik', plural: '–', en: 'symbolism' },
-  { de: 'die Schwierigkeit', plural: 'die Schwierigkeiten', en: 'difficulty' },
-  { de: 'das Risiko', plural: 'die Risiken', en: 'risk' },
-  { de: 'die Nebenbedeutung', plural: 'die Nebenbedeutungen', en: 'secondary meaning / connotation' },
-];
-
-let vtIndex = 0;
-let vtTimerStarted = false;
-
-function vtRender() {
-  const item = VOCAB_DATA[vtIndex];
-  document.getElementById('vt-en').textContent = item.en;
-  document.getElementById('vt-progress').textContent = `Karte ${vtIndex + 1} von ${VOCAB_DATA.length}`;
-  document.getElementById('vt-input').value = '';
-  document.getElementById('vt-input').className = 'vt-input';
-  document.getElementById('vt-feedback').textContent = '';
-}
-
-function vtCheck() {
-  if (!vtTimerStarted) { timerAutoStart(5); vtTimerStarted = true; }
-  const inp = document.getElementById('vt-input');
-  const val = inp.value.trim().toLowerCase();
-  const item = VOCAB_DATA[vtIndex];
-  const correct = item.de.toLowerCase();
-  if (val === correct) {
-    inp.className = 'vt-input ok';
-    document.getElementById('vt-feedback').textContent = '✅ ' + item.de + ' | Pl.: ' + item.plural;
-  } else if (correct.startsWith(val)) {
-    inp.className = 'vt-input';
-  } else if (val.length > 0) {
-    inp.className = 'vt-input no';
+  function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#sec-3 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(3);
   }
-}
 
-function vtNext() {
-  if (vtIndex < VOCAB_DATA.length - 1) { vtIndex++; vtRender(); }
-  else { timerStop(5); document.getElementById('vt-feedback').textContent = '🏆 Alle Karten abgeschlossen!'; }
-}
+  function showLueckenLoesungen() {
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+      inp.value = inp.dataset.answer;
+      inp.classList.add('correct');
+      inp.classList.remove('wrong');
+    });
+    timerStop(3);
+  }
 
-function vtPrev() { if (vtIndex > 0) { vtIndex--; vtRender(); } }
+  function resetLuecken() {
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+      inp.value = '';
+      inp.classList.remove('correct', 'wrong');
+    });
+    timerResetOne(3);
+  }
 
-function resetVokabeln() { vtIndex = 0; vtTimerStarted = false; vtRender(); }
+  // ========== MULTIPLE-CHOICE ==========
+  var MC_DATA = [
+    { q: 'Welche Aussage über die Geschichte von Tattoos ist richtig?', a: 0, opts: [
+      'Archäologische Funde deuten darauf hin, dass alte Kulturen Tattoos für spirituelle Bedeutung nutzten.',
+      'Tattoos waren immer ein Zeichen von Rebellion gegen die Gesellschaft.',
+      'Tattoos existierten erst seit dem 21. Jahrhundert.'
+    ]},
+    { q: 'Was ist laut Text ein häufiger Grund für Menschen, sich tätowieren zu lassen?', a: 1, opts: [
+      'Um Geld zu verdienen.',
+      'Um ihre Identität und Persönlichkeit nach außen zu zeigen.',
+      'Um berufliche Vorteile zu erhalten.'
+    ]},
+    { q: 'Wie unterscheiden sich Piercings von Tattoos laut dem Text?', a: 2, opts: [
+      'Piercings sind dauerhafter als Tattoos.',
+      'Piercings sind immer sichtbar, Tattoos nicht.',
+      'Piercings können flüchtig oder dauerhaft sein, je nach Wunsch des Trägers.'
+    ]},
+    { q: 'Welche psychologische Eigenschaft haben Menschen, die sich tätowieren lassen?', a: 0, opts: [
+      'Ein stärkeres Bedürfnis nach Selbstausdruck.',
+      'Ein Wunsch, unauffällig zu wirken.',
+      'Eine Ablehnung von Kunst und Kultur.'
+    ]},
+    { q: 'Wie wird Körperschmuck in der Gesellschaft interpretiert?', a: 1, opts: [
+      'Immer positiv als künstlerischer Ausdruck.',
+      'Im sozialen Kontext—manche sehen es als Nonkonformität.',
+      'Nur als Modeererscheinung ohne tiefere Bedeutung.'
+    ]},
+    { q: 'Welche berufliche Herausforderung kann Körperschmuck mit sich bringen?', a: 2, opts: [
+      'Garantierte Beförderung in modernen Unternehmen.',
+      'Erhöhte Karrierechancen durch Kreativität.',
+      'In manchen Berufsfeldern können sichtbare Tattoos oder Piercings Nachteile bedeuten.'
+    ]},
+    { q: 'Was repräsentiert ein Tattoo für den Menschen laut dem Text?', a: 0, opts: [
+      'Ein Kapitel seines Lebens—Liebe, Traum oder persönliche Überwindung.',
+      'Nur eine temporäre Modeerscheinung.',
+      'Ein Zeichen mangelnder Intelligenz.'
+    ]},
+    { q: 'Wie wird die Zukunft von Tattoos und Piercings charakterisiert?', a: 1, opts: [
+      'Sie werden vollständig aus der Gesellschaft verschwinden.',
+      'Es ist unklar, ob sie vollständig akzeptiert werden oder als Marker von Nonkonformität gelten.',
+      'Sie werden universell und von allen akzeptiert werden.'
+    ]},
+    { q: 'Was nennt der Text eine „Leinwand"?', a: 0, opts: [
+      'Den Körper, auf dem Menschen ihre Geschichte durch Tattoos erzählen.',
+      'Die Gesellschaft, die alles reguliert.',
+      'Die künstliche Haut von Tattoo-Künstlern.'
+    ]},
+    { q: 'Welche Sichtweise auf Körperschmuck wird im Text kritisiert?', a: 2, opts: [
+      'Dass Tattoos wertvoll sind.',
+      'Dass Piercings künstlerisch sind.',
+      'Dass Tattoos und Piercings Zeichen mangelnder Konformität darstellen.'
+    ]}
+  ];
 
-// ===================== INIT =====================
-buildVocabCards(VOCAB_TRADITIONEN, 'vocab-traditionen');
-buildVocabCards(VOCAB_TATTOOS, 'vocab-tattoos');
-buildVocabCards(VOCAB_PIERCINGS, 'vocab-piercings');
-buildLuecken();
-buildSatzbau();
-vtRender();
-loadBestTimes();
-function initVocab() { buildVocabCards(VOCAB_TRADITIONEN,'vocab-traditionen'); buildVocabCards(VOCAB_TATTOOS,'vocab-tattoos'); buildVocabCards(VOCAB_PIERCINGS,'vocab-piercings'); }
+  function initMC() {
+    var container = document.getElementById('mcContainer');
+    container.innerHTML = '';
+    MC_DATA.forEach(function(ex, idx) {
+      var item = document.createElement('div');
+      item.className = 'mc-item';
+      var q = document.createElement('div');
+      q.className = 'mc-question';
+      q.textContent = (idx + 1) + '. ' + ex.q;
+      item.appendChild(q);
+      var opts = document.createElement('div');
+      opts.className = 'mc-options';
+      ex.opts.forEach(function(opt, oidx) {
+        var btn = document.createElement('button');
+        btn.className = 'mc-btn';
+        btn.textContent = String.fromCharCode(65 + oidx) + ') ' + opt;
+        btn.addEventListener('click', function() {
+          mcCheck(idx, oidx, ex.a);
+        });
+        opts.appendChild(btn);
+      });
+      item.appendChild(opts);
+      container.appendChild(item);
+    });
+  }
+
+  function mcCheck(qidx, selectedIdx, correctIdx) {
+    var opts = document.querySelectorAll('#sec-4 .mc-item')[qidx].querySelectorAll('.mc-btn');
+    opts.forEach(function(b) { b.disabled = true; });
+    opts[selectedIdx].classList.add(selectedIdx === correctIdx ? 'correct' : 'wrong');
+    if (selectedIdx === correctIdx) {
+      timerAutoStart(4);
+      checkMCAllOk();
+    } else {
+      setTimeout(function() {
+        opts.forEach(function(b) { b.disabled = false; b.classList.remove('wrong'); });
+      }, 1500);
+    }
+  }
+
+  function checkMCAllOk() {
+    var allOk = Array.from(document.querySelectorAll('#sec-4 .mc-btn.correct')).length === MC_DATA.length;
+    if (allOk) timerStop(4);
+  }
+
+  function showMCLoesungen() {
+    MC_DATA.forEach(function(ex, idx) {
+      var item = document.querySelectorAll('#sec-4 .mc-item')[idx];
+      var opts = item.querySelectorAll('.mc-btn');
+      opts.forEach(function(b, oidx) {
+        b.disabled = true;
+        b.classList.remove('wrong');
+        if (oidx === ex.a) b.classList.add('correct');
+      });
+    });
+    timerStop(4);
+  }
+
+  function resetMC() {
+    initMC();
+    timerResetOne(4);
+  }
+
+  // ========== SATZBAU ==========
+  var SATZBAU_DATA = [
+    { parts: ['Tattoos', 'und', 'Piercings', 'sind', 'längst', 'kein', 'Zeichen', 'von', 'Rebellion', 'mehr'], valid: [['Tattoos', 'und', 'Piercings', 'sind', 'längst', 'kein', 'Zeichen', 'von', 'Rebellion', 'mehr']], punct: '.' },
+    { parts: ['Die', 'Geschichte', 'der', 'Tätowierung', 'reicht', 'Tausende', 'von', 'Jahren', 'zurück'], valid: [['Die', 'Geschichte', 'der', 'Tätowierung', 'reicht', 'Tausende', 'von', 'Jahren', 'zurück']], punct: '.' },
+    { parts: ['für', 'viele', 'junge', 'Menschen', 'sind', 'Tattoos', 'nicht', 'nur', 'Mode'], valid: [['Für', 'viele', 'junge', 'Menschen', 'sind', 'Tattoos', 'nicht', 'nur', 'Mode']], punct: '.' },
+    { parts: ['Ein', 'Tattoo', 'kann', 'ein', 'Kunstwerk', 'sein', 'das', 'die', 'innere', 'Welt', 'trägt'], valid: [['Ein', 'Tattoo', 'kann', 'ein', 'Kunstwerk', 'sein', 'das', 'die', 'innere', 'Welt', 'trägt']], punct: '.' },
+    { parts: ['Menschen', 'nutzen', 'ihren', 'Körper', 'als', 'Leinwand', 'um', 'ihre', 'Geschichte', 'zu', 'erzählen'], valid: [['Menschen', 'nutzen', 'ihren', 'Körper', 'als', 'Leinwand', 'um', 'ihre', 'Geschichte', 'zu', 'erzählen']], punct: '.' },
+    { parts: ['Piercings', 'werden', 'häufig', 'als', 'experimenteller', 'Weg', 'wahrgenommen', 'die', 'Grenzen', 'zu', 'erforschen'], valid: [['Piercings', 'werden', 'häufig', 'als', 'experimenteller', 'Weg', 'wahrgenommen', 'die', 'Grenzen', 'zu', 'erforschen']], punct: '.' },
+    { parts: ['In', 'manchen', 'Berufsfeldern', 'können', 'Tattoos', 'berufliche', 'Nachteile', 'mit', 'sich', 'bringen'], valid: [['In', 'manchen', 'Berufsfeldern', 'können', 'Tattoos', 'berufliche', 'Nachteile', 'mit', 'sich', 'bringen']], punct: '.' },
+    { parts: ['Die', 'Zukunft', 'wird', 'zeigen', 'ob', 'diese', 'Formen', 'vollständig', 'aufgenommen', 'werden'], valid: [['Die', 'Zukunft', 'wird', 'zeigen', 'ob', 'diese', 'Formen', 'vollständig', 'aufgenommen', 'werden']], punct: '.' },
+    { parts: ['Tattoos', 'und', 'Piercings', 'verbinden', 'Mode', 'Kunst', 'und', 'persönliche', 'Bedeutung'], valid: [['Tattoos', 'und', 'Piercings', 'verbinden', 'Mode', 'Kunst', 'und', 'persönliche', 'Bedeutung']], punct: '.' },
+    { parts: ['Menschen', 'werden', 'weiterhin', 'ihre', 'Geschichte', 'auf', 'ihrer', 'Haut', 'schreiben', 'können'], valid: [['Menschen', 'werden', 'weiterhin', 'ihre', 'Geschichte', 'auf', 'ihrer', 'Haut', 'schreiben', 'können']], punct: '.' }
+  ];
+
+  var sbDragged = null;
+
+  function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    SATZBAU_DATA.forEach(function(ex, idx) {
+      var item = document.createElement('div');
+      item.className = 'satzbau-item';
+      var bank = document.createElement('div');
+      bank.className = 'sb-bank';
+      bank.id = 'sb-bank-' + idx;
+      var shuffled = shuffle(ex.parts);
+      shuffled.forEach(function(word) {
+        var chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = word;
+        chip.dataset.orig = word;
+        chip.draggable = true;
+        chip.addEventListener('dragstart', function(e) {
+          sbDragged = chip;
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        chip.addEventListener('dragend', function() {
+          sbDragged = null;
+          sbCheckAuto(idx);
+        });
+        bank.appendChild(chip);
+      });
+      item.appendChild(bank);
+      var row = document.createElement('div');
+      row.className = 'drop-row';
+      row.id = 'sb-row-' + idx;
+      row.ondragover = function(e) { e.preventDefault(); this.classList.add('dragover'); };
+      row.ondragleave = function() { this.classList.remove('dragover'); };
+      row.ondrop = function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        if (sbDragged) {
+          this.appendChild(sbDragged);
+          sbDragged = null;
+          sbCheckAuto(idx);
+        }
+      };
+      item.appendChild(row);
+      var fb = document.createElement('div');
+      fb.className = 'satzbau-feedback';
+      fb.id = 'sb-fb-' + idx;
+      item.appendChild(fb);
+      container.appendChild(item);
+    });
+  }
+
+  function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+      row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'wrong'); });
+      fb.textContent = '';
+      return;
+    }
+    setTimeout(function() {
+      timerAutoStart(5);
+      var chips = Array.from(row.querySelectorAll('.chip'));
+      var order = chips.map(function(c) { return c.dataset.orig; });
+      var ok = SATZBAU_DATA[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+      });
+      chips.forEach(function(c) {
+        c.classList.remove('correct', 'wrong');
+        c.classList.add(ok ? 'correct' : 'wrong');
+      });
+      if (ok) {
+        fb.className = 'satzbau-feedback correct';
+        fb.textContent = '✓ Korrekt!';
+        checkSbAllDone();
+      } else {
+        fb.className = 'satzbau-feedback incorrect';
+        fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+      }
+    }, 500);
+  }
+
+  function checkSbAllDone() {
+    var allOk = SATZBAU_DATA.every(function(_, i) {
+      var row = document.getElementById('sb-row-' + i);
+      return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(5);
+  }
+
+  function showSatzbauLoesungen() {
+    SATZBAU_DATA.forEach(function(ex, idx) {
+      var bank = document.getElementById('sb-bank-' + idx);
+      var row = document.getElementById('sb-row-' + idx);
+      while (row.firstChild) row.removeChild(row.firstChild);
+      var allChips = {};
+      Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+      Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+      while (bank.firstChild) bank.removeChild(bank.firstChild);
+      ex.valid[0].forEach(function(word, i) {
+        if (allChips[word]) {
+          var chip = allChips[word];
+          chip.textContent = i === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word;
+          chip.classList.remove('correct', 'wrong');
+          row.appendChild(chip);
+        }
+      });
+    });
+    timerStop(5);
+  }
+
+  function resetSatzbau() {
+    initSatzbau();
+    timerResetOne(5);
+  }
+
+  // ========== TIMER SYSTEM ==========
+  var TIMER_PREFIX = 'tattoos-piercings-';
+  var timerStarted = [false, false, false, false, false, false];
+  var timerRunning = [false, false, false, false, false, false];
+  var timerSeconds = [0, 0, 0, 0, 0, 0];
+  var timerIntervals = [null, null, null, null, null, null];
+
+  function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+      timerSeconds[n]++;
+      var el = document.getElementById('timer-' + n);
+      if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+  }
+
+  function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+      localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+      var el = document.getElementById('best-' + n);
+      if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+  }
+
+  function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '00:00';
+  }
+
+  function fmtTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  function loadBestTimes() {
+    for (var i = 2; i <= 5; i++) {
+      var v = localStorage.getItem(TIMER_PREFIX + i);
+      if (v) {
+        var el = document.getElementById('best-' + i);
+        if (el) el.textContent = fmtTime(parseInt(v));
+      }
+    }
+  }
+
+  // ========== HELPERS ==========
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+      s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+      b.classList.toggle('active', i === idx);
+    });
+  }
+
+  // ========== INIT ==========
+  window.addEventListener('DOMContentLoaded', function() {
+    initVorentlastung();
+    highlightVocabInText();
+    initGenus();
+    initLuecken();
+    initMC();
+    initSatzbau();
+    loadBestTimes();
+  });
 </script>
 </body>
 </html>

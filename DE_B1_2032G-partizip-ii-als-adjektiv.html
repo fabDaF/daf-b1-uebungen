@@ -3,657 +3,1076 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 – Partizip II als Adjektiv</title>
+<title>B1.1 · 2032G · Partizip II als Adjektiv</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; font-size: 16px; }
-  .container { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 6px 32px rgba(0,0,0,0.28); overflow: hidden; }
-  h1 { background: #667eea; color: #fff; text-align: center; padding: 20px 20px 14px; font-size: 1.3em; }
-  .subtitle { background: #667eea; color: #d9b3ff; text-align: center; padding: 0 20px 16px; font-size: 0.88em; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  .nav { display: flex; flex-wrap: wrap; background: #f0e6ff; border-bottom: 2px solid #667eea; }
-  .nav button { flex: 1; min-width: 80px; padding: 10px 4px 8px; border: 1px solid #667eea; background: #f0e6ff; color: #667eea; font-size: 0.75em; font-weight: bold; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-  .nav button .nav-emoji { font-size: 1.3em; }
-  .nav button .nav-label { font-size: 0.85em; }
-  .nav button.active { background: #667eea; color: #fff; }
-  .nav button:hover:not(.active) { background: #d9b3ff; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
 
-  .tab { display: none; padding: 26px; }
-  .tab.aktiv { display: block; }
-  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; display: block; }
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
 
-  .timer-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 6px; }
-  .tc-buttons { display: flex; gap: 6px; }
-  .tc-buttons button { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; font-weight: 500; }
-  .tc-buttons button:hover { background: #f0f0f0; color: #555; }
-  .tc-times { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
-  .timer-display { color: #667eea; font-weight: 700; }
-  .best-display { color: #f39c12; font-weight: 600; }
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
 
-  .section-title { font-size: 1.05em; font-weight: bold; color: #667eea; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e0c4ff; }
-  .info-box { background: #f0e6ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 14px; font-size: 0.92em; line-height: 1.6; }
-  .info-box strong { color: #667eea; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
 
-  /* ENTDECKEN */
-  .discovery-box { background: #faf5ff; border: 1.5px solid #d9b3ff; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
-  .discovery-box .ex-sent { font-size: 0.97em; color: #333; line-height: 2; }
-  .discovery-box .ex-sent .hl { color: #667eea; font-weight: bold; }
-  .mc-step { display: none; background: #f0e6ff; border-radius: 10px; padding: 16px; margin-bottom: 12px; }
-  .mc-step.visible { display: block; }
-  .mc-step .mc-q { font-weight: bold; color: #333; margin-bottom: 10px; font-size: 0.95em; }
-  .mc-btn { display: inline-block; margin: 4px 6px 4px 0; padding: 7px 16px; border-radius: 20px; border: 1.5px solid #d9b3ff; background: #fff; color: #667eea; cursor: pointer; font-size: 0.88em; font-weight: 600; transition: all 0.15s; }
-  .mc-btn:hover { background: #f0e6ff; }
-  .mc-btn.correct { background: #e8f5e9; border-color: #81c784; color: #2e7d32; }
-  .mc-btn.wrong { background: #fdecea; border-color: #e57373; color: #c62828; }
-  .mc-feedback { font-size: 0.85em; margin-top: 8px; min-height: 18px; }
-  .rule-card { background: linear-gradient(135deg, #667eea, #9b59b6); color: #fff; border-radius: 12px; padding: 20px; margin-top: 16px; display: none; }
-  .rule-card.visible { display: block; }
-  .rule-card h3 { margin-bottom: 10px; font-size: 1.05em; }
-  .rule-card p { font-size: 0.93em; line-height: 1.7; }
-  .dots { display: flex; gap: 8px; margin-bottom: 16px; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; background: #d9b3ff; transition: background 0.3s; }
-  .dot.active { background: #667eea; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
 
-  /* REGEL TABLE */
-  .rule-table { width: 100%; border-collapse: collapse; font-size: 0.88em; margin-bottom: 18px; }
-  .rule-table th { background: #667eea; color: #fff; padding: 10px 12px; text-align: left; }
-  .rule-table td { padding: 9px 12px; border-bottom: 1px solid #e0c4ff; }
-  .rule-table tr:nth-child(even) td { background: #faf5ff; }
-  .rule-table .hl { color: #667eea; font-weight: bold; }
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
-  /* LÜCKENTEXT */
-  .luecken-list { list-style: none; padding: 0; }
-  .luecken-item { background: #faf5ff; border: 1.5px solid #e0c4ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; font-size: 0.95em; line-height: 1.7; }
-  .luecken-item input { border: none; border-bottom: 2px solid #aaa; outline: none; font-size: 0.97em; padding: 0 4px; min-width: 120px; background: transparent; }
-  .luecken-item input.ok { border-color: #27ae60; color: #27ae60; }
-  .luecken-item input.err { border-color: #e74c3c; color: #e74c3c; }
-  .wortkasten { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 10px 14px; margin-bottom: 18px; font-size: 0.9em; color: #667eea; }
-  .wortkasten strong { display: block; margin-bottom: 6px; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+}
 
-  /* SATZBAU */
-  .sb-exercise { background: #faf5ff; border: 1.5px solid #e0c4ff; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
-  .sb-drop-zone { min-height: 44px; border: 2px dashed #d9b3ff; border-radius: 8px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; background: #fff; }
-  .sb-drop-zone.drag-over { background: #f0e6ff; }
-  .sb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .sb-chip { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 20px; padding: 6px 14px; font-size: 0.9em; cursor: grab; user-select: none; color: #5a189a; font-weight: 600; }
-  .sb-chip.placed { background: #e8f5e9; border-color: #81c784; color: #2e7d32; }
-  .sb-chip.placed.wrong { background: #fdecea; border-color: #e57373; color: #c62828; }
-  .sb-chip.source { background: #e0e0e0; border-color: #bbb; color: #888; cursor: default; }
-  .sb-result { font-size: 0.85em; color: #888; margin-top: 6px; min-height: 18px; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
 
-  /* ZUORDNUNG */
-  .zuord-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
-  .zuord-zone { min-height: 120px; border: 2px dashed #d9b3ff; border-radius: 10px; padding: 12px; background: #faf5ff; }
-  .zuord-zone.drag-over { background: #f0e6ff; }
-  .zuord-zone-title { font-weight: bold; color: #667eea; font-size: 0.92em; margin-bottom: 8px; text-align: center; }
-  .zuord-chips-pool { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; justify-content: center; }
-  .zuord-chip { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 20px; padding: 7px 16px; font-size: 0.9em; cursor: grab; user-select: none; color: #5a189a; font-weight: 600; }
-  .zuord-chip.correct { background: #e8f5e9; border-color: #81c784; color: #2e7d32; cursor: default; }
-  .zuord-chip.wrong { background: #fdecea; border-color: #e57373; color: #c62828; }
+.section { display: none; }
+.section.active { display: block; }
+.sec-inner { padding: 28px 32px 32px; }
 
-  .score-box { background: #f0e6ff; border: 1.5px solid #d9b3ff; border-radius: 8px; padding: 8px 14px; display: inline-flex; gap: 14px; font-size: 0.88em; margin-bottom: 14px; }
-  .score-box span { color: #667eea; font-weight: bold; }
+.tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
 
-  .author-footer { background: #f8f8f8; text-align: center; padding: 12px; font-size: 0.78em; color: #999; border-top: 1px solid #eee; }
-  .author-footer a { color: #667eea; text-decoration: none; }
-  .author-name { font-weight: bold; }
+/* Entdeckungs-Tab */
+.entdeck-intro {
+    background: #f3e5f5;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    border-left: 5px solid #9c27b0;
+    font-size: 0.97rem;
+    line-height: 1.75;
+}
 
-  /* Wortschatz */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
+.entdeck-intro h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05rem; }
+.hl { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+
+.mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+.mc-step.active { display: block; }
+.mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 0.97rem; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-btn {
+    padding: 9px 16px;
+    border: 2px solid #c5cae9;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.92rem;
+    transition: all .2s;
+}
+
+.mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+.mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-btn.wrong { border-color: #e53935; background: #ffebee; color: #c62828; }
+.mc-feedback { margin-top: 10px; font-size: 0.88rem; min-height: 1.3em; }
+.mc-feedback.ok { color: #2e7d32; font-weight: 700; }
+.mc-feedback.err { color: #c62828; }
+
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background .3s; }
+.pdot.done { background: #667eea; }
+
+.regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 10px; }
+.regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.05rem; }
+.regel-karte ul { margin-left: 18px; }
+.regel-karte li { color: #333; line-height: 1.8; font-size: 0.95rem; }
+.regel-karte .rk-example { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; border-left: 3px solid #7c4dff; font-size: 0.9rem; color: #333; }
+.regel-karte .rk-example b { color: #3949ab; }
+
+/* Regel-Tab */
+.regel-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.regel-box {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 18px 22px;
+}
+
+.regel-box h3 { color: #3949ab; margin-bottom: 12px; font-size: 1.0rem; }
+.regel-box p { color: #555; line-height: 1.7; font-size: 0.95em; margin-bottom: 8px; }
+.regel-box .example { background: #fff; border-left: 3px solid #667eea; padding: 10px 12px; margin-top: 10px; font-size: 0.9em; color: #333; font-weight: 500; }
+
+/* Lückentext */
+.luecken-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    line-height: 1.9;
+    font-size: 0.95em;
+}
+
+input.blank {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    padding: 3px 6px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+    min-width: 4ch;
+}
+
+input.blank:focus { border-bottom-color: #667eea; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+
+/* Zuordnung */
+.zuo-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 16px;
+}
+
+.zuo-bank {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 14px;
+    min-height: 120px;
+}
+
+.zuo-bank h4 { color: #555; font-size: 0.9rem; margin-bottom: 10px; font-weight: 600; }
+
+.chip-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 80px;
+}
+
+.drop-zone {
+    background: #fafbff;
+    border: 2px dashed #c5cae9;
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 100px;
+}
+
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.drop-zone h4 { color: #555; font-size: 0.9rem; margin-bottom: 8px; font-weight: 600; }
+
+/* Chips */
+.chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    cursor: grab;
+    font-size: 0.85rem;
+    font-weight: 600;
+    user-select: none;
+    transition: transform .15s, opacity .15s;
+    white-space: nowrap;
+}
+
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.wrong { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+
+/* Satzbau */
+.satzbau-item { margin-bottom: 20px; }
+
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    min-height: 54px;
+}
+
+.sentence-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 2px dashed #c5cae9;
+    background: #fafbff;
+}
+
+.sentence-builder.correct { border-color: #27ae60; background: #e8f8f0; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+
+.satzbau-feedback { font-size: 0.85em; font-weight: 600; min-height: 20px; margin-top: 6px; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+
+.sb-punkt { font-weight: 700; font-size: 1.1em; margin-left: 2px; color: #333; align-self: center; }
+
+/* Control-Bar */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+
+/* Footer */
+.author-footer { text-align: center; margin-top: 40px; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* Responsive */
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .header h1 { font-size: 1.2rem; }
+    .sec-inner { padding: 16px; }
+    .tab-banner { max-height: 120px; }
+    .zuo-layout { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>📖 Partizip II als Adjektiv</h1>
-  <div class="subtitle">B1.2 · Einheit 203x · Lektion 2032G · Grammatik</div>
 
-  <nav class="nav">
-    <button class="active" onclick="showTab(0)"><span class="nav-emoji">🔍</span><span class="nav-label">Entdecken</span></button>
-    <button onclick="showTab(1)"><span class="nav-emoji">📋</span><span class="nav-label">Regel</span></button>
-    <button onclick="showTab(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></button>
-    <button onclick="showTab(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></button>
-    <button onclick="showTab(4)"><span class="nav-emoji">🔀</span><span class="nav-label">Zuordnung</span></button>
-  </nav>
-
-  <!-- TAB 0: ENTDECKEN -->
-  <div id="tab0" class="tab aktiv">
-    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Entdecken">
-
-    <div class="section-title">🔍 Entdecke die Regel</div>
-
-    <div class="discovery-box">
-      <div class="ex-sent">Für alle <span class="hl">Interessierten</span>: Das <span class="hl">erklärte</span> Phänomen dieser Lektion findet man häufiger als <span class="hl">gedacht</span>.</div>
-      <div class="ex-sent">Die <span class="hl">erklärte</span> Übung könnt ihr jetzt machen.</div>
-      <div class="ex-sent">100g <span class="hl">gekochten</span> Schinken, bitte.</div>
-      <div class="ex-sent">Eine <span class="hl">sogenannte</span> Regenbogenfamilie besteht aus zwei Partnern des gleichen Geschlechts.</div>
-      <div class="ex-sent">Die <span class="hl">befragten</span> Personen waren alle alleinerziehend.</div>
-      <div class="ex-sent">Als kinderloses Paar kann man auch ein <span class="hl">erfülltes</span> Leben führen.</div>
-    </div>
-
-    <div class="dots" id="dots">
-      <div class="dot active" id="dot0"></div>
-      <div class="dot" id="dot1"></div>
-      <div class="dot" id="dot2"></div>
-      <div class="dot" id="dot3"></div>
-    </div>
-
-    <div class="mc-step visible" id="step0">
-      <div class="mc-q">Was fällt dir bei den farbigen Wörtern auf? Was haben sie gemeinsam?</div>
-      <span class="mc-btn" onclick="mcAnswer(0,'a')">Sie sind alle Verben.</span>
-      <span class="mc-btn" onclick="mcAnswer(0,'b')">Sie sind Partizip II-Formen, die vor einem Nomen stehen.</span>
-      <span class="mc-btn" onclick="mcAnswer(0,'c')">Sie sind alle Nomen.</span>
-      <div class="mc-feedback" id="fb0"></div>
-    </div>
-
-    <div class="mc-step" id="step1">
-      <div class="mc-q">„Die <strong>erklärte</strong> Übung" — was bedeutet das genau?</div>
-      <span class="mc-btn" onclick="mcAnswer(1,'a')">Die Übung wird gerade erklärt.</span>
-      <span class="mc-btn" onclick="mcAnswer(1,'b')">Die Übung wurde bereits erklärt — sie ist jetzt fertig erklärt.</span>
-      <span class="mc-btn" onclick="mcAnswer(1,'c')">Die Übung soll erklärt werden.</span>
-      <div class="mc-feedback" id="fb1"></div>
-    </div>
-
-    <div class="mc-step" id="step2">
-      <div class="mc-q">Warum hat „erklärt" hier die Endung <em>-e</em> bekommen?</div>
-      <span class="mc-btn" onclick="mcAnswer(2,'a')">Weil es ein Verb ist.</span>
-      <span class="mc-btn" onclick="mcAnswer(2,'b')">Weil es vor einem Nomen steht und wie ein Adjektiv dekliniert wird.</span>
-      <span class="mc-btn" onclick="mcAnswer(2,'c')">Weil es Plural ist.</span>
-      <div class="mc-feedback" id="fb2"></div>
-    </div>
-
-    <div class="mc-step" id="step3">
-      <div class="mc-q">Wie werden die Partizip II-Nomen großgeschrieben? Welche sind Personen, welche Abstrakta?</div>
-      <span class="mc-btn" onclick="mcAnswer(3,'a')">Alle sind neutral (das).</span>
-      <span class="mc-btn" onclick="mcAnswer(3,'b')">Personen sind maskulin/feminin; Abstrakta sind neutral.</span>
-      <span class="mc-btn" onclick="mcAnswer(3,'c')">Es gibt keine Nomen aus Partizipien.</span>
-      <div class="mc-feedback" id="fb3"></div>
-    </div>
-
-    <div class="rule-card" id="ruleCard">
-      <h3>✅ Regel: Partizip II als Adjektiv (und Nomen)</h3>
-      <p>
-        Das <strong>Partizip II</strong> kann als <strong>Adjektiv</strong> verwendet werden.<br>
-        Es beschreibt etwas, das <strong>schon passiert</strong> oder <strong>beendet</strong> ist.<br><br>
-        Steht es <strong>vor dem Nomen</strong>, wird es wie ein normales Adjektiv nach Kasus, Genus und Numerus <strong>dekliniert</strong>.<br><br>
-        Aus dem Partizip II Adjektiv kann auch ein <strong>Nomen</strong> werden:<br>
-        eine <em>verletzte</em> Frau → eine <strong>Verletzte</strong> &nbsp;|&nbsp; keine <em>geeignete</em> Sache → nichts <strong>Geeignetes</strong><br><br>
-        Personen → maskulin/feminin &nbsp;|&nbsp; Abstrakta → neutral
-      </p>
-    </div>
-  </div>
-
-  <!-- TAB 1: REGEL -->
-  <div id="tab1" class="tab">
-    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Regelübersicht">
-
-    <div class="section-title">📋 Partizip II — Bildung</div>
-
-    <table class="rule-table">
-      <thead>
-        <tr><th>Verbtyp</th><th>Regel</th><th>Infinitiv</th><th>Partizip II</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>Schwache Verben</strong> (regelmäßig)</td><td>ge- + Stamm + -(e)t</td><td>machen / arbeiten</td><td><span class="hl">ge</span>mach<span class="hl">t</span> / <span class="hl">ge</span>arbeit<span class="hl">et</span></td></tr>
-        <tr><td><strong>Starke Verben</strong> (unregelmäßig)</td><td>ge- + Stamm(Vokalwechsel) + -en</td><td>schlafen / singen</td><td><span class="hl">ge</span>schlaf<span class="hl">en</span> / <span class="hl">ge</span>sung<span class="hl">en</span></td></tr>
-        <tr><td><strong>Mischverben</strong></td><td>ge- + Stamm(Vokalwechsel) + -t</td><td>bringen / rennen</td><td><span class="hl">ge</span>brach<span class="hl">t</span> / <span class="hl">ge</span>rann<span class="hl">t</span></td></tr>
-        <tr><td><strong>Verben mit nicht trennbarem Präfix</strong></td><td>kein ge-</td><td>entstehen / erziehen</td><td>entstanden / erzogen</td></tr>
-        <tr><td><strong>Verben mit trennbarem Präfix</strong></td><td>ge- zwischen Präfix und Stamm</td><td>einkaufen / einschlafen</td><td>ein<span class="hl">ge</span>kauft / ein<span class="hl">ge</span>schlafen</td></tr>
-        <tr><td><strong>Verben auf -ieren</strong></td><td>kein ge-, Endung -t</td><td>telefonieren / diskutieren</td><td>telefoniert / diskutiert</td></tr>
-      </tbody>
-    </table>
-
-    <div class="section-title">Partizip II als Adjektiv — Deklination</div>
-    <div class="info-box">
-      Das Partizip II steht <strong>vor dem Nomen</strong> → dekliniert wie ein normales Adjektiv.<br>
-      Es beschreibt etwas, das <strong>bereits passiert oder beendet</strong> ist.
-    </div>
-    <table class="rule-table">
-      <thead><tr><th>Partizip II</th><th>Beispiel als Adjektiv</th><th>Bedeutung</th></tr></thead>
-      <tbody>
-        <tr><td><span class="hl">erklärt</span></td><td>Die <span class="hl">erklärte</span> Übung könnt ihr jetzt machen.</td><td>Die Übung wurde bereits erklärt.</td></tr>
-        <tr><td><span class="hl">gekocht</span></td><td>100g <span class="hl">gekochten</span> Schinken, bitte.</td><td>Der Schinken wurde schon gekocht.</td></tr>
-        <tr><td><span class="hl">befragt</span></td><td>Die <span class="hl">befragten</span> Personen waren alleinerziehend.</td><td>Die Personen wurden befragt.</td></tr>
-        <tr><td><span class="hl">erfüllt</span></td><td>Ein <span class="hl">erfülltes</span> Leben führen.</td><td>Das Leben ist erfüllt.</td></tr>
-      </tbody>
-    </table>
-
-    <div class="section-title">Partizip II als Nomen</div>
-    <table class="rule-table">
-      <thead><tr><th>Als Adjektiv</th><th>→</th><th>Als Nomen</th><th>Typ</th></tr></thead>
-      <tbody>
-        <tr><td>eine <span class="hl">verletzte</span> Frau</td><td>→</td><td>eine <strong>Verletzte</strong></td><td>Person (feminin)</td></tr>
-        <tr><td>keine <span class="hl">geeignete</span> Sache</td><td>→</td><td>nichts <strong>Geeignetes</strong></td><td>Abstraktum (neutral)</td></tr>
-        <tr><td>der <span class="hl">vorgesetzte</span> Chef</td><td>→</td><td>mein <strong>Vorgesetzter</strong></td><td>Person (maskulin)</td></tr>
-        <tr><td>die <span class="hl">angestellten</span> Leute</td><td>→</td><td><strong>Angestellte</strong></td><td>Personen (Plural)</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- TAB 2: LÜCKENTEXT -->
-  <div id="tab2" class="tab">
-    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Lückentext">
-
-    <div class="timer-controls">
-      <div class="tc-buttons"><button onclick="resetLuecken()">↺ Neu</button></div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="lTimer">0:00</span></span>
-        <span>🏆 <span class="best-display" id="lBest">–</span></span>
-      </div>
-    </div>
-
-    <div class="score-box">Richtig: <span id="lScore">0</span> / <span id="lTotal">10</span></div>
-
-    <div class="wortkasten">
-      <strong>Wortkasten (Partizipien — achte auf die richtige Endung!):</strong>
-      gekocht · erklärt · befragt · erzogen · erfüllt · verheiratet · gestresst · entspannt · geschockt · eingeschlafen
-    </div>
-
-    <ul class="luecken-list" id="lueckenList"></ul>
-  </div>
-
-  <!-- TAB 3: SATZBAU -->
-  <div id="tab3" class="tab">
-    <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Satzbau">
-
-    <div class="timer-controls">
-      <div class="tc-buttons"><button onclick="sbResetAll()">↺ Neu</button>
-    <button onclick="showTab(5)">🔤 Wortschatz</button></div>
-      <div class="tc-times">
-        <span>⏱ <span class="timer-display" id="sbTimer">0:00</span></span>
-        <span>🏆 <span class="best-display" id="sbBest">–</span></span>
-      </div>
-    </div>
-
-    <div class="score-box">Richtig: <span id="sbScore">0</span> / <span id="sbTotal">6</span></div>
-
-    <div id="sbContainer"></div>
-  </div>
-
-  <!-- TAB 4: ZUORDNUNG -->
-  <div id="tab4" class="tab">
-    <img src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=900&h=180&fit=crop" class="tab-banner" alt="Zuordnung">
-
-    <div class="section-title">🔀 Partizip II als Adjektiv oder als Nomen?</div>
-
-    <div class="info-box">
-      Ordne die Ausdrücke den richtigen Kategorien zu. Klicke auf einen Chip und dann auf die richtige Zone.
-    </div>
-
-    <div class="score-box">Richtig: <span id="zScore">0</span> / <span id="zTotal">10</span></div>
-
-    <div class="zuord-chips-pool" id="zuordPool"></div>
-
-    <div class="zuord-container">
-      <div>
-        <div class="zuord-zone" id="zoneAdj" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="zDrop(event,'adj')">
-          <div class="zuord-zone-title">📝 Partizip II als Adjektiv</div>
-        </div>
-      </div>
-      <div>
-        <div class="zuord-zone" id="zoneNom" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="zDrop(event,'nom')">
-          <div class="zuord-zone-title">🔤 Partizip II als Nomen</div>
-        </div>
-      </div>
-    </div>
-
-    <button onclick="resetZuord()" style="background:#f0e6ff;border:1.5px solid #667eea;color:#667eea;padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:8px;">↺ Neu starten</button>
-  </div>
-
-  <div class="author-footer">
-    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
-    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
-  </div>
-
-
-  <!-- TAB 5: WORTSCHATZ -->
-  <div class="tab" id="tab5">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
-    <div class="tab-content">
-      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
-      <div id="vocabContainer"></div>
-      <div style="margin-top:16px;display:flex;gap:10px;">
-        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
-        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
-      </div>
-    </div>
-  </div>
-
+<div class="header">
+    <h1>Partizip II als Adjektiv</h1>
+    <p>B1.1 – Lektion 2032G · Grammatik</p>
+    <div class="big-emoji">📚</div>
 </div>
 
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">📖</span>
+        <span class="nav-label">Entdecken</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">📋</span>
+        <span class="nav-label">Regel</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">✏️</span>
+        <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">🔀</span>
+        <span class="nav-label">Zuordnung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">🧩</span>
+        <span class="nav-label">Satzbau</span>
+    </div>
+</div>
+
+<!-- ===== TAB 0: ENTDECKEN ===== -->
+<div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4195325/pexels-photo-4195325.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Geschlossene Tür">
+    <div class="sec-inner">
+        <div class="entdeck-intro">
+            <h3>Entdecke: Partizip II als Adjektiv</h3>
+            <p>Lies diese Sätze und achte auf die unterstrichenen Wörter:</p>
+            <p style="margin-top: 10px;">1. Die <span class="hl">geschlossene</span> Tür bleibt dunkel.</p>
+            <p>2. Der <span class="hl">geöffnete</span> Fenster zeigt die Stadt.</p>
+            <p>3. Das <span class="hl">gekochte</span> Wasser ist heiß.</p>
+            <p>4. Ein <span class="hl">geschriebener</span> Brief liegt auf dem Tisch.</p>
+        </div>
+
+        <div class="progress-dots">
+            <div class="pdot" id="pdot0"></div>
+            <div class="pdot" id="pdot1"></div>
+            <div class="pdot" id="pdot2"></div>
+            <div class="pdot" id="pdot3"></div>
+        </div>
+
+        <div class="mc-step active" id="mc-step0">
+            <h4>Schritt 1: Was beschreiben diese Wörter?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(0, this, false)">Sie beschreiben eine Handlung (Präsens)</button>
+                <button class="mc-btn" onclick="mcCheck(0, this, true)">Sie beschreiben einen Zustand oder eine Eigenschaft des Nomens</button>
+                <button class="mc-btn" onclick="mcCheck(0, this, false)">Sie sind Verben in der Perfekt-Form</button>
+            </div>
+            <div class="mc-feedback" id="mcfb0"></div>
+        </div>
+
+        <div class="mc-step" id="mc-step1">
+            <h4>Schritt 2: Wovon stammen diese Wörter ab?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(1, this, true)">Von Verben im Partizip II</button>
+                <button class="mc-btn" onclick="mcCheck(1, this, false)">Von Nomina</button>
+                <button class="mc-btn" onclick="mcCheck(1, this, false)">Von Adverbien</button>
+            </div>
+            <div class="mc-feedback" id="mcfb1"></div>
+        </div>
+
+        <div class="mc-step" id="mc-step2">
+            <h4>Schritt 3: Welche Endungen haben diese Partizipien?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(2, this, false)">Sie haben nur die Endung -t oder -en</button>
+                <button class="mc-btn" onclick="mcCheck(2, this, true)">Sie haben Adjektiv-Endungen, wie -e, -er, -es, -en usw.</button>
+                <button class="mc-btn" onclick="mcCheck(2, this, false)">Sie haben keine Endungen</button>
+            </div>
+            <div class="mc-feedback" id="mcfb2"></div>
+        </div>
+
+        <div class="mc-step" id="mc-step3">
+            <h4>Schritt 4: Wann nutzen wir Partizip II als Adjektiv?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(3, this, false)">Nur im Passiv</button>
+                <button class="mc-btn" onclick="mcCheck(3, this, true)">Um einen Zustand auszudrücken, der von einer Handlung stammt</button>
+                <button class="mc-btn" onclick="mcCheck(3, this, false)">Nur mit regelmäßigen Verben</button>
+            </div>
+            <div class="mc-feedback" id="mcfb3"></div>
+        </div>
+
+        <div class="regel-karte" id="regelkarte">
+            <h3>✓ Regel: Partizip II als Adjektiv</h3>
+            <ul>
+                <li><b>Partizip II als Adjektiv:</b> Ein Partizip II kann wie ein Adjektiv vor einem Nomen stehen und beschreibt einen Zustand oder eine Eigenschaft.</li>
+                <li><b>Beispiele:</b> die geschlossene Tür, das gekochte Wasser, ein geschriebener Brief</li>
+                <li><b>Adjektiv-Endungen:</b> Das Partizip II bekommt die gleichen Endungen wie ein Adjektiv: -e, -er, -es, -en, -em, -em usw.</li>
+                <li><b>Mit Artikel:</b> die ge<b>öffnete</b> Tür (bestimmter Artikel), ein ge<b>öffnetes</b> Fenster (unbestimmter Artikel)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TAB 1: REGEL ===== -->
+<div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Regelbuch">
+    <div class="sec-inner">
+        <h2>📋 Regel</h2>
+
+        <div class="regel-boxes">
+            <div class="regel-box">
+                <h3>Partizip II: Formation</h3>
+                <p>Das Partizip II wird aus dem Verb gebildet:</p>
+                <div class="example"><b>kochen</b> → ge<b>kocht</b></div>
+                <div class="example"><b>öffnen</b> → ge<b>öffnet</b></div>
+                <div class="example"><b>schreiben</b> → ge<b>schrieben</b></div>
+                <p style="margin-top: 12px; font-size: 0.9em;">Regelmäßige Verben erhalten -t oder -et. Unregelmäßige Verben haben oft Vokalwechsel.</p>
+            </div>
+
+            <div class="regel-box">
+                <h3>Partizip II + Adjektiv-Endung</h3>
+                <p>Das Partizip II bekommt die Endung eines Adjektivs:</p>
+                <div class="example">die ge<b>kochte</b> Suppe (-e)</div>
+                <div class="example">das ge<b>kochte</b> Wasser (-e)</div>
+                <div class="example">ein ge<b>kochter</b> Eintopf (-er)</div>
+                <p style="margin-top: 12px; font-size: 0.9em;">Die Endung hängt vom Artikel, vom Genus und vom Kasus ab.</p>
+            </div>
+
+            <div class="regel-box">
+                <h3>Regelmäßig vs. Unregelmäßig</h3>
+                <p><b>Regelmäßig:</b> ge-Stamm-t/et</p>
+                <div class="example">kochen → ge<b>kocht</b></div>
+                <div class="example">öffnen → ge<b>öffnet</b></div>
+                <p style="margin-top: 8px;"><b>Unregelmäßig:</b> ge-Stamm (Vokalwechsel)-en</p>
+                <div class="example">schreiben → ge<b>schrieben</b></div>
+                <div class="example">binden → ge<b>bunden</b></div>
+            </div>
+
+            <div class="regel-box">
+                <h3>Anwendung</h3>
+                <p>Partizip II als Adjektiv drückt einen <b>Zustand</b> aus, der von einer <b>Aktion</b> kommt:</p>
+                <div class="example">Die Tür ist <b>geschlossen</b> (wurde geschlossen)</div>
+                <div class="example">Der Brief ist <b>geschrieben</b> (wurde geschrieben)</div>
+                <p style="margin-top: 12px; font-size: 0.9em;">Im Gegensatz zum Passiv beschreibt das Partizip II den <b>Zustand</b>, nicht die <b>Handlung</b>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TAB 2: LÜCKENTEXT ===== -->
+<div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3945681/pexels-photo-3945681.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schreiben">
+    <div class="sec-inner">
+        <h2>✏️ Lückentext</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showLueckenLosung()">Lösungen</button>
+                <button class="btn" onclick="resetTab(2); timerResetOne(2);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-2">0:00</span></span>
+                <span>🏆 <span id="best-2">--:--</span></span>
+            </div>
+        </div>
+
+        <div id="lueckenContainer"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 3: ZUORDNUNG ===== -->
+<div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3865857/pexels-photo-3865857.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Sortieren">
+    <div class="sec-inner">
+        <h2>🔀 Zuordnung</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showZuoLosung()">Lösungen</button>
+                <button class="btn" onclick="resetTab(3); timerResetOne(3);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-3">0:00</span></span>
+                <span>🏆 <span id="best-3">--:--</span></span>
+            </div>
+        </div>
+
+        <div class="zuo-layout">
+            <div class="zuo-bank">
+                <h4>Alle Partizipien</h4>
+                <div class="chip-bank" id="zuoBank"></div>
+            </div>
+
+            <div>
+                <div class="drop-zone" ondrop="dropZuo(event, this)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" data-cat="regular" style="margin-bottom: 12px;">
+                    <h4>Regelmäßig</h4>
+                </div>
+                <div class="drop-zone" ondrop="dropZuo(event, this)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" data-cat="irregular">
+                    <h4>Unregelmäßig</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TAB 4: SATZBAU ===== -->
+<div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Satzzeichen">
+    <div class="sec-inner">
+        <h2>🧩 Satzbau</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showSbLosung()">Lösungen</button>
+                <button class="btn" onclick="resetTab(4); timerResetOne(4);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-4">0:00</span></span>
+                <span>🏆 <span id="best-4">--:--</span></span>
+            </div>
+        </div>
+
+        <div id="satzbauContainer"></div>
+    </div>
+</div>
+
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+</div><!-- /container -->
+
 <script>
-// ─── TAB ─────────────────────────────────────────────────────────────────────
-function showTab(n){
-  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('aktiv',i===n));
-  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
-}
+// ============ GLOBALE VARIABLEN ============
 
-// ─── TIMER ───────────────────────────────────────────────────────────────────
-const TIMER_PREFIX='best2032G';
-function fmtTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
-let lSec=0,lRunning=false,lInterval=null;
-function lStartTimer(){if(lRunning)return;lRunning=true;lInterval=setInterval(()=>{lSec++;document.getElementById('lTimer').textContent=fmtTime(lSec);},1000);}
-function lStopTimer(){if(!lRunning)return;clearInterval(lInterval);lRunning=false;const k=TIMER_PREFIX+'_L';const p=parseInt(localStorage.getItem(k)||'0');if(!p||lSec<p){localStorage.setItem(k,lSec);document.getElementById('lBest').textContent=fmtTime(lSec);}}
-function lLoadBest(){const k=TIMER_PREFIX+'_L';const b=parseInt(localStorage.getItem(k)||'0');if(b)document.getElementById('lBest').textContent=fmtTime(b);}
-let sbSec=0,sbRunning=false,sbInterval=null;
-function sbStartTimer(){if(sbRunning)return;sbRunning=true;sbInterval=setInterval(()=>{sbSec++;document.getElementById('sbTimer').textContent=fmtTime(sbSec);},1000);}
-function sbStopTimer(){if(!sbRunning)return;clearInterval(sbInterval);sbRunning=false;const k=TIMER_PREFIX+'_S';const p=parseInt(localStorage.getItem(k)||'0');if(!p||sbSec<p){localStorage.setItem(k,sbSec);document.getElementById('sbBest').textContent=fmtTime(sbSec);}}
-function sbLoadBest(){const k=TIMER_PREFIX+'_S';const b=parseInt(localStorage.getItem(k)||'0');if(b)document.getElementById('sbBest').textContent=fmtTime(b);}
+var mcDone = [false, false, false, false];
+var draggedChip = null;
+var TIMER_PREFIX = 'partizipii_2032G_';
+var timerStarted = [false, false, false, false, false];
+var timerRunning = [false, false, false, false, false];
+var timerSeconds = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
 
-// ─── ENTDECKEN ────────────────────────────────────────────────────────────────
-const MC_ANSWERS = ['b','b','b','b'];
-let mcDone = [false,false,false,false];
+// ============ LÜCKENTEXT DATA ============
 
-function mcAnswer(step, choice) {
-  if (mcDone[step]) return;
-  const fb = document.getElementById('fb'+step);
-  const btns = document.querySelectorAll('#step'+step+' .mc-btn');
-  const correct = choice === MC_ANSWERS[step];
-  btns.forEach(b => {
-    if (b.textContent.trim().startsWith(correct ? btns[['a','b','c'].indexOf(MC_ANSWERS[step])].textContent.trim().substring(0,3) : '~~~')) {}
-  });
-  // find clicked button
-  const letters = ['a','b','c'];
-  btns.forEach((b,i)=>{ if(letters[i]===choice) b.classList.add(correct?'correct':'wrong'); });
-  if (correct) {
-    mcDone[step] = true;
-    fb.textContent = '✓ Richtig!';
-    fb.style.color = '#27ae60';
-    updateDots(step+1);
-    setTimeout(()=>{ showStep(step+1); }, 500);
-  } else {
-    fb.textContent = '✗ Nicht ganz — versuch es nochmal.';
-    fb.style.color = '#e74c3c';
-    setTimeout(()=>{ btns.forEach(b=>b.classList.remove('wrong')); fb.textContent=''; }, 1200);
-  }
-}
-
-function showStep(n) {
-  if (n <= 3) {
-    document.getElementById('step'+n).classList.add('visible');
-  } else {
-    document.getElementById('ruleCard').classList.add('visible');
-  }
-}
-
-function updateDots(active) {
-  for(let i=0;i<4;i++) {
-    document.getElementById('dot'+i).classList.toggle('active', i<active);
-  }
-}
-
-// ─── LÜCKENTEXT ──────────────────────────────────────────────────────────────
-const LUECKEN_DATA = [
-  { before:'100g', blank:'gekochten', after:'Schinken, bitte.' },
-  { before:'Die', blank:'erklärte', after:'Übung könnt ihr jetzt machen.' },
-  { before:'Die', blank:'befragten', after:'Personen waren alle alleinerziehend.' },
-  { before:'Als kinderloses Paar kann man auch ein', blank:'erfülltes', after:'Leben führen.' },
-  { before:'Zwei Kilometer nach dem Parkplatz stellten die', blank:'gestressten', after:'Eltern fest, dass sie ein Kind vergessen hatten.' },
-  { before:'Der vergessene Olaf war schon etwas panisch, weil er seine Familie nicht mehr finden konnte. Er war sehr', blank:'geschockt', after:'.'},
-  { before:'Mein', blank:'verheirateter', after:'Bruder lebt mit seiner Familie in München.' },
-  { before:'Die', blank:'entspannte', after:'Mutter saß ruhig im Garten.'},
-  { before:'Das gut', blank:'erzogene', after:'Kind grüßte höflich.'},
-  { before:'Das', blank:'eingeschlafene', after:'Kind lag friedlich im Bett.'}
-];
-
-let lDone=0;
-function buildLuecken(){
-  const ul=document.getElementById('lueckenList');ul.innerHTML='';lDone=0;
-  document.getElementById('lScore').textContent='0';
-  document.getElementById('lTotal').textContent=LUECKEN_DATA.length;
-  LUECKEN_DATA.forEach((item,idx)=>{
-    const li=document.createElement('li');li.className='luecken-item';
-    li.innerHTML=item.before+' <input type="text" id="li'+idx+'" oninput="liveCheck(this,'+idx+')" autocomplete="off" spellcheck="false"> '+item.after;
-    ul.appendChild(li);
-  });
-}
-function liveCheck(inp,idx){
-  lStartTimer();
-  const target=LUECKEN_DATA[idx].blank;const val=inp.value;
-  if(val.length===0){inp.className='';return;}
-  const cs=target[0]===target[0].toUpperCase()&&target[0]!==target[0].toLowerCase();
-  const vCmp=cs?val:val.toLowerCase();const tCmp=cs?target:target.toLowerCase();
-  if(vCmp===tCmp){if(!inp.classList.contains('ok')){inp.className='ok';inp.disabled=true;lDone++;document.getElementById('lScore').textContent=lDone;if(lDone===LUECKEN_DATA.length)lStopTimer();}}
-  else if(!tCmp.startsWith(vCmp)){inp.className='err';}else{inp.className='';}
-}
-function resetLuecken(){clearInterval(lInterval);lRunning=false;lSec=0;document.getElementById('lTimer').textContent='0:00';buildLuecken();}
-
-// ══════════════════════════════════════════════
-// SATZBAU
-// ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['Die', 'erklärte', 'Übung', 'könnt', 'ihr', 'jetzt', 'machen', '.'] },
-  { words: ['Die', 'befragten', 'Personen', 'waren', 'alle', 'alleinerziehend', '.'] },
-  { words: ['Als', 'kinderloses', 'Paar', 'kann', 'man', 'auch', 'ein', 'erfülltes', 'Leben', 'führen', '.'] },
-  { words: ['Zwei', 'Kilometer', 'nach', 'dem', 'Parkplatz', 'stellten', 'die', 'gestressten', 'Eltern', 'fest', ',', 'dass', 'sie', 'ein', 'Kind', 'vergessen', 'hatten', '.'] },
-  { words: ['eine', 'verletzte', 'Frau', '→', 'eine', 'Verletzte'] },
-  { words: ['Das', 'Partizip', 'II', 'steht', 'vor', 'dem', 'Nomen', 'und', 'wird', 'dekliniert', '.'] }
-];
-
-let sbDragged = null;
-
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
-    });
-  }
-  return span;
-}
-
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
-}
-
-function sbCheckAuto(itemIdx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
-  }, 500);
-}
-
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
-  } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
-  }
-}
-
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
-  });
-}
-
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(3);
-}
-
-function buildSatzbau() {
-  const cont = document.getElementById('sbContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
-
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+var LUECKEN_DATA = [
+    {
+        segs: [
+            {t: 'Der '},
+            {b: 'gebackene', s: 'm'},
+            {t: ' Kuchen riecht köstlich.'}
+        ],
+        hint: 'Partizip II'
+    },
+    {
+        segs: [
+            {t: 'Sie öffnete den '},
+            {b: 'verschlossenen', s: 'm'},
+            {t: ' Koffer mit Neugier.'}
+        ],
+        hint: 'Partizip II + Endung'
+    },
+    {
+        segs: [
+            {t: 'Das '},
+            {b: 'gekochte', s: 'm'},
+            {t: ' Essen war zu heiß.'}
+        ],
+        hint: 'Partizip II'
+    },
+    {
+        segs: [
+            {t: 'Ein '},
+            {b: 'geschriebener', s: 'm'},
+            {t: ' Brief lag auf dem Schreibtisch.'}
+        ],
+        hint: 'Partizip II + Endung'
+    },
+    {
+        segs: [
+            {t: 'Die '},
+            {b: 'geöffnete', s: 'm'},
+            {t: ' Tür zeigte das Zimmer.'}
+        ],
+        hint: 'Partizip II'
+    },
+    {
+        segs: [
+            {t: 'Mit '},
+            {b: 'gefalteten', s: 'm'},
+            {t: ' Händen betete sie.'}
+        ],
+        hint: 'Partizip II + Endung'
+    },
+    {
+        segs: [
+            {t: 'Das '},
+            {b: 'bemalte', s: 'm'},
+            {t: ' Bild hing an der Wand.'}
+        ],
+        hint: 'Partizip II'
+    },
+    {
+        segs: [
+            {t: 'Alle '},
+            {b: 'gesammelten', s: 'm'},
+            {t: ' Daten werden analysiert.'}
+        ],
+        hint: 'Partizip II + Endung'
+    },
+    {
+        segs: [
+            {t: 'Der '},
+            {b: 'gebundene', s: 'm'},
+            {t: ' Strauch sieht ordentlich aus.'}
+        ],
+        hint: 'Partizip II'
+    },
+    {
+        segs: [
+            {t: 'Eine '},
+            {b: 'verlorene', s: 'm'},
+            {t: ' Liebe lässt sich nicht vergessen.'}
+        ],
+        hint: 'Partizip II + Endung'
+    },
+    {
+        segs: [
+            {t: 'Das '},
+            {b: 'geteilte', s: 'm'},
+            {t: ' Glück wird doppelt so groß.'}
+        ],
+        hint: 'Partizip II'
+    },
+    {
+        segs: [
+            {t: 'Ein '},
+            {b: 'gefundener', s: 'm'},
+            {t: ' Schatz liegt im Museum.'}
+        ],
+        hint: 'Partizip II + Endung'
     }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
+];
 
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
+// ============ ZUORDNUNG DATA ============
+
+var ZUO_DATA = [
+    {text: 'gekocht', cat: 'regular'},
+    {text: 'geöffnet', cat: 'regular'},
+    {text: 'bemalte', cat: 'regular'},
+    {text: 'gesammelt', cat: 'regular'},
+    {text: 'geschrieben', cat: 'irregular'},
+    {text: 'gebunden', cat: 'irregular'},
+    {text: 'gebacken', cat: 'irregular'},
+    {text: 'geverloren', cat: 'irregular'},
+    {text: 'gefunden', cat: 'irregular'},
+    {text: 'geteilt', cat: 'regular'},
+    {text: 'geschlossen', cat: 'irregular'},
+    {text: 'gefaltet', cat: 'regular'}
+];
+
+// ============ SATZBAU DATA ============
+
+var SB_DATA = [
+    {parts: ['Die', 'Tür', 'verschlossene', 'ist'], valid: [['Die', 'Tür', 'ist', 'verschlossene']], punct: '.'},
+    {parts: ['einen', 'gebackenen', 'Ich', 'Kuchen', 'esse'], valid: [['Ich', 'esse', 'einen', 'gebackenen', 'Kuchen']], punct: '.'},
+    {parts: ['Das', 'Brief', 'geschriebene', 'liegt'], valid: [['Das', 'geschriebene', 'Brief', 'liegt']], punct: '.'},
+    {parts: ['gefalteten', 'Mit', 'Hände', 'betete', 'sie'], valid: [['Mit', 'gefalteten', 'Hände', 'betete', 'sie']], punct: '.'},
+    {parts: ['gebundenen', 'Der', 'ordentlich', 'Strauch', 'sieht', 'aus'], valid: [['Der', 'gebundenen', 'Strauch', 'sieht', 'ordentlich', 'aus']], punct: '.'},
+    {parts: ['verlorene', 'Eine', 'Liebe', 'vergessen', 'lässt', 'sich', 'nicht'], valid: [['Eine', 'verlorene', 'Liebe', 'lässt', 'sich', 'nicht', 'vergessen']], punct: '.'},
+    {parts: ['geteilte', 'Das', 'groß', 'Glück', 'wird', 'doppelt', 'so'], valid: [['Das', 'geteilte', 'Glück', 'wird', 'doppelt', 'so', 'groß']], punct: '.'},
+    {parts: ['gefundener', 'Museum', 'liegt', 'Ein', 'Schatz', 'im'], valid: [['Ein', 'gefundener', 'Schatz', 'liegt', 'im', 'Museum']], punct: '.'}
+];
+
+// ============ NAVIGATION ============
+
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+// ============ MC-SYSTEM ============
+
+function mcCheck(step, btn, correct) {
+    var btns = btn.parentElement.querySelectorAll('.mc-btn');
+    btns.forEach(function(b) { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+    var fb = document.getElementById('mcfb' + step);
+
+    if (correct) {
+        btn.classList.add('correct');
+        fb.textContent = '\u2713 Richtig! Weiter zum nächsten Schritt.';
+        fb.className = 'mc-feedback ok';
+        mcDone[step] = true;
+        document.getElementById('pdot' + step).classList.add('done');
+
+        setTimeout(function() {
+            var next = document.getElementById('mc-step' + (step + 1));
+            if (next) { next.classList.add('active'); }
+            else { document.getElementById('regelkarte').style.display = 'block'; }
+        }, 700);
+    } else {
+        btn.classList.add('wrong');
+        fb.textContent = '\u2717 Nicht ganz \u2013 schau nochmal genau hin und versuche es erneut.';
+        fb.className = 'mc-feedback err';
+        setTimeout(function() {
+            btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong', 'correct'); });
+            fb.textContent = '';
+            fb.className = 'mc-feedback';
+        }, 1400);
+    }
+}
+
+// ============ LÜCKENTEXT ============
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+
+    LUECKEN_DATA.forEach(function(data, idx) {
+        var item = document.createElement('div');
+        item.className = 'luecken-item';
+        item.id = 'luecke-' + idx;
+
+        var p = document.createElement('p');
+        p.style.margin = '0';
+
+        data.segs.forEach(function(seg) {
+            if (seg.t) {
+                p.appendChild(document.createTextNode(seg.t));
+            } else {
+                var inp = document.createElement('input');
+                inp.className = 'blank';
+                inp.type = 'text';
+                inp.dataset.answer = seg.b.toLowerCase();
+                inp.dataset.hint = data.hint;
+                inp.style.width = (seg.s === 's' ? '50px' : seg.s === 'm' ? '90px' : seg.s === 'l' ? '150px' : '200px');
+                inp.addEventListener('input', function() {
+                    timerAutoStart(2);
+                    liveCheck(inp);
+                    checkLueckeAllOk();
+                });
+                p.appendChild(inp);
+            }
+        });
+
+        item.appendChild(p);
+        container.appendChild(item);
+    });
+}
+
+function liveCheck(inp) {
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.answer || '').toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('correct');
+    } else if (ans.indexOf(val) === 0) {
+        // gültiger Präfix
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function showLueckenLosung() {
+    document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp) {
+        showHint(inp);
+    });
+}
+
+function showHint(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    if (!inp.classList.contains('correct')) {
+        var hint = document.createElement('span');
+        hint.className = 'correction-hint';
+        hint.textContent = inp.dataset.answer;
+        inp.insertAdjacentElement('afterend', hint);
+    }
+    inp.value = inp.dataset.answer;
+    inp.classList.add('correct');
+    inp.classList.remove('wrong');
+}
+
+function checkLueckeAllOk() {
+    var inputs = document.querySelectorAll('#lueckenContainer input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(2);
+}
+
+// ============ ZUORDNUNG ============
+
+function initZuo() {
+    var bank = document.getElementById('zuoBank');
+    bank.innerHTML = '';
+
+    ZUO_DATA.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = item.text;
+        chip.dataset.cat = item.cat;
+        chip.draggable = true;
+
+        chip.addEventListener('dragstart', function(e) {
+            draggedChip = chip;
+            timerAutoStart(3);
+            e.dataTransfer.setData('text/plain', '');
+        });
+
+        chip.addEventListener('dragend', function() {
+            colorAllZuordnungChips();
+        });
+
+        bank.appendChild(chip);
+    });
+}
+
+function allowDrop(e) {
+    e.preventDefault();
+}
+
+function dragLeave(e) {
+    if (e.target.classList.contains('drop-zone')) {
+        e.target.classList.remove('dragover');
+    }
+}
+
+function dropZuo(e, zone) {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    if (!draggedChip) return;
+    zone.appendChild(draggedChip);
+    draggedChip = null;
+    colorAllZuordnungChips();
+}
+
+function colorAllZuordnungChips() {
+    document.querySelectorAll('#sec-3 .chip').forEach(function(chip) {
+        var zone = chip.closest('.drop-zone');
+        chip.classList.remove('correct', 'wrong');
+        if (zone) {
+            chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+        }
+    });
+    checkZuoAllOk();
+}
+
+function checkZuoAllOk() {
+    var chips = document.querySelectorAll('#sec-3 .chip');
+    var allOk = chips.length > 0 && Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+    if (allOk) timerStop(3);
+}
+
+function showZuoLosung() {
+    document.querySelectorAll('#sec-3 .drop-zone').forEach(function(zone) {
+        var chips = Array.from(zone.querySelectorAll('.chip')).filter(function(c) { return c.dataset.cat === zone.dataset.cat; });
+        chips.forEach(function(chip) {
+            zone.appendChild(chip);
+        });
+    });
+    colorAllZuordnungChips();
+}
+
+// ============ SATZBAU ============
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+
+    SB_DATA.forEach(function(data, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        // Chips shufflen
+        var parts = data.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i];
+            parts[i] = parts[j];
+            parts[j] = tmp;
+        }
+
+        parts.forEach(function(word) {
+            bank.appendChild(sbMakeChip(word, idx));
+        });
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        container.appendChild(item);
+    });
+}
+
+function sbMakeChip(word, idx) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+
+    chip.addEventListener('dragstart', function(e) {
+        draggedChip = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        draggedChip = null;
+    });
+
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!draggedChip) return;
+    });
+
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!draggedChip) return;
+        zone.appendChild(draggedChip);
+        draggedChip = null;
         sbUpdateCapitalization(zone);
         sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
-      pool.appendChild(chip);
     });
-    sbRegisterZone(pool);
+}
 
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
-
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        c.textContent = (i === 0 && orig !== ',' && orig !== '.') ?
+            orig.charAt(0).toUpperCase() + orig.slice(1) : orig;
     });
+}
 
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+
+    setTimeout(function() {
+        var order = Array.from(row.querySelectorAll('.chip')).map(function(c) { return c.dataset.orig; });
+        var ok = SB_DATA[idx].valid.some(function(v) {
+            return JSON.stringify(v) === JSON.stringify(order);
+        });
+
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+            c.classList.add(ok ? 'correct' : 'incorrect');
+        });
+
+        row.classList.remove('correct', 'incorrect');
+        row.classList.add(ok ? 'correct' : 'incorrect');
+        fb.className = 'satzbau-feedback ' + (ok ? 'correct' : 'incorrect');
+        fb.textContent = ok ? '\u2713 Korrekt!' : '\u2717 Falsche Reihenfolge \u2013 verschiebe die Chips!';
+
+        if (ok) sbCheckAllDone();
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = SB_DATA.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
     });
+    if (allOk) timerStop(4);
+}
 
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
+function showSbLosung() {
+    SB_DATA.forEach(function(data, idx) {
+        var bank = document.getElementById('sb-bank-' + idx);
+        var row = document.getElementById('sb-row-' + idx);
+
+        while (bank.firstChild) bank.removeChild(bank.firstChild);
+        while (row.firstChild) row.removeChild(row.firstChild);
+
+        data.valid[0].forEach(function(word, i) {
+            row.appendChild(sbMakeChip(word, idx));
+        });
+
+        sbUpdateCapitalization(row);
         sbCheckAuto(idx);
-      }
     });
-
-    const fb = document.createElement('div');
-    fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
-
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
 }
 
-function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+// ============ TIMER-SYSTEM ============
 
-// ── WORTSCHATZ ────────────────────────────────────────────────────
-const WORTSCHATZ = [
-  { type: 'n', en: 'the participle', art: 'das', wort: 'Partizip', plural: '-ien' },
-  { type: 'n', en: 'the adjective', art: 'das', wort: 'Adjektiv', plural: '-e' },
-  { type: 'n', en: 'the attribute', art: 'das', wort: 'Attribut', plural: '-e' },
-  { type: 'v', en: 'to break', de: 'brechen' },
-  { type: 'v', en: 'to open', de: 'öffnen' },
-  { type: 'v', en: 'to close', de: 'schließen' },
-  { type: 'v', en: 'to paint', de: 'malen' },
-  { type: 'v', en: 'to write', de: 'schreiben' },
-  { type: 'v', en: 'to lose', de: 'verlieren' },
-  { type: 'v', en: 'to find', de: 'finden' },
-];
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
 
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
     }
-    cont.appendChild(div);
-  });
 }
 
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
-      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
-    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  }
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
 }
 
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
+function fmtTime(s) {
+    return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+
+function loadBestTimes() {
+    for (var i = 1; i <= 4; i++) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
     }
-    vocabLiveCheck(idx);
-  });
 }
 
-function resetVocab() { initVocab(); }
+function resetTab(n) {
+    if (n === 2) {
+        initLuecken();
+    } else if (n === 3) {
+        initZuo();
+    } else if (n === 4) {
+        initSatzbau();
+    }
+}
 
-initVocab();
+// ============ INIT ============
+
+initLuecken();
+initZuo();
+initSatzbau();
+loadBestTimes();
 </script>
 </body>
 </html>

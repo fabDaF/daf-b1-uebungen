@@ -3,507 +3,1364 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2022G – Zusätzliches über das Futur I</title>
+<title>Futur I — Grammatik</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Segoe UI',Arial,sans-serif;background:#667eea;min-height:100vh;padding:20px}
-  .container{max-width:860px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.18);overflow:hidden}
-  h1{background:#667eea;color:#fff;padding:18px 24px;font-size:1.3rem;letter-spacing:.5px}
-  .nav{display:flex;flex-wrap:wrap;gap:0;border-bottom:2px solid #667eea;background:#f3e8ff}
-  .nav button{padding:10px 15px;border:1px solid #b388d8;border-bottom:none;background:#e9d5ff;color:#4a0080;font-size:.85rem;cursor:pointer;font-weight:600;border-radius:6px 6px 0 0;margin-bottom:-2px;transition:background .2s}
-  .nav button.active{background:#fff;color:#667eea;border-bottom:2px solid #fff;z-index:1}
-  .nav button:hover:not(.active){background:#d8b4fe}
-  .tab{display:none;padding:24px}
-  .tab.active{display:block}
-  .tab-banner{width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-bottom:18px}
-  .tab h2{color:#667eea;margin-bottom:14px;font-size:1.1rem}
-  .tab h3{color:#4a0080;margin:14px 0 8px;font-size:1rem}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* Timer */
-  .timer-bar{display:flex;align-items:center;gap:10px;background:#f3e8ff;border-radius:8px;padding:8px 14px;margin-bottom:16px;flex-wrap:wrap}
-  .timer-display{font-size:1.1rem;font-weight:700;color:#667eea;min-width:60px;font-family:monospace}
-  .timer-bar button{padding:5px 12px;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600}
-  .btn-start{background:#22c55e;color:#fff}.btn-stop{background:#ef4444;color:#fff}.btn-reset{background:#94a3b8;color:#fff}
-  .best-time{font-size:.8rem;color:#7c3aed;margin-left:4px}
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
 
-  /* Entdecken */
-  .dialog-box{background:#f3e8ff;border-left:4px solid #667eea;border-radius:8px;padding:14px 18px;margin-bottom:14px}
-  .dialog-line{margin:6px 0;font-size:.95rem;line-height:1.6}
-  .dialog-line strong{color:#667eea}
-  .highlight{background:#fef08a;border-radius:3px;padding:1px 3px;font-weight:700}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
 
-  /* Regelkarte */
-  .regel-table{width:100%;border-collapse:collapse;margin:12px 0}
-  .regel-table th{background:#667eea;color:#fff;padding:10px 14px;text-align:left;font-size:.9rem}
-  .regel-table td{padding:10px 14px;border-bottom:1px solid #e9d5ff;font-size:.9rem;vertical-align:top}
-  .regel-table tr:nth-child(even) td{background:#f9f5ff}
-  .use-badge{display:inline-block;background:#e9d5ff;color:#4a0080;border-radius:12px;padding:3px 10px;font-size:.82rem;font-weight:700;margin-bottom:4px}
-  .use-badge.pln{background:#dbeafe;color:#1e40af}
-  .use-badge.pro{background:#dcfce7;color:#166534}
-  .use-badge.ver{background:#fce7f3;color:#9d174d}
-  .use-badge.auf{background:#fff3cd;color:#92400e}
-  .use-badge.verm{background:#f3e8ff;color:#667eea}
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
 
-  /* Konjugationstabelle */
-  .konj-table{width:100%;border-collapse:collapse;margin:12px 0}
-  .konj-table th{background:#4a0080;color:#fff;padding:8px 12px;text-align:left;font-size:.88rem}
-  .konj-table td{padding:8px 12px;border-bottom:1px solid #e9d5ff;font-size:.9rem}
-  .konj-table tr:nth-child(even) td{background:#f9f5ff}
-  .konj-table .pron{color:#667eea;font-weight:700}
-  .konj-table .form{color:#166534;font-weight:700}
+.header h1 {
+  font-size: 2.2em;
+  font-family: Georgia, 'Times New Roman', serif;
+  color: white;
+  margin-bottom: 8px;
+  border: none;
+  padding: 0;
+}
 
-  /* Lückentext */
-  .luecke-item{margin-bottom:14px;line-height:2}
-  .luecke-item input{border:none;border-bottom:2px solid #667eea;background:#f3e8ff;padding:3px 8px;font-size:.95rem;color:#4a0080;border-radius:4px 4px 0 0;min-width:90px;outline:none}
-  .luecke-item input.correct{background:#dcfce7;border-color:#22c55e;color:#166534}
-  .luecke-item input.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
-  .check-btn{margin-top:14px;padding:9px 22px;background:#667eea;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.95rem;font-weight:600}
-  .check-btn:hover{background:#4a0080}
-  .result-msg{margin-top:10px;font-weight:700;font-size:.97rem}
+.header p {
+  font-size: 1.1em;
+  font-family: Georgia, 'Times New Roman', serif;
+  opacity: 0.95;
+  color: rgba(255,255,255,0.9);
+  margin: 0;
+}
 
-  /* Satzbau */
-  .sb-sentence{margin-bottom:20px}
-  .sb-sentence p{color:#4a0080;font-size:.88rem;margin-bottom:8px;font-style:italic}
-  .sb-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;min-height:38px;border:2px dashed #d8b4fe;border-radius:8px;padding:6px}
-  .sb-chip{background:#e9d5ff;border:2px solid #b388d8;border-radius:16px;padding:6px 13px;cursor:grab;font-size:.88rem;color:#4a0080;font-weight:600;user-select:none;transition:transform .1s}
-  .sb-chip:active{cursor:grabbing;transform:scale(1.05)}
-  .sb-drop-zone{display:flex;flex-wrap:wrap;gap:7px;min-height:44px;border:2px dashed #667eea;border-radius:8px;padding:6px;background:#faf5ff}
-  .sb-drop-zone.drag-over{background:#e9d5ff}
-  .sb-drop-zone .sb-chip{background:#c4b5fd}
-  .sb-ok{color:#22c55e;font-weight:700;font-size:.9rem;margin-top:4px}
-  .sb-err{color:#ef4444;font-weight:700;font-size:.9rem;margin-top:4px}
+.header .big-emoji {
+  font-size: 2.6em;
+  display: block;
+  margin-top: 8px;
+}
 
-  /* Üben Tab */
-  .ueben-item{background:#f9f5ff;border:1px solid #d8b4fe;border-radius:10px;padding:14px 16px;margin-bottom:14px}
-  .ueben-item .aufgabe{font-size:.9rem;color:#555;margin-bottom:8px}
-  .ueben-item .aufgabe strong{color:#667eea}
-  .ueben-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .ueben-row input{border:none;border-bottom:2px solid #667eea;background:transparent;padding:4px 8px;font-size:.93rem;outline:none;color:#4a0080;min-width:140px}
-  .ueben-row input.correct{border-color:#22c55e;color:#166534}
-  .ueben-row input.wrong{border-color:#ef4444;color:#991b1b}
-  .ueben-label{font-size:.9rem;color:#4a0080}
-  .use-tag{display:inline-block;font-size:.75rem;font-weight:700;border-radius:8px;padding:2px 8px;margin-left:6px}
+/* NAV */
+.nav {
+  display: flex;
+  flex-wrap: nowrap;
+  background: #f8f9fa;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
 
-  /* Wortschatz */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
+.nav-btn {
+  flex: 1;
+  padding: 14px 10px;
+  text-align: center;
+  cursor: pointer;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  transition: all 0.3s;
+  font-size: 0.92em;
+  font-weight: 500;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+  background: white;
+  color: #667eea;
+  font-weight: 600;
+  border-bottom: 3px solid #667eea;
+}
+
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; }
+
+.sec-inner { padding: 24px; }
+
+/* TAB BANNER */
+.tab-banner {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 600px) {
+  .tab-banner { max-height: 120px; }
+}
+
+/* ENTDECKUNGS-TAB */
+.entdeck-intro {
+  background: #f3e5f5;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  border-left: 5px solid #9c27b0;
+  font-size: 0.97rem;
+  line-height: 1.75;
+}
+
+.entdeck-intro h3 {
+  color: #6a1b9a;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+}
+
+.hl {
+  background: #e1bee7;
+  border-radius: 4px;
+  padding: 0 4px;
+  color: #4a148c;
+  font-weight: 700;
+}
+
+.mc-step {
+  display: none;
+  background: #fafbff;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 16px;
+  border: 1px solid #c5cae9;
+}
+
+.mc-step.active { display: block; }
+
+.mc-step h4 {
+  color: #3949ab;
+  margin-bottom: 12px;
+  font-size: 0.97rem;
+}
+
+.mc-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mc-btn {
+  padding: 9px 16px;
+  border: 2px solid #c5cae9;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.92rem;
+  transition: all .2s;
+}
+
+.mc-btn:hover {
+  border-color: #667eea;
+  background: #f3f4ff;
+}
+
+.mc-btn.correct {
+  border-color: #43a047;
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.mc-btn.wrong {
+  border-color: #e53935;
+  background: #ffebee;
+  color: #c62828;
+}
+
+.mc-feedback {
+  margin-top: 10px;
+  font-size: 0.88rem;
+  min-height: 1.3em;
+}
+
+.mc-feedback.ok {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.mc-feedback.err {
+  color: #c62828;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.pdot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #c5cae9;
+  transition: background .3s;
+}
+
+.pdot.done { background: #667eea; }
+
+.regel-karte {
+  display: none;
+  background: linear-gradient(135deg, #e8eaf6, #ede7f6);
+  border-radius: 14px;
+  padding: 22px 26px;
+  border-left: 5px solid #3949ab;
+  margin-top: 10px;
+}
+
+.regel-karte h3 {
+  color: #1a237e;
+  margin-bottom: 12px;
+  font-size: 1.05rem;
+}
+
+.regel-karte ul { margin-left: 18px; }
+
+.regel-karte li {
+  color: #333;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+.regel-karte .rk-example {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  border-left: 3px solid #7c4dff;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.regel-karte .rk-example b {
+  color: #3949ab;
+}
+
+/* TABELLEN */
+.tabelle-grid {
+  width: 100%;
+  margin: 14px 0;
+  border-collapse: collapse;
+}
+
+.tabelle-grid th {
+  background: #667eea;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.tabelle-grid td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.tabelle-grid tr:nth-child(even) td {
+  background: #f8f9fa;
+}
+
+.tabelle-grid .pron {
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* CONTROL BAR */
+.control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.btn-row { display: flex; gap: 6px; }
+
+.btn {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.82em;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.timer-display {
+  display: flex;
+  gap: 14px;
+  font-size: 0.82em;
+  color: #bbb;
+  font-variant-numeric: tabular-nums;
+}
+
+/* HILFE BOX */
+.hilfe-box {
+  background: #f0f4ff;
+  border-left: 4px solid #667eea;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin-bottom: 22px;
+  font-size: 0.9em;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* LÜCKENTEXT */
+input.blank {
+  border: 2px solid #c5cae9;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s, background .2s;
+  background: white;
+  margin: 0 2px;
+}
+
+input.blank:focus { border-color: #667eea; }
+
+input.blank.correct {
+  border-color: #27ae60;
+  background: #e8f5e9;
+}
+
+input.blank.wrong {
+  border-color: #e74c3c;
+  background: #ffebee;
+}
+
+.correction-hint {
+  font-size: 0.78rem;
+  color: #27ae60;
+  font-weight: 700;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.luecke-item {
+  margin-bottom: 16px;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+/* ZUORDNUNG */
+.zuordnung-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.zuordnung-cat {
+  background: #f8f9fa;
+  border: 2px dashed #c5cae9;
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 180px;
+}
+
+.zuordnung-cat h4 {
+  color: #667eea;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.zuordnung-cat .chip {
+  margin-bottom: 8px;
+}
+
+.chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  cursor: grab;
+  font-size: 0.85rem;
+  font-weight: 600;
+  user-select: none;
+  transition: transform .15s, opacity .15s;
+  white-space: nowrap;
+  display: inline-block;
+  margin: 4px;
+}
+
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.selected { outline: 3px solid #f39c12; }
+
+.chip.correct {
+  background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
+}
+
+.chip.wrong {
+  background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+}
+
+.chip-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  min-height: 54px;
+}
+
+/* SATZBAU */
+.satzbau-item {
+  margin-bottom: 20px;
+}
+
+.drop-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 2px dashed #c5cae9;
+  background: #fafbff;
+}
+
+.drop-row.dragover {
+  background: #e8eaff;
+  border-color: #667eea;
+}
+
+.satzbau-feedback {
+  margin-top: 8px;
+  font-size: 0.88rem;
+  min-height: 1.3em;
+  color: #666;
+}
+
+.satzbau-feedback.correct {
+  color: #27ae60;
+  font-weight: 700;
+}
+
+.satzbau-feedback.incorrect {
+  color: #e74c3c;
+}
+
+/* FOOTER */
+.author-footer {
+  text-align: center;
+  margin-top: 40px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  body { padding: 8px; }
+  .nav { flex-wrap: wrap; }
+  .nav-btn {
+    flex: 1 1 33%;
+    min-width: 0;
+    font-size: 0.8em;
+    padding: 10px 6px;
+  }
+  .zuordnung-container { grid-template-columns: 1fr; }
+  .header h1 { font-size: 1.2rem; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>2022G – Zusätzliches über das Futur I</h1>
+  <div class="header">
+    <h1>Futur I</h1>
+    <p>B1.1 – Lektion 2022G · Grammatik</p>
+    <div class="big-emoji">🚀</div>
+  </div>
+
   <div class="nav">
-    <button class="active" onclick="showTab(0)">1 · Entdecken</button>
-    <button onclick="showTab(1)">2 · Regeln</button>
-    <button onclick="showTab(2)">3 · Lückentext</button>
-    <button onclick="showTab(3)">4 · Satzbau</button>
-    <button onclick="showTab(4)">5 · Üben</button>
-    <button onclick="showTab(5)">🔤 Wortschatz</button>
+    <div class="nav-btn active" onclick="showSection(0)">
+      <span class="nav-emoji">📖</span>
+      <span class="nav-label">Entdecken</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+      <span class="nav-emoji">📋</span>
+      <span class="nav-label">Regel</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+      <span class="nav-emoji">✏️</span>
+      <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+      <span class="nav-emoji">🔀</span>
+      <span class="nav-label">Zuordnung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+      <span class="nav-emoji">🧩</span>
+      <span class="nav-label">Satzbau</span>
+    </div>
   </div>
 
-  <!-- TAB 1: ENTDECKEN -->
-  <div class="tab active" id="tab0">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Futur I">
-    <h2>Futur I entdecken</h2>
-    <p style="color:#555;font-size:.9rem;margin-bottom:16px">Lies die Sätze. Was fällt dir auf? Welche Form wird für die Zukunft verwendet?</p>
+  <!-- SECTION 0: ENTDECKEN -->
+  <div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Zukunft">
+    <div class="sec-inner">
+      <h2>📖 Entdecken</h2>
 
-    <div class="dialog-box">
-      <div class="dialog-line"><strong>Lena:</strong> Wir <span class="highlight">werden</span> heute viel Deutsch <span class="highlight">lernen</span>, obwohl das nicht so leicht <span class="highlight">sein wird</span>.</div>
-      <div class="dialog-line"><strong>Tom:</strong> Maria <span class="highlight">wird</span> uns morgen <span class="highlight">besuchen</span>. (Zukunft)</div>
-      <div class="dialog-line"><strong>Lena:</strong> Sie <span class="highlight">wird</span> wohl heute nicht mehr <span class="highlight">kommen</span>. (Vermutung)</div>
-      <div class="dialog-line"><strong>Tom:</strong> Du <span class="highlight">wirst</span> mir sofort das Geld <span class="highlight">zurückgeben</span>! (Aufforderung)</div>
-      <div class="dialog-line"><strong>Lena:</strong> Ab morgen <span class="highlight">werde</span> ich mehr <span class="highlight">lernen</span>. (Versprechen)</div>
-    </div>
-
-    <div style="background:#e9d5ff;border-radius:8px;padding:14px;margin-top:10px">
-      <p style="color:#4a0080;font-size:.9rem"><strong>Beobachtung:</strong> Das Futur I steht mit <strong>werden + Infinitiv</strong>. Es drückt verschiedene Bedeutungen aus: Zukunft, Vermutung, Aufforderung oder ein Versprechen.</p>
-    </div>
-
-    <h3 style="margin-top:20px">Konjugation von „werden"</h3>
-    <table class="konj-table">
-      <tr><th>Person</th><th>werden</th><th>Beispiel</th></tr>
-      <tr><td class="pron">ich</td><td class="form">werde</td><td>Ich werde morgen um 06:00 Uhr kommen.</td></tr>
-      <tr><td class="pron">du</td><td class="form">wirst</td><td>Du wirst mehr lernen.</td></tr>
-      <tr><td class="pron">er / sie / es</td><td class="form">wird</td><td>Er wird sich schnell anziehen.</td></tr>
-      <tr><td class="pron">wir</td><td class="form">werden</td><td>Wir werden dich am Nachmittag anrufen.</td></tr>
-      <tr><td class="pron">ihr</td><td class="form">werdet</td><td>Ihr werdet euch bestimmt freuen.</td></tr>
-      <tr><td class="pron">sie / Sie</td><td class="form">werden</td><td>Sie werden uns rechtzeitig informieren.</td></tr>
-    </table>
-  </div>
-
-  <!-- TAB 2: REGELN -->
-  <div class="tab" id="tab1">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Regeln">
-    <div class="timer-bar">
-      <span>⏱</span><span class="timer-display" id="td1">00:00</span>
-      <button class="btn-start" onclick="startTimer(1)">Start</button>
-      <button class="btn-stop" onclick="stopTimer(1)">Stop</button>
-      <button class="btn-reset" onclick="resetTimer(1)">Reset</button>
-      <span class="best-time" id="bt1"></span>
-    </div>
-    <h2>Futur I – Bildung &amp; Verwendung</h2>
-
-    <div style="background:#f3e8ff;border-radius:8px;padding:14px;margin-bottom:18px">
-      <p style="font-size:.95rem;color:#4a0080"><strong>Bildung:</strong> Das Futur I bildet man mit dem Hilfsverb <strong style="color:#667eea">werden</strong> + <strong style="color:#667eea">Infinitiv des Verbes</strong>.<br>
-      Der Infinitiv steht am <strong>Satzende</strong>.</p>
-      <div style="background:#fff;border-radius:6px;padding:10px;margin-top:10px;font-size:.93rem;color:#4a0080">
-        <strong>Schema:</strong> Subjekt + <span style="color:#667eea;font-weight:700">werden</span> + … + <span style="color:#166534;font-weight:700">Infinitiv</span>
+      <div class="entdeck-intro">
+        <h3>Schau die Beispielsätze an:</h3>
+        <p style="margin: 8px 0;">1. Ich <span class="hl">werde</span> morgen <span class="hl">kommen</span>.</p>
+        <p style="margin: 8px 0;">2. Sie <span class="hl">wird</span> wohl heute nicht mehr <span class="hl">anrufen</span>.</p>
+        <p style="margin: 8px 0;">3. Du <span class="hl">wirst</span> mir sofort das Geld <span class="hl">zurückgeben</span>!</p>
+        <p style="margin: 8px 0;">4. Wir <span class="hl">werden</span> viel <span class="hl">arbeiten</span> müssen.</p>
+        <p style="margin: 8px 0;">5. Ihr <span class="hl">werdet</span> euch bestimmt <span class="hl">freuen</span>.</p>
       </div>
-    </div>
 
-    <h3>Verwendungen des Futur I</h3>
-    <table class="regel-table">
-      <tr>
-        <th>Verwendung</th>
-        <th>Beschreibung</th>
-        <th>Beispiel</th>
-      </tr>
-      <tr>
-        <td><span class="use-badge pro">Prognose / Zukunft</span></td>
-        <td>Aussage über eine zukünftige Handlung oder Prognose</td>
-        <td><em>Heute wird es noch regnen.</em></td>
-      </tr>
-      <tr>
-        <td><span class="use-badge pln">Plan</span></td>
-        <td>Über Pläne sprechen</td>
-        <td><em>Er wird im Sommer seine Prüfung ablegen.</em></td>
-      </tr>
-      <tr>
-        <td><span class="use-badge ver">Versprechen</span></td>
-        <td>Ein Versprechen abgeben</td>
-        <td><em>Ab morgen werde ich mehr lernen.</em></td>
-      </tr>
-      <tr>
-        <td><span class="use-badge auf">Aufforderung</span></td>
-        <td>Alternative zum Imperativ</td>
-        <td><em>Du wirst mir sofort das Geld zurückgeben!</em></td>
-      </tr>
-      <tr>
-        <td><span class="use-badge verm">Vermutung</span></td>
-        <td>Vermutung in der Gegenwart; oft mit <strong>wohl, sicher, bestimmt</strong></td>
-        <td><em>Sie wird wohl krank sein.</em></td>
-      </tr>
-    </table>
+      <div class="progress-dots">
+        <div class="pdot" id="pdot0"></div>
+        <div class="pdot" id="pdot1"></div>
+        <div class="pdot" id="pdot2"></div>
+        <div class="pdot" id="pdot3"></div>
+      </div>
 
-    <div style="background:#fef9c3;border-radius:8px;padding:12px;margin-top:14px;border-left:4px solid #eab308">
-      <p style="font-size:.88rem;color:#78350f"><strong>Tipp:</strong> Vermutungen werden oft mit <strong>wohl</strong>, <strong>sicher</strong> oder <strong>bestimmt</strong> verstärkt. Diese Wörter stehen direkt neben dem Verb.<br>
-      Beispiel: <em>Maria sieht sehr blass aus. Sie <strong>wird wohl</strong> krank <strong>sein</strong>.</em></p>
-    </div>
-  </div>
+      <div class="mc-step active" id="mc-step0">
+        <h4>Schritt 1: Was siehst du in Satz 1?</h4>
+        <p style="margin-bottom: 10px; color: #555; font-size: 0.9rem;">„Ich werden morgen kommen."</p>
+        <div class="mc-options">
+          <button class="mc-btn" onclick="mcCheck(0, this, false)">Ein Hilfsverb + Infinitiv</button>
+          <button class="mc-btn" onclick="mcCheck(0, this, true)">Das Verb „werden" + ein Infinitiv am Ende</button>
+          <button class="mc-btn" onclick="mcCheck(0, this, false)">Zwei konjugierte Verben</button>
+        </div>
+        <div class="mc-feedback" id="mcfb0"></div>
+      </div>
 
-  <!-- TAB 3: LÜCKENTEXT -->
-  <div class="tab" id="tab2">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Lückentext">
-    <div class="timer-bar">
-      <span>⏱</span><span class="timer-display" id="td2">00:00</span>
-      <button class="btn-start" onclick="startTimer(2)">Start</button>
-      <button class="btn-stop" onclick="stopTimer(2)">Stop</button>
-      <button class="btn-reset" onclick="resetTimer(2)">Reset</button>
-      <span class="best-time" id="bt2"></span>
-    </div>
-    <h2>Lückentext – werden konjugieren</h2>
-    <p style="color:#555;font-size:.88rem;margin-bottom:16px">Ergänze die richtige Form von <em>werden</em> oder den Infinitiv. Schreibe genau wie angegeben.</p>
-    <div id="luecken-container"></div>
-    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
-    <div class="result-msg" id="luecken-result"></div>
-  </div>
+      <div class="mc-step" id="mc-step1">
+        <h4>Schritt 2: Was drückt Futur I aus?</h4>
+        <p style="margin-bottom: 10px; color: #555; font-size: 0.9rem;">Schau auf Satz 2: „Sie wird wohl heute nicht mehr anrufen." — Was bedeutet das?</p>
+        <div class="mc-options">
+          <button class="mc-btn" onclick="mcCheck(1, this, false)">Etwas, das sicher passiert</button>
+          <button class="mc-btn" onclick="mcCheck(1, this, true)">Eine Vermutung oder Prognose für die Zukunft</button>
+          <button class="mc-btn" onclick="mcCheck(1, this, false)">Eine Frage</button>
+        </div>
+        <div class="mc-feedback" id="mcfb1"></div>
+      </div>
 
-  <!-- TAB 4: SATZBAU -->
-  <div class="tab" id="tab3">
-    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Satzbau">
-    <div class="timer-bar">
-      <span>⏱</span><span class="timer-display" id="td3">00:00</span>
-      <button class="btn-start" onclick="startTimer(3)">Start</button>
-      <button class="btn-stop" onclick="stopTimer(3)">Stop</button>
-      <button class="btn-reset" onclick="resetTimer(3)">Reset</button>
-      <span class="best-time" id="bt3"></span>
-    </div>
-    <h2>Satzbau – Futur I Sätze ordnen</h2>
-    <p style="color:#555;font-size:.88rem;margin-bottom:14px">Ziehe die Wörter in die richtige Reihenfolge.</p>
-    <div id="sb-container"></div>
-    <button class="check-btn" onclick="checkAllSb()">Alle prüfen</button>
-    <div class="result-msg" id="sb-result"></div>
-  </div>
+      <div class="mc-step" id="mc-step2">
+        <h4>Schritt 3: Wie wird „werden" konjugiert?</h4>
+        <p style="margin-bottom: 10px; color: #555; font-size: 0.9rem;">Schau auf Satz 3: „Du wirst mir das Geld zurückgeben!"</p>
+        <div class="mc-options">
+          <button class="mc-btn" onclick="mcCheck(2, this, false)">Du werde</button>
+          <button class="mc-btn" onclick="mcCheck(2, this, true)">Du wirst</button>
+          <button class="mc-btn" onclick="mcCheck(2, this, false)">Du werden</button>
+        </div>
+        <div class="mc-feedback" id="mcfb2"></div>
+      </div>
 
-  <!-- TAB 5: ÜBEN -->
-  <div class="tab" id="tab4">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&w=800&h=180&fit=crop" alt="Üben">
-    <h2>Üben – Futur I anwenden</h2>
-    <p style="color:#555;font-size:.88rem;margin-bottom:16px">Bilde das Futur I. Ergänze die richtige Form von <strong>werden</strong>.</p>
-    <div id="ueben-container"></div>
-    <button class="check-btn" onclick="checkUeben()">Überprüfen</button>
-    <div class="result-msg" id="ueben-result"></div>
-  </div>
+      <div class="mc-step" id="mc-step3">
+        <h4>Schritt 4: Wo steht das Infinitiv-Verb?</h4>
+        <p style="margin-bottom: 10px; color: #555; font-size: 0.9rem;">Schau auf Satz 4: „Wir werden viel arbeiten müssen."</p>
+        <div class="mc-options">
+          <button class="mc-btn" onclick="mcCheck(3, this, true)">Immer am Ende des Satzes</button>
+          <button class="mc-btn" onclick="mcCheck(3, this, false)">Nach dem konjugierten Verb</button>
+          <button class="mc-btn" onclick="mcCheck(3, this, false)">Am Anfang des Satzes</button>
+        </div>
+        <div class="mc-feedback" id="mcfb3"></div>
+      </div>
 
-
-  <!-- TAB 5: WORTSCHATZ -->
-  <div class="tab" id="tab5">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
-    <div class="tab-content">
-      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
-      <div id="vocabContainer"></div>
-      <div style="margin-top:16px;display:flex;gap:10px;">
-        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
-        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
+      <div class="regel-karte" id="regelkarte">
+        <h3>Die Regel:</h3>
+        <ul>
+          <li><strong>Futur I</strong> = werden (konjugiert) + Infinitiv</li>
+          <li><strong>Struktur:</strong> Subjekt + werden + andere Satzteile + Infinitiv</li>
+          <li><strong>Beispiel:</strong> Ich werde morgen ein Buch lesen.</li>
+          <li><strong>Bedeutung:</strong> Zukunft, Vermutung, Prognose oder Versprechen</li>
+        </ul>
       </div>
     </div>
   </div>
 
-</div>
+  <!-- SECTION 1: REGEL -->
+  <div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3862619/pexels-photo-3862619.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Grammatik">
+    <div class="sec-inner">
+      <h2>📋 Grammatikregel</h2>
+
+      <div class="hilfe-box">
+        <strong>Futur I</strong> = werden + Infinitiv
+        <br>
+        Das Futur I drückt Zukunft, Vermutung, Aufforderung oder ein Versprechen aus.
+      </div>
+
+      <h3>Konjugation von „werden"</h3>
+      <table class="tabelle-grid">
+        <thead>
+          <tr>
+            <th>Person</th>
+            <th>werden</th>
+            <th>Beispiel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pron">ich</td>
+            <td><strong>werde</strong></td>
+            <td>Ich werde morgen anrufen.</td>
+          </tr>
+          <tr>
+            <td class="pron">du</td>
+            <td><strong>wirst</strong></td>
+            <td>Du wirst dich bestimmt freuen.</td>
+          </tr>
+          <tr>
+            <td class="pron">er / sie / es</td>
+            <td><strong>wird</strong></td>
+            <td>Er wird sich schnell anziehen.</td>
+          </tr>
+          <tr>
+            <td class="pron">wir</td>
+            <td><strong>werden</strong></td>
+            <td>Wir werden dich rechtzeitig informieren.</td>
+          </tr>
+          <tr>
+            <td class="pron">ihr</td>
+            <td><strong>werdet</strong></td>
+            <td>Ihr werdet uns bestimmt helfen.</td>
+          </tr>
+          <tr>
+            <td class="pron">sie / Sie</td>
+            <td><strong>werden</strong></td>
+            <td>Sie werden uns alle verstehen.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 24px;">Funktionen des Futur I</h3>
+      <table class="tabelle-grid">
+        <thead>
+          <tr>
+            <th>Funktion</th>
+            <th>Beispiel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Zukunft</strong></td>
+            <td>Morgen werde ich ins Kino gehen.</td>
+          </tr>
+          <tr>
+            <td><strong>Vermutung / Prognose</strong></td>
+            <td>Es wird wohl morgen regnen.</td>
+          </tr>
+          <tr>
+            <td><strong>Versprechen / Auftrag</strong></td>
+            <td>Ich werde dir morgen anrufen, versprochen!</td>
+          </tr>
+          <tr>
+            <td><strong>Aufforderung / Befehl</strong></td>
+            <td>Du wirst dich sofort anziehen!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 2: LÜCKENTEXT -->
+  <div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/159644/evolution-history-of-computer-technology-159644.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Futur">
+    <div class="sec-inner">
+      <h2>✏️ Lückentext</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showLueckeLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetLuecke(); timerResetOne(2);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-2">00:00</span></span>
+          <span>🏆 <span id="best-2">--:--</span></span>
+        </div>
+      </div>
+
+      <div id="lueckeContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: ZUORDNUNG -->
+  <div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Matching">
+    <div class="sec-inner">
+      <h2>🔀 Zuordnung</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showZuoLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetZuordnung(); timerResetOne(3);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-3">00:00</span></span>
+          <span>🏆 <span id="best-3">--:--</span></span>
+        </div>
+      </div>
+
+      <div class="chip-bank" id="zuoBank"></div>
+      <div class="zuordnung-container" id="zuoContainer"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SATZBAU -->
+  <div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807442/pexels-photo-3807442.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Sätze">
+    <div class="sec-inner">
+      <h2>🧩 Satzbau</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showSbLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetSatzbau(); timerResetOne(4);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-4">00:00</span></span>
+          <span>🏆 <span id="best-4">--:--</span></span>
+        </div>
+      </div>
+
+      <div id="satzbauContainer"></div>
+    </div>
+  </div>
+
+  <div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+  </div>
+</div><!-- /container -->
 
 <script>
-// ===== TIMER =====
-const TIMER_PREFIX = 'best2022G';
-const timers = {1:{iv:null,s:0},2:{iv:null,s:0},3:{iv:null,s:0}};
-function fmtTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function startTimer(n){const t=timers[n];if(t.iv)return;t.iv=setInterval(()=>{t.s++;document.getElementById('td'+n).textContent=fmtTime(t.s)},1000)}
-function stopTimer(n){const t=timers[n];if(!t.iv)return;clearInterval(t.iv);t.iv=null;const k=TIMER_PREFIX+'_t'+n;const prev=localStorage.getItem(k);if(!prev||t.s<parseInt(prev)){localStorage.setItem(k,t.s)}
-loadBestTimes()}
-function resetTimer(n){const t=timers[n];clearInterval(t.iv);t.iv=null;t.s=0;document.getElementById('td'+n).textContent='00:00'}
-function 
-loadBestTimes(){[1,2,3].forEach(n=>{const k=TIMER_PREFIX+'_t'+n;const v=localStorage.getItem(k);const el=document.getElementById('bt'+n);if(el&&v)el.textContent='Bestzeit: '+fmtTime(parseInt(v))})}
-function timerAutoStart(n){if(!timers[n].iv)startTimer(n)}
+// ============================================================================
+// GLOBALE VARIABLEN
+// ============================================================================
 
-loadBestTimes();
+var TIMER_PREFIX = 'futur_i_2022g_';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
 
-// ===== TABS =====
-function showTab(i){
-  document.querySelectorAll('.tab').forEach((t,j)=>{t.classList.toggle('active',i===j)});
-  document.querySelectorAll('.nav button').forEach((b,j)=>{b.classList.toggle('active',i===j)});
-  if(i===1)timerAutoStart(1);
-  if(i===2)timerAutoStart(2);
-  if(i===3)timerAutoStart(3);
-}
+var draggedChip = null;
+var sbDragged = null;
 
-// ===== LÜCKENTEXT =====
-const LUECKEN_DATA = [
-  {pre:'Sie ',blank:'wird',post:' morgen nach Paris fliegen. (Singular)'},
-  {pre:'Wir ',blank:'werden',post:' in einer Woche nach Hause kommen.'},
-  {pre:'Ihr ',blank:'werdet',post:' eure Hausaufgaben machen!'},
-  {pre:'Sie ',blank:'werden',post:' sich über das Geschenk freuen. (Plural)'},
-  {pre:'Ich ',blank:'werde',post:' darüber nachdenken.'},
-  {pre:'Er ',blank:'wird',post:' das Buch kaufen.'},
-  {pre:'Du ',blank:'wirst',post:' deinen Vater fragen.'},
-  {pre:'Er ',blank:'wird',post:' an seine Mutter denken.'},
-  {pre:'Heute ',blank:'wird',post:' es noch regnen.'},
-  {pre:'Ab morgen ',blank:'werde',post:' ich mehr lernen.'},
-];
-(function buildLuecken(){
-  const c=document.getElementById('luecken-container');
-  LUECKEN_DATA.forEach((d,i)=>{
-    const div=document.createElement('div');div.className='luecke-item';
-    div.innerHTML=`<span>${i+1}. ${d.pre}</span><input id="li${i}" type="text" placeholder="werden..."><span>${d.post}</span>`;
-    c.appendChild(div);
-    div.querySelector('input').addEventListener('input',()=>liveCheck(i));
+// ============================================================================
+// NAVIGATION
+// ============================================================================
+
+function showSection(idx) {
+  document.querySelectorAll('.section').forEach(function(s, i) {
+    s.classList.toggle('active', i === idx);
   });
-})();
-function liveCheck(i){
-  const inp=document.getElementById('li'+i);
-  const val=inp.value.trim();
-  const ans=LUECKEN_DATA[i].blank;
-  if(!val){inp.className='';return}
-  const correct=val===ans;
-  inp.classList.toggle('correct',correct);
-  inp.classList.toggle('wrong',!correct);
-  if(LUECKEN_DATA.every((_,j)=>document.getElementById('li'+j).value.trim()===LUECKEN_DATA[j].blank)){
-    stopTimer(2);document.getElementById('luecken-result').textContent='✅ Alle richtig!';document.getElementById('luecken-result').style.color='#22c55e';
-  }
-}
-function checkLuecken(){
-  let ok=0;
-  LUECKEN_DATA.forEach((d,i)=>{
-    const inp=document.getElementById('li'+i);
-    const correct=inp.value.trim()===d.blank;
-    inp.className=correct?'correct':'wrong';
-    if(correct)ok++;
-  });
-  const r=document.getElementById('luecken-result');
-  r.textContent=ok===LUECKEN_DATA.length?'✅ Alle richtig!':'⚠️ '+ok+'/'+LUECKEN_DATA.length+' richtig.';
-  r.style.color=ok===LUECKEN_DATA.length?'#22c55e':'#ef4444';
-  if(ok===LUECKEN_DATA.length)stopTimer(2);
-}
-
-// ===== SATZBAU =====
-const SATZBAU_DATA = [
-  {hint:'Futur I Bildung (Zukunft)',words:['Maria','wird','uns','morgen','besuchen','.']},
-  {hint:'Futur I mit Vermutung',words:['Sie','wird','wohl','heute','nicht','mehr','kommen','.']},
-  {hint:'Futur I als Aufforderung',words:['Du','wirst','mir','sofort','das','Geld','zurückgeben','!']},
-  {hint:'Futur I als Versprechen',words:['Ab','morgen','werde','ich','mehr','lernen','.']},
-  {hint:'Futur I Prognose',words:['Heute','wird','es','noch','regnen','.']},
-  {hint:'Futur I Plan',words:['Er','wird','im','Sommer','seine','Prüfung','ablegen','.']},
-];
-let sbState=[];
-(function buildSatzbau(){
-  const c=document.getElementById('sb-container');
-  SATZBAU_DATA.forEach((d,si)=>{
-    let sh=[...d.words.map((w,wi)=>({w,wi}))];
-    let ok=false;for(let t=0;t<50&&!ok;t++){for(let i=sh.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[sh[i],sh[j]]=[sh[i],sh[j]];}ok=sh.some((x,i)=>x.wi!==i)}
-    sbState.push({dropped:[],chips:sh});
-    const wrap=document.createElement('div');wrap.className='sb-sentence';
-    wrap.innerHTML=`<p>${d.hint}</p><div class="sb-chips" id="sbchips${si}"></div><div class="sb-drop-zone" id="sbdrop${si}"></div><div id="sbfb${si}"></div>`;
-    c.appendChild(wrap);
-    sh.forEach(({w},ci)=>sbMakeChip(si,ci,w,document.getElementById('sbchips'+si)));
-    sbRegisterZone(si,document.getElementById('sbdrop'+si));
-  });
-})();
-let sbDragged=null;
-function sbMakeChip(si,ci,w,parent){
-  const chip=document.createElement('div');chip.className='sb-chip';chip.textContent=w;chip.draggable=true;chip.dataset.si=si;chip.dataset.ci=ci;
-  chip.addEventListener('dragstart',e=>{sbDragged=chip;e.dataTransfer.effectAllowed='move'});
-  chip.addEventListener('dragend',()=>{sbDragged=null});
-  parent.appendChild(chip);
-}
-function sbRegisterZone(si,zone){
-  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over')});
-  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
-  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');if(sbDragged){zone.appendChild(sbDragged)}setTimeout(()=>sbCheckAuto(si),500)});
-  const src=document.getElementById('sbchips'+si);
-  src.addEventListener('dragover',e=>e.preventDefault());
-  src.addEventListener('drop',e=>{e.preventDefault();if(sbDragged)src.appendChild(sbDragged)});
-}
-function sbCheckAuto(si){
-  const zone=document.getElementById('sbdrop'+si);
-  const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
-  const ans=SATZBAU_DATA[si].words;
-  const fb=document.getElementById('sbfb'+si);
-  if(chips.length!==ans.length){fb.textContent='';return}
-  const match=chips.every((w,i)=>w===ans[i]);
-  if(match){fb.className='sb-ok';fb.textContent='✅ Richtig!';}
-  else{fb.className='sb-err';fb.textContent='❌ Noch nicht richtig.';}
-}
-function checkAllSb(){
-  let ok=0;
-  SATZBAU_DATA.forEach((_,si)=>{
-    const zone=document.getElementById('sbdrop'+si);
-    const chips=[...zone.querySelectorAll('.sb-chip')].map(c=>c.textContent);
-    const ans=SATZBAU_DATA[si].words;
-    const fb=document.getElementById('sbfb'+si);
-    const match=chips.length===ans.length&&chips.every((w,i)=>w===ans[i]);
-    fb.className=match?'sb-ok':'sb-err';
-    fb.textContent=match?'✅ Richtig!':'❌ Noch nicht richtig.';
-    if(match)ok++;
-  });
-  const r=document.getElementById('sb-result');
-  r.textContent=ok===SATZBAU_DATA.length?'🎉 Alle Sätze richtig!':'⚠️ '+ok+'/'+SATZBAU_DATA.length+' richtig.';
-  r.style.color=ok===SATZBAU_DATA.length?'#22c55e':'#ef4444';
-  if(ok===SATZBAU_DATA.length)stopTimer(3);
-}
-
-// ===== ÜBEN =====
-// Fill in the correct form of "werden" in various Futur I sentences
-const UEBEN_DATA = [
-  {aufgabe:'Zukunft: Ich _____ darüber nachdenken.',subject:'ich',infinitiv:'nachdenken',ans:'werde',tag:'Zukunft',tagColor:'pro'},
-  {aufgabe:'Plan: Er _____ im Sommer seine Prüfung ablegen.',subject:'er',infinitiv:'ablegen',ans:'wird',tag:'Plan',tagColor:'pln'},
-  {aufgabe:'Versprechen: Wir _____ dich am Nachmittag anrufen.',subject:'wir',infinitiv:'anrufen',ans:'werden',tag:'Versprechen',tagColor:'ver'},
-  {aufgabe:'Aufforderung: Ihr _____ eure Hausaufgaben machen!',subject:'ihr',infinitiv:'machen',ans:'werdet',tag:'Aufforderung',tagColor:'auf'},
-  {aufgabe:'Vermutung: Sie _____ wohl krank sein. (Singular, weiblich)',subject:'sie',infinitiv:'sein',ans:'wird',tag:'Vermutung',tagColor:'verm'},
-  {aufgabe:'Zukunft: Du _____ mehr lernen.',subject:'du',infinitiv:'lernen',ans:'wirst',tag:'Zukunft',tagColor:'pro'},
-  {aufgabe:'Prognose: Heute _____ es noch regnen.',subject:'es',infinitiv:'regnen',ans:'wird',tag:'Prognose',tagColor:'pro'},
-  {aufgabe:'Plan: Sie _____ uns rechtzeitig informieren. (Plural)',subject:'sie (Pl.)',infinitiv:'informieren',ans:'werden',tag:'Plan',tagColor:'pln'},
-];
-(function buildUeben(){
-  const c=document.getElementById('ueben-container');
-  UEBEN_DATA.forEach((d,i)=>{
-    const div=document.createElement('div');div.className='ueben-item';
-    div.innerHTML=`<div class="aufgabe"><strong>${i+1}.</strong> ${d.aufgabe.replace('_____','<span style="color:#667eea">_____</span>')} <span class="use-tag use-badge ${d.tagColor}">${d.tag}</span></div>
-      <div class="ueben-row"><span class="ueben-label">${d.subject} + </span><input id="ui${i}" type="text" placeholder="werden..."> <span class="ueben-label">+ ${d.infinitiv}</span></div>`;
-    c.appendChild(div);
-  });
-})();
-function checkUeben(){
-  let ok=0;
-  UEBEN_DATA.forEach((d,i)=>{
-    const inp=document.getElementById('ui'+i);
-    const correct=inp.value.trim()===d.ans;
-    inp.className=correct?'correct':'wrong';
-    if(correct)ok++;
-  });
-  const r=document.getElementById('ueben-result');
-  r.textContent=ok===UEBEN_DATA.length?'🎉 Alle richtig!':'⚠️ '+ok+'/'+UEBEN_DATA.length+' richtig.';
-  r.style.color=ok===UEBEN_DATA.length?'#22c55e':'#ef4444';
-}
-
-// ── WORTSCHATZ ────────────────────────────────────────────────────
-const WORTSCHATZ = [
-  { type: 'n', en: 'the future', art: 'die', wort: 'Zukunft', plural: '-' },
-  { type: 'n', en: 'the promise', art: 'das', wort: 'Versprechen', plural: '-' },
-  { type: 'n', en: 'the conjecture', art: 'die', wort: 'Vermutung', plural: '-en' },
-  { type: 'v', en: 'will be / to become', de: 'werden' },
-  { type: 'v', en: 'to visit', de: 'besuchen' },
-  { type: 'v', en: 'to come', de: 'kommen' },
-  { type: 'v', en: 'to return', de: 'zurückgeben' },
-  { type: 'v', en: 'to learn', de: 'lernen' },
-  { type: 'v', en: 'to dress', de: 'anziehen' },
-  { type: 'v', en: 'to call', de: 'anrufen' },
-];
-
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    }
-    cont.appendChild(div);
+  document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+    b.classList.toggle('active', i === idx);
   });
 }
 
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
-      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
-    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+// ============================================================================
+// MC-SYSTEM (TAB 0 — ENTDECKEN)
+// ============================================================================
+
+var mcDone = [false, false, false, false];
+
+function mcCheck(step, btn, correct) {
+  var btns = btn.parentElement.querySelectorAll('.mc-btn');
+  btns.forEach(function(b) { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+  var fb = document.getElementById('mcfb' + step);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '\u2713 Richtig! Weiter zum nächsten Schritt.';
+    fb.className = 'mc-feedback ok';
+    mcDone[step] = true;
+    document.getElementById('pdot' + step).classList.add('done');
+    setTimeout(function() {
+      var next = document.getElementById('mc-step' + (step + 1));
+      if (next) { next.classList.add('active'); }
+      else { document.getElementById('regelkarte').style.display = 'block'; }
+    }, 700);
   } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
+    btn.classList.add('wrong');
+    fb.textContent = '\u2717 Nicht ganz — schau nochmal genau hin und versuche es erneut.';
+    fb.className = 'mc-feedback err';
+    setTimeout(function() {
+      btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong', 'correct'); });
+      fb.textContent = '';
+      fb.className = 'mc-feedback';
+    }, 1400);
   }
 }
 
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
-    }
-    vocabLiveCheck(idx);
+// ============================================================================
+// LÜCKENTEXT (TAB 2)
+// ============================================================================
+
+var LUECKEN_DATA = [
+  { segs: [
+      {t: 'Ich '},
+      {b: 'werde', s: 'm'},
+      {t: ' dir morgen '},
+      {b: 'anrufen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Du '},
+      {b: 'wirst', s: 'm'},
+      {t: ' dich bestimmt '},
+      {b: 'freuen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Er '},
+      {b: 'wird', s: 'm'},
+      {t: ' sich schnell '},
+      {b: 'anziehen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Wir '},
+      {b: 'werden', s: 'm'},
+      {t: ' dich rechtzeitig '},
+      {b: 'informieren', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Ihr '},
+      {b: 'werdet', s: 'm'},
+      {t: ' uns bestimmt '},
+      {b: 'helfen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Sie '},
+      {b: 'werden', s: 'm'},
+      {t: ' wohl heute nicht mehr '},
+      {b: 'anrufen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Es '},
+      {b: 'wird', s: 'm'},
+      {t: ' wohl morgen '},
+      {b: 'regnen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Ich '},
+      {b: 'werde', s: 'm'},
+      {t: ' dir versprochen '},
+      {b: 'schreiben', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Du '},
+      {b: 'wirst', s: 'm'},
+      {t: ' dich sofort '},
+      {b: 'waschen', s: 'm'},
+      {t: '!'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Wir '},
+      {b: 'werden', s: 'm'},
+      {t: ' viel '},
+      {b: 'arbeiten', s: 'm'},
+      {t: ' müssen.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Sie '},
+      {b: 'werden', s: 'm'},
+      {t: ' uns alle '},
+      {b: 'verstehen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' },
+  { segs: [
+      {t: 'Es '},
+      {b: 'wird', s: 'm'},
+      {t: ' Spaß '},
+      {b: 'machen', s: 'm'},
+      {t: '.'}
+    ], hint: 'werden-Form' }
+];
+
+function initLuecke() {
+  var con = document.getElementById('lueckeContainer');
+  con.innerHTML = '';
+  LUECKEN_DATA.forEach(function(item, idx) {
+    var itemDiv = document.createElement('div');
+    itemDiv.className = 'luecke-item';
+    var html = '';
+    item.segs.forEach(function(seg) {
+      if (seg.t) {
+        html += seg.t;
+      } else {
+        var w = seg.s === 's' ? '50px' : seg.s === 'm' ? '90px' : seg.s === 'l' ? '150px' : '200px';
+        html += '<input class="blank" type="text" data-answer="' + seg.b.toLowerCase() + '" style="width:' + w + 'px;" oninput="liveCheckLuecke(this); checkLueckeAllOk();">';
+      }
+    });
+    html += ' <span style="font-size:0.78rem; color:#999; margin-left:6px;">(' + item.hint + ')</span>';
+    itemDiv.innerHTML = html;
+    con.appendChild(itemDiv);
   });
 }
 
-function resetVocab() { initVocab(); }
+function liveCheckLuecke(inp) {
+  timerAutoStart(2);
+  var val = inp.value.trim().toLowerCase();
+  var ans = (inp.dataset.answer || '').toLowerCase();
+  inp.classList.remove('correct', 'wrong');
+  if (val.length === 0) return;
+  if (val === ans) {
+    inp.classList.add('correct');
+  } else if (ans.indexOf(val) === 0) {
+    // Präfix — neutral
+  } else {
+    inp.classList.add('wrong');
+  }
+}
 
-initVocab();
+function checkLueckeAllOk() {
+  var inputs = document.querySelectorAll('#sec-2 input.blank');
+  var allOk = inputs.length > 0 &&
+    Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+  if (allOk) timerStop(2);
+}
+
+function showLueckeLoesung() {
+  timerStop(2);
+  document.querySelectorAll('#sec-2 input.blank').forEach(function(inp) {
+    inp.value = inp.dataset.answer;
+    inp.classList.add('correct');
+    inp.classList.remove('wrong');
+  });
+}
+
+function resetLuecke() {
+  document.querySelectorAll('#sec-2 input.blank').forEach(function(inp) {
+    inp.value = '';
+    inp.classList.remove('correct', 'wrong');
+  });
+  timerResetOne(2);
+}
+
+// ============================================================================
+// ZUORDNUNG (TAB 3)
+// ============================================================================
+
+var ZUO_DATA = [
+  { text: 'ich werde', cat: 'ich' },
+  { text: 'du wirst', cat: 'du' },
+  { text: 'er / sie / es wird', cat: 'er_sie_es' },
+  { text: 'wir werden', cat: 'wir' },
+  { text: 'ihr werdet', cat: 'ihr' },
+  { text: 'sie / Sie werden', cat: 'sie_sie' },
+  { text: 'Zukunft', cat: 'funktion' },
+  { text: 'Vermutung', cat: 'funktion' },
+  { text: 'Versprechen', cat: 'funktion' },
+  { text: 'Aufforderung', cat: 'funktion' },
+  { text: 'Infinitiv', cat: 'teil' },
+  { text: 'Hilfsverb', cat: 'teil' }
+];
+
+function initZuordnung() {
+  var bank = document.getElementById('zuoBank');
+  var con = document.getElementById('zuoContainer');
+  bank.innerHTML = '';
+  con.innerHTML = '';
+
+  var shuffled = shuffle(ZUO_DATA);
+  shuffled.forEach(function(item) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = item.text;
+    chip.dataset.cat = item.cat;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+      draggedChip = chip;
+      e.dataTransfer.setData('text/plain', '');
+    });
+    chip.addEventListener('dragend', function() {
+      timerAutoStart(3);
+      colorAllZuordnungChips();
+      draggedChip = null;
+    });
+    bank.appendChild(chip);
+  });
+
+  var cats = [
+    { name: 'werden-Formen', key: 'konjugation', items: ['ich', 'du', 'er_sie_es', 'wir', 'ihr', 'sie_sie'] },
+    { name: 'Funktionen', key: 'funktionen', items: ['funktion'] },
+    { name: 'Satzteile', key: 'satzteile', items: ['teil'] }
+  ];
+
+  cats.forEach(function(cat) {
+    var zone = document.createElement('div');
+    zone.className = 'zuordnung-cat';
+    zone.dataset.cat = cat.key;
+    zone.innerHTML = '<h4>' + cat.name + '</h4>';
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function() { this.classList.remove('dragover'); });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+      if (!draggedChip) return;
+      this.appendChild(draggedChip);
+      draggedChip = null;
+      timerAutoStart(3);
+      colorAllZuordnungChips();
+    });
+    con.appendChild(zone);
+  });
+}
+
+function colorZuordnungChip(chip) {
+  var zone = chip.closest('.zuordnung-cat');
+  if (zone) {
+    chip.classList.remove('correct', 'wrong');
+    var isCorrect = false;
+    if (zone.dataset.cat === 'konjugation' && ['ich', 'du', 'er_sie_es', 'wir', 'ihr', 'sie_sie'].indexOf(chip.dataset.cat) >= 0) isCorrect = true;
+    if (zone.dataset.cat === 'funktionen' && chip.dataset.cat === 'funktion') isCorrect = true;
+    if (zone.dataset.cat === 'satzteile' && chip.dataset.cat === 'teil') isCorrect = true;
+    chip.classList.add(isCorrect ? 'correct' : 'wrong');
+  } else {
+    chip.classList.remove('correct', 'wrong');
+  }
+}
+
+function colorAllZuordnungChips() {
+  document.querySelectorAll('#sec-3 .chip').forEach(colorZuordnungChip);
+  checkZuoAllOk();
+}
+
+function checkZuoAllOk() {
+  var chips = document.querySelectorAll('#sec-3 .chip');
+  var allOk = chips.length > 0 &&
+    Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+  if (allOk) timerStop(3);
+}
+
+function showZuoLoesung() {
+  timerStop(3);
+  var bank = document.getElementById('zuoBank');
+  var con = document.getElementById('zuoContainer');
+  bank.innerHTML = '';
+  con.querySelectorAll('.chip').forEach(function(chip) { chip.remove(); });
+  ZUO_DATA.forEach(function(item) {
+    var chip = document.createElement('div');
+    chip.className = 'chip correct';
+    chip.textContent = item.text;
+    chip.dataset.cat = item.cat;
+    var zone = con.querySelector('[data-cat*="' + (item.cat === 'funktion' ? 'funktionen' : item.cat === 'teil' ? 'satzteile' : 'konjugation') + '"]');
+    if (!zone) return;
+    zone.appendChild(chip);
+  });
+}
+
+function resetZuordnung() {
+  initZuordnung();
+  timerResetOne(3);
+}
+
+// ============================================================================
+// SATZBAU (TAB 4)
+// ============================================================================
+
+var SATZBAU_DATA = [
+  { parts: ['ich', 'werde', 'morgen', 'anrufen'], valid: [['ich', 'werde', 'morgen', 'anrufen']] },
+  { parts: ['du', 'wirst', 'dich', 'freuen'], valid: [['du', 'wirst', 'dich', 'freuen']] },
+  { parts: ['er', 'wird', 'schnell', 'anziehen'], valid: [['er', 'wird', 'schnell', 'anziehen']] },
+  { parts: ['wir', 'werden', 'dir', 'helfen'], valid: [['wir', 'werden', 'dir', 'helfen']] },
+  { parts: ['ihr', 'werdet', 'uns', 'verstehen'], valid: [['ihr', 'werdet', 'uns', 'verstehen']] },
+  { parts: ['sie', 'werden', 'bestimmt', 'kommen'], valid: [['sie', 'werden', 'bestimmt', 'kommen']] },
+  { parts: ['es', 'wird', 'morgen', 'regnen'], valid: [['es', 'wird', 'morgen', 'regnen']] },
+  { parts: ['ich', 'werde', 'viel', 'arbeiten'], valid: [['ich', 'werde', 'viel', 'arbeiten']] }
+];
+
+function initSatzbau() {
+  var con = document.getElementById('satzbauContainer');
+  con.innerHTML = '';
+  SATZBAU_DATA.forEach(function(ex, idx) {
+    var item = document.createElement('div');
+    item.className = 'satzbau-item';
+
+    var bank = document.createElement('div');
+    bank.className = 'chip-bank';
+    bank.id = 'sb-bank-' + idx;
+
+    var parts = shuffle(ex.parts.slice());
+    parts.forEach(function(word) {
+      var chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.textContent = word;
+      chip.dataset.orig = word;
+      chip.draggable = true;
+      chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+      });
+      chip.addEventListener('dragend', function() {
+        sbDragged = null;
+        colorSbRow(idx);
+      });
+      bank.appendChild(chip);
+    });
+
+    var row = document.createElement('div');
+    row.className = 'drop-row';
+    row.id = 'sb-row-' + idx;
+    row.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+    row.addEventListener('dragleave', function() { this.classList.remove('dragover'); });
+    row.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+      if (sbDragged) {
+        this.appendChild(sbDragged);
+        sbDragged = null;
+        timerAutoStart(4);
+        colorSbRow(idx);
+      }
+    });
+
+    var fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb-fb-' + idx;
+
+    var btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+
+    var solveBtn = document.createElement('button');
+    solveBtn.className = 'btn';
+    solveBtn.textContent = 'Lösen';
+    solveBtn.addEventListener('click', function() { sbShowSolution(idx); });
+
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'btn';
+    resetBtn.textContent = '↺ Neustart';
+    resetBtn.addEventListener('click', function() { sbResetOne(idx); });
+
+    btnRow.appendChild(solveBtn);
+    btnRow.appendChild(resetBtn);
+
+    item.appendChild(bank);
+    item.appendChild(row);
+    item.appendChild(fb);
+    item.appendChild(btnRow);
+    con.appendChild(item);
+  });
+}
+
+function colorSbRow(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var data = SATZBAU_DATA[idx];
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  var order = chips.map(function(c) { return c.dataset.orig; });
+  var isOk = data.valid.some(function(v) { return JSON.stringify(v) === JSON.stringify(order); });
+  chips.forEach(function(c) {
+    c.classList.remove('correct', 'wrong');
+    c.classList.add(isOk ? 'correct' : 'wrong');
+  });
+  var fb = document.getElementById('sb-fb-' + idx);
+  fb.textContent = isOk ? '\u2713 Richtig!' : '';
+  if (isOk) {
+    fb.className = 'satzbau-feedback correct';
+    timerAutoStart(4);
+    checkSbAllOk();
+  }
+}
+
+function checkSbAllOk() {
+  var rows = document.querySelectorAll('#sec-4 .drop-row');
+  var allOk = rows.length > 0 &&
+    Array.from(rows).every(function(row) {
+      return row.classList.contains('correct') || row.querySelectorAll('.chip').length === 0;
+    });
+  var allFilled = Array.from(rows).every(function(row) {
+    var data = SATZBAU_DATA[Array.from(rows).indexOf(row)];
+    return row.querySelectorAll('.chip').length === data.parts.length;
+  });
+  if (allOk && allFilled) timerStop(4);
+}
+
+function sbShowSolution(idx) {
+  timerStop(4);
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row = document.getElementById('sb-row-' + idx);
+  var fb = document.getElementById('sb-fb-' + idx);
+  var solution = SATZBAU_DATA[idx].valid[0];
+
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild) row.removeChild(row.firstChild);
+
+  solution.forEach(function(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip correct';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    row.appendChild(chip);
+  });
+  fb.textContent = '\u2713 Lösung angezeigt.';
+  fb.className = 'satzbau-feedback correct';
+}
+
+function sbResetOne(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row = document.getElementById('sb-row-' + idx);
+  var fb = document.getElementById('sb-fb-' + idx);
+
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild) row.removeChild(row.firstChild);
+
+  row.classList.remove('correct', 'incorrect');
+  fb.textContent = '';
+
+  var parts = shuffle(SATZBAU_DATA[idx].parts.slice());
+  parts.forEach(function(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+      sbDragged = chip;
+      timerAutoStart(4);
+      e.dataTransfer.setData('text/plain', '');
+    });
+    chip.addEventListener('dragend', function() {
+      sbDragged = null;
+      colorSbRow(idx);
+    });
+    bank.appendChild(chip);
+  });
+}
+
+function showSbLoesung() {
+  timerStop(4);
+  SATZBAU_DATA.forEach(function(ex, idx) {
+    sbShowSolution(idx);
+  });
+}
+
+function resetSatzbau() {
+  SATZBAU_DATA.forEach(function(ex, idx) {
+    sbResetOne(idx);
+  });
+  timerResetOne(4);
+}
+
+// ============================================================================
+// TIMER-SYSTEM
+// ============================================================================
+
+function timerAutoStart(n) {
+  if (timerStarted[n]) return;
+  timerStarted[n] = true;
+  timerRunning[n] = true;
+  timerIntervals[n] = setInterval(function() {
+    timerSeconds[n]++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }, 1000);
+}
+
+function timerStop(n) {
+  if (!timerRunning[n]) return;
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+  if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+    localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+    var el = document.getElementById('best-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }
+}
+
+function timerResetOne(n) {
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  timerStarted[n] = false;
+  timerSeconds[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '00:00';
+}
+
+function fmtTime(s) {
+  var m = Math.floor(s / 60);
+  var sec = s % 60;
+  return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function loadBestTimes() {
+  for (var i = 1; i <= 4; i++) {
+    var v = localStorage.getItem(TIMER_PREFIX + i);
+    if (v) {
+      var el = document.getElementById('best-' + i);
+      if (el) el.textContent = fmtTime(parseInt(v));
+    }
+  }
+}
+
+// ============================================================================
+// UTILITY
+// ============================================================================
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+// ============================================================================
+// INIT
+// ============================================================================
+
+window.addEventListener('DOMContentLoaded', function() {
+  initLuecke();
+  initZuordnung();
+  initSatzbau();
+  loadBestTimes();
+});
 </script>
 </body>
 </html>

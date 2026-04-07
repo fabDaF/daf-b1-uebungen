@@ -3,696 +3,884 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 – Gefühle über Dinge und Ereignisse (2044X)</title>
+<title>B1.1 · 2044X · Gefühle über Dinge und Ereignisse</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #667eea; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; }
-  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; }
-  .header { background: #667eea; color: #fff; padding: 18px 24px; }
-  .header h1 { font-size: 1.25rem; font-weight: 700; }
-  .header p { font-size: 0.85rem; opacity: 0.85; margin-top: 3px; }
-  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
-  .nav-row { display: flex; flex-wrap: wrap; }
-  .nav button { flex: 1 1 auto; padding: 10px 8px; border: 1px solid #9b59b6; background: #f3e8ff; color: #667eea; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
-  .nav button:hover { background: #e0c8ff; }
-  .nav button.active { background: #667eea; color: #fff; }
-  .tab { display: none; padding: 22px 24px; }
-  .tab.active { display: block; }
-  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
-  .section-title { font-size: 1.1rem; font-weight: 700; color: #667eea; margin-bottom: 14px; border-left: 4px solid #667eea; padding-left: 10px; }
-  /* GEFÜHL-BLÖCKE */
-  .gefuehl-block { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; }
-  .gefuehl-block h3 { font-size: 1.0rem; font-weight: 700; color: #667eea; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-  .gefuehl-block .emoji { font-size: 1.3rem; }
-  .ausdruck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
-  .ausdruck-chip { background: #fff; border: 1px solid #9b59b6; border-radius: 20px; padding: 6px 14px; font-size: 0.88rem; color: #333; text-align: center; }
-  .beispiel-box { background: #e8f4fd; border-left: 3px solid #3498db; border-radius: 0 6px 6px 0; padding: 8px 12px; margin-top: 10px; font-size: 0.88rem; color: #555; }
-  .beispiel-box strong { color: #2980b9; }
-  /* ZUORDNUNG */
-  .zuord-intro { background: #f3e8ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; color: #555; }
-  .zuord-text-box { background: #f0f8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
-  .zuord-text-box .box-label { font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .zuord-text-box p { font-size: 0.92rem; color: #333; line-height: 1.5; margin-bottom: 8px; }
-  .zuord-select { padding: 6px 10px; border: 2px solid #9b59b6; border-radius: 6px; font-size: 0.88rem; color: #333; background: #fff; cursor: pointer; }
-  .zuord-select.correct { border-color: #28a745; background: #d4edda; color: #155724; }
-  .zuord-select.wrong { border-color: #dc3545; background: #f8d7da; color: #721c24; }
-  .check-btn { background: #667eea; color: #fff; border: none; border-radius: 8px; padding: 10px 22px; cursor: pointer; font-size: 0.95rem; margin-top: 10px; }
-  .check-btn:hover { background: #5a0c9d; }
-  .result-msg { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.92rem; display: none; }
-  .result-msg.show { display: block; }
-  .result-msg.ok { background: #d4edda; color: #155724; }
-  .result-msg.nok { background: #f8d7da; color: #721c24; }
-  /* TIMER */
-  .timer-bar { display: flex; align-items: center; gap: 10px; background: #f3e8ff; border-radius: 8px; padding: 8px 14px; margin-bottom: 16px; }
-  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 55px; }
-  .timer-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 0.85rem; }
-  .timer-btn:hover { background: #5a0c9d; }
-  /* LÜCKENTEXT */
-  .luecken-intro { background: #f3e8ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; color: #555; }
-  .luecken-list { list-style: none; }
-  .luecken-list li { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 0.95rem; flex-wrap: wrap; }
-  .gap-input { border: none; border-bottom: 2px solid #9b59b6; outline: none; font-size: 0.95rem; padding: 2px 4px; min-width: 150px; color: #333; background: transparent; }
-  .gap-input.correct { border-bottom-color: #28a745; color: #155724; background: #d4edda; border-radius: 4px; border: 1px solid #28a745; }
-  .gap-input.wrong { border-bottom-color: #dc3545; color: #721c24; background: #f8d7da; border-radius: 4px; border: 1px solid #dc3545; }
-  /* SATZBAU */
-  .sb-sentence { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
-  .sb-sentence .sb-label { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
-  .sb-drop-zone { min-height: 44px; background: #fff; border: 2px dashed #9b59b6; border-radius: 6px; padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-  .sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 5px 12px; font-size: 0.85rem; cursor: grab; user-select: none; border: none; }
-  .chip:active { cursor: grabbing; }
-  .chip.in-zone { background: #9b59b6; }
-  .sb-check-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; cursor: pointer; font-size: 0.85rem; }
-  .sb-check-btn:hover { background: #5a0c9d; }
-  .sb-feedback { font-size: 0.85rem; margin-top: 6px; display: none; }
-  .sb-feedback.show { display: block; }
-  .sb-feedback.ok { color: #155724; }
-  .sb-feedback.nok { color: #721c24; }
-  /* VOKABELN */
-  .vocab-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
-  .vocab-table th { background: #667eea; color: #fff; padding: 8px 10px; text-align: left; }
-  .vocab-table td { padding: 7px 10px; border: 1px solid #ddd; }
-  .vocab-table tr:nth-child(even) td { background: #f9f0ff; }
-  /* SPRECHAUFGABEN */
-  .sprech-section { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; }
-  .sprech-section h4 { font-size: 0.95rem; font-weight: 700; color: #667eea; margin-bottom: 8px; }
-  .sprech-section p { font-size: 0.9rem; color: #444; line-height: 1.55; }
-  .author-footer { text-align: center; font-size: 0.75rem; color: #aaa; padding: 16px; border-top: 1px solid #eee; margin-top: 8px; }
-
-  /* Wortschatz */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+}
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.sec-inner { padding: 28px 32px 32px; }
+.tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+.lese-text {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 22px 26px;
+    font-size: 1.0em;
+    line-height: 1.9;
+    color: #333;
+    margin-bottom: 18px;
+}
+.lese-text p { margin-bottom: 12px; }
+.lese-text p:last-child { margin-bottom: 0; }
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+#genusContainer { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+.genus-card {
+    background: #f8f9ff;
+    border: 2px solid #dde3ff;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: grab;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #555;
+    transition: all 0.2s;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.genus-card:hover { background: #f0f4ff; border-color: #667eea; }
+.genus-card.correct { background: #e8f8f0; border-color: #27ae60; color: #27ae60; font-weight: 700; }
+.genus-card.wrong { background: #fdeaea; border-color: #e74c3c; color: #e74c3c; font-weight: 700; }
+.genus-drop-zone {
+    background: #fafbff;
+    border: 2px dashed #c5cae9;
+    border-radius: 8px;
+    padding: 14px;
+    min-height: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.genus-drop-zone.correct { border-color: #27ae60; background: #e8f8f0; }
+.genus-drop-zone.wrong { border-color: #e74c3c; background: #fff5f5; }
+.genus-label {
+    font-weight: 700;
+    color: #667eea;
+    min-width: 40px;
+    font-size: 0.95em;
+}
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+.luecken-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    line-height: 1.9;
+    font-size: 0.95em;
+}
+input.blank {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    padding: 3px 6px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+    min-width: 4ch;
+}
+input.blank:focus { border-bottom-color: #667eea; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+.mc-item { margin-bottom: 18px; padding: 16px; background: #f8f9ff; border-radius: 10px; }
+.mc-question { font-weight: 700; color: #333; margin-bottom: 12px; font-size: 0.95em; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-pill {
+    padding: 10px 14px;
+    background: white;
+    border: 1.5px solid #dde3ff;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.92em;
+    color: #555;
+    text-align: left;
+}
+.mc-pill:hover { background: #f0f4ff; border-color: #667eea; }
+.mc-pill.correct { background: #e8f8f0; border-color: #27ae60; color: #27ae60; font-weight: 700; }
+.mc-pill.wrong { background: #fdeaea; border-color: #e74c3c; color: #e74c3c; }
+.mc-pill.disabled { cursor: not-allowed; opacity: 0.5; }
+.chip {
+    padding: 6px 14px; border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: grab; font-size: 0.85rem;
+    font-weight: 600; user-select: none;
+    transition: transform .15s, opacity .15s;
+    white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.chip.punct-chip { padding: 8px 8px; min-width: 24px; font-weight: 700; font-size: 1.1em; }
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px; background: #f8f9fa;
+    border-radius: 10px; margin-bottom: 14px; min-height: 54px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px;
+    padding: 8px 10px; border-radius: 8px;
+    border: 2px dashed #c5cae9; background: #fafbff;
+}
+.sentence-builder.correct { border-color: #27ae60; background: #e8f8f0; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.satzbau-item { margin-bottom: 20px; }
+.satzbau-feedback { font-size: 0.85em; font-weight: 600; min-height: 20px; margin-top: 6px; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.sb-punkt { font-weight: 700; font-size: 1.1em; margin-left: 2px; color: #333; align-self: center; }
+.author-footer { text-align: center; margin-top: 40px; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .header h1 { font-size: 1.2rem; }
+    .sec-inner { padding: 16px; }
+    .tab-banner { max-height: 120px; }
+    #genusContainer { grid-template-columns: 1fr 1fr; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header">
+
+<div class="header">
     <h1>Gefühle über Dinge und Ereignisse</h1>
-    <p>B1.2 · Lektion 2044X · Kommunikation</p>
-  </div>
+    <p>B1.1 – Lektion 2044X · Textarbeit</p>
+    <div class="big-emoji">😊</div>
+</div>
 
-  <div class="nav">
-    <div class="nav-row">
-      <button class="active" onclick="showTab(0)">😊 Gefühle +</button>
-      <button onclick="showTab(1)">😞 Gefühle −</button>
-      <button onclick="showTab(2)">🔀 Zuordnung</button>
-      <button onclick="showTab(3)">✏️ Lückentext</button>
-      <button onclick="showTab(4)">🧩 Satzbau</button>
-      </div>
-  </div>
-
-  <!-- TAB 0: POSITIVE GEFÜHLE -->
-  <div class="tab active" id="tab-0">
-    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=800" class="tab-banner" alt="Positive Gefühle">
-    <div class="section-title">Positive Gefühle ausdrücken</div>
-    <p style="margin-bottom:16px; color:#555; font-size:0.9rem;">„Nicht alle können Gefühle zeigen. Ob Freude oder Langeweile, ob Überraschung oder Enttäuschung. Es gibt viele Möglichkeiten, sich zu äußern."</p>
-
-    <div class="gefuehl-block">
-      <h3><span class="emoji">🎉</span> der Enthusiasmus</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Das ist großartig!</div>
-        <div class="ausdruck-chip">Das ist wunderbar!</div>
-        <div class="ausdruck-chip">Ich liebe es!</div>
-        <div class="ausdruck-chip">Schön!</div>
-        <div class="ausdruck-chip">Oh mein Gott!</div>
-        <div class="ausdruck-chip">Das ist herrlich!</div>
-        <div class="ausdruck-chip">Wie cool!</div>
-        <div class="ausdruck-chip">Das ist hervorragend!</div>
-        <div class="ausdruck-chip">Das ist grandios!</div>
-      </div>
-      <div class="beispiel-box">Ich bekomme ein Geschenk. <strong>Das ist wunderbar!</strong></div>
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">📖</span>
+        <span class="nav-label">Vorentlastung</span>
     </div>
-
-    <div class="gefuehl-block">
-      <h3><span class="emoji">😌</span> die Zufriedenheit</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Ich bin höchst zufrieden!</div>
-        <div class="ausdruck-chip">Ich habe alles, was ich brauche.</div>
-        <div class="ausdruck-chip">Das ist genau das, was ich wollte.</div>
-        <div class="ausdruck-chip">Ich musste so lange darauf warten!</div>
-      </div>
-      <div class="beispiel-box">Bald ist das Konzert meiner Lieblingssängerin. <strong>Ich musste so lange darauf warten!</strong></div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">📄</span>
+        <span class="nav-label">Lesetext</span>
     </div>
-
-    <div class="gefuehl-block">
-      <h3><span class="emoji">😮‍💨</span> die Erleichterung</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Gott sei Dank!</div>
-        <div class="ausdruck-chip">Endlich!</div>
-        <div class="ausdruck-chip">Zum Glück hat es gut geendet.</div>
-        <div class="ausdruck-chip">Glücklicherweise…</div>
-      </div>
-      <div class="beispiel-box"><strong>Endlich!</strong> Ich bin Mitglied einer Rockband.</div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">🔤</span>
+        <span class="nav-label">Genus</span>
     </div>
-
-    <div class="gefuehl-block">
-      <h3><span class="emoji">😲</span> die Überraschung</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Wow!</div>
-        <div class="ausdruck-chip">Was für eine Überraschung!</div>
-        <div class="ausdruck-chip">Ich finde es überraschend!</div>
-        <div class="ausdruck-chip">Das ist komisch.</div>
-        <div class="ausdruck-chip">Das ist unglaublich!</div>
-      </div>
-      <div class="beispiel-box">Meine Freunde kommen zu Besuch. <strong>Was für eine Überraschung!</strong></div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">✏️</span>
+        <span class="nav-label">Lückentext</span>
     </div>
-  </div>
-
-  <!-- TAB 1: NEGATIVE GEFÜHLE -->
-  <div class="tab" id="tab-1">
-    <img src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&w=800" class="tab-banner" alt="Negative Gefühle">
-    <div class="section-title">Negative Gefühle ausdrücken</div>
-
-    <div class="gefuehl-block">
-      <h3><span class="emoji">😱</span> die Bestürzung</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Das ist schrecklich!</div>
-        <div class="ausdruck-chip">Das ist furchtbar!</div>
-        <div class="ausdruck-chip">Wie schrecklich!</div>
-        <div class="ausdruck-chip">Ich kann nicht glauben, was ich da höre!</div>
-      </div>
-      <div class="beispiel-box">Ich darf keinen Urlaub nehmen. <strong>Das ist schrecklich!</strong></div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">☑️</span>
+        <span class="nav-label">Multiple Choice</span>
     </div>
-
-    <div class="gefuehl-block">
-      <h3><span class="emoji">😑</span> die Gleichgültigkeit</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Es ist mir egal!</div>
-        <div class="ausdruck-chip">Das ist irrelevant.</div>
-        <div class="ausdruck-chip">Es ist mir völlig egal.</div>
-        <div class="ausdruck-chip">Es macht mir nichts aus.</div>
-        <div class="ausdruck-chip">Das geht mich nichts an.</div>
-        <div class="ausdruck-chip">Meinetwegen!</div>
-      </div>
-      <div class="beispiel-box">Meine Geschwister versuchen immer die besten Noten zu bekommen, <strong>aber für mich ist das irrelevant</strong>.</div>
+    <div class="nav-btn" onclick="showSection(5)">
+        <span class="nav-emoji">🧩</span>
+        <span class="nav-label">Satzbau</span>
     </div>
+</div>
 
-    <div class="gefuehl-block">
-      <h3><span class="emoji">😔</span> die Enttäuschung</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Das ist schade!</div>
-        <div class="ausdruck-chip">Ich bin sehr enttäuscht.</div>
-        <div class="ausdruck-chip">Traurigerweise…</div>
-        <div class="ausdruck-chip">Leider…</div>
-        <div class="ausdruck-chip">Ich habe was komplett anderes erwartet.</div>
-        <div class="ausdruck-chip">Ich bin nicht glücklich damit.</div>
-        <div class="ausdruck-chip">Das ist leider nicht das, was ich wollte.</div>
-        <div class="ausdruck-chip">Ich bin damit nicht zufrieden.</div>
-      </div>
-      <div class="beispiel-box">Der Film war völlig uninteressant. <strong>Ich habe was komplett anderes erwartet.</strong></div>
+<div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Verschiedene Gefühle und Emotionen">
+    <div class="sec-inner">
+        <h2>📖 Vorentlastung</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesungVorent()">Lösungen</button>
+                <button class="btn btn-reset" onclick="resetTabVorent()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">⏱ <span id="timer-0">00:00</span></span>
+                <span class="best-time">🏆 <span id="best-0">--:--</span></span>
+            </div>
+        </div>
+        <div class="vocab-grid" id="vocabGrid"></div>
     </div>
+</div>
 
-    <div class="gefuehl-block">
-      <h3><span class="emoji">😟</span> die Hilflosigkeit</h3>
-      <div class="ausdruck-grid">
-        <div class="ausdruck-chip">Ich weiß nicht, was ich machen soll.</div>
-        <div class="ausdruck-chip">Ich habe keine Ahnung.</div>
-        <div class="ausdruck-chip">Ich weiß nicht mal, wo ich anfangen soll.</div>
-        <div class="ausdruck-chip">Ich fühle mich so hilflos.</div>
-      </div>
-      <div class="beispiel-box">Mein Computer ist kaputt. <strong>Ich weiß nicht, was ich machen soll.</strong></div>
+<div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Glückliche Menschen freuen sich">
+    <div class="sec-inner">
+        <h2>📄 Lesetext</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesungLesetext()">Lösungen</button>
+                <button class="btn btn-reset" onclick="resetTabLesetext()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">⏱ <span id="timer-1">00:00</span></span>
+                <span class="best-time">🏆 <span id="best-1">--:--</span></span>
+            </div>
+        </div>
+        <div class="lese-text" id="lesetext">
+            <p>In der deutschen Sprache gibt es viele Wege, Gefühle und Emotionen auszudrücken. Es gibt nicht nur simple Verben wie „sich freuen" oder „traurig sein", sondern auch komplexe Strukturen, um Gefühle über Ereignisse und Dinge zu beschreiben.</p>
+            <p>Ein wichtiger Weg ist die Verwendung von Sätzen mit „dass". Zum Beispiel: „Es freut mich, dass du kommst." Diese Struktur ermöglicht es, das Gefühl und den Grund dafür in einem Satz auszudrücken. Adjektive wie „froh", „traurig", „begeistert" und „enttäuscht" werden oft mit Präpositionen kombiniert: „Ich bin froh über das Ergebnis" oder „Wir sind enttäuscht von der Lösung".</p>
+            <p>Die deutsche Kultur legt großen Wert darauf, Gefühle klar und präzise auszudrücken. Man kann Hoffnung zeigen durch Sätze wie „Ich hoffe, dass alles gut wird" oder Angst durch „Ich habe Angst vor der Prüfung". Die Präposition „vor" wird hier mit „Angst" kombiniert und zeigt eine spezifische Phobie oder Sorge an.</p>
+            <p>Es ist auch möglich, Erleichterung auszudrücken: „Es ist mir eine Last vom Herzen gefallen, dass die Prüfung vorbei ist." Dies drückt eine intensive emotionale Befreiung aus. Überraschung kann man mit „Es überrascht mich, dass..." ausdrücken, während Trauer durch „Es tut mir leid, dass..." deutlich wird.</p>
+            <p>Die Fähigkeit, Gefühle präzise auszudrücken, ist ein wichtiger Teil der sprachlichen Kompetenz und trägt wesentlich zur erfolgreichen zwischenmenschlichen Kommunikation bei.</p>
+        </div>
     </div>
-  </div>
+</div>
 
-  <!-- TAB 2: ZUORDNUNG -->
-  <div class="tab" id="tab-2">
-    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=800" class="tab-banner" alt="Zuordnung">
-    <div class="section-title">Zuordnung: Welches Gefühl drückt der Text aus?</div>
-    <div class="zuord-intro">Lies die kurzen Texte und ordne jedem das passende Gefühl zu.</div>
-
-    <div id="zuordContainer"></div>
-    <button class="check-btn" onclick="checkZuordnung()">Auswerten</button>
-    <div class="result-msg" id="zuordResult"></div>
-  </div>
-
-  <!-- TAB 3: LÜCKENTEXT -->
-  <div class="tab" id="tab-3">
-    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=800" class="tab-banner" alt="Lückentext">
-    <div class="section-title">Lückentext: Gefühlsausdrücke</div>
-    <div class="timer-bar">
-      <span>⏱</span>
-      <span class="timer-display" id="timerDisplay3">00:00</span>
-      <button class="timer-btn" onclick="startTimer('best2044X_L','timerDisplay3')">Start</button>
-      <button class="timer-btn" onclick="stopTimer('best2044X_L')">Stop</button>
-      <button class="timer-btn" onclick="resetTimer('best2044X_L','timerDisplay3')">Reset</button>
+<div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3825517/pexels-photo-3825517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Emotionale Begegnung zwischen Menschen">
+    <div class="sec-inner">
+        <h2>🔤 Genus</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesungGenus()">Lösungen</button>
+                <button class="btn btn-reset" onclick="resetTabGenus()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">⏱ <span id="timer-2">00:00</span></span>
+                <span class="best-time">🏆 <span id="best-2">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">Ordne jedes Nomen dem richtigen Artikel zu: der, die, das oder pl (Plural).</div>
+        <div id="genusContainer"></div>
     </div>
-    <div class="luecken-intro">Ergänze die passenden Gefühlsausdrücke.</div>
-    <ul class="luecken-list" id="lueckenList"></ul>
-    <button class="check-btn" onclick="checkLuecken()">Auswerten</button>
-    <div class="result-msg" id="lueckenResult"></div>
-  </div>
+</div>
 
-  <!-- TAB 4: SATZBAU -->
-  <div class="tab" id="tab-4">
-    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=800" class="tab-banner" alt="Satzbau">
-    <div class="section-title">Satzbau: Gefühle ausdrücken</div>
-    <div class="timer-bar">
-      <span>⏱</span>
-      <span class="timer-display" id="timerDisplay4">00:00</span>
-      <button class="timer-btn" onclick="startTimer('best2044X_S','timerDisplay4')">Start</button>
-      <button class="timer-btn" onclick="stopTimer('best2044X_S')">Stop</button>
-      <button class="timer-btn" onclick="resetTimer('best2044X_S','timerDisplay4')">Reset</button>
-    <button onclick="showTab(5)">🔤 Wortschatz</button>
-    <button onclick="showTab(6)">🔤 Wortschatz</button>
+<div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807564/pexels-photo-3807564.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Person schreibt oder füllt ein Formular aus">
+    <div class="sec-inner">
+        <h2>✏️ Lückentext</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesungLucken()">Lösungen</button>
+                <button class="btn btn-reset" onclick="resetTabLucken()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+                <span class="best-time">🏆 <span id="best-3">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">Fülle die Lücken mit den passenden Wörtern oder Strukturen aus dem Text ein.</div>
+        <div id="luckenContainer"></div>
     </div>
-    <div id="sbContainer"></div>
-  </div>
+</div>
 
-  <!-- TAB 5: VOKABELN -->
-  <div class="tab" id="tab-5">
-    <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&w=800" class="tab-banner" alt="Vokabeln">
-    <div class="section-title">Vokabelliste: Gefühle und Emotionen</div>
-    <table class="vocab-table">
-      <tr><th>Deutsch</th><th>Englisch</th><th>Beispielsatz</th></tr>
-      <tr><td>der Enthusiasmus</td><td>enthusiasm</td><td>Ihr Enthusiasmus für Musik ist ansteckend.</td></tr>
-      <tr><td>die Zufriedenheit</td><td>satisfaction, contentment</td><td>Ich bin höchst zufrieden mit dem Ergebnis.</td></tr>
-      <tr><td>die Erleichterung</td><td>relief</td><td>Gott sei Dank! Das ist eine große Erleichterung.</td></tr>
-      <tr><td>die Überraschung</td><td>surprise</td><td>Was für eine Überraschung! Ich hätte das nicht erwartet.</td></tr>
-      <tr><td>die Bestürzung</td><td>dismay, shock</td><td>Das ist furchtbar! Ich kann es nicht glauben.</td></tr>
-      <tr><td>die Gleichgültigkeit</td><td>indifference</td><td>Es ist mir egal, was andere denken.</td></tr>
-      <tr><td>die Enttäuschung</td><td>disappointment</td><td>Ich bin sehr enttäuscht von dem Film.</td></tr>
-      <tr><td>die Hilflosigkeit</td><td>helplessness</td><td>Ich fühle mich so hilflos in dieser Situation.</td></tr>
-      <tr><td>großartig</td><td>great, fantastic</td><td>Das ist großartig! Herzlichen Glückwunsch!</td></tr>
-      <tr><td>wunderbar</td><td>wonderful</td><td>Die Überraschungsparty war wunderbar.</td></tr>
-      <tr><td>herrlich</td><td>wonderful, glorious</td><td>Das Wetter ist heute herrlich!</td></tr>
-      <tr><td>hervorragend</td><td>excellent, outstanding</td><td>Ihre Leistung war hervorragend.</td></tr>
-      <tr><td>grandios</td><td>magnificent, grandiose</td><td>Das Konzert war grandios!</td></tr>
-      <tr><td>schrecklich</td><td>terrible, dreadful</td><td>Das ist schrecklich! Wie ist das passiert?</td></tr>
-      <tr><td>furchtbar</td><td>dreadful, awful</td><td>Das Wetter ist furchtbar heute.</td></tr>
-      <tr><td>enttäuschend</td><td>disappointing</td><td>Das Ergebnis war enttäuschend.</td></tr>
-      <tr><td>irrelevant</td><td>irrelevant</td><td>Diese Information ist völlig irrelevant.</td></tr>
-      <tr><td>die Ahnung (keine ~ haben)</td><td>clue / to have no idea</td><td>Ich habe keine Ahnung, was ich machen soll.</td></tr>
-      <tr><td>hilflos</td><td>helpless</td><td>Sie fühlte sich hilflos und allein.</td></tr>
-      <tr><td>sich äußern</td><td>to express oneself</td><td>Es gibt viele Möglichkeiten, sich zu äußern.</td></tr>
-    </table>
-  </div>
-
-  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · B1.2 · 2044X · Gefühle über Dinge und Ereignisse</div>
-
-
-  <!-- TAB 5: WORTSCHATZ -->
-  <div class="tab" id="tab5">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
-    <div class="tab-content">
-      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
-      <div id="vocabContainer"></div>
-      <div style="margin-top:16px;display:flex;gap:10px;">
-        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
-        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
-      </div>
+<div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807511/pexels-photo-3807511.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Person wählt eine Option aus">
+    <div class="sec-inner">
+        <h2>☑️ Multiple Choice</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesungMC()">Lösungen</button>
+                <button class="btn btn-reset" onclick="resetTabMC()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">⏱ <span id="timer-4">00:00</span></span>
+                <span class="best-time">🏆 <span id="best-4">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">Wähle die beste Antwort für jede Frage.</div>
+        <div id="mcContainer"></div>
     </div>
-  </div>
+</div>
+
+<div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3807562/pexels-photo-3807562.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Konzentration und Fokus">
+    <div class="sec-inner">
+        <h2>🧩 Satzbau</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesungSatzbau()">Lösungen</button>
+                <button class="btn btn-reset" onclick="resetTabSatzbau()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">⏱ <span id="timer-5">00:00</span></span>
+                <span class="best-time">🏆 <span id="best-5">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">Ordne die Chips so an, dass vollständige Sätze entstehen. Ziehe die Chips in die leere Zone.</div>
+        <div id="satzbauContainer"></div>
+    </div>
+</div>
+
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
 
 </div>
 
 <script>
-// ── NAVIGATION ────────────────────────────────────────────────
-function showTab(n) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
-  document.querySelectorAll('.nav button').forEach((b,i) => b.classList.toggle('active', i===n));
-}
 
-// ── TIMER ─────────────────────────────────────────────────────
-const timers = {};
-function startTimer(key, displayId) {
-  if (timers[key] && timers[key].running) return;
-  const start = Date.now() - (timers[key] ? timers[key].elapsed : 0);
-  timers[key] = { running: true, elapsed: 0,
-    interval: setInterval(() => {
-      const e = Date.now() - start;
-      timers[key].elapsed = e;
-      const m = String(Math.floor(e/60000)).padStart(2,'0');
-      const s = String(Math.floor((e%60000)/1000)).padStart(2,'0');
-      document.getElementById(displayId).textContent = m+':'+s;
-    }, 500)
-  };
-}
-function stopTimer(key) {
-  if (timers[key]) { clearInterval(timers[key].interval); timers[key].running = false; }
-}
-function resetTimer(key, displayId) {
-  stopTimer(key); timers[key] = null;
-  document.getElementById(displayId).textContent = '00:00';
-}
-
-// ── ZUORDNUNG DATA ────────────────────────────────────────────
-const ZUORD_DATA = [
-  {
-    label: 'Text A',
-    text: 'Wow! Ich hätte überhaupt nicht mehr damit gerechnet, dass du vorbeikommst!',
-    answer: 'Überraschung'
-  },
-  {
-    label: 'Text B',
-    text: 'Das ist großartig! Ich freue mich so sehr, das glaubst du gar nicht! Wenn du hier bist, werden wir uns alle Sehenswürdigkeiten anschauen, in viele Restaurants gehen, viel Zeit miteinander verbringen. Ich werde dir einfach alles zeigen! Das wird wunderbar!',
-    answer: 'Enthusiasmus'
-  },
-  {
-    label: 'Text C',
-    text: 'Gott sei Dank! Ich habe mir schon Sorgen gemacht! Endlich bist du da!',
-    answer: 'Erleichterung'
-  },
-  {
-    label: 'Text D',
-    text: 'Nun habe ich alles, was ich brauche. Du bist hier, das Wetter ist toll und wir können den lauwarmen Sommerabend im Park genießen.',
-    answer: 'Zufriedenheit'
-  },
-  {
-    label: 'Text E',
-    text: 'Das ist schrecklich! Ich darf keinen Urlaub nehmen, obwohl ich es so dringend brauche!',
-    answer: 'Bestürzung'
-  },
-  {
-    label: 'Text F',
-    text: 'Der Film war völlig uninteressant. Ich habe was komplett anderes erwartet. Ich bin damit nicht zufrieden.',
-    answer: 'Enttäuschung'
-  },
+var VORENTLASTUNG = [
+    { term: "die Freude (Sg.)", def: "das Gefühl der Glücklichkeit und Zufriedenheit" },
+    { term: "die Trauer (Sg.)", def: "tiefe Traurigkeit, oft nach einem Verlust" },
+    { term: "die Überraschung, -en", def: "ein Ereignis, das man nicht erwartet hat" },
+    { term: "die Enttäuschung, -en", def: "das Gefühl, wenn etwas nicht so läuft wie erwartet" },
+    { term: "die Angst, -̈e", def: "ein intensives Unbehagen vor etwas Gefährlichem" },
+    { term: "die Hoffnung, -en", def: "der Glaube, dass etwas Gutes passieren wird" },
+    { term: "die Begeisterung (Sg.)", def: "starker Enthusiasmus und Freude für etwas" },
+    { term: "die Erleichterung (Sg.)", def: "das Gefühl der Erleichterung nach einer Belastung" },
+    { term: "froh", def: "glücklich, zufrieden mit einer Situation" },
+    { term: "traurig", def: "betrübt, mit Gefühlen von Trauer" },
+    { term: "begeistert", def: "sehr enthusiastisch und voller Freude" },
+    { term: "enttäuscht", def: "durch Nicht-Erfüllung von Erwartungen betrübt" },
+    { term: "überrascht", def: "unerwartet überraschend oder verwundert" },
+    { term: "erleichtert", def: "gefühlsmäßig entlastet von Besorgnis oder Druck" },
+    { term: "sich freuen über (+Akk.)", def: "Strukturelle Ausdruckweise für Freude über etwas" },
+    { term: "Angst haben vor (+Dat.)", def: "Strukturelle Ausdruckweise für Angst vor etwas" }
 ];
 
-const zuordOptions = ['Enthusiasmus','Zufriedenheit','Erleichterung','Überraschung','Bestürzung','Gleichgültigkeit','Enttäuschung','Hilflosigkeit'];
-
-function buildZuordnung() {
-  const container = document.getElementById('zuordContainer');
-  ZUORD_DATA.forEach((item, i) => {
-    const div = document.createElement('div');
-    div.className = 'zuord-text-box';
-    const opts = zuordOptions.map(o => `<option value="${o}">${o}</option>`).join('');
-    div.innerHTML = `<div class="box-label">${item.label}</div>
-      <p>${item.text}</p>
-      <select class="zuord-select" id="zuord${i}">
-        <option value="">-- Gefühl wählen --</option>${opts}
-      </select>`;
-    container.appendChild(div);
-  });
-}
-
-function checkZuordnung() {
-  let correct = 0;
-  ZUORD_DATA.forEach((item, i) => {
-    const sel = document.getElementById('zuord'+i);
-    const ok = sel.value === item.answer;
-    sel.className = 'zuord-select ' + (ok ? 'correct' : (sel.value ? 'wrong' : ''));
-    if (ok) correct++;
-  });
-  const res = document.getElementById('zuordResult');
-  res.textContent = correct === ZUORD_DATA.length
-    ? `✅ Perfekt! Alle ${ZUORD_DATA.length} Texte richtig zugeordnet!`
-    : `${correct} von ${ZUORD_DATA.length} richtig. Überprüfe die markierten Texte.`;
-  res.className = 'result-msg show ' + (correct === ZUORD_DATA.length ? 'ok' : 'nok');
-}
-
-// ── LÜCKENTEXT DATA ───────────────────────────────────────────
-const LUECKEN_DATA = [
-  { pre: 'Ich bekomme ein Geschenk. ', gap: 'Wunderbar', suf: '! Das habe ich mir so gewünscht.' },
-  { pre: 'Gott sei Dank! ', gap: 'Endlich', suf: ' bist du da! Ich mache mir schon Sorgen.' },
-  { pre: 'Mein Computer ist kaputt. Ich habe keine ', gap: 'Ahnung', suf: ', was ich machen soll.' },
-  { pre: 'Der Film war so langweilig. Das ist ', gap: 'schade', suf: '! Ich hatte so viel erwartet.' },
-  { pre: 'Was? Du kommst zu Besuch? ', gap: 'Unglaublich', suf: '! Das hätte ich nicht gedacht!' },
-  { pre: 'Es ist mir völlig ', gap: 'egal', suf: ', was andere von mir denken.' },
-  { pre: 'Ich bin höchst ', gap: 'zufrieden', suf: ' mit meiner neuen Wohnung.' },
-  { pre: 'Das ist ', gap: 'schrecklich', suf: '! Wie konnte das nur passieren?' },
-  { pre: 'Ich bin sehr ', gap: 'enttäuscht', suf: ' von dem Ergebnis des Spiels.' },
-  { pre: 'Das Konzert war ', gap: 'grandios', suf: '! Die beste Musik, die ich je gehört habe!' },
+var genusItems = [
+    { word: "🎭 Freude", article: "die" },
+    { word: "😔 Trauer", article: "die" },
+    { word: "😲 Überraschung", article: "die" },
+    { word: "😞 Enttäuschung", article: "die" },
+    { word: "😨 Angst", article: "die" },
+    { word: "🌟 Hoffnung", article: "die" },
+    { word: "🎉 Begeisterung", article: "die" },
+    { word: "😌 Erleichterung", article: "die" },
+    { word: "🎪 Ereignis", article: "das" },
+    { word: "💭 Gefühl", article: "das" },
+    { word: "📋 Ergebnis", article: "das" },
+    { word: "📰 Nachricht", article: "die" },
+    { word: "🎭 Veranstaltung", article: "die" },
+    { word: "🧠 Erfahrung", article: "die" },
+    { word: "🏆 Erfolg", article: "der" }
 ];
 
-function buildLuecken() {
-  const ul = document.getElementById('lueckenList');
-  LUECKEN_DATA.forEach((item, i) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<span>${item.pre}</span><input class="gap-input" id="gap${i}" autocomplete="off" spellcheck="false" oninput="liveCheck(${i})"><span>${item.suf}</span>`;
-    ul.appendChild(li);
-  });
-}
-
-function liveCheck(i) {
-  const inp = document.getElementById('gap'+i);
-  const val = inp.value.trim();
-  if (!val) { inp.className = 'gap-input'; return; }
-  const ok = val.toLowerCase() === LUECKEN_DATA[i].gap.toLowerCase();
-  inp.className = 'gap-input ' + (ok ? 'correct' : '');
-  autoStopIfDone();
-}
-
-function autoStopIfDone() {
-  const all = LUECKEN_DATA.every((_,i) => {
-    const v = (document.getElementById('gap'+i)||{}).value||'';
-    return v.trim().toLowerCase() === LUECKEN_DATA[i].gap.toLowerCase();
-  });
-  if (all) stopTimer('best2044X_L');
-}
-
-function checkLuecken() {
-  let correct = 0;
-  LUECKEN_DATA.forEach((item, i) => {
-    const inp = document.getElementById('gap'+i);
-    const ok = inp.value.trim().toLowerCase() === item.gap.toLowerCase();
-    inp.className = 'gap-input ' + (ok ? 'correct' : 'wrong');
-    if (ok) correct++;
-  });
-  const res = document.getElementById('lueckenResult');
-  res.textContent = correct === LUECKEN_DATA.length
-    ? `✅ Perfekt! Alle ${LUECKEN_DATA.length} Lücken richtig!`
-    : `${correct} von ${LUECKEN_DATA.length} richtig. Überprüfe die roten Lücken.`;
-  res.className = 'result-msg show ' + (correct === LUECKEN_DATA.length ? 'ok' : 'nok');
-  if (correct === LUECKEN_DATA.length) stopTimer('best2044X_L');
-}
-
-// ══════════════════════════════════════════════
-// SATZBAU
-// ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['Das', 'ist', 'großartig', '!', 'Ich', 'freue', 'mich', 'so', 'sehr', 'über', 'diese', 'Nachricht', '!'] },
-  { words: ['Ich', 'habe', 'keine', 'Ahnung', ',', 'wo', 'ich', 'anfangen', 'soll', '.'] },
-  { words: ['Gott', 'sei', 'Dank', '!', 'Zum', 'Glück', 'hat', 'es', 'gut', 'geendet', '.'] },
-  { words: ['Ich', 'bin', 'sehr', 'enttäuscht', 'von', 'dem', 'Ergebnis', '.'] },
-  { words: ['Das', 'ist', 'mir', 'völlig', 'egal', '.', 'Es', 'macht', 'mir', 'nichts', 'aus', '.'] },
-  { words: ['Was', 'für', 'eine', 'Überraschung', '!', 'Das', 'hätte', 'ich', 'nicht', 'erwartet', '.'] }
+var luckenData = [
+    { id: 1, text: "Es freut mich, dass du <input type='text' class='blank' data-id='1' placeholder='...'>", solution: "kommst" },
+    { id: 2, text: "Ich bin enttäuscht <input type='text' class='blank' data-id='2' placeholder='...'> dem Ergebnis.", solution: "von" },
+    { id: 3, text: "Das überrascht mich, dass Sie kein <input type='text' class='blank' data-id='3' placeholder='...'> sprechen.", solution: "Englisch" },
+    { id: 4, text: "Es ist eine Last vom Herzen <input type='text' class='blank' data-id='4' placeholder='...'>, dass die Prüfung vorbei ist.", solution: "gefallen" },
+    { id: 5, text: "Sie haben Angst <input type='text' class='blank' data-id='5' placeholder='...'> der Zukunft.", solution: "vor" },
+    { id: 6, text: "Ich bin <input type='text' class='blank' data-id='6' placeholder='...'> über die gute Note.", solution: "froh" },
+    { id: 7, text: "Es tut mir leid, <input type='text' class='blank' data-id='7' placeholder='...'> es nicht schaffe.", solution: "dass" },
+    { id: 8, text: "Sie sind <input type='text' class='blank' data-id='8' placeholder='...'> von ihrem Erfolg.", solution: "begeistert" },
+    { id: 9, text: "Es ist meine <input type='text' class='blank' data-id='9' placeholder='...'>, dass alles gut wird.", solution: "Hoffnung" },
+    { id: 10, text: "Die Trauer über den <input type='text' class='blank' data-id='10' placeholder='...'> ist sehr groß.", solution: "Verlust" }
 ];
 
-let sbDragged = null;
+var mcData = [
+    { id: 1, question: "Welche Struktur drückt Freude über ein Ereignis aus?", options: ["Ich bin froh dass...", "Es freut mich, dass...", "Ich habe Freude vor...", "Das macht mich traurig, dass..."], correct: 1 },
+    { id: 2, question: "Welche Präposition wird mit „Enttäuschung" kombiniert?", options: ["mit", "nach", "vor", "von"], correct: 3 },
+    { id: 3, question: "Was ist eine „dass-Satz-Struktur"?", options: ["Ein Satz mit Komma", "Ein Satz, der ein Gefühl und seinen Grund verbindet", "Ein Satz ohne Gefühle", "Ein Satz mit Modalverben"], correct: 1 },
+    { id: 4, question: "Wie drückt man Angst aus?", options: ["Ich bin Angst", "Ich habe Angst vor...", "Die Angst mich hat", "Angst ist ich"], correct: 1 },
+    { id: 5, question: "Welches Adjektiv bedeutet „von Besorgnis befreit"?", options: ["traurig", "begeistert", "erleichtert", "überrascht"], correct: 2 },
+    { id: 6, question: "Welche Präposition folgt auf „Hoffnung"?", options: ["auf", "vor", "von", "über"], correct: 0 },
+    { id: 7, question: "Was ist ein Beispiel für Überraschung?", options: ["Es überrascht mich, dass...", "Ich bin überrascht von...", "Das überrascht mich...", "Alle Optionen sind richtig"], correct: 3 },
+    { id: 8, question: "Wie kombiniert man „Erfolg" mit einem Gefühl?", options: ["Ich bin enttäuscht über meinen Erfolg", "Ich bin begeistert von meinem Erfolg", "Beides ist möglich", "Keines ist möglich"], correct: 2 },
+    { id: 9, question: "Welche Struktur zeigt Trauer?", options: ["Es freut mich, dass...", "Ich bin traurig über...", "Es überrascht mich, dass...", "Ich hoffe, dass..."], correct: 1 },
+    { id: 10, question: "Was bedeutet „Es tut mir leid, dass..."?", options: ["Ich bin sehr glücklich", "Ich bedauere ein Ereignis", "Ich habe keine Gefühle", "Ich bin begeistert"], correct: 1 }
+];
 
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+var satzbauData = [
+    { parts: ["Es", "freut", "mich", ",", "dass", "du", "kommst"], valid: [["Es", "freut", "mich", ",", "dass", "du", "kommst"]], punct: "." },
+    { parts: ["Ich", "bin", "enttäuscht", "von", "dem", "Ergebnis"], valid: [["Ich", "bin", "enttäuscht", "von", "dem", "Ergebnis"]], punct: "." },
+    { parts: ["Das", "überrascht", "mich", ",", "dass", "Sie", "kein", "Englisch", "sprechen"], valid: [["Das", "überrascht", "mich", ",", "dass", "Sie", "kein", "Englisch", "sprechen"]], punct: "." },
+    { parts: ["Es", "ist", "mir", "eine", "Last", "vom", "Herzen", "gefallen"], valid: [["Es", "ist", "mir", "eine", "Last", "vom", "Herzen", "gefallen"]], punct: "." },
+    { parts: ["Sie", "haben", "Angst", "vor", "der", "Zukunft"], valid: [["Sie", "haben", "Angst", "vor", "der", "Zukunft"]], punct: "." },
+    { parts: ["Ich", "hoffe", ",", "dass", "alles", "gut", "wird"], valid: [["Ich", "hoffe", ",", "dass", "alles", "gut", "wird"]], punct: "." },
+    { parts: ["Es", "tut", "mir", "leid", ",", "dass", "ich", "nicht", "komme"], valid: [["Es", "tut", "mir", "leid", ",", "dass", "ich", "nicht", "komme"]], punct: "." },
+    { parts: ["Sie", "sind", "begeistert", "von", "ihrem", "Erfolg"], valid: [["Sie", "sind", "begeistert", "von", "ihrem", "Erfolg"]], punct: "." }
+];
+
+var timers = [{}, {}, {}, {}, {}, {}];
+var bestTimes = [null, null, null, null, null, null];
+
+function startTimer(tabIdx) {
+    if (timers[tabIdx].running) return;
+    timers[tabIdx].running = true;
+    timers[tabIdx].start = Date.now() - (timers[tabIdx].elapsed || 0);
+    timers[tabIdx].interval = setInterval(function() {
+        timers[tabIdx].elapsed = Date.now() - timers[tabIdx].start;
+        updateTimerDisplay(tabIdx);
+    }, 100);
+}
+
+function stopTimer(tabIdx) {
+    if (timers[tabIdx].interval) clearInterval(timers[tabIdx].interval);
+    timers[tabIdx].running = false;
+    if (timers[tabIdx].elapsed) {
+        if (!bestTimes[tabIdx] || timers[tabIdx].elapsed < bestTimes[tabIdx]) {
+            bestTimes[tabIdx] = timers[tabIdx].elapsed;
+        }
+        updateBestTime(tabIdx);
+    }
+}
+
+function updateTimerDisplay(tabIdx) {
+    var elapsed = timers[tabIdx].elapsed || 0;
+    var secs = Math.floor(elapsed / 1000);
+    var mins = Math.floor(secs / 60);
+    var display = (mins < 10 ? '0' : '') + mins + ':' + (secs % 60 < 10 ? '0' : '') + (secs % 60);
+    var el = document.getElementById('timer-' + tabIdx);
+    if (el) el.textContent = display;
+}
+
+function updateBestTime(tabIdx) {
+    if (!bestTimes[tabIdx]) {
+        document.getElementById('best-' + tabIdx).textContent = '--:--';
+        return;
+    }
+    var secs = Math.floor(bestTimes[tabIdx] / 1000);
+    var mins = Math.floor(secs / 60);
+    var display = (mins < 10 ? '0' : '') + mins + ':' + (secs % 60 < 10 ? '0' : '') + (secs % 60);
+    document.getElementById('best-' + tabIdx).textContent = display;
+}
+
+function resetTimer(tabIdx) {
+    if (timers[tabIdx].interval) clearInterval(timers[tabIdx].interval);
+    timers[tabIdx] = {};
+    updateTimerDisplay(tabIdx);
+}
+
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
     });
-  }
-  return span;
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+function initVorentlastung() {
+    var grid = document.getElementById('vocabGrid');
+    grid.innerHTML = '';
+    VORENTLASTUNG.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + item.term + '</div><div class="vocab-def">' + item.def + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+function showLoesungVorent() { alert('Alle 16 Begriffe mit ihren Definitionen sind oben angezeigt.'); }
+function resetTabVorent() { resetTimer(0); }
+
+function highlightVocabInText() {
+    var text = document.getElementById('lesetext');
+    if (!text) return;
+    var words = VORENTLASTUNG.map(function(item) {
+        var term = item.term.replace(/^(die|der|das)\s+/i, '').split(',')[0].trim();
+        return term;
+    }).filter(function(w) { return w && w.length > 2; });
+
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var txt = node.nodeValue;
+            var has = false;
+            words.forEach(function(word) {
+                if (txt.indexOf(word) !== -1) has = true;
+            });
+            if (!has) return;
+            var span = document.createElement('span');
+            var parts = txt.split(new RegExp('(' + words.join('|') + ')', 'gi'));
+            parts.forEach(function(part) {
+                if (words.some(function(w) { return w.toLowerCase() === part.toLowerCase(); })) {
+                    var hl = document.createElement('span');
+                    hl.className = 'vocab-hl';
+                    hl.textContent = part;
+                    span.appendChild(hl);
+                } else {
+                    span.appendChild(document.createTextNode(part));
+                }
+            });
+            node.parentNode.replaceChild(span, node);
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
+    }
+    walkAndHighlight(text);
+}
+
+function showLoesungLesetext() { alert('Der Lesetext ist oben vollständig angezeigt.'); }
+function resetTabLesetext() { resetTimer(1); }
+
+var genusSelected = {};
+
+function initGenus() {
+    var cont = document.getElementById('genusContainer');
+    cont.innerHTML = '';
+    genusItems.forEach(function(item, idx) {
+        var card = document.createElement('div');
+        card.className = 'genus-card';
+        card.textContent = item.word;
+        card.draggable = true;
+        card.dataset.article = item.article;
+        card.dataset.idx = idx;
+        card.addEventListener('dragstart', function(e) { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', idx); });
+        cont.appendChild(card);
+    });
+    ['der', 'die', 'das', 'pl'].forEach(function(article) {
+        var zone = document.createElement('div');
+        zone.className = 'genus-drop-zone';
+        zone.id = 'zone-' + article;
+        var label = document.createElement('div');
+        label.className = 'genus-label';
+        label.textContent = article;
+        zone.appendChild(label);
+        zone.addEventListener('dragover', function(e) { e.preventDefault(); });
+        zone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            var idx = e.dataTransfer.getData('text/plain');
+            var card = document.querySelector('[data-idx="' + idx + '"]');
+            if (!card) return;
+            Object.keys(genusSelected).forEach(function(k) { if (genusSelected[k] === card) delete genusSelected[k]; });
+            if (genusSelected[article] && genusSelected[article] !== card) {
+                cont.appendChild(genusSelected[article]);
+                genusSelected[article].classList.remove('correct', 'wrong');
+            }
+            zone.appendChild(card);
+            genusSelected[article] = card;
+            card.classList.remove('correct', 'wrong');
+            startTimer(2);
+            if (card.dataset.article === article) {
+                card.classList.add('correct');
+                zone.classList.add('correct');
+            } else {
+                card.classList.add('wrong');
+                zone.classList.add('wrong');
+            }
+            checkGenusAllDone();
+        });
+        cont.parentNode.appendChild(zone);
+    });
+}
+
+function checkGenusAllDone() {
+    var allCorrect = Object.keys(genusSelected).every(function(art) {
+        return genusSelected[art] && genusSelected[art].dataset.article === art;
+    });
+    if (allCorrect && Object.keys(genusSelected).length === 4) {
+        stopTimer(2);
+    }
+}
+
+function showLoesungGenus() { alert('Alle Nomen wurden bereits mit dem richtigen Artikel gelöst.'); }
+
+function resetTabGenus() {
+    genusSelected = {};
+    document.getElementById('genusContainer').innerHTML = '';
+    document.querySelectorAll('.genus-drop-zone').forEach(function(z) { z.remove(); });
+    resetTimer(2);
+    initGenus();
+}
+
+function initLucken() {
+    var cont = document.getElementById('luckenContainer');
+    cont.innerHTML = '';
+    luckenData.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
+        div.innerHTML = item.text;
+        var inp = div.querySelector('input.blank');
+        if (inp) {
+            inp.addEventListener('input', function() {
+                startTimer(3);
+                var correct = this.value.toLowerCase() === item.solution.toLowerCase();
+                this.classList.toggle('correct', correct);
+                this.classList.toggle('wrong', this.value.length > 0 && !correct);
+                checkLuckenAllDone();
+            });
+        }
+        cont.appendChild(div);
+    });
+}
+
+function checkLuckenAllDone() {
+    var allInputs = document.querySelectorAll('#luckenContainer input.blank');
+    var allCorrect = Array.from(allInputs).every(function(inp) { return inp.classList.contains('correct'); });
+    if (allCorrect && allInputs.length > 0) stopTimer(3);
+}
+
+function showLoesungLucken() {
+    luckenData.forEach(function(item) {
+        var inp = document.querySelector('input[data-id="' + item.id + '"]');
+        if (inp) inp.value = item.solution;
+    });
+}
+
+function resetTabLucken() {
+    document.getElementById('luckenContainer').innerHTML = '';
+    resetTimer(3);
+    initLucken();
+}
+
+var mcAnswers = {};
+
+function initMC() {
+    var cont = document.getElementById('mcContainer');
+    cont.innerHTML = '';
+    mcData.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'mc-item';
+        var q = document.createElement('div');
+        q.className = 'mc-question';
+        q.textContent = item.id + '. ' + item.question;
+        div.appendChild(q);
+        var opts = document.createElement('div');
+        opts.className = 'mc-options';
+        item.options.forEach(function(opt, optIdx) {
+            var pill = document.createElement('div');
+            pill.className = 'mc-pill';
+            pill.textContent = opt;
+            pill.addEventListener('click', function() {
+                startTimer(4);
+                mcAnswers[item.id] = optIdx;
+                var allPills = opts.querySelectorAll('.mc-pill');
+                allPills.forEach(function(p) {
+                    p.classList.remove('correct', 'wrong');
+                });
+                pill.classList.add(optIdx === item.correct ? 'correct' : 'wrong');
+                allPills.forEach(function(p, i) { if (i !== optIdx) p.classList.add('disabled'); });
+                checkMCAllDone();
+            });
+            opts.appendChild(pill);
+        });
+        div.appendChild(opts);
+        cont.appendChild(div);
+    });
+}
+
+function checkMCAllDone() {
+    if (Object.keys(mcAnswers).length === mcData.length) {
+        var allCorrect = Object.keys(mcAnswers).every(function(id) {
+            var q = mcData.find(function(d) { return d.id == id; });
+            return q && mcAnswers[id] === q.correct;
+        });
+        if (allCorrect) stopTimer(4);
+    }
+}
+
+function showLoesungMC() {
+    mcData.forEach(function(item) {
+        var pills = document.querySelectorAll('.mc-item:nth-child(' + item.id + ') .mc-pill');
+        if (pills.length > item.correct) {
+            pills[item.correct].click();
+        }
+    });
+}
+
+function resetTabMC() {
+    mcAnswers = {};
+    document.getElementById('mcContainer').innerHTML = '';
+    resetTimer(4);
+    initMC();
+}
+
+var sbDragged = null;
+var satzbauAnswers = {};
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        startTimer(5);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+    });
+    return chip;
 }
 
 function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (sbDragged) zone.appendChild(sbDragged);
+        sbDragged = null;
+        checkSBZone(zone);
+    });
 }
 
-function sbCheckAuto(itemIdx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
-  }, 500);
+function checkSBZone(zone) {
+    setTimeout(function() {
+        var rowId = zone.id.replace('sb-row-', '');
+        var bank = document.getElementById('sb-bank-' + rowId);
+        if (bank && bank.querySelectorAll('.chip').length === 0) {
+            checkSBRow(zone);
+        }
+    }, 100);
 }
 
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
-  } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
-  }
-}
-
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
-  });
-}
-
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(4);
-}
-
-function buildSatzbau() {
-  const cont = document.getElementById('sbContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
-
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+function checkSBRow(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var idx = parseInt(row.id.replace('sb-row-', ''));
+    var correct = satzbauData[idx].valid.some(function(v) { return JSON.stringify(v) === JSON.stringify(order); });
+    row.classList.toggle('correct', correct);
+    row.classList.toggle('incorrect', !correct);
+    chips.forEach(function(c) {
+        c.classList.toggle('correct', correct);
+        c.classList.toggle('incorrect', !correct);
+    });
+    if (correct) {
+        satzbauAnswers[idx] = true;
+        if (Object.keys(satzbauAnswers).length === satzbauData.length) stopTimer(5);
     }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
-
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-      pool.appendChild(chip);
-    });
-    sbRegisterZone(pool);
-
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
-
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
-    });
-
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
-    });
-
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      }
-    });
-
-    const fb = document.createElement('div');
-    fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
-
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
 }
 
-function resetSatzbau() { buildSatzbau(); resetTimer(4); }
-
-// ── WORTSCHATZ ────────────────────────────────────────────────────
-const WORTSCHATZ = [
-  { type: 'n', en: 'the feeling', art: 'das', wort: 'Gefühl', plural: '-e' },
-  { type: 'n', en: 'the joy', art: 'die', wort: 'Freude', plural: '-n' },
-  { type: 'n', en: 'the sadness', art: 'die', wort: 'Traurigkeit', plural: '-' },
-  { type: 'n', en: 'the fear', art: 'die', wort: 'Angst', plural: '-e' },
-  { type: 'v', en: 'to feel happy', de: 'sich freuen' },
-  { type: 'v', en: 'to feel sad', de: 'traurig sein' },
-  { type: 'v', en: 'to be afraid', de: 'Angst haben' },
-  { type: 'v', en: 'to surprise', de: 'überraschen' },
-  { type: 'v', en: 'to disappoint', de: 'enttäuschen' },
-  { type: 'v', en: 'to excite', de: 'begeistern' },
-];
-
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    }
-    cont.appendChild(div);
-  });
+function initSatzbau() {
+    var cont = document.getElementById('satzbauContainer');
+    cont.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+        sbRegisterZone(bank);
+        sbRegisterZone(row);
+        item.appendChild(bank);
+        item.appendChild(row);
+        cont.appendChild(item);
+    });
 }
 
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
-      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
-    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  }
+function showLoesungSatzbau() {
+    satzbauData.forEach(function(ex, idx) {
+        var row = document.getElementById('sb-row-' + idx);
+        var bank = document.getElementById('sb-bank-' + idx);
+        if (row && bank) {
+            var allChips = {};
+            Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+            Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+            while (row.firstChild) row.removeChild(row.firstChild);
+            ex.valid[0].forEach(function(word) {
+                if (allChips[word]) row.appendChild(allChips[word]);
+            });
+            checkSBRow(row);
+        }
+    });
 }
 
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
-    }
-    vocabLiveCheck(idx);
-  });
+function resetTabSatzbau() {
+    satzbauAnswers = {};
+    document.getElementById('satzbauContainer').innerHTML = '';
+    resetTimer(5);
+    initSatzbau();
 }
 
-function resetVocab() { initVocab(); }
+document.addEventListener('DOMContentLoaded', function() {
+    initVorentlastung();
+    highlightVocabInText();
+    initGenus();
+    initLucken();
+    initMC();
+    initSatzbau();
+});
 
-initVocab();
 </script>
 </body>
 </html>

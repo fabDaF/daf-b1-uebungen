@@ -3,599 +3,1080 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 – Mehr Folgen, bitte! (2043R)</title>
+<title>B1.1 · 2043R · Mehr Folgen bitte</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #667eea; font-family: 'Segoe UI', Arial, sans-serif; min-height: 100vh; padding: 20px; }
-  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; }
-  .header { background: #667eea; color: #fff; padding: 18px 24px; }
-  .header h1 { font-size: 1.25rem; font-weight: 700; }
-  .header p { font-size: 0.85rem; opacity: 0.85; margin-top: 3px; }
-  /* NAV */
-  .nav { display: flex; flex-direction: column; background: #f3e8ff; border-bottom: 2px solid #667eea; }
-  .nav-row { display: flex; flex-wrap: wrap; }
-  .nav button { flex: 1 1 auto; padding: 10px 8px; border: 1px solid #9b59b6; background: #f3e8ff; color: #667eea; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
-  .nav button:hover { background: #e0c8ff; }
-  .nav button.active { background: #667eea; color: #fff; }
-  /* TABS */
-  .tab { display: none; padding: 22px 24px; }
-  .tab.active { display: block; }
-  /* BANNER */
-  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
-  /* SECTION TITLE */
-  .section-title { font-size: 1.1rem; font-weight: 700; color: #667eea; margin-bottom: 14px; border-left: 4px solid #667eea; padding-left: 10px; }
-  /* VORENTLASTUNG */
-  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 16px; }
-  .vocab-card { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 10px 14px; }
-  .vocab-card .de { font-weight: 700; color: #667eea; font-size: 0.95rem; }
-  .vocab-card .en { color: #666; font-size: 0.82rem; margin-top: 2px; }
-  .vocab-card .beispiel { color: #555; font-size: 0.8rem; margin-top: 4px; font-style: italic; }
-  /* LESETEXT */
-  .story-container { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 24px; font-family: Georgia, 'Times New Roman', serif; font-size: 1.0rem; line-height: 1.75; color: #222; text-align: justify; hyphens: auto; }
-  .story-container p { margin-bottom: 1.1em; text-indent: 1.4em; }
-  .story-container p:first-child { text-indent: 0; }
-  .story-container h3 { font-size: 1.05rem; font-weight: 700; color: #667eea; margin: 1.2em 0 0.5em 0; text-indent: 0; }
-  .vocab-hl { background: #fff3b0; border-radius: 3px; padding: 0 2px; cursor: help; font-weight: 600; }
-  /* RF-FRAGEN */
-  .rf-intro { background: #f3e8ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; color: #555; }
-  .rf-list { list-style: none; }
-  .rf-item { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
-  .rf-item .rf-text { flex: 1 1 300px; font-size: 0.93rem; color: #333; line-height: 1.5; }
-  .rf-buttons { display: flex; gap: 8px; flex-shrink: 0; }
-  .rf-btn { padding: 7px 18px; border: 2px solid #9b59b6; border-radius: 20px; background: #fff; color: #667eea; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-  .rf-btn:hover { background: #e0c8ff; }
-  .rf-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; }
-  .rf-btn.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
-  .rf-btn.disabled { pointer-events: none; }
-  .rf-feedback { width: 100%; font-size: 0.82rem; margin-top: 4px; display: none; }
-  .rf-feedback.show { display: block; }
-  .rf-feedback.ok { color: #155724; }
-  .rf-feedback.nok { color: #721c24; }
-  .check-btn { background: #667eea; color: #fff; border: none; border-radius: 8px; padding: 10px 22px; cursor: pointer; font-size: 0.95rem; margin-top: 10px; }
-  .check-btn:hover { background: #5a0c9d; }
-  /* LÜCKENTEXT */
-  .timer-bar { display: flex; align-items: center; gap: 10px; background: #f3e8ff; border-radius: 8px; padding: 8px 14px; margin-bottom: 16px; }
-  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 55px; }
-  .timer-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 0.85rem; }
-  .timer-btn:hover { background: #5a0c9d; }
-  .luecken-intro { background: #f3e8ff; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 0.9rem; color: #555; }
-  .luecken-list { list-style: none; }
-  .luecken-list li { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 0.95rem; flex-wrap: wrap; }
-  .gap-input { border: none; border-bottom: 2px solid #9b59b6; outline: none; font-size: 0.95rem; padding: 2px 4px; min-width: 150px; color: #333; background: transparent; }
-  .gap-input.correct { border-bottom-color: #28a745; color: #155724; background: #d4edda; border-radius: 4px; border: 1px solid #28a745; }
-  .gap-input.wrong { border-bottom-color: #dc3545; color: #721c24; background: #f8d7da; border-radius: 4px; border: 1px solid #dc3545; }
-  .result-msg { margin-top: 12px; padding: 10px 14px; border-radius: 8px; font-size: 0.92rem; display: none; }
-  .result-msg.show { display: block; }
-  .result-msg.ok { background: #d4edda; color: #155724; }
-  .result-msg.nok { background: #f8d7da; color: #721c24; }
-  /* SATZBAU */
-  .sb-sentence { background: #f3e8ff; border: 1px solid #9b59b6; border-radius: 8px; padding: 14px; margin-bottom: 18px; }
-  .sb-sentence .sb-label { font-size: 0.8rem; color: #888; margin-bottom: 8px; }
-  .sb-drop-zone { min-height: 44px; background: #fff; border: 2px dashed #9b59b6; border-radius: 6px; padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-  .sb-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-  .chip { background: #667eea; color: #fff; border-radius: 20px; padding: 5px 12px; font-size: 0.85rem; cursor: grab; user-select: none; border: none; }
-  .chip:active { cursor: grabbing; }
-  .chip.in-zone { background: #9b59b6; }
-  .sb-check-btn { background: #667eea; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; cursor: pointer; font-size: 0.85rem; }
-  .sb-check-btn:hover { background: #5a0c9d; }
-  .sb-feedback { font-size: 0.85rem; margin-top: 6px; display: none; }
-  .sb-feedback.show { display: block; }
-  .sb-feedback.ok { color: #155724; }
-  .sb-feedback.nok { color: #721c24; }
-  /* VOCAB TABLE */
-  .vocab-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 10px; }
-  .vocab-table th { background: #667eea; color: #fff; padding: 8px 10px; text-align: left; }
-  .vocab-table td { padding: 7px 10px; border: 1px solid #ddd; }
-  .vocab-table tr:nth-child(even) td { background: #f9f0ff; }
-  /* WORTSCHATZ INTERACTIVE */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
-  .author-footer { text-align: center; font-size: 0.75rem; color: #aaa; padding: 16px; border-top: 1px solid #eee; margin-top: 8px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+}
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.sec-inner { padding: 28px 32px 32px; }
+.tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+/* Vorentlastung */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+/* Lesetext */
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text .dialog {
+    font-style: normal;
+    text-indent: 0;
+    padding-left: 1.1em;
+    border-left: 3px solid #667eea;
+    color: #2a2a6e;
+    margin-left: 0;
+}
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+/* Richtig/Falsch */
+.rf-list {
+    display: flex; flex-direction: column; gap: 8px;
+    max-width: 650px; margin-left: auto; margin-right: auto;
+}
+.rf-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; background: #f9f9f9; border-radius: 8px;
+    font-size: 0.95em; border: 1.5px solid #ddd;
+}
+.rf-item:hover { background: #f3e5f5; }
+.rf-text { flex: 1; }
+.rf-btns { display: flex; gap: 6px; }
+.rf-btn {
+    padding: 4px 14px; border-radius: 14px; border: 1.5px solid #9b59b6;
+    background: #fff; color: #6c3483; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; }
+.rf-result.ok { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-title { font-size: 1.0em; color: #555; margin-bottom: 12px; font-weight: 600; max-width: 650px; margin-left: auto; margin-right: auto; }
+/* Control-Bar */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+/* Hilfe-Box */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+/* Lückentext */
+.luecken-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    line-height: 1.9;
+    font-size: 0.95em;
+}
+input.blank {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    padding: 3px 6px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+    min-width: 4ch;
+}
+input.blank:focus { border-bottom-color: #667eea; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+/* Chips */
+.chip {
+    padding: 6px 14px; border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: grab; font-size: 0.85rem;
+    font-weight: 600; user-select: none;
+    transition: transform .15s, opacity .15s;
+    white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.chip.punct-chip { padding: 8px 8px; min-width: 24px; font-weight: 700; font-size: 1.1em; }
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px; background: #f8f9fa;
+    border-radius: 10px; margin-bottom: 14px; min-height: 54px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px;
+    padding: 8px 10px; border-radius: 8px;
+    border: 2px dashed #c5cae9; background: #fafbff;
+}
+.sentence-builder.correct { border-color: #27ae60; background: #e8f8f0; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.satzbau-item { margin-bottom: 20px; }
+.satzbau-feedback { font-size: 0.85em; font-weight: 600; min-height: 20px; margin-top: 6px; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.sb-punkt { font-weight: 700; font-size: 1.1em; margin-left: 2px; color: #333; align-self: center; }
+/* Wortschatz */
+#wortschatzContainer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* Footer */
+.author-footer { text-align: center; margin-top: 40px; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+/* Responsive */
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .header h1 { font-size: 1.2rem; }
+    .sec-inner { padding: 16px; }
+    .tab-banner { max-height: 120px; }
+    #wortschatzContainer { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <h1>Mehr Folgen, bitte!</h1>
-    <p>B1.2 · Lektion 2043R · Lesetext</p>
-  </div>
 
-  <div class="nav">
-    <div class="nav-row">
-      <button class="active" onclick="showTab(0)">📚 Vorentlastung</button>
-      <button onclick="showTab(1)">📖 Lesetext</button>
-      <button onclick="showTab(2)">❓ Text &amp; Fragen</button>
-      <button onclick="showTab(3)">✏️ Lückentext</button>
-      <button onclick="showTab(4)">🧩 Satzbau</button>
-      <button onclick="showTab(5)">📋 Wortschatz</button>
-    </div>
-  </div>
-
-  <!-- TAB 0: VORENTLASTUNG -->
-  <div class="tab active" id="tab-0">
-    <img src="https://images.pexels.com/photos/1662770/pexels-photo-1662770.jpeg?auto=compress&w=800" class="tab-banner" alt="TV-Serien">
-    <div class="section-title">Vorentlastung: Schlüsselwörter</div>
-    <p style="margin-bottom:14px; color:#555; font-size:0.9rem;">„Filme sind ein Teil unseres Lebens. In ihnen kann man sich wiederfinden und verlaufen. Eine irreale Welt, die unsere Realität verschönert. Doch werden diese von Serien ersetzt?"</p>
-    <div class="vocab-grid">
-      <div class="vocab-card"><div class="de">die Unterhaltungsmöglichkeit, -en</div><div class="en">form of entertainment</div><div class="beispiel">TV ist eine beliebte Unterhaltungsmöglichkeit.</div></div>
-      <div class="vocab-card"><div class="de">fesseln</div><div class="en">to captivate, to fascinate</div><div class="beispiel">Die Serie hat mich total gefesselt.</div></div>
-      <div class="vocab-card"><div class="de">die Filmindustrie</div><div class="en">film industry</div><div class="beispiel">Die Filmindustrie hat sich verändert.</div></div>
-      <div class="vocab-card"><div class="de">die Qualitätsserie, -n</div><div class="en">high-quality series</div><div class="beispiel">Breaking Bad ist eine Qualitätsserie.</div></div>
-      <div class="vocab-card"><div class="de">die Serialität</div><div class="en">seriality (addictive serial nature)</div><div class="beispiel">Die Serialität macht Serien so populär.</div></div>
-      <div class="vocab-card"><div class="de">der Fortsetzungseffekt</div><div class="en">cliffhanger effect</div><div class="beispiel">Der Fortsetzungseffekt macht süchtig.</div></div>
-      <div class="vocab-card"><div class="de">süchtig (machen)</div><div class="en">addictive / to make addicted</div><div class="beispiel">Diese Serie macht wirklich süchtig!</div></div>
-      <div class="vocab-card"><div class="de">die Staffel, -n</div><div class="en">season</div><div class="beispiel">Die zweite Staffel ist besser als die erste.</div></div>
-      <div class="vocab-card"><div class="de">die Folge, -n</div><div class="en">episode</div><div class="beispiel">Ich habe drei Folgen hintereinander geguckt.</div></div>
-      <div class="vocab-card"><div class="de">einschalten</div><div class="en">to tune in, to switch on</div><div class="beispiel">Die Zuschauer schalten immer wieder ein.</div></div>
-      <div class="vocab-card"><div class="de">die Wirkung, -en</div><div class="en">effect, impact</div><div class="beispiel">Serien haben eine beruhigende Wirkung.</div></div>
-      <div class="vocab-card"><div class="de">die Liebesgeschichte, -n</div><div class="en">love story</div><div class="beispiel">Rentner mögen Serien mit Liebesgeschichten.</div></div>
-    </div>
-  </div>
-
-  <!-- TAB 1: LESETEXT -->
-  <div class="tab" id="tab-1">
-    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&w=800" class="tab-banner" alt="Fernsehen">
-    <div class="section-title">Mehr Folgen, bitte!</div>
-    <div class="story-container" id="storyText">
-      <h3>Teil 1 – Unterhaltung am Bildschirm</h3>
-      <p>Man braucht nicht mehr aus dem Haus rauszugehen. Man kann sich gemütlich in den Sessel setzen und stundenlang TV gucken. Eine der verbreitesten <span class="vocab-hl" title="form of entertainment">Unterhaltungsmöglichkeiten</span>, die die Menschheit wie nie zuvor vor dem Bildschirm <span class="vocab-hl" title="to captivate">gefesselt</span> hat. Doch was guckt man so neugierig und wie ist man dazu gekommen? Sind das die TV-Shows oder Filme? Natürlich Filme, die sich seit ihrer Entstehung mehrere Formen geschaffen haben.</p>
-
-      <h3>Teil 2 – Filmarten und der Aufstieg der Serien</h3>
-      <p>Die bekanntesten Filmarten sind die sogenannten <span class="vocab-hl" title="independent films">unabhängigen Filme</span>, auf Englisch Independent Filme oder Indie-Filme, und die sogenannten <span class="vocab-hl" title="commercial films">kommerziellen Filme</span>. Independent Filme sind Filme, die außerhalb der Strukturen und Hauptstudios umgesetzt werden. Sie haben ein kleines <span class="vocab-hl" title="budget">Budget</span> und ihre Finanzierung erfolgt meist durch den Vorverkauf im Ausland. Kommerzielle Filme sind an Unterhaltung und Verkauf orientiert.</p>
-      <p>Filme rücken aber immer weiter auf den zweiten Platz. <span class="vocab-hl" title="series">Serien</span> gewinnen immer mehr an Popularität. Das Wort Serie kommt von dem lateinischen Wort <em>Series</em> und bedeutet die Reihe, die Kette.</p>
-
-      <h3>Teil 3 – Das Goldene Zeitalter der Serien</h3>
-      <p>Die 1990er Jahre werden in der <span class="vocab-hl" title="film industry">Filmindustrie</span> als die Goldene Zeit bezeichnet, weil man in der Zeit immer mehr <span class="vocab-hl" title="high-quality series">Qualitätsserien dreht</span>. Man freut sich besonders auf die Serien aus den USA, die die Serien mit hoher Qualität produzieren. Die technologischen Fortschritte haben es möglich gemacht, wunderbare <span class="vocab-hl" title="special effects">Effekte</span> zu benutzen und somit die Geschichte real erscheinen zu lassen. Ob die modernen Probleme oder die Elemente aus der Geschichte – man verwandelt die Erzählung, sodass sie für die Menschen interessant ist.</p>
-
-      <h3>Teil 4 – Warum sind Serien so populär?</h3>
-      <p>Die Soziologen <span class="vocab-hl" title="to research">erforschen</span> seit langem dieses Phänomen. Wieso sind sie so populär? Man spricht oft über die <span class="vocab-hl" title="seriality">Serialität</span>. Je nach Alter, hat man die Möglichkeit in eine andere Realität reinzuschlüpfen und das reale Leben zu vergessen. Ob Kinder oder Rentner, ob Mädchen oder Jungen, man kann Serien für jeden Geschmack finden. Die Form des Erzählens und die Geschichten sind dem Zuschauer so nah, dass die Serie sie nicht mehr loslässt.</p>
-
-      <h3>Teil 5 – Der Fortsetzungseffekt</h3>
-      <p>Man lebt mit dem Leben Anderer. Manche Serien laufen monate- oder sogar jahrelang und die <span class="vocab-hl" title="viewers">Zuschauer</span> warten ungeduldig auf die nächste <span class="vocab-hl" title="episode">Folge</span>. So macht der <span class="vocab-hl" title="cliffhanger effect">Fortsetzungseffekt</span> einen <span class="vocab-hl" title="addicted">süchtig</span>, denn für den Erfolg einer Serie ist es wichtig, dass Zuschauer immer wieder <span class="vocab-hl" title="tune in">einschalten</span>. Es gibt sogar Extremfälle, wo manche erst dann wieder aus dem Haus gehen, wenn sie eine ganze <span class="vocab-hl" title="season">Staffel</span> gesehen haben.</p>
-
-      <h3>Teil 6 – Die beruhigende Wirkung</h3>
-      <p>Je mehr Qualität die Serie hat, desto süchtiger wird man. Je mehr unerwartete, überraschende oder enttäuschende Fortsetzungen die Geschichte hat, desto süchtiger wird man. Die Serien haben eine beruhigende <span class="vocab-hl" title="effect">Wirkung</span>. Guckt man seine <span class="vocab-hl" title="favourite series">Lieblingsserie</span>, bekommt man positive Emotionen. Die Wissenschaftler haben herausgefunden, dass der Zuschauer aggressiv wird, wenn man seine Lieblingsserie ausschaltet oder blockiert. Der Körper reagiert negativ.</p>
-
-      <h3>Teil 7 – Serien für Rentner</h3>
-      <p>Wie ist es bei Rentnern oder Kindern? Rentner gucken meistens Serien, in denen <span class="vocab-hl" title="love stories">Liebesgeschichten</span> und <span class="vocab-hl" title="family problems">Familienprobleme</span> behandelt werden. Dadurch können sie ihr eigenes Leben beurteilen, oder auch die Entscheidungen der Helden kritisieren. Mit dieser Form verarbeiten sie ihre Lebenserfahrung.</p>
-
-      <h3>Teil 8 – Serien für Kinder</h3>
-      <p>Während für Jugendliche, Erwachsene und Rentner Serien eine Unterhaltungsmöglichkeit darstellen, sind sie für Kinder ein Teil ihrer realen Welt. Ihre Psyche ist noch im Entwicklungsprozess und schnell von der Geschichte oder den <span class="vocab-hl" title="main characters">Hauptfiguren</span> der Serie beeinflusst. Sie <span class="vocab-hl" title="adopt">übernehmen</span> die Eigenschaften der Helden und <span class="vocab-hl" title="integrate">binden</span> sie in ihr Leben ein. Kinder haben gleiche Interessen und gleiche <span class="vocab-hl" title="habits">Gewohnheiten</span>, die natürlich nicht immer positiv sind. Nicht selten kommt es sogar zu <span class="vocab-hl" title="fatal">fatalen</span> Ergebnissen.</p>
-
-      <h3>Teil 9 – Das Vergnügen trotz Nebeneffekten</h3>
-      <p>Diese <span class="vocab-hl" title="side effects">Nebeneffekte</span> kennt jeder Zuschauer, doch welches <span class="vocab-hl" title="pleasure">Vergnügen</span> bekommt man dabei? Darauf gibt es eine ganz einfache Antwort: Man möchte der Geschichte folgen und mit den Helden leben, denn in der Wirklichkeit hat man selten mit Menschen, die solche Eigenschaften haben, zu tun. Sie werden von <span class="vocab-hl" title="episode">Folge</span> zu Folge, von Staffel zu Staffel immer interessanter oder mächtiger. So füllt man eine Lücke, die im realen Leben sonst leer bleiben würde. Ein weiterer guter Nebeneffekt ist, dass das Gucken von Serien eine fast kostenlose Möglichkeit ist, Zeit zu verbringen.</p>
-    </div>
-  </div>
-
-  <!-- TAB 2: TEXT & FRAGEN -->
-  <div class="tab" id="tab-2">
-    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=800" class="tab-banner" alt="Textfragen">
-    <div class="section-title">Text &amp; Fragen: Richtig oder falsch?</div>
-    <div class="rf-intro">Lies die Aussagen und entscheide: Richtig oder falsch? Die Antworten findest du im Lesetext.</div>
-    <ul class="rf-list" id="rfList"></ul>
-    <div class="result-msg" id="rfResult"></div>
-  </div>
-
-  <!-- TAB 3: LÜCKENTEXT -->
-  <div class="tab" id="tab-3">
-    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=800" class="tab-banner" alt="Lückentext">
-    <div class="section-title">Lückentext: Mehr Folgen, bitte!</div>
-    <div class="timer-bar">
-      <span>⏱</span>
-      <span class="timer-display" id="timerDisplay3">00:00</span>
-      <button class="timer-btn" onclick="startTimer('best2043R_L','timerDisplay3')">Start</button>
-      <button class="timer-btn" onclick="stopTimer('best2043R_L')">Stop</button>
-      <button class="timer-btn" onclick="resetTimer('best2043R_L','timerDisplay3')">Reset</button>
-    </div>
-    <div class="luecken-intro">Ergänze die Lücken mit den passenden Wörtern aus dem Lesetext.</div>
-    <ul class="luecken-list" id="lueckenList"></ul>
-    <button class="check-btn" onclick="checkLuecken()">Auswerten</button>
-    <div class="result-msg" id="lueckenResult"></div>
-  </div>
-
-  <!-- TAB 4: SATZBAU -->
-  <div class="tab" id="tab-4">
-    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=800" class="tab-banner" alt="Satzbau">
-    <div class="section-title">Satzbau: Sätze über TV-Serien</div>
-    <div class="timer-bar">
-      <span>⏱</span>
-      <span class="timer-display" id="timerDisplay4">00:00</span>
-      <button class="timer-btn" onclick="startTimer('best2043R_S','timerDisplay4')">Start</button>
-      <button class="timer-btn" onclick="stopTimer('best2043R_S')">Stop</button>
-      <button class="timer-btn" onclick="resetTimer('best2043R_S','timerDisplay4')">Reset</button>
-    </div>
-    <div id="sbContainer"></div>
-  </div>
-
-  <!-- TAB 5: VOKABELN -->
-  <div class="tab" id="tab-5">
-    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=800" class="tab-banner" alt="Vokabeln">
-    <div class="section-title">Wortschatz: Mehr Folgen, bitte!</div>
-    <div id="vocabContainer"></div>
-    <div style="margin-top:16px;display:flex;gap:10px;">
-      <button onclick="showVocabLoesung()">💡 Lösung</button>
-      <button onclick="resetVocab()">↺ Neustart</button>
-    </div>
-  </div>
-
-  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · B1.2 · 2043R · Mehr Folgen, bitte!</div>
+<div class="header">
+    <h1>Mehr Folgen bitte</h1>
+    <p>B1.1 &#8211; Lektion 2043R &#183; Lesen</p>
+    <div class="big-emoji">&#128293;</div>
 </div>
 
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">&#128214;</span>
+        <span class="nav-label">Vorentlastung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">&#128196;</span>
+        <span class="nav-label">Lesetext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">&#10067;</span>
+        <span class="nav-label">Text &amp; Fragen</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">&#9999;&#65039;</span>
+        <span class="nav-label">L&#252;ckentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">&#129513;</span>
+        <span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(5)">
+        <span class="nav-emoji">&#128218;</span>
+        <span class="nav-label">Wortschatz</span>
+    </div>
+</div>
+
+<!-- ===== TAB 0: VORENTLASTUNG ===== -->
+<div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3180681/pexels-photo-3180681.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Streaming und Fernsehen">
+    <div class="sec-inner">
+        <div class="section-title">&#128214; Vorentlastung</div>
+        <div class="section-sub">Lerne diese W&#246;rter, bevor du den Text liest.</div>
+        <div class="vocab-grid" id="vocabGrid"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 1: LESETEXT ===== -->
+<div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1537671/pexels-photo-1537671.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mann sitzt auf dem Sofa und schaut Fernsehen">
+    <div class="sec-inner">
+        <div class="section-title">&#128196; Nur eine Folge</div>
+        <div class="story-text" id="storyText">
+
+            <p>Karim sa&#223; auf seinem Sofa und &#246;ffnete die Streaming-Plattform. Eigentlich hatte er nur f&#252;nf Minuten Zeit. Dann kam das Meeting. Aber die erste Folge von &#8222;Wir sind Erinnerung&#8223; dauerte genau 47 Minuten, und Karim hatte eine Schwachstelle f&#252;r Krimis. Er dr&#252;ckte auf Play. Das war ein Fehler.</p>
+
+            <p>Die Handlung war sofort interessant. Karim sa&#223; spannungsgeladen da, sein Latte-Macchiato wurde kalt. Ein Detektiv untersucht den Tod einer jungen Frau. Nichts ist so, wie es zun&#228;chst aussieht. Im B&#252;ro w&#252;rde man ihn brauchen, aber Karim konnte nicht aufh&#246;ren zu schauen. Die Hauptfigur war fest entschlossen, die Wahrheit herauszufinden, und Karim war mit ihr. Am Ende der Folge passierte etwas Unerwartetes: Ein Cliffhanger. Die n&#228;chste Antwort lag hinter dieser Titelseite, der Titel der n&#228;chsten Folge leuchtete verlockend auf.</p>
+
+            <figure style="margin:18px 0;text-align:center;">
+                <img src="https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Person schaut Fernsehen bei Nacht" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+                <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Karims Abend beginnt: &#8222;Nur noch eine Folge&#8223;</figcaption>
+            </figure>
+
+            <p>Karim rief im B&#252;ro an. &#8222;Mir geht es nicht gut&#8223;, log er. Die Kollegin Alex verstand es sofort. Aber Karim w&#228;re nicht Karim, wenn er nicht parallel zur Serie auch noch seine Arbeitsmails &#252;berpr&#252;fen w&#252;rde. Die Untertitel in der Serie halfen: Er folgte jeder Szene, obwohl er nur zur H&#228;lfte zuh&#246;rte. Die Staffel hatte zehn Folgen, und Karim war bereits s&#252;chtig. Es war Mittwoch. Am Wochenende w&#252;rde er Zeit haben.</p>
+
+            <p>Aber Donnerstag kam schnell. Im B&#252;ro redete die ganze E.ON-Abteilung &#252;ber die Serie. &#8222;Hast du schon &#8222;Wir sind Erinnerung&#8223; geschaut?&#8223;, fragte Elena aus dem Marketing. Karim musste zugeben, dass er zwei Folgen heruntergespult hatte. Der Gesprächsstoff war ungeheuer wichtig geworden. Karim merkte, dass die Serie nicht nur wegen der Handlung fesselnd war. Sie war auch der Stoff, von dem Arbeitsgespräche gemacht wurden. Zehn Minuten Pause? &#8222;Hast du dieses Ending gesehen?&#8223; Mittagessen mit Stefan? &#8222;Wie kannst du dir so einen Plot vorstellen?&#8223;</p>
+
+            <figure style="margin:18px 0;text-align:center;">
+                <img src="https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Gruppe von Menschen reden zusammen" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+                <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Die Serie wird zum Thema im B&#252;ro</figcaption>
+            </figure>
+
+            <p>Am Freitag schlie&#223;lich hatte Karim die restlichen acht Folgen gesehen. Er war fertig, er war gl&#252;cklich, und er war irgendwie traurig. Die Serie war vorbei, aber die Geschichte lebte in ihm. Er verstand jetzt, warum Binge-Watching solch ein Ph&#228;nomen war. Die Serie synchronisierte seine Gedanken mit denen seiner Kolleginnen und Kollegen. Sie schuf eine Gemeinschaft aus Menschen, die dieselbe Geschichte teilten, dieselbe Fragen hatten, dieselbe Spannung f&#252;hlten. Karim war nicht mehr allein mit den Mysterien, den Enden, den Gef&#252;hlen.</p>
+
+            <p>Montag wartet, und Karim bereitet sich auf eine Empfehlung vor. Die n&#228;chste Serie wird &#8222;Only Murders in the Building&#8223; sein. Sein Gewissen wei&#223; es. Sein Kalender wei&#223; es. Aber sein Sofa wird es best&#228;tigen.</p>
+
+        </div>
+        <div class="story-source">Quelle: B1.1 &#8211; Lektion 2043R &#8211; Mehr Folgen bitte</div>
+    </div>
+</div>
+
+<!-- ===== TAB 2: TEXT & FRAGEN ===== -->
+<div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6975954/pexels-photo-6975954.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Fragen und Antworten">
+    <div class="sec-inner">
+        <h2>&#10067; Text &amp; Fragen</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesung(2)">L&#246;sungen</button>
+                <button class="btn btn-reset" onclick="resetTab(2); resetTimer(2);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9200; <span id="timer-2">00:00</span></span>
+                <span class="best-time">&#127470; <span id="best-2">--:--</span></span>
+            </div>
+        </div>
+        <div class="rf-title">Sind diese Aussagen richtig oder falsch?</div>
+        <div class="rf-list" id="rfList"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 3: LÜCKENTEXT ===== -->
+<div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3790668/pexels-photo-3790668.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schreiben und Ausfüllen">
+    <div class="sec-inner">
+        <h2>&#9999;&#65039; L&#252;ckentext</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLoesung(3)">L&#246;sungen</button>
+                <button class="btn btn-reset" onclick="resetTab(3); resetTimer(3);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9200; <span id="timer-3">00:00</span></span>
+                <span class="best-time">&#127470; <span id="best-3">--:--</span></span>
+            </div>
+        </div>
+        <div id="lueckenContainer"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 4: SATZBAU ===== -->
+<div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Worte und Sätze">
+    <div class="sec-inner">
+        <h2>&#129513; Satzbau</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showSatzbauLoesung()">L&#246;sungen</button>
+                <button class="btn btn-reset" onclick="resetSatzbau(); resetTimer(4);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9200; <span id="timer-4">00:00</span></span>
+                <span class="best-time">&#127470; <span id="best-4">--:--</span></span>
+            </div>
+        </div>
+        <div id="satzbauContainer"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 5: WORTSCHATZ ===== -->
+<div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=800" alt="W&#246;rter und Sprache">
+    <div class="sec-inner">
+        <h2>&#128218; Wortschatz</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showWortschatzLoesung()">L&#246;sungen</button>
+                <button class="btn btn-reset" onclick="resetWortschatz(); resetTimer(5);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9200; <span id="timer-5">00:00</span></span>
+                <span class="best-time">&#127470; <span id="best-5">--:--</span></span>
+            </div>
+        </div>
+        <div id="wortschatzContainer"></div>
+    </div>
+</div>
+
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+</div><!-- /container -->
+
 <script>
-// ── TAB NAVIGATION ───────────────────────────────────────────
-function showTab(n) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
-  document.querySelectorAll('.nav button').forEach((b,i) => b.classList.toggle('active', i===n));
+// ===== TIMER & STATE =====
+var timers = {};
+var best_times = [0,0,0,0,0,0];
+var section_started = [false,false,false,false,false,false];
+
+function timerAutoStart(idx) {
+    if (timers[idx]) return;
+    section_started[idx] = true;
+    var start_ms = Date.now();
+    timers[idx] = setInterval(function() {
+        var elapsed_ms = Date.now() - start_ms;
+        var secs = Math.floor(elapsed_ms / 1000);
+        var mm = Math.floor(secs / 60);
+        var ss = secs % 60;
+        var display = (mm < 10 ? '0' : '') + mm + ':' + (ss < 10 ? '0' : '') + ss;
+        document.getElementById('timer-' + idx).textContent = display;
+    }, 100);
 }
 
-// ── TIMER ────────────────────────────────────────────────────
-const timers = {};
-function startTimer(key, displayId) {
-  if (timers[key] && timers[key].running) return;
-  const start = Date.now() - (timers[key] ? timers[key].elapsed : 0);
-  timers[key] = { running: true, elapsed: 0,
-    interval: setInterval(() => {
-      const e = Date.now() - start;
-      timers[key].elapsed = e;
-      const m = String(Math.floor(e/60000)).padStart(2,'0');
-      const s = String(Math.floor((e%60000)/1000)).padStart(2,'0');
-      document.getElementById(displayId).textContent = m+':'+s;
-    }, 500)
-  };
-}
-function stopTimer(key) {
-  if (timers[key]) { clearInterval(timers[key].interval); timers[key].running = false; }
-}
-function resetTimer(key, displayId) {
-  stopTimer(key); timers[key] = null;
-  document.getElementById(displayId).textContent = '00:00';
+function stopTimer(idx) {
+    if (timers[idx]) {
+        clearInterval(timers[idx]);
+        var final_text = document.getElementById('timer-' + idx).textContent;
+        var parts = final_text.split(':');
+        var mm = parseInt(parts[0]);
+        var ss = parseInt(parts[1]);
+        var total_secs = mm * 60 + ss;
+        if (best_times[idx] === 0 || total_secs < best_times[idx]) {
+            best_times[idx] = total_secs;
+            var best_mm = Math.floor(best_times[idx] / 60);
+            var best_ss = best_times[idx] % 60;
+            var best_display = (best_mm < 10 ? '0' : '') + best_mm + ':' + (best_ss < 10 ? '0' : '') + best_ss;
+            document.getElementById('best-' + idx).textContent = best_display;
+        }
+        delete timers[idx];
+    }
 }
 
-// ── RF-FRAGEN ────────────────────────────────────────────────
-const RF_DATA = [
-  { text: 'Unter Serialität versteht man, dass man in der realen Welt lebt.', answer: false },
-  { text: 'Es gibt Serien für jede Altersgruppe.', answer: true },
-  { text: 'Das Ziel der Serienindustrie ist es, Fortsetzungseffekte zu schaffen.', answer: true },
-  { text: 'Man wird von den Serien nicht abhängig.', answer: false },
-  { text: 'Wenn sich die Fortsetzung der Folgen vorher erraten lässt, macht das süchtiger.', answer: false },
-];
-
-function buildRF() {
-  const ul = document.getElementById('rfList');
-  RF_DATA.forEach((item, i) => {
-    const li = document.createElement('li');
-    li.className = 'rf-item';
-    li.innerHTML = `
-      <span class="rf-text">${item.text}</span>
-      <div class="rf-buttons">
-        <button class="rf-btn" id="rfR${i}" onclick="checkRF(${i}, true)">Richtig</button>
-        <button class="rf-btn" id="rfF${i}" onclick="checkRF(${i}, false)">Falsch</button>
-      </div>
-      <div class="rf-feedback" id="rffb${i}"></div>`;
-    ul.appendChild(li);
-  });
+function resetTimer(idx) {
+    if (timers[idx]) clearInterval(timers[idx]);
+    delete timers[idx];
+    document.getElementById('timer-' + idx).textContent = '00:00';
+    section_started[idx] = false;
 }
 
-function checkRF(i, val) {
-  const correct = RF_DATA[i].answer;
-  const btnR = document.getElementById('rfR'+i);
-  const btnF = document.getElementById('rfF'+i);
-  const fb = document.getElementById('rffb'+i);
-  btnR.classList.add('disabled'); btnF.classList.add('disabled');
-  const ok = val === correct;
-  if (val === true) btnR.classList.add(ok ? 'correct' : 'wrong');
-  else btnF.classList.add(ok ? 'correct' : 'wrong');
-  fb.textContent = ok ? '✅ Richtig!' : `❌ Falsch – die Antwort ist: ${correct ? 'Richtig' : 'Falsch'}`;
-  fb.className = 'rf-feedback show ' + (ok ? 'ok' : 'nok');
-}
-
-// ── LÜCKENTEXT DATA ──────────────────────────────────────────
-const LUECKEN_DATA = [
-  { pre: 'Serien fesseln die Zuschauer als ', gap: 'Unterhaltungsmöglichkeit', suf: '.' },
-  { pre: 'Die 1990er Jahre gelten als das Goldene Zeitalter der ', gap: 'Filmindustrie', suf: '.' },
-  { pre: 'Die Serien aus den USA produzieren Serien mit hoher ', gap: 'Qualität', suf: '.' },
-  { pre: 'Die Wissenschaft nennt das Phänomen der Seriensucht ', gap: 'Serialität', suf: '.' },
-  { pre: 'Der ', gap: 'Fortsetzungseffekt', suf: ' macht Zuschauer süchtig.' },
-  { pre: 'Zuschauer warten ungeduldig auf die nächste ', gap: 'Folge', suf: '.' },
-  { pre: 'Rentner bevorzugen Serien mit ', gap: 'Liebesgeschichten', suf: ' und Familienproblemen.' },
-  { pre: 'Kinder übernehmen die Eigenschaften der ', gap: 'Hauptfiguren', suf: ' der Serien.' },
-  { pre: 'Serien haben eine beruhigende ', gap: 'Wirkung', suf: ' auf den Zuschauer.' },
-  { pre: 'Das Gucken von Serien ist eine fast kostenlose Möglichkeit, Zeit zu ', gap: 'verbringen', suf: '.' },
-];
-
-function buildLuecken() {
-  const ul = document.getElementById('lueckenList');
-  LUECKEN_DATA.forEach((item, i) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<span>${item.pre}</span><input class="gap-input" id="gap${i}" autocomplete="off" spellcheck="false" oninput="liveCheck(${i})"><span>${item.suf}</span>`;
-    ul.appendChild(li);
-  });
-}
-
-function liveCheck(i) {
-  const inp = document.getElementById('gap'+i);
-  const val = inp.value.trim();
-  if (!val) { inp.className = 'gap-input'; return; }
-  const ans = LUECKEN_DATA[i].gap;
-  const ok = val.toLowerCase() === ans.toLowerCase();
-  inp.className = 'gap-input ' + (ok ? 'correct' : '');
-  autoStopIfDone();
-}
-
-function autoStopIfDone() {
-  const all = LUECKEN_DATA.every((_,i) => {
-    const v = (document.getElementById('gap'+i)||{}).value||'';
-    return v.trim().toLowerCase() === LUECKEN_DATA[i].gap.toLowerCase();
-  });
-  if (all) stopTimer('best2043R_L');
-}
-
-function checkLuecken() {
-  let correct = 0;
-  LUECKEN_DATA.forEach((item, i) => {
-    const inp = document.getElementById('gap'+i);
-    const ok = inp.value.trim().toLowerCase() === item.gap.toLowerCase();
-    inp.className = 'gap-input ' + (ok ? 'correct' : 'wrong');
-    if (ok) correct++;
-  });
-  const res = document.getElementById('lueckenResult');
-  res.textContent = correct === LUECKEN_DATA.length
-    ? `✅ Perfekt! Alle ${LUECKEN_DATA.length} Lücken richtig!`
-    : `${correct} von ${LUECKEN_DATA.length} richtig. Überprüfe die roten Lücken.`;
-  res.className = 'result-msg show ' + (correct === LUECKEN_DATA.length ? 'ok' : 'nok');
-  if (correct === LUECKEN_DATA.length) stopTimer('best2043R_L');
-}
-
-// ══════════════════════════════════════════════
-// SATZBAU
-// ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['Die', 'Serien', 'fesseln', 'die', 'Zuschauer', 'vor', 'dem', 'Bildschirm', '.'] },
-  { words: ['Der', 'Fortsetzungseffekt', 'macht', 'die', 'Zuschauer', 'süchtig', '.'] },
-  { words: ['Serien', 'haben', 'eine', 'beruhigende', 'Wirkung', 'auf', 'den', 'Körper', '.'] },
-  { words: ['Kinder', 'übernehmen', 'die', 'Eigenschaften', 'der', 'Hauptfiguren', '.'] },
-  { words: ['Je', 'mehr', 'Qualität', 'die', 'Serie', 'hat', ',', 'desto', 'süchtiger', 'wird', 'man', '.'] },
-  { words: ['Das', 'Gucken', 'von', 'Serien', 'ist', 'eine', 'kostenlose', 'Möglichkeit', ',', 'Zeit', 'zu', 'verbringen', '.'] }
-];
-
-let sbDragged = null;
-
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+// ===== SECTION NAVIGATION =====
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
     });
-  }
-  return span;
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+// ===== VORENTLASTUNG (Tab 0) =====
+var VORENTLASTUNG = [
+    { term: 'die Serie, -n', en: 'the TV series', def: 'Eine Geschichte in mehreren Teilen, die im Fernsehen oder online gezeigt wird.' },
+    { term: 'die Folge, -n', en: 'the episode', def: 'Ein einzelner Teil einer Serie.' },
+    { term: 'die Staffel, -n', en: 'the season', def: 'Eine Sammlung von Folgen einer Serie.' },
+    { term: 'die Handlung, -en', en: 'the plot', def: 'Die Geschichte eines Films oder einer Serie.' },
+    { term: 'der Cliffhanger, -', en: 'the cliffhanger', def: 'Ein spannender Moment am Ende einer Folge, der den Zuschauer neugierig macht.' },
+    { term: 'die Streaming-Plattform, -en', en: 'the streaming platform', def: 'Ein Dienst, auf dem man Videos anschauen kann.' },
+    { term: 'die Hauptfigur, -en', en: 'the main character', def: 'Die wichtigste Person in einer Geschichte.' },
+    { term: 'die Nebenfigur, -en', en: 'the supporting character', def: 'Eine weniger wichtige Person in einer Geschichte.' },
+    { term: 'der Zuschauer, -', en: 'the viewer', def: 'Eine Person, die einen Film oder eine Serie schaut.' },
+    { term: 'die Spannung, -', en: 'the suspense', def: 'Das Gef&#252;hl von Nervosit&#228;t und Aufregung beim Zuschauen.' },
+    { term: 's&#252;chtig (nach)', en: 'addicted (to)', def: 'Nicht in der Lage zu sein, mit etwas aufzuh&#246;ren.' },
+    { term: 'sich entspannen', en: 'to relax', def: 'Ruhig werden und Stress abbauen.' },
+    { term: 'die Empfehlung, -en', en: 'the recommendation', def: 'Der Rat, etwas zu schauen oder zu tun.' },
+    { term: 'der Gesprächsstoff, -', en: 'the conversation topic', def: 'Ein Thema, &#252;ber das Menschen sprechen.' },
+    { term: 'binge-watchen', en: 'to binge-watch', def: 'Viele Folgen einer Serie hintereinander schauen.' },
+    { term: 'die Untertitel, -', en: 'the subtitles', def: 'Text am unteren Rand des Bildschirms.' },
+    { term: 'synchronisieren', en: 'to dub', def: 'Dialoge in eine andere Sprache sprechen.' },
+    { term: 'fesseln', en: 'to captivate', def: 'Sehr interessant und spannend sein; die Aufmerksamkeit halten.' }
+];
+
+function initVorentlastung() {
+    var grid = document.getElementById('vocabGrid');
+    grid.innerHTML = '';
+    VORENTLASTUNG.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + item.term + '</div>' +
+                         '<div class="vocab-en">' + item.en + '</div>' +
+                         '<div class="vocab-def">' + item.def + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+// ===== TEXT & FRAGEN (Tab 2) =====
+var rfData = [
+    { text: 'Karim hatte viel Zeit und wollte die Serie schauen.', answer: false },
+    { text: 'Die Handlung der Serie war sofort interessant f&#252;r Karim.', answer: true },
+    { text: 'Karim ging ins B&#252;ro, obwohl er die erste Folge schaute.', answer: false },
+    { text: 'Die Kolleginnen und Kollegen sprachen auch &#252;ber die Serie.', answer: true },
+    { text: 'Die Serie hatte nur f&#252;nf Folgen.', answer: false },
+    { text: 'Karim sah alle zehn Folgen am Wochenende.', answer: false },
+    { text: 'Die Serie war wichtig f&#252;r den Gesprächsstoff im B&#252;ro.', answer: true },
+    { text: 'Karim war traurig, weil die Serie zu Ende war.', answer: true }
+];
+
+function initRF() {
+    var container = document.getElementById('rfList');
+    container.innerHTML = '';
+    rfData.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'rf-item';
+        var text_div = document.createElement('div');
+        text_div.className = 'rf-text';
+        text_div.textContent = item.text;
+        var btns_div = document.createElement('div');
+        btns_div.className = 'rf-btns';
+        var btn_r = document.createElement('button');
+        btn_r.className = 'rf-btn';
+        btn_r.textContent = 'Richtig';
+        btn_r.dataset.idx = idx;
+        btn_r.dataset.answer = 'true';
+        btn_r.onclick = function() { rfCheck(this); };
+        var btn_f = document.createElement('button');
+        btn_f.className = 'rf-btn';
+        btn_f.textContent = 'Falsch';
+        btn_f.dataset.idx = idx;
+        btn_f.dataset.answer = 'false';
+        btn_f.onclick = function() { rfCheck(this); };
+        btns_div.appendChild(btn_r);
+        btns_div.appendChild(btn_f);
+        var result_div = document.createElement('div');
+        result_div.className = 'rf-result';
+        result_div.id = 'rf-result-' + idx;
+        div.appendChild(text_div);
+        div.appendChild(btns_div);
+        div.appendChild(result_div);
+        container.appendChild(div);
+    });
+}
+
+function rfCheck(btn) {
+    var idx = parseInt(btn.dataset.idx);
+    var user_answer = btn.dataset.answer === 'true';
+    var correct_answer = rfData[idx].answer;
+    timerAutoStart(2);
+    var item = btn.parentNode.parentNode;
+    var buttons = item.querySelectorAll('.rf-btn');
+    buttons.forEach(function(b) { b.classList.remove('sel-r', 'sel-f'); });
+    btn.classList.add(user_answer ? 'sel-r' : 'sel-f');
+    var result_div = document.getElementById('rf-result-' + idx);
+    if (user_answer === correct_answer) {
+        result_div.className = 'rf-result ok';
+        result_div.textContent = '✓';
+    } else {
+        result_div.className = 'rf-result err';
+        result_div.textContent = '✗';
+    }
+    if (checkRFAllDone()) stopTimer(2);
+}
+
+function checkRFAllDone() {
+    return rfData.every(function(_, idx) {
+        return document.getElementById('rf-result-' + idx).textContent !== '';
+    });
+}
+
+function showLoesung(tab) {
+    if (tab === 2) {
+        rfData.forEach(function(item, idx) {
+            var result_div = document.getElementById('rf-result-' + idx);
+            var item_div = result_div.parentNode;
+            var buttons = item_div.querySelectorAll('.rf-btn');
+            buttons.forEach(function(b) {
+                b.classList.remove('sel-r', 'sel-f');
+                var ans = b.dataset.answer === 'true';
+                if (ans === item.answer) {
+                    b.classList.add(ans ? 'sel-r' : 'sel-f');
+                    result_div.className = 'rf-result ok';
+                    result_div.textContent = '✓';
+                }
+            });
+        });
+        stopTimer(2);
+    } else if (tab === 3) {
+        stopTimer(3);
+        document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp) {
+            inp.value = inp.dataset.answer;
+            inp.classList.remove('wrong');
+            inp.classList.add('correct');
+        });
+    }
+}
+
+function resetTab(tab) {
+    if (tab === 2) {
+        document.querySelectorAll('.rf-item').forEach(function(item) {
+            item.querySelectorAll('.rf-btn').forEach(function(b) { b.classList.remove('sel-r', 'sel-f'); });
+            item.querySelector('.rf-result').textContent = '';
+            item.querySelector('.rf-result').className = 'rf-result';
+        });
+    } else if (tab === 3) {
+        document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp) {
+            inp.value = '';
+            inp.classList.remove('correct', 'wrong');
+        });
+    }
+}
+
+// ===== LÜCKENTEXT (Tab 3) =====
+var lueckenData = [
+    { sentence: 'Karim öffnete die <input class="blank" data-answer="Streaming-Plattform" type="text"> und suchte eine neue Serie.' },
+    { sentence: 'Die <input class="blank" data-answer="Handlung" type="text"> war sofort interessant und spannend.' },
+    { sentence: 'Die <input class="blank" data-answer="Hauptfigur" type="text"> war fest entschlossen, das Mysterium zu lösen.' },
+    { sentence: 'Am Ende der Folge gab es einen <input class="blank" data-answer="Cliffhanger" type="text">.' },
+    { sentence: 'Karim war s&#252;chtig nach der <input class="blank" data-answer="Serie" type="text"> und konnte nicht aufhören.' },
+    { sentence: 'Die <input class="blank" data-answer="Staffel" type="text"> hatte zehn Folgen.' },
+    { sentence: 'Im B&#252;ro war die Serie der <input class="blank" data-answer="Gesprächsstoff" type="text">.' },
+    { sentence: 'Mit <input class="blank" data-answer="Untertitel" type="text"> konnte Karim jede Szene verstehen.' },
+    { sentence: 'Die Serie <input class="blank" data-answer="fesselte" type="text"> Karim so sehr, dass er arbeiten vergaß.' },
+    { sentence: 'Die Stimmen wurden <input class="blank" data-answer="synchronisiert" type="text"> – eine deutsche Stimme sprach die Dialoge.' },
+    { sentence: 'Karim bekam eine <input class="blank" data-answer="Empfehlung" type="text"> von Alex f&#252;r die n&#228;chste Serie.' },
+    { sentence: 'Nach dem Binge-Watching konnte sich Karim endlich <input class="blank" data-answer="entspannen" type="text">.' }
+];
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    lueckenData.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
+        var p = document.createElement('p');
+        p.innerHTML = item.sentence;
+        p.querySelectorAll('input').forEach(function(inp) {
+            inp.oninput = function() { lueckenCheck(this); timerAutoStart(3); checkLueckenAllDone(); };
+        });
+        div.appendChild(p);
+        container.appendChild(div);
+    });
+}
+
+function lueckenCheck(inp) {
+    var user = inp.value.trim();
+    var answer = inp.dataset.answer;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    if (user.toLowerCase() === answer.toLowerCase()) {
+        inp.classList.add('correct');
+    } else if (answer.toLowerCase().indexOf(user.toLowerCase()) === 0) {
+        // Prefix match — neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkLueckenAllDone() {
+    var inputs = document.querySelectorAll('#lueckenContainer input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('correct');
+    });
+    if (allOk) stopTimer(3);
+}
+
+// ===== SATZBAU (Tab 4) =====
+var satzbauData = [
+    { parts: ['Karim', 'öffnete', 'die', 'Streaming-Plattform', 'und', 'suchte', 'eine', 'neue', 'Serie'], valid: [['Karim', 'öffnete', 'die', 'Streaming-Plattform', 'und', 'suchte', 'eine', 'neue', 'Serie']], punct: '.' },
+    { parts: ['Die', 'Handlung', 'war', 'sofort', 'interessant'], valid: [['Die', 'Handlung', 'war', 'sofort', 'interessant']], punct: '.' },
+    { parts: ['mit', 'Untertitel', 'konnte', 'Karim', 'jede', 'Szene', 'verstehen'], valid: [['Mit', 'Untertitel', 'konnte', 'Karim', 'jede', 'Szene', 'verstehen']], punct: '.' },
+    { parts: ['alle', 'redeten', 'über', 'die', 'neue', 'Serie'], valid: [['Alle', 'redeten', 'über', 'die', 'neue', 'Serie']], punct: '.' },
+    { parts: ['die', 'Serie', 'fesselte', 'Karim', 'so', 'sehr'], valid: [['Die', 'Serie', 'fesselte', 'Karim', 'so', 'sehr']], punct: '.' },
+    { parts: ['er', 'schaute', 'alle', 'Folgen', 'am', 'Wochenende'], valid: [['Er', 'schaute', 'alle', 'Folgen', 'am', 'Wochenende']], punct: '.' },
+    { parts: ['süchtig', 'nach', 'Serien', 'war', 'Karim', 'jetzt'], valid: [['S&#252;chtig', 'nach', 'Serien', 'war', 'Karim', 'jetzt']], punct: '.' },
+    { parts: ['die', 'nächste', 'Empfehlung', 'kommt', 'bald'], valid: [['Die', 'n&#228;chste', 'Empfehlung', 'kommt', 'bald']], punct: '.' }
+];
+
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
 }
 
 function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var idx = parseInt(zone.id.split('-')[2]);
+        var row = document.getElementById('sb-row-' + idx);
+        if (row) sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
 }
 
-function sbCheckAuto(itemIdx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
-  }, 500);
-}
-
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
-  } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
-  }
-}
-
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
-  });
-}
-
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(4);
-}
-
-function buildSatzbau() {
-  const cont = document.getElementById('sbContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
-
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
     }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
-
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-      pool.appendChild(chip);
-    });
-    sbRegisterZone(pool);
-
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
-
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
-    });
-
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
-    });
-
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      }
-    });
-
-    const fb = document.createElement('div');
-    fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
-
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
+    return ok;
 }
 
-function resetSatzbau() { buildSatzbau(); resetTimer(4); }
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct');
+            row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect');
+            row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
 
-// ── WORTSCHATZ ──────────────────────────────────────────────
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) stopTimer(4);
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) {
+            bank.appendChild(sbMakeChip(word));
+        });
+        sbRegisterZone(bank);
+        sbRegisterZone(row);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function resetSatzbau() {
+    for (var i = 0; i < satzbauData.length; i++) sbResetOne(i);
+}
+
+function showSatzbauLoesung() {
+    satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
+    stopTimer(4);
+}
+
+// ===== WORTSCHATZ (Tab 5) =====
 var WORTSCHATZ = [
-  { type: "n", en: "form of entertainment", art: "die", wort: "Unterhaltungsmöglichkeit", plural: "Unterhaltungsmöglichkeiten" },
-  { type: "v", en: "to captivate, to fascinate", de: "fesseln" },
-  { type: "n", en: "independent / indie film", art: "der", wort: "Indie-Film", plural: "Indie-Filme" },
-  { type: "n", en: "commercial film", art: "der", wort: "kommerzielle Film", plural: "kommerzielle Filme" },
-  { type: "n", en: "budget", art: "das", wort: "Budget", plural: "Budgets" },
-  { type: "n", en: "film industry", art: "die", wort: "Filmindustrie", plural: "Filmindustrien" },
-  { type: "n", en: "high-quality series", art: "die", wort: "Qualitätsserie", plural: "Qualitätsserien" },
-  { type: "n", en: "seriality", art: "die", wort: "Serialität", plural: "Serialitäten" },
-  { type: "n", en: "cliffhanger effect", art: "der", wort: "Fortsetzungseffekt", plural: "Fortsetzungseffekte" },
-  { type: "v", en: "addictive / to make addicted", de: "süchtig (machen)" },
-  { type: "n", en: "episode", art: "die", wort: "Folge", plural: "Folgen" },
-  { type: "n", en: "season", art: "die", wort: "Staffel", plural: "Staffeln" },
-  { type: "v", en: "to tune in", de: "einschalten" },
-  { type: "n", en: "effect, impact", art: "die", wort: "Wirkung", plural: "Wirkungen" },
-  { type: "n", en: "favourite series", art: "die", wort: "Lieblingsserie", plural: "Lieblingsserien" },
-  { type: "n", en: "love story", art: "die", wort: "Liebesgeschichte", plural: "Liebesgeschichten" },
-  { type: "n", en: "main character", art: "die", wort: "Hauptfigur", plural: "Hauptfiguren" },
-  { type: "v", en: "to adopt, to take over", de: "übernehmen" },
-  { type: "n", en: "habit", art: "die", wort: "Gewohnheit", plural: "Gewohnheiten" },
-  { type: "n", en: "side effect", art: "der", wort: "Nebeneffekt", plural: "Nebeneffekte" },
-  { type: "n", en: "pleasure, enjoyment", art: "das", wort: "Vergnügen", plural: "Vergnügen" },
-  { type: "v", en: "to research, to investigate", de: "erforschen" },
+    { en: 'the series (pl.)', type: 'n', artikel: 'die', de: 'Serie', plural: '-n' },
+    { en: 'the episode (pl.)', type: 'n', artikel: 'die', de: 'Folge', plural: '-n' },
+    { en: 'the season (pl.)', type: 'n', artikel: 'die', de: 'Staffel', plural: '-n' },
+    { en: 'the plot (pl.)', type: 'n', artikel: 'die', de: 'Handlung', plural: '-en' },
+    { en: 'the cliffhanger', type: 'n', artikel: 'der', de: 'Cliffhanger', plural: '\u2013' },
+    { en: 'the streaming platform (pl.)', type: 'n', artikel: 'die', de: 'Streaming-Plattform', plural: '-en' },
+    { en: 'the main character (pl.)', type: 'n', artikel: 'die', de: 'Hauptfigur', plural: '-en' },
+    { en: 'the supporting character (pl.)', type: 'n', artikel: 'die', de: 'Nebenfigur', plural: '-en' },
+    { en: 'the viewer (pl.)', type: 'n', artikel: 'der', de: 'Zuschauer', plural: '\u2013' },
+    { en: 'the suspense (sg.)', type: 'n', artikel: 'die', de: 'Spannung', plural: '\u2013' },
+    { en: 'addicted', type: 'a', de: 'süchtig' },
+    { en: 'to relax', type: 'v', de: 'entspannen' }
 ];
 
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+function initWortschatz() {
+    var container = document.getElementById('wortschatzContainer');
+    container.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        row.style.marginBottom = '0';
+        var prompt = document.createElement('div');
+        prompt.style.cssText = 'font-weight:600; color:#667eea; margin-bottom:6px; font-size:1.05em;';
+        prompt.textContent = item.en;
+        row.appendChild(prompt);
+        var fields = document.createElement('div');
+        fields.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; align-items:center;';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'blank'; artInp.type = 'text';
+            artInp.placeholder = 'Artikel'; artInp.style.width = '70px';
+            artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+            artInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(artInp);
+            var wordInp = document.createElement('input');
+            wordInp.className = 'blank'; wordInp.type = 'text';
+            wordInp.placeholder = 'Wort'; wordInp.style.width = '160px';
+            wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
+            wordInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(wordInp);
+            var plInp = document.createElement('input');
+            plInp.className = 'blank'; plInp.type = 'text';
+            plInp.placeholder = 'Plural'; plInp.style.width = '140px';
+            plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+            if (item.plural === '\u2013') {
+                plInp.value = '\u2013';
+                plInp.disabled = true;
+                plInp.classList.add('correct');
+                plInp.style.opacity = '0.6';
+                plInp.title = 'Dieses Wort hat keinen Plural';
+            } else {
+                plInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            }
+            fields.appendChild(plInp);
+        } else {
+            var inp = document.createElement('input');
+            inp.className = 'blank'; inp.type = 'text';
+            inp.placeholder = 'Deutsch'; inp.style.width = '220px';
+            inp.dataset.answer = item.de; inp.dataset.field = 'word';
+            inp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields);
+        container.appendChild(row);
+    });
+}
+
+function wortschatzCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser   = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { /* Prefix — neutral */ }
+    else { inp.classList.add('wrong'); }
+}
+
+function checkWortschatzAllOk() {
+    var inputs = document.querySelectorAll('#sec-5 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.disabled || i.classList.contains('correct');
+    });
+    if (allOk) stopTimer(5);
+}
+
+function showWortschatzLoesung() {
+    stopTimer(5);
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
+}
+
+function resetWortschatz() {
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        if (!inp.disabled) {
+            inp.value = ''; inp.classList.remove('correct', 'wrong');
+        }
+    });
+    resetTimer(5);
+}
+
+// ===== HIGHLIGHT VOCAB IN TEXT =====
+function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text');
+    if (!storyText) return;
+    var words = VORENTLASTUNG.map(function(item) {
+        var term = item.term.replace(/^(der|die|das)\s+/i, '');
+        return term.split(',')[0].trim();
+    });
+    words = words.filter(function(w) { return w && w.length > 3; });
+    if (words.length === 0) return;
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'gi');
+                replaced = replaced.replace(regex, '\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHighlight = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHighlight = !isHighlight; return; }
+                    if (isHighlight) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHighlight = !isHighlight;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
     }
-    cont.appendChild(div);
-  });
+    walkAndHighlight(storyText);
 }
 
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    var okA = a === item.art.toLowerCase();
-    var okW = w === item.wort;
-    var okP = p === item.plural;
-    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  }
-}
-
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
-    }
-    vocabLiveCheck(idx);
-  });
-}
-
-function resetVocab() { initVocab(); }
-
-initVocab();
-
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', function() {
+    initVorentlastung();
+    initRF();
+    initLuecken();
+    initSatzbau();
+    initWortschatz();
+    highlightVocabInText();
+});
 </script>
 </body>
 </html>

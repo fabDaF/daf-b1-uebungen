@@ -3,733 +3,942 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2033R · Adoption</title>
+<title>B1.1 · 2033R · Adoption</title>
 <style>
-  :root { --accent: #667eea; --accent-light: #f3e5ff; --accent-mid: #9c27b0; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
-  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
-  h1.main-title { background: var(--accent); color: #fff; text-align: center; padding: 18px 20px 10px; font-size: 1.5rem; margin: 0; }
-  p.subtitle { background: var(--accent); color: #e8c8ff; text-align: center; padding: 0 20px 14px; font-size: 0.92rem; margin: 0; }
-
-  /* NAV */
-  .tab-nav { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 12px 0; background: #f8f0ff; border-bottom: 2px solid var(--accent); }
-  .tab-btn { flex: 1 1 auto; min-width: 110px; padding: 8px 6px; border: 2px solid var(--accent); border-bottom: none; border-radius: 6px 6px 0 0; background: #fff; color: var(--accent); font-size: 0.82rem; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s, color 0.2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-  .tab-btn:hover { background: var(--accent-light); }
-  .tab-btn.active { background: var(--accent); color: #fff; }
-  .tab-btn .tab-icon { font-size: 1.1rem; }
-  .tab-btn .tab-label { font-size: 0.75rem; }
-
-  /* CONTENT */
-  .tab-content { display: none; padding: 24px 28px 32px; }
-  .tab-content.active { display: block; }
-  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 16px; }
-
-  /* VORENTLASTUNG */
-  .vocab-intro { font-size: 1.05rem; color: #555; margin-bottom: 16px; text-align: center; }
-  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-  .vocab-card { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 8px; padding: 12px 14px; }
-  .vocab-card .word { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
-  .vocab-card .transl { font-size: 0.87rem; color: #555; margin-top: 3px; }
-  .vocab-card .example { font-size: 0.83rem; color: #777; margin-top: 4px; font-style: italic; }
-
-  /* WORTSCHATZ INTERACTIVE */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-inputs input.wrong { border-color: #ef4444; background: #fef2f2; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
-
-  /* LESETEXT */
-  .story-container { max-width: 640px; margin: 0 auto; }
-  .story-text { font-family: Georgia, 'Times New Roman', serif; font-size: 1.05rem; line-height: 1.85; text-align: justify; hyphens: auto; color: #222; }
-  .story-text p { margin-bottom: 1em; text-indent: 1.4em; }
-  .story-text p:first-of-type { text-indent: 0; }
-  .story-section-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 1.0rem; font-weight: 700; color: var(--accent); margin: 18px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .vocab-hl { background: #ffe066; border-radius: 3px; padding: 0 2px; cursor: help; position: relative; }
-  .vocab-hl .tooltip { display: none; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: #333; color: #fff; font-size: 0.78rem; padding: 4px 8px; border-radius: 5px; white-space: nowrap; z-index: 10; font-family: 'Segoe UI', Arial, sans-serif; font-style: normal; }
-  .vocab-hl:hover .tooltip { display: block; }
-
-  /* RICHTIG/FALSCH */
-  .rf-task-title { font-size: 1.05rem; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
-  .rf-list { display: flex; flex-direction: column; gap: 10px; }
-  .rf-item { display: flex; align-items: flex-start; gap: 10px; background: #fafafa; border: 1.5px solid #ddd; border-radius: 8px; padding: 12px 14px; }
-  .rf-text { flex: 1; font-size: 0.97rem; color: #333; line-height: 1.45; }
-  .rf-buttons { display: flex; gap: 8px; flex-shrink: 0; margin-top: 2px; }
-  .rf-btn { padding: 5px 14px; border: 2px solid #ccc; border-radius: 6px; background: #fff; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: background 0.15s, color 0.15s; }
-  .rf-btn.r { border-color: #27ae60; color: #27ae60; }
-  .rf-btn.f { border-color: #e74c3c; color: #e74c3c; }
-  .rf-btn.r.selected { background: #27ae60; color: #fff; }
-  .rf-btn.f.selected { background: #e74c3c; color: #fff; }
-  .rf-btn.correct { background: #27ae60 !important; color: #fff !important; border-color: #27ae60 !important; }
-  .rf-btn.wrong { background: #e74c3c !important; color: #fff !important; border-color: #e74c3c !important; }
-  .rf-correction { font-size: 0.85rem; color: #c0392b; margin-top: 6px; font-style: italic; display: none; }
-  .rf-correction.visible { display: block; }
-  .btn-check-rf { margin-top: 18px; background: var(--accent); color: #fff; border: none; padding: 10px 28px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
-  .btn-check-rf:hover { background: var(--accent-mid); }
-  .rf-score { margin-top: 12px; font-size: 1rem; font-weight: 700; color: var(--accent); }
-
-  /* LÜCKENTEXT */
-  .luecken-intro { font-size: 0.95rem; color: #555; margin-bottom: 16px; }
-  .luecken-text { font-size: 1.02rem; line-height: 2.1; color: #222; }
-  .luecken-text input { border: none; border-bottom: 2px solid var(--accent); background: transparent; font-size: 1.0rem; font-family: inherit; color: #222; width: 130px; outline: none; padding: 1px 3px; transition: border-color 0.2s; }
-  .luecken-text input:focus { border-bottom-color: #ff9800; }
-  .luecken-text input.correct { border-bottom-color: #27ae60; background: #eaffea; }
-  .luecken-text input.wrong { border-bottom-color: #e74c3c; background: #ffeaea; }
-  .btn-check { margin-top: 20px; background: var(--accent); color: #fff; border: none; padding: 10px 28px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
-  .btn-check:hover { background: var(--accent-mid); }
-  .luecken-score { margin-top: 12px; font-size: 1rem; font-weight: 700; color: var(--accent); }
-  .wordbank { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; padding: 12px; background: #f8f0ff; border-radius: 8px; border: 1.5px solid #d4a0f0; }
-  .wordbank-chip { background: #fff; border: 1.5px solid var(--accent-mid); border-radius: 14px; padding: 4px 12px; font-size: 0.88rem; color: var(--accent); font-weight: 600; }
-
-  /* TIMER */
-  .timer-controls { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-  .tc-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-  .tc-times { display: flex; gap: 8px; flex-wrap: wrap; }
-  .timer-display { font-size: 1.1rem; font-weight: 700; color: var(--accent); background: var(--accent-light); padding: 6px 16px; border-radius: 8px; display: inline-block; min-width: 80px; text-align: center; }
-  .btn-timer { padding: 7px 16px; border: 2px solid var(--accent); border-radius: 8px; background: #fff; color: var(--accent); font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: background 0.15s; }
-  .btn-timer:hover { background: var(--accent-light); }
-  .btn-timer.time-btn { border-color: #888; color: #555; font-size: 0.82rem; }
-  .btn-timer.time-btn:hover { background: #f0f0f0; }
-
-  /* SATZBAU */
-  .sb-intro { font-size: 0.95rem; color: #555; margin-bottom: 16px; }
-  .sb-list { display: flex; flex-direction: column; gap: 20px; }
-  .sb-item { background: #fafafa; border: 1.5px solid #e0c8f8; border-radius: 10px; padding: 14px; }
-  .sb-drop-zone { min-height: 44px; border: 2px dashed var(--accent-mid); border-radius: 8px; padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 10px; background: #fff; transition: background 0.15s; }
-  .sb-drop-zone.drag-over { background: #ede0ff; }
-  .sb-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-  .sb-chip { background: var(--accent-light); border: 1.5px solid var(--accent-mid); border-radius: 14px; padding: 5px 13px; font-size: 0.9rem; color: var(--accent); cursor: grab; user-select: none; font-weight: 600; transition: background 0.15s, transform 0.1s; }
-  .sb-chip:hover { background: #ddb8ff; transform: scale(1.04); }
-  .sb-chip.in-zone { background: #ddb8ff; cursor: grab; }
-  .sb-chip.dragging { opacity: 0.5; }
-  .sb-feedback { font-size: 0.88rem; font-weight: 700; margin-top: 6px; min-height: 1.2em; }
-  .sb-feedback.ok { color: #27ae60; }
-  .sb-feedback.err { color: #e74c3c; }
-
-  /* VOKABELN */
-  .vocab-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
-  .vocab-table th { background: var(--accent); color: #fff; padding: 10px 12px; text-align: left; }
-  .vocab-table td { padding: 9px 12px; border-bottom: 1px solid #eee; vertical-align: top; }
-  .vocab-table tr:hover td { background: var(--accent-light); }
-  .vocab-table .de { font-weight: 700; color: var(--accent); }
-  .vocab-table .en { color: #555; }
-  .vocab-table .bsp { color: #777; font-style: italic; font-size: 0.87rem; }
-
-  /* FOOTER */
-  .author-footer { text-align: center; font-size: 0.78rem; color: #bbb; padding: 12px 0 8px; border-top: 1px solid #eee; margin-top: 8px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+}
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.sec-inner { padding: 28px 32px 32px; }
+.tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text .dialog {
+    font-style: normal;
+    text-indent: 0;
+    padding-left: 1.1em;
+    border-left: 3px solid #667eea;
+    color: #2a2a6e;
+    margin-left: 0;
+}
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+.rf-list {
+    display: flex; flex-direction: column; gap: 8px;
+    max-width: 650px; margin-left: auto; margin-right: auto;
+}
+.rf-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; background: #f9f9f9; border-radius: 8px;
+    font-size: 0.95em; border: 1.5px solid #ddd;
+}
+.rf-item:hover { background: #f3e5f5; }
+.rf-text { flex: 1; }
+.rf-btns { display: flex; gap: 6px; }
+.rf-btn {
+    padding: 4px 14px; border-radius: 14px; border: 1.5px solid #9b59b6;
+    background: #fff; color: #6c3483; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; }
+.rf-result.ok { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-title { font-size: 1.0em; color: #555; margin-bottom: 12px; font-weight: 600; max-width: 650px; margin-left: auto; margin-right: auto; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+.luecken-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    line-height: 1.9;
+    font-size: 0.95em;
+}
+input.blank {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    padding: 3px 6px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+    min-width: 4ch;
+}
+input.blank:focus { border-bottom-color: #667eea; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.chip {
+    padding: 6px 14px; border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: grab; font-size: 0.85rem;
+    font-weight: 600; user-select: none;
+    transition: transform .15s, opacity .15s;
+    white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.chip.punct-chip { padding: 8px 8px; min-width: 24px; font-weight: 700; font-size: 1.1em; }
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px; background: #f8f9fa;
+    border-radius: 10px; margin-bottom: 14px; min-height: 54px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px;
+    padding: 8px 10px; border-radius: 8px;
+    border: 2px dashed #c5cae9; background: #fafbff;
+}
+.sentence-builder.correct { border-color: #27ae60; background: #e8f8f0; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.satzbau-item { margin-bottom: 20px; }
+.satzbau-feedback { font-size: 0.85em; font-weight: 600; min-height: 20px; margin-top: 6px; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.sb-punkt { font-weight: 700; font-size: 1.1em; margin-left: 2px; color: #333; align-self: center; }
+.author-footer { text-align: center; margin-top: 40px; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .header h1 { font-size: 1.2rem; }
+    .sec-inner { padding: 16px; }
+    .tab-banner { max-height: 120px; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1 class="main-title">Adoption</h1>
-  <p class="subtitle">B1.2 · Lektion 2033R · Lesetext &amp; Übungen</p>
-
-  <nav class="tab-nav">
-    <button class="tab-btn active" onclick="showTab(0,this)"><span class="tab-icon">📖</span><span class="tab-label">Vorentlastung</span></button>
-    <button class="tab-btn" onclick="showTab(1,this)"><span class="tab-icon">📰</span><span class="tab-label">Lesetext</span></button>
-    <button class="tab-btn" onclick="showTab(2,this)"><span class="tab-icon">✅</span><span class="tab-label">Text &amp; Fragen</span></button>
-    <button class="tab-btn" onclick="showTab(3,this)"><span class="tab-icon">✏️</span><span class="tab-label">Lückentext</span></button>
-    <button class="tab-btn" onclick="showTab(4,this)"><span class="tab-icon">🔀</span><span class="tab-label">Satzbau</span></button>
-    <button class="tab-btn" onclick="showTab(5,this)"><span class="tab-icon">📚</span><span class="tab-label">Vokabeln</span></button>
-  </nav>
-
-  <!-- TAB 0: WORTSCHATZ -->
-  <div class="tab-content active" id="tab0">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1620760/pexels-photo-1620760.jpeg?auto=compress&w=900" alt="Adoption Banner">
-    <div style="margin-bottom: 16px;">
-      <h2 style="color: #667eea; text-align: center; margin-bottom: 16px;">🔤 Wortschatz</h2>
-      <div id="vocabContainer"></div>
-      <div style="margin-top:16px;display:flex;gap:10px;">
-        <button onclick="showVocabLoesung()">💡 Lösung</button>
-        <button onclick="resetVocab()">↺ Neustart</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 1: LESETEXT -->
-  <div class="tab-content" id="tab1">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1682497/pexels-photo-1682497.jpeg?auto=compress&w=900" alt="Familie Lesetext Banner">
-    <div class="story-container">
-      <div class="story-text">
-        <p class="story-section-title">Viele Kinder</p>
-        <p>Ich wollte schon immer eigene Kinder — möglichst früh und möglichst viele. Kurz nach der Hochzeit haben mein Mann und ich auch angefangen, zu probieren, ein Kind zu bekommen. Leider hat es auch nach einem Jahr nicht funktioniert. Also haben wir versucht, auf anderen Wegen unseren Traum zu erfüllen. Der erste Schritt ist erstmal eine <span class="vocab-hl">künstliche Befruchtung<span class="tooltip">artificial fertilisation</span></span>. Es gibt viele verschiedene Methoden und wir haben einige ausprobiert.</p>
-
-        <p class="story-section-title">Viele Versuche</p>
-        <p>Oft musste ich Hormone nehmen, wodurch sich mein Charakter verändert hat. Das war sicherlich nicht immer einfach für meinen Partner, aber auch für mich war die Zeit sehr hart. Jeden Monat haben wir gehofft, dass es funktioniert hat. Wenn dann aber wieder klar war, dass ich nicht schwanger bin, brauchte ich immer wieder ein paar Tage, um mich davon zu erholen. Mein Mann war ebenso <span class="vocab-hl">geknickt<span class="tooltip">dejected, downcast</span></span> wie ich.</p>
-
-        <p class="story-section-title">Adoption</p>
-        <p>Nach einigen missglückten Versuchen haben wir uns schließlich untersuchen lassen und es hat sich herausgestellt, dass wir keine Kinder bekommen können. Natürlich waren wir erst einmal total geschockt, aber auch <span class="vocab-hl">erleichtert<span class="tooltip">relieved</span></span>, denn wir hatten jetzt endlich eine Diagnose. So konnten wir über andere Optionen nachdenken: Sollten wir eine kinderlose Familie bleiben, sollten wir Pflegekinder aufnehmen oder doch ein Kind adoptieren? Da wir es nicht verkraftet hätten, ein Kind eventuell wieder hergeben zu müssen, entschieden wir uns für eine <span class="vocab-hl">Adoption<span class="tooltip">adoption</span></span>, aber wer darf in Deutschland eigentlich adoptieren und was muss man noch alles beachten?</p>
-
-        <p class="story-section-title">Wer darf adoptieren?</p>
-        <p>Wir haben uns zu diesem Thema alle möglichen Informationen gesucht und uns viel mit Eltern ausgetauscht, die schon ein Kind adoptiert hatten. In Deutschland dürfen theoretisch alle Menschen ein Kind adoptieren, die über 25 Jahre alt sind. Also dürfen auch Alleinerziehende und seit Oktober 2017 endlich auch <span class="vocab-hl">Regenbogenfamilien<span class="tooltip">rainbow families</span></span> ein Kind adoptieren.</p>
-
-        <p class="story-section-title">Der Anfang</p>
-        <p>Wenn man ein Kind adoptieren möchte, muss man sich mit einer sogenannten <span class="vocab-hl">Adoptionsvermittlungsstelle<span class="tooltip">adoption agency</span></span> in Verbindung setzen. Das sind offizielle Institutionen, die normalerweise zum Jugendamt gehören, aber auch ein paar private Vereine sind offiziell als Adoptionsvermittler registriert. Dort wird geprüft, ob eine Familie geeignet ist, ein Kind aufzunehmen: Wie sind die Eltern? Haben sie genug Geld? Ist die Wohnung groß genug? Wie wollen sie das Kind erziehen?</p>
-
-        <p class="story-section-title">Hilfe für die Adoptiveltern</p>
-        <p>Theoretisch müssten nur die Formalitäten geprüft werden, aber viele Jugendämter wollen die zukünftigen Eltern auch in Seminaren auf ihre neue Rolle vorbereiten. Sie stehen den Adoptiveltern danach während der ganzen Zeit zur Seite. Oft haben sogar die ganz Kleinen schon traumatische Erfahrungen gemacht, daher kann es passieren, dass sie Probleme haben, sich in die Familie oder später in der Schule zu integrieren. Da ist es hilfreich, wenn die Eltern das wissen und <span class="vocab-hl">Ansprechpartner<span class="tooltip">contact persons</span></span> haben, die ihnen Tipps geben können.</p>
-
-        <p class="story-section-title">Der Anruf</p>
-        <p>Bei uns war es nach etwa zwei Jahren Warten soweit: An einem Dienstagmorgen bekamen wir den Anruf, dass der kleine Elias bald Teil unserer kleinen Familie sein würde. Wir waren so aufgeregt, glücklich und hatten Angst. Also, vermutlich die gleichen Gefühle wie ein Paar, das gerade einen positiven Schwangerschaftstest in den Händen hält. Drei Wochen später kam Elias dann zu uns.</p>
-
-        <p class="story-section-title">3 Jahre später</p>
-        <p>Das alles ist jetzt etwa drei Jahre her. Elias ist jetzt vier Jahre alt und geht seit einem Jahr in den Kindergarten. Manchmal hat er ganz plötzlich und ohne Grund einen <span class="vocab-hl">Wutanfall<span class="tooltip">tantrum, fit of rage</span></span>, aber wir wissen, dass es bei seiner <span class="vocab-hl">leiblichen<span class="tooltip">biological</span></span> Mutter nicht immer einfach für ihn war. Deshalb können wir damit umgehen und zeigen ihm, dass wir ihn trotzdem sehr lieben. Es geht auch gar nicht anders, denn er ist einfach der Tollste, Schönste und Liebste.</p>
-
-        <p class="story-section-title">Was bringt die Zukunft?</p>
-        <p>Natürlich wird er bald erfahren, dass er noch eine zweite Mama hat und vielleicht möchte er sie auch kennenlernen, wenn er größer ist. Ein bisschen Angst habe ich davor schon, aber wir werden ihn unterstützen, denn er soll mehr über seine <span class="vocab-hl">Herkunft<span class="tooltip">origin, heritage</span></span> erfahren, wenn er das möchte.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 2: TEXT & FRAGEN (Richtig/Falsch) -->
-  <div class="tab-content" id="tab2">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=900" alt="Text und Fragen Banner">
-    <p class="rf-task-title">Richtig oder falsch? Korrigiere die falschen Aussagen!</p>
-    <div class="rf-list" id="rfList">
-      <div class="rf-item" data-correct="r">
-        <div style="flex:1">
-          <div class="rf-text">Die Erzählerin wollte schon immer Kinder haben.</div>
-          <div class="rf-correction">Korrektur: —</div>
-        </div>
-        <div class="rf-buttons">
-          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
-          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
-        </div>
-      </div>
-      <div class="rf-item" data-correct="f">
-        <div style="flex:1">
-          <div class="rf-text">Sie haben nicht lange probiert, ein Kind auf natürlichem Weg zu bekommen.</div>
-          <div class="rf-correction">Korrektur: Sie haben ein Jahr lang probiert, ein Kind auf natürlichem Weg zu bekommen.</div>
-        </div>
-        <div class="rf-buttons">
-          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
-          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
-        </div>
-      </div>
-      <div class="rf-item" data-correct="f">
-        <div style="flex:1">
-          <div class="rf-text">Die Zeit mit der künstlichen Befruchtung war nur für den Mann schwierig.</div>
-          <div class="rf-correction">Korrektur: Es war für beide schwierig — für den Mann und für die Erzählerin.</div>
-        </div>
-        <div class="rf-buttons">
-          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
-          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
-        </div>
-      </div>
-      <div class="rf-item" data-correct="f">
-        <div style="flex:1">
-          <div class="rf-text">Wenn in jedem Monat klar war, dass sie nicht schwanger ist, war das kein Problem.</div>
-          <div class="rf-correction">Korrektur: Sie brauchte jedes Mal ein paar Tage, um sich davon zu erholen.</div>
-        </div>
-        <div class="rf-buttons">
-          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
-          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
-        </div>
-      </div>
-      <div class="rf-item" data-correct="f">
-        <div style="flex:1">
-          <div class="rf-text">Als sie die Diagnose gehört haben, waren sie nur traurig.</div>
-          <div class="rf-correction">Korrektur: Sie waren geschockt, aber auch erleichtert, denn sie hatten endlich eine Diagnose.</div>
-        </div>
-        <div class="rf-buttons">
-          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
-          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
-        </div>
-      </div>
-      <div class="rf-item" data-correct="r">
-        <div style="flex:1">
-          <div class="rf-text">In Deutschland dürfen auch Alleinerziehende und Regenbogenfamilien ein Kind adoptieren.</div>
-          <div class="rf-correction">Korrektur: —</div>
-        </div>
-        <div class="rf-buttons">
-          <button class="rf-btn r" onclick="selectRF(this,'r')">R</button>
-          <button class="rf-btn f" onclick="selectRF(this,'f')">F</button>
-        </div>
-      </div>
-    </div>
-    <button class="btn-check-rf" onclick="checkRF()">Überprüfen</button>
-    <div class="rf-score" id="rfScore"></div>
-  </div>
-
-  <!-- TAB 3: LÜCKENTEXT -->
-  <div class="tab-content" id="tab3">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1128318/pexels-photo-1128318.jpeg?auto=compress&w=900" alt="Lückentext Banner">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button class="btn-timer" onclick="timerStart('best2033R_L')">▶ Start</button>
-        <button class="btn-timer" onclick="timerStop('best2033R_L')">⏹ Stop</button>
-        <button class="btn-timer" onclick="timerReset('best2033R_L')">↺ Reset</button>
-      </div>
-      <div class="tc-times">
-        <span class="timer-display" id="best2033R_L-display">00:00</span>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',60)">1 min</button>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',120)">2 min</button>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',180)">3 min</button>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_L',300)">5 min</button>
-      </div>
-    </div>
-    <p class="luecken-intro">Füll die Lücken mit den richtigen Wörtern aus.</p>
-    <div class="wordbank">
-      <span class="wordbank-chip">Adoption</span>
-      <span class="wordbank-chip">Adoptivfamilie</span>
-      <span class="wordbank-chip">leibliche</span>
-      <span class="wordbank-chip">Befruchtung</span>
-      <span class="wordbank-chip">erleichtert</span>
-      <span class="wordbank-chip">Wutanfall</span>
-      <span class="wordbank-chip">Herkunft</span>
-      <span class="wordbank-chip">geknickt</span>
-      <span class="wordbank-chip">Ansprechpartner</span>
-      <span class="wordbank-chip">Jugendamt</span>
-    </div>
-    <div class="luecken-text" id="lueckenText"></div>
-    <button class="btn-check" onclick="checkLuecken()">Überprüfen</button>
-    <div class="luecken-score" id="lueckenScore"></div>
-  </div>
-
-  <!-- TAB 4: SATZBAU -->
-  <div class="tab-content" id="tab4">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=900" alt="Satzbau Banner">
-    <div class="timer-controls">
-      <div class="tc-buttons">
-        <button class="btn-timer" onclick="timerStart('best2033R_S')">▶ Start</button>
-        <button class="btn-timer" onclick="timerStop('best2033R_S')">⏹ Stop</button>
-        <button class="btn-timer" onclick="timerReset('best2033R_S')">↺ Reset</button>
-      </div>
-      <div class="tc-times">
-        <span class="timer-display" id="best2033R_S-display">00:00</span>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',60)">1 min</button>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',120)">2 min</button>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',180)">3 min</button>
-        <button class="btn-timer time-btn" onclick="timerSet('best2033R_S',300)">5 min</button>
-      </div>
-    </div>
-    <p class="sb-intro">Bringe die Wörter in die richtige Reihenfolge.</p>
-    <div class="sb-list" id="sbList"></div>
-  </div>
-
-  <!-- TAB 5: VOKABELN -->
-  <div class="tab-content" id="tab5">
-    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=900" alt="Vokabeln Banner">
-    <table class="vocab-table">
-      <thead><tr><th>Deutsch</th><th>Englisch</th><th>Beispielsatz</th></tr></thead>
-      <tbody>
-        <tr><td class="de">die Adoption, -en</td><td class="en">adoption</td><td class="bsp">Sie haben sich für eine Adoption entschieden.</td></tr>
-        <tr><td class="de">adoptieren</td><td class="en">to adopt</td><td class="bsp">In Deutschland dürfen alle über 25 ein Kind adoptieren.</td></tr>
-        <tr><td class="de">die Adoptivfamilie, -n</td><td class="en">adoptive family</td><td class="bsp">Er wächst in seiner Adoptivfamilie auf.</td></tr>
-        <tr><td class="de">die Adoptiveltern (Pl.)</td><td class="en">adoptive parents</td><td class="bsp">Das Jugendamt unterstützt die Adoptiveltern.</td></tr>
-        <tr><td class="de">leiblich</td><td class="en">biological (parent/child)</td><td class="bsp">Er möchte seine leibliche Mutter kennenlernen.</td></tr>
-        <tr><td class="de">die künstliche Befruchtung</td><td class="en">artificial fertilisation</td><td class="bsp">Die künstliche Befruchtung war eine stressige Zeit.</td></tr>
-        <tr><td class="de">geknickt</td><td class="en">dejected, downcast</td><td class="bsp">Mein Mann war ebenso geknickt wie ich.</td></tr>
-        <tr><td class="de">erleichtert</td><td class="en">relieved</td><td class="bsp">Wir waren erleichtert, als wir die Diagnose bekamen.</td></tr>
-        <tr><td class="de">die Adoptionsvermittlungsstelle, -n</td><td class="en">adoption agency</td><td class="bsp">Man muss sich an eine Adoptionsvermittlungsstelle wenden.</td></tr>
-        <tr><td class="de">der Ansprechpartner, –</td><td class="en">contact person</td><td class="bsp">Das Jugendamt ist unser Ansprechpartner.</td></tr>
-        <tr><td class="de">der Wutanfall, ¨-e</td><td class="en">tantrum, fit of rage</td><td class="bsp">Manchmal hat er plötzlich einen Wutanfall.</td></tr>
-        <tr><td class="de">die Herkunft (Sg.)</td><td class="en">origin, heritage</td><td class="bsp">Er soll mehr über seine Herkunft erfahren.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · fabDaF · B1.2 · 2033R</div>
+<div class="header">
+    <h1>Adoption</h1>
+    <p>B1.1 – Lektion 2033R · Lesen</p>
+    <div class="big-emoji">👨‍👩‍👧</div>
 </div>
-
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">📖</span>
+        <span class="nav-label">Vorentlastung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">📄</span>
+        <span class="nav-label">Lesetext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">❓</span>
+        <span class="nav-label">Text &amp; Fragen</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">✏️</span>
+        <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">🧩</span>
+        <span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(5)">
+        <span class="nav-emoji">📚</span>
+        <span class="nav-label">Wortschatz</span>
+    </div>
+</div>
+<div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3938023/pexels-photo-3938023.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Familie">
+    <div class="sec-inner">
+        <div class="section-title">📖 Vorentlastung</div>
+        <div class="section-sub">Lerne diese Wörter, bevor du den Text liest.</div>
+        <div class="vocab-grid" id="vocabGrid"></div>
+    </div>
+</div>
+<div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/8534574/pexels-photo-8534574.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Glückliche Familie">
+    <div class="sec-inner">
+        <div class="section-title">📄 Die neue Familie</div>
+        <div class="story-text" id="storyText">
+            <p>Es war ein ganz normaler Montag im Büro der E.ON in Düsseldorf. Karim saß an seinem Schreibtisch und arbeitete an den technischen Daten für das neue Windprojekt. Da kam Stefan herein – sein Kollege seit fünf Jahren. Stefan sah anders aus: glücklicher, strahlender, als würde er leuchten. Er setzte sich neben Karim hin und sagte leise: „Wir haben es geschafft. Die Adoption ist endlich genehmigt."</p>
+            <p>Karim kannte die Geschichte. Stefan und seine Frau Anja hatten sich ein Kind so sehr gewünscht. Jahrelang hatten sie gehofft. Lange Arztbesuche, Enttäuschungen. Irgendwann beschlossen sie: Das Jugendamt, die Wartezeit, die Prüfung – egal wie schwer, wir versuchen es. Karim erinnerte sich an all die Gespräche in der Kantine, an Stefans ruhige Hoffnung trotz aller Hindernisse.</p>
+            <figure style="margin:18px 0;text-align:center;">
+                <img src="https://images.pexels.com/photos/5998251/pexels-photo-5998251.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Freudige Umarmung" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+                <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Die Nachricht der Genehmigung – ein Moment voller Freude</figcaption>
+            </figure>
+            <p>„Das Kind – wie alt ist es?", fragte Karim. „Vier Jahre. Ein Junge. Sein Name ist Mika, aber wir werden ihn Miklas nennen – mit unserem Familiennamen." Stefans Stimme zitterte leicht. „Er weiß schon, dass er adoptiert ist. Das war uns wichtig. Keine Geheimnisse." Karim nickte. Das war klug. Die Identität eines Kindes, dachte Karim, braucht Wahrheit.</p>
+            <p>Aber Stefan hatte auch Angst. „Mika sehnt sich noch nach seiner leiblichen Mutter", sagte er. „Das verstehen wir. Der Vormund des Jugendamts hat uns alles erklärt. Wir werden ihm helfen, seine Herkunft zu verstehen. Das ist wichtig für seine Geborgenheit zu Hause." Stefan atmet tief durch. „Der Prozess war so intensiv – das Gutachten, die psychologische Untersuchung, die Beamten, die unsere Wohnung besichtigt haben."</p>
+            <figure style="margin:18px 0;text-align:center;">
+                <img src="https://images.pexels.com/photos/6933981/pexels-photo-6933981.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Kind schaut aus dem Fenster" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+                <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Die Gedanken eines Adoptivkindes – Fragen und Gefühle</figcaption>
+            </figure>
+            <p>In den nächsten Wochen sah Karim Stefans Leben sich komplett verändern. Die Pflegefamilie, die Mika vorher aufgenommen hatte, kam noch manchmal zu Besuch. Sie hatten das Kind anvertraut bekommen, hatten es geliebt, wie es ihre Aufgabe war. Jetzt übergaben sie das Sorgerecht an Stefan und Anja. Das war emotional – für alle. Karim sah Stefan eines Tages nach so einem Treffen und Stefan war still, nachdenklich. „Es ist nicht einfach", sagte er. „Die Pflegefamilie hat so viel für ihn getan."</p>
+            <p>Aber dann – eines Tages kam Stefan mit Mika ins Büro. Das kleine Kind in der Adoptivfamilie trug ein neues rotes Shirt mit einem Superhelden-Bild. Stefan zeigte es stolz herum. Und plötzlich verstand Karim es: Das ist Familie. Die Liebe, die Geduld, das neue Leben zusammen. Die Adoption war nicht nur eine Behördengenehmigung. Sie war der Anfang einer neuen Herkunft, einer neuen Geborgenheit.</p>
+        </div>
+        <div class="story-source">Quelle: B1.1 – Lektion 2033R – Adoption</div>
+    </div>
+</div>
+<div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3945657/pexels-photo-3945657.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Diskussion">
+    <div class="sec-inner">
+        <div class="section-title">❓ Text &amp; Fragen</div>
+        <div class="section-sub">Hast du den Text verstanden? Entscheide: richtig oder falsch?</div>
+        <div class="rf-title">Richtig oder falsch?</div>
+        <div class="rf-list" id="rfList"></div>
+        <div style="margin-top:28px;padding:16px 20px;background:#f0f4ff;border-radius:10px;max-width:650px;margin-left:auto;margin-right:auto;">
+            <p style="font-weight:700;color:#667eea;margin-bottom:8px;">💬 Diskutiere mit deinem Partner:</p>
+            <p style="color:#555;font-size:0.93em;line-height:1.7;">Warum ist es wichtig, dass Adoptiveltern die Wahrheit sagen? Hast du Erfahrung mit einer Pflegefamilie oder Adoption? Verwende Formulierungen wie: „Ich denke, dass …", „Es ist wichtig, weil …", „Für mich ist die Familie …"</p>
+        </div>
+    </div>
+</div>
+<div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schreiben">
+    <div class="sec-inner">
+        <h2>✏️ Lückentext</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+                <button class="btn" onclick="resetLuecken()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-3">00:00</span></span>
+                <span>🏆 <span id="best-3">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">💡 Ergänze die fehlenden Wörter aus der Geschichte. Die Felder werden automatisch grün, wenn die Antwort stimmt.</div>
+        <div id="lueckenContainer"></div>
+    </div>
+</div>
+<div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Satzbau">
+    <div class="sec-inner">
+        <h2>🧩 Satzbau</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showAllSbLoesung()">Lösungen</button>
+                <button class="btn" onclick="resetAllSb()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-4">00:00</span></span>
+                <span>🏆 <span id="best-4">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">💡 Ordne die Wörter zu einem korrekten Satz. Ziehe die Chips in die Drop-Zone oder klicke sie an.</div>
+        <div id="satzbauContainer"></div>
+    </div>
+</div>
+<div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wörterbuch">
+    <div class="sec-inner">
+        <h2>📚 Wortschatz</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showWortschatzLoesung()">Lösungen</button>
+                <button class="btn" onclick="resetWortschatz()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-5">00:00</span></span>
+                <span>🏆 <span id="best-5">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">💡 Übersetze die englischen Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural.</div>
+        <div id="wortschatzContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+    </div>
+</div>
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+</div>
 <script>
-// ── TAB NAVIGATION ──────────────────────────────────────────
-function showTab(idx, btn) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab' + idx).classList.add('active');
-  btn.classList.add('active');
-}
-
-// ── WORTSCHATZ INTERACTIVE ───────────────────────────────────
+var VORENTLASTUNG = [
+    { term: 'die Adoption, -en', en: 'the adoption', def: 'Der rechtliche Prozess, ein Kind als Sohn oder Tochter in die Familie aufzunehmen.' },
+    { term: 'adoptieren', en: 'to adopt', def: 'Ein Kind rechtlich in die Familie aufnehmen.' },
+    { term: 'das Adoptivkind, -er', en: 'the adopted child', def: 'Ein Kind, das von einer anderen Familie adoptiert wurde.' },
+    { term: 'die Pflegefamilie, -n', en: 'the foster family', def: 'Eine Familie, die ein Kind zeitweise aufnimmt, ohne es zu adoptieren.' },
+    { term: 'das Jugendamt, -̈er', en: 'the youth welfare office', def: 'Eine Behörde, die sich um Kinder und Familien kümmert.' },
+    { term: 'die Herkunft', en: 'the origin, descent', def: 'Die Familie und der Ort, von dem man kommt.' },
+    { term: 'die Identität, -en', en: 'the identity', def: 'Das Wissen, wer man wirklich ist.' },
+    { term: 'die Geborgenheit', en: 'the security, comfort', def: 'Das Gefühl, sicher und geliebt zu sein.' },
+    { term: 'das Sorgerecht', en: 'the custody', def: 'Das Recht und die Verantwortung, sich um ein Kind zu kümmern.' },
+    { term: 'die Wartezeit, -en', en: 'the waiting period', def: 'Die Zeit, die man warten muss.' },
+    { term: 'die Bewerbung, -en', en: 'the application', def: 'Das schriftliche Gesuch um etwas.' },
+    { term: 'die Genehmigung, -en', en: 'the approval, permission', def: 'Die offizielle Erlaubnis für etwas.' },
+    { term: 'das Gutachten, -', en: 'the expert assessment', def: 'Eine detaillierte Beurteilung durch einen Fachmann.' },
+    { term: 'der Vormund, -̈er', en: 'the guardian', def: 'Eine Person, die für ein Kind verantwortlich ist.' },
+    { term: 'sich sehnen nach', en: 'to long for', def: 'Sich etwas intensiv wünschen.' },
+    { term: 'aufnehmen', en: 'to take in, accept', def: 'Eine Person in die Familie aufnehmen.' },
+    { term: 'anvertrauen', en: 'to entrust', def: 'Einem Menschen ein Kind oder etwas Wichtiges geben.' },
+    { term: 'leiblich', en: 'biological', def: 'Von Geburt an verwandt.' }
+];
+var LUECKEN = [
+    { text: 'Es war ein ganz normaler Montag im Büro der E.ON in <input class="blank" data-answer="Düsseldorf" placeholder="?">.', id: 'L1' },
+    { text: 'Stefan sagte zu Karim: „Wir haben es geschafft. Die <input class="blank" data-answer="Adoption" placeholder="?"> ist endlich genehmigt."', id: 'L2' },
+    { text: 'Stefan und Anja hatten sich kontaktiert mit dem <input class="blank" data-answer="Jugendamt" placeholder="?">, um ein Kind zu adoptieren.', id: 'L3' },
+    { text: 'Das Kind ist vier Jahre alt und sein Name ist <input class="blank" data-answer="Mika" placeholder="?">.', id: 'L4' },
+    { text: 'Stefan und Anja werden das Kind <input class="blank" data-answer="Miklas" placeholder="?"> nennen.', id: 'L5' },
+    { text: 'Das Kind sehnt sich noch nach seiner <input class="blank" data-answer="leiblichen Mutter" placeholder="?">.', id: 'L6' },
+    { text: 'Ein <input class="blank" data-answer="Vormund" placeholder="??"> vom Jugendamt hat Stefan und Anja alles erklärt.', id: 'L7' },
+    { text: 'Der Prozess war intensiv: das <input class="blank" data-answer="Gutachten" placeholder="?">, die psychologische Untersuchung, die Beamten.', id: 'L8' },
+    { text: 'Die <input class="blank" data-answer="Pflegefamilie" placeholder="??"> hat Mika vor Stefan und Anja aufgenommen.', id: 'L9' },
+    { text: 'Die Pflegefamilie übergab das <input class="blank" data-answer="Sorgerecht" placeholder="??"> an Stefan und Anja.', id: 'L10' },
+    { text: 'Mika trug ein neues rotes Shirt mit einem <input class="blank" data-answer="Superhelden-Bild" placeholder="?">.', id: 'L11' },
+    { text: 'Die Adoption war der Anfang einer neuen <input class="blank" data-answer="Herkunft" placeholder="?">>.', id: 'L12' }
+];
+var satzbauData = [
+    { parts: ['Stefan', 'und', 'Anja', 'ein', 'Kind', 'mögen', '.'], valid: [['Stefan', 'und', 'Anja', 'mögen', 'ein', 'Kind', '.']], punct: '.' },
+    { parts: ['Der', 'Junge', 'vier', 'ist', 'Jahre', 'alt', '.'], valid: [['Der', 'Junge', 'ist', 'vier', 'Jahre', 'alt', '.']], punct: '.' },
+    { parts: ['Karim', 'E.ON', 'arbeitet', 'einer', 'deutschen', 'in', '.'], valid: [['Karim', 'arbeitet', 'in', 'einer', 'deutschen', 'E.ON-Firma', '.']], punct: '.' },
+    { parts: ['Das', 'Gutachten', 'psychologisch', 'sehr', 'war', 'intensiv', '.'], valid: [['Das', 'psychologische', 'Gutachten', 'war', 'sehr', 'intensiv', '.']], punct: '.' },
+    { parts: ['Mika', 'sich', 'leiblich', 'nach', 'Mutter', 'seiner', 'sehnt', '.'], valid: [['Mika', 'sehnt', 'sich', 'nach', 'seiner', 'leiblichen', 'Mutter', '.']], punct: '.' },
+    { parts: ['Das', 'Sorgerecht', 'Pflegefamilie', 'Stefan', 'Anja', 'von', 'zu', 'ging', '.'], valid: [['Das', 'Sorgerecht', 'ging', 'von', 'der', 'Pflegefamilie', 'zu', 'Stefan', 'und', 'Anja', '.']], punct: '.' },
+    { parts: ['Wahrheit', 'für', 'Kind', 'Identität', 'ein', 'wichtig', 'ist', '.'], valid: [['Wahrheit', 'ist', 'für', 'die', 'Identität', 'eines', 'Kindes', 'wichtig', '.']], punct: '.' },
+    { parts: ['Liebe', 'Familie', 'nicht', 'eine', 'nur', 'Behördengenehmigung', 'ist', '.'], valid: [['Eine', 'Familie', 'ist', 'nicht', 'nur', 'eine', 'Behördengenehmigung', '.']], punct: '.' }
+];
 var WORTSCHATZ = [
-  { type: "n", en: "adoption", art: "die", wort: "Adoption", plural: "Adoptionen" },
-  { type: "n", en: "adoptive family", art: "die", wort: "Adoptivfamilie", plural: "Adoptivfamilien" },
-  { type: "v", en: "biological (adj.)", de: "leiblich" },
-  { type: "n", en: "fertilisation", art: "die", wort: "Befruchtung", plural: "Befruchtungen" },
-  { type: "v", en: "dejected, downcast (adj.)", de: "geknickt" },
-  { type: "v", en: "relieved (adj.)", de: "erleichtert" },
-  { type: "n", en: "adoption agency", art: "die", wort: "Adoptionsvermittlungsstelle", plural: "Adoptionsvermittlungsstellen" },
-  { type: "n", en: "contact person", art: "der", wort: "Ansprechpartner", plural: "Ansprechpartner" },
-  { type: "n", en: "tantrum, fit of rage", art: "der", wort: "Wutanfall", plural: "Wutanfälle" },
-  { type: "n", en: "origin, heritage", art: "die", wort: "Herkunft", plural: "Herkünfte" },
+    { type: 'n', en: 'adoption', de: 'Adoption', artikel: 'die', plural: '-en' },
+    { type: 'n', en: 'foster family', de: 'Pflegefamilie', artikel: 'die', plural: '-n' },
+    { type: 'n', en: 'youth office', de: 'Jugendamt', artikel: 'das', plural: '-̈er' },
+    { type: 'n', en: 'origin', de: 'Herkunft', artikel: 'die', plural: '–' },
+    { type: 'n', en: 'identity', de: 'Identität', artikel: 'die', plural: '-en' },
+    { type: 'n', en: 'security', de: 'Geborgenheit', artikel: 'die', plural: '–' },
+    { type: 'n', en: 'custody', de: 'Sorgerecht', artikel: 'das', plural: '–' },
+    { type: 'n', en: 'waiting period', de: 'Wartezeit', artikel: 'die', plural: '-en' },
+    { type: 'n', en: 'application', de: 'Bewerbung', artikel: 'die', plural: '-en' },
+    { type: 'n', en: 'approval', de: 'Genehmigung', artikel: 'die', plural: '-en' },
+    { type: 'n', en: 'expert assessment', de: 'Gutachten', artikel: 'das', plural: '–' },
+    { type: 'n', en: 'guardian', de: 'Vormund', artikel: 'der', plural: '-̈er' }
 ];
-
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+var RF_DATA = [
+    { question: 'Stefan arbeitet schon fünf Jahre mit Karim im Büro.', answer: true },
+    { question: 'Stefan und Anja hatten schnell ein Kind adoptiert.', answer: false },
+    { question: 'Das Adoptivkind heißt Mika und ist vier Jahre alt.', answer: true },
+    { question: 'Karim denkt, dass Wahrheit für die Identität eines Kindes nicht wichtig ist.', answer: false },
+    { question: 'Der Vormund vom Jugendamt hat Stefan und Anja alles erklärt.', answer: true },
+    { question: 'Die Pflegefamilie hat nie mehr Kontakt zu Mika.', answer: false },
+    { question: 'Mika trägt im Büro ein neues rotes Shirt mit einem Superhelden-Bild.', answer: true },
+    { question: 'Karim versteht, dass Familie nur eine Behördengenehmigung ist.', answer: false }
+];
+var timers = [
+    { current: 0, best: null, interval: null },
+    { current: 0, best: null, interval: null },
+    { current: 0, best: null, interval: null },
+    { current: 0, best: null, interval: null },
+    { current: 0, best: null, interval: null },
+    { current: 0, best: null, interval: null }
+];
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+function timerAutoStart(tabIdx) {
+    if (timers[tabIdx] && !timers[tabIdx].interval) {
+        timers[tabIdx].interval = setInterval(function() {
+            timers[tabIdx].current++;
+            updateTimerDisplay(tabIdx);
+        }, 1000);
+    }
+}
+function stopTimer(tabIdx) {
+    if (timers[tabIdx] && timers[tabIdx].interval) {
+        clearInterval(timers[tabIdx].interval);
+        timers[tabIdx].interval = null;
+        if (!timers[tabIdx].best || timers[tabIdx].current < timers[tabIdx].best) {
+            timers[tabIdx].best = timers[tabIdx].current;
+        }
+        updateTimerDisplay(tabIdx);
+    }
+}
+function resetTimer(tabIdx) {
+    stopTimer(tabIdx);
+    timers[tabIdx].current = 0;
+    updateTimerDisplay(tabIdx);
+}
+function updateTimerDisplay(tabIdx) {
+    var mins = Math.floor(timers[tabIdx].current / 60);
+    var secs = timers[tabIdx].current % 60;
+    var timeStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    var elem = document.getElementById('timer-' + tabIdx);
+    if (elem) elem.textContent = timeStr;
+    var best = timers[tabIdx].best;
+    var bestStr = best !== null ? Math.floor(best / 60) + ':' + (best % 60 < 10 ? '0' : '') + (best % 60) : '--:--';
+    var bestElem = document.getElementById('best-' + tabIdx);
+    if (bestElem) bestElem.textContent = bestStr;
+}
+function initVorentlastung() {
+    var grid = document.getElementById('vocabGrid');
+    grid.innerHTML = '';
+    VORENTLASTUNG.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + escapeHtml(item.term) + '</div>' +
+                         '<div class="vocab-en">' + escapeHtml(item.en) + '</div>' +
+                         '<div class="vocab-def">' + escapeHtml(item.def) + '</div>';
+        grid.appendChild(card);
+    });
+}
+function initRF() {
+    var list = document.getElementById('rfList');
+    list.innerHTML = '';
+    RF_DATA.forEach(function(item, idx) {
+        var rfItem = document.createElement('div');
+        rfItem.className = 'rf-item';
+        rfItem.innerHTML = '<div class="rf-text">' + escapeHtml(item.question) + '</div>' +
+                           '<div class="rf-btns">' +
+                           '<button class="rf-btn" onclick="rfCheck(' + idx + ', true)" data-idx="' + idx + '" data-sel="r">Richtig</button>' +
+                           '<button class="rf-btn" onclick="rfCheck(' + idx + ', false)" data-idx="' + idx + '" data-sel="f">Falsch</button>' +
+                           '</div>' +
+                           '<div class="rf-result" id="rf-result-' + idx + '"></div>';
+        list.appendChild(rfItem);
+    });
+}
+function rfCheck(idx, userAnswer) {
+    var correct = RF_DATA[idx].answer === userAnswer;
+    var rBtns = document.querySelectorAll('[data-idx="' + idx + '"]');
+    rBtns.forEach(function(btn) { btn.classList.remove('sel-r', 'sel-f'); });
+    document.querySelector('[data-idx="' + idx + '"][data-sel="' + (userAnswer ? 'r' : 'f') + '"]').classList.add(userAnswer ? 'sel-r' : 'sel-f');
+    var resultElem = document.getElementById('rf-result-' + idx);
+    resultElem.className = 'rf-result ' + (correct ? 'ok' : 'err');
+    resultElem.textContent = correct ? '✓' : '✗';
+    timerAutoStart(2);
+}
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
+        div.innerHTML = item.text;
+        container.appendChild(div);
+        var inputs = div.querySelectorAll('input.blank');
+        inputs.forEach(function(inp) {
+            inp.oninput = function() { lueckenCheck(this); timerAutoStart(3); checkLueckenAllOk(); };
+        });
+    });
+}
+function lueckenCheck(inp) {
+    var user = inp.value.trim();
+    var answer = inp.dataset.answer;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    if (user.toLowerCase() === answer.toLowerCase()) {
+        inp.classList.add('correct');
+    } else if (answer.toLowerCase().indexOf(user.toLowerCase()) === 0) {
     } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+        inp.classList.add('wrong');
     }
-    cont.appendChild(div);
-  });
 }
-
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    var okA = a === item.art.toLowerCase();
-    var okW = w === item.wort;
-    var okP = p === item.plural;
-    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else if (a || w || p) { hint.textContent = ''; hint.className = 'vocab-hint'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    var ok2 = w2 === item.de;
-    if (ok2) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  }
-}
-
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
-    }
-    vocabLiveCheck(idx);
-  });
-}
-
-function resetVocab() { initVocab(); }
-
-// ── LÜCKENTEXT DATA ──────────────────────────────────────────
-const LUECKEN_DATA = [
-  { before: 'Der erste Schritt war eine künstliche ', blank: 'Befruchtung', after: ', die wir mehrfach ausprobiert haben.' },
-  { before: 'Mein Mann war ebenso ', blank: 'geknickt', after: ' wie ich, wenn es nicht funktioniert hatte.' },
-  { before: 'Wir waren erst einmal geschockt, aber auch ', blank: 'erleichtert', after: ', denn wir hatten endlich eine Diagnose.' },
-  { before: 'Wir entschieden uns für eine ', blank: 'Adoption', after: ', weil wir kein Kind wieder hergeben wollten.' },
-  { before: 'Man muss sich an eine Adoptionsvermittlungsstelle wenden, die zum ', blank: 'Jugendamt', after: ' gehört.' },
-  { before: 'Dort wird geprüft, ob eine Familie geeignet ist — das ist der Beginn der Aufnahme in die ', blank: 'Adoptivfamilie', after: '.' },
-  { before: 'Das Jugendamt ist ein wichtiger ', blank: 'Ansprechpartner', after: ' für die Adoptiveltern.' },
-  { before: 'Elias hat manchmal einen ', blank: 'Wutanfall', after: ', aber wir wissen, warum.' },
-  { before: 'Er soll mehr über seine ', blank: 'Herkunft', after: ' erfahren, wenn er das möchte.' },
-  { before: 'Elias wird eines Tages auch seine ', blank: 'leibliche', after: ' Mutter kennenlernen wollen.' },
-];
-
-function buildLuecken() {
-  const container = document.getElementById('lueckenText');
-  container.innerHTML = '';
-  LUECKEN_DATA.forEach((item, i) => {
-    const span = document.createElement('span');
-    span.innerHTML = item.before +
-      `<input type="text" id="l${i}" data-answer="${item.blank}" placeholder="..." oninput="liveCheck(this)" autocomplete="off">` +
-      item.after + ' ';
-    container.appendChild(span);
-    container.appendChild(document.createTextNode(' '));
-  });
-}
-
-function liveCheck(input) {
-  const ans = input.dataset.answer;
-  const val = input.value.trim();
-  if (!val) { input.className = ''; return; }
-  const caseSensitive = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
-  const match = caseSensitive ? val === ans : val.toLowerCase() === ans.toLowerCase();
-  input.classList.toggle('correct', match);
-  input.classList.toggle('wrong', !match);
-  if (match) {
-    const allCorrect = LUECKEN_DATA.every((item, j) => {
-      const inp = document.getElementById('l' + j);
-      if (!inp) return false;
-      const a = inp.dataset.answer;
-      const v = inp.value.trim();
-      const cs = a[0] === a[0].toUpperCase() && a[0] !== a[0].toLowerCase();
-      return cs ? v === a : v.toLowerCase() === a.toLowerCase();
+function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#lueckenContainer input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('correct');
     });
-    if (allCorrect) timerStop('best2033R_L');
-  }
+    if (allOk) stopTimer(3);
 }
-
-function checkLuecken() {
-  let correct = 0;
-  LUECKEN_DATA.forEach((item, i) => {
-    const inp = document.getElementById('l' + i);
-    const ans = item.blank;
-    const val = inp.value.trim();
-    const cs = ans[0] === ans[0].toUpperCase() && ans[0] !== ans[0].toLowerCase();
-    const ok = cs ? val === ans : val.toLowerCase() === ans.toLowerCase();
-    inp.classList.toggle('correct', ok);
-    inp.classList.toggle('wrong', !ok);
-    if (ok) correct++;
-    else if (!val) inp.value = ans, inp.classList.add('correct'), inp.classList.remove('wrong');
-  });
-  document.getElementById('lueckenScore').textContent = `Ergebnis: ${correct} / ${LUECKEN_DATA.length} richtig`;
-  if (correct === LUECKEN_DATA.length) timerStop('best2033R_L');
-}
-
-buildLuecken();
-
-// ══════════════════════════════════════════════
-// SATZBAU
-// ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['Kurz', 'nach', 'der', 'Hochzeit', 'haben', 'wir', 'angefangen', ',', 'ein', 'Kind', 'zu', 'bekommen', '.'] },
-  { words: ['Mein', 'Mann', 'war', 'ebenso', 'geknickt', 'wie', 'ich', '.'] },
-  { words: ['Wir', 'entschieden', 'uns', 'für', 'eine', 'Adoption', ',', 'da', 'wir', 'kein', 'Kind', 'hergeben', 'wollten', '.'] },
-  { words: ['In', 'Deutschland', 'dürfen', 'alle', 'Menschen', 'über', '25', 'ein', 'Kind', 'adoptieren', '.'] },
-  { words: ['Das', 'Jugendamt', 'steht', 'den', 'Adoptiveltern', 'während', 'der', 'ganzen', 'Zeit', 'zur', 'Seite', '.'] },
-  { words: ['Er', 'soll', 'mehr', 'über', 'seine', 'Herkunft', 'erfahren', ',', 'wenn', 'er', 'das', 'möchte', '.'] }
-];
-
-let sbDragged = null;
-
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
+function showLueckenLoesung() {
+    stopTimer(3);
+    document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct');
+        inp.classList.remove('wrong');
     });
-  }
-  return span;
 }
-
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
+    resetTimer(3);
 }
-
-function sbCheckAuto(itemIdx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
-  }, 500);
-}
-
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
-  } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
-  }
-}
-
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) {
-      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
+var sbDragged = null;
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
     }
-  });
+    return c;
 }
-
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(4);
-}
-
-function buildSatzbau() {
-  const cont = document.getElementById('satzbauContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
-
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
     }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
-
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
-        sbUpdateCapitalization(zone);
+    return null;
+}
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
         sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-      pool.appendChild(chip);
     });
-    sbRegisterZone(pool);
-
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
-
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
+}
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
     });
-
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
     });
-
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      }
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(4);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct');
+            row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect');
+            row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
     });
-
-    const fb = document.createElement('div');
+    if (allOk) stopTimer(4);
+}
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-'  + idx);
+    var fb   = document.getElementById('sb-fb-'   + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
     fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
-
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
-}
-
-function resetSatzbau() { buildSatzbau(); resetTimer(4); }
-
-buildSatzbau();
-
-// ── RICHTIG / FALSCH ──────────────────────────────────────────
-function selectRF(btn, choice) {
-  const item = btn.closest('.rf-item');
-  item.querySelectorAll('.rf-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  btn.dataset.choice = choice;
-}
-
-function checkRF() {
-  const items = document.querySelectorAll('.rf-item');
-  let correct = 0;
-  items.forEach(item => {
-    const expected = item.dataset.correct;
-    const selected = [...item.querySelectorAll('.rf-btn')].find(b => b.classList.contains('selected'));
-    const correction = item.querySelector('.rf-correction');
-    item.querySelectorAll('.rf-btn').forEach(b => { b.classList.remove('correct', 'wrong'); });
-    if (selected) {
-      const choice = selected.classList.contains('r') ? 'r' : 'f';
-      if (choice === expected) {
-        selected.classList.add('correct');
-        correct++;
-        if (correction) correction.classList.remove('visible');
-      } else {
-        selected.classList.add('wrong');
-        const correctBtn = [...item.querySelectorAll('.rf-btn')].find(b => b.classList.contains(expected));
-        if (correctBtn) correctBtn.classList.add('correct');
-        if (correction) correction.classList.add('visible');
-      }
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
     }
-  });
-  document.getElementById('rfScore').textContent = `Ergebnis: ${correct} / ${items.length} richtig`;
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
 }
-
-// ── TIMER ENGINE ──────────────────────────────────────────────
-const timers = {};
-function timerInit(id) {
-  if (!timers[id]) timers[id] = { interval: null, elapsed: 0, countdown: null, running: false };
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) {
+            bank.appendChild(sbMakeChip(word));
+        });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
 }
-function timerStart(id) {
-  timerInit(id);
-  const t = timers[id];
-  if (t.running) return;
-  t.running = true;
-  const disp = document.getElementById(id + '-display');
-  t.interval = setInterval(() => {
-    if (t.countdown !== null) {
-      t.countdown--;
-      if (t.countdown <= 0) { t.countdown = 0; timerStop(id); }
-      disp.textContent = fmt(t.countdown);
-    } else {
-      t.elapsed++;
-      disp.textContent = fmt(t.elapsed);
+function showAllSbLoesung() {
+    stopTimer(4);
+    for (var i = 0; i < satzbauData.length; i++) {
+        sbShowSolution(i);
     }
-  }, 1000);
 }
-function timerStop(id) {
-  timerInit(id);
-  const t = timers[id];
-  clearInterval(t.interval);
-  t.running = false;
+function resetAllSb() {
+    for (var i = 0; i < satzbauData.length; i++) {
+        sbResetOne(i);
+    }
+    resetTimer(4);
 }
-function timerReset(id) {
-  timerStop(id);
-  timers[id].elapsed = 0;
-  timers[id].countdown = null;
-  const disp = document.getElementById(id + '-display');
-  if (disp) disp.textContent = '00:00';
+function initWortschatz() {
+    var container = document.getElementById('wortschatzContainer');
+    container.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        row.style.marginBottom = '0';
+        var prompt = document.createElement('div');
+        prompt.style.cssText = 'font-weight:600; color:#667eea; margin-bottom:6px; font-size:1.05em;';
+        prompt.textContent = item.en;
+        row.appendChild(prompt);
+        var fields = document.createElement('div');
+        fields.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; align-items:center;';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'blank'; artInp.type = 'text';
+            artInp.placeholder = 'Artikel'; artInp.style.width = '70px';
+            artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+            artInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(artInp);
+            var wordInp = document.createElement('input');
+            wordInp.className = 'blank'; wordInp.type = 'text';
+            wordInp.placeholder = 'Wort'; wordInp.style.width = '160px';
+            wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
+            wordInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(wordInp);
+            var plInp = document.createElement('input');
+            plInp.className = 'blank'; plInp.type = 'text';
+            plInp.placeholder = 'Plural'; plInp.style.width = '140px';
+            plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+            if (item.plural === '\u2013') {
+                plInp.value = '\u2013';
+                plInp.disabled = true;
+                plInp.classList.add('correct');
+                plInp.style.opacity = '0.6';
+                plInp.title = 'Dieses Wort hat keinen Plural';
+            } else {
+                plInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            }
+            fields.appendChild(plInp);
+        } else {
+            var inp = document.createElement('input');
+            inp.className = 'blank'; inp.type = 'text';
+            inp.placeholder = 'Deutsch'; inp.style.width = '220px';
+            inp.dataset.answer = item.de; inp.dataset.field = 'word';
+            inp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields);
+        container.appendChild(row);
+    });
 }
-function timerSet(id, secs) {
-  timerStop(id);
-  timerInit(id);
-  timers[id].countdown = secs;
-  const disp = document.getElementById(id + '-display');
-  if (disp) disp.textContent = fmt(secs);
+function wortschatzCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser   = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { }
+    else { inp.classList.add('wrong'); }
 }
-function fmt(s) {
-  const m = Math.floor(s / 60), sec = s % 60;
-  return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+function checkWortschatzAllOk() {
+    var inputs = document.querySelectorAll('#sec-5 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.disabled || i.classList.contains('correct');
+    });
+    if (allOk) stopTimer(5);
 }
-
-initVocab();
+function showWortschatzLoesung() {
+    stopTimer(5);
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
+}
+function resetWortschatz() {
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        if (!inp.disabled) {
+            inp.value = ''; inp.classList.remove('correct', 'wrong');
+        }
+    });
+    resetTimer(5);
+}
+function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text');
+    if (!storyText) return;
+    var words = [];
+    if (typeof VORENTLASTUNG !== 'undefined' && VORENTLASTUNG.length) {
+        words = VORENTLASTUNG.map(function(item) {
+            var term = item.term.replace(/^(der|die|das)\s+/i, '');
+            return term.split(',')[0].trim();
+        });
+    }
+    words = words.filter(function(w) { return w && w.length > 3; });
+    if (words.length === 0) return;
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+                replaced = replaced.replace(regex, '\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHighlight = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHighlight = !isHighlight; return; }
+                    if (isHighlight) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHighlight = !isHighlight;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
+    }
+    walkAndHighlight(storyText);
+}
+function escapeHtml(text) {
+    var map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+document.addEventListener('DOMContentLoaded', function() {
+    initVorentlastung();
+    initRF();
+    initLuecken();
+    initSatzbau();
+    initWortschatz();
+    highlightVocabInText();
+});
 </script>
 </body>
 </html>

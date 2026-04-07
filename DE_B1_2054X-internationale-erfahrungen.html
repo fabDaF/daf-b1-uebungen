@@ -3,30 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 · 2054X · Internationale Erfahrungen</title>
+<title>B1.1 · 2054X · Internationale Erfahrungen</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     padding: 20px;
 }
 .container {
-    max-width: 960px;
+    max-width: 1000px;
     margin: 0 auto;
     background: #fff;
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.18);
     overflow: hidden;
 }
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #9b59b6 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
-    padding: 24px 32px 18px;
+    padding: 28px 32px 20px;
 }
-.header h1 { font-size: 1.5em; font-weight: 700; }
-.header .subtitle { font-size: 0.9em; opacity: 0.85; margin-top: 4px; }
+.header h1 {
+    font-family: Georgia, serif;
+    font-size: 1.6em;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+.header p {
+    font-family: Georgia, serif;
+    font-size: 0.95em;
+    opacity: 0.9;
+    margin-bottom: 12px;
+}
+.header-subtitle {
+    font-size: 0.85em;
+    opacity: 0.85;
+    margin-bottom: 8px;
+}
+.header-emoji {
+    font-size: 2.5em;
+    margin-top: 8px;
+}
 .nav {
     display: flex;
     flex-direction: column;
@@ -36,7 +55,7 @@ body {
 .nav-row { display: flex; flex-wrap: wrap; }
 .nav-btn {
     flex: 1 1 auto;
-    padding: 11px 10px;
+    padding: 12px 10px;
     font-size: 0.82em;
     font-weight: 600;
     border: 1.5px solid #c39bd3;
@@ -47,30 +66,82 @@ body {
     transition: background 0.15s, color 0.15s;
     text-align: center;
     min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
 }
+.nav-emoji { font-size: 1.2em; }
+.nav-label { font-size: 0.75em; }
 .nav-btn:hover { background: #e8d5f5; }
 .nav-btn.active { background: #667eea; color: #fff; border-color: #667eea; }
-.section { display: none; padding: 28px 32px 32px; }
+.section { display: none; padding: 0; }
 .section.active { display: block; }
 .tab-banner {
     width: 100%;
-    max-height: 180px;
+    max-height: 200px;
     object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    border-radius: 0;
+    margin: 0;
     display: block;
 }
+.sec-inner {
+    padding: 28px 32px 32px;
+}
 .section-title {
-    font-size: 1.4em;
+    font-size: 1.35em;
     font-weight: 700;
     color: #667eea;
     margin-bottom: 20px;
 }
-.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
-/* VOCAB CARDS */
+.section-sub {
+    color: #888;
+    font-size: 0.92em;
+    margin-bottom: 16px;
+}
+
+/* CONTROL BAR */
+.control-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+.btn-row {
+    display: flex;
+    gap: 10px;
+}
+.btn {
+    padding: 9px 16px;
+    font-size: 0.85em;
+    font-weight: 600;
+    background: #999;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn:hover { background: #777; }
+.timer-display {
+    display: flex;
+    gap: 16px;
+    font-size: 0.9em;
+    color: #666;
+}
+.timer-display span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* VORENTLASTUNG */
 .vocab-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 14px;
     margin-top: 16px;
 }
@@ -80,857 +151,1021 @@ body {
     border-radius: 10px;
     padding: 14px 16px;
 }
-.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
-.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
-.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
-/* AUSLANDSTYPEN GRID */
-.ausland-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
+.vocab-term {
+    font-weight: 700;
+    color: #667eea;
+    font-size: 1.05em;
+    margin-bottom: 4px;
 }
-.ausland-card {
-    background: #f0f4ff;
-    border: 1.5px solid #c5d0f5;
-    border-radius: 12px;
-    padding: 16px;
+.vocab-en {
+    color: #999;
+    font-size: 0.85em;
+    margin-bottom: 6px;
+    font-style: italic;
+}
+.vocab-def {
+    color: #555;
+    font-size: 0.92em;
+    line-height: 1.5;
+}
+
+/* LESETEXT */
+.story-text {
+    font-family: Georgia, serif;
+    max-width: 700px;
+    text-align: justify;
+    line-height: 1.8;
+    hyphens: auto;
+    color: #333;
+}
+.story-text p {
+    margin-bottom: 1.2em;
+    text-indent: 1.4em;
+}
+.story-text p:first-child {
+    text-indent: 0;
+}
+.story-text figure {
+    margin: 1.5em 0;
     text-align: center;
 }
-.ausland-card .icon { font-size: 2em; margin-bottom: 8px; }
-.ausland-card .titel { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 6px; }
-.ausland-card .desc { color: #555; font-size: 0.88em; line-height: 1.5; }
-/* ZUORDNUNG REIHENFOLGE */
-.zuord-info {
-    background: #f8f3fd;
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-bottom: 20px;
-    font-size: 0.95em;
-    color: #444;
-    line-height: 1.7;
-}
-.zuord-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-.zuord-table th {
-    background: #667eea;
-    color: #fff;
-    padding: 10px 14px;
-    text-align: left;
-    font-size: 0.9em;
-}
-.zuord-table td {
-    padding: 12px 14px;
-    border-bottom: 1px solid #e8d5f5;
-    font-size: 0.92em;
-    vertical-align: top;
-}
-.zuord-table tr:nth-child(even) td { background: #f8f3fd; }
-.zuord-select {
-    padding: 6px 10px;
-    border: 1.5px solid #9b59b6;
+.story-text figure img {
+    max-width: 100%;
+    height: auto;
     border-radius: 8px;
-    background: #fff;
-    color: #333;
-    font-size: 0.9em;
-    cursor: pointer;
-    outline: none;
+    margin-bottom: 8px;
 }
-.zuord-select.ok { border-color: #27ae60; background: #eafaf1; color: #1e8449; }
-.zuord-select.err { border-color: #e74c3c; background: #fdecea; }
-/* RF LAYOUT */
-.rf-list {
+.story-text figure figcaption {
+    font-size: 0.9em;
+    color: #888;
+    font-style: italic;
+}
+.vocab-hl {
+    background: #ffe9a0;
+    font-weight: 600;
+    cursor: help;
+}
+
+/* GENUS DRAG & DROP */
+.genus-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.genus-cat {
+    background: #f0f4ff;
+    border: 2px solid #c5d0f5;
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 200px;
+    position: relative;
+}
+.genus-label {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #667eea;
+    margin-bottom: 12px;
+}
+.genus-zone {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-width: 650px;
-    margin-left: auto;
-    margin-right: auto;
 }
-.rf-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    font-size: 0.95em;
-    cursor: pointer;
-    border: 1.5px solid #ddd;
-}
-.rf-item:hover { background: #f3e5f5; }
-.rf-text { flex: 1; }
-.rf-btns { display: flex; gap: 6px; }
-.rf-btn {
-    padding: 4px 14px;
-    border-radius: 14px;
-    border: 1.5px solid #9b59b6;
-    background: #fff;
-    color: #6c3483;
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-.rf-btn:hover { background: #f3e5f5; }
-.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
-.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
-.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; }
-.rf-result.ok { color: #27ae60; }
-.rf-result.err { color: #e74c3c; }
-.rf-title {
-    font-size: 1.0em; color: #555; margin-bottom: 12px; font-weight: 600;
-    max-width: 650px; margin-left: auto; margin-right: auto;
-}
-/* LÜCKENTEXT */
-.luecke-box {
-    background: #f8f3fd;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 20px;
-}
-.luecke-satz {
-    margin-bottom: 14px;
-    line-height: 1.9;
-    font-size: 0.97em;
-}
-.luecke-input {
-    border: none;
-    border-bottom: 2px solid #9b59b6;
-    background: transparent;
-    font-size: 0.97em;
-    width: 160px;
-    outline: none;
-    color: #333;
-    padding: 1px 4px;
-}
-.luecke-input.ok { border-bottom-color: #27ae60; color: #27ae60; background: #eafaf1; border-radius: 4px; }
-.luecke-input.err { border-bottom-color: #e74c3c; color: #e74c3c; }
-/* TIMER */
-.timer-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-}
-.timer-display { font-size: 1.1em; font-weight: 700; color: #667eea; min-width: 60px; }
-.btn {
-    padding: 7px 18px;
+.chip {
+    background: #667eea;
+    color: #fff;
+    padding: 8px 12px;
     border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.85em;
-}
-.btn-purple { background: #667eea; color: #fff; }
-.btn-outline { background: #fff; color: #667eea; border: 1.5px solid #667eea; }
-.btn:hover { opacity: 0.88; }
-.score-msg { font-size: 0.88em; color: #555; margin-top: 8px; }
-/* SATZBAU */
-.sb-area { margin-bottom: 28px; }
-.sb-question { font-weight: 600; color: #555; margin-bottom: 8px; font-size: 0.9em; }
-.sb-chips {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    min-height: 44px; padding: 8px;
-    background: #f3e5f5; border-radius: 10px; margin-bottom: 6px;
-}
-.sb-chip {
-    padding: 6px 14px; border-radius: 18px;
-    background: #fff; border: 1.5px solid #9b59b6;
-    color: #667eea; cursor: grab; font-size: 0.9em;
-    font-weight: 600; user-select: none; transition: background 0.1s;
-}
-.sb-chip:hover { background: #e8d5f5; }
-.sb-chip.dragging { opacity: 0.5; }
-.sb-chip.correct { background: #27ae60; color: #fff; border-color: #27ae60; cursor: default; }
-.sb-chip.incorrect { background: #e74c3c; color: #fff; border-color: #e74c3c; }
-.sb-drop {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    min-height: 44px; padding: 8px;
-    background: #fff; border: 2px dashed #c39bd3;
-    border-radius: 10px; margin-bottom: 8px;
-}
-.sb-drop.drag-over { background: #f3e5f5; border-color: #667eea; }
-.sb-feedback { font-size: 0.85em; font-weight: 600; min-height: 18px; margin-bottom: 4px; }
-.sb-feedback.ok { color: #27ae60; }
-.sb-feedback.err { color: #e74c3c; }
-/* SPRECHKARTEN */
-.sprech-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
-}
-.sprech-card {
-    background: #f0f7ff;
-    border: 1.5px solid #b3d4f5;
-    border-radius: 12px;
-    padding: 16px 18px;
-}
-.sprech-card .frage { font-weight: 700; color: #2471a3; margin-bottom: 8px; font-size: 0.95em; }
-.sprech-card .hilfe { color: #555; font-size: 0.88em; line-height: 1.6; }
-/* RESULT BOX */
-.result-box {
-    margin-top: 18px;
-    padding: 14px 18px;
-    border-radius: 10px;
-    background: #f0faf4;
-    border: 1.5px solid #27ae60;
-    font-weight: 600;
-    color: #1e8449;
+    cursor: grab;
+    user-select: none;
+    transition: background 0.2s, box-shadow 0.2s;
+    text-align: center;
     font-size: 0.95em;
+    font-weight: 600;
 }
-/* DIKTAT TEXT */
-.diktat-text {
-    background: #f8f3fd;
-    border-left: 4px solid #667eea;
-    border-radius: 0 10px 10px 0;
-    padding: 18px 22px;
-    font-size: 0.97em;
+.chip:active { cursor: grabbing; }
+.chip.correct { background: #27ae60; box-shadow: 0 0 8px rgba(39, 174, 96, 0.4); }
+.chip.wrong { background: #e74c3c; box-shadow: 0 0 8px rgba(231, 76, 60, 0.4); }
+.chip.dragging { opacity: 0.7; }
+
+.chip-bank {
+    background: #fff8e1;
+    border: 2px dashed #ffc107;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.chip-bank .chip {
+    background: #ffc107;
+    color: #333;
+}
+
+/* LÜCKENTEXT */
+.blanks-text {
+    font-size: 1.05em;
     line-height: 1.8;
     color: #333;
-    margin-bottom: 20px;
-    font-family: Georgia, serif;
+    max-width: 700px;
 }
-.korr-highlight { color: #e74c3c; font-weight: 700; text-decoration: line-through; }
-.korr-correct { color: #27ae60; font-weight: 700; }
-/* AUTHOR FOOTER */
+.blanks-text input.blank {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 4px 8px;
+    font-size: inherit;
+    font-weight: 600;
+    min-width: 120px;
+    margin: 0 4px;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+.blanks-text input.blank:focus {
+    outline: none;
+    border-bottom-color: #667eea;
+    background: #f0f4ff;
+}
+.blanks-text input.blank.correct {
+    border-bottom-color: #27ae60;
+    background: #d4edda;
+}
+.blanks-text input.blank.wrong {
+    border-bottom-color: #e74c3c;
+    background: #f8d7da;
+}
+.hint-btn {
+    font-size: 0.8em;
+    color: #999;
+    background: none;
+    border: 1px dashed #ccc;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: help;
+    margin-left: 4px;
+    transition: color 0.2s;
+}
+.hint-btn:hover { color: #667eea; border-color: #667eea; }
+
+/* MULTIPLE CHOICE */
+.mc-question {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #eee;
+}
+.mc-question:last-child { border-bottom: none; }
+.mc-q-text {
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+}
+.mc-opts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.mc-opt {
+    padding: 9px 16px;
+    font-size: 0.95em;
+    background: #f0f4ff;
+    border: 2px solid #c5d0f5;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #333;
+}
+.mc-opt:hover:not(:disabled) { background: #667eea; color: #fff; border-color: #667eea; }
+.mc-opt:disabled { opacity: 0.5; cursor: default; }
+.mc-opt.correct { background: #27ae60; color: #fff; border-color: #27ae60; }
+.mc-opt.wrong { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+
+/* SATZBAU */
+.sb-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.sb-left, .sb-right { }
+.sb-label {
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 12px;
+    font-size: 0.95em;
+}
+.chip-bank {
+    background: #fff8e1;
+    border: 2px dashed #ffc107;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.chip-bank .chip {
+    background: #ffc107;
+    color: #333;
+}
+.sentence-builder {
+    background: #f0f4ff;
+    border: 2px solid #c5d0f5;
+    border-radius: 10px;
+    padding: 16px;
+    min-height: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-content: flex-start;
+}
+.sb-chip {
+    background: #667eea;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: grab;
+    user-select: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.sb-chip.wrong-pos { background: #e74c3c; }
+.sb-punkt {
+    background: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    margin-left: auto;
+    align-self: flex-start;
+}
+.satzbau-feedback {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: none;
+    font-weight: 600;
+}
+.satzbau-feedback.show { display: block; }
+.satzbau-feedback.correct {
+    background: #d4edda;
+    color: #27ae60;
+    border: 1px solid #27ae60;
+}
+.satzbau-feedback.wrong {
+    background: #f8d7da;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+}
+
+/* FOOTER */
 .author-footer {
-    text-align: center;
-    padding: 14px;
-    font-size: 0.78em;
-    color: #aaa;
+    padding: 16px 32px;
+    font-size: 0.85em;
+    color: #999;
+    background: #f8f9fa;
     border-top: 1px solid #eee;
+    text-align: center;
 }
+.author-footer .author-name {
+    font-weight: 600;
+    color: #667eea;
+}
+.author-footer a {
+    color: #667eea;
+    text-decoration: none;
+}
+.author-footer a:hover { text-decoration: underline; }
+
 </style>
 </head>
 <body>
+
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div style="font-size:0.9em;opacity:0.8;">B1.2 · Lektion 2054X</div>
+<div class="header">
     <h1>Internationale Erfahrungen</h1>
-    <div class="subtitle">Kommunikation · Auslandsaufenthalte · Behördenwege</div>
-  </div>
+    <p>Behörden, Austausch und neue Welten</p>
+    <div class="header-subtitle">B1.1 – Lektion 2054X · Textarbeit</div>
+    <div class="header-emoji">🌍</div>
+</div>
 
-  <!-- NAV -->
-  <div class="nav">
+<div class="nav">
     <div class="nav-row">
-      <button class="nav-btn active" onclick="showTab(0)">🌍 Auslandstypen</button>
-      <button class="nav-btn" onclick="showTab(1)">📚 Wortschatz</button>
-      <button class="nav-btn" onclick="showTab(2)">🏛 Behördenwege</button>
-      <button class="nav-btn" onclick="showTab(3)">✅ Richtig/Falsch</button>
-      <button class="nav-btn" onclick="showTab(4)">✏️ Lückentext</button>
-      <button class="nav-btn" onclick="showTab(5)">🔀 Satzbau</button>
-    </div>
-  </div>
-
-  <!-- ===== TAB 0: AUSLANDSTYPEN ===== -->
-  <div class="section active" id="sec-0">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Banner">
-    <div class="section-title">🌍 Arten des Auslandsaufenthalts</div>
-    <div class="section-sub">Ferienarbeit, Freiwilligendienst, Auslandssemester oder gleich auswandern?</div>
-
-    <div class="ausland-grid">
-      <div class="ausland-card">
-        <div class="icon">🏖️</div>
-        <div class="titel">Ferienarbeit (Ferienjob)</div>
-        <div class="desc">Kurzfristige Arbeit im Ausland während der Ferien. Ideal zum Geldverdienen und Sprache üben.</div>
-      </div>
-      <div class="ausland-card">
-        <div class="icon">❤️</div>
-        <div class="titel">Freiwilligendienst</div>
-        <div class="desc">Freiwillige Arbeit leisten, z.B. bei Ärzte ohne Grenzen. Lehrreich und bereichernd.</div>
-      </div>
-      <div class="ausland-card">
-        <div class="icon">🎓</div>
-        <div class="titel">Auslandssemester</div>
-        <div class="desc">Als Austauschstudent an einer Hochschule im Ausland studieren. Mit Austauschdienst organisieren.</div>
-      </div>
-      <div class="ausland-card">
-        <div class="icon">💼</div>
-        <div class="titel">Globaler Wirtschaftsreisender</div>
-        <div class="desc">Auf dem internationalen Arbeitsmarkt tätig, ohne den Wohnsitz zu verlegen.</div>
-      </div>
-      <div class="ausland-card">
-        <div class="icon">✈️</div>
-        <div class="titel">Auswandern</div>
-        <div class="desc">Permanent ins Ausland ziehen. Einwanderungsvisum über die Botschaft oder das Konsulat beantragen.</div>
-      </div>
-      <div class="ausland-card">
-        <div class="icon">🔬</div>
-        <div class="titel">Auslandspraktikum</div>
-        <div class="desc">Berufspraktikum im Ausland. Erfahrungen auf dem internationalen Arbeitsmarkt sammeln.</div>
-      </div>
-    </div>
-
-    <div class="section-title" style="font-size:1.1em;margin-top:8px;">📋 Ordne: kurzzeitig (1) bis permanent (4)</div>
-    <div style="background:#f8f3fd;border-radius:12px;padding:20px;margin-bottom:20px;">
-      <p style="margin-bottom:14px;font-size:0.95em;color:#444;">Ordne die Personen nach der Dauer ihres Auslandsaufenthalts. Ziehe die Zahl (1–4) zur richtigen Person.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-        <div style="background:#fff;border:1.5px solid #c39bd3;border-radius:10px;padding:14px;">
-          <span style="font-weight:700;color:#667eea;">A</span> — Emma studiert an der TU. Sie beschließt, für ein Jahr an der Uni in Berlin zu studieren.
-          <div style="margin-top:8px;">
-            <select class="zuord-select" onchange="checkOrdnung(this,'2')">
-              <option value="">— Dauer —</option>
-              <option value="1">1 (kurzzeitig)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4 (permanent)</option>
-            </select>
-          </div>
+        <div class="nav-btn active" data-tab="0">
+            <span class="nav-emoji">📖</span>
+            <span class="nav-label">Vorentlastung</span>
         </div>
-        <div style="background:#fff;border:1.5px solid #c39bd3;border-radius:10px;padding:14px;">
-          <span style="font-weight:700;color:#667eea;">B</span> — Christian möchte einige Jahre für Ärzte ohne Grenzen in Zentralafrika arbeiten.
-          <div style="margin-top:8px;">
-            <select class="zuord-select" onchange="checkOrdnung(this,'3')">
-              <option value="">— Dauer —</option>
-              <option value="1">1 (kurzzeitig)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4 (permanent)</option>
-            </select>
-          </div>
+        <div class="nav-btn" data-tab="1">
+            <span class="nav-emoji">📄</span>
+            <span class="nav-label">Lesetext</span>
         </div>
-        <div style="background:#fff;border:1.5px solid #c39bd3;border-radius:10px;padding:14px;">
-          <span style="font-weight:700;color:#667eea;">C</span> — Samuel lebt praktisch aus dem Koffer. Seine Firma schickt ihn in verschiedene Länder.
-          <div style="margin-top:8px;">
-            <select class="zuord-select" onchange="checkOrdnung(this,'1')">
-              <option value="">— Dauer —</option>
-              <option value="1">1 (kurzzeitig)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4 (permanent)</option>
-            </select>
-          </div>
+        <div class="nav-btn" data-tab="2">
+            <span class="nav-emoji">🔤</span>
+            <span class="nav-label">Genus</span>
         </div>
-        <div style="background:#fff;border:1.5px solid #c39bd3;border-radius:10px;padding:14px;">
-          <span style="font-weight:700;color:#667eea;">D</span> — Anna beantragt bei der Kanadischen Botschaft ein Einwanderungsvisum.
-          <div style="margin-top:8px;">
-            <select class="zuord-select" onchange="checkOrdnung(this,'4')">
-              <option value="">— Dauer —</option>
-              <option value="1">1 (kurzzeitig)</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4 (permanent)</option>
-            </select>
-          </div>
+        <div class="nav-btn" data-tab="3">
+            <span class="nav-emoji">✏️</span>
+            <span class="nav-label">Lückentext</span>
         </div>
-      </div>
+        <div class="nav-btn" data-tab="4">
+            <span class="nav-emoji">☑️</span>
+            <span class="nav-label">Multiple-Choice</span>
+        </div>
+        <div class="nav-btn" data-tab="5">
+            <span class="nav-emoji">🧩</span>
+            <span class="nav-label">Satzbau</span>
+        </div>
     </div>
+</div>
 
-    <div class="section-title" style="font-size:1.1em;margin-top:8px;">💬 Brainstorming</div>
-    <div class="sprech-grid">
-      <div class="sprech-card">
-        <div class="frage">Welche Art des Auslandsaufenthalts würdest du wählen?</div>
-        <div class="hilfe">Ich würde am liebsten ... wählen, weil ...</div>
-      </div>
-      <div class="sprech-card">
-        <div class="frage">Erfahrungen auf dem internationalen Arbeitsmarkt zu sammeln kann sehr bereichernd sein — warum?</div>
-        <div class="hilfe">Man kann ... lernen / kennenlernen / erfahren ...</div>
-      </div>
-      <div class="sprech-card">
-        <div class="frage">Welche organisatorischen Erledigungen braucht man vor einem Auslandsaufenthalt?</div>
-        <div class="hilfe">Man braucht ... / Man sollte ... haben. / Man muss sich um ... kümmern.</div>
-      </div>
+<!-- TAB 0: VORENTLASTUNG -->
+<div class="section active" id="tab-0">
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg" alt="Vorentlastung" class="tab-banner">
+    <div class="sec-inner">
+        <div class="section-title">Vorentlastung: Wortschatz</div>
+        <div class="section-sub">Lernen Sie die wichtigsten Wörter zum Thema internationale Erfahrungen.</div>
+        <div class="vocab-grid" id="vorentlastung-grid"></div>
     </div>
-  </div>
+</div>
 
-  <!-- ===== TAB 1: VOKABELN ===== -->
-  <div class="section" id="sec-1">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Vokabeln Banner">
-    <div class="section-title">📚 Neue Vokabeln</div>
-    <div class="section-sub">Vokabeln rund um internationale Erfahrungen und Behördenwege.</div>
-    <div class="vocab-grid" id="vocabGrid"></div>
-  </div>
-
-  <!-- ===== TAB 2: BEHÖRDENWEGE ===== -->
-  <div class="section" id="sec-2">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Behördenwege Banner">
-    <div class="section-title">🏛 Behördenwege &amp; Austauschdienste</div>
-    <div class="section-sub">Vervollständige die Texte mit den richtigen Wörtern.</div>
-
-    <div style="background:#e8f4fd;border-radius:10px;padding:16px 20px;margin-bottom:20px;font-weight:600;color:#2471a3;">
-      Bevor man in das Gastland reisen kann, gibt es viele organisatorische Erledigungen zu bedenken: Visum, Impfungen, Reisepass, Unterkunft, Arbeit oder Studienplatz, Flug, etc.
+<!-- TAB 1: LESETEXT -->
+<div class="section" id="tab-1">
+    <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg" alt="Lesetext" class="tab-banner">
+    <div class="sec-inner">
+        <div class="section-title">Lesetext</div>
+        <div class="section-sub">Lesen Sie den Text gründlich und achten Sie auf die hervorgehobenen Wörter.</div>
+        <div class="story-text" id="story-text-container"></div>
     </div>
+</div>
 
-    <p style="font-weight:700;color:#667eea;margin-bottom:12px;">Du möchtest ein Auslandssemester absolvieren. Wer kann dir bei den Vorbereitungen helfen?</p>
-    <div class="luecke-box">
-      <div class="luecke-satz">
-        Zahlreiche <input class="luecke-input" id="b0" data-ans="austauschdienste" oninput="liveCheckB(this)" placeholder="A___..."> in Deutschland bieten Serviceleistungen für ausländische Studierende an.
-      </div>
-      <div class="luecke-satz">
-        Sie helfen bei der Wahl einer geeigneten <input class="luecke-input" id="b1" data-ans="hochschule" oninput="liveCheckB(this)" placeholder="H___">, stellen sicher, dass der Bewerber die <input class="luecke-input" id="b2" data-ans="formellen" oninput="liveCheckB(this)" placeholder="f___"> Voraussetzungen erfüllt und der deutschen Sprache mächtig ist.
-      </div>
-      <div class="luecke-satz">
-        Auch bei <input class="luecke-input" id="b3" data-ans="datenbanken" oninput="liveCheckB(this)" placeholder="D___">, Bewerbung und Einschreibung an der Universität, Krankenversicherung, Visum und Unterkunftssuche können sie hilfreich sein.
-      </div>
-      <div class="luecke-satz">
-        Es gibt online <input class="luecke-input" id="b4" data-ans="stipendienmöglichkeiten" oninput="liveCheckB(this)" placeholder="S___"> für die verschiedenen Arten der finanziellen Förderung.
-      </div>
+<!-- TAB 2: GENUS -->
+<div class="section" id="tab-2">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg" alt="Genus" class="tab-banner">
+    <div class="sec-inner">
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="resetGenus()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-2">0:00</span></span>
+                <span>🏆 Best: <span id="best-2">--:--</span></span>
+            </div>
+        </div>
+        <div class="section-title">Genus: Artikel zuordnen</div>
+        <div class="section-sub">Ziehen Sie die Wörter in die richtige Kategorie.</div>
+        <div class="chip-bank" id="chip-bank-2"></div>
+        <div class="genus-container" id="genus-zones"></div>
     </div>
+</div>
 
-    <p style="font-weight:700;color:#667eea;margin-bottom:12px;">Wenn du an deiner deutschen Hochschule angekommen bist, gibt es auch Ansprechpartner.</p>
-    <div class="luecke-box">
-      <div class="luecke-satz">
-        Deutsche <input class="luecke-input" id="b5" data-ans="hochschulen" oninput="liveCheckB(this)" placeholder="H___"> verfügen in der Regel über Akademische Auslandsämter oder <em>International Offices</em>.
-      </div>
-      <div class="luecke-satz">
-        Internationale <input class="luecke-input" id="b6" data-ans="studierende" oninput="liveCheckB(this)" placeholder="S___"> können sich mit ersten Fragen zu Studium und Alltag an dieses Amt wenden.
-      </div>
-      <div class="luecke-satz">
-        Diese Ämter helfen bei der <input class="luecke-input" id="b7" data-ans="immatrikulation" oninput="liveCheckB(this)" placeholder="I___"> an der Uni, bei der Studienplanung, sowie beim Suchen einer Unterkunft.
-      </div>
-      <div class="luecke-satz">
-        Auch bei organisatorischen und <input class="luecke-input" id="b8" data-ans="steuerlichen" oninput="liveCheckB(this)" placeholder="s___"> Fragen zum Thema Nebenjob oder <input class="luecke-input" id="b9" data-ans="praktikum" oninput="liveCheckB(this)" placeholder="P___"> helfen Austauschdienste.
-      </div>
+<!-- TAB 3: LÜCKENTEXT -->
+<div class="section" id="tab-3">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg" alt="Lückentext" class="tab-banner">
+    <div class="sec-inner">
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="resetLuecken()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-3">0:00</span></span>
+                <span>🏆 Best: <span id="best-3">--:--</span></span>
+            </div>
+        </div>
+        <div class="section-title">Lückentext ausfüllen</div>
+        <div class="section-sub">Ergänzen Sie die fehlenden Wörter.</div>
+        <div id="luecken-container"></div>
     </div>
-    <div class="score-msg" id="bScore"></div>
-    <div class="result-box" id="bResult" style="display:none;">🎉 Alle Lücken richtig!</div>
-  </div>
+</div>
 
-  <!-- ===== TAB 3: RICHTIG / FALSCH ===== -->
-  <div class="section" id="sec-3">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="RF Banner">
-    <div class="section-title">✅ Richtig oder Falsch?</div>
-    <div class="section-sub">Lies den Text über Einwanderungsvisa und entscheide: Richtig oder Falsch?</div>
-
-    <div class="diktat-text">
-      Nicht alle EU-Länder haben die gleichen Einwanderungsbestimmungen. Wer in ein EU-Land einwandern möchte, muss in der Regel ein Visum beantragen. Ein Visum ist die offizielle Erlaubnis, in das jeweilige Land einzureisen und dort zu leben. Das Visum beantragt man bei der Botschaft oder beim Konsulat des Ziellandes. Informationen über die Einreisebestimmungen können online oder direkt bei den Behörden gefunden werden.
+<!-- TAB 4: MULTIPLE-CHOICE -->
+<div class="section" id="tab-4">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg" alt="Multiple-Choice" class="tab-banner">
+    <div class="sec-inner">
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="resetMC()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-4">0:00</span></span>
+                <span>🏆 Best: <span id="best-4">--:--</span></span>
+            </div>
+        </div>
+        <div class="section-title">Multiple-Choice Fragen</div>
+        <div class="section-sub">Wählen Sie die richtige Antwort.</div>
+        <div id="mc-container"></div>
     </div>
+</div>
 
-    <p class="rf-title">Sind diese Aussagen richtig oder falsch?</p>
-    <div class="rf-list" id="rfList"></div>
-    <div class="result-box" id="rfResult" style="display:none;margin-top:16px;">🎉 Alle Fragen beantwortet!</div>
-
-    <div style="margin-top:28px;background:#f0f7ff;border-radius:12px;padding:20px;">
-      <p style="font-weight:700;color:#2471a3;margin-bottom:14px;">✍️ Korrigiere den Text! (Finde 5 Fehler)</p>
-      <div class="diktat-text" style="font-family:'Segoe UI',sans-serif;">
-        Ich bin eine sehr <span class="korr-highlight">schlechte</span> <span class="korr-correct">→ gute</span> Studentin. Darum haben meine Professoren vorgeschlagen, ich solle mich um ein Stipendium <span class="korr-highlight">beschweren</span> <span class="korr-correct">→ bewerben</span>. Es war relativ kompliziert und langwierig, aber schließlich wurde meine Bewertung an der Uni hier akzeptiert. Ich bin nun auf der Suche nach einer <span class="korr-highlight">Brücke</span> <span class="korr-correct">→ Unterkunft</span> in der Nähe der Uni. Die Miete sollte nicht zu <span class="korr-highlight">billig</span> <span class="korr-correct">→ teuer</span> sein, da ich leider noch keine Arbeitsgenehmigung habe. Mein <span class="korr-highlight">Stiefel</span> <span class="korr-correct">→ Budget</span> muss für Unterkunft und Verpflegung reichen.
-      </div>
+<!-- TAB 5: SATZBAU -->
+<div class="section" id="tab-5">
+    <img src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg" alt="Satzbau" class="tab-banner">
+    <div class="sec-inner">
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="resetAllSatzbau()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-5">0:00</span></span>
+                <span>🏆 Best: <span id="best-5">--:--</span></span>
+            </div>
+        </div>
+        <div class="section-title">Satzbau üben</div>
+        <div class="section-sub">Ordnen Sie die Wörter in die richtige Reihenfolge.</div>
+        <div id="satzbau-container"></div>
     </div>
-  </div>
+</div>
 
-  <!-- ===== TAB 4: LÜCKENTEXT ===== -->
-  <div class="section" id="sec-4">
-    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Lückentext Banner">
-    <div class="section-title">✏️ Lückentext</div>
-    <div class="section-sub">Ergänze die fehlenden Vokabeln.</div>
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
 
-    <div class="timer-row">
-      <div class="timer-display" id="timerL">00:00</div>
-      <button class="btn btn-purple" onclick="startTimer('L')">▶ Start</button>
-      <button class="btn btn-outline" onclick="stopTimer('L')">⏸ Stop</button>
-      <button class="btn btn-outline" onclick="resetLuecke()">↺ Reset</button>
-    </div>
-
-    <div class="luecke-box" id="lueckeBox"></div>
-    <div class="score-msg" id="lueckeScore"></div>
-    <div class="result-box" id="lueckeResult" style="display:none;">🎉 Alle Lücken richtig ausgefüllt!</div>
-  </div>
-
-  <!-- ===== TAB 5: SATZBAU ===== -->
-  <div class="section" id="sec-5">
-    <img class="tab-banner" src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Satzbau Banner">
-    <div class="section-title">🔀 Satzbau</div>
-    <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge.</div>
-
-    <div class="timer-row">
-      <div class="timer-display" id="timerS">00:00</div>
-      <button class="btn btn-purple" onclick="startTimer('S')">▶ Start</button>
-      <button class="btn btn-outline" onclick="stopTimer('S')">⏸ Stop</button>
-    </div>
-
-    <div id="sbContainer"></div>
-    <div class="result-box" id="sbResult" style="display:none;">🎉 Alle Sätze richtig!</div>
-  </div>
-
-  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · B1.2 Lektion 2054X</div>
 </div>
 
 <script>
-// ===== DATEN =====
-var WORTSCHATZ = [
-    { de: 'der Auswanderer, -', en: 'emigrant', def: 'Jemand, der dauerhaft ins Ausland zieht.' },
-    { de: 'in fremde Welten eintauchen', en: 'to immerse in foreign worlds', def: 'Sich intensiv mit einer neuen Kultur oder Umgebung beschäftigen.' },
-    { de: 'die Behördenwege (Pl.)', en: 'bureaucratic procedures', def: 'Die offiziellen Schritte, die man bei Ämtern erledigen muss.' },
-    { de: 'die Botschaft, -en', en: 'embassy', def: 'Das offizielle Vertretungsbüro eines Landes im Ausland.' },
-    { de: 'das Konsulat, -e', en: 'consulate', def: 'Eine kleinere diplomatische Vertretung eines Landes.' },
-    { de: 'der Kulturschock, -s', en: 'culture shock', def: 'Das Gefühl der Verwirrung oder des Unbehagens in einer fremden Kultur.' },
-    { de: 'einer Situation ausgesetzt sein', en: 'to be exposed to a situation', def: 'Mit einer bestimmten Situation direkt konfrontiert sein.' },
-    { de: 'lehrreich', en: 'educational / instructive', def: 'Aus einer Erfahrung kann man viel lernen.' },
-    { de: 'das Visum, Visa', en: 'visa', def: 'Die offizielle Erlaubnis, in ein bestimmtes Land einzureisen.' },
-    { de: 'der Ferienjob, -s', en: 'holiday job', def: 'Ein Arbeitsverhältnis während der Ferien, oft im Ausland.' },
-    { de: 'freiwillige Arbeit leisten', en: 'to do voluntary work', def: 'Ohne Bezahlung für eine gute Sache arbeiten.' },
-    { de: 'der internationale Arbeitsmarkt', en: 'international job market', def: 'Der weltweite Markt für Arbeit und Beschäftigung.' },
-    { de: 'der Austauschstudent, -en', en: 'exchange student', def: 'Ein Student, der im Rahmen eines Programms an einer Uni im Ausland studiert.' },
-    { de: 'der Austauschdienst, -e', en: 'exchange service', def: 'Eine Organisation, die Serviceleistungen für ausländische Studierende anbietet.' },
-    { de: 'bereichernd', en: 'enriching', def: 'Eine Erfahrung, die das eigene Leben bereichert und verbessert.' },
-    { de: 'der globale Wirtschaftsreisende', en: 'global business traveller', def: 'Jemand, der international tätig ist, ohne seinen Wohnsitz zu verlegen.' }
+// ========================
+// DATA DEFINITIONS
+// ========================
+
+var VORENTLASTUNG = [
+    { term: 'der Auswanderer, -', en: 'emigrant', def: 'Jemand, der dauerhaft ins Ausland zieht.' },
+    { term: 'in fremde Welten eintauchen', en: 'to immerse in foreign worlds', def: 'Sich intensiv mit einer neuen Kultur beschäftigen.' },
+    { term: 'die Behördenwege (Pl.)', en: 'bureaucratic procedures', def: 'Die offiziellen Schritte bei Ämtern.' },
+    { term: 'die Botschaft, -en', en: 'embassy', def: 'Das offizielle Vertretungsbüro eines Landes im Ausland.' },
+    { term: 'das Konsulat, -e', en: 'consulate', def: 'Eine kleinere diplomatische Vertretung eines Landes.' },
+    { term: 'der Kulturschock, -s', en: 'culture shock', def: 'Verwirrung oder Unbehagen in einer fremden Kultur.' },
+    { term: 'einer Situation ausgesetzt sein', en: 'to be exposed to a situation', def: 'Mit einer Situation direkt konfrontiert sein.' },
+    { term: 'lehrreich', en: 'educational', def: 'Man kann viel daraus lernen.' },
+    { term: 'das Visum, Visa', en: 'visa', def: 'Die offizielle Erlaubnis, in ein Land einzureisen.' },
+    { term: 'der Ferienjob, -s', en: 'holiday job', def: 'Kurzfristige Arbeit während der Ferien.' },
+    { term: 'freiwillige Arbeit leisten', en: 'to do voluntary work', def: 'Ohne Bezahlung für eine gute Sache arbeiten.' },
+    { term: 'der Austauschstudent, -en', en: 'exchange student', def: 'Student, der an einer Uni im Ausland studiert.' },
+    { term: 'der Austauschdienst, -e', en: 'exchange service', def: 'Organisation mit Serviceleistungen für Studierende.' },
+    { term: 'bereichernd', en: 'enriching', def: 'Eine Erfahrung, die das Leben bereichert.' },
+    { term: 'der globale Wirtschaftsreisende', en: 'global business traveller', def: 'International tätig, ohne den Wohnsitz zu verlegen.' },
+    { term: 'die Immatrikulation, -en', en: 'enrollment', def: 'Die Einschreibung an einer Hochschule.' }
+];
+
+var LESETEXT_HTML = `
+<p>Internationale Erfahrungen sind <span class="vocab-hl">bereichernd</span> und prägen Menschen für ihr ganzes Leben. Ob als <span class="vocab-hl">Auswanderer</span>, <span class="vocab-hl">Austauschstudent</span> oder Abenteurer – in fremde Welten einzutauchen ist für viele ein Traum. Doch bevor diese Reise beginnt, müssen viele <span class="vocab-hl">Behördenwege</span> bewältigt werden.</p>
+
+<figure>
+    <img src="https://images.pexels.com/photos/1098460/pexels-photo-1098460.jpeg" alt="Flugzeug beim Starten">
+    <figcaption>Die Reise ins Ausland beginnt oft am Flughafen.</figcaption>
+</figure>
+
+<p>Das <span class="vocab-hl">Visum</span> ist ein wichtiges Dokument. Wer ins Ausland reisen möchte, muss es bei der <span class="vocab-hl">Botschaft</span> oder beim <span class="vocab-hl">Konsulat</span> des Ziellandes beantragen. Jedes Land hat andere Anforderungen, und die Prozesse können kompliziert und zeitaufwendig sein. Manche Menschen sind von diesem <span class="vocab-hl">Kulturschock</span> überfordert, wenn sie zum ersten Mal mit den deutschen Behörden konfrontiert werden.</p>
+
+<figure>
+    <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg" alt="Ein Team von internationalen Mitarbeitern">
+    <figcaption>Internationale Zusammenarbeit eröffnet neue Perspektiven.</figcaption>
+</figure>
+
+<p>Es gibt viele Wege, ins Ausland zu gehen: Manche Menschen nehmen einen <span class="vocab-hl">Ferienjob</span> an, andere <span class="vocab-hl">leisten freiwillige Arbeit</span>, und wieder andere studieren als <span class="vocab-hl">Austauschstudent</span> an einer Uni im Ausland. Ein <span class="vocab-hl">Austauschdienst</span> kann dabei helfen, die richtige Möglichkeit zu finden. Diese Organisationen kennen die <span class="vocab-hl">Behördenwege</span> und unterstützen Studierende bei der <span class="vocab-hl">Immatrikulation</span> an ausländischen Hochschulen.</p>
+
+<figure>
+    <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg" alt="Ein modernes Büro mit internationaler Ausstattung">
+    <figcaption>Moderne Arbeitsumgebungen fördern globalen Austausch.</figcaption>
+</figure>
+
+<p>Eine Auslandserfahrung ist immer <span class="vocab-hl">lehrreich</span> und <span class="vocab-hl">bereichernd</span>. Sie ermöglicht es uns, eine Situation ganz neu zu erleben, <span class="vocab-hl">einer neuen Kultur ausgesetzt</span> zu sein und dabei von unseren Grenzen zu wachsen. Egal, ob man als <span class="vocab-hl">globaler Wirtschaftsreisender</span> tätig ist oder nur ein Semester im Ausland verbringt – jede Erfahrung trägt dazu bei, unseren Horizont zu erweitern.</p>
+`;
+
+var GENUS_DATA = [
+    { word: '✈️ Auswanderer', cat: 'der' },
+    { word: '🏛️ Botschaft', cat: 'die' },
+    { word: '🏢 Konsulat', cat: 'das' },
+    { word: '😰 Kulturschock', cat: 'der' },
+    { word: '📋 Visum', cat: 'das' },
+    { word: '🏖️ Ferienjob', cat: 'der' },
+    { word: '🌍 Arbeitsmarkt', cat: 'der' },
+    { word: '🎓 Austauschstudent', cat: 'der' },
+    { word: '📚 Austauschdienst', cat: 'der' },
+    { word: '🏫 Hochschule', cat: 'die' },
+    { word: '📝 Immatrikulation', cat: 'die' },
+    { word: '🏠 Unterkunft', cat: 'die' },
+    { word: '🎓 Auslandssemester', cat: 'das' },
+    { word: '📄 Einreisebestimmungen', cat: 'pl' },
+    { word: '💼 Arbeitsgenehmigung', cat: 'die' }
 ];
 
 var LUECKEN = [
-    { pre: 'In fremde Welten ', gap: 'eintauchen', post: ' kann sehr lehrreich und bereichernd sein.', hint: 'e___' },
-    { pre: 'Für die Einreise in viele Länder braucht man ein ', gap: 'Visum', post: '.', hint: 'V___' },
-    { pre: 'Das Visum beantragt man bei der ', gap: 'Botschaft', post: ' oder beim Konsulat des Ziellandes.', hint: 'B___' },
-    { pre: 'Die ', gap: 'Behördenwege', post: ' vor einem Auslandsaufenthalt können sehr kompliziert sein.', hint: 'B___' },
-    { pre: 'Als ', gap: 'Austauschstudent', post: ' kann man ein Semester an einer Uni im Ausland studieren.', hint: 'A___' },
-    { pre: 'Der ', gap: 'Austauschdienst', post: ' bietet Serviceleistungen für ausländische Studierende an.', hint: 'A___' },
-    { pre: 'Erfahrungen auf dem internationalen Arbeitsmarkt zu sammeln kann sehr ', gap: 'bereichernd', post: ' sein.', hint: 'b___' },
-    { pre: 'Wenn man im Ausland einer schwierigen Situation ', gap: 'ausgesetzt', post: ' ist, wächst man daran.', hint: 'a___' },
-    { pre: 'Freiwillige Arbeit zu leisten ist ', gap: 'lehrreich', post: ' und gibt dem Leben einen Sinn.', hint: 'l___' },
-    { pre: 'Der globale Wirtschaftsreisende ist auf dem internationalen ', gap: 'Arbeitsmarkt', post: ' tätig, ohne seinen Wohnsitz zu verlegen.', hint: 'A___' }
+    { segs: [{t:'In fremde Welten '},{b:'eintauchen'},{t:' kann sehr lehrreich und bereichernd sein.'}], hint: 'Verb' },
+    { segs: [{t:'Für die Einreise braucht man ein '},{b:'Visum'},{t:'.'}], hint: 'Nomen' },
+    { segs: [{t:'Das Visum beantragt man bei der '},{b:'Botschaft'},{t:' oder beim Konsulat.'}], hint: 'Nomen' },
+    { segs: [{t:'Die '},{b:'Behördenwege'},{t:' vor einem Auslandsaufenthalt können kompliziert sein.'}], hint: 'Nomen' },
+    { segs: [{t:'Als '},{b:'Austauschstudent'},{t:' kann man im Ausland studieren.'}], hint: 'Nomen' },
+    { segs: [{t:'Der '},{b:'Austauschdienst'},{t:' bietet Serviceleistungen für Studierende an.'}], hint: 'Nomen' },
+    { segs: [{t:'Erfahrungen auf dem internationalen Arbeitsmarkt zu sammeln kann sehr '},{b:'bereichernd'},{t:' sein.'}], hint: 'Adjektiv' },
+    { segs: [{t:'Wenn man einer schwierigen Situation '},{b:'ausgesetzt'},{t:' ist, wächst man daran.'}], hint: 'Partizip' },
+    { segs: [{t:'Freiwillige Arbeit zu leisten ist '},{b:'lehrreich'},{t:' und gibt dem Leben Sinn.'}], hint: 'Adjektiv' },
+    { segs: [{t:'Der globale Wirtschaftsreisende ist auf dem internationalen '},{b:'Arbeitsmarkt'},{t:' tätig.'}], hint: 'Nomen' }
 ];
 
-var SATZBAU = [
-    { chips: ['In', 'fremde', 'Welten', 'eintauchen', 'kann', 'sehr', 'bereichernd', 'sein.'], correct: ['In', 'fremde', 'Welten', 'eintauchen', 'kann', 'sehr', 'bereichernd', 'sein.'] },
-    { chips: ['Man', 'braucht', 'ein', 'Visum,', 'um', 'in', 'viele', 'Länder', 'einzureisen.'], correct: ['Man', 'braucht', 'ein', 'Visum,', 'um', 'in', 'viele', 'Länder', 'einzureisen.'] },
-    { chips: ['Der', 'Austauschdienst', 'hilft', 'bei', 'den', 'Behördenwegen.'], correct: ['Der', 'Austauschdienst', 'hilft', 'bei', 'den', 'Behördenwegen.'] },
-    { chips: ['Sie', 'ist', 'als', 'Austauschstudentin', 'einem', 'Kulturschock', 'ausgesetzt.'], correct: ['Sie', 'ist', 'als', 'Austauschstudentin', 'einem', 'Kulturschock', 'ausgesetzt.'] },
-    { chips: ['Freiwillige', 'Arbeit', 'zu', 'leisten', 'ist', 'lehrreich', 'und', 'bereichernd.'], correct: ['Freiwillige', 'Arbeit', 'zu', 'leisten', 'ist', 'lehrreich', 'und', 'bereichernd.'] },
-    { chips: ['Das', 'Visum', 'beantragt', 'man', 'bei', 'der', 'Botschaft', 'des', 'Ziellandes.'], correct: ['Das', 'Visum', 'beantragt', 'man', 'bei', 'der', 'Botschaft', 'des', 'Ziellandes.'] }
+var MC_DATA = [
+    { q: 'Welche Möglichkeit ist KEIN typischer Weg ins Ausland?', opts: ['Ferienjob', 'Auslandssemester', 'Fernsehen', 'Auswandern'], ans: 2 },
+    { q: 'Wo beantragt man ein Visum?', opts: ['Bei der Botschaft oder dem Konsulat', 'Am Flughafen', 'Im Supermarkt', 'Bei der Polizei'], ans: 0 },
+    { q: 'Was bieten Austauschdienste an?', opts: ['Serviceleistungen für Studierende', 'Flugtickets', 'Sprachkurse', 'Hotelzimmer'], ans: 0 },
+    { q: 'Was prüfen Austauschdienste beim Bewerber?', opts: ['Sportlichkeit', 'Formelle Voraussetzungen und Sprachkenntnisse', 'Musikgeschmack', 'Kochkünste'], ans: 1 },
+    { q: 'Was ist das International Office?', opts: ['Ein Reisebüro', 'Eine Bank', 'Eine Abteilung der Hochschule', 'Ein Ministerium'], ans: 2 },
+    { q: 'Wobei hilft das Akademische Auslandsamt?', opts: ['Autoverkauf', 'Immatrikulation und Studienplanung', 'Restaurantempfehlungen', 'Sportvereine'], ans: 1 },
+    { q: 'Was bedeutet „bereichernd"?', opts: ['Teuer', 'Langweilig', 'Das Leben positiv verändernd', 'Kompliziert'], ans: 2 },
+    { q: 'Was kann bei einem Auslandsaufenthalt passieren?', opts: ['Ein Erdbeben', 'Ein Kulturschock', 'Ein Stromausfall', 'Ein Computerfehler'], ans: 1 },
+    { q: 'Was braucht man NICHT für einen Auslandsaufenthalt?', opts: ['Visum', 'Reisepass', 'Hundeleine', 'Unterkunft'], ans: 2 },
+    { q: 'Was ist ein Auswanderer?', opts: ['Ein Tourist', 'Jemand, der dauerhaft ins Ausland zieht', 'Ein Pilot', 'Ein Diplomat'], ans: 1 }
 ];
 
-var RF_DATA = [
-    { text: 'Alle Länder der EU haben die gleichen Einwanderungsbestimmungen.', correct: 'f' },
-    { text: 'Ein Visum ist die Erlaubnis, in das jeweilige Land einzuwandern.', correct: 'r' },
-    { text: 'Das Visum kann man in einem Supermarkt kaufen.', correct: 'f' },
-    { text: 'Mit „Botschaft" ist eine Nachricht in diesem Text gemeint.', correct: 'f' },
-    { text: 'Informationen über Einreisebestimmungen können online gefunden werden.', correct: 'r' }
+var satzbauData = [
+    { parts: ['in', 'fremde', 'welten', 'eintauchen', 'kann', 'bereichernd', 'sein'], valid: [['in', 'fremde', 'welten', 'eintauchen', 'kann', 'bereichernd', 'sein']], punct: '.' },
+    { parts: ['man', 'braucht', 'ein', 'visum', 'für', 'die', 'einreise'], valid: [['man', 'braucht', 'ein', 'visum', 'für', 'die', 'einreise']], punct: '.' },
+    { parts: ['der', 'austauschdienst', 'hilft', 'bei', 'den', 'behördenwegen'], valid: [['der', 'austauschdienst', 'hilft', 'bei', 'den', 'behördenwegen']], punct: '.' },
+    { parts: ['das', 'visum', 'beantragt', 'man', 'bei', 'der', 'botschaft'], valid: [['das', 'visum', 'beantragt', 'man', 'bei', 'der', 'botschaft']], punct: '.' },
+    { parts: ['freiwillige', 'arbeit', 'ist', 'lehrreich', 'und', 'bereichernd'], valid: [['freiwillige', 'arbeit', 'ist', 'lehrreich', 'und', 'bereichernd']], punct: '.' },
+    { parts: ['sie', 'ist', 'einem', 'kulturschock', 'ausgesetzt'], valid: [['sie', 'ist', 'einem', 'kulturschock', 'ausgesetzt']], punct: '.' },
+    { parts: ['erfahrungen', 'auf', 'dem', 'arbeitsmarkt', 'sind', 'wichtig'], valid: [['erfahrungen', 'auf', 'dem', 'arbeitsmarkt', 'sind', 'wichtig']], punct: '.' },
+    { parts: ['die', 'hochschule', 'hat', 'ein', 'auslandsamt'], valid: [['die', 'hochschule', 'hat', 'ein', 'auslandsamt']], punct: '.' }
 ];
 
-// ===== TAB NAVIGATION =====
-function showTab(n) {
-    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===n); });
-    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===n); });
+// ========================
+// TIMER SYSTEM
+// ========================
+
+var timers = {
+    2: { interval: null, seconds: 0, best: null },
+    3: { interval: null, seconds: 0, best: null },
+    4: { interval: null, seconds: 0, best: null },
+    5: { interval: null, seconds: 0, best: null }
+};
+
+function loadBestTimes() {
+    for (let t = 2; t <= 5; t++) {
+        let best = localStorage.getItem('best-' + t);
+        if (best) {
+            timers[t].best = parseInt(best);
+            document.getElementById('best-' + t).textContent = fmtTime(parseInt(best));
+        }
+    }
 }
 
-// ===== VOCAB GRID =====
-function initVocab() {
-    var grid = document.getElementById('vocabGrid');
+function fmtTime(seconds) {
+    let mins = Math.floor(seconds / 60);
+    let secs = seconds % 60;
+    return mins + ':' + (secs < 10 ? '0' : '') + secs;
+}
+
+function timerAutoStart(tabNum) {
+    if (timers[tabNum].interval) return;
+    timers[tabNum].interval = setInterval(function() {
+        timers[tabNum].seconds++;
+        document.getElementById('timer-' + tabNum).textContent = fmtTime(timers[tabNum].seconds);
+    }, 1000);
+}
+
+function stopTimer(tabNum) {
+    if (!timers[tabNum].interval) return;
+    clearInterval(timers[tabNum].interval);
+    timers[tabNum].interval = null;
+
+    let best = timers[tabNum].best;
+    if (!best || timers[tabNum].seconds < best) {
+        timers[tabNum].best = timers[tabNum].seconds;
+        localStorage.setItem('best-' + tabNum, timers[tabNum].seconds);
+        document.getElementById('best-' + tabNum).textContent = fmtTime(timers[tabNum].seconds);
+    }
+}
+
+function resetTimer(tabNum) {
+    if (timers[tabNum].interval) {
+        clearInterval(timers[tabNum].interval);
+        timers[tabNum].interval = null;
+    }
+    timers[tabNum].seconds = 0;
+    document.getElementById('timer-' + tabNum).textContent = '0:00';
+}
+
+// ========================
+// TAB NAVIGATION
+// ========================
+
+function showTab(n) {
+    let tabs = document.querySelectorAll('.section');
+    let btns = document.querySelectorAll('.nav-btn');
+
+    tabs.forEach(t => t.classList.remove('active'));
+    btns.forEach(b => b.classList.remove('active'));
+
+    document.getElementById('tab-' + n).classList.add('active');
+    document.querySelector('[data-tab="' + n + '"]').classList.add('active');
+}
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        let tab = this.getAttribute('data-tab');
+        showTab(tab);
+    });
+});
+
+// ========================
+// TAB 0: VORENTLASTUNG
+// ========================
+
+function initVorentlastung() {
+    let grid = document.getElementById('vorentlastung-grid');
     grid.innerHTML = '';
-    WORTSCHATZ.forEach(function(v) {
-        var card = document.createElement('div');
+    VORENTLASTUNG.forEach(item => {
+        let card = document.createElement('div');
         card.className = 'vocab-card';
-        card.innerHTML = '<div class="vocab-term">' + v.de + '</div>'
-            + '<div class="vocab-en">' + v.en + '</div>'
-            + '<div class="vocab-def">' + v.def + '</div>';
+        card.innerHTML = `
+            <div class="vocab-term">${item.term}</div>
+            <div class="vocab-en">${item.en}</div>
+            <div class="vocab-def">${item.def}</div>
+        `;
         grid.appendChild(card);
     });
 }
-initVocab();
 
-// ===== ORDNUNG CHECK =====
-function checkOrdnung(sel, correct) {
-    if (!sel.value) { sel.className = 'zuord-select'; return; }
-    if (sel.value === correct) {
-        sel.className = 'zuord-select ok';
+// ========================
+// TAB 1: LESETEXT
+// ========================
+
+function initLesetext() {
+    document.getElementById('story-text-container').innerHTML = LESETEXT_HTML;
+    highlightVocabInText();
+}
+
+function highlightVocabInText() {
+    // Already done in HTML with vocab-hl classes
+}
+
+// ========================
+// TAB 2: GENUS
+// ========================
+
+var draggedChip = null;
+
+function initGenus() {
+    let bank = document.getElementById('chip-bank-2');
+    bank.innerHTML = '';
+    GENUS_DATA.forEach((item, idx) => {
+        let chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = item.word;
+        chip.setAttribute('data-word', item.word);
+        chip.setAttribute('data-cat', item.cat);
+        chip.draggable = true;
+        chip.addEventListener('dragstart', sbDragStart);
+        chip.addEventListener('dragend', sbDragEnd);
+        bank.appendChild(chip);
+    });
+
+    let zones = document.getElementById('genus-zones');
+    zones.innerHTML = '';
+    let cats = ['der', 'die', 'das', 'pl'];
+    cats.forEach(cat => {
+        let zone = document.createElement('div');
+        zone.className = 'genus-cat';
+        zone.innerHTML = `
+            <div class="genus-label">${cat === 'pl' ? 'Plural' : cat}</div>
+            <div class="genus-zone" data-cat="${cat}"></div>
+        `;
+        zone.addEventListener('dragover', sbDragOver);
+        zone.addEventListener('drop', function(e) { sbDrop(e, cat); });
+        zones.appendChild(zone);
+    });
+}
+
+function sbDragStart(e) {
+    draggedChip = this;
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function sbDragEnd(e) {
+    this.classList.remove('dragging');
+    draggedChip = null;
+}
+
+function sbDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+}
+
+function sbDrop(e, cat) {
+    e.preventDefault();
+    if (!draggedChip) return;
+
+    let zone = e.currentTarget.querySelector('[data-cat="' + cat + '"]');
+    if (!zone) zone = e.currentTarget.querySelector('.genus-zone');
+
+    zone.appendChild(draggedChip);
+    colorAllGenusChips();
+
+    let allDone = document.querySelectorAll('#genus-zones .chip').length === GENUS_DATA.length;
+    if (allDone && document.querySelectorAll('#genus-zones .chip.correct').length === GENUS_DATA.length) {
+        stopTimer(2);
+    }
+}
+
+function colorAllGenusChips() {
+    document.querySelectorAll('#genus-zones .chip').forEach(chip => {
+        let word = chip.getAttribute('data-word');
+        let correctCat = chip.getAttribute('data-cat');
+        let zone = chip.closest('.genus-zone');
+        let zoneCat = zone.getAttribute('data-cat');
+
+        if (zoneCat === correctCat) {
+            chip.classList.remove('wrong');
+            chip.classList.add('correct');
+        } else {
+            chip.classList.remove('correct');
+            chip.classList.add('wrong');
+        }
+    });
+}
+
+function resetGenus() {
+    resetTimer(2);
+    let bank = document.getElementById('chip-bank-2');
+    document.querySelectorAll('#genus-zones .chip').forEach(chip => {
+        chip.classList.remove('correct', 'wrong');
+        bank.appendChild(chip);
+    });
+}
+
+// ========================
+// TAB 3: LÜCKENTEXT
+// ========================
+
+function initLuecken() {
+    let cont = document.getElementById('luecken-container');
+    cont.innerHTML = '';
+
+    LUECKEN.forEach((item, idx) => {
+        let div = document.createElement('div');
+        div.style.marginBottom = '16px';
+        div.className = 'blanks-text';
+
+        let html = '';
+        item.segs.forEach(seg => {
+            if (seg.b) {
+                html += `<input type="text" class="blank" data-blank="${idx}" data-ans="${seg.b.toLowerCase()}" placeholder="...">`;
+            } else {
+                html += seg.t;
+            }
+        });
+        html += ` <span class="hint-btn" title="${item.hint}">💡</span>`;
+        div.innerHTML = html;
+        cont.appendChild(div);
+    });
+
+    document.querySelectorAll('input.blank').forEach(inp => {
+        inp.addEventListener('input', function() {
+            let ans = this.getAttribute('data-ans');
+            let val = this.value.toLowerCase().trim();
+
+            if (val === ans) {
+                this.classList.remove('wrong');
+                this.classList.add('correct');
+                timerAutoStart(3);
+            } else if (ans.indexOf(val) === 0 && val.length > 0) {
+                this.classList.remove('wrong');
+                this.classList.remove('correct');
+            } else if (val.length > 0) {
+                this.classList.remove('correct');
+                this.classList.add('wrong');
+                timerAutoStart(3);
+            } else {
+                this.classList.remove('correct', 'wrong');
+            }
+
+            checkAllLueckenDone();
+        });
+    });
+}
+
+function checkAllLueckenDone() {
+    let all = document.querySelectorAll('input.blank.correct').length === LUECKEN.length;
+    if (all) stopTimer(3);
+}
+
+function resetLuecken() {
+    resetTimer(3);
+    initLuecken();
+}
+
+// ========================
+// TAB 4: MULTIPLE CHOICE
+// ========================
+
+function initMC() {
+    let cont = document.getElementById('mc-container');
+    cont.innerHTML = '';
+
+    MC_DATA.forEach((item, idx) => {
+        let div = document.createElement('div');
+        div.className = 'mc-question';
+
+        let html = `<div class="mc-q-text">${idx + 1}. ${item.q}</div><div class="mc-opts">`;
+        item.opts.forEach((opt, oidx) => {
+            html += `<button class="mc-opt" data-q="${idx}" data-ans="${oidx}">${opt}</button>`;
+        });
+        html += '</div>';
+        div.innerHTML = html;
+        cont.appendChild(div);
+    });
+
+    document.querySelectorAll('.mc-opt').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            if (this.disabled) return;
+            timerAutoStart(4);
+
+            let qIdx = parseInt(this.getAttribute('data-q'));
+            let ansIdx = parseInt(this.getAttribute('data-ans'));
+            let correct = ansIdx === MC_DATA[qIdx].ans;
+
+            document.querySelectorAll(`[data-q="${qIdx}"]`).forEach(b => {
+                b.disabled = true;
+                if (parseInt(b.getAttribute('data-ans')) === MC_DATA[qIdx].ans) {
+                    b.classList.add('correct');
+                } else if (b === this && !correct) {
+                    b.classList.add('wrong');
+                }
+            });
+
+            if (!correct) {
+                setTimeout(() => {
+                    document.querySelectorAll(`[data-q="${qIdx}"]`).forEach(b => {
+                        b.disabled = false;
+                        b.classList.remove('correct', 'wrong');
+                    });
+                }, 1400);
+            } else {
+                checkAllMCDone();
+            }
+        });
+    });
+}
+
+function checkAllMCDone() {
+    let done = document.querySelectorAll('.mc-opt.correct').length === MC_DATA.length;
+    if (done) stopTimer(4);
+}
+
+function resetMC() {
+    resetTimer(4);
+    initMC();
+}
+
+// ========================
+// TAB 5: SATZBAU
+// ========================
+
+var sbState = {};
+var sbDraggedChip = null;
+
+function initSatzbau() {
+    let cont = document.getElementById('satzbau-container');
+    cont.innerHTML = '';
+    sbState = {};
+
+    satzbauData.forEach((sent, idx) => {
+        sbState[idx] = { parts: sent.parts.slice(), valid: sent.valid, punct: sent.punct };
+
+        let div = document.createElement('div');
+        div.style.marginBottom = '28px';
+
+        let bank = document.createElement('div');
+        bank.className = 'chip-bank';
+        bank.setAttribute('data-sent', idx);
+
+        sent.parts.forEach((part, pidx) => {
+            let chip = document.createElement('div');
+            chip.className = 'sb-chip';
+            chip.textContent = part;
+            chip.draggable = true;
+            chip.setAttribute('data-sent', idx);
+            chip.setAttribute('data-part', pidx);
+            chip.addEventListener('dragstart', sbChipDragStart);
+            chip.addEventListener('dragend', sbChipDragEnd);
+            bank.appendChild(chip);
+        });
+
+        let builder = document.createElement('div');
+        builder.className = 'sentence-builder';
+        builder.setAttribute('data-sent', idx);
+        builder.addEventListener('dragover', sbDragOver);
+        builder.addEventListener('drop', function(e) { sbChipDrop(e, idx); });
+
+        let punkt = document.createElement('div');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = sent.punct;
+        builder.appendChild(punkt);
+
+        let feedback = document.createElement('div');
+        feedback.className = 'satzbau-feedback';
+        feedback.setAttribute('data-sent', idx);
+
+        div.appendChild(bank);
+        div.appendChild(builder);
+        div.appendChild(feedback);
+        cont.appendChild(div);
+    });
+}
+
+function sbChipDragStart(e) {
+    sbDraggedChip = this;
+    this.style.opacity = '0.5';
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function sbChipDragEnd(e) {
+    if (sbDraggedChip) {
+        sbDraggedChip.style.opacity = '1';
+        sbDraggedChip = null;
+    }
+}
+
+function sbChipDrop(e, sentIdx) {
+    e.preventDefault();
+    if (!sbDraggedChip) return;
+
+    let builder = e.currentTarget;
+    let part = sbDraggedChip.textContent;
+    let punkt = builder.querySelector('.sb-punkt');
+    builder.insertBefore(sbDraggedChip, punkt);
+
+    sbDraggedChip.style.opacity = '1';
+    sbDraggedChip = null;
+
+    sbCheckAuto(sentIdx);
+}
+
+function sbCheckAuto(sentIdx) {
+    let builder = document.querySelector(`.sentence-builder[data-sent="${sentIdx}"]`);
+    let chips = builder.querySelectorAll('.sb-chip');
+    let sentence = [];
+    chips.forEach(c => sentence.push(c.textContent.toLowerCase()));
+
+    let isValid = false;
+    sbState[sentIdx].valid.forEach(pattern => {
+        if (sentence.join(' ') === pattern.join(' ')) {
+            isValid = true;
+        }
+    });
+
+    let feedback = document.querySelector(`.satzbau-feedback[data-sent="${sentIdx}"]`);
+    if (isValid) {
+        chips.forEach(c => c.classList.remove('wrong-pos'));
+        feedback.classList.add('show', 'correct');
+        feedback.classList.remove('wrong');
+        feedback.textContent = '✓ Richtig!';
+
+        timerAutoStart(5);
+
+        if (sbCheckAllDone()) {
+            stopTimer(5);
+        }
+    } else if (chips.length > 0) {
+        feedback.classList.add('show', 'wrong');
+        feedback.classList.remove('correct');
+        feedback.textContent = '✗ Versuchen Sie es erneut.';
+        timerAutoStart(5);
     } else {
-        sel.className = 'zuord-select err';
+        feedback.classList.remove('show');
     }
 }
 
-// ===== BEHÖRDENTEXT LÜCKEN =====
-function liveCheckB(inp) {
-    var val = inp.value.trim().toLowerCase();
-    var ans = inp.dataset.ans;
-    if (val === ans) {
-        inp.classList.add('ok'); inp.classList.remove('err');
-    } else if (val.length > 0) {
-        inp.classList.add('err'); inp.classList.remove('ok');
-    } else {
-        inp.classList.remove('ok','err');
+function sbCheckAllDone() {
+    let allDone = true;
+    for (let i = 0; i < satzbauData.length; i++) {
+        let feedback = document.querySelector(`.satzbau-feedback[data-sent="${i}"]`);
+        if (!feedback || !feedback.classList.contains('correct')) {
+            allDone = false;
+            break;
+        }
     }
-    updateBScore();
-}
-function updateBScore() {
-    var ids = ['b0','b1','b2','b3','b4','b5','b6','b7','b8','b9'];
-    var correct = ids.filter(function(id) {
-        var inp = document.getElementById(id);
-        return inp && inp.value.trim().toLowerCase() === inp.dataset.ans;
-    }).length;
-    document.getElementById('bScore').textContent = correct + ' / ' + ids.length + ' richtig';
-    if (correct === ids.length) document.getElementById('bResult').style.display = 'block';
+    return allDone;
 }
 
-// ===== RF QUESTIONS =====
-function initRF() {
-    var list = document.getElementById('rfList');
-    list.innerHTML = '';
-    RF_DATA.forEach(function(item, i) {
-        var row = document.createElement('div');
-        row.className = 'rf-item';
-        row.innerHTML = '<div class="rf-text">' + item.text + '</div>'
-            + '<div class="rf-btns">'
-            + '<button class="rf-btn" id="rfR'+i+'" onclick="selectRF('+i+',\'r\')">R</button>'
-            + '<button class="rf-btn" id="rfF'+i+'" onclick="selectRF('+i+',\'f\')">F</button>'
-            + '</div>'
-            + '<div class="rf-result" id="rfRes'+i+'"></div>';
-        list.appendChild(row);
-    });
-}
-initRF();
-
-function selectRF(i, choice) {
-    var rBtn = document.getElementById('rfR'+i);
-    var fBtn = document.getElementById('rfF'+i);
-    var res = document.getElementById('rfRes'+i);
-    rBtn.className = 'rf-btn' + (choice==='r' ? ' sel-r' : '');
-    fBtn.className = 'rf-btn' + (choice==='f' ? ' sel-f' : '');
-    var correct = RF_DATA[i].correct;
-    if (choice === correct) {
-        res.textContent = '✓'; res.className = 'rf-result ok';
-    } else {
-        res.textContent = '✗'; res.className = 'rf-result err';
-    }
-    checkAllRF();
+function resetAllSatzbau() {
+    resetTimer(5);
+    initSatzbau();
 }
 
-function checkAllRF() {
-    var allAnswered = RF_DATA.every(function(item, i) {
-        return document.getElementById('rfRes'+i).textContent !== '';
-    });
-    if (allAnswered) document.getElementById('rfResult').style.display = 'block';
-}
+// ========================
+// INITIALIZATION
+// ========================
 
-// ===== TIMER =====
-var timers = { L: null, S: null };
-var timerVals = { L: 0, S: 0 };
-var timerRunning = { L: false, S: false };
-var TIMER_PREFIX = 'best2054X_';
+document.addEventListener('DOMContentLoaded', function() {
+    loadBestTimes();
+    initVorentlastung();
+    initLesetext();
+    initGenus();
+    initLuecken();
+    initMC();
+    initSatzbau();
+});
 
-function pad(n) { return n < 10 ? '0'+n : ''+n; }
-function startTimer(t) {
-    if (timerRunning[t]) return;
-    timerRunning[t] = true;
-    timers[t] = setInterval(function() {
-        timerVals[t]++;
-        var m = Math.floor(timerVals[t]/60), s = timerVals[t]%60;
-        document.getElementById('timer'+t).textContent = pad(m)+':'+pad(s);
-    }, 1000);
-}
-function stopTimer(t) {
-    clearInterval(timers[t]); timerRunning[t] = false;
-    var key = TIMER_PREFIX+t;
-    var cur = parseInt(localStorage.getItem(key)||'9999');
-    if (timerVals[t]>0 && timerVals[t]<cur) localStorage.setItem(key, timerVals[t]);
-}
-
-// ===== LÜCKENTEXT =====
-function initLuecke() {
-    var box = document.getElementById('lueckeBox');
-    box.innerHTML = '';
-    LUECKEN.forEach(function(item, i) {
-        var div = document.createElement('div');
-        div.className = 'luecke-satz';
-        div.innerHTML = item.pre
-            + '<input class="luecke-input" type="text" id="gap'+i+'" data-ans="'+item.gap.toLowerCase()+'" oninput="liveCheck(this,'+i+')" placeholder="'+item.hint+'">'
-            + item.post;
-        box.appendChild(div);
-    });
-}
-initLuecke();
-
-function liveCheck(inp, i) {
-    var val = inp.value.trim().toLowerCase();
-    if (val === inp.dataset.ans) {
-        inp.classList.add('ok'); inp.classList.remove('err');
-    } else if (val.length > 0) {
-        inp.classList.add('err'); inp.classList.remove('ok');
-    } else {
-        inp.classList.remove('ok','err');
-    }
-    updateLueckeScore();
-    autoStopIfDone();
-}
-function updateLueckeScore() {
-    var correct = 0;
-    LUECKEN.forEach(function(item,i) {
-        var inp = document.getElementById('gap'+i);
-        if (inp && inp.value.trim().toLowerCase()===item.gap.toLowerCase()) correct++;
-    });
-    document.getElementById('lueckeScore').textContent = correct+' / '+LUECKEN.length+' richtig';
-    return correct;
-}
-function autoStopIfDone() {
-    var correct = 0;
-    LUECKEN.forEach(function(item,i) {
-        var inp = document.getElementById('gap'+i);
-        if (inp && inp.value.trim().toLowerCase()===item.gap.toLowerCase()) correct++;
-    });
-    if (correct===LUECKEN.length) {
-        stopTimer('L');
-        document.getElementById('lueckeResult').style.display = 'block';
-    }
-}
-function resetLuecke() {
-    LUECKEN.forEach(function(item,i) {
-        var inp = document.getElementById('gap'+i);
-        if (inp) { inp.value=''; inp.classList.remove('ok','err'); }
-    });
-    document.getElementById('lueckeScore').textContent = '';
-    document.getElementById('lueckeResult').style.display = 'none';
-    timerVals['L']=0; clearInterval(timers['L']); timerRunning['L']=false;
-    document.getElementById('timerL').textContent='00:00';
-}
-
-// ══════════════════════════════════════════════
-// SATZBAU
-// ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['f'] }
-];
-
-let sbDragged = null;
-
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
-    });
-  }
-  return span;
-}
-
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
-}
-
-function sbCheckAuto(itemIdx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
-  }, 500);
-}
-
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
-  } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
-  }
-}
-
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) {
-      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
-    }
-  });
-}
-
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(4);
-}
-
-function buildSatzbau() {
-  const cont = document.getElementById('sbContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
-
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
-    }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
-
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-      pool.appendChild(chip);
-    });
-    sbRegisterZone(pool);
-
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
-
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
-    });
-
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
-    });
-
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      }
-    });
-
-    const fb = document.createElement('div');
-    fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
-
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
-}
-
-function resetSatzbau() { buildSatzbau(); resetTimer(4); }
-
-buildSatzbau();
 </script>
+
 </body>
 </html>

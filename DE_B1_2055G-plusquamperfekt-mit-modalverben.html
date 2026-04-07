@@ -3,801 +3,919 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 · 2055G · Das Plusquamperfekt mit Modalverben</title>
+<title>B1.1 · 2055G · Plusquamperfekt mit Modalverben</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
-.container { max-width: 960px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); overflow: hidden; }
-.header { background: linear-gradient(135deg, #667eea 0%, #9b59b6 100%); color: #fff; padding: 24px 32px 18px; }
-.header h1 { font-size: 1.5em; font-weight: 700; }
-.header .subtitle { font-size: 0.9em; opacity: 0.85; margin-top: 4px; }
-.nav { display: flex; flex-direction: column; border-bottom: 3px solid #667eea; background: #f8f3fd; }
-.nav-row { display: flex; flex-wrap: wrap; }
-.nav-btn { flex: 1 1 auto; padding: 11px 10px; font-size: 0.82em; font-weight: 600; border: 1.5px solid #c39bd3; border-bottom: none; background: #f8f3fd; color: #667eea; cursor: pointer; transition: background 0.15s; text-align: center; min-width: 80px; }
-.nav-btn:hover { background: #e8d5f5; }
-.nav-btn.active { background: #667eea; color: #fff; border-color: #667eea; }
-.section { display: none; padding: 28px 32px 32px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+}
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
 .section.active { display: block; }
-.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; display: block; }
-.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
-.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
-
-/* MC ENTDECKEN */
-.mc-step { display: none; }
+.sec-inner { padding: 28px 32px 32px; }
+.tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+/* Entdeckungs-Tab */
+.entdeck-intro {
+  background: #f3e5f5; border-radius: 12px;
+  padding: 18px 22px; margin-bottom: 20px;
+  border-left: 5px solid #9c27b0; font-size: 0.97rem; line-height: 1.75;
+}
+.entdeck-intro h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05rem; }
+.hl { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+.mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
 .mc-step.active { display: block; }
-.mc-progress { display: flex; gap: 8px; margin-bottom: 20px; }
-.mc-dot { width: 28px; height: 28px; border-radius: 50%; background: #e0d0f5; display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 700; color: #667eea; cursor: pointer; }
-.mc-dot.done { background: #27ae60; color: #fff; }
-.mc-dot.active { background: #667eea; color: #fff; }
-.mc-box { background: #f8f3fd; border-radius: 12px; padding: 22px 24px; margin-bottom: 18px; }
-.mc-frage { font-size: 1.05em; font-weight: 600; color: #333; margin-bottom: 16px; line-height: 1.5; }
-.mc-beispiel { font-size: 0.95em; color: #555; font-style: italic; margin-bottom: 14px; padding: 10px 14px; background: #fff; border-left: 3px solid #9b59b6; border-radius: 0 8px 8px 0; }
-.mc-opts { display: flex; flex-direction: column; gap: 10px; }
-.mc-opt { padding: 12px 16px; border: 1.5px solid #c39bd3; border-radius: 10px; background: #fff; cursor: pointer; font-size: 0.95em; color: #333; transition: background 0.15s; }
-.mc-opt:hover { background: #f3e5f5; }
-.mc-opt.correct { background: #eafaf1; border-color: #27ae60; color: #1e8449; font-weight: 600; }
-.mc-opt.wrong { background: #fdecea; border-color: #e74c3c; color: #c0392b; }
-.mc-feedback { margin-top: 14px; font-size: 0.92em; font-weight: 600; min-height: 20px; }
-.mc-feedback.ok { color: #27ae60; }
-.mc-feedback.err { color: #e74c3c; }
-.mc-next { margin-top: 14px; padding: 9px 22px; background: #667eea; color: #fff; border: none; border-radius: 18px; cursor: pointer; font-weight: 600; font-size: 0.9em; display: none; }
-.mc-rule-card { margin-top: 18px; padding: 16px 20px; background: #fffde7; border: 1.5px solid #f9ca24; border-radius: 10px; font-size: 0.92em; color: #555; line-height: 1.6; display: none; }
-.mc-rule-card strong { color: #667eea; }
-
-/* REGEL BOXEN */
-.regel-grid { display: grid; grid-template-columns: 1fr; gap: 18px; margin-bottom: 20px; }
-.regel-box { border-radius: 12px; padding: 18px 22px; }
-.regel-box.blue { background: #e8f4fd; border: 1.5px solid #85c1e9; }
-.regel-box.purple { background: #f3e5f5; border: 1.5px solid #9b59b6; }
-.regel-box.green { background: #eafaf1; border: 1.5px solid #58d68d; }
-.regel-box.orange { background: #fef9e7; border: 1.5px solid #f0b27a; }
-.regel-titel { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 10px; }
-.regel-formel { font-size: 0.97em; color: #333; line-height: 1.7; }
-.regel-formel code { background: #f0e6ff; border-radius: 4px; padding: 2px 6px; font-family: 'Courier New', monospace; font-size: 0.95em; color: #667eea; }
-.regel-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9em; }
-.regel-table th { background: #667eea; color: #fff; padding: 8px 12px; text-align: left; }
-.regel-table td { padding: 8px 12px; border-bottom: 1px solid #e0d0f5; }
-.regel-table tr:nth-child(even) td { background: #f8f3fd; }
-.beispiel-satz { font-style: italic; color: #555; margin-top: 10px; font-size: 0.93em; padding: 8px 12px; background: #fff; border-left: 3px solid #667eea; border-radius: 0 6px 6px 0; }
-
-/* LÜCKENTEXT */
-.luecke-box { background: #f8f3fd; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
-.luecke-satz { margin-bottom: 14px; line-height: 1.9; font-size: 0.97em; }
-.luecke-input { border: none; border-bottom: 2px solid #9b59b6; background: transparent; font-size: 0.97em; width: 150px; outline: none; color: #333; padding: 1px 4px; }
-.luecke-input.ok { border-bottom-color: #27ae60; color: #27ae60; background: #eafaf1; border-radius: 4px; }
-.luecke-input.err { border-bottom-color: #e74c3c; color: #e74c3c; }
-.luecke-input.wide { width: 200px; }
-
-/* TIMER */
-.timer-row { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-.timer-display { font-size: 1.1em; font-weight: 700; color: #667eea; min-width: 60px; }
-.btn { padding: 7px 18px; border-radius: 20px; border: none; cursor: pointer; font-weight: 600; font-size: 0.85em; }
-.btn-purple { background: #667eea; color: #fff; }
-.btn-outline { background: #fff; color: #667eea; border: 1.5px solid #667eea; }
-.btn:hover { opacity: 0.88; }
-.score-msg { font-size: 0.88em; color: #555; margin-top: 8px; }
-
-/* SATZBAU */
-.sb-area { margin-bottom: 28px; }
-.sb-question { font-weight: 600; color: #555; margin-bottom: 8px; font-size: 0.9em; }
-.sb-chips { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; padding: 8px; background: #f3e5f5; border-radius: 10px; margin-bottom: 6px; }
-.sb-chip { padding: 6px 14px; border-radius: 18px; background: #fff; border: 1.5px solid #9b59b6; color: #667eea; cursor: grab; font-size: 0.9em; font-weight: 600; user-select: none; transition: background 0.1s; }
-.sb-chip:hover { background: #e8d5f5; }
-.sb-chip.dragging { opacity: 0.5; }
-.sb-chip.correct { background: #27ae60; color: #fff; border-color: #27ae60; cursor: default; }
-.sb-drop { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; padding: 8px; background: #fff; border: 2px dashed #c39bd3; border-radius: 10px; margin-bottom: 8px; }
-.sb-drop.drag-over { background: #f3e5f5; border-color: #667eea; }
-.sb-feedback { font-size: 0.85em; font-weight: 600; min-height: 18px; margin-bottom: 4px; }
-.sb-feedback.ok { color: #27ae60; }
-.sb-feedback.err { color: #e74c3c; }
-
-/* ZUORDNUNG */
-.zuord-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.zuord-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #f9f9f9; border: 1.5px solid #ddd; border-radius: 8px; font-size: 0.93em; }
-.zuord-text { flex: 1; }
-.zuord-select { padding: 6px 10px; border: 1.5px solid #9b59b6; border-radius: 8px; font-size: 0.88em; cursor: pointer; outline: none; }
-.zuord-select.ok { border-color: #27ae60; background: #eafaf1; color: #1e8449; }
-.zuord-select.err { border-color: #e74c3c; background: #fdecea; }
-
-/* RESULT */
-.result-box { margin-top: 18px; padding: 14px 18px; border-radius: 10px; background: #f0faf4; border: 1.5px solid #27ae60; font-weight: 600; color: #1e8449; font-size: 0.95em; }
-
-/* FOOTER */
-.author-footer { text-align: center; padding: 14px; font-size: 0.78em; color: #aaa; border-top: 1px solid #eee; }
-
-  /* Wortschatz */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
+.mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 0.97rem; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-btn {
+  padding: 9px 16px; border: 2px solid #c5cae9; border-radius: 8px;
+  background: #fff; cursor: pointer; text-align: left; font-size: 0.92rem;
+  transition: all .2s;
+}
+.mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+.mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-btn.wrong   { border-color: #e53935; background: #ffebee; color: #c62828; }
+.mc-feedback { margin-top: 10px; font-size: 0.88rem; min-height: 1.3em; }
+.mc-feedback.ok  { color: #2e7d32; font-weight: 700; }
+.mc-feedback.err { color: #c62828; }
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background .3s; }
+.pdot.done { background: #667eea; }
+.regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 10px; }
+.regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.05rem; }
+.regel-karte ul { margin-left: 18px; }
+.regel-karte li { color: #333; line-height: 1.8; font-size: 0.95rem; }
+.regel-karte .rk-example { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; border-left: 3px solid #7c4dff; font-size: 0.9rem; color: #333; }
+.regel-karte .rk-example b { color: #3949ab; }
+/* Regel-Tab */
+h2 { font-size: 1.2em; font-weight: 700; color: #667eea; margin-bottom: 16px; }
+.rule-box {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+}
+.rule-box h3 { color: #3949ab; font-size: 1.0em; margin-bottom: 10px; }
+.rule-box ul { margin-left: 18px; }
+.rule-box li { color: #333; line-height: 1.7; font-size: 0.95em; margin-bottom: 6px; }
+.rule-box code { background: #fff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 2px 6px; font-family: monospace; font-size: 0.9em; color: #667eea; }
+/* Lückentext */
+.luecken-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    line-height: 1.9;
+    font-size: 0.95em;
+}
+input.blank {
+    border: 2px solid #c5cae9; border-radius: 6px;
+    padding: 3px 8px; font-size: 0.9rem;
+    font-family: inherit; outline: none;
+    transition: border-color .2s, background .2s;
+    background: white; margin: 0 2px;
+}
+input.blank:focus { border-color: #667eea; }
+input.blank.correct { border-color: #27ae60; background: #e8f5e9; }
+input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
+.correction-hint {
+  font-size: 0.78rem; color: #27ae60; font-weight: 700;
+  margin-left: 4px; white-space: nowrap;
+}
+/* Zuordnung */
+.zuo-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.drop-zone {
+  border: 2px dashed #c5cae9; border-radius: 10px;
+  padding: 12px; background: #fafbff;
+  transition: background .2s; min-height: 100px;
+}
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.zuo-title { font-weight: 700; color: #667eea; text-align: center; margin-bottom: 10px; font-size: 0.9em; }
+.chip-bank {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 12px; background: #f8f9fa;
+  border-radius: 10px; margin-bottom: 14px; min-height: 54px;
+}
+.chip {
+  padding: 6px 14px; border-radius: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; cursor: grab; font-size: 0.85rem;
+  font-weight: 600; user-select: none;
+  transition: transform .15s, opacity .15s;
+  white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+/* Satzbau */
+.satzbau-item { background: #f8f9ff; padding: 16px 20px; margin-bottom: 20px; border-radius: 10px; border-left: 4px solid #667eea; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: #f8f8f8; border-radius: 10px; min-height: 54px; margin-bottom: 8px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; padding: 8px 10px; border-radius: 8px; border: 2px dashed #c5cae9; background: #fafbff; align-items: center; }
+.sentence-builder.correct  { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct  { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+/* Control-Bar */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+/* Hilfe-Box */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+/* Author Footer */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+/* Responsive */
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .zuo-layout { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <!-- HEADER -->
-  <div class="header">
-    <div style="font-size:0.9em;opacity:0.8;">B1.2 · Lektion 2055G</div>
-    <h1>Das Plusquamperfekt mit Modalverben</h1>
-    <div class="subtitle">Grammatik · Bildung · Verwendung · Nebensatz</div>
-  </div>
-
-  <!-- NAV -->
-  <div class="nav">
-    <div class="nav-row">
-      <button class="nav-btn active" onclick="showTab(0)">🔍 Entdecken</button>
-      <button class="nav-btn" onclick="showTab(1)">📋 Regel</button>
-      <button class="nav-btn" onclick="showTab(2)">✏️ Lückentext</button>
-      <button class="nav-btn" onclick="showTab(3)">🔀 Satzbau</button>
-      <button class="nav-btn" onclick="showTab(4)">🔗 Zuordnung</button>
+    <div class="header">
+        <h1>Das Plusquamperfekt mit Modalverben</h1>
+        <p>B1.1 – Lektion 2055G · Grammatik</p>
+        <div class="big-emoji">⏰</div>
     </div>
-  </div>
-
-  <!-- ===== TAB 0: ENTDECKEN ===== -->
-  <div class="section active" id="sec-0">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Entdecken Banner">
-    <div class="section-title">🔍 Entdecke das Plusquamperfekt!</div>
-    <div class="section-sub">Wähle die richtige Antwort und entdecke die Grammatikregel.</div>
-
-    <div class="mc-progress" id="mcProgress">
-      <div class="mc-dot active" id="dot0">1</div>
-      <div class="mc-dot" id="dot1">2</div>
-      <div class="mc-dot" id="dot2">3</div>
-      <div class="mc-dot" id="dot3">4</div>
-    </div>
-
-    <!-- STEP 0 -->
-    <div class="mc-step active" id="step0">
-      <div class="mc-box">
-        <div class="mc-frage">Du bist zu spät zur Deutschstunde gekommen. Was sagst du?</div>
-        <div class="mc-beispiel">„Bevor ich kommen konnte, ___ ich ein Missgeschick ___."</div>
-        <div class="mc-opts">
-          <div class="mc-opt" onclick="checkMC(0,0,'wrong')">a) habe ... gehabt</div>
-          <div class="mc-opt" onclick="checkMC(0,1,'correct')">b) hatte ... gehabt</div>
-          <div class="mc-opt" onclick="checkMC(0,2,'wrong')">c) bin ... gehabt</div>
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)">
+            <span class="nav-emoji">📖</span>
+            <span class="nav-label">Entdecken</span>
         </div>
-        <div class="mc-feedback" id="fb0"></div>
-        <button class="mc-next" id="next0" onclick="nextStep(1)">Weiter →</button>
-      </div>
-      <div class="mc-rule-card" id="rule0">
-        ✅ <strong>Plusquamperfekt:</strong> Das Plusquamperfekt wird gebildet mit <strong>haben/sein im Präteritum</strong> + <strong>Partizip II</strong>. Es beschreibt eine Handlung, die <strong>vor</strong> einer anderen vergangenen Handlung passierte.<br>
-        Beispiel: Er <strong>hatte</strong> sehr lange Deutsch <strong>gelernt</strong>, bevor er nach Deutschland reiste.
-      </div>
+        <div class="nav-btn" onclick="showSection(1)">
+            <span class="nav-emoji">📋</span>
+            <span class="nav-label">Regel</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(2)">
+            <span class="nav-emoji">✏️</span>
+            <span class="nav-label">Lückentext</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(3)">
+            <span class="nav-emoji">🔀</span>
+            <span class="nav-label">Zuordnung</span>
+        </div>
+        <div class="nav-btn" onclick="showSection(4)">
+            <span class="nav-emoji">🧩</span>
+            <span class="nav-label">Satzbau</span>
+        </div>
     </div>
 
-    <!-- STEP 1 -->
-    <div class="mc-step" id="step1">
-      <div class="mc-box">
-        <div class="mc-frage">Welche Konjunktion passt, um das frühere Ereignis im Plusquamperfekt einzuleiten?</div>
-        <div class="mc-beispiel">„___ der Baum umgefallen war, wurde er zu Brennholz verarbeitet."</div>
-        <div class="mc-opts">
-          <div class="mc-opt" onclick="checkMC(1,0,'wrong')">a) Weil</div>
-          <div class="mc-opt" onclick="checkMC(1,1,'wrong')">b) Obwohl</div>
-          <div class="mc-opt" onclick="checkMC(1,2,'correct')">c) Nachdem</div>
+    <!-- ===== TAB 0: ENTDECKEN ===== -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Crect fill='%23667eea' width='1200' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='48' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPlusquamperfekt mit Modalverben%3C/text%3E%3C/svg%3E" alt="Entdecken">
+        <div class="sec-inner">
+            <h2>📖 Entdecke die Regel selbst</h2>
+            <div class="entdeck-intro">
+                <h3>👀 Schau dir diese Sätze an:</h3>
+                <p><span class="hl">Sie hatte</span> den Streit <span class="hl">nicht vermeiden können</span>.</p>
+                <p><span class="hl">Er hatte</span> das Buch noch <span class="hl">lesen müssen</span>.</p>
+                <p><span class="hl">Wir hatten</span> den Zug noch <span class="hl">erreichen können</span>.</p>
+            </div>
+            <div class="progress-dots">
+                <div class="pdot" id="pdot0"></div>
+                <div class="pdot" id="pdot1"></div>
+                <div class="pdot" id="pdot2"></div>
+                <div class="pdot" id="pdot3"></div>
+            </div>
+            <div class="mc-step active" id="mc-step0">
+                <h4>❓ Schritt 1: Welches Hilfsverb steht im Plusquamperfekt mit Modalverben?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(0, this, false)">war / waren</button>
+                    <button class="mc-btn" onclick="mcCheck(0, this, true)">hatte / hatten</button>
+                    <button class="mc-btn" onclick="mcCheck(0, this, false)">ist / sind</button>
+                    <button class="mc-btn" onclick="mcCheck(0, this, false)">wird / werden</button>
+                </div>
+                <div class="mc-feedback" id="mcfb0"></div>
+            </div>
+            <div class="mc-step" id="mc-step1">
+                <h4>❓ Schritt 2: Was steht nach „hatte" / „hatten"?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(1, this, false)">Partizip II des Modalverbs</button>
+                    <button class="mc-btn" onclick="mcCheck(1, this, true)">Zwei Infinitive (Vollverb + Modalverb)</button>
+                    <button class="mc-btn" onclick="mcCheck(1, this, false)">Partizip II des Vollverbs</button>
+                    <button class="mc-btn" onclick="mcCheck(1, this, false)">Präsens des Modalverbs</button>
+                </div>
+                <div class="mc-feedback" id="mcfb1"></div>
+            </div>
+            <div class="mc-step" id="mc-step2">
+                <h4>❓ Schritt 3: Welche Reihenfolge ist korrekt im Nebensatz?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(2, this, false)">...weil sie den Streit vermeiden konnte nicht.</button>
+                    <button class="mc-btn" onclick="mcCheck(2, this, true)">...weil sie den Streit nicht hatte vermeiden können.</button>
+                    <button class="mc-btn" onclick="mcCheck(2, this, false)">...weil sie nicht den Streit vermeiden hatte können.</button>
+                    <button class="mc-btn" onclick="mcCheck(2, this, false)">...weil sie hatte den Streit vermeiden nicht können.</button>
+                </div>
+                <div class="mc-feedback" id="mcfb2"></div>
+            </div>
+            <div class="mc-step" id="mc-step3">
+                <h4>❓ Schritt 4: Wann benutzen wir das Plusquamperfekt mit Modalverben?</h4>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="mcCheck(3, this, false)">Für Pläne in der Zukunft</button>
+                    <button class="mc-btn" onclick="mcCheck(3, this, true)">Für etwas, das früher nicht möglich war oder nicht musste sein</button>
+                    <button class="mc-btn" onclick="mcCheck(3, this, false)">Für regelmäßige Handlungen</button>
+                    <button class="mc-btn" onclick="mcCheck(3, this, false)">Für gerade passierte Ereignisse</button>
+                </div>
+                <div class="mc-feedback" id="mcfb3"></div>
+            </div>
+            <div class="regel-karte" id="regelkarte">
+                <h3>✓ Die Regel: Plusquamperfekt mit Modalverben</h3>
+                <ul>
+                    <li><strong>Formation:</strong> hatte/hatten + Infinitiv (Vollverb) + Infinitiv (Modalverb)</li>
+                    <li><strong>Hauptsatz:</strong> „Sie hatte den Streit nicht vermeiden können."</li>
+                    <li><strong>Nebensatz:</strong> „...weil sie den Streit nicht hatte vermeiden können." (hatte rückt nach vorne)</li>
+                    <li><strong>Niemals:</strong> kein Partizip II des Modalverbs</li>
+                    <li><strong>Immer:</strong> „hatte" oder „hatten" (nie „war" oder „waren")</li>
+                </ul>
+                <div class="rk-example">
+                    <b>Merksatz:</b> Plusquamperfekt + Modalverb = Unmöglichkeit oder Notwendigkeit in der Vergangenheit
+                </div>
+            </div>
         </div>
-        <div class="mc-feedback" id="fb1"></div>
-        <button class="mc-next" id="next1" onclick="nextStep(2)">Weiter →</button>
-      </div>
-      <div class="mc-rule-card" id="rule1">
-        ✅ <strong>PQP im Nebensatz:</strong> Temporale Konjunktionen wie <strong>nachdem, bevor, als</strong> leiten einen Nebensatz mit Plusquamperfekt ein. Im Nebensatz steht das Verb am <strong>Ende</strong>: „Nachdem sie gegessen <strong>hatte</strong>, schlief sie ein."
-      </div>
     </div>
 
-    <!-- STEP 2 -->
-    <div class="mc-step" id="step2">
-      <div class="mc-box">
-        <div class="mc-frage">Wie bildet man das Plusquamperfekt MIT einem Modalverb?</div>
-        <div class="mc-beispiel">„Sie hatte endlich wieder einmal lesen ___."</div>
-        <div class="mc-opts">
-          <div class="mc-opt" onclick="checkMC(2,0,'wrong')">a) gekonnt</div>
-          <div class="mc-opt" onclick="checkMC(2,1,'correct')">b) können</div>
-          <div class="mc-opt" onclick="checkMC(2,2,'wrong')">c) gekonnt haben</div>
+    <!-- ===== TAB 1: REGEL ===== -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Crect fill='%23764ba2' width='1200' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='48' fill='white' text-anchor='middle' dominant-baseline='middle'%3EGrammatische Regeln%3C/text%3E%3C/svg%3E" alt="Regel">
+        <div class="sec-inner">
+            <h2>📋 Grammatische Regeln</h2>
+            <div class="rule-box">
+                <h3>1. Das Perfekt (Wiederholung)</h3>
+                <ul>
+                    <li><strong>Formation:</strong> haben/sein + Partizip II</li>
+                    <li><strong>Beispiel:</strong> „Sie <strong>hat</strong> den Streit <strong>vermieden</strong>."</li>
+                    <li><strong>Bedeutung:</strong> Die Handlung ist abgeschlossen</li>
+                </ul>
+            </div>
+            <div class="rule-box">
+                <h3>2. Das Plusquamperfekt (Vorzeitigkeit)</h3>
+                <ul>
+                    <li><strong>Formation:</strong> hatte/hatten + Partizip II</li>
+                    <li><strong>Beispiel:</strong> „Sie <strong>hatte</strong> den Streit <strong>vermieden</strong>."</li>
+                    <li><strong>Bedeutung:</strong> Die Handlung liegt zeitlich vor einer anderen Vergangenheitshandlung</li>
+                </ul>
+            </div>
+            <div class="rule-box">
+                <h3>3. Plusquamperfekt mit Modalverben (Spezialfall)</h3>
+                <ul>
+                    <li><strong>Formation:</strong> hatte/hatten + Infinitiv (Vollverb) + Infinitiv (Modalverb)</li>
+                    <li><strong>Beispiel:</strong> „Sie <strong>hatte</strong> den Streit nicht <strong>vermeiden können</strong>."</li>
+                    <li><strong>Hilfsverb:</strong> immer <code>haben</code> (nie sein)</li>
+                    <li><strong>Niemals:</strong> Partizip II des Modalverbs</li>
+                </ul>
+            </div>
+            <div class="rule-box">
+                <h3>4. Modalverben im PQP</h3>
+                <ul>
+                    <li><code>können</code> → „...können" (Infinitiv)</li>
+                    <li><code>müssen</code> → „...müssen" (Infinitiv)</li>
+                    <li><code>wollen</code> → „...wollen" (Infinitiv)</li>
+                    <li><code>sollen</code> → „...sollen" (Infinitiv)</li>
+                    <li><code>dürfen</code> → „...dürfen" (Infinitiv)</li>
+                </ul>
+            </div>
+            <div class="rule-box">
+                <h3>5. Wortstellung im Nebensatz</h3>
+                <ul>
+                    <li><strong>Hauptsatz:</strong> Sie <strong>hatte</strong> das Buch nicht <strong>lesen müssen</strong>.</li>
+                    <li><strong>Nebensatz:</strong> ...weil sie das Buch nicht <strong>hatte lesen müssen</strong>.</li>
+                    <li><strong>Regelung:</strong> <code>hatte</code> steht vor den beiden Infinitiven</li>
+                </ul>
+            </div>
         </div>
-        <div class="mc-feedback" id="fb2"></div>
-        <button class="mc-next" id="next2" onclick="nextStep(3)">Weiter →</button>
-      </div>
-      <div class="mc-rule-card" id="rule2">
-        ✅ <strong>PQP mit Modalverb:</strong> Wenn ein Modalverb dabei ist, kein Partizip II! Stattdessen: <strong>haben (Präteritum) + Infinitiv Vollverb + Infinitiv Modalverb</strong>.<br>
-        „Gestern Abend <strong>hatte</strong> sie endlich wieder einmal <strong>lesen können</strong>."
-      </div>
     </div>
 
-    <!-- STEP 3 -->
-    <div class="mc-step" id="step3">
-      <div class="mc-box">
-        <div class="mc-frage">Welche Aussage über das Plusquamperfekt mit Modalverb im Nebensatz ist RICHTIG?</div>
-        <div class="mc-beispiel">„Sie war traurig, weil sie den Streit nicht ___ vermeiden ___."</div>
-        <div class="mc-opts">
-          <div class="mc-opt" onclick="checkMC(3,0,'wrong')">a) hatte ... gekonnt</div>
-          <div class="mc-opt" onclick="checkMC(3,1,'correct')">b) hatte ... können</div>
-          <div class="mc-opt" onclick="checkMC(3,2,'wrong')">c) hat ... können</div>
+    <!-- ===== TAB 2: LÜCKENTEXT ===== -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Crect fill='%239c27b0' width='1200' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='48' fill='white' text-anchor='middle' dominant-baseline='middle'%3ELückentext: Plusquamperfekt%3C/text%3E%3C/svg%3E" alt="Lückentext">
+        <div class="sec-inner">
+            <h2>✏️ Lückentext</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showLueckeLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetLuecke(); timerResetOne(2);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-2">0:00</span></span>
+                    <span>🏆 <span id="best-2">--:--</span></span>
+                </div>
+            </div>
+            <div id="lueckeContainer"></div>
         </div>
-        <div class="mc-feedback" id="fb3"></div>
-        <button class="mc-next" id="next3" onclick="nextStep(4)">Weiter →</button>
-      </div>
-      <div class="mc-rule-card" id="rule3">
-        ✅ <strong>PQP mit Modalverb im Nebensatz:</strong> Im Nebensatz steht <strong>hatte</strong> VOR Infinitiv + Modalverb am Ende: „...weil sie den Streit nicht <strong>hatte vermeiden können</strong>."<br>
-        Merke: <code>hatte</code> + Infinitiv + Modalverb (Infinitiv) — kein Partizip II!
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== TAB 1: REGEL ===== -->
-  <div class="section" id="sec-1">
-    <img class="tab-banner" src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Regel Banner">
-    <div class="section-title">📋 Die Regeln</div>
-
-    <div class="regel-grid">
-      <!-- Perfekt Wiederholung -->
-      <div class="regel-box blue">
-        <div class="regel-titel">🔁 Perfekt (Wiederholung)</div>
-        <div class="regel-formel">
-          <code>haben/sein (Präsens)</code> + <code>Partizip II</code> = <strong>Perfekt</strong><br>
-          Beschreibt eine vergangene, abgeschlossene Handlung.
-        </div>
-        <table class="regel-table">
-          <tr><th>Subjekt + haben/sein (Präsens)</th><th>Partizip II</th></tr>
-          <tr><td>Ich <strong>habe</strong></td><td>gelesen.</td></tr>
-          <tr><td>Du <strong>bist</strong></td><td>gegangen.</td></tr>
-          <tr><td>Er/sie <strong>hat</strong></td><td>gekocht.</td></tr>
-        </table>
-      </div>
-
-      <!-- Plusquamperfekt Bildung -->
-      <div class="regel-box purple">
-        <div class="regel-titel">📌 Plusquamperfekt: Bildung</div>
-        <div class="regel-formel">
-          <code>haben/sein (Präteritum)</code> + <code>Partizip II</code> = <strong>Plusquamperfekt</strong><br>
-          Beschreibt eine Handlung, die <strong>vor</strong> einer anderen vergangenen Handlung passierte.
-        </div>
-        <table class="regel-table">
-          <tr><th>Subjekt + sein/haben (Präteritum)</th><th>Partizip II</th></tr>
-          <tr><td>Ich <strong>hatte</strong></td><td>gelesen.</td></tr>
-          <tr><td>Du <strong>warst</strong></td><td>gegangen.</td></tr>
-          <tr><td>Er/sie <strong>hatte</strong></td><td>gekocht.</td></tr>
-          <tr><td>Wir <strong>hatten</strong></td><td>gegessen.</td></tr>
-          <tr><td>Ihr <strong>wart</strong></td><td>gespielt.</td></tr>
-        </table>
-        <p class="beispiel-satz">Er hatte sehr lange Deutsch gelernt, bevor er nach Deutschland reiste.</p>
-      </div>
-
-      <!-- PQP Verwendung -->
-      <div class="regel-box green">
-        <div class="regel-titel">📍 Plusquamperfekt: Verwendung</div>
-        <div class="regel-formel">
-          Das Plusquamperfekt wird <strong>nicht alleine</strong> verwendet. Es bringt zwei Ereignisse in der Vergangenheit in Relation:<br><br>
-          • Das Ereignis im <strong>PQP</strong> passierte <strong>zuerst</strong>.<br>
-          • Das zweite Ereignis steht im <strong>Perfekt</strong> oder <strong>Präteritum</strong>.<br><br>
-          Typische Konjunktionen: <strong>nachdem, bevor, als, weil, obwohl</strong>
-        </div>
-        <p class="beispiel-satz">Nachdem er mit seiner Freundin gestritten <strong>hatte</strong>, fand er sich alleine am Straßenrand wieder.</p>
-      </div>
-
-      <!-- PQP mit Modalverb -->
-      <div class="regel-box orange">
-        <div class="regel-titel">⭐ Plusquamperfekt mit Modalverb</div>
-        <div class="regel-formel">
-          Wenn ein Modalverb dabei ist: <strong>kein Partizip II!</strong><br><br>
-          <strong>Hauptsatz:</strong> <code>hatten</code> + Infinitiv Vollverb + Infinitiv Modalverb<br>
-          „Sie <strong>hatte</strong> den Streit nicht <strong>vermeiden können</strong>."<br><br>
-          <strong>Nebensatz:</strong> <code>hatte</code> steht vor Infinitiv + Modalverb am Ende<br>
-          „...weil sie den Streit nicht <strong>hatte vermeiden können</strong>."
-        </div>
-        <table class="regel-table" style="margin-top:12px;">
-          <tr><th>Person</th><th>PQP mit können (Hauptsatz)</th></tr>
-          <tr><td>Ich</td><td>hatte ... machen <strong>können</strong></td></tr>
-          <tr><td>Er/sie</td><td>hatte ... gehen <strong>müssen</strong></td></tr>
-          <tr><td>Wir</td><td>hatten ... bleiben <strong>dürfen</strong></td></tr>
-        </table>
-        <p class="beispiel-satz">Gestern Abend hatte sie endlich wieder einmal lesen <strong>können</strong>. Darum schlief sie gut ein.</p>
-      </div>
-
-      <!-- Partizip II Ausnahmen -->
-      <div class="regel-box blue">
-        <div class="regel-titel">⚠️ Partizip II — Ausnahmen</div>
-        <div class="regel-formel">
-          <strong>Starke/irreguläre Verben</strong> ändern den Wortstamm: <code>gehen → gegangen</code><br>
-          <strong>Verb auf -ieren</strong>: kein Präfix <em>ge-</em>: <code>telefonieren → telefoniert</code><br>
-          <strong>Nicht-trennbare Verben</strong>: kein <em>ge-</em>: <code>verstehen → verstanden</code><br>
-          <strong>Trennbare Verben</strong>: <em>ge-</em> nach Präfix: <code>abgeben → abgegeben</code><br>
-          <strong>Verbstamm auf -d/-t</strong>: Endung <em>-et</em>: <code>warten → gewartet</code>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== TAB 2: LÜCKENTEXT ===== -->
-  <div class="section" id="sec-2">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Lückentext Banner">
-    <div class="section-title">✏️ Lückentext</div>
-    <div class="section-sub">Setze die richtige Form von <em>haben</em> sowie ein passendes Modalverb ein (Plusquamperfekt mit Modalverb).</div>
-
-    <div class="timer-row">
-      <div class="timer-display" id="timerL">00:00</div>
-      <button class="btn btn-purple" onclick="startTimer('L')">▶ Start</button>
-      <button class="btn btn-outline" onclick="stopTimer('L')">⏸ Stop</button>
-      <button class="btn btn-outline" onclick="resetLuecke()">↺ Reset</button>
     </div>
 
-    <div class="luecke-box" id="lueckeBox"></div>
-    <div class="score-msg" id="lueckeScore"></div>
-    <div class="result-box" id="lueckeResult" style="display:none;">🎉 Alle Lücken richtig ausgefüllt!</div>
-  </div>
-
-  <!-- ===== TAB 3: SATZBAU ===== -->
-  <div class="section" id="sec-3">
-    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Satzbau Banner">
-    <div class="section-title">🔀 Satzbau</div>
-    <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge. Beachte das Plusquamperfekt!</div>
-
-    <div class="timer-row">
-      <div class="timer-display" id="timerS">00:00</div>
-      <button class="btn btn-purple" onclick="startTimer('S')">▶ Start</button>
-      <button class="btn btn-outline" onclick="stopTimer('S')">⏸ Stop</button>
+    <!-- ===== TAB 3: ZUORDNUNG ===== -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Crect fill='%23e91e63' width='1200' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='48' fill='white' text-anchor='middle' dominant-baseline='middle'%3EZuordnung: Satztypen%3C/text%3E%3C/svg%3E" alt="Zuordnung">
+        <div class="sec-inner">
+            <h2>🔀 Zuordnung</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showZuoLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetZuo(); timerResetOne(3);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-3">0:00</span></span>
+                    <span>🏆 <span id="best-3">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Ordne die Sätze in die richtigen Kategorien. Beachte: Nur Sätze mit Modalverben gehören zur dritten Kategorie!
+            </div>
+            <div class="zuo-layout">
+                <div class="drop-zone" data-cat="hauptsatz" ondrop="dropZuo(event, this)" ondragover="allowDrop(event)">
+                    <div class="zuo-title">📌 PQP Hauptsatz</div>
+                </div>
+                <div class="drop-zone" data-cat="nebensatz" ondrop="dropZuo(event, this)" ondragover="allowDrop(event)">
+                    <div class="zuo-title">📌 PQP Nebensatz</div>
+                </div>
+                <div class="drop-zone" data-cat="modalverb" ondrop="dropZuo(event, this)" ondragover="allowDrop(event)">
+                    <div class="zuo-title">📌 PQP mit Modalverb</div>
+                </div>
+            </div>
+            <div class="chip-bank" id="zuoBank" ondrop="dropZuo(event, this)" ondragover="allowDrop(event)"></div>
+        </div>
     </div>
 
-    <div id="sbContainer"></div>
-    <div class="result-box" id="sbResult" style="display:none;">🎉 Alle Sätze richtig!</div>
-  </div>
-
-  <!-- ===== TAB 4: ZUORDNUNG ===== -->
-  <div class="section" id="sec-4">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&fit=crop" alt="Zuordnung Banner">
-    <div class="section-title">🔗 Zuordnung</div>
-    <div class="section-sub">Ordne die Sätze zu: PQP im Hauptsatz / PQP im Nebensatz / PQP mit Modalverb.</div>
-
-    <div class="zuord-list" id="zuordList"></div>
-    <div class="score-msg" id="zuordScore"></div>
-    <div class="result-box" id="zuordResult" style="display:none;">🎉 Alle richtig zugeordnet!</div>
-  </div>
-
-  <div class="author-footer">FrankBurkert@fabdaf.onmicrosoft.com · B1.2 Lektion 2055G</div>
-
-
-  <!-- TAB 5: WORTSCHATZ -->
-  <div class="tab" id="tab5">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1181233/pexels-photo-1181233.jpeg?auto=compress&cs=tinysrgb&w=900&h=200&fit=crop" alt="Wortschatz">
-    <div class="tab-content">
-      <div class="hilfe-box">Lerne die wichtigsten Vokabeln dieser Lektion.</div>
-      <div id="vocabContainer"></div>
-      <div style="margin-top:16px;display:flex;gap:10px;">
-        <button class="reset-btn" onclick="showVocabLoesung()">💡 Lösung</button>
-        <button class="reset-btn" onclick="resetVocab()">↺ Neustart</button>
-      </div>
+    <!-- ===== TAB 4: SATZBAU ===== -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Crect fill='%23ff9800' width='1200' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='48' fill='white' text-anchor='middle' dominant-baseline='middle'%3ESatzbau: Wörter ordnen%3C/text%3E%3C/svg%3E" alt="Satzbau">
+        <div class="sec-inner">
+            <h2>🧩 Satzbau</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showSbLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetSb(); timerResetOne(4);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-4">0:00</span></span>
+                    <span>🏆 <span id="best-4">--:--</span></span>
+                </div>
+            </div>
+            <div class="hilfe-box">
+                <strong>Aufgabe:</strong> Ordne die Wörter in die richtige Reihenfolge. Draggiere die Chips von der Bank in die Satzzeile.
+            </div>
+            <div id="satzbauContainer"></div>
+        </div>
     </div>
-  </div>
 
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
 </div>
 
 <script>
-// ===== LÜCKENTEXT-DATEN =====
-var LUECKEN = [
-    {
-        pre: 'Heute ',
-        gap1: 'hatte', gap1id: 'g0a', hint1: 'hatte/wollte',
-        mid: ' ich Haferflocken essen ',
-        gap2: 'wollen', gap2id: 'g0b', hint2: 'wollen',
-        post: '. Es waren jedoch keine mehr da.'
-    },
-    {
-        pre: 'Der Mann ',
-        gap1: 'hatte', gap1id: 'g1a', hint1: 'hatte/sollte',
-        mid: ' den Schnee räumen ',
-        gap2: 'sollen', gap2id: 'g1b', hint2: 'sollen',
-        post: '. Er verspätete sich jedoch.'
-    },
-    {
-        pre: 'Laura ',
-        gap1: 'hatte', gap1id: 'g2a', hint1: 'hatte/wollte',
-        mid: ' in den Urlaub fahren ',
-        gap2: 'wollen', gap2id: 'g2b', hint2: 'wollen',
-        post: '. Doch dann wurde sie leider krank.'
-    },
-    {
-        pre: 'Sie ',
-        gap1: 'hatte', gap1id: 'g3a', hint1: 'hatte/konnte',
-        mid: ' ihre Freundin nicht besuchen ',
-        gap2: 'können', gap2id: 'g3b', hint2: 'können',
-        post: '. Folglich war sie traurig.'
-    },
-    {
-        pre: 'Ich ',
-        gap1: 'hatte', gap1id: 'g4a', hint1: 'hatte/wollte',
-        mid: ' nicht kochen ',
-        gap2: 'wollen', gap2id: 'g4b', hint2: 'wollen',
-        post: '. Darum gab es Obst und Gemüse zu essen.'
-    }
-];
+var TIMER_PREFIX = 'daf_2055g_';
+var timerStarted  = [false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null];
 
-// ══════════════════════════════════════════════
-// SATZBAU
-// ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['hauptsatz'] }
-];
-
-let sbDragged = null;
-
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
-    });
-  }
-  return span;
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i) { s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i) { b.classList.toggle('active', i===idx); });
 }
 
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
-}
+// ========== MC SYSTEM (TAB 0) ==========
+var mcDone = [false, false, false, false];
 
-function sbCheckAuto(itemIdx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
-  }, 500);
-}
-
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
+function mcCheck(step, btn, correct) {
+  var btns = btn.parentElement.querySelectorAll('.mc-btn');
+  btns.forEach(function(b) { b.disabled = true; b.classList.remove('correct','wrong'); });
+  var fb = document.getElementById('mcfb' + step);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '\u2713 Richtig! Weiter zum nächsten Schritt.';
+    fb.className = 'mc-feedback ok';
+    mcDone[step] = true;
+    document.getElementById('pdot' + step).classList.add('done');
+    setTimeout(function() {
+      var next = document.getElementById('mc-step' + (step + 1));
+      if (next) { next.classList.add('active'); }
+      else { document.getElementById('regelkarte').style.display = 'block'; }
+    }, 700);
   } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
+    btn.classList.add('wrong');
+    fb.textContent = '\u2717 Nicht ganz — schau nochmal genau hin und versuche es erneut.';
+    fb.className = 'mc-feedback err';
+    setTimeout(function() {
+      btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong','correct'); });
+      fb.textContent = '';
+      fb.className = 'mc-feedback';
+    }, 1400);
   }
 }
 
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) {
-      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
-    }
-  });
-}
-
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(3);
-}
-
-function buildSatzbau() {
-  const cont = document.getElementById('sbContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
-
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
-    }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
-
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(3); });
-      pool.appendChild(chip);
-    });
-    sbRegisterZone(pool);
-
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
-
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
-    });
-
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
-    });
-
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      }
-    });
-
-    const fb = document.createElement('div');
-    fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
-
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
-}
-
-function resetSatzbau() { buildSatzbau(); resetTimer(3); }
-
-// ===== ZUORDNUNG-DATEN =====
-var ZUORDNUNG = [
-    { satz: 'Sie hatte schon alles versucht.', correct: 'hauptsatz' },
-    { satz: 'Weil er einen Streit gehabt hatte, war er traurig.', correct: 'nebensatz' },
-    { satz: 'Sie hatte den Streit nicht vermeiden können.', correct: 'modalverb' },
-    { satz: 'Nachdem er gegessen hatte, schlief er ein.', correct: 'nebensatz' },
-    { satz: 'Sie war traurig, weil sie nicht hatte kommen können.', correct: 'modalverb' },
-    { satz: 'Er hatte sein Ticket verloren. Dann hatte er ein Problem.', correct: 'hauptsatz' },
-    { satz: 'Er hatte das nicht wissen wollen.', correct: 'modalverb' },
-    { satz: 'Als der Regen aufgehört hatte, schien die Sonne.', correct: 'nebensatz' }
+// ========== LÜCKENTEXT (TAB 2) ==========
+var LUECKEN_DATA = [
+  { segs: [{t: 'Heute '}, {b: 'hatte', s: 'm'}, {t: ' ich Haferflocken essen '}, {b: 'wollen', s: 'm'}, {t: '. Es waren jedoch keine mehr da.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Der Mann '}, {b: 'hatte', s: 'm'}, {t: ' den Schnee räumen '}, {b: 'sollen', s: 'm'}, {t: '. Er verspätete sich jedoch.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Laura '}, {b: 'hatte', s: 'm'}, {t: ' in den Urlaub fahren '}, {b: 'wollen', s: 'm'}, {t: '. Doch dann wurde sie leider krank.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Sie '}, {b: 'hatte', s: 'm'}, {t: ' ihre Freundin nicht besuchen '}, {b: 'können', s: 'm'}, {t: '. Folglich war sie traurig.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Ich '}, {b: 'hatte', s: 'm'}, {t: ' nicht kochen '}, {b: 'wollen', s: 'm'}, {t: '. Darum gab es Obst und Gemüse zu essen.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Die Kinder '}, {b: 'hatten', s: 'm'}, {t: ' noch nicht schlafen '}, {b: 'wollen', s: 'm'}, {t: '. Deshalb waren sie müde.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Er '}, {b: 'hatte', s: 'm'}, {t: ' das Buch noch lesen '}, {b: 'müssen', s: 'm'}, {t: '. Aber die Bibliothek schloss früh.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Wir '}, {b: 'hatten', s: 'm'}, {t: ' den Zug noch erreichen '}, {b: 'können', s: 'm'}, {t: '. Zum Glück waren wir pünktlich.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Die Studenten '}, {b: 'hatten', s: 'm'}, {t: ' die Prüfung bestehen '}, {b: 'müssen', s: 'm'}, {t: '. Sonst wäre das Stipendium weg.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Meine Kollegin '}, {b: 'hatte', s: 'm'}, {t: ' den Bericht abgeben '}, {b: 'sollen', s: 'm'}, {t: '. Der Chef war jedoch nicht da.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Der Arzt '}, {b: 'hatte', s: 'm'}, {t: ' den Patienten operieren '}, {b: 'müssen', s: 'm'}, {t: '. Es gab keine andere Möglichkeit.'}], hint: 'Hilfsverb / Modalverb' },
+  { segs: [{t: 'Anna '}, {b: 'hatte', s: 'm'}, {t: ' nicht länger warten '}, {b: 'dürfen', s: 'm'}, {t: '. Die Zeit war einfach zu knapp.'}], hint: 'Hilfsverb / Modalverb' },
 ];
 
-// ===== TAB NAVIGATION =====
-function showTab(n) {
-    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active',i===n); });
-    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active',i===n); });
+function initLuecke() {
+    var c = document.getElementById('lueckeContainer');
+    c.innerHTML = '';
+    LUECKEN_DATA.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'luecken-item';
+        var text = '';
+        ex.segs.forEach(function(seg) {
+            if (seg.t) {
+                text += seg.t;
+            } else {
+                var size = seg.s || 'm';
+                var w = size === 's' ? '50px' : size === 'm' ? '90px' : size === 'l' ? '150px' : '200px';
+                text += '<input class="blank" style="width:' + w + '" type="text" data-answer="' + seg.b + '" oninput="liveCheck(this); timerAutoStart(2); checkLueckeAllOk();" />';
+            }
+        });
+        item.innerHTML = text;
+        c.appendChild(item);
+    });
 }
 
-// ===== MC ENTDECKEN =====
-var mcAnswered = [false,false,false,false];
-function checkMC(step, optIdx, result) {
-    if (mcAnswered[step]) return;
-    var opts = document.querySelectorAll('#step'+step+' .mc-opt');
-    opts.forEach(function(o){ o.style.pointerEvents='none'; });
-    opts[optIdx].classList.add(result);
-    var fb = document.getElementById('fb'+step);
-    if (result === 'correct') {
-        fb.textContent = '✅ Richtig!'; fb.className = 'mc-feedback ok';
-        document.getElementById('rule'+step).style.display = 'block';
-        document.getElementById('next'+step).style.display = 'inline-block';
-        mcAnswered[step] = true;
-        document.getElementById('dot'+step).classList.add('done');
-    } else {
-        fb.textContent = '❌ Nicht ganz. Versuche es nochmal!'; fb.className = 'mc-feedback err';
-        setTimeout(function(){
-            opts.forEach(function(o){ o.style.pointerEvents=''; o.classList.remove('wrong','correct'); });
-            fb.textContent = '';
-        }, 1200);
+function liveCheck(inp) {
+  var val = inp.value.trim().toLowerCase();
+  var ans = (inp.dataset.answer || '').toLowerCase();
+  inp.classList.remove('correct', 'wrong');
+  if (val.length === 0) return;
+  if (val === ans) {
+    inp.classList.add('correct');
+  } else if (ans.indexOf(val) === 0) {
+    // gültiger Präfix — neutral
+  } else {
+    inp.classList.add('wrong');
+  }
+}
+
+function checkLueckeAllOk() {
+  var inputs = document.querySelectorAll('#sec-2 input.blank');
+  var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+  if (allOk) timerStop(2);
+}
+
+function showLueckeLoesung() {
+  timerStop(2);
+  document.querySelectorAll('#sec-2 input.blank').forEach(function(inp) {
+    inp.value = inp.dataset.answer;
+    inp.classList.add('correct');
+    inp.classList.remove('wrong');
+  });
+}
+
+function resetLuecke() {
+  document.querySelectorAll('#sec-2 input.blank').forEach(function(inp) {
+    inp.value = '';
+    inp.classList.remove('correct', 'wrong');
+  });
+}
+
+// ========== ZUORDNUNG (TAB 3) ==========
+var draggedChip = null;
+var ZUO_DATA = [
+  { text: 'Er hatte sein Ticket verloren.', cat: 'hauptsatz' },
+  { text: 'Wir hatten das Essen schon bestellt.', cat: 'hauptsatz' },
+  { text: 'Sie hatte lange gewartet.', cat: 'hauptsatz' },
+  { text: 'Ich hatte den Brief geschrieben.', cat: 'hauptsatz' },
+  { text: 'Nachdem er gegessen hatte, schlief er ein.', cat: 'nebensatz' },
+  { text: 'Weil sie gestritten hatte, war sie traurig.', cat: 'nebensatz' },
+  { text: 'Als der Regen aufgehört hatte, schien die Sonne.', cat: 'nebensatz' },
+  { text: 'Bevor er ging, hatte er aufgeräumt.', cat: 'nebensatz' },
+  { text: 'Sie hatte den Streit nicht vermeiden können.', cat: 'modalverb' },
+  { text: 'Er hatte das Buch lesen müssen.', cat: 'modalverb' },
+  { text: 'Wir hatten nicht länger warten dürfen.', cat: 'modalverb' },
+  { text: 'Sie hatte nicht kommen wollen.', cat: 'modalverb' },
+];
+
+function initZuo() {
+    var bank = document.getElementById('zuoBank');
+    bank.innerHTML = '';
+    ZUO_DATA.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = item.text;
+        chip.dataset.cat = item.cat;
+        chip.draggable = true;
+        chip.addEventListener('dragstart', function(e) {
+            draggedChip = chip;
+            timerAutoStart(3);
+            e.dataTransfer.setData('text/plain', '');
+        });
+        chip.addEventListener('dragend', function() {
+            colorAllZuordnungChips();
+        });
+        bank.appendChild(chip);
+    });
+}
+
+function allowDrop(e) { e.preventDefault(); }
+
+function dropZuo(e, zone) {
+  e.preventDefault();
+  if (!draggedChip) return;
+  zone.appendChild(draggedChip);
+  draggedChip = null;
+  colorAllZuordnungChips();
+}
+
+function colorZuordnungChip(chip) {
+  var zone = chip.closest('.drop-zone');
+  if (zone) {
+    chip.classList.remove('correct', 'wrong');
+    chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+  } else {
+    chip.classList.remove('correct', 'wrong');
+  }
+}
+
+function colorAllZuordnungChips() {
+  document.querySelectorAll('#sec-3 .chip').forEach(function(chip) { colorZuordnungChip(chip); });
+  checkZuoAllOk();
+}
+
+function checkZuoAllOk() {
+  var chips = document.querySelectorAll('#sec-3 .chip');
+  var allOk = chips.length > 0 && Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+  if (allOk) timerStop(3);
+}
+
+function showZuoLoesung() {
+  timerStop(3);
+  var zones = {
+    hauptsatz: document.querySelector('[data-cat="hauptsatz"]'),
+    nebensatz: document.querySelector('[data-cat="nebensatz"]'),
+    modalverb: document.querySelector('[data-cat="modalverb"]')
+  };
+  var chips = Array.from(document.querySelectorAll('#sec-3 .chip'));
+  chips.forEach(function(chip) {
+    var cat = chip.dataset.cat;
+    zones[cat].appendChild(chip);
+    colorZuordnungChip(chip);
+  });
+}
+
+function resetZuo() {
+  var bank = document.getElementById('zuoBank');
+  var chips = Array.from(document.querySelectorAll('#sec-3 .chip'));
+  chips.forEach(function(chip) {
+    chip.classList.remove('correct', 'wrong');
+    bank.appendChild(chip);
+  });
+}
+
+// ========== SATZBAU (TAB 4) ==========
+var sbDragged = null;
+var satzbauData = [
+  { parts: ['sie','hatte','den','streit','nicht','vermeiden','können'], valid: [['sie','hatte','den','streit','nicht','vermeiden','können']], punct: '.' },
+  { parts: ['er','hatte','das','buch','noch','lesen','müssen'], valid: [['er','hatte','das','buch','noch','lesen','müssen']], punct: '.' },
+  { parts: ['wir','hatten','den','zug','erreichen','können'], valid: [['wir','hatten','den','zug','erreichen','können']], punct: '.' },
+  { parts: ['die','kinder','hatten','nicht','schlafen','wollen'], valid: [['die','kinder','hatten','nicht','schlafen','wollen']], punct: '.' },
+  { parts: ['ich','hatte','das','nicht','wissen','wollen'], valid: [['ich','hatte','das','nicht','wissen','wollen']], punct: '.' },
+  { parts: ['sie','hatte','ihre','freundin','besuchen','müssen'], valid: [['sie','hatte','ihre','freundin','besuchen','müssen']], punct: '.' },
+  { parts: ['der','arzt','hatte','den','patienten','operieren','müssen'], valid: [['der','arzt','hatte','den','patienten','operieren','müssen']], punct: '.' },
+  { parts: ['anna','hatte','nicht','warten','dürfen'], valid: [['anna','hatte','nicht','warten','dürfen']], punct: '.' },
+];
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';' || word === '.') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        zone.appendChild(sbDragged);
+        sbDragged = null;
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? orig.charAt(0).toUpperCase() + orig.slice(1) : orig;
+        }
+    });
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'wrong'); });
+        row.classList.remove('correct', 'wrong');
+        fb.textContent = '';
+        return;
     }
+    setTimeout(function() {
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct');
+            row.classList.remove('wrong');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('wrong');
+            row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge — verschiebe die Chips!';
+        }
+    }, 500);
 }
-function nextStep(n) {
-    if (n > 3) return;
-    document.querySelectorAll('.mc-step').forEach(function(s,i){ s.classList.toggle('active',i===n); });
-    document.querySelectorAll('.mc-dot').forEach(function(d,i){
-        d.classList.remove('active');
-        if (i===n) d.classList.add('active');
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) { return JSON.stringify(v) === JSON.stringify(order); });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'wrong');
+        c.classList.add(ok ? 'correct' : 'wrong');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(4);
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() { sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() { sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
     });
 }
 
-// ===== TIMER =====
-var timers = {L:null,S:null};
-var timerVals = {L:0,S:0};
-var timerRunning = {L:false,S:false};
-var TIMER_PREFIX = 'best2055G_';
-function pad(n){ return n<10?'0'+n:''+n; }
-function startTimer(t){
-    if(timerRunning[t]) return;
-    timerRunning[t]=true;
-    timers[t]=setInterval(function(){
-        timerVals[t]++;
-        var m=Math.floor(timerVals[t]/60),s=timerVals[t]%60;
-        document.getElementById('timer'+t).textContent=pad(m)+':'+pad(s);
-    },1000);
-}
-function stopTimer(t){
-    clearInterval(timers[t]); timerRunning[t]=false;
-    var key=TIMER_PREFIX+t, cur=parseInt(localStorage.getItem(key)||'9999');
-    if(timerVals[t]>0&&timerVals[t]<cur) localStorage.setItem(key,timerVals[t]);
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? word.charAt(0).toUpperCase() + word.slice(1) : word;
+            }
+            chip.classList.remove('correct', 'wrong');
+            row.appendChild(chip);
+        }
+    });
+    document.getElementById('sb-fb-' + idx).textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
 }
 
-// ===== LÜCKENTEXT =====
-function initLuecke(){
-    var box=document.getElementById('lueckeBox');
-    box.innerHTML='';
-    LUECKEN.forEach(function(item,i){
-        var div=document.createElement('div');
-        div.className='luecke-satz';
-        div.innerHTML=item.pre
-            +'<input class="luecke-input" type="text" id="'+item.gap1id+'" data-ans="'+item.gap1.toLowerCase()+'" oninput="liveCheck(this)" placeholder="'+item.hint1+'">'
-            +item.mid
-            +'<input class="luecke-input" type="text" id="'+item.gap2id+'" data-ans="'+item.gap2.toLowerCase()+'" oninput="liveCheck(this)" placeholder="'+item.hint2+'">'
-            +item.post;
-        box.appendChild(div);
-    });
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'wrong');
+    fb.textContent = '';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
 }
+
+function showSbLoesung() {
+  timerStop(4);
+  satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
+}
+
+function resetSb() {
+  satzbauData.forEach(function(_, idx) { sbResetOne(idx); });
+}
+
+// ========== TIMER SYSTEM ==========
+function timerAutoStart(n) {
+  if (timerStarted[n]) return;
+  timerStarted[n] = true;
+  timerRunning[n] = true;
+  timerIntervals[n] = setInterval(function() {
+    timerSeconds[n]++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }, 1000);
+}
+
+function timerStop(n) {
+  if (!timerRunning[n]) return;
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+  if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+    localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+    var el = document.getElementById('best-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }
+}
+
+function timerResetOne(n) {
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  timerStarted[n] = false;
+  timerSeconds[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '0:00';
+}
+
+function fmtTime(s) {
+  return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+
+function loadBestTimes() {
+  for (var i = 2; i <= 4; i++) {
+    var v = localStorage.getItem(TIMER_PREFIX + i);
+    if (v) {
+      var el = document.getElementById('best-' + i);
+      if (el) el.textContent = fmtTime(parseInt(v));
+    }
+  }
+}
+
+// ========== INIT ==========
 initLuecke();
-function liveCheck(inp){
-    var val=inp.value.trim().toLowerCase();
-    if(val===inp.dataset.ans){inp.classList.add('ok');inp.classList.remove('err');}
-    else if(val.length>0){inp.classList.add('err');inp.classList.remove('ok');}
-    else{inp.classList.remove('ok','err');}
-    updateLueckeScore();
-    autoStopIfDone();
-}
-function updateLueckeScore(){
-    var allIds=[];
-    LUECKEN.forEach(function(item){ allIds.push(item.gap1id,item.gap2id); });
-    var correct=allIds.filter(function(id){
-        var inp=document.getElementById(id);
-        return inp&&inp.value.trim().toLowerCase()===inp.dataset.ans;
-    }).length;
-    document.getElementById('lueckeScore').textContent=correct+' / '+allIds.length+' richtig';
-    return correct;
-}
-function autoStopIfDone(){
-    var allIds=[];
-    LUECKEN.forEach(function(item){ allIds.push(item.gap1id,item.gap2id); });
-    var correct=allIds.filter(function(id){
-        var inp=document.getElementById(id);
-        return inp&&inp.value.trim().toLowerCase()===inp.dataset.ans;
-    }).length;
-    if(correct===allIds.length){stopTimer('L');document.getElementById('lueckeResult').style.display='block';}
-}
-function resetLuecke(){
-    var allIds=[];
-    LUECKEN.forEach(function(item){ allIds.push(item.gap1id,item.gap2id); });
-    allIds.forEach(function(id){
-        var inp=document.getElementById(id);
-        if(inp){inp.value='';inp.classList.remove('ok','err');}
-    });
-    document.getElementById('lueckeScore').textContent='';
-    document.getElementById('lueckeResult').style.display='none';
-    timerVals['L']=0; clearInterval(timers['L']); timerRunning['L']=false;
-    document.getElementById('timerL').textContent='00:00';
-}
-
-// ===== ZUORDNUNG =====
-function initZuordnung(){
-    var list=document.getElementById('zuordList');
-    list.innerHTML='';
-    ZUORDNUNG.forEach(function(item,i){
-        var row=document.createElement('div'); row.className='zuord-item';
-        row.innerHTML='<div class="zuord-text">'+item.satz+'</div>'
-            +'<select class="zuord-select" id="zs'+i+'" onchange="checkZuord('+i+',this)">'
-            +'<option value="">— Typ —</option>'
-            +'<option value="hauptsatz">PQP im Hauptsatz</option>'
-            +'<option value="nebensatz">PQP im Nebensatz</option>'
-            +'<option value="modalverb">PQP mit Modalverb</option>'
-            +'</select>';
-        list.appendChild(row);
-    });
-}
-buildSatzbau();
-initZuordnung();
-function checkZuord(i,sel){
-    if(!sel.value){sel.className='zuord-select';return;}
-    if(sel.value===ZUORDNUNG[i].correct){sel.className='zuord-select ok';}
-    else{sel.className='zuord-select err';}
-    updateZuordScore();
-}
-function updateZuordScore(){
-    var correct=ZUORDNUNG.filter(function(item,i){
-        var sel=document.getElementById('zs'+i);
-        return sel&&sel.value===item.correct;
-    }).length;
-    document.getElementById('zuordScore').textContent=correct+' / '+ZUORDNUNG.length+' richtig';
-    if(correct===ZUORDNUNG.length) document.getElementById('zuordResult').style.display='block';
-}
-
-// ── WORTSCHATZ ────────────────────────────────────────────────────
-const WORTSCHATZ = [
-  { type: 'n', en: 'the pluperfect', art: 'das', wort: 'Plusquamperfekt', plural: '-' },
-  { type: 'n', en: 'the modal verb', art: 'das', wort: 'Modalverb', plural: '-en' },
-  { type: 'n', en: 'the past', art: 'die', wort: 'Vergangenheit', plural: '-' },
-  { type: 'v', en: 'could', de: 'konnte' },
-  { type: 'v', en: 'might', de: 'durfte' },
-  { type: 'v', en: 'should', de: 'sollte' },
-  { type: 'v', en: 'had to', de: 'musste' },
-  { type: 'v', en: 'wanted to', de: 'wollte' },
-  { type: 'v', en: 'liked to', de: 'mochte' },
-  { type: 'v', en: 'needed to', de: 'brauchte' },
-];
-
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    }
-    cont.appendChild(div);
-  });
-}
-
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    if (a === item.art.toLowerCase() && w === item.wort && p === item.plural) {
-      hint.textContent = '✓'; hint.className = 'vocab-hint correct';
-    } else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  }
-}
-
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
-    }
-    vocabLiveCheck(idx);
-  });
-}
-
-function resetVocab() { initVocab(); }
-
-initVocab();
+initZuo();
+initSatzbau();
+loadBestTimes();
 </script>
 </body>
 </html>

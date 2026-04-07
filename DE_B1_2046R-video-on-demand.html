@@ -3,592 +3,1081 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B1.2 – 2046R · Video-on-Demand</title>
+<title>B1.1 · 2046R · Video on Demand</title>
 <style>
-  :root { --main: #667eea; --main-light: #f3e5f5; --main-dark: #4a0080; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', sans-serif; background: var(--main); min-height: 100vh; padding: 20px; }
-  .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.25); overflow: hidden; }
-  header { background: var(--main); color: #fff; padding: 22px 28px 16px; }
-  header h1 { font-size: 1.45rem; font-weight: 700; }
-  header p { font-size: 0.9rem; opacity: 0.85; margin-top: 4px; }
-  /* NAV */
-  nav { display: flex; flex-direction: column; background: #f8f0ff; border-bottom: 2px solid var(--main); }
-  nav button { background: transparent; border: none; border-bottom: 1px solid #ddd; padding: 11px 18px; text-align: left; cursor: pointer; font-size: 0.92rem; color: #333; transition: background 0.2s; }
-  nav button:last-child { border-bottom: none; }
-  nav button.active { background: var(--main); color: #fff; font-weight: 700; }
-  nav button:hover:not(.active) { background: #e8d5f5; }
-  /* TAB */
-  .tab { display: none; padding: 24px 28px 32px; }
-  .tab.active { display: block; }
-  /* BANNER */
-  .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 20px; }
-  /* VOCAB CARDS */
-  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .vocab-card { background: var(--main-light); border: 1px solid #d0a0e8; border-radius: 10px; padding: 12px 14px; }
-  .vocab-card .wort { font-weight: 700; color: var(--main-dark); font-size: 0.97rem; }
-  .vocab-card .artikel { font-size: 0.8rem; color: #888; margin-bottom: 4px; }
-  .vocab-card .def { font-size: 0.85rem; color: #444; line-height: 1.4; }
-  /* LESETEXT */
-  .lesetext { font-family: Georgia, 'Times New Roman', serif; font-size: 1.02rem; line-height: 1.85; color: #222; max-width: 680px; margin: 0 auto; text-align: justify; hyphens: auto; }
-  .lesetext p { text-indent: 1.5em; margin-bottom: 0.8em; }
-  .lesetext p:first-of-type { text-indent: 0; }
-  .teil-heading { font-family: 'Segoe UI', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--main); text-transform: uppercase; letter-spacing: 0.05em; margin: 20px 0 6px; }
-  .vocab-hl { background: #fff176; border-radius: 3px; padding: 0 2px; cursor: help; position: relative; }
-  /* RF FRAGEN */
-  .rf-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-  .rf-item { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 12px 16px; }
-  .rf-item p { font-size: 0.95rem; margin-bottom: 8px; line-height: 1.5; }
-  .rf-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
-  .rf-btn { padding: 6px 18px; border: 2px solid #ccc; border-radius: 20px; background: #fff; cursor: pointer; font-size: 0.88rem; font-weight: 600; transition: all 0.2s; }
-  .rf-btn:hover { border-color: var(--main); color: var(--main); }
-  .rf-btn.selected-r { border-color: #1565c0; background: #e3f2fd; color: #1565c0; }
-  .rf-btn.selected-f { border-color: #667eea; background: #f3e5f5; color: #667eea; }
-  .rf-btn.correct { border-color: #27ae60; background: #e8f8ee; color: #27ae60; }
-  .rf-btn.wrong { border-color: #e74c3c; background: #fdecea; color: #e74c3c; }
-  .check-btn { background: var(--main); color: #fff; border: none; padding: 10px 26px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; margin-top: 6px; transition: background 0.2s; }
-  .check-btn:hover { background: var(--main-dark); }
-  .result-msg { margin-top: 12px; font-weight: 600; font-size: 0.95rem; }
-  .result-msg.ok { color: #27ae60; }
-  .result-msg.nok { color: #e74c3c; }
-  /* LÜCKENTEXT */
-  .luecken-intro { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; font-size: 0.93rem; color: #555; }
-  .luecken-satz { background: #fafafa; border: 1px solid #eee; border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; line-height: 1.8; }
-  .luecke { border: none; border-bottom: 2px solid var(--main); background: transparent; font-size: 0.97rem; font-family: inherit; color: #222; padding: 2px 4px; min-width: 130px; outline: none; }
-  .luecke.correct { border-bottom-color: #27ae60; background: #e8f8ee; border-radius: 4px; }
-  .luecke.wrong { border-bottom-color: #e74c3c; background: #fdecea; border-radius: 4px; }
-  /* SATZBAU */
-  .sb-task { background: #f8f0ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
-  .sb-task p.aufgabe { font-size: 0.93rem; color: #555; margin-bottom: 10px; }
-  .chips-area { display: flex; flex-wrap: wrap; gap: 8px; min-height: 44px; background: #fff; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; }
-  .chip { background: var(--main); color: #fff; border: none; border-radius: 20px; padding: 6px 14px; cursor: grab; font-size: 0.88rem; font-weight: 500; user-select: none; transition: opacity 0.2s, transform 0.15s; }
-  .chip:hover { transform: scale(1.05); }
-  .chip.dragging { opacity: 0.4; }
-  .drop-zone { min-height: 44px; background: #fafafa; border: 2px dashed #c3a0e0; border-radius: 8px; padding: 8px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .drop-zone.over { background: #e8d5f5; border-color: var(--main); }
-  .sb-feedback { font-size: 0.9rem; font-weight: 600; margin-top: 6px; min-height: 20px; }
-  .sb-feedback.ok { color: #27ae60; }
-  .sb-feedback.nok { color: #e74c3c; }
-  /* VOKABELN */
-  .vok-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-  .vok-card { background: var(--main-light); border: 2px solid transparent; border-radius: 10px; padding: 14px; cursor: pointer; transition: border-color 0.2s; }
-  .vok-card:hover { border-color: var(--main); }
-  .vok-card .vok-de { font-weight: 700; color: var(--main-dark); font-size: 0.97rem; }
-  .vok-card .vok-en { font-size: 0.85rem; color: #666; margin-top: 4px; display: none; }
-  .vok-card.revealed .vok-en { display: block; }
-  .vok-hint { font-size: 0.82rem; color: #999; margin-bottom: 12px; }
-  /* TIMER */
-  .timer-bar { display: flex; align-items: center; gap: 10px; background: #f8f0ff; border-radius: 8px; padding: 8px 16px; margin-bottom: 16px; font-size: 0.88rem; color: #555; }
-  .timer-display { font-size: 1rem; font-weight: 700; color: var(--main); min-width: 50px; }
-  .timer-btn { background: var(--main); color: #fff; border: none; padding: 5px 14px; border-radius: 6px; cursor: pointer; font-size: 0.82rem; }
-  /* WORTSCHATZ INTERACTIVE */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid var(--main); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
-  footer { text-align: center; padding: 14px; font-size: 0.78rem; color: #aaa; border-top: 1px solid #eee; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active {
+    background: white;
+    color: #667eea;
+    font-weight: 600;
+    border-bottom: 3px solid #667eea;
+}
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.sec-inner { padding: 28px 32px 32px; }
+.tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+/* Vorentlastung */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+/* Lesetext */
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text .dialog {
+    font-style: normal;
+    text-indent: 0;
+    padding-left: 1.1em;
+    border-left: 3px solid #667eea;
+    color: #2a2a6e;
+    margin-left: 0;
+}
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+/* Richtig/Falsch */
+.rf-list {
+    display: flex; flex-direction: column; gap: 8px;
+    max-width: 650px; margin-left: auto; margin-right: auto;
+}
+.rf-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; background: #f9f9f9; border-radius: 8px;
+    font-size: 0.95em; border: 1.5px solid #ddd;
+}
+.rf-item:hover { background: #f3e5f5; }
+.rf-text { flex: 1; }
+.rf-btns { display: flex; gap: 6px; }
+.rf-btn {
+    padding: 4px 14px; border-radius: 14px; border: 1.5px solid #9b59b6;
+    background: #fff; color: #6c3483; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.8rem; font-weight: 700; min-width: 24px; }
+.rf-result.ok { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-title { font-size: 1.0em; color: #555; margin-bottom: 12px; font-weight: 600; max-width: 650px; margin-left: auto; margin-right: auto; }
+/* Control-Bar */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+/* Hilfe-Box */
+.hilfe-box {
+    background: #f0f4ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 0.9em;
+    color: #444;
+    line-height: 1.6;
+}
+/* Lückentext */
+.luecken-item {
+    background: #f8f9ff;
+    border-left: 4px solid #667eea;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    line-height: 1.9;
+    font-size: 0.95em;
+}
+input.blank {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    padding: 3px 6px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+    min-width: 4ch;
+}
+input.blank:focus { border-bottom-color: #667eea; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { font-size: 0.78rem; color: #27ae60; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+/* Chips */
+.chip {
+    padding: 6px 14px; border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; cursor: grab; font-size: 0.85rem;
+    font-weight: 600; user-select: none;
+    transition: transform .15s, opacity .15s;
+    white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.chip.punct-chip { padding: 8px 8px; min-width: 24px; font-weight: 700; font-size: 1.1em; }
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px; background: #f8f9fa;
+    border-radius: 10px; margin-bottom: 14px; min-height: 54px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px;
+    padding: 8px 10px; border-radius: 8px;
+    border: 2px dashed #c5cae9; background: #fafbff;
+}
+.sentence-builder.correct { border-color: #27ae60; background: #e8f8f0; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.satzbau-item { margin-bottom: 20px; }
+.satzbau-feedback { font-size: 0.85em; font-weight: 600; min-height: 20px; margin-top: 6px; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.sb-punkt { font-weight: 700; font-size: 1.1em; margin-left: 2px; color: #333; align-self: center; }
+/* Footer */
+.author-footer { text-align: center; margin-top: 40px; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+/* Responsive */
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .header h1 { font-size: 1.2rem; }
+    .sec-inner { padding: 16px; }
+    .tab-banner { max-height: 120px; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <header>
-    <h1>Video-on-Demand</h1>
-    <p>B1.2 · Lektion 2046R · Lesetext</p>
-  </header>
 
-  <nav id="mainNav">
-    <button class="active" onclick="showTab(0)">① Vorentlastung</button>
-    <button onclick="showTab(1)">② Lesetext</button>
-    <button onclick="showTab(2)">③ Text &amp; Fragen</button>
-    <button onclick="showTab(3)">④ Lückentext</button>
-    <button onclick="showTab(4)">⑤ Satzbau</button>
-    <button onclick="showTab(5)">⑥ Wortschatz</button>
-  </nav>
-
-  <!-- TAB 0: VORENTLASTUNG -->
-  <div class="tab active" id="tab0">
-    <img class="tab-banner" src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&w=860" alt="Online Videos" loading="lazy">
-    <h2 style="color:var(--main);margin-bottom:16px;">Vorentlastung: Schlüsselwörter</h2>
-    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Lerne die wichtigsten Wörter zum Thema <em>Video-on-Demand</em>, bevor du den Text liest.</p>
-    <div class="vocab-grid">
-      <div class="vocab-card"><div class="artikel">das</div><div class="wort">Video-on-Demand</div><div class="def">Abrufvideo über das Internet, jederzeit verfügbar</div></div>
-      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Vielfältigkeit</div><div class="def">viele verschiedene Möglichkeiten, Abwechslung</div></div>
-      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Bequemlichkeit</div><div class="def">Komfort, einfacher Zugang ohne Aufwand</div></div>
-      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Video-Plattform</div><div class="def">Internetseite, auf der man Videos abrufen kann</div></div>
-      <div class="vocab-card"><div class="artikel">das</div><div class="wort">Streaming</div><div class="def">gleichzeitige Übertragung und Wiedergabe von Videos</div></div>
-      <div class="vocab-card"><div class="artikel">der</div><div class="wort">Livestream</div><div class="def">direkte Live-Übertragung eines Videos im Internet</div></div>
-      <div class="vocab-card"><div class="artikel">der</div><div class="wort">Phonecast</div><div class="def">Rundfunkprogramm über den Telefonserver</div></div>
-      <div class="vocab-card"><div class="artikel">—</div><div class="wort">konsumieren</div><div class="def">verbrauchen, nutzen, ansehen</div></div>
-      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Videovorlesung</div><div class="def">Universitätsvorlesung als Video übertragen</div></div>
-      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Mitgliedschaft</div><div class="def">Abonnement, monatliche Zahlung für Zugang</div></div>
-      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Internetverbindung</div><div class="def">Verbindung zum Internet, nötig für Streaming</div></div>
-      <div class="vocab-card"><div class="artikel">die</div><div class="wort">Hardwareanforderung</div><div class="def">technische Voraussetzung für ein Gerät/Programm</div></div>
-    </div>
-  </div>
-
-  <!-- TAB 1: LESETEXT -->
-  <div class="tab" id="tab1">
-    <img class="tab-banner" src="https://images.pexels.com/photos/1662770/pexels-photo-1662770.jpeg?auto=compress&w=860" alt="Streaming" loading="lazy">
-    <h2 style="color:var(--main);margin-bottom:20px;">Video-on-Demand</h2>
-    <div class="lesetext" lang="de">
-      <div class="teil-heading">Teil 1 – Online-Abrufvideos</div>
-      <p>Seit Jahren sucht man nach Alternativen zum Fernsehen. Technologische Fortschritte haben der Welt ganz neue Wege eröffnet. Die <span class="vocab-hl" title="viele verschiedene Möglichkeiten">Vielfältigkeit</span> der <strong>Medien</strong> hat der Filmindustrie einen enormen Gewinn gebracht. Aber nicht nur die Filmemacher haben davon profitiert, das Auditorium genießt auch die <span class="vocab-hl" title="Komfort, einfacher Zugang">Bequemlichkeit</span>, über das Internet an jedem Ort, ob von zu Hause oder unterwegs, und zu jeder beliebigen Zeit ein Video zu gucken.</p>
-      <p>Das sind die sogenannten <strong>Online-Abrufvideos</strong> oder auf Englisch <strong>Online-Video on Demand (OVD)</strong>, die über das Internet <strong>auf Anfrage</strong> durch verschiedene <span class="vocab-hl" title="Internetseite für Videos">Video-Plattformen</span> übertragen werden.</p>
-
-      <div class="teil-heading">Teil 2 – Vorteile von Video-on-Demand</div>
-      <p>Video-on-Demand hat einige Vorteile. Ein Vorteil ist, dass man Filme oder Serien dann ansehen kann, wann man möchte. Man muss auch den Inhalt nicht unbedingt bis zum Ende <span class="vocab-hl" title="verbrauchen, nutzen, ansehen">konsumieren</span>. Man kann nämlich das Angefangene pausieren und später weitergucken. Außerdem kann man <strong>Fernsehberichte speichern</strong> und weiter verwenden.</p>
-
-      <div class="teil-heading">Teil 3 – Streaming</div>
-      <p>Ist dir der Begriff <span class="vocab-hl" title="gleichzeitige Übertragung und Wiedergabe">Streaming</span> bekannt? Streaming ist für <strong>Internetbenutzer</strong> ein ganz bekannter Begriff. Es beinhaltet die gleichzeitige <strong>Übertragung und Wiedergabe</strong> von Videos über das <strong>Netzwerk</strong>. Programme, die live übertragen werden, werden als <span class="vocab-hl" title="Live-Übertragung im Internet">Livestream</span> oder einfach <strong>Stream</strong> bezeichnet.</p>
-      <p>Im Gegensatz zum Herunterladen ist das Ziel vom Streaming, die Videos direkt auszugeben. Die Videos werden direkt geliefert. Das Angebot wird in Echtzeit realisiert.</p>
-
-      <div class="teil-heading">Teil 4 – Phonecast und On-Demand Streaming</div>
-      <p>Livestream hat seit kurzer Zeit auch eine neue Form – <span class="vocab-hl" title="Rundfunk über den Telefonserver">Phonecast</span>. Das englische Wort leitet sich aus zwei Wörtern ab: Telefon und Rundfunk. Dabei wird über den Telefonserver ein Rundfunkprogramm für die Empfänger verbreitet, das sie abrufen können.</p>
-      <p>Eine andere Form vom Streaming ist das <strong>On-Demand Streaming</strong>. Beim On-Demand Streaming werden Daten vom Server auf Anfrage übertragen. Dabei kann man das Video pausieren, vor- oder <strong>zurückspulen</strong>.</p>
-
-      <div class="teil-heading">Teil 5 – Streaming im Alltag</div>
-      <p>Streaming wird in vielen Lebensbereichen genutzt: z. B. werden in der Ausbildung immer mehr <span class="vocab-hl" title="Vorlesungen als Video übertragen">Videovorlesungen</span> live übertragen, um den Studenten den Lernprozess zu erleichtern. Weiterhin trifft man die Streaming Videos auch im Alltag. In sozialen Medien herrscht zur Zeit ein Boom, <strong>sich zu streamen</strong>.</p>
-
-      <div class="teil-heading">Teil 6 – Geschichte der Streaming-Plattformen</div>
-      <p>Doch wie funktioniert das Streaming durch Plattformen. Es gibt heutzutage schon bekannte Streaming-Plattformen. Sie haben den Zugang zu den Videos verändert. Anfangs begannen die Plattformen ihre Tätigkeit mit dem Versand von DVDs an Abonnenten, die die Videos gekauft oder ausgeliehen hatten. Bald änderte sich die Lieferungsmethode und man hat die bestellten Daten über E-Mail bekommen. 2007 wurde erstmals das Streaming ausprobiert.</p>
-
-      <div class="teil-heading">Teil 7 – Plattformen heute</div>
-      <p>Heutzutage sind solche Plattformen in vielen Ländern zugänglich und bieten den Benutzern zahlreiche TV-Shows, Spielfilme oder Dokumentarfilme sowie Serien. Das Angebot wird jeden Monat erneuert. Dafür muss man eine <span class="vocab-hl" title="Abonnement, monatliche Zahlung">Mitgliedschaft</span>, ein sogenanntes Abonnement, kaufen und kann den ganzen Monat den Inhalt unbegrenzt anschauen. Was ganz wichtig ist – auf den Server kann man mit jedem Gerät zugreifen, das mit dem Internet verbunden ist.</p>
-
-      <div class="teil-heading">Teil 8 – Nachteile des Internetsehens</div>
-      <p>Trotz so vieler Vorteile kann man auch einige Probleme nennen, die mit dem <strong>Internetfernsehen</strong> verbunden sind. Was in vielen Regionen ganz unterschiedlich ist, ist das Angebot. Denn die Server bieten verschiedenen Ländern eine unterschiedliche Auswahl. Außerdem braucht man immer eine schnelle <span class="vocab-hl" title="Verbindung zum Internet">Internetverbindung</span>. An bestimmten Orten ist dies nicht der Fall. Bestimmte <span class="vocab-hl" title="technische Voraussetzungen">Hardwareanforderungen</span> sind nicht zu vergessen. Nicht auf jedem Gerät kann man die Server installieren. Manchmal ist die <strong>Bildqualität</strong> und die <strong>Bildgröße</strong> nicht die Beste. Dies kann den Prozess unangenehmer machen.</p>
-      <p>Trotz der Nachteile steigt die Tendenz. Immer mehr Menschen nutzen das Angebot vom On-Demand-Streaming.</p>
-    </div>
-  </div>
-
-  <!-- TAB 2: TEXT & FRAGEN -->
-  <div class="tab" id="tab2">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&w=860" alt="Fragen" loading="lazy">
-    <h2 style="color:var(--main);margin-bottom:16px;">Richtig oder falsch?</h2>
-    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Klicke auf <strong>R</strong> (Richtig) oder <strong>F</strong> (Falsch) für jeden Satz.</p>
-
-    <div class="rf-list" id="rf-list">
-      <!-- gebaut per JS -->
-    </div>
-    <button class="check-btn" onclick="checkRF()">Alle prüfen</button>
-    <div class="result-msg" id="rf-result"></div>
-  </div>
-
-  <!-- TAB 3: LÜCKENTEXT -->
-  <div class="tab" id="tab3">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&w=860" alt="Lückentext" loading="lazy">
-    <h2 style="color:var(--main);margin-bottom:12px;">Lückentext: Video-on-Demand</h2>
-
-    <div class="timer-bar">
-      <span>⏱ Zeit:</span>
-      <span class="timer-display" id="timer3">00:00</span>
-      <button class="timer-btn" onclick="startTimer(3)">Start</button>
-      <button class="timer-btn" onclick="stopTimer(3)" style="background:#999;">Stop</button>
-    </div>
-
-    <div class="luecken-intro">Ergänze die Lücken mit dem richtigen Wort aus dem Text.</div>
-    <div id="luecken-container"></div>
-    <button class="check-btn" onclick="checkLuecken()">Alle prüfen</button>
-    <div class="result-msg" id="luecken-result"></div>
-  </div>
-
-  <!-- TAB 4: SATZBAU -->
-  <div class="tab" id="tab4">
-    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&w=860" alt="Satzbau" loading="lazy">
-    <h2 style="color:var(--main);margin-bottom:12px;">Satzbau: Video-on-Demand</h2>
-
-    <div class="timer-bar">
-      <span>⏱ Zeit:</span>
-      <span class="timer-display" id="timer4">00:00</span>
-      <button class="timer-btn" onclick="startTimer(4)">Start</button>
-      <button class="timer-btn" onclick="stopTimer(4)" style="background:#999;">Stop</button>
-    </div>
-
-    <p style="font-size:0.93rem;color:#555;margin-bottom:16px;">Bringe die Wörter in die richtige Reihenfolge. Klicke oder ziehe die Chips in die Zielzone.</p>
-    <div id="satzbau-container"></div>
-  </div>
-
-  <!-- TAB 5: WORTSCHATZ -->
-  <div class="tab" id="tab5">
-    <img class="tab-banner" src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&w=860" alt="Vokabeln" loading="lazy">
-    <h2 style="color:var(--main);margin-bottom:12px;">Wortschatz: Video-on-Demand</h2>
-    <div id="vocabContainer"></div>
-    <div style="margin-top:16px;display:flex;gap:10px;">
-      <button onclick="showVocabLoesung()" style="background: var(--main); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 600;">💡 Lösung</button>
-      <button onclick="resetVocab()" style="background: var(--main); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-weight: 600;">↺ Neustart</button>
-    </div>
-  </div>
-
-  <footer>© fabDaF · <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com" style="color:#aaa;">FrankBurkert@fabdaf.onmicrosoft.com</a></footer>
+<div class="header">
+    <h1>Video on Demand</h1>
+    <p>B1.1 – Lektion 2046R · Lesen</p>
+    <div class="big-emoji">📺</div>
 </div>
 
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">📖</span>
+        <span class="nav-label">Vorentlastung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">📄</span>
+        <span class="nav-label">Lesetext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">❓</span>
+        <span class="nav-label">Text &amp; Fragen</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">✏️</span>
+        <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">🧩</span>
+        <span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(5)">
+        <span class="nav-emoji">📚</span>
+        <span class="nav-label">Wortschatz</span>
+    </div>
+</div>
+
+<!-- ===== TAB 0: VORENTLASTUNG ===== -->
+<div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Streaming und digitale Inhalte">
+    <div class="sec-inner">
+        <div class="section-title">📖 Vorentlastung</div>
+        <div class="section-sub">Lerne diese Wörter, bevor du den Text liest.</div>
+        <div class="vocab-grid" id="vocabGrid"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 1: LESETEXT ===== -->
+<div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/7974/pexels-photo.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Abend mit Streaming">
+    <div class="sec-inner">
+        <div class="section-title">📄 Video on Demand</div>
+        <div class="story-text" id="storyText">
+
+            <p>Karim Benali sitzt an diesem Freitag allein in seinem Wohnzimmer. Die Woche bei E.ON in Düsseldorf war anstrengend. Er möchte sich einfach entspannen und hat beschlossen, nicht hinauszugehen. Der Fernseher läuft, doch die traditionellen Sendungen im deutschen Fernsehen langweilen ihn. Die ARD und das ZDF bieten zwar ein breites Angebot, aber die starren Sendezeiten gefallen ihm nicht mehr. Karim möchte schauen, was er will – und wann er will.</p>
+
+            <p>Sein Kollege Elena Stojanovic hat ihm diese Woche eine Dokumentation über die Geschichte der Musik empfohlen. „Das ist wirklich spannend", sagte Elena. „Auf Netflix oder Amazon Prime können Sie diese Serie jederzeit schauen." Karim schaut auf sein Smartphone. Das klingt interessant, aber er kennt sich mit diesen Plattformen nicht aus. Welche ist am besten? Wie viel kostet eine Flatrate?</p>
+
+            <figure style="margin:18px 0;text-align:center;">
+                <img src="https://images.pexels.com/photos/5632621/pexels-photo-5632621.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Streaming-Dienste auf dem Bildschirm" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+                <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Netflix, Amazon Prime und andere Plattformen bieten unendliche Auswahl</figcaption>
+            </figure>
+
+            <p>Er öffnet zunächst die Mediathek der ARD. Das System ist kostenlos und bietet tausende Stunden an Inhalten. Karim findet dort viele interessante Sendungen – Dokumentationen, Spielfilme und Serien. Die Qualität ist gut, und es gibt sogar Untertitel in mehreren Sprachen. Die Mediatheken sind eine großartige Alternative zu den kommerziellen Plattformen. Kostenloses Video on Demand direkt von den öffentlich-rechtlichen Sendern!</p>
+
+            <p>Dann vergleicht Karim die kommerziellen Streaming-Dienste. Netflix kostet etwa 13 Euro pro Monat für die Standard-Version. Amazon Prime Video kostet weniger, ist aber Teil eines größeren Abonnements. Der Algorithmus bei Netflix ist beeindruckend – das System „kennt" Ihre Vorlieben und macht kluge Empfehlungen. Die Untertitel sind in vielen Sprachen verfügbar. Auch kann man Serien und Filme herunterladen und offline schauen.</p>
+
+            <figure style="margin:18px 0;text-align:center;">
+                <img src="https://images.pexels.com/photos/1179804/pexels-photo-1179804.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Person mit Fernbedienung" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+                <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Video on Demand ermöglicht es, flexibel zu schauen, wann man Zeit hat</figcaption>
+            </figure>
+
+            <p>Karim macht sich Notizen. Netflix hat eine riesige Auswahl und eine gute Benutzererfahrung. Aber es gibt auch kleinere Plattformen wie DAZN für Sport oder Joyn für deutsche Inhalte. Jede Plattform hat ihre Stärken. Welche ist die richtige für ihn? Die Werbung bei kostenlosen Versionen kann lästig sein, und die Anzahl der Benutzer pro Abonnement ist oft begrenzt.</p>
+
+            <p>Schließlich gibt sich Karim einen Ruck. Er entscheidet sich für die kostenlose ARD-Mediathek als Ausgangspunkt und abonniert Netflix für ein Monat zum Testen. Der Zugang zu tausenden Filmen, Serien und Dokumentationen ist einfach verlockend. Elena hat recht – Video on Demand ist die Zukunft des Fernsehens. An diesem Freitag wird Karim endlich die Musikdokumentation schauen, während er auf seinem Sofa sitzt und sich einen Tee macht. Kein starres Programm, kein Abwarten mehr. Nur Karim, sein Smartphone und unendliche Möglichkeiten.</p>
+
+        </div>
+        <div class="story-source">Quelle: B1.1 – Lektion 2046R – Video on Demand</div>
+    </div>
+</div>
+
+<!-- ===== TAB 2: TEXT & FRAGEN ===== -->
+<div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/7976/pexels-photo.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Diskussion und Verständnis">
+    <div class="sec-inner">
+        <div class="section-title">❓ Text &amp; Fragen</div>
+        <div class="section-sub">Hast du den Text verstanden? Entscheide: richtig oder falsch?</div>
+        <div class="rf-title">Richtig oder falsch?</div>
+        <div class="rf-list" id="rfList"></div>
+
+        <div style="margin-top:28px;padding:16px 20px;background:#f0f4ff;border-radius:10px;max-width:650px;margin-left:auto;margin-right:auto;">
+            <p style="font-weight:700;color:#667eea;margin-bottom:8px;">💬 Diskutiere mit deinem Partner:</p>
+            <p style="color:#555;font-size:0.93em;line-height:1.7;">Nutzt du selbst Streaming-Dienste? Welcher ist dein Favorit? Sprich über deine Erfahrung: „Ich nutze … weil …", „Die beste Funktion ist …", „Das Abonnement kostet …"</p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== TAB 3: LÜCKENTEXT ===== -->
+<div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4195325/pexels-photo-4195325.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schreiben und Üben">
+    <div class="sec-inner">
+        <h2>✏️ Lückentext</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+                <button class="btn" onclick="resetLuecken()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-3">0:00</span></span>
+                <span>🏆 Best: <span id="best-3">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">💡 Ergänze die fehlenden Wörter aus der Geschichte. Die Felder werden automatisch grün, wenn die Antwort stimmt.</div>
+        <div id="lueckenContainer"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 4: SATZBAU ===== -->
+<div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5082567/pexels-photo-5082567.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Satzbau und Grammatik">
+    <div class="sec-inner">
+        <h2>🧩 Satzbau</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showAllSbLoesung()">Lösungen</button>
+                <button class="btn" onclick="resetAllSb()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-4">0:00</span></span>
+                <span>🏆 Best: <span id="best-4">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">💡 Ordne die Wörter zu einem korrekten Satz. Ziehe die Chips in die Drop-Zone oder klicke sie an.</div>
+        <div id="satzbauContainer"></div>
+    </div>
+</div>
+
+<!-- ===== TAB 5: WORTSCHATZ ===== -->
+<div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wörterbuch und Vokabeln">
+    <div class="sec-inner">
+        <h2>📚 Wortschatz</h2>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn" onclick="showWortschatzLoesung()">Lösungen</button>
+                <button class="btn" onclick="resetWortschatz()">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span>⏱ <span id="timer-5">0:00</span></span>
+                <span>🏆 Best: <span id="best-5">--:--</span></span>
+            </div>
+        </div>
+        <div class="hilfe-box">💡 Übersetze die englischen Wörter ins Deutsche. Bei Nomen: Artikel + Wort + Plural.</div>
+        <div id="wortschatzContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+    </div>
+</div>
+
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+</div><!-- /container -->
+
 <script>
-// ─── TAB NAVIGATION ───────────────────────────────────────────
-function showTab(n) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
-  document.querySelectorAll('nav button').forEach((b,i) => b.classList.toggle('active', i===n));
-}
+// ══════════════════════════════════════════════
+// DATEN
+// ══════════════════════════════════════════════
 
-// ─── TIMER ────────────────────────────────────────────────────
-const TIMER_PREFIX = 'best2046R';
-let timers = {3:null, 4:null};
-let secs   = {3:0, 4:0};
-function startTimer(t) {
-  if (timers[t]) return;
-  secs[t] = 0;
-  timers[t] = setInterval(() => {
-    secs[t]++;
-    const m = String(Math.floor(secs[t]/60)).padStart(2,'0');
-    const s = String(secs[t]%60).padStart(2,'0');
-    document.getElementById('timer'+t).textContent = m+':'+s;
-  }, 1000);
-}
-function stopTimer(t) {
-  clearInterval(timers[t]); timers[t] = null;
-  const key = TIMER_PREFIX + '_T' + t;
-  const cur = localStorage.getItem(key);
-  if (!cur || secs[t] < parseInt(cur)) localStorage.setItem(key, secs[t]);
-}
-function autoStopIfDone(t, total, correct) {
-  if (correct === total) stopTimer(t);
-}
-
-// ─── RF DATA ──────────────────────────────────────────────────
-const RF_DATA = [
-  { frage: 'Beim Phonecast nimmt man mit dem Handy Livevideos auf.', antwort: 'falsch' },
-  { frage: 'Für das Phonecast braucht man einen Telefonserver.', antwort: 'richtig' },
-  { frage: 'Beim On-Demand Streaming guckt man Videos live.', antwort: 'falsch' },
-  { frage: 'Soziale Medien sind das einzige Mittel, einen Stream zu gucken.', antwort: 'falsch' },
-  { frage: 'Streaming wird auch an den Universitäten benutzt.', antwort: 'richtig' },
+var VORENTLASTUNG = [
+    { term: 'das Streaming/-s', en: 'streaming', def: 'Das Übertragen von Musik, Filmen oder Serien über das Internet in Echtzeit.' },
+    { term: 'die Plattform/-en', en: 'platform', def: 'Eine Webseite oder Anwendung, auf der man Inhalte anschauen kann.' },
+    { term: 'das Abonnement/-s', en: 'subscription', def: 'Ein bezahlter Service, mit dem man Zugang zu Inhalten erhält.' },
+    { term: 'die Mediathek/-en', en: 'media library', def: 'Die Sammlung von Sendungen und Filmen bei öffentlich-rechtlichen Sendern.' },
+    { term: 'die Dokumentation/-en', en: 'documentary', def: 'Ein Filmformat, das reale Ereignisse oder Themen darstellt.' },
+    { term: 'das Angebot/-e', en: 'offer / selection', def: 'Die Menge und Vielfalt der verfügbaren Inhalte.' },
+    { term: 'der Algorithmus/Algorithmen', en: 'algorithm', def: 'Ein System, das lernt und Vorschläge macht, die zu dir passen.' },
+    { term: 'die Empfehlung/-en', en: 'recommendation', def: 'Ein Vorschlag für etwas, das dir gefallen könnte.' },
+    { term: 'der Untertitel/-', en: 'subtitle', def: 'Der Text am unteren Rand des Bildschirms, der die Dialoge übersetzt.' },
+    { term: 'die Synchronisation/-en', en: 'dubbing', def: 'Das Sprechen von Dialogen in einer anderen Sprache.' },
+    { term: 'herunterladen', en: 'to download', def: 'Inhalte speichern, sodass man sie später ohne Internet schauen kann.' },
+    { term: 'die Flatrate/-s', en: 'flat rate', def: 'Ein fester monatlicher Preis für unbegrenzte Nutzung.' },
+    { term: 'die Werbung (Sg.)', en: 'advertising', def: 'Kommerzielle Anzeigen, die zwischen oder vor den Inhalten gezeigt werden.' },
+    { term: 'der Inhalt/-e', en: 'content', def: 'Alle verfügbaren Filme, Serien und anderen Materialien.' },
+    { term: 'die Auswahl (Sg.)', en: 'selection / choice', def: 'Die Menge der zur Verfügung stehenden Optionen.' },
+    { term: 'verfügbar', en: 'available', def: 'Etwas, das man nutzen oder bekommen kann.' },
+    { term: 'kostenlos', en: 'free', def: 'Ohne Kosten; ohne Geld bezahlen zu müssen.' },
+    { term: 'vergleichen', en: 'to compare', def: 'Zwei oder mehr Dinge nebeneinander ansehen, um Unterschiede zu finden.' }
 ];
-(function buildRF() {
-  const list = document.getElementById('rf-list');
-  RF_DATA.forEach((item, i) => {
-    const div = document.createElement('div');
-    div.className = 'rf-item';
-    div.innerHTML = `<p>${item.frage}</p><div class="rf-buttons">
-      <button class="rf-btn" id="rf${i}r" onclick="selectRF(${i},'richtig')">R – Richtig</button>
-      <button class="rf-btn" id="rf${i}f" onclick="selectRF(${i},'falsch')">F – Falsch</button>
-    </div>`;
-    list.appendChild(div);
-  });
-})();
-function selectRF(i, val) {
-  document.getElementById('rf'+i+'r').classList.toggle('selected-r', val==='richtig');
-  document.getElementById('rf'+i+'f').classList.toggle('selected-f', val==='falsch');
-  document.getElementById('rf'+i+'r').classList.remove('correct','wrong');
-  document.getElementById('rf'+i+'f').classList.remove('correct','wrong');
+
+var RF_DATA = [
+    { text: 'Karim schaut am liebsten die traditionellen Sendungen in der ARD.', ans: false },
+    { text: 'Elena empfiehlt Karim eine Musikdokumentation auf Netflix.', ans: true },
+    { text: 'Die Mediathek ist ein kostenloser Service von öffentlich-rechtlichen Sendern.', ans: true },
+    { text: 'Netflix kostet etwa 13 Euro pro Monat für die Standard-Version.', ans: true },
+    { text: 'Bei Netflix kann man Inhalte nicht herunterladen.', ans: false },
+    { text: 'Amazon Prime Video ist ein separates Abonnement ohne andere Dienste.', ans: false },
+    { text: 'Karim hat sich für Netflix und die ARD-Mediathek entschieden.', ans: true },
+    { text: 'Karim interessiert sich am meisten für Sport-Streaming-Dienste.', ans: false }
+];
+
+var LUECKEN = [
+    { segs: [{t:'Die ARD und das ZDF bieten ein breites '},{b:'Angebot'},{t:', aber die starren Sendezeiten gefallen Karim nicht.'}], hint: 'Nomen' },
+    { segs: [{t:'Elena hat Karim eine '},{b:'Dokumentation'},{t:' über die Geschichte der Musik empfohlen.'}], hint: 'Nomen' },
+    { segs: [{t:'Die Mediathek bietet tausende Stunden an '},{b:'Inhalten'},{t:'.'}], hint: 'Nomen' },
+    { segs: [{t:'Der '},{b:'Algorithmus'},{t:' bei Netflix macht kluge Empfehlungen.'}], hint: 'Nomen' },
+    { segs: [{t:'Man kann Serien und Filme ''},{b:'herunterladen'},{t:' und offline schauen.'}], hint: 'Verb' },
+    { segs: [{t:'Netflix kostet etwa 13 Euro pro Monat für die Standard-''},{b:'Flatrate'},{t:'.'}], hint: 'Nomen' },
+    { segs: [{t:'Es gibt auch kleinere Plattformen wie DAZN für Sport oder Joyn für deutsche ''},{b:'Inhalte'},{t:'.'}], hint: 'Nomen' },
+    { segs: [{t:'Die ''},{b:'Werbung'},{t:' bei kostenlosen Versionen kann lästig sein.'}], hint: 'Nomen' },
+    { segs: [{t:'Karim entscheidet sich für die kostenlose ARD-''},{b:'Mediathek'},{t:' und Netflix.'}], hint: 'Nomen' },
+    { segs: [{t:'Video on Demand ist die ''},{b:'Zukunft'},{t:' des Fernsehens.'}], hint: 'Nomen' },
+    { segs: [{t:'Karim möchte schauen, was er will – und ''},{b:'wann'},{t:' er will.'}], hint: 'Adverb' },
+    { segs: [{t:'Die Untertitel sind in ''},{b:'vielen'},{t:' Sprachen verfügbar.'}], hint: 'Adjektiv' }
+];
+
+var satzbauData = [
+    { parts: ['karim', 'möchte', 'schauen', 'was', 'er', 'will'], valid: [['karim', 'möchte', 'schauen', 'was', 'er', 'will']], punct: '.' },
+    { parts: ['netflix', 'kostet', 'etwa', '13', 'euro', 'pro', 'monat'], valid: [['netflix', 'kostet', 'etwa', '13', 'euro', 'pro', 'monat']], punct: '.' },
+    { parts: ['die', 'mediathek', 'ist', 'kostenlos', 'und', 'verfügbar'], valid: [['die', 'mediathek', 'ist', 'kostenlos', 'und', 'verfügbar']], punct: '.' },
+    { parts: ['elena', 'hat', 'karim', 'eine', 'dokumentation', 'empfohlen'], valid: [['elena', 'hat', 'karim', 'eine', 'dokumentation', 'empfohlen']], punct: '.' },
+    { parts: ['man', 'kann', 'filme', 'herunterladen', 'und', 'offline', 'schauen'], valid: [['man', 'kann', 'filme', 'herunterladen', 'und', 'offline', 'schauen']], punct: '.' },
+    { parts: ['der', 'algorithmus', 'macht', 'kluge', 'empfehlungen'], valid: [['der', 'algorithmus', 'macht', 'kluge', 'empfehlungen']], punct: '.' },
+    { parts: ['karim', 'entscheidet', 'sich', 'für', 'netflix'], valid: [['karim', 'entscheidet', 'sich', 'für', 'netflix']], punct: '.' },
+    { parts: ['video', 'on', 'demand', 'ist', 'die', 'zukunft'], valid: [['video', 'on', 'demand', 'ist', 'die', 'zukunft']], punct: '.' }
+];
+
+var WORTSCHATZ = [
+    { id:1, type:'n', en:'🎬 streaming', artikel:'das', de:'Streaming', plural:'Streaming' },
+    { id:2, type:'n', en:'📱 platform', artikel:'die', de:'Plattform', plural:'Plattformen' },
+    { id:3, type:'n', en:'💳 subscription', artikel:'das', de:'Abonnement', plural:'Abonnements' },
+    { id:4, type:'n', en:'📺 media library', artikel:'die', de:'Mediathek', plural:'Mediatheken' },
+    { id:5, type:'n', en:'🎥 documentary', artikel:'die', de:'Dokumentation', plural:'Dokumentationen' },
+    { id:6, type:'n', en:'🤖 algorithm', artikel:'der', de:'Algorithmus', plural:'Algorithmen' },
+    { id:7, type:'n', en:'📝 subtitle', artikel:'der', de:'Untertitel', plural:'Untertitel' },
+    { id:8, type:'n', en:'🎙️ dubbing', artikel:'die', de:'Synchronisation', plural:'Synchronisationen' },
+    { id:9, type:'n', en:'🎁 selection', artikel:'die', de:'Auswahl', plural:'\u2013' },
+    { id:10, type:'p', en:'💰 free', de:'kostenlos' },
+    { id:11, type:'p', en:'📊 available', de:'verfügbar' },
+    { id:12, type:'p', en:'🔍 to compare', de:'vergleichen' }
+];
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) { s.classList.toggle('active', i === idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) { b.classList.toggle('active', i === idx); });
 }
-function checkRF() {
-  let correct = 0;
-  RF_DATA.forEach((item, i) => {
-    const rBtn = document.getElementById('rf'+i+'r');
-    const fBtn = document.getElementById('rf'+i+'f');
-    rBtn.classList.remove('correct','wrong','selected-r');
-    fBtn.classList.remove('correct','wrong','selected-f');
-    const chosen = rBtn.classList.contains('selected-r') ? 'richtig' : fBtn.classList.contains('selected-f') ? 'falsch' : '';
-    if (!chosen) return;
-    if (chosen === item.antwort) {
-      (item.antwort==='richtig'?rBtn:fBtn).classList.add('correct');
-      correct++;
-    } else {
-      (chosen==='richtig'?rBtn:fBtn).classList.add('wrong');
-      (item.antwort==='richtig'?rBtn:fBtn).classList.add('correct');
+
+// ══════════════════════════════════════════════
+// VORENTLASTUNG
+// ══════════════════════════════════════════════
+
+function initVorentlastung() {
+    var grid = document.getElementById('vocabGrid');
+    grid.innerHTML = '';
+    VORENTLASTUNG.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + item.term + '</div>' +
+            '<div class="vocab-en">' + item.en + '</div>' +
+            '<div class="vocab-def">' + item.def + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+// ══════════════════════════════════════════════
+// VOCAB HIGHLIGHTING
+// ══════════════════════════════════════════════
+
+function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text');
+    if (!storyText) return;
+    var words = VORENTLASTUNG.map(function(item) {
+        var term = item.term.replace(/^(der|die|das)\s+/i, '');
+        return term.split(',')[0].trim().split('/')[0].trim();
+    });
+    words = words.filter(function(w) { return w && w.length > 3; });
+    if (words.length === 0) return;
+    function walkAndHighlight(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'gi');
+                replaced = replaced.replace(regex, '\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHighlight = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHighlight = !isHighlight; return; }
+                    if (isHighlight) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHighlight = !isHighlight;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walkAndHighlight);
+        }
     }
-  });
-  const r = document.getElementById('rf-result');
-  r.textContent = correct===RF_DATA.length ? '🎉 Alle '+RF_DATA.length+' Antworten richtig!' : correct+' / '+RF_DATA.length+' richtig. Schau nochmal in den Text!';
-  r.className = 'result-msg '+(correct===RF_DATA.length?'ok':'nok');
+    walkAndHighlight(storyText);
 }
 
-// ─── LÜCKENTEXT DATA ──────────────────────────────────────────
-const LUECKEN_DATA = [
-  { before: 'Technologische Fortschritte haben der Welt neue Wege ', blank: 'eröffnet', after: '.' },
-  { before: 'Online-Abrufvideos werden über das Internet auf ', blank: 'Anfrage', after: ' übertragen.' },
-  { before: 'Man kann das Angefangene pausieren und später ', blank: 'weitergucken', after: '.' },
-  { before: 'Streaming beinhaltet die gleichzeitige Übertragung und ', blank: 'Wiedergabe', after: ' von Videos.' },
-  { before: 'Programme, die live übertragen werden, heißen ', blank: 'Livestream', after: '.' },
-  { before: 'Beim Phonecast wird über den Telefonserver ein ', blank: 'Rundfunkprogramm', after: ' verbreitet.' },
-  { before: 'Beim On-Demand Streaming kann man das Video pausieren, vor- oder ', blank: 'zurückspulen', after: '.' },
-  { before: 'Man muss eine ', blank: 'Mitgliedschaft', after: ' kaufen, um unbegrenzt Inhalte anzuschauen.' },
-  { before: 'Man braucht immer eine schnelle ', blank: 'Internetverbindung', after: ' für das Streaming.' },
-  { before: '2007 wurde erstmals das ', blank: 'Streaming', after: ' ausprobiert.' },
-];
-(function buildLuecken() {
-  const cont = document.getElementById('luecken-container');
-  LUECKEN_DATA.forEach((item, i) => {
-    const div = document.createElement('div');
-    div.className = 'luecken-satz';
-    div.innerHTML = item.before +
-      `<input class="luecke" id="l${i}" type="text" autocomplete="off" placeholder="?" oninput="liveCheck(${i})">` +
-      item.after;
-    cont.appendChild(div);
-  });
-})();
-function normalize(s) { return s.trim().toLowerCase().replace(/\s+/g,' '); }
-function liveCheck(i) {
-  const inp = document.getElementById('l'+i);
-  const val = normalize(inp.value);
-  const sol = normalize(LUECKEN_DATA[i].blank);
-  if (val === sol) { inp.classList.add('correct'); inp.classList.remove('wrong'); }
-  else { inp.classList.remove('correct','wrong'); }
-  const allCorrect = LUECKEN_DATA.every((_,j) => normalize(document.getElementById('l'+j).value) === normalize(LUECKEN_DATA[j].blank));
-  if (allCorrect) autoStopIfDone(3, LUECKEN_DATA.length, LUECKEN_DATA.length);
+// ══════════════════════════════════════════════
+// RICHTIG/FALSCH
+// ══════════════════════════════════════════════
+
+function initRichtigFalsch() {
+    var list = document.getElementById('rfList');
+    list.innerHTML = '';
+    RF_DATA.forEach(function(item, idx) {
+        var row = document.createElement('div');
+        row.className = 'rf-item';
+        row.id = 'rf-item-' + idx;
+        var text = document.createElement('div');
+        text.className = 'rf-text';
+        text.textContent = item.text;
+        var btns = document.createElement('div');
+        btns.className = 'rf-btns';
+        var rBtn = document.createElement('button');
+        rBtn.className = 'rf-btn';
+        rBtn.textContent = 'Richtig';
+        rBtn.onclick = function() { rfCheck(idx, true); };
+        var fBtn = document.createElement('button');
+        fBtn.className = 'rf-btn';
+        fBtn.textContent = 'Falsch';
+        fBtn.onclick = function() { rfCheck(idx, false); };
+        btns.appendChild(rBtn);
+        btns.appendChild(fBtn);
+        var result = document.createElement('div');
+        result.className = 'rf-result';
+        result.id = 'rf-result-' + idx;
+        row.appendChild(text);
+        row.appendChild(btns);
+        row.appendChild(result);
+        list.appendChild(row);
+    });
 }
-function checkLuecken() {
-  let correct = 0;
-  LUECKEN_DATA.forEach((item, i) => {
-    const inp = document.getElementById('l'+i);
-    const val = normalize(inp.value);
-    const sol = normalize(item.blank);
-    inp.classList.remove('correct','wrong');
-    if (val === sol) { inp.classList.add('correct'); correct++; }
-    else { inp.classList.add('wrong'); inp.title = 'Lösung: ' + item.blank; }
-  });
-  const r = document.getElementById('luecken-result');
-  r.textContent = correct===LUECKEN_DATA.length ? '🎉 Alle '+LUECKEN_DATA.length+' Lücken richtig!' : correct+' / '+LUECKEN_DATA.length+' richtig. Versuche es nochmal!';
-  r.className = 'result-msg '+(correct===LUECKEN_DATA.length?'ok':'nok');
-  autoStopIfDone(3, LUECKEN_DATA.length, correct);
+
+function rfCheck(idx, chosen) {
+    timerAutoStart(2);
+    var correct = (RF_DATA[idx].ans === chosen);
+    var result = document.getElementById('rf-result-' + idx);
+    result.classList.remove('ok', 'err');
+    if (correct) {
+        result.textContent = '✓';
+        result.classList.add('ok');
+        document.getElementById('rf-item-' + idx).style.opacity = '0.6';
+    } else {
+        result.textContent = '✗';
+        result.classList.add('err');
+    }
+    rfCheckAllDone();
+}
+
+function rfCheckAllDone() {
+    var allOk = RF_DATA.every(function(_, i) {
+        var result = document.getElementById('rf-result-' + i);
+        return result && result.textContent === '✓';
+    });
+    if (allOk) stopTimer(2);
+}
+
+// ══════════════════════════════════════════════
+// LÜCKENTEXT
+// ══════════════════════════════════════════════
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN.forEach(function(item, idx) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        item.segs.forEach(function(seg) {
+            if (seg.b) {
+                var inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'blank';
+                inp.dataset.answer = seg.b;
+                inp.dataset.hint = item.hint;
+                inp.id = 'blank-' + idx;
+                inp.oninput = function() { lueckenCheck(this); timerAutoStart(3); checkLueckenAllOk(); };
+                row.appendChild(inp);
+            } else {
+                row.appendChild(document.createTextNode(seg.t));
+            }
+        });
+        container.appendChild(row);
+    });
+}
+
+function lueckenCheck(inp) {
+    var user = inp.value.trim();
+    var answer = inp.dataset.answer;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    if (user.toLowerCase() === answer.toLowerCase()) { inp.classList.add('correct'); }
+    else if (answer.toLowerCase().indexOf(user.toLowerCase()) === 0) { /* Präfix */ }
+    else { inp.classList.add('wrong'); }
+}
+
+function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#sec-3 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.classList.contains('correct');
+    });
+    if (allOk) stopTimer(3);
+}
+
+function showLueckenLoesung() {
+    stopTimer(3);
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+        inp.value = ''; inp.classList.remove('correct', 'wrong');
+    });
+    resetTimer(3);
 }
 
 // ══════════════════════════════════════════════
 // SATZBAU
 // ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['Video-on-Demand', 'ermöglicht', 'uns', ',', 'jederzeit', 'Videos', 'zu', 'gucken', '.'] },
-  { words: ['Man', 'kann', 'das', 'Video', 'pausieren', 'und', 'weitergucken', '.'] },
-  { words: ['Streaming', 'wird', 'in', 'vielen', 'Lebensbereichen', 'genutzt', '.'] },
-  { words: ['Man', 'braucht', 'eine', 'schnelle', 'Internetverbindung', '.'] },
-  { words: ['Die', 'Mitgliedschaft', 'kostet', 'jeden', 'Monat', 'Geld', '.'] },
-  { words: ['Videovorlesungen', 'werden', 'live', 'übertragen', '.'] }
-];
 
-let sbDragged = null;
+var sbDragged = null;
 
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
-    });
-  }
-  return span;
-}
-
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
-}
-
-function sbCheckAuto(itemIdx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
-  }, 500);
-}
-
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
-  } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
-  }
-}
-
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
-  });
-}
-
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(4);
-}
-
-function buildSatzbau() {
-  const cont = document.getElementById('satzbauContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
-
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
     }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
+    return c;
+}
 
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
-        sbUpdateCapitalization(zone);
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
         sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-      pool.appendChild(chip);
     });
-    sbRegisterZone(pool);
+}
 
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
-
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
     });
-
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
     });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
 
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      }
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(4);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct');
+            row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect');
+            row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
     });
+    if (allOk) stopTimer(4);
+}
 
-    const fb = document.createElement('div');
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild) row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild) row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
     fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
-
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
-}
-
-function resetSatzbau() { buildSatzbau(); resetTimer(4); }
-
-// ── WORTSCHATZ ──────────────────────────────────────────────
-var WORTSCHATZ = [
-  { type: "n", en: "the streaming", art: "das", wort: "Streaming", plural: "Streaming" },
-  { type: "v", en: "to stream", de: "streamen" },
-  { type: "n", en: "the video", art: "das", wort: "Video", plural: "Videos" },
-  { type: "v", en: "to pause", de: "pausieren" },
-  { type: "v", en: "to skip/rewind", de: "zurückspulen" },
-  { type: "n", en: "the membership", art: "die", wort: "Mitgliedschaft", plural: "Mitgliedschaften" },
-  { type: "n", en: "the internet connection", art: "die", wort: "Internetverbindung", plural: "Internetverbindungen" },
-  { type: "v", en: "to broadcast", de: "übertragen" },
-  { type: "n", en: "the livestream", art: "der", wort: "Livestream", plural: "Livestreams" },
-  { type: "n", en: "the content", art: "der", wort: "Inhalt", plural: "Inhalte" },
-  { type: "v", en: "to watch", de: "gucken" },
-  { type: "n", en: "the platform", art: "die", wort: "Plattform", plural: "Plattformen" },
-];
-
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
     }
-    cont.appendChild(div);
-  });
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
 }
 
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    var okA = a === item.art.toLowerCase();
-    var okW = w === item.wort;
-    var okP = p === item.plural;
-    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  }
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) {
+            bank.appendChild(sbMakeChip(word));
+        });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function() {
+            sbShowSolution(parseInt(this.getAttribute('data-idx')));
+        });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function() {
+            sbResetOne(parseInt(this.getAttribute('data-idx')));
+        });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
 }
 
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
+function showAllSbLoesung() {
+    stopTimer(4);
+    satzbauData.forEach(function(_, idx) {
+        sbShowSolution(idx);
+    });
+}
+
+function resetAllSb() {
+    satzbauData.forEach(function(_, idx) {
+        sbResetOne(idx);
+    });
+    resetTimer(4);
+}
+
+// ══════════════════════════════════════════════
+// WORTSCHATZ
+// ══════════════════════════════════════════════
+
+function initWortschatz() {
+    var container = document.getElementById('wortschatzContainer');
+    container.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        row.style.marginBottom = '0';
+        var prompt = document.createElement('div');
+        prompt.style.cssText = 'font-weight:600; color:#667eea; margin-bottom:6px; font-size:1.05em;';
+        prompt.textContent = item.en;
+        row.appendChild(prompt);
+        var fields = document.createElement('div');
+        fields.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; align-items:center;';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'blank'; artInp.type = 'text';
+            artInp.placeholder = 'Artikel'; artInp.style.width = '70px';
+            artInp.dataset.answer = item.artikel; artInp.dataset.field = 'art';
+            artInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(artInp);
+            var wordInp = document.createElement('input');
+            wordInp.className = 'blank'; wordInp.type = 'text';
+            wordInp.placeholder = 'Wort'; wordInp.style.width = '160px';
+            wordInp.dataset.answer = item.de; wordInp.dataset.field = 'word';
+            wordInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(wordInp);
+            var plInp = document.createElement('input');
+            plInp.className = 'blank'; plInp.type = 'text';
+            plInp.placeholder = 'Plural'; plInp.style.width = '140px';
+            plInp.dataset.answer = item.plural; plInp.dataset.field = 'plural';
+            if (item.plural === '\u2013') {
+                plInp.value = '\u2013';
+                plInp.disabled = true;
+                plInp.classList.add('correct');
+                plInp.style.opacity = '0.6';
+                plInp.title = 'Dieses Wort hat keinen Plural';
+            } else {
+                plInp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            }
+            fields.appendChild(plInp);
+        } else {
+            var inp = document.createElement('input');
+            inp.className = 'blank'; inp.type = 'text';
+            inp.placeholder = 'Deutsch'; inp.style.width = '220px';
+            inp.dataset.answer = item.de; inp.dataset.field = 'word';
+            inp.oninput = function() { wortschatzCheck(this); timerAutoStart(5); checkWortschatzAllOk(); };
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields);
+        container.appendChild(row);
+    });
+}
+
+function wortschatzCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!user) return;
+    var cmpUser = (field === 'art') ? user.toLowerCase().trim() : user.trim();
+    var cmpAnswer = (field === 'art') ? answer.toLowerCase() : answer;
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { /* Präfix */ }
+    else { inp.classList.add('wrong'); }
+}
+
+function checkWortschatzAllOk() {
+    var inputs = document.querySelectorAll('#sec-5 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
+        return i.disabled || i.classList.contains('correct');
+    });
+    if (allOk) stopTimer(5);
+}
+
+function showWortschatzLoesung() {
+    stopTimer(5);
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
+}
+
+function resetWortschatz() {
+    document.querySelectorAll('#sec-5 input.blank').forEach(function(inp) {
+        if (!inp.disabled) {
+            inp.value = ''; inp.classList.remove('correct', 'wrong');
+        }
+    });
+    resetTimer(5);
+}
+
+// ══════════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════════
+
+var timers = {};
+
+function timerAutoStart(tabIdx) {
+    if (!timers[tabIdx]) {
+        timers[tabIdx] = { started: Date.now(), best: null };
+        updateTimerDisplay(tabIdx);
+        var interval = setInterval(function() {
+            if (timers[tabIdx]) updateTimerDisplay(tabIdx);
+            else clearInterval(interval);
+        }, 100);
     }
-    vocabLiveCheck(idx);
-  });
 }
 
-function resetVocab() { initVocab(); }
+function stopTimer(tabIdx) {
+    if (timers[tabIdx] && !timers[tabIdx].stopped) {
+        timers[tabIdx].stopped = Date.now();
+        var elapsed = (timers[tabIdx].stopped - timers[tabIdx].started) / 1000;
+        if (!timers[tabIdx].best || elapsed < timers[tabIdx].best) {
+            timers[tabIdx].best = elapsed;
+        }
+        updateTimerDisplay(tabIdx);
+    }
+}
 
-initVocab();
+function resetTimer(tabIdx) {
+    timers[tabIdx] = { started: null, best: timers[tabIdx] ? timers[tabIdx].best : null, stopped: null };
+    updateTimerDisplay(tabIdx);
+}
 
+function updateTimerDisplay(tabIdx) {
+    var timer = timers[tabIdx];
+    if (!timer) return;
+    var current = timer.stopped || Date.now();
+    var elapsed = Math.floor((current - timer.started) / 1000);
+    var mins = Math.floor(elapsed / 60);
+    var secs = elapsed % 60;
+    document.getElementById('timer-' + tabIdx).textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    if (timer.best) {
+        var bestMins = Math.floor(timer.best / 60);
+        var bestSecs = Math.floor(timer.best % 60);
+        document.getElementById('best-' + tabIdx).textContent = bestMins + ':' + (bestSecs < 10 ? '0' : '') + bestSecs;
+    }
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+
+window.addEventListener('DOMContentLoaded', function() {
+    initVorentlastung();
+    initRichtigFalsch();
+    initLuecken();
+    initSatzbau();
+    initWortschatz();
+    highlightVocabInText();
+});
 </script>
 </body>
 </html>

@@ -106,7 +106,7 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 .vocab-inputs { display: flex; gap: 6px; flex-wrap: wrap; }
 .vocab-inputs input.art  { width: 70px; }
 .vocab-inputs input.wort { width: 120px; }
-.vocab-inputs input.plural { width: 120px; }
+.vocab-inputs input.plural { width: 70px; }
 .vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: transparent; padding: 3px 6px; font-size: 0.9em; font-family: inherit; outline: none; transition: all 0.2s; }
 .vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
 .vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
@@ -129,6 +129,21 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 .footer { text-align: center; padding: 20px; color: #aaa; font-size: 0.8em; border-top: 1px solid #eee; }
 .footer a { color: #aaa; }
 .author-name { color: #aaa; }
+
+/* TAB BANNER */
+.tab-banner {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  display: block;
+}
+@media (max-width: 600px) {
+  .tab-banner { max-height: 120px; }
+}
 </style>
 </head>
 <body>
@@ -179,7 +194,7 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
       <li><span class="verb">Trenne</span> deinen Müll.</li>
       <li><span class="verb">Benutze</span> keine chemischen Reinigungsmittel.</li>
       <li><span class="verb">Denke</span> daran, das Licht auszumachen, wenn du den Raum verlässt.</li>
-      <li><span class="verb">Kompostiere</span> deinen organischen Abfall — er kann verrotten statt Giftgas zu erzeugen.</li>
+      <li><span class="verb">Kompostiere</span> deinen organischen Abfall — so sparst du Deponieplatz und reduzierst Treibhausgase.</li>
     </ul>
 
     <div class="section-title">Tätigkeiten bewerten und argumentieren</div>
@@ -832,16 +847,16 @@ function satzbauAlleLoesen() { satzbauData.forEach(function(_, i) { sbShowSoluti
 
 // ─── WORTSCHATZ ───────────────────────────────────────────────────────────
 var WORTSCHATZ = [
-  { id:1,  type:'n', en:'climate change',          artikel:'der', de:'Klimawandel',     plural:'-' },
-  { id:2,  type:'n', en:'air pollution',            artikel:'die', de:'Luftverschmutzung', plural:'-en' },
-  { id:3,  type:'n', en:'deforestation',            artikel:'die', de:'Abholzung',       plural:'-en' },
-  { id:4,  type:'n', en:'greenhouse effect',        artikel:'der', de:'Treibhauseffekt', plural:'-e' },
-  { id:5,  type:'n', en:'water pollution',          artikel:'die', de:'Wasserverschmutzung', plural:'-en' },
-  { id:6,  type:'n', en:'soil erosion',             artikel:'die', de:'Bodenerosion',    plural:'-en' },
-  { id:7,  type:'n', en:'emission',                 artikel:'die', de:'Emission',        plural:'-en' },
-  { id:8,  type:'n', en:'extinction of species',    artikel:'das', de:'Artensterben',    plural:'-' },
-  { id:9,  type:'n', en:'overpopulation',           artikel:'die', de:'Überbevölkerung', plural:'-' },
-  { id:10, type:'n', en:'littering / pollution',    artikel:'die', de:'Vermüllung',      plural:'-en' },
+  { id:1,  type:'n', en:'climate change',          artikel:'der', de:'Klimawandel',     plural:'Klimawandel' },
+  { id:2,  type:'n', en:'air pollution',            artikel:'die', de:'Luftverschmutzung', plural:'Luftverschmutzungen' },
+  { id:3,  type:'n', en:'deforestation',            artikel:'die', de:'Abholzung',       plural:'Abholzungen' },
+  { id:4,  type:'n', en:'greenhouse effect',        artikel:'der', de:'Treibhauseffekt', plural:'Treibhauseffekte' },
+  { id:5,  type:'n', en:'water pollution',          artikel:'die', de:'Wasserverschmutzung', plural:'Wasserverschmutzungen' },
+  { id:6,  type:'n', en:'soil erosion',             artikel:'die', de:'Bodenerosion',    plural:'Bodenerosionen' },
+  { id:7,  type:'n', en:'emission',                 artikel:'die', de:'Emission',        plural:'Emissionen' },
+  { id:8,  type:'n', en:'extinction of species',    artikel:'das', de:'Artensterben',    plural:'Artensterben' },
+  { id:9,  type:'n', en:'overpopulation',           artikel:'die', de:'Überbevölkerung', plural:'Überbevölkerung' },
+  { id:10, type:'n', en:'littering / pollution',    artikel:'die', de:'Vermüllung',      plural:'Vermüllungen' },
   { id:11, type:'v', en:'to compost',               de:'kompostieren' },
   { id:12, type:'v', en:'to reduce / decrease',     de:'reduzieren' }
 ];
@@ -861,7 +876,7 @@ function initVocab() {
     if (w.type === 'n') {
       var artInp = makeVocabInput('art', w.artikel, 'Artikel', w.id, 'art');
       var wortInp = makeVocabInput('wort', w.de, 'Nomen', w.id, 'wort');
-      var pluralInp = makeVocabInput('plural', w.plural, 'Plural', w.id, 'plural');
+      var pluralInp = makeVocabInput('plural', w.plural, 'Endung', w.id, 'plural');
       inputs.appendChild(artInp);
       inputs.appendChild(wortInp);
       inputs.appendChild(pluralInp);

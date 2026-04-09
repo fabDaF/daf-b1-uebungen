@@ -78,94 +78,80 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 2px;
         }
 
         .nav-btn:last-child { border-right: none; }
-        .nav-btn:hover { background: #e9ecef; color: #495057; }
-        .nav-btn.active {
-            background: white;
-            color: #667eea;
-            font-weight: 600;
-            border-bottom: 3px solid #667eea;
-        }
-
-        .nav-emoji { font-size: 1.3em; line-height: 1.2; }
-        .nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+        .nav-btn:hover { background: #e9ecef; color: #333; }
+        .nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom-color: white; }
+        .nav-btn .emoji { font-size: 1.3em; }
+        .nav-btn .label { font-size: 0.82em; }
 
         /* SECTIONS */
         .section { display: none; }
         .section.active { display: block; }
 
-        .sec-inner {
-            padding: 24px;
-        }
-
         .tab-banner {
             width: 100%;
-            max-height: 180px;
+            height: 200px;
             object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            display: block;
         }
+
+        .sec-inner { padding: 28px; }
+        .sec-inner h2 { font-size: 1.4em; color: #333; margin-bottom: 20px; }
 
         /* CONTROL BAR */
         .control-bar {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 18px;
-            padding: 6px 12px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 14px;
             background: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 10px;
         }
 
-        .btn-row { display: flex; gap: 6px; }
+        .btn-row { display: flex; gap: 8px; }
+
         .btn {
-            background: none;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 4px 12px;
-            font-size: 0.82em;
-            color: #888;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.15s;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.85rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transition: transform .15s, opacity .15s;
         }
-        .btn:hover { border-color: #667eea; color: #667eea; }
+
+        .btn:hover { transform: translateY(-1px); opacity: 0.92; }
 
         .timer-display {
             display: flex;
             gap: 14px;
-            font-size: 0.82em;
-            color: #bbb;
-            font-variant-numeric: tabular-nums;
-        }
-
-        h2 {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 14px;
+            font-size: 0.95em;
             font-weight: 600;
+            color: #667eea;
         }
 
         /* VORENTLASTUNG */
         .vocab-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 14px;
-            margin-top: 16px;
         }
 
         .vocab-card {
-            background: #f8f9ff;
-            border: 1px solid #dde3ff;
+            background: #f8f9fa;
             border-radius: 10px;
-            padding: 14px 16px;
+            padding: 16px;
+            border-left: 4px solid #667eea;
         }
 
-        .vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
-        .vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+        .vocab-term { font-weight: 700; color: #333; margin-bottom: 6px; }
+        .vocab-def { color: #666; font-size: 0.92em; line-height: 1.5; }
 
         /* LESETEXT */
         .story-text {
@@ -193,7 +179,18 @@
 
         .story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; }
 
-        /* GENUS */
+        /* GENUS — CHIPS + DROP-ZONES */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 14px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            min-height: 54px;
+        }
+
         .chip {
             padding: 6px 14px;
             border-radius: 20px;
@@ -203,16 +200,23 @@
             font-size: 0.85rem;
             font-weight: 600;
             user-select: none;
-            transition: transform .15s, opacity .15s;
+            transition: transform .15s, opacity .15s, background .2s;
             white-space: nowrap;
-            draggable: true;
         }
 
         .chip:active { cursor: grabbing; transform: scale(1.04); }
         .chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
         .chip.wrong { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
 
-        .genus-cat {
+        .genus-label {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 6px;
+            margin-top: 10px;
+        }
+
+        .genus-cat, .drop-zone {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -221,736 +225,642 @@
             border-radius: 10px;
             margin-bottom: 14px;
             min-height: 54px;
+            border: 2px dashed #ddd;
+            transition: border-color .2s, background .2s;
         }
 
-        .genus-label {
-            font-weight: 700;
-            color: #667eea;
-            font-size: 0.9em;
-            margin-bottom: 8px;
-        }
+        .drop-zone.dragover { border-color: #667eea; background: #f0f0ff; }
 
         /* LÜCKENTEXT */
         .luecken-item {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            border-radius: 0 8px 8px 0;
             padding: 14px 18px;
             margin-bottom: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            line-height: 2.2;
+            font-size: 1em;
         }
 
         input.blank {
-            border: 2px solid #c5cae9;
-            border-radius: 6px;
-            padding: 3px 8px;
-            font-size: 0.9rem;
+            border: none;
+            border-bottom: 2px solid #667eea;
+            background: transparent;
+            font-size: inherit;
             font-family: inherit;
+            padding: 2px 4px;
             outline: none;
             transition: border-color .2s, background .2s;
-            background: white;
-            margin: 0 2px;
+            text-align: center;
         }
 
-        input.blank:focus { border-color: #667eea; }
-        input.blank.correct { border-color: #27ae60; background: #e8f5e9; }
-        input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
+        input.blank:focus { border-bottom-color: #764ba2; }
+        input.blank.correct { border-bottom-color: #27ae60; background: rgba(39,174,96,0.08); color: #27ae60; font-weight: 600; }
+        input.blank.wrong { border-bottom-color: #e74c3c; background: rgba(231,76,60,0.08); color: #e74c3c; }
 
-        /* MC */
+        /* MULTIPLE CHOICE */
+        .mc-question { margin-bottom: 28px; }
+        .mc-question-text { font-weight: 700; color: #333; margin-bottom: 12px; font-size: 1em; }
+
         .mc-option {
-            padding: 12px 16px;
-            margin-bottom: 10px;
-            border: 2px solid #c5cae9;
-            border-radius: 8px;
-            background: #fff;
+            padding: 12px 18px;
+            margin-bottom: 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
             cursor: pointer;
             transition: all .2s;
             font-size: 0.95em;
         }
 
-        .mc-option:hover { border-color: #667eea; background: #f3f4ff; }
-        .mc-option.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
-        .mc-option.wrong { border-color: #e53935; background: #ffebee; color: #c62828; }
+        .mc-option:hover { border-color: #667eea; background: #f8f9ff; }
+        .mc-option.correct { border-color: #27ae60; background: rgba(39,174,96,0.1); color: #27ae60; font-weight: 600; }
+        .mc-option.wrong { border-color: #e74c3c; background: rgba(231,76,60,0.1); color: #e74c3c; text-decoration: line-through; }
+        .mc-option.disabled { pointer-events: none; opacity: 0.6; }
 
         /* SATZBAU */
-        .satzbau-item {
-            margin-bottom: 20px;
-        }
-
-        .chips-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 14px;
-            min-height: 54px;
-        }
+        .satzbau-item { margin-bottom: 24px; }
 
         .sentence-builder {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            min-height: 44px;
-            padding: 8px 10px;
-            border-radius: 8px;
-            border: 2px dashed #c5cae9;
-            background: #fafbff;
+            padding: 14px;
+            min-height: 54px;
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            margin-top: 8px;
+            transition: border-color .2s, background .2s;
+            align-items: center;
         }
 
+        .sentence-builder.correct { border-color: #27ae60; background: rgba(39,174,96,0.05); }
+        .sentence-builder.incorrect { border-color: #e74c3c; background: rgba(231,76,60,0.05); }
+        .sentence-builder.dragover { border-color: #667eea; background: #f0f0ff; }
+
+        .chip.incorrect { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+        .chip.punct-chip { padding: 6px 6px; min-width: auto; font-weight: 700; }
+
+        .sb-punkt { font-weight: 700; font-size: 1.1em; margin-left: 2px; color: #27ae60; }
+
         .satzbau-feedback {
-            font-size: 0.9em;
-            margin-top: 8px;
-            font-weight: bold;
+            font-size: 0.88em;
+            margin-top: 6px;
             min-height: 20px;
+            font-weight: 600;
         }
 
         .satzbau-feedback.correct { color: #27ae60; }
         .satzbau-feedback.incorrect { color: #e74c3c; }
 
         /* FOOTER */
-        .author-footer {
-            text-align: center;
-            margin-top: 40px;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 16px;
-            font-size: 0.8rem;
-            color: #aaa;
-        }
-
+        .author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
         .author-footer a { color: #aaa; }
         .author-name { font-weight: 700; }
 
+        /* RESPONSIVE */
         @media (max-width: 600px) {
             body { padding: 8px; }
-            .nav { flex-wrap: wrap; }
-            .nav-btn {
-                flex: 1 1 33%;
-                min-width: 0;
-                font-size: 0.8em;
-                padding: 10px 6px;
-            }
-            .nav-btn:last-child { border-right: 1px solid #ddd; }
+            .header { padding: 18px; }
             .header h1 { font-size: 1.2rem; }
-            .tab-banner { max-height: 120px; }
+            .header p { font-size: 0.85rem; }
+            .nav-btn { padding: 10px 4px; font-size: 0.78em; }
+            .sec-inner { padding: 16px; }
+            .control-bar { flex-direction: column; gap: 10px; }
+            .vocab-grid { grid-template-columns: 1fr; }
+            .story-text { font-size: 0.98em; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- HEADER -->
-        <div class="header">
-            <h1>An einer Diskussion teilnehmen</h1>
-            <p>B1.1 – Lektion 2024X · Textarbeit</p>
-            <div class="big-emoji">💬</div>
-        </div>
+<div class="container">
+    <div class="header">
+        <h1>An einer Diskussion teilnehmen</h1>
+        <p>B1.1 – Lektion 2024X · Textarbeit</p>
+        <div class="big-emoji">🗣️</div>
+    </div>
 
-        <!-- NAV -->
-        <div class="nav">
-            <div class="nav-btn active" onclick="showSection(0)">
-                <span class="nav-emoji">📖</span>
-                <span class="nav-label">Vorentlastung</span>
-            </div>
-            <div class="nav-btn" onclick="showSection(1)">
-                <span class="nav-emoji">📄</span>
-                <span class="nav-label">Lesetext</span>
-            </div>
-            <div class="nav-btn" onclick="showSection(2)">
-                <span class="nav-emoji">🔤</span>
-                <span class="nav-label">Genus</span>
-            </div>
-            <div class="nav-btn" onclick="showSection(3)">
-                <span class="nav-emoji">✏️</span>
-                <span class="nav-label">Lückentext</span>
-            </div>
-            <div class="nav-btn" onclick="showSection(4)">
-                <span class="nav-emoji">☑️</span>
-                <span class="nav-label">Multiple-Choice</span>
-            </div>
-            <div class="nav-btn" onclick="showSection(5)">
-                <span class="nav-emoji">🧩</span>
-                <span class="nav-label">Satzbau</span>
-            </div>
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)">
+            <span class="emoji">📖</span><span class="label">Vorentlastung</span>
         </div>
-
-        <!-- SECTION 0: VORENTLASTUNG -->
-        <div class="section active" id="sec-0">
-            <img class="tab-banner" src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Menschen in einer Diskussionsgruppe">
-            <div class="sec-inner">
-                <h2>📖 Vorentlastung</h2>
-                <div class="vocab-grid" id="vorentlastungGrid">
-                    <!-- Dynamisch gefüllt -->
-                </div>
-            </div>
+        <div class="nav-btn" onclick="showSection(1)">
+            <span class="emoji">📄</span><span class="label">Lesetext</span>
         </div>
-
-        <!-- SECTION 1: LESETEXT -->
-        <div class="section" id="sec-1">
-            <img class="tab-banner" src="https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Konferenzraum mit Diskussionsteilnehmern">
-            <div class="sec-inner">
-                <h2>📄 Lesetext</h2>
-                <div class="story-text" id="lesetext">
-                    <!-- Dynamisch gefüllt -->
-                </div>
-                <div class="story-source">Quelle: B1.1 – Lektion 2024X · Textarbeit</div>
-            </div>
+        <div class="nav-btn" onclick="showSection(2)">
+            <span class="emoji">🔤</span><span class="label">Genus</span>
         </div>
-
-        <!-- SECTION 2: GENUS -->
-        <div class="section" id="sec-2">
-            <img class="tab-banner" src="https://images.pexels.com/photos/3808291/pexels-photo-3808291.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Diskussionsrunde mit verschiedenen Personen">
-            <div class="sec-inner">
-                <h2>🔤 Genus – Artikel zuordnen</h2>
-                <div class="control-bar">
-                    <div class="btn-row">
-                        <button class="btn" onclick="showGenusloesung()">Lösungen</button>
-                        <button class="btn" onclick="resetGenus(); timerResetOne(2);">Neu starten</button>
-                    </div>
-                    <div class="timer-display">
-                        <span>⏱ <span id="timer-2">00:00</span></span>
-                        <span>🏆 <span id="best-2">--:--</span></span>
-                    </div>
-                </div>
-                <div id="genusContainer">
-                    <!-- Dynamisch gefüllt -->
-                </div>
-            </div>
+        <div class="nav-btn" onclick="showSection(3)">
+            <span class="emoji">✏️</span><span class="label">Lückentext</span>
         </div>
-
-        <!-- SECTION 3: LÜCKENTEXT -->
-        <div class="section" id="sec-3">
-            <img class="tab-banner" src="https://images.pexels.com/photos/3531173/pexels-photo-3531173.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Person beim Schreiben in einer Diskussion">
-            <div class="sec-inner">
-                <h2>✏️ Lückentext</h2>
-                <div class="control-bar">
-                    <div class="btn-row">
-                        <button class="btn" onclick="showLueckenloesung()">Lösungen</button>
-                        <button class="btn" onclick="resetLuecken(); timerResetOne(3);">Neu starten</button>
-                    </div>
-                    <div class="timer-display">
-                        <span>⏱ <span id="timer-3">00:00</span></span>
-                        <span>🏆 <span id="best-3">--:--</span></span>
-                    </div>
-                </div>
-                <div id="lueckenContainer">
-                    <!-- Dynamisch gefüllt -->
-                </div>
-            </div>
+        <div class="nav-btn" onclick="showSection(4)">
+            <span class="emoji">☑️</span><span class="label">Multiple-Choice</span>
         </div>
-
-        <!-- SECTION 4: MULTIPLE CHOICE -->
-        <div class="section" id="sec-4">
-            <img class="tab-banner" src="https://images.pexels.com/photos/3808287/pexels-photo-3808287.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Präsentation in einer Diskussionsrunde">
-            <div class="sec-inner">
-                <h2>☑️ Fragen zum Text</h2>
-                <div class="control-bar">
-                    <div class="btn-row">
-                        <button class="btn" onclick="resetMC(); timerResetOne(4);">Neu starten</button>
-                    </div>
-                    <div class="timer-display">
-                        <span>⏱ <span id="timer-4">00:00</span></span>
-                        <span>🏆 <span id="best-4">--:--</span></span>
-                    </div>
-                </div>
-                <div id="mcContainer">
-                    <!-- Dynamisch gefüllt -->
-                </div>
-            </div>
-        </div>
-
-        <!-- SECTION 5: SATZBAU -->
-        <div class="section" id="sec-5">
-            <img class="tab-banner" src="https://images.pexels.com/photos/3538291/pexels-photo-3538291.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Sprechblasen symbolisieren Dialog">
-            <div class="sec-inner">
-                <h2>🧩 Satzbau</h2>
-                <div class="control-bar">
-                    <div class="btn-row">
-                        <button class="btn" onclick="resetSatzbau(); timerResetOne(5);">Neu starten</button>
-                    </div>
-                    <div class="timer-display">
-                        <span>⏱ <span id="timer-5">00:00</span></span>
-                        <span>🏆 <span id="best-5">--:--</span></span>
-                    </div>
-                </div>
-                <div id="satzbauContainer">
-                    <!-- Dynamisch gefüllt -->
-                </div>
-            </div>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="author-footer">
-            <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
-            <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+        <div class="nav-btn" onclick="showSection(5)">
+            <span class="emoji">🧩</span><span class="label">Satzbau</span>
         </div>
     </div>
 
-    <script>
-        // ===== VORENTLASTUNG =====
-        var VORENTLASTUNG = [
-            { term: "die Meinung, -en", def: "das, was man von etwas denkt; die persönliche Ansicht" },
-            { term: "der Standpunkt, -e", def: "die Position oder Sicht, von der aus man etwas beurteilt" },
-            { term: "das Argument, -e", def: "ein Grund oder Beweis, um eine Aussage zu unterstützen" },
-            { term: "einverstanden sein", def: "zustimmen; mit etwas d'accord sein" },
-            { term: "widersprechen", def: "eine andere Meinung haben; nicht einverstanden sein" },
-            { term: "der Konsens, -e", def: "Einigung; wenn sich alle auf etwas einigen" },
-            { term: "moderieren", def: "eine Diskussion leiten und die Redner organisieren" },
-            { term: "unterbrechen", def: "jemanden beim Sprechen stoppen; nicht ausreden lassen" },
-            { term: "sachlich", def: "objektiv und ruhig; ohne Emotionen" },
-            { term: "die Kontroverse, -n", def: "eine Diskussion, bei der es unterschiedliche Meinungen gibt" }
-        ];
+    <!-- SECTION 0: VORENTLASTUNG -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://placehold.co/1000x200/667eea/white?text=Vorentlastung" alt="Vorentlastung">
+        <div class="sec-inner">
+            <h2>📖 Vorentlastung — Wichtige Wörter</h2>
+            <div class="vocab-grid" id="vorentlastungGrid"></div>
+        </div>
+    </div>
 
-        function initVorentlastung() {
-            var grid = document.getElementById('vorentlastungGrid');
-            grid.innerHTML = '';
-            VORENTLASTUNG.forEach(function(item) {
-                var card = document.createElement('div');
-                card.className = 'vocab-card';
-                card.innerHTML = '<div class="vocab-term">' + item.term + '</div>' +
-                    '<div class="vocab-def">' + item.def + '</div>';
-                grid.appendChild(card);
-            });
-        }
+    <!-- SECTION 1: LESETEXT -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://placehold.co/1000x200/764ba2/white?text=Lesetext" alt="Lesetext">
+        <div class="sec-inner">
+            <h2>📄 Lesetext</h2>
+            <div class="story-text" id="lesetext">
+                <p>Eine gute Diskussion ist wie ein Tanz: Alle Partner müssen zusammen in die gleiche Richtung gehen. Der moderierte Diskurs hat in unserer Gesellschaft einen hohen Wert gewonnen. In Schulen, Universitäten und Firmen wird gelehrt, wie man effektiv diskutiert. Doch was macht eine Diskussion wirklich erfolgreich?</p>
 
-        // ===== LESETEXT =====
-        var LESETEXT = `<p>Eine gute Diskussion ist wie ein Tanz: Alle Partner müssen zusammen in die gleiche Richtung gehen. Der moderierte Diskurs hat in unserer Gesellschaft einen hohen Wert gewonnen. In Schulen, Universitäten und Firmen wird gelehrt, wie man effektiv diskutiert. Doch was macht eine Diskussion wirklich erfolgreich?</p>
+                <p>Zunächst ist es wichtig, respektvoll miteinander umzugehen. Das bedeutet nicht, dass man immer einer <span class="vocab-hl">Meinung</span> ist. Gerade der Austausch verschiedener <span class="vocab-hl">Standpunkt</span>e macht eine Diskussion wertvoll. Wenn Menschen mit unterschiedlichen Sichtweisen aufeinandertreffen, entstehen neue Ideen. Wichtig ist nur, dass jeder aktiv zuhört und die <span class="vocab-hl">Argument</span>e des anderen ernst nimmt.</p>
 
-<p>Zunächst ist es wichtig, respektvoll miteinander umzugehen. Das bedeutet nicht, dass man immer einer Meinung ist. Gerade der Austausch verschiedener Standpunkte macht eine Diskussion wertvoll. Wenn Menschen mit unterschiedlichen Sichtweisen aufeinandertreffen, entstehen neue Ideen. Wichtig ist nur, dass jeder aktiv zuhört und die Argumente des anderen ernst nimmt.</p>
+                <p>Ein zweites Merkmal einer guten Diskussion ist die Struktur. Der Moderator oder die Moderatorin trägt große Verantwortung: Sie müssen sicherstellen, dass alle zu Wort kommen. Niemand sollte <span class="vocab-hl">unterbrochen</span> werden, und die Zeit sollte gerecht verteilt sein. Die Teilnehmer sollten ihre Punkte klar und <span class="vocab-hl">sachlich</span> formulieren, nicht emotional werden.</p>
 
-<p>Ein zweites Merkmal einer guten Diskussion ist die Struktur. Der Moderator oder die Moderatorin trägt große Verantwortung: Sie müssen sicherstellen, dass alle zu Wort kommen. Niemand sollte unterbrochen werden, und die Zeit sollte gerecht verteilt sein. Die Teilnehmer sollten ihre Punkte klar und sachlich formulieren, nicht emotional werden.</p>
+                <p>Schließlich ist der Sinn einer Diskussion nicht immer, einen <span class="vocab-hl">Konsens</span> zu finden. Manchmal geht es darum, das Thema gründlich zu verstehen und verschiedene Perspektiven zu erkunden. Eine erfolgreiche Diskussion hinterlässt den Teilnehmern neue Erkenntnisse und den Wunsch, weiter miteinander zu sprechen.</p>
+            </div>
+            <div class="story-source">B1.1 – Lektion 2024X – An einer Diskussion teilnehmen</div>
+        </div>
+    </div>
 
-<p>Schließlich ist der Sinn einer Diskussion nicht immer, einen Konsens zu finden. Manchmal geht es darum, das Thema gründlich zu verstehen und verschiedene Perspektiven zu erkunden. Eine erfolgreiche Diskussion hinterlässt den Teilnehmern neue Erkenntnisse und den Wunsch, weiter miteinander zu sprechen.</p>`;
+    <!-- SECTION 2: GENUS -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://placehold.co/1000x200/667eea/white?text=Genus" alt="Genus">
+        <div class="sec-inner">
+            <h2>🔤 Genus — Artikel zuordnen</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showGenusLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetGenus(); timerResetOne(2);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-2">00:00</span></span>
+                    <span>🏆 <span id="best-2">--:--</span></span>
+                </div>
+            </div>
+            <div id="genusContainer"></div>
+        </div>
+    </div>
 
-        function initLesetext() {
-            var container = document.getElementById('lesetext');
-            container.innerHTML = LESETEXT;
-            highlightVocabInText();
-        }
+    <!-- SECTION 3: LÜCKENTEXT -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://placehold.co/1000x200/764ba2/white?text=L%C3%BCckentext" alt="Lückentext">
+        <div class="sec-inner">
+            <h2>✏️ Lückentext</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showLueckenLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetLuecken(); timerResetOne(3);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-3">00:00</span></span>
+                    <span>🏆 <span id="best-3">--:--</span></span>
+                </div>
+            </div>
+            <div id="lueckenContainer"></div>
+        </div>
+    </div>
 
-        function highlightVocabInText() {
-            var textEl = document.getElementById('lesetext');
-            if (!textEl) return;
-            var words = VORENTLASTUNG.map(function(v) {
-                return v.term.replace(/^(der|die|das)\s+/i, '').split(',')[0].trim();
-            });
-            words = words.filter(function(w) { return w && w.length > 3; });
+    <!-- SECTION 4: MULTIPLE CHOICE -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://placehold.co/1000x200/667eea/white?text=Multiple-Choice" alt="Multiple-Choice">
+        <div class="sec-inner">
+            <h2>☑️ Multiple-Choice — Textverständnis</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="showMCLoesung()">Lösungen</button>
+                    <button class="btn" onclick="resetMC(); timerResetOne(4);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-4">00:00</span></span>
+                    <span>🏆 <span id="best-4">--:--</span></span>
+                </div>
+            </div>
+            <div id="mcContainer"></div>
+        </div>
+    </div>
 
-            function walk(node) {
-                if (node.nodeType === 3) {
-                    var text = node.nodeValue;
-                    var replaced = text;
-                    words.forEach(function(word) {
-                        var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
-                        replaced = replaced.replace(regex, '\x01$1\x02');
-                    });
-                    if (replaced !== text) {
-                        var span = document.createElement('span');
-                        var parts = replaced.split(/\x01|\x02/);
-                        var isHl = false;
-                        parts.forEach(function(part) {
-                            if (!part) { isHl = !isHl; return; }
-                            if (isHl) {
-                                var hl = document.createElement('span');
-                                hl.className = 'vocab-hl';
-                                hl.textContent = part;
-                                span.appendChild(hl);
-                            } else {
-                                span.appendChild(document.createTextNode(part));
-                            }
-                            isHl = !isHl;
-                        });
-                        node.parentNode.replaceChild(span, node);
-                    }
-                } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
-                    Array.from(node.childNodes).forEach(walk);
-                }
-            }
-            walk(textEl);
-        }
+    <!-- SECTION 5: SATZBAU -->
+    <div class="section" id="sec-5">
+        <img class="tab-banner" src="https://placehold.co/1000x200/764ba2/white?text=Satzbau" alt="Satzbau">
+        <div class="sec-inner">
+            <h2>🧩 Satzbau — Sätze ordnen</h2>
+            <div class="control-bar">
+                <div class="btn-row">
+                    <button class="btn" onclick="satzbauData.forEach(function(_,i){sbShowSolution(i);})">Lösungen</button>
+                    <button class="btn" onclick="satzbauData.forEach(function(_,i){sbResetOne(i);}); timerResetOne(5);">Neu starten</button>
+                </div>
+                <div class="timer-display">
+                    <span>⏱ <span id="timer-5">00:00</span></span>
+                    <span>🏆 <span id="best-5">--:--</span></span>
+                </div>
+            </div>
+            <div id="satzbauContainer"></div>
+        </div>
+    </div>
 
-        // ===== GENUS =====
-        var GENUS_DATA = [
-            { word: "💬 Meinung", cat: "die" },
-            { word: "📍 Standpunkt", cat: "der" },
-            { word: "🎯 Argument", cat: "das" },
-            { word: "👥 Teilnehmer", cat: "der" },
-            { word: "🗣️ Diskurs", cat: "der" },
-            { word: "⚖️ Perspektive", cat: "die" },
-            { word: "📢 Moderator", cat: "der" },
-            { word: "🤝 Konsens", cat: "der" },
-            { word: "💡 Idee", cat: "die" },
-            { word: "❌ Fehler", cat: "der" },
-            { word: "📊 Struktur", cat: "die" },
-            { word: "🎓 Erkenntnis", cat: "die" },
-            { word: "⏰ Zeit", cat: "die" },
-            { word: "🌍 Gesellschaft", cat: "die" },
-            { word: "💼 Firma", cat: "die" }
-        ];
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+    </div>
+</div>
 
-        var draggedChip = null;
+<script>
+// ===== VORENTLASTUNG =====
+var VORENTLASTUNG = [
+    { term: "die Meinung, -en", def: "das, was man von etwas denkt; die persönliche Ansicht" },
+    { term: "der Standpunkt, -e", def: "die Position oder Sicht, von der aus man etwas beurteilt" },
+    { term: "das Argument, -e", def: "ein Grund oder Beweis, um eine Aussage zu unterstützen" },
+    { term: "einverstanden sein", def: "zustimmen; mit etwas d'accord sein" },
+    { term: "widersprechen", def: "eine andere Meinung haben; nicht einverstanden sein" },
+    { term: "der Konsens, -e", def: "Einigung; wenn sich alle auf etwas einigen" },
+    { term: "moderieren", def: "eine Diskussion leiten und die Redner organisieren" },
+    { term: "unterbrechen", def: "jemanden beim Sprechen stoppen; nicht ausreden lassen" },
+    { term: "sachlich", def: "objektiv und ruhig; ohne Emotionen" },
+    { term: "die Kontroverse, -n", def: "eine Diskussion, bei der es unterschiedliche Meinungen gibt" }
+];
 
-        function initGenus() {
-            var container = document.getElementById('genusContainer');
-            container.innerHTML = '';
+function initVorentlastung() {
+    var grid = document.getElementById('vorentlastungGrid');
+    grid.innerHTML = '';
+    VORENTLASTUNG.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        card.innerHTML = '<div class="vocab-term">' + item.term + '</div><div class="vocab-def">' + item.def + '</div>';
+        grid.appendChild(card);
+    });
+}
 
-            var bank = document.createElement('div');
-            bank.className = 'chips-container';
-            bank.id = 'genus-bank';
-            container.appendChild(bank);
+// ===== GENUS =====
+var GENUS_DATA = [
+    { word: "💬 Meinung", cat: "die" },
+    { word: "📍 Standpunkt", cat: "der" },
+    { word: "🎯 Argument", cat: "das" },
+    { word: "👥 Teilnehmer", cat: "der" },
+    { word: "🗣️ Diskurs", cat: "der" },
+    { word: "⚖️ Perspektive", cat: "die" },
+    { word: "📢 Moderator", cat: "der" },
+    { word: "🤝 Konsens", cat: "der" },
+    { word: "💡 Idee", cat: "die" },
+    { word: "📊 Struktur", cat: "die" },
+    { word: "🎓 Erkenntnis", cat: "die" },
+    { word: "🌍 Gesellschaft", cat: "die" },
+    { word: "💼 Firma", cat: "die" },
+    { word: "🔔 Kontroverse", cat: "die" },
+    { word: "📝 Merkmal", cat: "das" }
+];
 
-            GENUS_DATA.forEach(function(item) {
-                var chip = document.createElement('div');
-                chip.className = 'chip';
-                chip.textContent = item.word;
-                chip.dataset.cat = item.cat;
-                chip.draggable = true;
-                chip.addEventListener('dragstart', function() {
-                    draggedChip = chip;
-                    timerAutoStart(2);
-                });
-                chip.addEventListener('dragend', function() {
-                    draggedChip = null;
-                    colorAllGenusChips();
-                });
-                bank.appendChild(chip);
-            });
+var draggedChip = null;
 
-            var zonen = ['der', 'die', 'das'];
-            zonen.forEach(function(cat) {
-                var label = document.createElement('div');
-                label.className = 'genus-label';
-                label.textContent = cat.toUpperCase();
-                container.appendChild(label);
+function initGenus() {
+    var container = document.getElementById('genusContainer');
+    container.innerHTML = '';
 
-                var zone = document.createElement('div');
-                zone.className = 'genus-cat';
-                zone.dataset.cat = cat;
-                zone.id = 'genus-' + cat;
-                zone.addEventListener('dragover', function(e) { e.preventDefault(); });
-                zone.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    if (draggedChip) {
-                        zone.appendChild(draggedChip);
-                        draggedChip = null;
-                        colorAllGenusChips();
-                    }
-                });
-                container.appendChild(zone);
-            });
-        }
+    var bank = document.createElement('div');
+    bank.className = 'chips-container';
+    bank.id = 'genus-bank';
 
-        function colorAllGenusChips() {
-            document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
-                var zone = chip.closest('.genus-cat');
-                chip.classList.remove('correct', 'wrong');
-                if (zone) {
-                    chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
-                }
-            });
-            checkGenusAllOk();
-        }
+    // Shuffle
+    var shuffled = GENUS_DATA.slice();
+    for (var i = shuffled.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+    }
 
-        function checkGenusAllOk() {
-            var chips = document.querySelectorAll('#sec-2 .chip');
-            var allOk = chips.length > 0 && Array.from(chips).every(function(c) {
-                return c.classList.contains('correct');
-            });
-            if (allOk) timerStop(2);
-        }
+    shuffled.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = item.word;
+        chip.dataset.cat = item.cat;
+        chip.draggable = true;
+        chip.addEventListener('dragstart', function(e) {
+            e.dataTransfer.setData('text/plain', '');
+            draggedChip = chip;
+            timerAutoStart(2);
+        });
+        chip.addEventListener('dragend', function() {
+            draggedChip = null;
+            colorAllGenusChips();
+        });
+        chip.addEventListener('click', function() {
+            if (!draggedChip) { draggedChip = chip; chip.style.outline = '3px solid #e67e22'; }
+            else if (draggedChip === chip) { draggedChip = null; chip.style.outline = ''; }
+        });
+        bank.appendChild(chip);
+    });
 
-        function showGenusloesung() {
-            document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
-                var zone = document.getElementById('genus-' + chip.dataset.cat);
-                if (zone) zone.appendChild(chip);
-            });
+    container.appendChild(bank);
+
+    // Click on bank to return chip
+    bank.addEventListener('click', function(e) {
+        if (e.target === bank && draggedChip) {
+            bank.appendChild(draggedChip);
+            draggedChip.style.outline = '';
+            draggedChip = null;
             colorAllGenusChips();
         }
+    });
 
-        function resetGenus() {
-            var bank = document.getElementById('genus-bank');
-            document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
-                bank.appendChild(chip);
-                chip.classList.remove('correct', 'wrong');
-            });
-        }
+    var zonen = ['der', 'die', 'das'];
+    zonen.forEach(function(cat) {
+        var label = document.createElement('div');
+        label.className = 'genus-label';
+        label.textContent = cat.toUpperCase();
+        container.appendChild(label);
 
-        // ===== LÜCKENTEXT =====
-        var LUECKEN_DATA = [
-            { segs: [{t: 'Eine gute Diskussion erfordert '}, {b: 'Respekt', s: 'm'}, {t: ' zwischen den Teilnehmern.'}], hint: 'Nomen' },
-            { segs: [{t: 'Die '}, {b: 'Moderatorin', s: 'm'}, {t: ' sorgt dafür, dass alle zu Wort kommen.'}], hint: 'Nomen (die)' },
-            { segs: [{t: 'Es ist wichtig, '}, {b: 'aktiv', s: 'm'}, {t: ' zuzuhören.'}], hint: 'Adjektiv' },
-            { segs: [{t: 'Niemand sollte '}, {b: 'unterbrochen', s: 'm'}, {t: ' werden.'}], hint: 'Partizip' },
-            { segs: [{t: 'Die Teilnehmer sollten ihre Punkte '}, {b: 'sachlich', s: 'm'}, {t: ' formulieren.'}], hint: 'Adjektiv' },
-            { segs: [{t: 'Ein Konsens entsteht durch '}, {b: 'Austausch', s: 'm'}, {t: ' verschiedener Standpunkte.'}], hint: 'Nomen' },
-            { segs: [{t: 'Der Sinn einer Diskussion ist oft, das Thema '}, {b: 'gründlich', s: 'm'}, {t: ' zu verstehen.'}], hint: 'Adverb' },
-            { segs: [{t: 'Diese Erkenntnis '}, {b: 'hinterlässt', s: 'm'}, {t: ' den Teilnehmern neues Wissen.'}], hint: 'Verb' },
-            { segs: [{t: 'Verschiedene '}, {b: 'Perspektiven', s: 'm'}, {t: ' machen eine Diskussion wertvoll.'}], hint: 'Nomen' },
-            { segs: [{t: 'Nach einer guten Diskussion haben die Teilnehmer den Wunsch, '}, {b: 'weiterzusprechen', s: 'l'}, {t: '.'}], hint: 'Infinitiv' }
-        ];
+        var zone = document.createElement('div');
+        zone.className = 'drop-zone';
+        zone.dataset.cat = cat;
+        zone.id = 'genus-' + cat;
 
-        function initLuecken() {
-            var container = document.getElementById('lueckenContainer');
-            container.innerHTML = '';
-            LUECKEN_DATA.forEach(function(item, idx) {
-                var row = document.createElement('div');
-                row.className = 'luecken-item';
-
-                var content = '';
-                item.segs.forEach(function(seg) {
-                    if (seg.t) {
-                        content += seg.t;
-                    } else {
-                        var width = seg.s === 's' ? '50px' : seg.s === 'm' ? '90px' : seg.s === 'l' ? '150px' : '200px';
-                        content += '<input class="blank" type="text" data-answer="' + seg.b + '" style="width:' + width + ';" />';
-                    }
-                });
-
-                row.innerHTML = content;
-                container.appendChild(row);
-
-                row.querySelectorAll('input.blank').forEach(function(inp) {
-                    inp.addEventListener('input', function() {
-                        timerAutoStart(3);
-                        liveCheck(this);
-                        checkLueckenAllOk();
-                    });
-                });
-            });
-        }
-
-        function liveCheck(inp) {
-            var val = inp.value.trim().toLowerCase();
-            var ans = (inp.dataset.answer || '').toLowerCase();
-            inp.classList.remove('correct', 'wrong');
-            if (val.length === 0) return;
-            if (val === ans) {
-                inp.classList.add('correct');
-            } else if (ans.indexOf(val) === 0) {
-                // Präfix → neutral
-            } else {
-                inp.classList.add('wrong');
-            }
-        }
-
-        function checkLueckenAllOk() {
-            var inputs = document.querySelectorAll('#sec-3 input.blank');
-            var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) {
-                return i.classList.contains('correct');
-            });
-            if (allOk) timerStop(3);
-        }
-
-        function showLueckenloesung() {
-            document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
-                inp.value = inp.dataset.answer;
-                inp.classList.add('correct');
-            });
-            timerStop(3);
-        }
-
-        function resetLuecken() {
-            document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
-                inp.value = '';
-                inp.classList.remove('correct', 'wrong');
-            });
-        }
-
-        // ===== MULTIPLE CHOICE =====
-        var MC_DATA = [
-            { q: 'Was ist das Hauptthema des Textes?', opts: [
-                { t: 'Merkmale einer guten Diskussion', ok: true },
-                { t: 'Warum Menschen nicht diskutieren wollen', ok: false },
-                { t: 'Die Geschichte der Diskussionskultur', ok: false },
-                { t: 'Verschiedene Diskussionsregeln in Schulen', ok: false }
-            ]},
-            { q: 'Warum ist Respekt wichtig in einer Diskussion?', opts: [
-                { t: 'Weil der Moderator es so verlangt', ok: false },
-                { t: 'Weil alle zustimmen müssen', ok: false },
-                { t: 'Weil es den Austausch verschiedener Standpunkte ermöglicht', ok: true },
-                { t: 'Weil alle Argumente gleich gut sind', ok: false }
-            ]},
-            { q: 'Welche Rolle hat die Moderatorin?', opts: [
-                { t: 'Sie wählt die beste Meinung aus', ok: false },
-                { t: 'Sie sorgt dafür, dass alle zu Wort kommen und die Zeit gerecht verteilt ist', ok: true },
-                { t: 'Sie beendet die Diskussion', ok: false },
-                { t: 'Sie unterrichtet die Teilnehmer', ok: false }
-            ]},
-            { q: 'Was ist ein wichtiges Merkmal bei der Formulierung von Punkten?', opts: [
-                { t: 'Sie sollten emotional sein', ok: false },
-                { t: 'Sie sollten sehr lang sein', ok: false },
-                { t: 'Sie sollten sachlich und klar formuliert sein', ok: true },
-                { t: 'Sie sollten nur Fragen beinhalten', ok: false }
-            ]},
-            { q: 'Ist das Ziel einer Diskussion immer, Konsens zu finden?', opts: [
-                { t: 'Ja, das ist der einzige Sinn', ok: false },
-                { t: 'Nein, manchmal ist es wichtiger, das Thema zu verstehen und Perspektiven zu erkunden', ok: true },
-                { t: 'Ja, wenn die Moderatorin gut ist', ok: false },
-                { t: 'Nein, Diskussionen sind immer Konflikte', ok: false }
-            ]},
-            { q: 'Was hinterlässt eine erfolgreiche Diskussion bei den Teilnehmern?', opts: [
-                { t: 'Frustration und Verwirrung', ok: false },
-                { t: 'Den Wunsch, nicht mehr zu sprechen', ok: false },
-                { t: 'Neue Erkenntnisse und den Wunsch weiterzusprechen', ok: true },
-                { t: 'Keine Veränderung', ok: false }
-            ]},
-            { q: 'Warum werden verschiedene Standpunkte als wertvoll beschrieben?', opts: [
-                { t: 'Weil sie den Moderator freuen', ok: false },
-                { t: 'Weil sie zu neuen Ideen führen', ok: true },
-                { t: 'Weil sie länger sind', ok: false },
-                { t: 'Weil sie am emotionalsten sind', ok: false }
-            ]},
-            { q: 'Was sollte ein Teilnehmer nicht tun?', opts: [
-                { t: 'Aktiv zuhören', ok: false },
-                { t: 'Andere unterbrechen', ok: true },
-                { t: 'Seine Meinung sachlich ausdrücken', ok: false },
-                { t: 'Die Argumente anderer ernst nehmen', ok: false }
-            ]},
-            { q: 'In welchen Bereichen ist eine gute Diskussionsfähigkeit wichtig?', opts: [
-                { t: 'Nur in Schulen', ok: false },
-                { t: 'In Schulen, Universitäten und Firmen', ok: true },
-                { t: 'Nur in Firmen', ok: false },
-                { t: 'Nirgendwo besonders', ok: false }
-            ]},
-            { q: 'Wie wird der Tanz im ersten Satz als Vergleich verwendet?', opts: [
-                { t: 'Diskussionen sind immer konfrontativ', ok: false },
-                { t: 'Alle Teilnehmer müssen zusammen in die gleiche Richtung gehen', ok: true },
-                { t: 'Diskussionen sind langweilig', ok: false },
-                { t: 'Die Moderatorin tanzt während der Diskussion', ok: false }
-            ]}
-        ];
-
-        function initMC() {
-            var container = document.getElementById('mcContainer');
-            container.innerHTML = '';
-            MC_DATA.forEach(function(item, qIdx) {
-                var question = document.createElement('div');
-                question.style.marginBottom = '24px';
-
-                var qText = document.createElement('div');
-                qText.style.cssText = 'font-weight:700; color:#333; margin-bottom:12px; font-size:1em;';
-                qText.textContent = item.q;
-                question.appendChild(qText);
-
-                item.opts.forEach(function(opt, oIdx) {
-                    var btn = document.createElement('div');
-                    btn.className = 'mc-option';
-                    btn.textContent = opt.t;
-                    btn.onclick = function() {
-                        timerAutoStart(4);
-                        document.querySelectorAll('#sec-4 .mc-option').forEach(function(b) {
-                            b.style.pointerEvents = 'none';
-                            b.classList.remove('correct', 'wrong');
-                        });
-                        btn.classList.add(opt.ok ? 'correct' : 'wrong');
-                        checkMCAllDone();
-                    };
-                    question.appendChild(btn);
-                });
-
-                container.appendChild(question);
-            });
-        }
-
-        function checkMCAllDone() {
-            var allOptions = document.querySelectorAll('#sec-4 .mc-option');
-            var answered = 0;
-            allOptions.forEach(function(opt) {
-                if (opt.classList.contains('correct') || opt.classList.contains('wrong')) answered++;
-            });
-            if (answered === allOptions.length) timerStop(4);
-        }
-
-        function resetMC() {
-            document.querySelectorAll('#sec-4 .mc-option').forEach(function(btn) {
-                btn.classList.remove('correct', 'wrong');
-                btn.style.pointerEvents = 'auto';
-            });
-        }
-
-                
-
-        var sbDragged = null;
-
-        
-
-        // ===== TIMER SYSTEM =====
-        var TIMER_PREFIX = 'diskussion_2024X_';
-        var timerStarted = [false, false, false, false, false, false];
-        var timerRunning = [false, false, false, false, false, false];
-        var timerSeconds = [0, 0, 0, 0, 0, 0];
-        var timerIntervals = [null, null, null, null, null, null];
-
-        function timerAutoStart(n) {
-            if (timerStarted[n]) return;
-            timerStarted[n] = true;
-            timerRunning[n] = true;
-            timerIntervals[n] = setInterval(function() {
-                timerSeconds[n]++;
-                var el = document.getElementById('timer-' + n);
-                if (el) el.textContent = fmtTime(timerSeconds[n]);
-            }, 1000);
-        }
-
-        function timerStop(n) {
-            if (!timerRunning[n]) return;
-            clearInterval(timerIntervals[n]);
-            timerRunning[n] = false;
-            var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
-            if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
-                localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
-                var el = document.getElementById('best-' + n);
-                if (el) el.textContent = fmtTime(timerSeconds[n]);
-            }
-        }
-
-        function timerResetOne(n) {
-            clearInterval(timerIntervals[n]);
-            timerRunning[n] = false;
-            timerStarted[n] = false;
-            timerSeconds[n] = 0;
-            var el = document.getElementById('timer-' + n);
-            if (el) el.textContent = '00:00';
-        }
-
-        function fmtTime(s) {
-            var m = Math.floor(s / 60);
-            var sec = s % 60;
-            return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
-        }
-
-        function loadBestTimes() {
-            for (var i = 0; i < 6; i++) {
-                var v = localStorage.getItem(TIMER_PREFIX + i);
-                if (v) {
-                    var el = document.getElementById('best-' + i);
-                    if (el) el.textContent = fmtTime(parseInt(v));
-                }
-            }
-        }
-
-        // ===== NAVIGATION =====
-        function showSection(idx) {
-            document.querySelectorAll('.section').forEach(function(s, i) {
-                s.classList.toggle('active', i === idx);
-            });
-            document.querySelectorAll('.nav-btn').forEach(function(b, i) {
-                b.classList.toggle('active', i === idx);
-            });
-        }
-
-        // ===== INIT =====
-        document.addEventListener('DOMContentLoaded', function() {
-            initVorentlastung();
-            initLesetext();
-            initGenus();
-            initLuecken();
-            initMC();
-            initSatzbau();
-            loadBestTimes();
+        zone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            zone.classList.add('dragover');
         });
-    // ===== SATZBAU CANONICAL PATTERN =====
+        zone.addEventListener('dragleave', function() {
+            zone.classList.remove('dragover');
+        });
+        zone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            if (draggedChip) {
+                zone.appendChild(draggedChip);
+                draggedChip = null;
+                colorAllGenusChips();
+            }
+        });
+        // Click mode
+        zone.addEventListener('click', function(e) {
+            if (e.target === zone && draggedChip) {
+                zone.appendChild(draggedChip);
+                draggedChip.style.outline = '';
+                draggedChip = null;
+                timerAutoStart(2);
+                colorAllGenusChips();
+            }
+        });
+
+        container.appendChild(zone);
+    });
+}
+
+function colorAllGenusChips() {
+    document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
+        var zone = chip.closest('.drop-zone');
+        chip.classList.remove('correct', 'wrong');
+        if (zone && zone.dataset.cat) {
+            chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+        }
+    });
+    checkGenusAllOk();
+}
+
+function checkGenusAllOk() {
+    var chips = document.querySelectorAll('#sec-2 .chip');
+    var allPlaced = document.querySelectorAll('#sec-2 .drop-zone .chip');
+    if (allPlaced.length === GENUS_DATA.length) {
+        var allOk = Array.from(allPlaced).every(function(c) { return c.classList.contains('correct'); });
+        if (allOk) timerStop(2);
+    }
+}
+
+function showGenusLoesung() {
+    document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
+        var zone = document.getElementById('genus-' + chip.dataset.cat);
+        if (zone) zone.appendChild(chip);
+        chip.style.outline = '';
+    });
+    draggedChip = null;
+    colorAllGenusChips();
+    timerStop(2);
+}
+
+function resetGenus() {
+    draggedChip = null;
+    initGenus();
+}
+
+// ===== LÜCKENTEXT =====
+var LUECKEN_DATA = [
+    { segs: [{t: 'Eine gute Diskussion erfordert '}, {b: 'Respekt'}, {t: ' zwischen den Teilnehmern.'}], hint: 'Nomen' },
+    { segs: [{t: 'Die '}, {b: 'Moderatorin'}, {t: ' sorgt dafür, dass alle zu Wort kommen.'}], hint: 'Nomen (die)' },
+    { segs: [{t: 'Es ist wichtig, '}, {b: 'aktiv'}, {t: ' zuzuhören.'}], hint: 'Adjektiv' },
+    { segs: [{t: 'Niemand sollte '}, {b: 'unterbrochen'}, {t: ' werden.'}], hint: 'Partizip' },
+    { segs: [{t: 'Die Teilnehmer sollten ihre Punkte '}, {b: 'sachlich'}, {t: ' formulieren.'}], hint: 'Adjektiv' },
+    { segs: [{t: 'Ein '}, {b: 'Konsens'}, {t: ' entsteht durch Austausch verschiedener Standpunkte.'}], hint: 'Nomen' },
+    { segs: [{t: 'Der Sinn einer Diskussion ist oft, das Thema '}, {b: 'gründlich'}, {t: ' zu verstehen.'}], hint: 'Adverb' },
+    { segs: [{t: 'Diese Erkenntnis '}, {b: 'hinterlässt'}, {t: ' den Teilnehmern neues Wissen.'}], hint: 'Verb' },
+    { segs: [{t: 'Verschiedene '}, {b: 'Perspektiven'}, {t: ' machen eine Diskussion wertvoll.'}], hint: 'Nomen (Plural)' },
+    { segs: [{t: 'Die Teilnehmer haben den Wunsch, '}, {b: 'weiterzusprechen'}, {t: '.'}], hint: 'Infinitiv' }
+];
+
+function initLuecken() {
+    var container = document.getElementById('lueckenContainer');
+    container.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        var content = '';
+        item.segs.forEach(function(seg) {
+            if (seg.t) {
+                content += seg.t;
+            } else {
+                var w = (seg.b.length + 4) + 'ch';
+                content += '<input class="blank" type="text" data-answer="' + seg.b + '" style="width:' + w + ';" placeholder="' + (item.hint || '') + '" />';
+            }
+        });
+        row.innerHTML = content;
+        container.appendChild(row);
+
+        row.querySelectorAll('input.blank').forEach(function(inp) {
+            inp.addEventListener('input', function() {
+                timerAutoStart(3);
+                liveCheck(this);
+                checkLueckenAllOk();
+            });
+        });
+    });
+}
+
+function liveCheck(inp) {
+    var val = inp.value.trim().toLowerCase();
+    var ans = (inp.dataset.answer || '').toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('correct');
+    } else if (ans.indexOf(val) === 0) {
+        // Prefix match → neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#sec-3 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i) { return i.classList.contains('correct'); });
+    if (allOk) timerStop(3);
+}
+
+function showLueckenLoesung() {
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('wrong');
+        inp.classList.add('correct');
+    });
+    timerStop(3);
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
+}
+
+// ===== MULTIPLE CHOICE =====
+var MC_DATA = [
+    { q: 'Was ist das Hauptthema des Textes?', opts: [
+        { t: 'Merkmale einer guten Diskussion', ok: true },
+        { t: 'Warum Menschen nicht diskutieren wollen', ok: false },
+        { t: 'Die Geschichte der Diskussionskultur', ok: false },
+        { t: 'Verschiedene Diskussionsregeln in Schulen', ok: false }
+    ]},
+    { q: 'Warum ist Respekt in einer Diskussion wichtig?', opts: [
+        { t: 'Weil der Moderator es verlangt', ok: false },
+        { t: 'Weil alle einer Meinung sein müssen', ok: false },
+        { t: 'Weil er den Austausch verschiedener Standpunkte ermöglicht', ok: true },
+        { t: 'Weil alle Argumente gleich gut sind', ok: false }
+    ]},
+    { q: 'Welche Aufgabe hat die Moderatorin?', opts: [
+        { t: 'Sie wählt die beste Meinung aus', ok: false },
+        { t: 'Sie sorgt dafür, dass alle zu Wort kommen', ok: true },
+        { t: 'Sie beendet die Diskussion nach 30 Minuten', ok: false },
+        { t: 'Sie unterrichtet die Teilnehmer im Voraus', ok: false }
+    ]},
+    { q: 'Wie sollten Teilnehmer ihre Punkte formulieren?', opts: [
+        { t: 'Emotional und laut', ok: false },
+        { t: 'Sehr lang und ausführlich', ok: false },
+        { t: 'Klar und sachlich', ok: true },
+        { t: 'Nur als Fragen', ok: false }
+    ]},
+    { q: 'Ist das Ziel einer Diskussion immer, Konsens zu finden?', opts: [
+        { t: 'Ja, das ist der einzige Sinn', ok: false },
+        { t: 'Nein, manchmal geht es darum, verschiedene Perspektiven zu erkunden', ok: true },
+        { t: 'Ja, wenn die Moderatorin gut ist', ok: false },
+        { t: 'Nein, Diskussionen sind immer Konflikte', ok: false }
+    ]},
+    { q: 'Was hinterlässt eine erfolgreiche Diskussion?', opts: [
+        { t: 'Frustration und Verwirrung', ok: false },
+        { t: 'Den Wunsch, nie wieder zu sprechen', ok: false },
+        { t: 'Neue Erkenntnisse und den Wunsch weiterzusprechen', ok: true },
+        { t: 'Keine Veränderung bei den Teilnehmern', ok: false }
+    ]},
+    { q: 'Warum sind verschiedene Standpunkte wertvoll?', opts: [
+        { t: 'Weil sie den Moderator erfreuen', ok: false },
+        { t: 'Weil sie zu neuen Ideen führen', ok: true },
+        { t: 'Weil sie die Diskussion verlängern', ok: false },
+        { t: 'Weil sie am emotionalsten sind', ok: false }
+    ]},
+    { q: 'Was sollte ein Teilnehmer nicht tun?', opts: [
+        { t: 'Aktiv zuhören', ok: false },
+        { t: 'Andere unterbrechen', ok: true },
+        { t: 'Seine Meinung sachlich ausdrücken', ok: false },
+        { t: 'Die Argumente anderer ernst nehmen', ok: false }
+    ]},
+    { q: 'In welchen Bereichen ist gute Diskussionsfähigkeit wichtig?', opts: [
+        { t: 'Nur in Schulen', ok: false },
+        { t: 'In Schulen, Universitäten und Firmen', ok: true },
+        { t: 'Nur in Firmen', ok: false },
+        { t: 'Nur in der Familie', ok: false }
+    ]},
+    { q: 'Was bedeutet der Vergleich mit einem Tanz im ersten Satz?', opts: [
+        { t: 'Diskussionen sind konfrontativ', ok: false },
+        { t: 'Alle müssen zusammen in die gleiche Richtung gehen', ok: true },
+        { t: 'Diskussionen sind langweilig', ok: false },
+        { t: 'Man muss tanzen können, um zu diskutieren', ok: false }
+    ]}
+];
+
+var mcAnswered = [];
+
+function initMC() {
+    var container = document.getElementById('mcContainer');
+    container.innerHTML = '';
+    mcAnswered = [];
+    MC_DATA.forEach(function(item, qIdx) {
+        mcAnswered.push(false);
+        var question = document.createElement('div');
+        question.className = 'mc-question';
+        question.id = 'mc-q-' + qIdx;
+
+        var qText = document.createElement('div');
+        qText.className = 'mc-question-text';
+        qText.textContent = (qIdx + 1) + '. ' + item.q;
+        question.appendChild(qText);
+
+        item.opts.forEach(function(opt) {
+            var btn = document.createElement('div');
+            btn.className = 'mc-option';
+            btn.textContent = opt.t;
+            btn.dataset.ok = opt.ok ? '1' : '0';
+            btn.addEventListener('click', function() {
+                if (mcAnswered[qIdx]) return;
+                mcAnswered[qIdx] = true;
+                timerAutoStart(4);
+                // Disable all options in THIS question
+                question.querySelectorAll('.mc-option').forEach(function(o) {
+                    o.classList.add('disabled');
+                    if (o.dataset.ok === '1') o.classList.add('correct');
+                });
+                if (!opt.ok) btn.classList.add('wrong');
+                checkMCAllDone();
+            });
+            question.appendChild(btn);
+        });
+
+        container.appendChild(question);
+    });
+}
+
+function checkMCAllDone() {
+    var allDone = mcAnswered.every(function(a) { return a; });
+    if (allDone) timerStop(4);
+}
+
+function showMCLoesung() {
+    MC_DATA.forEach(function(item, qIdx) {
+        mcAnswered[qIdx] = true;
+        var q = document.getElementById('mc-q-' + qIdx);
+        q.querySelectorAll('.mc-option').forEach(function(o) {
+            o.classList.add('disabled');
+            if (o.dataset.ok === '1') o.classList.add('correct');
+        });
+    });
+    timerStop(4);
+}
+
+function resetMC() {
+    initMC();
+}
+
+// ===== SATZBAU — CANONICAL PATTERN =====
+var satzbauData = [
+    { parts: ['der', 'sinn', 'einer', 'Diskussion', 'ist', 'nicht', 'immer,', 'Konsens', 'zu', 'finden'], valid: [['der', 'sinn', 'einer', 'Diskussion', 'ist', 'nicht', 'immer,', 'Konsens', 'zu', 'finden']], punct: '.' },
+    { parts: ['wenn', 'Menschen', 'mit', 'unterschiedlichen', 'Sichtweisen', 'aufeinandertreffen,', 'entstehen', 'neue', 'Ideen'], valid: [['wenn', 'Menschen', 'mit', 'unterschiedlichen', 'Sichtweisen', 'aufeinandertreffen,', 'entstehen', 'neue', 'Ideen']], punct: '.' },
+    { parts: ['der', 'Moderator', 'sorgt', 'dafür,', 'dass', 'alle', 'zu', 'Wort', 'kommen'], valid: [['der', 'Moderator', 'sorgt', 'dafür,', 'dass', 'alle', 'zu', 'Wort', 'kommen']], punct: '.' },
+    { parts: ['niemand', 'sollte', 'unterbrochen', 'werden,', 'und', 'die', 'Zeit', 'sollte', 'gerecht', 'verteilt', 'sein'], valid: [['niemand', 'sollte', 'unterbrochen', 'werden,', 'und', 'die', 'Zeit', 'sollte', 'gerecht', 'verteilt', 'sein']], punct: '.' },
+    { parts: ['eine', 'erfolgreiche', 'Diskussion', 'hinterlässt', 'den', 'Teilnehmern', 'neue', 'Erkenntnisse'], valid: [['eine', 'erfolgreiche', 'Diskussion', 'hinterlässt', 'den', 'Teilnehmern', 'neue', 'Erkenntnisse']], punct: '.' },
+    { parts: ['die', 'Teilnehmer', 'sollten', 'ihre', 'Punkte', 'klar', 'und', 'sachlich', 'formulieren'], valid: [['die', 'Teilnehmer', 'sollten', 'ihre', 'Punkte', 'klar', 'und', 'sachlich', 'formulieren']], punct: '.' },
+    { parts: ['ein', 'zweites', 'Merkmal', 'einer', 'guten', 'Diskussion', 'ist', 'die', 'Struktur'], valid: [['ein', 'zweites', 'Merkmal', 'einer', 'guten', 'Diskussion', 'ist', 'die', 'Struktur']], punct: '.' },
+    { parts: ['gerade', 'der', 'Austausch', 'verschiedener', 'Standpunkte', 'macht', 'eine', 'Diskussion', 'wertvoll'], valid: [['gerade', 'der', 'Austausch', 'verschiedener', 'Standpunkte', 'macht', 'eine', 'Diskussion', 'wertvoll']], punct: '.' },
+    { parts: ['es', 'ist', 'wichtig,', 'dass', 'jeder', 'aktiv', 'zuhört'], valid: [['es', 'ist', 'wichtig,', 'dass', 'jeder', 'aktiv', 'zuhört']], punct: '.' },
+    { parts: ['in', 'Schulen,', 'Universitäten', 'und', 'Firmen', 'wird', 'gelehrt,', 'wie', 'man', 'effektiv', 'diskutiert'], valid: [['in', 'Schulen,', 'Universitäten', 'und', 'Firmen', 'wird', 'gelehrt,', 'wie', 'man', 'effektiv', 'diskutiert']], punct: '.' }
+];
 
 var sbDragged = null;
 
@@ -1080,7 +990,6 @@ function sbCheckAuto(idx) {
         return;
     }
     setTimeout(function() {
-        timerAutoStart(5);
         var ok = sbColorRow(idx);
         if (ok) {
             row.classList.add('correct');
@@ -1102,11 +1011,10 @@ function sbCheckAllDone() {
         var row = document.getElementById('sb-row-' + i);
         return row && row.classList.contains('correct');
     });
-    if (allOk) stopTimer(5);
+    if (allOk) timerStop(5);
 }
 
 function sbShowSolution(idx) {
-    stopTimer(5);
     var bank = document.getElementById('sb-bank-' + idx);
     var row  = document.getElementById('sb-row-' + idx);
     var fb   = document.getElementById('sb-fb-' + idx);
@@ -1139,8 +1047,6 @@ function sbResetOne(idx) {
     row.classList.remove('correct', 'incorrect');
     fb.textContent = '';
     fb.className = 'satzbau-feedback';
-    var existing = row.querySelector('.sb-punkt');
-    if (existing) existing.parentNode.removeChild(existing);
     var parts = satzbauData[idx].parts.slice();
     for (var i = parts.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -1155,63 +1061,110 @@ function initSatzbau() {
     satzbauData.forEach(function(ex, idx) {
         var item = document.createElement('div');
         item.className = 'satzbau-item';
+
         var bank = document.createElement('div');
         bank.className = 'chips-container';
         bank.id = 'sb-bank-' + idx;
+
         var row = document.createElement('div');
         row.className = 'sentence-builder';
         row.id = 'sb-row-' + idx;
+
         var fb = document.createElement('div');
         fb.className = 'satzbau-feedback';
         fb.id = 'sb-fb-' + idx;
+
         var parts = ex.parts.slice();
         for (var i = parts.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
             var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
         }
-        parts.forEach(function(word) {
-            bank.appendChild(sbMakeChip(word));
-        });
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
-        var btnRow = document.createElement('div');
-        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
-        var solveBtn = document.createElement('button');
-        solveBtn.className = 'btn';
-        solveBtn.textContent = 'Lösen';
-        solveBtn.setAttribute('data-idx', idx);
-        solveBtn.addEventListener('click', function() {
-            sbShowSolution(parseInt(this.getAttribute('data-idx')));
-        });
-        var resetBtn = document.createElement('button');
-        resetBtn.className = 'btn';
-        resetBtn.textContent = '↺ Neustart';
-        resetBtn.setAttribute('data-idx', idx);
-        resetBtn.addEventListener('click', function() {
-            sbResetOne(parseInt(this.getAttribute('data-idx')));
-        });
-        btnRow.appendChild(solveBtn);
-        btnRow.appendChild(resetBtn);
+
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
-        item.appendChild(btnRow);
         container.appendChild(item);
     });
 }
 
-var satzbauData = [
-            { parts: ['Der', 'Sinn', 'einer', 'Diskussion', 'ist', 'nicht', 'immer,', 'Konsens', 'zu', 'finden.'], valid: [['der', 'sinn', 'einer', 'diskussion', 'ist', 'nicht', 'immer,', 'konsens', 'zu', 'finden.']], punct: '.' },
-            { parts: ['Wenn', 'Menschen', 'mit', 'unterschiedlichen', 'Sichtweisen', 'aufeinandertreffen,', 'entstehen', 'neue', 'Ideen.'], valid: [['wenn', 'menschen', 'mit', 'unterschiedlichen', 'sichtweisen', 'aufeinandertreffen,', 'entstehen', 'neue', 'ideen.']], punct: '.' },
-            { parts: ['Der', 'Moderator', 'sorgt', 'dafür,', 'dass', 'alle', 'zu', 'Wort', 'kommen.'], valid: [['der', 'moderator', 'sorgt', 'dafür,', 'dass', 'alle', 'zu', 'wort', 'kommen.']], punct: '.' },
-            { parts: ['Niemand', 'sollte', 'unterbrochen', 'werden,', 'und', 'die', 'Zeit', 'sollte', 'gerecht', 'verteilt', 'sein.'], valid: [['niemand', 'sollte', 'unterbrochen', 'werden,', 'und', 'die', 'zeit', 'sollte', 'gerecht', 'verteilt', 'sein.']], punct: '.' },
-            { parts: ['Eine', 'erfolgreiche', 'Diskussion', 'hinterlässt', 'den', 'Teilnehmern', 'neue', 'Erkenntnisse.'], valid: [['eine', 'erfolgreiche', 'diskussion', 'hinterlässt', 'den', 'teilnehmern', 'neue', 'erkenntnisse.']], punct: '.' },
-            { parts: ['Die', 'Teilnehmer', 'sollten', 'ihre', 'Punkte', 'klar', 'und', 'sachlich', 'formulieren.'], valid: [['die', 'teilnehmer', 'sollten', 'ihre', 'punkte', 'klar', 'und', 'sachlich', 'formulieren.']], punct: '.' },
-            { parts: ['Ein', 'zweites', 'Merkmal', 'einer', 'guten', 'Diskussion', 'ist', 'die', 'Struktur.'], valid: [['ein', 'zweites', 'merkmal', 'einer', 'guten', 'diskussion', 'ist', 'die', 'struktur.']], punct: '.' },
-            { parts: ['Gerade', 'der', 'Austausch', 'verschiedener', 'Standpunkte', 'macht', 'eine', 'Diskussion', 'wertvoll.'], valid: [['gerade', 'der', 'austausch', 'verschiedener', 'standpunkte', 'macht', 'eine', 'diskussion', 'wertvoll.']], punct: '.' },
-            { parts: ['Es', 'ist', 'wichtig,', 'dass', 'jeder', 'aktiv', 'zuhört.'], valid: [['es', 'ist', 'wichtig,', 'dass', 'jeder', 'aktiv', 'zuhört.']], punct: '.' },
-            { parts: ['In', 'Schulen,', 'Universitäten', 'und', 'Firmen', 'wird', 'gelehrt,', 'wie', 'man', 'effektiv', 'diskutiert.'], valid: [['in', 'schulen,', 'universitäten', 'und', 'firmen', 'wird', 'gelehrt,', 'wie', 'man', 'effektiv', 'diskutiert.']], punct: '.' }
-        ];
+// ===== TIMER SYSTEM =====
+var TIMER_PREFIX = 'diskussion_2024X_';
+var timerStarted = [false, false, false, false, false, false];
+var timerRunning = [false, false, false, false, false, false];
+var timerSeconds = [0, 0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null, null];
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+
+function timerStop(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '00:00';
+}
+
+function fmtTime(s) {
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function loadBestTimes() {
+    for (var i = 0; i < 6; i++) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
+    }
+}
+
+// ===== NAVIGATION =====
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+    initVorentlastung();
+    initGenus();
+    initLuecken();
+    initMC();
+    initSatzbau();
+    loadBestTimes();
+});
 </script>
 </body>
 </html>

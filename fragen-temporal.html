@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temporale Fragewörter – B1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#333;min-height:100vh}
+
+/* HEADER */
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px 24px 16px;text-align:center}
+.header h1{font-size:1.35em;font-weight:700;margin-bottom:4px}
+.header .teil-badge{display:inline-block;background:rgba(255,255,255,0.2);border-radius:20px;padding:3px 14px;font-size:0.8em;margin-top:6px}
+
+/* NAV */
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+
+
+
+/* SECTIONS */
+.section{display:none;padding:20px 16px;max-width:860px;margin:0 auto}
+.section.active{display:block}
+
+/* CARDS */
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.card h3{font-size:1em;color:#667eea;margin-bottom:12px;font-weight:700}
+
+/* TIMER */
+.timer-bar{display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:10px 16px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,0.08);font-size:0.88em;color:#555}
+.timer-bar .t-time{font-weight:700;color:#667eea;min-width:48px}
+.timer-bar .t-best{color:#f39c12;font-weight:600}
+.btn-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{padding:8px 18px;border:none;border-radius:20px;font-size:0.85em;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-sol{background:#27ae60;color:#fff}
+.btn-rst{background:#95a5a6;color:#fff}
+.btn-sol:hover{background:#219a52}
+.btn-rst:hover{background:#7f8c8d}
+
+/* ENTDECKUNG */
+.dialog-box{background:#f8f9fa;border-radius:10px;padding:16px 18px;margin-bottom:14px;border-left:4px solid #667eea}
+.dialog-line{margin-bottom:6px;line-height:1.6}
+.dialog-line .sp{font-weight:700;color:#764ba2}
+.dialog-line .hl{background:#e8f0fe;color:#1a73e8;border-radius:4px;padding:1px 5px;font-weight:600}
+.dialog-label{font-size:0.78em;font-weight:700;color:#764ba2;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+
+/* MC-STEP-SYSTEM */
+.question-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07);display:none}
+.question-card.active{display:block}
+.question-card h3{color:#333;font-size:1em;margin-bottom:14px;font-weight:600;line-height:1.5}
+.step-label{display:inline-block;background:#667eea;color:#fff;font-size:0.75em;padding:3px 10px;border-radius:12px;margin-bottom:10px;font-weight:600}
+.option{display:block;width:100%;text-align:left;padding:12px 16px;margin-bottom:8px;border:2px solid #e0e0e0;border-radius:10px;background:#fff;font-size:0.92em;cursor:pointer;transition:all .2s;color:#333;font-family:inherit}
+.option:hover{border-color:#667eea;background:#f8f9ff}
+.option.correct{border-color:#27ae60;background:#e8f8f0;color:#27ae60;font-weight:600;pointer-events:none}
+.option.wrong{border-color:#e74c3c;background:#fdf0ef;color:#e74c3c}
+.option.disabled{pointer-events:none;opacity:.6}
+.feedback{margin-top:12px;padding:10px 14px;border-radius:10px;font-size:0.88em;display:none;line-height:1.5}
+.feedback.show{display:block}
+.feedback.success{background:#e8f8f0;color:#27ae60;border:1px solid #27ae60}
+.feedback.error{background:#fdf0ef;color:#e74c3c;border:1px solid #e74c3c}
+.progress-dots{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
+.dot{width:12px;height:12px;border-radius:50%;background:#ddd;transition:all .3s}
+.dot.done{background:#27ae60}
+.dot.current{background:#667eea;box-shadow:0 0 6px rgba(102,126,234,.5)}
+.regel-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,0.07);display:none}
+.regel-card.active{display:block}
+.weiter-btn{display:inline-block;margin-top:12px;padding:10px 22px;border:none;border-radius:20px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:0.88em;font-weight:600;cursor:pointer;transition:opacity .2s}
+.weiter-btn:hover{opacity:.85}
+.weiter-btn:disabled{opacity:.35;cursor:default}
+
+.regel-karte{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-radius:12px;padding:18px 20px;margin-top:0}
+.regel-karte h4{font-size:1em;margin-bottom:10px;opacity:.85}
+.regel-karte table{width:100%;border-collapse:collapse;font-size:0.88em}
+.regel-karte td{padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.2)}
+.regel-karte td:first-child{font-weight:700;white-space:nowrap;padding-right:16px}
+.regel-karte tr:last-child td{border-bottom:none}
+
+/* ZUORDNUNG */
+.zuo-container{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:600px){.zuo-container{grid-template-columns:1fr}}
+.zuo-box{background:#f8f9fa;border-radius:10px;padding:14px}
+.zuo-box h4{font-size:0.85em;font-weight:700;color:#764ba2;margin-bottom:10px;text-align:center;padding:6px;background:#ede7f6;border-radius:6px}
+.drop-zone{min-height:60px;border:2px dashed #c5cae9;border-radius:8px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;transition:border-color .2s}
+.drop-zone.over{border-color:#667eea;background:#f0f0ff}
+.chip-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:12px;background:#fff;border-radius:10px;border:1px solid #e0e0e0;min-height:48px}
+.chip{padding:8px 14px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-radius:20px;cursor:grab;font-size:0.85em;font-weight:600;user-select:none;transition:opacity .2s;white-space:nowrap}
+.chip:active{cursor:grabbing}
+.chip.placed-ok{background:linear-gradient(135deg,#27ae60,#2ecc71)}
+.chip.placed-err{background:linear-gradient(135deg,#e74c3c,#c0392b)}
+.chip.clickable{cursor:pointer}
+
+/* LÜCKENTEXT */
+.luecke-satz{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:10px;line-height:2;border-left:3px solid #667eea;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.l-inp{border:none;border-bottom:2px solid #667eea;background:transparent;font-size:0.95em;font-family:inherit;padding:2px 4px;outline:none;color:#333;transition:border-color .2s}
+.l-inp:focus{border-bottom-color:#764ba2}
+.l-inp.ok{border-bottom-color:#27ae60;color:#27ae60}
+.l-inp.err{border-bottom-color:#e74c3c;color:#e74c3c}
+.correction-hint{display:inline-block;background:#27ae60;color:#fff;border-radius:4px;padding:1px 7px;font-size:0.78em;font-weight:700;margin-left:4px}
+.wortkasten{background:#e8f4fd;border:1px solid #b3d7f0;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:0.88em;line-height:1.7}
+.wortkasten strong{color:#1a73e8}
+.score-line{font-size:0.88em;color:#555;margin-top:8px}
+
+/* SATZBAU */
+.sb-item{background:#f8f9fa;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.sb-frage{font-size:0.85em;color:#764ba2;font-weight:700;margin-bottom:8px}
+.chip-source{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;min-height:36px;padding:8px;background:#fff;border-radius:8px;border:1px dashed #c5cae9}
+.drop-row{display:flex;flex-wrap:wrap;gap:6px;min-height:40px;padding:8px;border:2px dashed #c5cae9;border-radius:8px;transition:border-color .2s;align-items:center}
+.drop-row.over{border-color:#667eea;background:#f0f0ff}
+.drop-row.ok-border{border-color:#27ae60;background:#eafaf1}
+.sb-check{margin-top:8px;padding:6px 16px;border:none;border-radius:16px;background:#667eea;color:#fff;font-size:0.83em;font-weight:600;cursor:pointer}
+.sb-check:hover{background:#764ba2}
+.sb-fb{font-size:0.85em;margin-top:6px;font-weight:600;min-height:18px}
+.sb-fb.ok{color:#27ae60}
+.sb-fb.err{color:#e74c3c}
+
+
+/* AUTHOR */
+.author-footer{text-align:center;padding:20px;font-size:0.78em;color:#aaa;margin-top:10px}
+.author-footer a{color:#bbb;text-decoration:none}
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ebff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; border-bottom: 3px solid #667eea; font-weight: 700; }
+@media (max-width: 600px) {
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; font-size: 0.78em; padding: 10px 4px; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="header">
+  <h1>Temporale Fragewörter</h1>
+  <div class="teil-badge">wann · wie lange · seit wann · bis wann · ab wann · wie oft</div>
+</div>
+
+<div class="nav">
+  <div class="nav-btn active" onclick="showSection(0)">📖 Entdeckung</div>
+  <div class="nav-btn" onclick="showSection(1)">🗂️ Zuordnung</div>
+  <div class="nav-btn" onclick="showSection(2)">✏️ Lückentext</div>
+  <div class="nav-btn" onclick="showSection(3)">🧩 Satzbau</div>
+</div>
+
+<!-- ===== TAB 0: ENTDECKUNG ===== -->
+<div class="section active" id="sec-0">
+
+  <!-- PROGRESS DOTS: 4 Dialoge + 4 MC-Fragen = 8 Schritte -->
+  <div class="progress-dots">
+    <div class="dot current" id="dot-0"></div>
+    <div class="dot" id="dot-1"></div>
+    <div class="dot" id="dot-2"></div>
+    <div class="dot" id="dot-3"></div>
+    <div class="dot" id="dot-4"></div>
+    <div class="dot" id="dot-5"></div>
+    <div class="dot" id="dot-6"></div>
+    <div class="dot" id="dot-7"></div>
+  </div>
+
+  <!-- SCHRITT 1: Dialog 1 -->
+  <div class="question-card active" id="q0">
+    <span class="step-label">Schritt 1 von 8</span>
+    <p style="font-size:0.88em;color:#666;margin-bottom:12px">Lies den Dialog. Achte auf die <span class="hl">markierten Fragewörter</span>.</p>
+    <div class="dialog-label">Zeitpunkt &amp; Dauer</div>
+    <div class="dialog-box">
+      <div class="dialog-line"><span class="sp">Lena:</span> Du siehst müde aus. <span class="hl">Wann</span> bist du gestern ins Bett gegangen?</div>
+      <div class="dialog-line"><span class="sp">Tim:</span> <span class="hl">Um zwei Uhr nachts</span>. Ich konnte nicht schlafen.</div>
+      <div class="dialog-line" style="margin-top:8px"><span class="sp">Lena:</span> Und <span class="hl">wie lange</span> hast du geschlafen?</div>
+      <div class="dialog-line"><span class="sp">Tim:</span> Nur <span class="hl">vier Stunden</span>.</div>
+    </div>
+    <button class="weiter-btn" onclick="advanceStep(0)">Zur Frage →</button>
+  </div>
+
+  <!-- SCHRITT 2: Frage zu Dialog 1 -->
+  <div class="question-card" id="q1">
+    <span class="step-label">Schritt 2 von 8</span>
+    <h3>„Um zwei Uhr nachts" und „vier Stunden" — was ist der Unterschied zwischen diesen Antworten?</h3>
+    <button class="option" onclick="mcCheck(this,false)">Beide nennen einen Zeitpunkt</button>
+    <button class="option" onclick="mcCheck(this,false)">Beide nennen eine Dauer</button>
+    <button class="option" onclick="mcCheck(this,true)">„Um zwei Uhr" ist ein Zeitpunkt (wann?), „vier Stunden" ist eine Dauer (wie lange?)</button>
+    <button class="option" onclick="mcCheck(this,false)">„Vier Stunden" ist ein Zeitpunkt, „um zwei Uhr" eine Häufigkeit</button>
+    <div class="feedback success">Genau! <strong>Wann?</strong> → Zeitpunkt (<em>um zwei Uhr, am Montag, im März</em>). <strong>Wie lange?</strong> → Dauer (<em>vier Stunden, einen Tag</em>). Zwei verschiedene Fragen — zwei verschiedene Antworttypen.</div>
+    <div class="feedback error">Schau genau: Auf „Wann?" antwortet man mit einem Moment. Auf „Wie lange?" mit einer Zeitspanne. Was ist „um zwei Uhr"?</div>
+  </div>
+
+  <!-- SCHRITT 3: Dialog 2 -->
+  <div class="question-card" id="q2">
+    <span class="step-label">Schritt 3 von 8</span>
+    <div class="dialog-label">Anfang &amp; Ende</div>
+    <div class="dialog-box">
+      <div class="dialog-line"><span class="sp">Chef:</span> <span class="hl">Seit wann</span> arbeiten Sie bei uns?</div>
+      <div class="dialog-line"><span class="sp">Anna:</span> <span class="hl">Seit März letzten Jahres</span> — also seit fast zwei Jahren.</div>
+      <div class="dialog-line" style="margin-top:8px"><span class="sp">Chef:</span> Und <span class="hl">bis wann</span> haben Sie Ihren Vertrag?</div>
+      <div class="dialog-line"><span class="sp">Anna:</span> <span class="hl">Bis Ende dieses Jahres</span>.</div>
+    </div>
+    <button class="weiter-btn" onclick="advanceStep(2)">Zur Frage →</button>
+  </div>
+
+  <!-- SCHRITT 4: Frage zu Dialog 2 -->
+  <div class="question-card" id="q3">
+    <span class="step-label">Schritt 4 von 8</span>
+    <h3>Anna arbeitet <em>noch</em> dort. Warum steht das Verb im Präsens: „Seit wann <em>arbeiten</em> Sie"?</h3>
+    <button class="option" onclick="mcCheck(this,false)">Weil die Frage höflich ist</button>
+    <button class="option" onclick="mcCheck(this,true)">Weil der Zustand in der Vergangenheit begann und bis jetzt anhält</button>
+    <button class="option" onclick="mcCheck(this,false)">Weil „seit wann" immer Präsens verlangt, egal was</button>
+    <button class="option" onclick="mcCheck(this,false)">Weil „bis wann" im Satz vorkommt</button>
+    <div class="feedback success">Richtig! <strong>Seit wann?</strong> fragt nach dem Startpunkt eines Zustands, der noch läuft — deshalb Präsens. <strong>Bis wann?</strong> fragt nach dem Endpunkt: <em>bis Ende des Jahres</em>.</div>
+    <div class="feedback error">Denk nach: Anna fing im März an — und arbeitet <em>immer noch</em> dort. Der Beginn liegt in der Vergangenheit, die Situation dauert an. Welche Zeitform passt dazu?</div>
+  </div>
+
+  <!-- SCHRITT 5: Dialog 3 -->
+  <div class="question-card" id="q4">
+    <span class="step-label">Schritt 5 von 8</span>
+    <div class="dialog-label">Häufigkeit &amp; Zukunft</div>
+    <div class="dialog-box">
+      <div class="dialog-line"><span class="sp">Arzt:</span> <span class="hl">Wie oft</span> treiben Sie Sport?</div>
+      <div class="dialog-line"><span class="sp">Patient:</span> <span class="hl">Zweimal pro Woche</span> — meistens Dienstag und Donnerstag.</div>
+      <div class="dialog-line" style="margin-top:8px"><span class="sp">Arzt:</span> Und <span class="hl">ab wann</span> wollen Sie wieder arbeiten?</div>
+      <div class="dialog-line"><span class="sp">Patient:</span> <span class="hl">Ab nächstem Montag</span>, wenn es geht.</div>
+    </div>
+    <button class="weiter-btn" onclick="advanceStep(4)">Zur Frage →</button>
+  </div>
+
+  <!-- SCHRITT 6: Frage zu Dialog 3 -->
+  <div class="question-card" id="q5">
+    <span class="step-label">Schritt 6 von 8</span>
+    <h3>Was ist der Unterschied zwischen <em>seit wann</em> und <em>ab wann</em>?</h3>
+    <button class="option" onclick="mcCheck(this,false)">Kein Unterschied — beide fragen nach dem Startpunkt</button>
+    <button class="option" onclick="mcCheck(this,false)">„Ab wann" fragt nach der Vergangenheit, „seit wann" nach der Zukunft</button>
+    <button class="option" onclick="mcCheck(this,true)">„Seit wann" → Startpunkt in der Vergangenheit (läuft noch); „ab wann" → Startpunkt in der Zukunft</button>
+    <button class="option" onclick="mcCheck(this,false)">„Ab wann" fragt nach Häufigkeit</button>
+    <div class="feedback success">Perfekt! <strong>Seit wann?</strong> → Vergangenheit bis heute (<em>seit März</em>). <strong>Ab wann?</strong> → Zukunft (<em>ab nächstem Montag</em>). Und <strong>wie oft?</strong> → Häufigkeit (<em>zweimal pro Woche</em>) — eine ganz andere Kategorie.</div>
+    <div class="feedback error">Schau auf die Antworten: „Seit März letzten Jahres" liegt in der Vergangenheit. „Ab nächstem Montag" liegt in der Zukunft. Was fragt also nach der Zukunft?</div>
+  </div>
+
+  <!-- SCHRITT 7: Dialog 4 -->
+  <div class="question-card" id="q6">
+    <span class="step-label">Schritt 7 von 8</span>
+    <div class="dialog-label">Zeitraum mit Grenzen</div>
+    <div class="dialog-box">
+      <div class="dialog-line"><span class="sp">Maria:</span> <span class="hl">Von wann bis wann</span> geht die Konferenz?</div>
+      <div class="dialog-line"><span class="sp">Karl:</span> <span class="hl">Von Montag bis Mittwoch</span>. Drei Tage.</div>
+      <div class="dialog-line" style="margin-top:8px"><span class="sp">Maria:</span> Und <span class="hl">wie lange</span> dauert die Mittagspause?</div>
+      <div class="dialog-line"><span class="sp">Karl:</span> <span class="hl">Eine Stunde</span>.</div>
+    </div>
+    <button class="weiter-btn" onclick="advanceStep(6)">Zur letzten Frage →</button>
+  </div>
+
+  <!-- SCHRITT 8: Frage zu Dialog 4 -->
+  <div class="question-card" id="q7">
+    <span class="step-label">Schritt 8 von 8</span>
+    <h3>„Von Montag bis Mittwoch" und „eine Stunde" — beide beschreiben einen Zeitraum. Was ist der Unterschied?</h3>
+    <button class="option" onclick="mcCheck(this,false)">Kein Unterschied — beide antworten auf „wie lange?"</button>
+    <button class="option" onclick="mcCheck(this,false)">„Eine Stunde" nennt Anfang und Ende, „von Montag bis Mittwoch" nur die Dauer</button>
+    <button class="option" onclick="mcCheck(this,true)">„Von Montag bis Mittwoch" nennt Anfang und Ende konkret; „eine Stunde" nennt nur die Dauer</button>
+    <button class="option" onclick="mcCheck(this,false)">„Von wann bis wann" ist dasselbe wie „wann"</button>
+    <div class="feedback success">Ausgezeichnet! <strong>Von wann bis wann?</strong> → Zeitraum mit Anfang + Ende (<em>von Montag bis Mittwoch</em>). <strong>Wie lange?</strong> → nur die Dauer, ohne Grenzen zu nennen (<em>eine Stunde, drei Tage</em>).</div>
+    <div class="feedback error">„Von Montag bis Mittwoch" — das sind zwei konkrete Grenzen: ein Anfang und ein Ende. „Eine Stunde" nennt nur die Länge. Was fragt explizit nach Anfang und Ende?</div>
+  </div>
+
+  <!-- REGELKARTE -->
+  <div class="regel-card" id="regel">
+    <div class="regel-karte">
+      <h4>📌 Die temporalen Fragewörter im Überblick</h4>
+      <table>
+        <tr><td>Wann?</td><td>Zeitpunkt → <em>um acht / am Montag / im März</em></td></tr>
+        <tr><td>Wie lange?</td><td>Dauer → <em>drei Stunden / einen Tag</em></td></tr>
+        <tr><td>Seit wann?</td><td>Anfang in der Vergangenheit (läuft noch) → <em>seit März / seit gestern</em></td></tr>
+        <tr><td>Bis wann?</td><td>Endpunkt → <em>bis Freitag / bis Ende des Jahres</em></td></tr>
+        <tr><td>Ab wann?</td><td>Startpunkt in der Zukunft → <em>ab Montag / ab nächster Woche</em></td></tr>
+        <tr><td>Von wann bis wann?</td><td>Zeitraum mit Grenzen → <em>von März bis Juni</em></td></tr>
+        <tr><td>Wie oft?</td><td>Häufigkeit → <em>zweimal pro Woche / jeden Tag</em></td></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== TAB 1: ZUORDNUNG ===== -->
+<div class="section" id="sec-1">
+  <div class="timer-bar">⏱ <span class="t-time" id="timer-1">0:00</span> <span class="t-best" id="best-1"></span></div>
+  <div class="card">
+    <h3>🗂️ Zuordnung: Welches Fragewort passt?</h3>
+    <p style="font-size:0.88em;color:#666;margin-bottom:12px">Ordne die Satzpaare dem richtigen Fragewort zu. Klicken oder ziehen.</p>
+    <div class="chip-pool" id="zuo-pool"></div>
+    <div class="zuo-container" id="zuo-boxes"></div>
+    <div class="score-line" id="zuo-score"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="zuoShow()">👁 Lösungen</button>
+      <button class="btn" onclick="zuoReset()">🔄 Neu starten</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 2: LÜCKENTEXT ===== -->
+<div class="section" id="sec-2">
+  <div class="timer-bar">⏱ <span class="t-time" id="timer-2">0:00</span> <span class="t-best" id="best-2"></span></div>
+  <div class="card">
+    <h3>✏️ Lückentext: Fragewort ergänzen</h3>
+    <div class="wortkasten">
+      <strong>Fragewörter:</strong> wann · wie lange · seit wann · bis wann · ab wann · von wann bis wann · wie oft
+    </div>
+    <div id="luecke-container"></div>
+    <div class="score-line" id="luecke-score"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="lueckeShow()">👁 Lösungen</button>
+      <button class="btn" onclick="lueckeReset()">🔄 Neu starten</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB 3: SATZBAU ===== -->
+<div class="section" id="sec-3">
+  <div class="timer-bar">⏱ <span class="t-time" id="timer-3">0:00</span> <span class="t-best" id="best-3"></span></div>
+  <div class="card">
+    <h3>🧩 Satzbau: Frage und Antwort</h3>
+    <p style="font-size:0.88em;color:#666;margin-bottom:14px">Bringe die Wörter in die richtige Reihenfolge.</p>
+    <div id="sb-container"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="sbReset()">🔄 Alle zurücksetzen</button>
+    </div>
+  </div>
+</div>
+
+<div class="author-footer">
+  <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+  <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+<script>
+const TIMER_PREFIX = 'temporal-fragen-b1';
+
+// ── NAVIGATION ──
+function showSection(n){
+  document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
+}
+
+// ── ENTDECKUNG: 8 Schritte abwechselnd Dialog / MC-Frage ──
+// q0,q2,q4,q6 = Dialoge (Weiter-Button)
+// q1,q3,q5,q7 = MC-Fragen
+const ALL_STEPS=['q0','q1','q2','q3','q4','q5','q6','q7'];
+
+function scrollToCard(id){
+  setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+
+// Gemeinsame Funktion: aktuellen Dot abhaken, nächsten Schritt öffnen
+function advanceStep(currentIdx){
+  const btn=document.getElementById('q'+currentIdx).querySelector('.weiter-btn');
+  if(btn){btn.disabled=true;}
+  document.getElementById('dot-'+currentIdx).classList.remove('current');
+  document.getElementById('dot-'+currentIdx).classList.add('done');
+  const next=currentIdx+1;
+  if(next<ALL_STEPS.length){
+    document.getElementById(ALL_STEPS[next]).classList.add('active');
+    document.getElementById('dot-'+next).classList.add('current');
+    scrollToCard(ALL_STEPS[next]);
+  } else {
+    document.getElementById('regel').classList.add('active');
+    scrollToCard('regel');
+  }
+}
+
+// MC-Fragen: nur bei richtiger Antwort weiterschalten
+function mcCheck(btn,correct){
+  const card=btn.parentElement;
+  const currentIdx=ALL_STEPS.indexOf(card.id);
+  const options=card.querySelectorAll('.option');
+  const fbOk=card.querySelector('.feedback.success');
+  const fbErr=card.querySelector('.feedback.error');
+  if(correct){
+    btn.classList.add('correct');
+    options.forEach(o=>o.classList.add('disabled'));
+    fbOk.classList.add('show');
+    fbErr.classList.remove('show');
+    setTimeout(()=>advanceStep(currentIdx), 1500);
+  } else {
+    btn.classList.add('wrong');
+    fbErr.classList.add('show');
+    setTimeout(()=>{btn.classList.remove('wrong');fbErr.classList.remove('show');},2000);
+  }
+}
+
+// ── TIMER ──
+let timerSeconds=[0,0,0], timerRunning=[false,false,false], timerStarted=[false,false,false];
+let timerIntervals=[null,null,null];
+function timerAutoStart(n){
+  if(timerStarted[n])return;
+  timerStarted[n]=true; timerRunning[n]=true;
+  timerIntervals[n]=setInterval(()=>{
+    timerSeconds[n]++;
+    const m=Math.floor(timerSeconds[n]/60), s=timerSeconds[n]%60;
+    document.getElementById('timer-'+(n+1)).textContent=m+':'+(s<10?'0':'')+s;
+  },1000);
+}
+function timerStop(n){
+  if(!timerRunning[n])return;
+  clearInterval(timerIntervals[n]); timerRunning[n]=false;
+  const key=TIMER_PREFIX+'-best-'+n;
+  const prev=parseInt(localStorage.getItem(key)||'999999');
+  if(timerSeconds[n]<prev){ localStorage.setItem(key,timerSeconds[n]); loadBestTimes(); }
+}
+function timerResetOne(n){
+  clearInterval(timerIntervals[n]);
+  timerRunning[n]=false; timerStarted[n]=false; timerSeconds[n]=0;
+  document.getElementById('timer-'+(n+1)).textContent='0:00';
+}
+function loadBestTimes(){
+  [0,1,2].forEach(n=>{
+    const v=localStorage.getItem(TIMER_PREFIX+'-best-'+n);
+    if(v){ const m=Math.floor(v/60),s=v%60; document.getElementById('best-'+(n+1)).textContent='⭐ Best: '+m+':'+(s<10?'0':'')+s; }
+  });
+}
+function checkAllOk(tabN){
+  const inputs=document.querySelectorAll('#sec-'+(tabN+1)+' .l-inp');
+  if([...inputs].every(i=>i.classList.contains('ok')))timerStop(tabN);
+}
+
+
+// ── ZUORDNUNG ──
+const ZUO_CATS=[
+  {id:'zeitpunkt', label:'Wann? — Zeitpunkt'},
+  {id:'dauer',     label:'Wie lange? — Dauer'},
+  {id:'seit',      label:'Seit wann? — Anfang (Vergangenheit)'},
+  {id:'haeufig',   label:'Wie oft? — Häufigkeit'}
+];
+const ZUO_ITEMS=[
+  {word:'Er beginnt pünktlich. — Um neun Uhr.',      cat:'zeitpunkt'},
+  {word:'Der Kurs beginnt im Oktober.',               cat:'zeitpunkt'},
+  {word:'Sie kam am Montag an.',                      cat:'zeitpunkt'},
+  {word:'Das Meeting findet an Weihnachten statt.',   cat:'zeitpunkt'},
+  {word:'Die Fahrt dauerte drei Stunden.',            cat:'dauer'},
+  {word:'Er arbeitet einen ganzen Tag daran.',        cat:'dauer'},
+  {word:'Die Pause geht von zwölf bis eins.',         cat:'dauer'},
+  {word:'Sie schläft acht Stunden pro Nacht.',        cat:'dauer'},
+  {word:'Er lernt seit zwei Jahren Deutsch.',         cat:'seit'},
+  {word:'Sie wohnt seit letztem März hier.',          cat:'seit'},
+  {word:'Ich kenne ihn seit langem.',                 cat:'seit'},
+  {word:'Er arbeitet seit gestern in München.',       cat:'seit'},
+  {word:'Sie geht täglich spazieren.',                cat:'haeufig'},
+  {word:'Er fährt zweimal pro Woche ins Büro.',       cat:'haeufig'},
+  {word:'Ich besuche meine Eltern jedes Jahr.',       cat:'haeufig'},
+  {word:'Er trinkt selten Alkohol.',                  cat:'haeufig'}
+];
+
+let zuoState={};
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function zuoInit(){
+  zuoState={};
+  const pool=document.getElementById('zuo-pool');
+  const boxes=document.getElementById('zuo-boxes');
+  pool.innerHTML=''; boxes.innerHTML='';
+  document.getElementById('zuo-score').textContent='';
+
+  ZUO_CATS.forEach(cat=>{
+    const box=document.createElement('div');
+    box.className='zuo-box';
+    box.innerHTML=`<h4>${cat.label}</h4><div class="drop-zone" id="dz-${cat.id}" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="zuoDrop(event,'${cat.id}')"></div>`;
+    boxes.appendChild(box);
+    zuoState[cat.id]=[];
+  });
+
+  shuffle([...ZUO_ITEMS]).forEach((item,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='chip clickable';
+    chip.textContent=item.word;
+    chip.dataset.cat=item.cat;
+    chip.dataset.idx=idx;
+    chip.draggable=true;
+    chip.ondragstart=e=>{timerAutoStart(0);e.dataTransfer.setData('text',idx+'|pool');};
+    chip.onclick=()=>{ timerAutoStart(0); zuoClickChip(chip,item.cat); };
+    pool.appendChild(chip);
+  });
+}
+
+function zuoClickChip(chip,cat){
+  const dz=document.getElementById('dz-'+cat);
+  dz.appendChild(chip);
+  const correct=chip.dataset.cat===cat;
+  chip.classList.remove('placed-ok','placed-err');
+  chip.classList.add(correct?'placed-ok':'placed-err');
+  chip.draggable=false; chip.onclick=null;
+  zuoState[cat].push({correct});
+  zuoUpdateScore();
+}
+
+function zuoDrop(e,cat){
+  e.preventDefault();
+  document.getElementById('dz-'+cat).classList.remove('over');
+  const [idx,src]=e.dataTransfer.getData('text').split('|');
+  const chip=document.querySelector(`[data-idx="${idx}"]`);
+  if(!chip)return;
+  timerAutoStart(0);
+  document.getElementById('dz-'+cat).appendChild(chip);
+  const correct=chip.dataset.cat===cat;
+  chip.classList.remove('placed-ok','placed-err');
+  chip.classList.add(correct?'placed-ok':'placed-err');
+  chip.draggable=false; chip.onclick=null;
+  zuoUpdateScore();
+  const allPlaced=document.querySelectorAll('#zuo-pool .chip').length===0 &&
+    [...document.querySelectorAll('.drop-zone .chip')].length===ZUO_ITEMS.length;
+  if(allPlaced)timerStop(0);
+}
+
+function zuoUpdateScore(){
+  const placed=[...document.querySelectorAll('.drop-zone .chip')];
+  const ok=placed.filter(c=>c.classList.contains('placed-ok')).length;
+  document.getElementById('zuo-score').textContent=placed.length+' / '+ZUO_ITEMS.length+' platziert — '+ok+' richtig';
+}
+
+function zuoShow(){
+  document.querySelectorAll('#zuo-pool .chip').forEach(chip=>{
+    const cat=chip.dataset.cat;
+    document.getElementById('dz-'+cat).appendChild(chip);
+    chip.classList.add('placed-ok');
+    chip.draggable=false; chip.onclick=null;
+  });
+  document.querySelectorAll('.drop-zone .chip').forEach(chip=>{
+    const correctCat=chip.dataset.cat;
+    const parent=chip.closest('.drop-zone');
+    if(parent.id!=='dz-'+correctCat){
+      chip.classList.remove('placed-ok'); chip.classList.add('placed-err');
+    } else chip.classList.add('placed-ok');
+  });
+  zuoUpdateScore(); timerStop(0);
+}
+
+function zuoReset(){ timerResetOne(0); zuoInit(); }
+
+// ── LÜCKENTEXT ──
+const LUECKE_ITEMS=[
+  {segs:[{t:'___ kommen Sie normalerweise ins Büro?'},{b:'Wann',s:'m'}]},
+  {segs:[{t:'Er lernt Deutsch. — ___ ? — Seit fast zwei Jahren.'},{b:'Seit wann',s:'l'}]},
+  {segs:[{t:'Die Besprechung dauerte ___ ? — Zwei Stunden.'},{b:'wie lange',s:'m'}]},
+  {segs:[{t:'___ haben Sie Ihren Vertrag? — Bis Ende des Jahres.'},{b:'Bis wann',s:'m'}]},
+  {segs:[{t:'___ fährt die Bahn ab? — Um 14:32 Uhr.'},{b:'Wann',s:'m'}]},
+  {segs:[{t:'___ können Sie anfangen? — Ab nächstem Montag.'},{b:'Ab wann',s:'m'}]},
+  {segs:[{t:'Sie geht ___ ins Fitnessstudio? — Dreimal pro Woche.'},{b:'wie oft',s:'m'}]},
+  {segs:[{t:'___ geht der Kurs? — Von Oktober bis März.'},{b:'Von wann bis wann',s:'xl'}]},
+  {segs:[{t:'Er wohnt schon lange hier. — ___ ? — Seit 2018.'},{b:'Seit wann',s:'l'}]},
+  {segs:[{t:'Die Ausstellung ist ___ zu sehen? — Bis zum 30. März.'},{b:'bis wann',s:'m'}]},
+  {segs:[{t:'___ beginnt der neue Kurs? — Ab Herbst.'},{b:'Ab wann',s:'m'}]},
+  {segs:[{t:'___ kommt der Zug an? — Jeden Tag um 9:14 Uhr.'},{b:'Wie oft',s:'m'}]}
+];
+
+function normalize(s){return s.trim().toLowerCase().replace(/\s+/g,' ')}
+
+function lueckeInit(){
+  const cont=document.getElementById('luecke-container');
+  cont.innerHTML='';
+  document.getElementById('luecke-score').textContent='';
+  LUECKE_ITEMS.forEach((item,i)=>{
+    const div=document.createElement('div');
+    div.className='luecke-satz';
+    item.segs.forEach(seg=>{
+      if(seg.t){
+        seg.t.split('___').forEach((part,pi)=>{
+          if(pi>0){
+            const inp=document.createElement('input');
+            inp.type='text'; inp.className='l-inp';
+            inp.style.width=seg.b?{s:'60px',m:'100px',l:'150px',xl:'210px'}[seg.s||'m']:'100px';
+            inp.placeholder='Fragewort';
+            inp.dataset.sol=seg.b||'';
+            inp.oninput=()=>{ timerAutoStart(1); lueckeLiveCheck(inp); checkAllOk(1); };
+            inp.onblur=()=>lueckeLiveCheck(inp);
+            div.appendChild(inp);
+          }
+          if(part) div.appendChild(document.createTextNode(part));
+        });
+      }
+    });
+    cont.appendChild(div);
+  });
+}
+
+function lueckeLiveCheck(inp){
+  const old=inp.nextElementSibling;
+  if(old&&old.classList.contains('correction-hint'))old.remove();
+  if(!inp.value.trim()){inp.classList.remove('ok','err');return;}
+  const ok=normalize(inp.value)===normalize(inp.dataset.sol);
+  inp.classList.toggle('ok',ok); inp.classList.toggle('err',!ok);
+  lueckeUpdateScore();
+}
+
+function lueckeUpdateScore(){
+  const all=document.querySelectorAll('#luecke-container .l-inp');
+  const ok=[...all].filter(i=>i.classList.contains('ok')).length;
+  document.getElementById('luecke-score').textContent=ok+' / '+all.length+' richtig';
+}
+
+function lueckeShow(){
+  document.querySelectorAll('#luecke-container .l-inp').forEach(inp=>{
+    const old=inp.nextElementSibling;
+    if(old&&old.classList.contains('correction-hint'))old.remove();
+    if(!inp.classList.contains('ok')){
+      inp.value=inp.dataset.sol;
+      inp.classList.remove('err'); inp.classList.add('ok');
+      const hint=document.createElement('span');
+      hint.className='correction-hint'; hint.textContent=inp.dataset.sol;
+      inp.insertAdjacentElement('afterend',hint);
+    }
+  });
+  lueckeUpdateScore(); timerStop(1);
+}
+
+function lueckeReset(){
+  timerResetOne(1);
+  document.querySelectorAll('#luecke-container .l-inp').forEach(inp=>{
+    inp.value=''; inp.classList.remove('ok','err');
+    const old=inp.nextElementSibling;
+    if(old&&old.classList.contains('correction-hint'))old.remove();
+  });
+  document.getElementById('luecke-score').textContent='';
+}
+
+// ── SATZBAU ──
+const SB_ITEMS=[
+  {label:'Frage nach Zeitpunkt', parts:['Wann',',','fängt','der','Kurs','an','?'], sol:'Wann , fängt der Kurs an ?'},
+  {label:'Antwort mit Zeitpunkt', parts:['Er','fängt','am','Montag','um','neun','an','.'], sol:'Er fängt am Montag um neun an .'},
+  {label:'Frage nach Dauer',     parts:['Wie','lange','hat','die','Reise','gedauert','?'], sol:'Wie lange hat die Reise gedauert ?'},
+  {label:'Antwort mit Dauer',    parts:['Sie','hat','drei','Stunden','gedauert','.'], sol:'Sie hat drei Stunden gedauert .'},
+  {label:'Frage: seit wann?',    parts:['Seit','wann','lernst','du','Deutsch','?'], sol:'Seit wann lernst du Deutsch ?'},
+  {label:'Antwort mit seit',     parts:['Ich','lerne','seit','zwei','Jahren','Deutsch','.'], sol:'Ich lerne seit zwei Jahren Deutsch .'},
+  {label:'Frage nach Häufigkeit',parts:['Wie','oft','treiben','Sie','Sport','?'], sol:'Wie oft treiben Sie Sport ?'},
+  {label:'Antwort mit Häufigkeit',parts:['Ich','gehe','zweimal','pro','Woche','ins','Fitnessstudio','.'], sol:'Ich gehe zweimal pro Woche ins Fitnessstudio .'}
+];
+
+let sbStarted=false;
+function sbInit(){
+  sbStarted=false;
+  const cont=document.getElementById('sb-container');
+  cont.innerHTML='';
+  SB_ITEMS.forEach((item,i)=>{
+    const div=document.createElement('div');
+    div.className='sb-item';
+    div.innerHTML=`<div class="sb-frage">${item.label}</div>
+      <div class="chip-source" id="sb-src-${i}"></div>
+      <div class="drop-row" id="sb-row-${i}" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="sbDrop(event,${i})"></div>
+      <button class="btn" onclick="sbCheck(${i})">Prüfen</button>
+      <div class="sb-fb" id="sb-fb-${i}"></div>`;
+    cont.appendChild(div);
+
+    const src=document.getElementById('sb-src-'+i);
+    shuffle([...item.parts]).forEach((p,pi)=>{
+      const chip=document.createElement('div');
+      chip.className='chip'; chip.textContent=p; chip.dataset.orig=p; chip.draggable=true;
+      chip.ondragstart=e=>{timerAutoStart(2);e.dataTransfer.setData('text',p+'|'+i+'|'+pi);};
+      chip.onclick=()=>{ timerAutoStart(2); sbMoveToRow(chip,i); };
+      src.appendChild(chip);
+    });
+  });
+}
+
+function sbMoveToRow(chip,i){
+  const row=document.getElementById('sb-row-'+i);
+  row.appendChild(chip);
+  chip.onclick=()=>{ const src=document.getElementById('sb-src-'+i); src.appendChild(chip); chip.onclick=()=>sbMoveToRow(chip,i); };
+  updateCaps(i);
+}
+
+function sbDrop(e,i){
+  e.preventDefault();
+  document.getElementById('sb-row-'+i).classList.remove('over');
+  const[p,,pi]=e.dataTransfer.getData('text').split('|');
+  const src=document.getElementById('sb-src-'+i);
+  const chip=[...src.querySelectorAll('.chip')].find(c=>c.textContent===p&&c.dataset.orig===p) ||
+             [...document.getElementById('sb-row-'+i).querySelectorAll('.chip')].find(c=>c.textContent===p);
+  if(!chip)return;
+  timerAutoStart(2);
+  document.getElementById('sb-row-'+i).appendChild(chip);
+  chip.onclick=()=>{ src.appendChild(chip); chip.onclick=()=>sbMoveToRow(chip,i); };
+  updateCaps(i);
+}
+
+function updateCaps(i){
+  const row=document.getElementById('sb-row-'+i);
+  const chips=[...row.querySelectorAll('.chip')];
+  chips.forEach((c,ci)=>{
+    if(ci===0&&c.dataset.orig!==',')
+      c.textContent=c.dataset.orig.charAt(0).toUpperCase()+c.dataset.orig.slice(1);
+    else c.textContent=c.dataset.orig;
+  });
+}
+
+function sbCheck(i){
+  const row=document.getElementById('sb-row-'+i);
+  const chips=[...row.querySelectorAll('.chip')];
+  const result=chips.map(c=>c.dataset.orig).join(' ');
+  const fb=document.getElementById('sb-fb-'+i);
+  if(result===SB_ITEMS[i].sol){
+    row.classList.add('ok-border');
+    fb.textContent='✓ Richtig!'; fb.className='sb-fb ok';
+    const allOk=[...document.querySelectorAll('.drop-row')].every(r=>r.classList.contains('ok-border'));
+    if(allOk)timerStop(2);
+  } else {
+    fb.textContent='✗ Noch nicht richtig — versuche es nochmal.'; fb.className='sb-fb err';
+  }
+}
+
+function sbReset(){
+  timerResetOne(2); sbInit();
+}
+
+// ── INIT ──
+zuoInit();
+lueckeInit();
+sbInit();
+loadBestTimes();
+</script>
+</body>
+</html>

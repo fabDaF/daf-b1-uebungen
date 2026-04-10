@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adversative und konzessive Konnektoren</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+
+/* Header */
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px 20px 16px; text-align: center; }
+.header h1 { font-size: 1.5em; margin-bottom: 4px; }
+.header h2 { font-size: 1em; font-weight: 400; opacity: 0.9; }
+
+/* Navigation */
+.nav { display: flex; gap: 6px; padding: 12px 16px; background: #fff; border-bottom: 2px solid #e8e8e8; flex-wrap: wrap; justify-content: center; }
+.nav-btn { padding: 10px 16px; border-radius: 20px; cursor: pointer; font-size: 0.95em; font-weight: 600; background: #f0f2f5; color: #555; transition: all 0.25s; white-space: nowrap; user-select: none; }
+.nav-btn.active { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+.nav-btn:hover { background: #e0e3ff; }
+
+/* Sections */
+.section { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
+.section.active { display: block; }
+.section-title { font-size: 1.1em; font-weight: 700; margin-bottom: 16px; color: #333; }
+
+/* Help box */
+.help-box { background: #e8f4fd; border-left: 4px solid #667eea; padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 20px; font-size: 0.88em; line-height: 1.6; }
+.help-box strong { color: #667eea; }
+
+/* Buttons */
+.btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 0.9em; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-show { background: #e0e0e0; color: #333; }
+.btn-show:hover { background: #d0d0d0; }
+.btn-reset { background: #fff; color: #667eea; border: 2px solid #667eea; }
+.btn-reset:hover { background: #f0f2ff; }
+
+/* LÜCKENÜBUNG */
+.ex-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: relative; }
+.ex-card .badge { display: none; }
+.ex-sentence { font-size: 1.1em; line-height: 2.2; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0; }
+.nowrap-group { display: inline-flex; align-items: baseline; white-space: nowrap; gap: 0; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: #f8f9ff; padding: 2px 6px; font-size: 1em; font-family: inherit; text-align: center; border-radius: 4px 4px 0 0; outline: none; transition: border-color 0.2s, background 0.2s; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f0ff; }
+input.blank.s { min-width: 45px; width: 45px; }
+input.blank.m { min-width: 90px; width: 90px; }
+input.blank.l { min-width: 150px; width: 150px; }
+input.blank.correct { border-bottom-color: #27ae60; background: #eafaf1; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdf2f2; }
+.sol-text { display: none; color: #27ae60; font-weight: 600; font-size: 0.85em; margin-left: 2px; }
+.correction-hint { color: #27ae60; font-weight: 600; font-size: 0.85em; margin-left: 4px; white-space: nowrap; }
+
+/* ZUORDNUNG */
+.chip-bank { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; padding: 12px; background: #f8f9ff; border-radius: 8px; border: 2px dashed #ccc; margin-bottom: 16px; }
+.chip { display: inline-block; padding: 8px 16px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 20px; cursor: grab; font-size: 0.9em; font-weight: 500; user-select: none; transition: transform 0.15s, opacity 0.15s; }
+.chip:active { cursor: grabbing; transform: scale(1.05); }
+.chip.selected { outline: 3px solid #ffd700; }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.wrong { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+.categories { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.category { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.category h3 { text-align: center; margin-bottom: 10px; color: #667eea; font-size: 0.95em; }
+.drop-zone { min-height: 60px; padding: 8px; background: #fafbff; border: 2px dashed #ddd; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 6px; transition: border-color 0.2s, background 0.2s; }
+.drop-zone.drag-over { border-color: #667eea; background: #f0f2ff; }
+
+/* SATZBAU */
+.sb-exercise { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.sb-exercise .sb-label { font-weight: 600; color: #667eea; margin-bottom: 10px; font-size: 0.9em; }
+.chip-bank[data-sb-id] { margin-bottom: 10px; }
+.drop-row { min-height: 48px; padding: 10px 12px; background: #f8f9ff; border: 2px dashed #ccc; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; transition: border-color 0.2s; }
+.drop-row.drag-over { border-color: #667eea; background: #f0f2ff; }
+.drop-row .chip { font-size: 0.85em; }
+.fixed-dot { font-size: 1.2em; font-weight: 700; margin-left: 2px; color: #333; user-select: none; }
+.sb-exercise.correct-row .drop-row { border-color: #27ae60; background: #eafaf1; }
+.sb-exercise.wrong-row .drop-row { border-color: #e74c3c; background: #fdf2f2; }
+
+/* ENTDECKUNG */
+.discovery-box { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.discovery-box h3 { color: #667eea; font-size: 1em; margin-bottom: 12px; }
+.discovery-box h4 { color: #333; font-size: 0.95em; margin-top: 14px; margin-bottom: 8px; font-weight: 600; }
+.example-list { list-style: none; margin-left: 0; }
+.example-list li { padding: 6px 0; font-size: 0.95em; line-height: 1.6; }
+.example-list li strong { color: #764ba2; }
+.example-list li em { color: #999; font-style: italic; font-size: 0.9em; }
+
+/* KONNEKTOREN-SCHEMA */
+.schema-block { margin-bottom: 24px; }
+.schema-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.schema-label { font-size: 1.1em; font-weight: 700; color: #1a1a2e; }
+.schema-meaning { font-size: 0.88em; color: #666; font-style: italic; }
+.schema-question { font-size: 0.88em; font-weight: 600; color: #764ba2; }
+.schema-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.schema-box { border-radius: 10px; padding: 12px 10px; min-height: 80px; display: flex; flex-direction: column; }
+.schema-box .box-title { font-size: 0.72em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.schema-box .box-syntax { font-size: 0.68em; margin-bottom: 8px; opacity: 0.8; }
+.schema-box .box-items { font-size: 0.9em; font-weight: 600; line-height: 1.7; }
+.schema-box .box-items .item-note { font-weight: 400; font-size: 0.78em; opacity: 0.7; }
+.schema-box .box-model { margin-top: 8px; padding: 5px 8px; background: rgba(0,0,0,0.06); border-radius: 6px; font-size: 0.78em; font-family: 'Courier New', monospace; letter-spacing: 0.3px; line-height: 1.5; }
+.schema-box .box-model strong { font-weight: 700; }
+.box-konj { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #90caf9; color: #1565c0; }
+.box-konj .box-title { color: #0d47a1; }
+.box-adv { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #a5d6a7; color: #2e7d32; }
+.box-adv .box-title { color: #1b5e20; }
+.box-subj { background: linear-gradient(135deg, #f3e5f5, #e1bee7); border: 2px solid #ce93d8; color: #6a1b9a; }
+.box-subj .box-title { color: #4a148c; }
+.box-praep { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border: 2px solid #ffcc80; color: #e65100; }
+.box-praep .box-title { color: #bf360c; }
+.schema-box.empty { border-style: dashed; opacity: 0.45; display: flex; align-items: center; justify-content: center; }
+.schema-box.empty .empty-marker { font-size: 1.4em; font-weight: 300; opacity: 0.5; }
+.schema-connector { display: flex; align-items: center; justify-content: center; gap: 10px; margin: -4px 0 -4px 0; padding: 6px 0; }
+.schema-connector .arrow { font-size: 1.1em; color: #764ba2; }
+.schema-connector .connector-text { font-size: 0.82em; color: #764ba2; font-weight: 600; font-style: italic; }
+.legende { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; padding: 10px; background: #f8f9ff; border-radius: 8px; }
+.legende-item { display: flex; align-items: center; gap: 5px; font-size: 0.78em; font-weight: 600; color: #555; }
+.legende-dot { width: 12px; height: 12px; border-radius: 3px; }
+.legende-dot.l-konj { background: #90caf9; }
+.legende-dot.l-adv { background: #a5d6a7; }
+.legende-dot.l-subj { background: #ce93d8; }
+.legende-dot.l-praep { background: #ffcc80; }
+
+/* Responsive */
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.2em; }
+    .nav-btn { font-size: 0.75em; padding: 10px 4px; }
+    .categories { grid-template-columns: 1fr; }
+    .ex-sentence { font-size: 1em; }
+    .schema-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .schema-box { min-height: 70px; padding: 8px 6px; }
+    .schema-box .box-items { font-size: 0.8em; }
+}
+/* Author Footer */
+.author-footer { margin-top: 40px; padding: 16px 20px; text-align: center; font-size: 0.8em; color: #888; border-top: 1px solid #e0e0e0; }
+.author-footer a { color: #667eea; text-decoration: none; font-weight: 500; }
+.author-footer a:hover { text-decoration: underline; color: #764ba2; }
+.author-footer .author-name { font-weight: 600; color: #555; }
+
+/* Timer */
+.timer-display { display: flex; justify-content: center; gap: 20px; margin-top: 10px; font-size: 0.95em; }
+.current-time { font-weight: 600; color: #667eea; }
+.best-time { font-weight: 600; color: #f39c12; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Adversative und konzessive Konnektoren</h1>
+    <h2>Gegensatz und Einr\u00e4umung — wo liegt der Unterschied? — B1</h2>
+</div>
+
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">📖 Entdeckung</div>
+    <div class="nav-btn" onclick="showSection(1)">🔀 Zuordnung</div>
+    <div class="nav-btn" onclick="showSection(2)">✏️ Lückenübung</div>
+    <div class="nav-btn" onclick="showSection(3)">🧩 Satzbau</div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 0: ENTDECKUNG                        -->
+<!-- ============================================ -->
+<div class="section active" id="sec-0">
+    <div class="section-title">📖 Entdeckung — Gegensatz ist nicht gleich Gegensatz</div>
+
+    <div class="discovery-box">
+        <h3>Zwei Sätze — ein feiner Unterschied</h3>
+        <p style="font-size: 0.95em; line-height: 1.8; margin-bottom: 14px;">
+            <strong style="color: #764ba2;">Er ist reich, <em>aber</em> unglücklich.</strong><br>
+            <strong style="color: #764ba2;"><em>Obwohl</em> er reich ist, ist er unglücklich.</strong>
+        </p>
+        <p style="font-size: 0.92em; line-height: 1.7; margin-bottom: 12px;">
+            Beide Sätze enthalten einen Gegensatz. Aber sie denken ihn unterschiedlich:
+        </p>
+        <p style="font-size: 0.95em; line-height: 1.7; margin-bottom: 6px;">
+            <strong style="color: #667eea;">Adversativ</strong> = einfacher <strong>Gegensatz</strong>. Zwei Tatsachen stehen nebeneinander. Es gibt keine Erwartung, die gebrochen wird. Man stellt nur fest: <em>A ist so — und B ist anders.</em>
+        </p>
+        <p style="font-size: 0.95em; line-height: 1.7;">
+            <strong style="color: #667eea;">Konzessiv</strong> = <strong>Einräumung</strong>. Im Hintergrund steht eine logische Erwartung. Man räumt einen Grund ein — aber die erwartete Folge tritt <strong>nicht</strong> ein. <em>Wer reich ist, sollte glücklich sein — ist er aber nicht.</em>
+        </p>
+    </div>
+
+    <div class="discovery-box">
+        <h3>Der Schlüssel: Gibt es eine gebrochene Erwartung?</h3>
+        <p style="font-size: 0.92em; line-height: 1.7; margin-bottom: 10px;">
+            Frage dich immer: <strong>Erwarte ich logisch etwas anderes?</strong>
+        </p>
+        <ul class="example-list">
+            <li><strong>aber</strong> (adversativ): <em>Sie wohnt in Berlin, <strong>aber</strong> er wohnt in München.</em> — Kein gebrochenes Versprechen. Einfach zwei verschiedene Fakten.</li>
+            <li><strong>obwohl</strong> (konzessiv): <em><strong>Obwohl</strong> sie müde ist, arbeitet sie weiter.</em> — Man erwartet: Wer müde ist, hört auf. Diese Erwartung wird gebrochen.</li>
+            <li><strong>jedoch</strong> (adversativ): <em>Der Film war lang, <strong>jedoch</strong> interessant.</em> — Zwei Eigenschaften, die nebeneinanderstehen.</li>
+            <li><strong>trotzdem</strong> (konzessiv): <em>Er hat nicht gelernt. <strong>Trotzdem</strong> hat er bestanden.</em> — Man erwartet: Wer nicht lernt, besteht nicht. Gebrochene Erwartung.</li>
+        </ul>
+        <p style="font-size: 0.88em; line-height: 1.7; background: #fff8e1; padding: 10px 14px; border-radius: 8px; border-left: 4px solid #f39c12; margin-top: 12px;">
+            <strong>Merke:</strong> Das Konzessive setzt immer eine <strong>kausale Beziehung</strong> voraus — und bricht sie. Müdigkeit → aufhören (kausal) — aber sie arbeitet weiter (konzessiv). Ohne diese Erwartung im Hintergrund gibt es keine Einräumung, nur einen Gegensatz.
+        </p>
+    </div>
+
+    <div class="discovery-box">
+        <h3>Konnektoren-Schema</h3>
+        <div class="legende">
+            <div class="legende-item"><span class="legende-dot l-konj"></span> Konjunktion (ADUSO)</div>
+            <div class="legende-item"><span class="legende-dot l-adv"></span> Adverb (Inversion)</div>
+            <div class="legende-item"><span class="legende-dot l-subj"></span> Subjunktion (Nebensatz)</div>
+            <div class="legende-item"><span class="legende-dot l-praep"></span> Präposition (+ Kasus)</div>
+        </div>
+
+        <!-- ADVERSATIV -->
+        <div class="schema-block">
+            <div class="schema-header">
+                <span class="schema-label">ADVERSATIV</span>
+                <span class="schema-meaning">— der Gegensatz</span>
+                <span class="schema-question">Was steht im Kontrast?</span>
+            </div>
+            <div class="schema-grid">
+                <div class="schema-box box-konj">
+                    <div class="box-title">Konjunktion</div>
+                    <div class="box-syntax">HS + HS (Pos. 0)</div>
+                    <div class="box-items">aber<br>sondern<br>doch</div>
+                    <div class="box-model">HS, <strong>aber</strong> S <strong>V</strong> …</div>
+                </div>
+                <div class="schema-box box-adv">
+                    <div class="box-title">Adverb</div>
+                    <div class="box-syntax">HS (Pos. 1 → Inversion)</div>
+                    <div class="box-items">jedoch<br>allerdings<br>dagegen<br>hingegen</div>
+                    <div class="box-model"><strong>Jedoch</strong> <strong>V</strong> S …</div>
+                </div>
+                <div class="schema-box box-subj empty">
+                    <div class="box-title">Subjunktion</div>
+                    <div class="box-syntax">NS (Verb am Ende)</div>
+                    <span class="empty-marker">—</span>
+                </div>
+                <div class="schema-box box-praep empty">
+                    <div class="box-title">Präposition</div>
+                    <div class="box-syntax">+ Kasus</div>
+                    <span class="empty-marker">—</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Connector -->
+        <div class="schema-connector">
+            <span class="arrow">⬆</span>
+            <span class="connector-text">beide enthalten einen Gegensatz — aber nur das Konzessive bricht eine Erwartung</span>
+            <span class="arrow">⬇</span>
+        </div>
+
+        <!-- KONZESSIV -->
+        <div class="schema-block">
+            <div class="schema-header">
+                <span class="schema-label">KONZESSIV</span>
+                <span class="schema-meaning">— die Einräumung</span>
+                <span class="schema-question">Trotz welcher Tatsache?</span>
+            </div>
+            <div class="schema-grid">
+                <div class="schema-box box-konj empty">
+                    <div class="box-title">Konjunktion</div>
+                    <div class="box-syntax">HS + HS (Pos. 0)</div>
+                    <span class="empty-marker">—</span>
+                </div>
+                <div class="schema-box box-adv">
+                    <div class="box-title">Adverb</div>
+                    <div class="box-syntax">HS (Pos. 1 → Inversion)</div>
+                    <div class="box-items">trotzdem<br>dennoch<br>nichtsdestotrotz</div>
+                    <div class="box-model"><strong>Trotzdem</strong> <strong>V</strong> S …</div>
+                </div>
+                <div class="schema-box box-subj">
+                    <div class="box-title">Subjunktion</div>
+                    <div class="box-syntax">NS (Verb am Ende)</div>
+                    <div class="box-items">obwohl<br>obgleich<br>auch wenn</div>
+                    <div class="box-model"><strong>Obwohl</strong> S … <strong>V</strong>, V S …</div>
+                </div>
+                <div class="schema-box box-praep">
+                    <div class="box-title">Präposition</div>
+                    <div class="box-syntax">+ Genitiv</div>
+                    <div class="box-items">trotz</div>
+                    <div class="box-model"><strong>Trotz</strong> + Gen. <strong>V</strong> S …</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="discovery-box">
+        <h3>Beispiele im Vergleich</h3>
+        <ul class="example-list">
+            <li><strong>aber</strong> (adversativ, Konjunktion): Er lebt in Berlin, <strong>aber</strong> sie lebt in München. <em>(Zwei Fakten, kein gebrochenes Versprechen)</em></li>
+            <li><strong>obwohl</strong> (konzessiv, Subjunktion): <strong>Obwohl</strong> er in Berlin lebt, spricht er kein Deutsch. <em>(Erwartung: Wer in Berlin lebt, spricht Deutsch)</em></li>
+            <li><strong>sondern</strong> (adversativ, Konjunktion): Er wohnt nicht in Berlin, <strong>sondern</strong> in Hamburg. <em>(Korrektur, kein Erwartungsbruch)</em></li>
+            <li><strong>trotzdem</strong> (konzessiv, Adverb): Es regnet stark. <strong>Trotzdem</strong> geht sie joggen. <em>(Erwartung: Bei Regen bleibt man drinnen)</em></li>
+            <li><strong>jedoch</strong> (adversativ, Adverb): Der Film war lang. <strong>Jedoch</strong> war er sehr spannend. <em>(Kontrast ohne Erwartungsbruch)</em></li>
+            <li><strong>trotz</strong> (konzessiv, Präposition): <strong>Trotz</strong> des Regens geht sie joggen. <em>(+ Genitiv)</em></li>
+        </ul>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 1: ZUORDNUNG                         -->
+<!-- ============================================ -->
+<div class="section" id="sec-1">
+    <div class="section-title">🔀 Zuordnung — Adversativ oder konzessiv?</div>
+    <div class="help-box">
+        <strong>Adversativ</strong> = einfacher Gegensatz. Zwei Fakten stehen nebeneinander.<br>
+        <strong>Konzessiv</strong> = Einräumung. Eine Erwartung wird gebrochen.<br>
+        Ordne die Sätze der richtigen Kategorie zu.
+    </div>
+    <div class="chip-bank" id="zuo-bank"></div>
+    <div class="categories">
+        <div class="category" data-cat="adversativ">
+            <h3>⚔️ Adversativ (Gegensatz)</h3>
+            <div class="drop-zone" data-cat="adversativ"></div>
+        </div>
+        <div class="category" data-cat="konzessiv">
+            <h3>🔄 Konzessiv (Einräumung)</h3>
+            <div class="drop-zone" data-cat="konzessiv"></div>
+        </div>
+    </div>
+    <div class="btn-row">
+        <button class="btn btn-show" onclick="zuoShow()">👁 Lösungen</button>
+        <button class="btn btn-reset" onclick="zuoReset()">🔄 Neu starten</button>
+    </div>
+    <div class="timer-display"><span class="current-time">⏱️ <span id="timer-1">00:00</span></span><span class="best-time">🏆 Best: <span id="best-1">--:--</span></span></div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 2: LÜCKENÜBUNG                       -->
+<!-- ============================================ -->
+<div class="section" id="sec-2">
+    <div class="section-title">✏️ Lückenübung — Konnektoren einsetzen</div>
+    <div class="help-box">
+        Setze den passenden Konnektor ein. Frage dich: Wird hier eine <strong>Erwartung gebrochen</strong> (→ konzessiv) oder stehen einfach <strong>zwei Fakten</strong> im Kontrast (→ adversativ)?<br>
+        <strong>Konjunktion</strong> (aber, sondern, doch) → normale HS-Wortstellung<br>
+        <strong>Adverb</strong> (jedoch, allerdings, trotzdem, dennoch) → <strong>Inversion</strong>!<br>
+        <strong>Subjunktion</strong> (obwohl, obgleich) → Verb am <strong>Ende</strong><br>
+        <strong>Präposition</strong> (trotz) → + Genitiv
+    </div>
+    <div id="luecke-container"></div>
+    <div class="btn-row">
+        <button class="btn btn-show" onclick="lueckeShow()">👁 Lösungen</button>
+        <button class="btn btn-reset" onclick="lueckeReset()">🔄 Neu starten</button>
+    </div>
+    <div class="timer-display"><span class="current-time">⏱️ <span id="timer-2">00:00</span></span><span class="best-time">🏆 Best: <span id="best-2">--:--</span></span></div>
+</div>
+
+<!-- ============================================ -->
+<!-- SECTION 3: SATZBAU                           -->
+<!-- ============================================ -->
+<div class="section" id="sec-3">
+    <div class="section-title">🧩 Satzbau — Sätze mit Konnektoren bauen</div>
+    <div class="help-box">
+        🔹 <strong>aber / sondern / doch</strong> → Konjunktion (Position 0): normale HS-Wortstellung<br>
+        🔹 <strong>jedoch / allerdings / dagegen</strong> → Adverb (Position 1): <strong>Inversion</strong>!<br>
+        🔹 <strong>obwohl / obgleich</strong> → Nebensatz: Verb am <strong>Ende</strong><br>
+        🔹 <strong>trotzdem / dennoch</strong> → Adverb (Position 1): <strong>Inversion</strong>!<br>
+        🔹 <strong>trotz</strong> + Genitiv → am Satzanfang oder im Mittelfeld<br>
+        🔹 Komma steht <strong>vor</strong> dem Konnektor (außer am Satzanfang)
+    </div>
+    <div id="sb-container"></div>
+    <div class="btn-row">
+        <button class="btn btn-show" onclick="sbShow()">👁 Lösungen</button>
+        <button class="btn btn-reset" onclick="sbReset()">🔄 Neu starten</button>
+    </div>
+    <div class="timer-display"><span class="current-time">⏱️ <span id="timer-3">00:00</span></span><span class="best-time">🏆 Best: <span id="best-3">--:--</span></span></div>
+</div>
+
+<script>
+/* ========================================= */
+/*  TAB NAVIGATION                           */
+/* ========================================= */
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach((s, i) => s.classList.toggle('active', i === idx));
+    document.querySelectorAll('.nav-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+}
+
+/* ========================================= */
+/*  HELPER                                   */
+/* ========================================= */
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function normalize(s) {
+    return s.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+/* ========================================= */
+/*  TIMER SYSTEM                             */
+/* ========================================= */
+const TIMER_PREFIX = 'adversativ-konzessiv-b1';
+const timerState = {
+    1: { running:false, startTime:null, elapsed:0, interval:null },
+    2: { running:false, startTime:null, elapsed:0, interval:null },
+    3: { running:false, startTime:null, elapsed:0, interval:null }
+};
+
+function formatTime(s) {
+    return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+
+function startTimer(idx) {
+    if (timerState[idx].running) return;
+    timerState[idx].running = true;
+    timerState[idx].startTime = Date.now() - (timerState[idx].elapsed * 1000);
+    timerState[idx].interval = setInterval(() => {
+        timerState[idx].elapsed = Math.floor((Date.now() - timerState[idx].startTime) / 1000);
+        document.getElementById('timer-'+idx).textContent = formatTime(timerState[idx].elapsed);
+    }, 1000);
+}
+
+function stopTimer(idx) {
+    if (!timerState[idx].running) return;
+    clearInterval(timerState[idx].interval);
+    timerState[idx].running = false;
+    const t = timerState[idx].elapsed;
+    const key = TIMER_PREFIX + '-best-' + idx;
+    const prev = localStorage.getItem(key);
+    if (!prev || t < parseInt(prev)) {
+        localStorage.setItem(key, t);
+        document.getElementById('best-'+idx).textContent = formatTime(t);
+    }
+}
+
+function resetTimer(idx) {
+    if (timerState[idx].running) { clearInterval(timerState[idx].interval); timerState[idx].running = false; }
+    timerState[idx].elapsed = 0;
+    timerState[idx].startTime = null;
+    document.getElementById('timer-'+idx).textContent = '00:00';
+}
+
+function loadBestTimes() {
+    for (let i = 1; i <= 3; i++) {
+        const b = localStorage.getItem(TIMER_PREFIX + '-best-' + i);
+        if (b) document.getElementById('best-'+i).textContent = formatTime(parseInt(b));
+    }
+}
+
+function initTimerListeners() {
+    document.querySelectorAll('#zuo-bank .chip, #sec-1 .chip').forEach(chip => {
+        chip.addEventListener('mousedown', () => startTimer(1), { once: true });
+        chip.addEventListener('touchstart', () => startTimer(1), { once: true });
+    });
+    document.querySelectorAll('#sec-2 input.blank').forEach(inp => {
+        inp.addEventListener('focus', () => startTimer(2), { once: true });
+    });
+    document.querySelectorAll('#sec-3 .chip').forEach(chip => {
+        chip.addEventListener('mousedown', () => startTimer(3), { once: true });
+        chip.addEventListener('touchstart', () => startTimer(3), { once: true });
+    });
+}
+
+/* ========================================= */
+/*  LIVE CHECK & AUTO FEEDBACK               */
+/* ========================================= */
+function liveCheck(inp) {
+    var user = inp.value;
+    var answer = inp.dataset.sol || inp.dataset.answer;
+    var field = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (user.length === 0) return;
+    var cmpUser = user;
+    var cmpAnswer = answer;
+    if (field === 'art') { cmpUser = user.toLowerCase(); cmpAnswer = answer.toLowerCase(); }
+    if (cmpUser === cmpAnswer) { inp.classList.add('correct'); }
+    else if (cmpAnswer.indexOf(cmpUser) === 0) { /* prefix */ }
+    else { inp.classList.add('wrong'); }
+}
+
+function checkAllInputs(secSelector, timerIdx) {
+    var inputs = document.querySelectorAll(secSelector);
+    var allCorrect = inputs.length > 0;
+    inputs.forEach(function(inp) {
+        if (!inp.classList.contains('correct')) allCorrect = false;
+    });
+    if (allCorrect) stopTimer(timerIdx);
+}
+
+/* ========================================= */
+/*  SECTION 1: ZUORDNUNG                     */
+/* ========================================= */
+const ZUO_ITEMS = [
+    { word: "Er ist reich, aber ungl\u00fccklich.", cat: "adversativ" },
+    { word: "Sie wohnt in Berlin, aber er in M\u00fcnchen.", cat: "adversativ" },
+    { word: "Das Essen war teuer, jedoch sehr gut.", cat: "adversativ" },
+    { word: "Er ist nicht faul, sondern fleißig.", cat: "adversativ" },
+    { word: "Sie ist jung. Allerdings hat sie viel Erfahrung.", cat: "adversativ" },
+    { word: "Er mag Kaffee, sie dagegen trinkt nur Tee.", cat: "adversativ" },
+    { word: "Der Film war lang, doch nie langweilig.", cat: "adversativ" },
+    { word: "Obwohl er krank ist, geht er zur Arbeit.", cat: "konzessiv" },
+    { word: "Es regnet stark. Trotzdem geht sie joggen.", cat: "konzessiv" },
+    { word: "Trotz des Verbots hat er geraucht.", cat: "konzessiv" },
+    { word: "Sie hat nicht gelernt. Dennoch hat sie bestanden.", cat: "konzessiv" },
+    { word: "Obgleich er m\u00fcde war, arbeitete er weiter.", cat: "konzessiv" },
+    { word: "Trotz der K\u00e4lte tragen die Kinder keine Jacke.", cat: "konzessiv" },
+    { word: "Er hat wenig Zeit. Trotzdem hilft er gern.", cat: "konzessiv" },
+];
+
+let zuoSelected = null;
+
+function zuoInit() {
+    const bank = document.getElementById('zuo-bank');
+    bank.innerHTML = '';
+    document.querySelectorAll('#sec-1 .drop-zone').forEach(z => z.innerHTML = '');
+
+    shuffle(ZUO_ITEMS).forEach((item, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = item.word;
+        chip.dataset.cat = item.cat;
+        chip.draggable = true;
+        chip.id = 'zuo-chip-' + i;
+
+        chip.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('text/plain', chip.id);
+            chip.style.opacity = '0.5';
+        });
+        chip.addEventListener('dragend', () => chip.style.opacity = '1');
+
+        chip.addEventListener('click', () => {
+            if (zuoSelected === chip) {
+                chip.classList.remove('selected');
+                zuoSelected = null;
+            } else {
+                if (zuoSelected) zuoSelected.classList.remove('selected');
+                zuoSelected = chip;
+                chip.classList.add('selected');
+            }
+        });
+
+        bank.appendChild(chip);
+    });
+
+    document.querySelectorAll('#sec-1 .drop-zone').forEach(zone => {
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('drag-over');
+            const id = e.dataTransfer.getData('text/plain');
+            const chip = document.getElementById(id);
+            if (chip) {
+                zone.appendChild(chip);
+                chip.classList.remove('correct', 'wrong');
+                if (chip.dataset.cat === zone.dataset.cat) {
+                    chip.classList.add('correct');
+                } else {
+                    chip.classList.add('wrong');
+                }
+            }
+        });
+        zone.addEventListener('click', () => {
+            if (zuoSelected) {
+                zone.appendChild(zuoSelected);
+                zuoSelected.classList.remove('correct', 'wrong');
+                if (zuoSelected.dataset.cat === zone.dataset.cat) {
+                    zuoSelected.classList.add('correct');
+                } else {
+                    zuoSelected.classList.add('wrong');
+                }
+                zuoSelected.classList.remove('selected');
+                zuoSelected = null;
+            }
+        });
+    });
+
+    bank.addEventListener('dragover', e => { e.preventDefault(); bank.classList.add('drag-over'); });
+    bank.addEventListener('dragleave', () => bank.classList.remove('drag-over'));
+    bank.addEventListener('drop', e => {
+        e.preventDefault();
+        bank.classList.remove('drag-over');
+        const id = e.dataTransfer.getData('text/plain');
+        const chip = document.getElementById(id);
+        if (chip) {
+            bank.appendChild(chip);
+            chip.classList.remove('correct', 'wrong');
+        }
+    });
+    bank.addEventListener('click', () => {
+        if (zuoSelected && !bank.contains(zuoSelected)) {
+            bank.appendChild(zuoSelected);
+            zuoSelected.classList.remove('correct', 'wrong');
+            zuoSelected.classList.remove('selected');
+            zuoSelected = null;
+        }
+    });
+}
+
+function zuoShow() {
+    document.querySelectorAll('#sec-1 .chip').forEach(chip => {
+        const zone = document.querySelector(`#sec-1 .drop-zone[data-cat="${chip.dataset.cat}"]`);
+        zone.appendChild(chip);
+        chip.classList.remove('wrong', 'selected');
+        chip.classList.add('correct');
+    });
+}
+
+function zuoReset() {
+    resetTimer(1);
+    zuoSelected = null;
+    zuoInit();
+    initTimerListeners();
+}
+
+/* ========================================= */
+/*  SECTION 2: LÜCKENÜBUNG                   */
+/* ========================================= */
+const LUECKEN = [
+    {
+        id: 1, verb: "adversativ",
+        segments: [
+            {t: "Er ist gro\u00df, "},
+            {b: "aber", s: "m"},
+            {t: " sie ist klein."}
+        ]
+    },
+    {
+        id: 2, verb: "konzessiv",
+        segments: [
+            {t: "Er geht zur Arbeit, "},
+            {b: "obwohl", s: "l"},
+            {t: " er Fieber hat."}
+        ]
+    },
+    {
+        id: 3, verb: "adversativ",
+        segments: [
+            {t: "Das Hotel war teuer. "},
+            {b: "Jedoch", s: "l"},
+            {t: " war es sehr komfortabel."}
+        ]
+    },
+    {
+        id: 4, verb: "konzessiv",
+        segments: [
+            {t: "Sie hat den ganzen Tag gearbeitet. "},
+            {b: "Trotzdem", s: "l"},
+            {t: " ist sie nicht m\u00fcde."}
+        ]
+    },
+    {
+        id: 5, verb: "adversativ",
+        segments: [
+            {t: "Er trinkt nicht Kaffee, "},
+            {b: "sondern", s: "l"},
+            {t: " Tee."}
+        ]
+    },
+    {
+        id: 6, verb: "konzessiv",
+        segments: [
+            {b: "Trotz", s: "m"},
+            {t: " des schlechten Wetters gehen wir spazieren."}
+        ]
+    },
+    {
+        id: 7, verb: "adversativ",
+        segments: [
+            {t: "Der Kuchen sieht gut aus. "},
+            {b: "Allerdings", s: "l"},
+            {t: " schmeckt er nicht besonders."}
+        ]
+    },
+    {
+        id: 8, verb: "konzessiv",
+        segments: [
+            {b: "Obwohl", s: "l"},
+            {t: " er wenig verdient, ist er zufrieden."}
+        ]
+    },
+    {
+        id: 9, verb: "adversativ",
+        segments: [
+            {t: "Die Wohnung ist klein, "},
+            {b: "doch", s: "m"},
+            {t: " gem\u00fctlich."}
+        ]
+    },
+    {
+        id: 10, verb: "konzessiv",
+        segments: [
+            {t: "Er hatte keine Erfahrung. "},
+            {b: "Dennoch", s: "l"},
+            {t: " hat er den Job bekommen."}
+        ]
+    },
+    {
+        id: 11, verb: "adversativ",
+        segments: [
+            {t: "Sie liebt das Meer, er "},
+            {b: "hingegen", s: "l"},
+            {t: " liebt die Berge."}
+        ]
+    },
+    {
+        id: 12, verb: "konzessiv",
+        segments: [
+            {b: "Obgleich", s: "l"},
+            {t: " die Aufgabe schwer war, haben alle bestanden."}
+        ]
+    },
+    {
+        id: 13, verb: "adversativ",
+        segments: [
+            {t: "Das Buch ist nicht langweilig, "},
+            {b: "sondern", s: "l"},
+            {t: " sehr spannend."}
+        ]
+    },
+    {
+        id: 14, verb: "konzessiv",
+        segments: [
+            {b: "Trotz", s: "m"},
+            {t: " seiner Verletzung spielte er weiter Fu\u00dfball."}
+        ]
+    },
+    {
+        id: 15, verb: "adversativ",
+        segments: [
+            {t: "Er wollte helfen, "},
+            {b: "aber", s: "m"},
+            {t: " niemand brauchte Hilfe."}
+        ]
+    },
+    {
+        id: 16, verb: "konzessiv",
+        segments: [
+            {t: "Sie hat alles richtig gemacht. "},
+            {b: "Trotzdem", s: "l"},
+            {t: " wurde sie kritisiert."}
+        ]
+    },
+    {
+        id: 17, verb: "adversativ",
+        segments: [
+            {t: "Die Stadt ist laut. "},
+            {b: "Dagegen", s: "l"},
+            {t: " ist das Dorf sehr ruhig."}
+        ]
+    },
+    {
+        id: 18, verb: "konzessiv",
+        segments: [
+            {t: "Er kennt den Weg nicht, "},
+            {b: "obwohl", s: "l"},
+            {t: " er hier schon oft war."}
+        ]
+    },
+    {
+        id: 19, verb: "adversativ",
+        segments: [
+            {t: "Er ist nicht krank, "},
+            {b: "sondern", s: "l"},
+            {t: " nur m\u00fcde."}
+        ]
+    },
+    {
+        id: 20, verb: "konzessiv",
+        segments: [
+            {t: "Es war sp\u00e4t. "},
+            {b: "Dennoch", s: "l"},
+            {t: " hat er noch angerufen."}
+        ]
+    }
+];
+
+function lueckeInit() {
+    const c = document.getElementById('luecke-container');
+    c.innerHTML = '';
+    LUECKEN.forEach(ex => {
+        const card = document.createElement('div');
+        card.className = 'ex-card';
+
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = ex.verb;
+        card.appendChild(badge);
+
+        const sentence = document.createElement('div');
+        sentence.className = 'ex-sentence';
+
+        let blankIdx = 0;
+        for (let i = 0; i < ex.segments.length; i++) {
+            const seg = ex.segments[i];
+            if (seg.t !== undefined) {
+                const endsNoSpace = seg.t.length > 0 && !seg.t.endsWith(' ') && i + 1 < ex.segments.length && ex.segments[i + 1].b !== undefined;
+                if (endsNoSpace) {
+                    const group = document.createElement('span');
+                    group.className = 'nowrap-group';
+                    const txt = document.createElement('span');
+                    txt.textContent = seg.t;
+                    group.appendChild(txt);
+                    i++;
+                    const nextSeg = ex.segments[i];
+                    const currentBlankIdx = blankIdx;
+                    const inp = document.createElement('input');
+                    inp.type = 'text';
+                    inp.className = 'blank ' + nextSeg.s;
+                    inp.dataset.exId = ex.id;
+                    inp.dataset.blankIdx = currentBlankIdx;
+                    inp.dataset.sol = nextSeg.b;
+                    inp.dataset.answer = nextSeg.b;
+                    inp.autocomplete = 'off';
+                    inp.spellcheck = false;
+                    inp.oninput = function() { liveCheck(this); checkAllInputs('#luecke-container input.blank', 2); };
+                    group.appendChild(inp);
+                    sentence.appendChild(group);
+                    blankIdx++;
+                } else {
+                    const txt = document.createElement('span');
+                    txt.textContent = seg.t;
+                    sentence.appendChild(txt);
+                }
+            } else if (seg.b !== undefined) {
+                const currentBlankIdx = blankIdx;
+                const inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'blank ' + seg.s;
+                inp.dataset.exId = ex.id;
+                inp.dataset.blankIdx = currentBlankIdx;
+                inp.dataset.sol = seg.b;
+                inp.dataset.answer = seg.b;
+                inp.autocomplete = 'off';
+                inp.spellcheck = false;
+                inp.oninput = function() { liveCheck(this); checkAllInputs('#luecke-container input.blank', 2); };
+                sentence.appendChild(inp);
+                blankIdx++;
+            }
+        }
+
+        card.appendChild(sentence);
+        c.appendChild(card);
+    });
+}
+
+function lueckeShow() {
+    document.querySelectorAll('#luecke-container input.blank').forEach(inp => {
+        const user = normalize(inp.value);
+        const answer = normalize(inp.dataset.sol);
+        const next = inp.nextElementSibling;
+        if (next && next.classList.contains('correction-hint')) next.remove();
+        if (user === answer) {
+            inp.classList.remove('wrong');
+            inp.classList.add('correct');
+        } else {
+            inp.classList.add('wrong');
+            const hint = document.createElement('span');
+            hint.className = 'correction-hint';
+            hint.textContent = inp.dataset.sol;
+            inp.insertAdjacentElement('afterend', hint);
+        }
+    });
+}
+
+function lueckeReset() {
+    resetTimer(2);
+    document.querySelectorAll('#luecke-container input.blank').forEach(inp => {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+        const next = inp.nextElementSibling;
+        if (next && next.classList.contains('correction-hint')) next.remove();
+    });
+    initTimerListeners();
+}
+
+/* ========================================= */
+/*  SECTION 3: SATZBAU                       */
+/* ========================================= */
+const SATZBAU = [
+    {
+        id: 1, hint: "adversativ (aber) \u2014 Konjunktion",
+        parts: ["er", "ist", "gro\u00df", ",", "aber", "sie", "ist", "klein"],
+        valid: [["er", "ist", "gro\u00df", ",", "aber", "sie", "ist", "klein"]]
+    },
+    {
+        id: 2, hint: "konzessiv (obwohl) \u2014 Nebensatz",
+        parts: ["sie", "geht", "zur Arbeit", ",", "obwohl", "sie", "krank", "ist"],
+        valid: [["sie", "geht", "zur Arbeit", ",", "obwohl", "sie", "krank", "ist"]]
+    },
+    {
+        id: 3, hint: "adversativ (sondern) \u2014 Konjunktion",
+        parts: ["er", "trinkt", "nicht", "Kaffee", ",", "sondern", "Tee"],
+        valid: [["er", "trinkt", "nicht", "Kaffee", ",", "sondern", "Tee"]]
+    },
+    {
+        id: 4, hint: "konzessiv (trotzdem) \u2014 Adverb + Inversion",
+        parts: ["es", "regnet", "trotzdem", "geht", "sie", "nach drau\u00dfen"],
+        valid: [["es", "regnet", "trotzdem", "geht", "sie", "nach drau\u00dfen"]]
+    },
+    {
+        id: 5, hint: "adversativ (jedoch) \u2014 Adverb + Inversion",
+        parts: ["der Film", "war", "lang", "jedoch", "war", "er", "sehr spannend"],
+        valid: [["der Film", "war", "lang", "jedoch", "war", "er", "sehr spannend"]]
+    },
+    {
+        id: 6, hint: "konzessiv (obwohl) \u2014 Nebensatz vorn",
+        parts: ["obwohl", "er", "wenig", "verdient", ",", "ist", "er", "zufrieden"],
+        valid: [["obwohl", "er", "wenig", "verdient", ",", "ist", "er", "zufrieden"]]
+    },
+    {
+        id: 7, hint: "adversativ (doch) \u2014 Konjunktion",
+        parts: ["die Wohnung", "ist", "klein", ",", "doch", "sehr", "gem\u00fctlich"],
+        valid: [["die Wohnung", "ist", "klein", ",", "doch", "sehr", "gem\u00fctlich"]]
+    },
+    {
+        id: 8, hint: "konzessiv (trotz + Gen.) \u2014 Pr\u00e4position",
+        parts: ["trotz", "des Regens", "spielen", "die Kinder", "im Garten"],
+        valid: [
+            ["trotz", "des Regens", "spielen", "die Kinder", "im Garten"],
+            ["die Kinder", "spielen", "trotz", "des Regens", "im Garten"]
+        ]
+    },
+    {
+        id: 9, hint: "adversativ (allerdings) \u2014 Adverb + Inversion",
+        parts: ["das Essen", "war", "gut", "allerdings", "war", "es", "zu teuer"],
+        valid: [["das Essen", "war", "gut", "allerdings", "war", "es", "zu teuer"]]
+    },
+    {
+        id: 10, hint: "konzessiv (dennoch) \u2014 Adverb + Inversion",
+        parts: ["er", "hatte", "keine Erfahrung", "dennoch", "hat", "er", "den Job", "bekommen"],
+        valid: [["er", "hatte", "keine Erfahrung", "dennoch", "hat", "er", "den Job", "bekommen"]]
+    }
+];
+
+let sbSelected = null;
+
+function checkSatzbauAuto() {
+    SATZBAU.forEach(ex => {
+        const row = document.querySelector(`.drop-row[data-sb-id="${ex.id}"]`);
+        const wrapper = document.querySelector(`.sb-exercise[data-sb-id="${ex.id}"]`);
+        const chips = [...row.querySelectorAll('.chip')];
+        const answer = chips.map(c => c.dataset.orig);
+        const ok = ex.valid.some(v => v.length === answer.length && v.every((w, i) => w === answer[i]));
+        wrapper.classList.remove('correct-row', 'wrong-row');
+        wrapper.classList.add(ok ? 'correct-row' : 'wrong-row');
+    });
+}
+
+function sbInit() {
+    const c = document.getElementById('sb-container');
+    c.innerHTML = '';
+    SATZBAU.forEach(ex => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'sb-exercise';
+        wrapper.dataset.sbId = ex.id;
+
+        const label = document.createElement('div');
+        label.className = 'sb-label';
+        label.textContent = ex.hint || ('Satz ' + ex.id);
+        wrapper.appendChild(label);
+
+        const bank = document.createElement('div');
+        bank.className = 'chip-bank';
+        bank.dataset.sbId = ex.id;
+
+        shuffle(ex.parts).forEach((part, i) => {
+            const chip = document.createElement('div');
+            chip.className = 'chip';
+            chip.textContent = part;
+            chip.dataset.orig = part;
+            chip.dataset.sbId = ex.id;
+            chip.draggable = true;
+            chip.id = `sb-chip-${ex.id}-${i}`;
+
+            chip.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', chip.id);
+                chip.style.opacity = '0.5';
+            });
+            chip.addEventListener('dragend', () => chip.style.opacity = '1');
+            chip.addEventListener('click', () => sbChipClick(chip, ex.id));
+
+            bank.appendChild(chip);
+        });
+        wrapper.appendChild(bank);
+
+        const row = document.createElement('div');
+        row.className = 'drop-row';
+        row.dataset.sbId = ex.id;
+
+        const dot = document.createElement('span');
+        dot.className = 'fixed-dot';
+        dot.textContent = '.';
+        row.appendChild(dot);
+
+        row.addEventListener('dragover', e => { e.preventDefault(); row.classList.add('drag-over'); });
+        row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+        row.addEventListener('drop', e => {
+            e.preventDefault();
+            row.classList.remove('drag-over');
+            const id = e.dataTransfer.getData('text/plain');
+            const chip = document.getElementById(id);
+            if (!chip) return;
+            const chips = [...row.querySelectorAll('.chip')];
+            let inserted = false;
+            for (const ch of chips) {
+                if (ch === chip) continue;
+                const rect = ch.getBoundingClientRect();
+                if (e.clientX < rect.left + rect.width / 2) {
+                    row.insertBefore(chip, ch);
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted) row.insertBefore(chip, dot);
+            updateCaps(ex.id);
+            checkSatzbauAuto();
+        });
+
+        row.addEventListener('click', e => {
+            if (sbSelected && sbSelected.dataset.sbId == ex.id && e.target === row) {
+                row.insertBefore(sbSelected, dot);
+                sbSelected.classList.remove('selected');
+                sbSelected = null;
+                updateCaps(ex.id);
+                checkSatzbauAuto();
+            }
+        });
+
+        wrapper.appendChild(row);
+
+        bank.addEventListener('dragover', e => { e.preventDefault(); bank.classList.add('drag-over'); });
+        bank.addEventListener('dragleave', () => bank.classList.remove('drag-over'));
+        bank.addEventListener('drop', e => {
+            e.preventDefault();
+            bank.classList.remove('drag-over');
+            const id = e.dataTransfer.getData('text/plain');
+            const chip = document.getElementById(id);
+            if (chip) {
+                bank.appendChild(chip);
+                updateCaps(ex.id);
+                checkSatzbauAuto();
+            }
+        });
+
+        c.appendChild(wrapper);
+    });
+}
+
+function sbChipClick(chip, exId) {
+    const row = document.querySelector(`.drop-row[data-sb-id="${exId}"]`);
+    const bank = document.querySelector(`.chip-bank[data-sb-id="${exId}"]`);
+    const dot = row.querySelector('.fixed-dot');
+
+    if (sbSelected === chip) {
+        chip.classList.remove('selected');
+        sbSelected = null;
+        return;
+    }
+
+    if (sbSelected && sbSelected.dataset.sbId == exId) {
+        if (row.contains(sbSelected) && row.contains(chip)) {
+            row.insertBefore(sbSelected, chip);
+            sbSelected.classList.remove('selected');
+            sbSelected = null;
+            updateCaps(exId);
+            checkSatzbauAuto();
+            return;
+        }
+        sbSelected.classList.remove('selected');
+    }
+
+    if (bank.contains(chip)) {
+        row.insertBefore(chip, dot);
+        updateCaps(exId);
+        checkSatzbauAuto();
+        sbSelected = null;
+        return;
+    }
+
+    if (row.contains(chip)) {
+        sbSelected = chip;
+        chip.classList.add('selected');
+    }
+}
+
+function updateCaps(exId) {
+    const row = document.querySelector(`.drop-row[data-sb-id="${exId}"]`);
+    const bank = document.querySelector(`.chip-bank[data-sb-id="${exId}"]`);
+    [...row.querySelectorAll('.chip'), ...bank.querySelectorAll('.chip')].forEach(c => {
+        if (c.dataset.orig) c.textContent = c.dataset.orig;
+    });
+    const first = row.querySelector('.chip');
+    if (first && first.textContent !== '.')
+        first.textContent = first.textContent.charAt(0).toUpperCase() + first.textContent.slice(1);
+}
+
+function sbShow() {
+    SATZBAU.forEach(ex => {
+        const row = document.querySelector(`.drop-row[data-sb-id="${ex.id}"]`);
+        const bank = document.querySelector(`.chip-bank[data-sb-id="${ex.id}"]`);
+        const wrapper = document.querySelector(`.sb-exercise[data-sb-id="${ex.id}"]`);
+        const dot = row.querySelector('.fixed-dot');
+        const allChips = [...row.querySelectorAll('.chip'), ...bank.querySelectorAll('.chip')];
+
+        ex.valid[0].forEach(part => {
+            const chip = allChips.find(c => c.dataset.orig === part);
+            if (chip) row.insertBefore(chip, dot);
+        });
+
+        wrapper.classList.remove('wrong-row');
+        wrapper.classList.add('correct-row');
+        updateCaps(ex.id);
+    });
+}
+
+function sbReset() {
+    resetTimer(3);
+    sbSelected = null;
+    sbInit();
+    document.querySelectorAll('.sb-exercise').forEach(w => w.classList.remove('correct-row', 'wrong-row'));
+    initTimerListeners();
+}
+
+/* ========================================= */
+/*  INIT                                     */
+/* ========================================= */
+zuoInit();
+lueckeInit();
+sbInit();
+loadBestTimes();
+initTimerListeners();
+</script>
+<div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot; <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+</body>
+</html>

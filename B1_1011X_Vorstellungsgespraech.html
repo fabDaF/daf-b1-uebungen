@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 · Das Vorstellungsgespräch — Konjunktiv II</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #333; }
+
+  .header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; padding: 20px 24px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .header h1 { font-size: 1.25rem; font-weight: 700; }
+  .header p  { font-size: 0.88rem; opacity: 0.88; margin-top: 2px; }
+  .teil-badge {
+    background: rgba(255,255,255,0.22); border-radius: 10px;
+    padding: 6px 14px; font-size: 0.82rem; font-weight: 700; white-space: nowrap;
+  }
+
+  .nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+  
+  
+  
+
+  .section { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .section-title { font-size: 1.1rem; font-weight: 700; color: #3949ab; margin-bottom: 6px; }
+  .section-sub   { font-size: 0.87rem; color: #666; margin-bottom: 18px; }
+
+  /* ─── Timer & Score ─── */
+  .timer-bar {
+    display: flex; align-items: center; gap: 12px;
+    background: #fff; border-radius: 10px; padding: 8px 14px;
+    margin-bottom: 16px; border: 1px solid #e0e0e0; font-size: 0.85rem;
+  }
+  .timer-bar .t-icon { font-size: 1.1rem; }
+  .timer-bar .t-val  { font-weight: 700; color: #3949ab; min-width: 56px; }
+  .timer-bar .t-best { color: #f39c12; font-size: 0.82rem; margin-left: auto; }
+  .score-bar {
+    display: flex; gap: 10px; margin-bottom: 14px; font-size: 0.85rem; flex-wrap: wrap;
+  }
+  .score-bar span { background: #fff; border-radius: 20px; padding: 4px 12px; border: 1px solid #e0e0e0; }
+  .score-bar .ok  { color: #27ae60; font-weight: 700; }
+  .score-bar .err { color: #e74c3c; font-weight: 700; }
+
+  /* ─── Buttons ─── */
+  .btn-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .btn {
+    padding: 9px 20px; border-radius: 20px; border: none; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; transition: all .2s;
+  }
+  .btn-show { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+  .btn-show:hover { opacity: 0.88; }
+  .btn-reset { background: #fff; color: #667eea; border: 2px solid #667eea; }
+  .btn-reset:hover { background: #f3f4ff; }
+
+  /* ─── Entdeckungs-Tab ─── */
+  .entdeck-intro {
+    background: #f3e5f5; border-radius: 12px;
+    padding: 18px 22px; margin-bottom: 20px;
+    border-left: 5px solid #9c27b0; font-size: 0.97rem; line-height: 1.75;
+  }
+  .entdeck-intro h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05rem; }
+  .hl { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+
+  .mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+  .mc-step.active { display: block; }
+  .mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 0.97rem; }
+  .mc-options { display: flex; flex-direction: column; gap: 8px; }
+  .mc-btn {
+    padding: 9px 16px; border: 2px solid #c5cae9; border-radius: 8px;
+    background: #fff; cursor: pointer; text-align: left; font-size: 0.92rem;
+    transition: all .2s;
+  }
+  .mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+  .mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+  .mc-btn.wrong   { border-color: #e53935; background: #ffebee; color: #c62828; }
+  .mc-feedback { margin-top: 10px; font-size: 0.88rem; min-height: 1.3em; }
+  .mc-feedback.ok  { color: #2e7d32; font-weight: 700; }
+  .mc-feedback.err { color: #c62828; }
+
+  .progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+  .pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background .3s; }
+  .pdot.done { background: #667eea; }
+
+  .regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 10px; }
+  .regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.05rem; }
+  .regel-karte ul { margin-left: 18px; }
+  .regel-karte li { color: #333; line-height: 1.8; font-size: 0.95rem; }
+  .regel-karte .rk-example { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; border-left: 3px solid #7c4dff; font-size: 0.9rem; color: #333; }
+  .regel-karte .rk-example b { color: #3949ab; }
+
+  /* ─── Lückentext ─── */
+  .wortkasten {
+    background: #e8eaf6; border-radius: 10px; padding: 12px 16px;
+    margin-bottom: 16px; font-size: 0.9rem; line-height: 1.8;
+  }
+  .luecke-satz { background: #fff; border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; font-size: 0.95rem; line-height: 1.9; border: 1px solid #e0e0e0; }
+  .l-inp {
+    border: none; border-bottom: 2px solid #667eea; background: transparent;
+    font-size: 0.95rem; font-family: inherit; color: #1a237e; font-weight: 600;
+    outline: none; padding: 0 4px; transition: border-color .2s;
+  }
+  .l-inp.correct { border-bottom-color: #27ae60; color: #27ae60; }
+  .l-inp.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
+  .correction-hint {
+    display: inline-block; background: #e8f5e9; color: #2e7d32;
+    border-radius: 6px; padding: 1px 7px; font-size: 0.82rem; font-weight: 700;
+    margin-left: 4px;
+  }
+
+  /* ─── Zuordnung ─── */
+  .zuo-bank {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 18px;
+    border: 2px dashed #c5cae9; min-height: 60px;
+  }
+  .zuo-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  
+
+// ─── SHUFFLE ──────────────────────────────────────────────────
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+// ─── TIMER SYSTEM ─────────────────────────────────────────────
+var TIMER_PREFIX = 'b1_1011x_vs_';
+var timerSeconds = [0, 0, 0, 0, 0, 0, 0];
+var timerRunning = [false, false, false, false, false, false, false];
+var timerStarted = [false, false, false, false, false, false, false];
+var timerIntervals = [null, null, null, null, null, null, null];
+
+function timerAutoStart(n) {
+  if (timerStarted[n]) return;
+  timerStarted[n] = true;
+  timerRunning[n] = true;
+  timerIntervals[n] = setInterval(function() {
+    if (!timerRunning[n]) return;
+    timerSeconds[n]++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = Math.floor(timerSeconds[n] / 60) + ':' + ('0' + (timerSeconds[n] % 60)).slice(-2);
+  }, 1000);
+}
+
+function timerStop(n) {
+  if (!timerRunning[n]) return;
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  var key = TIMER_PREFIX + n;
+  var prev = parseInt(localStorage.getItem(key) || '0');
+  if (!prev || timerSeconds[n] < prev) {
+    localStorage.setItem(key, timerSeconds[n]);
+    var bestEl = document.getElementById('best-' + n);
+    if (bestEl) bestEl.textContent = '🏆 Bestzeit: ' + Math.floor(timerSeconds[n] / 60) + ':' + ('0' + (timerSeconds[n] % 60)).slice(-2);
+  }
+}
+
+function timerResetOne(n) {
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  timerStarted[n] = false;
+  timerSeconds[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '0:00';
+}
+
+function loadBestTimes() {
+  for (var n = 1; n <= 6; n++) {
+    var key = TIMER_PREFIX + n;
+    var val = parseInt(localStorage.getItem(key) || '0');
+    if (val) {
+      var bestEl = document.getElementById('best-' + n);
+      if (bestEl) bestEl.textContent = '🏆 Bestzeit: ' + Math.floor(val / 60) + ':' + ('0' + (val % 60)).slice(-2);
+    }
+  }
+}
+
+// ─── ENTDECKUNGS-TAB MC ───────────────────────────────────────
+var mcDone = [false, false, false, false];
+
+function mcCheck(step, btn, correct) {
+  var btns = btn.parentElement.querySelectorAll('.mc-btn');
+  btns.forEach(function(b) { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+  var fb = document.getElementById('mcfb' + step);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '\u2713 Richtig! Weiter zum nächsten Schritt.';
+    fb.className = 'mc-feedback ok';
+    mcDone[step] = true;
+    document.getElementById('pdot' + step).classList.add('done');
+    setTimeout(function() {
+      var next = document.getElementById('mc-step' + (step + 1));
+      if (next) { next.classList.add('active'); }
+      else { document.getElementById('regelkarte').style.display = 'block'; }
+    }, 700);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '\u2717 Nicht ganz — schau nochmal genau hin und versuche es erneut.';
+    fb.className = 'mc-feedback err';
+    setTimeout(function() {
+      btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong', 'correct'); });
+      fb.textContent = '';
+      fb.className = 'mc-feedback';
+    }, 1400);
+  }
+}
+
+// ─── LÜCKENTEXT DATEN ─────────────────────────────────────────
+var LUECKEN_DATA = [
+  { segs: [
+    {t:'„'}, {b:'Könnten', s:'l'}, {t:' Sie mir kurz von Ihrem Lebenslauf berichten?"'}
+  ]},
+  { segs: [
+    {t:'Ich '}, {b:'würde', s:'m'}, {t:' gerne erfahren, wie hoch das Gehalt ist.'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Dürfte', s:'m'}, {t:' ich fragen, welche Qualifikationen Sie suchen?"'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Hätten', s:'m'}, {t:' Sie Interesse, die Ausbildung anzurechnen?"'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Wären', s:'m'}, {t:' Sie bereit, auch am Wochenende zu arbeiten?"'}
+  ]},
+  { segs: [
+    {t:'Ich '}, {b:'würde', s:'m'}, {t:' meine Stärken gerne kurz beschreiben.'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Könnten', s:'l'}, {t:' Sie mir ein Beispiel für Ihre Berufserfahrung nennen?"'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Würden', s:'m'}, {t:' Sie uns erzählen, warum Sie sich beworben haben?"'}
+  ]},
+  { segs: [
+    {t:'Ich '}, {b:'würde', s:'m'}, {t:' gern über das Gehalt verhandeln.'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Dürften', s:'m'}, {t:' wir Ihre Schwächen und Stärken erfragen?"'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Hätten', s:'m'}, {t:' Sie noch Fragen an uns?"'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Wären', s:'m'}, {t:' Sie auch für eine Teilzeitstelle zu haben?"'}
+  ]},
+  { segs: [
+    {t:'Ich '}, {b:'könnte', s:'m'}, {t:' Ihnen meinen Lebenslauf vorlegen.'}
+  ]},
+  { segs: [
+    {t:'„'}, {b:'Könnten', s:'l'}, {t:' Sie uns beschreiben, was Sie in Ihrer Ausbildung gelernt haben?"'}
+  ]},
+];
+
+var sizeMap = { s: 50, m: 90, l: 150, xl: 200 };
+
+function liveCheck(inp) {
+  var val = inp.value.trim();
+  var ans = (inp.dataset.answer || '').toLowerCase();
+  inp.classList.remove('correct', 'wrong');
+  if (val.length === 0) return;
+  if (val === ans) {
+    inp.classList.add('correct');
+  } else if (ans.indexOf(val) === 0) {
+    // valid prefix — neutral
+  } else {
+    inp.classList.add('wrong');
+  }
+}
+
+function showHint(inp) {
+  var next = inp.nextElementSibling;
+  if (next && next.classList.contains('correction-hint')) next.remove();
+  inp.value = inp.dataset.answer;
+  inp.classList.add('correct');
+  inp.classList.remove('wrong');
+  var hint = document.createElement('span');
+  hint.className = 'correction-hint';
+  hint.textContent = inp.dataset.answer;
+  inp.insertAdjacentElement('afterend', hint);
+}
+
+function lueckeInit() {
+  var container = document.getElementById('luecke-container');
+  container.innerHTML = '';
+  var data = shuffle(LUECKEN_DATA);
+  data.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'luecke-satz';
+    item.segs.forEach(function(seg) {
+      if (seg.t !== undefined) {
+        div.appendChild(document.createTextNode(seg.t));
+      } else {
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'l-inp';
+        inp.dataset.answer = seg.b;
+        inp.style.width = (sizeMap[seg.s] || 90) + 'px';
+        inp.oninput = function() {
+          timerAutoStart(1);
+          liveCheck(this);
+          checkAllLueckeOk();
+        };
+        div.appendChild(inp);
+      }
+    });
+    container.appendChild(div);
+  });
+}
+
+function checkAllLueckeOk() {
+  var all = document.querySelectorAll('#luecke-container .l-inp');
+  var ok = true;
+  all.forEach(function(inp) { if (!inp.classList.contains('correct')) ok = false; });
+  if (ok && all.length > 0) timerStop(1);
+}
+
+function lueckeShow() {
+  timerStop(1);
+  document.querySelectorAll('#luecke-container .l-inp').forEach(function(inp) {
+    showHint(inp);
+  });
+}
+
+function lueckeReset() {
+  timerResetOne(1);
+  document.querySelectorAll('#luecke-container .l-inp').forEach(function(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    inp.value = '';
+    inp.classList.remove('correct', 'wrong');
+  });
+}
+
+// ─── ZUORDNUNG DATEN ──────────────────────────────────────────
+var ZUO_ITEMS = [
+  { word: 'die Bewerbung ausarbeiten', cat: 'bew' },
+  { word: 'den Lebenslauf schreiben', cat: 'bew' },
+  { word: 'die Bewerbung einreichen', cat: 'bew' },
+  { word: 'die Bewerbung abschicken', cat: 'bew' },
+  { word: 'Zeugnisse beifügen', cat: 'bew' },
+  { word: 'die Bewerbung vorlegen', cat: 'bew' },
+  { word: 'Stärken ausspielen', cat: 'job' },
+  { word: 'Erfahrungen einbringen', cat: 'job' },
+  { word: 'Schwächen eingestehen', cat: 'job' },
+  { word: 'Qualifikationen nachweisen', cat: 'job' },
+  { word: 'das Gehalt aushandeln', cat: 'job' },
+  { word: 'Erfahrungen vorweisen', cat: 'job' },
+  { word: 'Stärken betonen', cat: 'job' },
+  { word: 'Schwächen einräumen', cat: 'job' },
+];
+
+var zuoSelected = null;
+
+function colorZuordnungChip(chip) {
+  var zone = chip.closest('.drop-zone');
+  if (zone) {
+    chip.classList.remove('correct', 'wrong');
+    chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+  } else {
+    chip.classList.remove('correct', 'wrong');
+  }
+}
+
+function colorAllZuordnungChips() {
+  document.querySelectorAll('#zuo-bank .chip, #zone-bew .chip, #zone-job .chip').forEach(function(chip) {
+    colorZuordnungChip(chip);
+  });
+}
+
+function checkZuoAllOk() {
+  var all = document.querySelectorAll('#zone-bew .chip, #zone-job .chip');
+  var ok = true;
+  if (all.length < ZUO_ITEMS.length) return;
+  all.forEach(function(ch) { if (!ch.classList.contains('correct')) ok = false; });
+  if (ok) timerStop(2);
+}
+
+function zuoDrop(event, cat) {
+  event.preventDefault();
+  var id = event.dataTransfer.getData('text');
+  var chip = document.getElementById(id);
+  if (!chip) return;
+  if (cat) {
+    var zone = document.getElementById('zone-' + cat);
+    if (zone) { zone.classList.remove('over'); zone.appendChild(chip); }
+  } else {
+    document.getElementById('zuo-bank').appendChild(chip);
+  }
+  colorAllZuordnungChips();
+  checkZuoAllOk();
+}
+
+function zuoInit() {
+  var bank = document.getElementById('zuo-bank');
+  bank.innerHTML = '';
+  document.getElementById('zone-bew').innerHTML = '';
+  document.getElementById('zone-job').innerHTML = '';
+
+  var items = shuffle(ZUO_ITEMS);
+  items.forEach(function(item, idx) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.id = 'zchip' + idx;
+    chip.textContent = item.word;
+    chip.dataset.cat = item.cat;
+    chip.draggable = true;
+    chip.ondragstart = function(e) {
+      timerAutoStart(2);
+      e.dataTransfer.setData('text', e.target.id);
+    };
+    chip.ondragend = function() {
+      chip.style.opacity = '1';
+      colorAllZuordnungChips();
+      checkZuoAllOk();
+    };
+    chip.onclick = function() {
+      timerAutoStart(2);
+      if (zuoSelected === chip) {
+        chip.classList.remove('selected');
+        zuoSelected = null;
+      } else {
+        if (zuoSelected) zuoSelected.classList.remove('selected');
+        zuoSelected = chip;
+        chip.classList.add('selected');
+      }
+    };
+    bank.appendChild(chip);
+  });
+
+  ['zone-bew', 'zone-job'].forEach(function(zoneId) {
+    var zone = document.getElementById(zoneId);
+    zone.onclick = function() {
+      if (zuoSelected) {
+        timerAutoStart(2);
+        zone.appendChild(zuoSelected);
+        zuoSelected.classList.remove('selected');
+        zuoSelected = null;
+        colorAllZuordnungChips();
+        checkZuoAllOk();
+      }
+    };
+  });
+
+  bank.onclick = function() {
+    if (zuoSelected && !bank.contains(zuoSelected)) {
+      bank.appendChild(zuoSelected);
+      zuoSelected.classList.remove('selected');
+      zuoSelected = null;
+      colorAllZuordnungChips();
+      checkZuoAllOk();
+    }
+  };
+}
+
+function zuoShow() {
+  timerStop(2);
+  // Alle Chips — egal wo sie gerade liegen — anhand ihres data-cat in die richtige Zone verschieben
+  document.querySelectorAll('#zuo-bank .chip, #zone-bew .chip, #zone-job .chip').forEach(function(chip) {
+    var zone = document.getElementById('zone-' + chip.dataset.cat);
+    if (zone) zone.appendChild(chip);
+    colorZuordnungChip(chip);
+  });
+}
+
+function zuoReset() {
+  timerResetOne(2);
+  zuoSelected = null;
+  zuoInit();
+}
+
+// ─── SATZBAU DATEN ────────────────────────────────────────────
+var SB_DATA = [
+  {
+    parts: ['Könnten', 'Sie', 'mir', 'von', 'Ihrer', 'Berufserfahrung', 'erzählen', '?'],
+    answer: ['könnten', 'sie', 'mir', 'von', 'ihrer', 'berufserfahrung', 'erzählen', '?']
+  },
+  {
+    parts: ['Ich', 'würde', 'gerne', 'meine', 'Stärken', 'beschreiben', '.'],
+    answer: ['ich', 'würde', 'gerne', 'meine', 'stärken', 'beschreiben', '.']
+  },
+  {
+    parts: ['Dürfte', 'ich', 'nach', 'dem', 'Gehalt', 'fragen', '?'],
+    answer: ['dürfte', 'ich', 'nach', 'dem', 'gehalt', 'fragen', '?']
+  },
+  {
+    parts: ['Hätten', 'Sie', 'Interesse', 'an', 'meiner', 'Bewerbung', '?'],
+    answer: ['hätten', 'sie', 'interesse', 'an', 'meiner', 'bewerbung', '?']
+  },
+  {
+    parts: ['Wären', 'Sie', 'bereit', ',', 'die', 'Ausbildung', 'anzurechnen', '?'],
+    answer: ['wären', 'sie', 'bereit', ',', 'die', 'ausbildung', 'anzurechnen', '?']
+  },
+  {
+    parts: ['Würden', 'Sie', 'uns', 'Ihre', 'Qualifikationen', 'vorlegen', '?'],
+    answer: ['würden', 'sie', 'uns', 'ihre', 'qualifikationen', 'vorlegen', '?']
+  },
+  {
+    parts: ['Könnten', 'Sie', 'eine', 'Schwäche', 'von', 'sich', 'nennen', '?'],
+    answer: ['könnten', 'sie', 'eine', 'schwäche', 'von', 'sich', 'nennen', '?']
+  },
+  {
+    parts: ['Ich', 'würde', 'gerne', 'über', 'das', 'Studium', 'sprechen', '.'],
+    answer: ['ich', 'würde', 'gerne', 'über', 'das', 'studium', 'sprechen', '.']
+  },
+];
+
+var sbChips = [];  // [{chipEl, origText}]
+
+function updateCaps(rowEl) {
+  var first = rowEl.querySelector('.chip');
+  if (first && first.dataset.orig !== ',' && first.dataset.orig !== '?') {
+    first.textContent = first.dataset.orig.charAt(0).toUpperCase() + first.dataset.orig.slice(1);
+  }
+  rowEl.querySelectorAll('.chip').forEach(function(ch) {
+    if (ch === first) return;
+    ch.textContent = ch.dataset.orig;
+  });
+}
+
+function checkSbAuto(rowEl, answerArr) {
+  var chips = rowEl.querySelectorAll('.chip');
+  chips.forEach(function(ch, i) {
+    ch.classList.remove('correct', 'wrong');
+    if (i < answerArr.length && ch.dataset.orig.toLowerCase() === answerArr[i]) {
+      ch.classList.add('correct');
+    } else {
+      ch.classList.add('wrong');
+    }
+  });
+  if (chips.length === answerArr.length) {
+    var allOk = true;
+    chips.forEach(function(ch, i) { if (!ch.classList.contains('correct')) allOk = false; });
+    return allOk;
+  }
+  return false;
+}
+
+function checkAllSbOk() {
+  var items = document.querySelectorAll('#sb-container .sb-item');
+  var allOk = true;
+  items.forEach(function(item) {
+    var row = item.querySelector('.sb-row');
+    if (!row) { allOk = false; return; }
+    var ansStr = row.dataset.answer || '';
+    var ans = ansStr.split('|');
+    var chips = row.querySelectorAll('.chip');
+    if (chips.length !== ans.length) { allOk = false; return; }
+    chips.forEach(function(ch, i) {
+      if (ch.dataset.orig.toLowerCase() !== ans[i]) allOk = false;
+    });
+  });
+  if (allOk) timerStop(3);
+}
+
+function sbInit() {
+  var container = document.getElementById('sb-container');
+  container.innerHTML = '';
+  sbChips = [];
+
+  var data = shuffle(SB_DATA);
+  data.forEach(function(ex, idx) {
+    var item = document.createElement('div');
+    item.className = 'sb-item';
+
+    var label = document.createElement('div');
+    label.className = 'sb-label';
+    label.textContent = '\uD83D\uDD04 Satz ' + (idx + 1);
+    item.appendChild(label);
+
+    var pool = document.createElement('div');
+    pool.className = 'sb-pool';
+
+    var row = document.createElement('div');
+    row.className = 'sb-row';
+    row.dataset.answer = ex.answer.join('|');
+
+    var parts = shuffle(ex.parts);
+    parts.forEach(function(part) {
+      var chip = document.createElement('div');
+      chip.className = part === ',' || part === '?' ? 'chip comma-chip' : 'chip';
+      chip.dataset.orig = part.toLowerCase() === part ? part : part.toLowerCase() === part.toLowerCase() ? part : part;
+      // store original for caps logic
+      chip.dataset.orig = part;
+      chip.textContent = part;
+      chip.draggable = true;
+      chip.ondragstart = function(e) {
+        timerAutoStart(3);
+        e.dataTransfer.setData('text', JSON.stringify({ idx: idx, part: part, id: chip._uid }));
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+      };
+      chip.ondragend = function() { chip.style.opacity = '1'; };
+      chip._uid = 'sbchip_' + idx + '_' + Math.random().toString(36).slice(2);
+      chip.id = chip._uid;
+
+      chip.onclick = function() {
+        timerAutoStart(3);
+        var inRow = row.contains(chip);
+        if (inRow) {
+          pool.appendChild(chip);
+          chip.classList.remove('correct', 'wrong');
+        } else {
+          row.appendChild(chip);
+          updateCaps(row);
+          checkSbAuto(row, ex.answer);
+          checkAllSbOk();
+          return;
+        }
+        updateCaps(row);
+        checkSbAuto(row, ex.answer);
+        checkAllSbOk();
+      };
+
+      pool.appendChild(chip);
+    });
+
+    row.ondragover = function(e) { e.preventDefault(); };
+    row.ondrop = function(e) {
+      e.preventDefault();
+      timerAutoStart(3);
+      var id = e.dataTransfer.getData('text');
+      try { var obj = JSON.parse(id); id = obj.id; } catch(err) {}
+      var chip = document.getElementById(id);
+      if (chip) {
+        row.appendChild(chip);
+        chip.style.opacity = '1';
+        updateCaps(row);
+        checkSbAuto(row, ex.answer);
+        checkAllSbOk();
+      }
+    };
+
+    pool.ondragover = function(e) { e.preventDefault(); };
+    pool.ondrop = function(e) {
+      e.preventDefault();
+      var id = e.dataTransfer.getData('text');
+      try { var obj = JSON.parse(id); id = obj.id; } catch(err) {}
+      var chip = document.getElementById(id);
+      if (chip && row.contains(chip)) {
+        pool.appendChild(chip);
+        chip.style.opacity = '1';
+        chip.classList.remove('correct', 'wrong');
+        updateCaps(row);
+        checkSbAuto(row, ex.answer);
+        checkAllSbOk();
+      }
+    };
+
+    item.appendChild(pool);
+    item.appendChild(row);
+    container.appendChild(item);
+  });
+}
+
+function sbShow() {
+  timerStop(3);
+  var items = document.querySelectorAll('#sb-container .sb-item');
+  items.forEach(function(item) {
+    var pool = item.querySelector('.sb-pool');
+    var row  = item.querySelector('.sb-row');
+    var ansArr = (row.dataset.answer || '').split('|');
+    // collect all chips
+    var allChips = Array.from(item.querySelectorAll('.chip'));
+    // map orig to chip
+    var remaining = allChips.slice();
+    row.innerHTML = '';
+    ansArr.forEach(function(ans) {
+      var found = remaining.find(function(ch) { return ch.dataset.orig.toLowerCase() === ans.toLowerCase(); });
+      if (found) {
+        remaining.splice(remaining.indexOf(found), 1);
+        row.appendChild(found);
+        found.classList.remove('wrong');
+        found.classList.add('correct');
+      }
+    });
+    remaining.forEach(function(ch) { pool.appendChild(ch); });
+    updateCaps(row);
+  });
+}
+
+function sbReset() {
+  timerResetOne(3);
+  sbInit();
+}
+
+// ─── WORTSCHATZ DATEN ─────────────────────────────────────────
+var WS_DATA = [
+  { en: '💼 the job application', art: 'die', word: 'Bewerbung', pl: 'Bewerbungen', hint: 'Nomen (f.)' },
+  { en: '📄 the CV / résumé', art: 'der', word: 'Lebenslauf', pl: 'Lebensläufe', hint: 'Nomen (m.)' },
+  { en: '🏢 the job / position', art: 'die', word: 'Stelle', pl: 'Stellen', hint: 'Nomen (f.)' },
+  { en: '📋 the job interview', art: 'das', word: 'Vorstellungsgespräch', pl: 'Vorstellungsgespräche', hint: 'Nomen (n.)' },
+  { en: '💪 the strength / strong point', art: 'die', word: 'Stärke', pl: 'Stärken', hint: 'Nomen (f.)' },
+  { en: '⚠️ the weakness', art: 'die', word: 'Schwäche', pl: 'Schwächen', hint: 'Nomen (f.)' },
+  { en: '💰 the salary / pay', art: 'das', word: 'Gehalt', pl: 'Gehälter', hint: 'Nomen (n.)' },
+  { en: '🎓 the qualification', art: 'die', word: 'Qualifikation', pl: 'Qualifikationen', hint: 'Nomen (f.)' },
+  { en: '📚 the (professional) experience', art: 'die', word: 'Erfahrung', pl: 'Erfahrungen', hint: 'Nomen (f.)' },
+  { en: '🎓 the training / apprenticeship', art: 'die', word: 'Ausbildung', pl: 'Ausbildungen', hint: 'Nomen (f.)' },
+  { en: '🎓 the (university) studies', art: 'das', word: 'Studium', pl: 'Studien', hint: 'Nomen (n.)' },
+  { en: '👤 the applicant', art: 'der', word: 'Bewerber', pl: 'Bewerber', hint: 'Nomen (m.)' },
+  { en: '💼 the profession / career', art: 'der', word: 'Beruf', pl: 'Berufe', hint: 'Nomen (m.)' },
+  { en: '🎤 the interview', art: 'das', word: 'Interview', pl: 'Interviews', hint: 'Nomen (n.)' },
+];
+
+function wsLiveCheckEl(inp) {
+  var user  = inp.value.trim();
+  var ans   = inp.dataset.answer;
+  var field = inp.dataset.field || '';
+  inp.classList.remove('correct', 'wrong');
+  if (user.length === 0) return;
+  var cmpUser   = field === 'art' ? user.toLowerCase() : user;
+  var cmpAnswer = field === 'art' ? ans.toLowerCase()  : ans;
+  if (cmpUser === cmpAnswer) { inp.classList.add('correct'); return; }
+  if (cmpAnswer.indexOf(cmpUser) === 0) return; // valid prefix
+  inp.classList.add('wrong');
+}
+
+function checkAllWsOk() {
+  var all = document.querySelectorAll('#ws-container .ws-art, #ws-container .ws-inp, #ws-container .ws-pl');
+  var ok = true;
+  all.forEach(function(inp) { if (!inp.classList.contains('correct')) ok = false; });
+  if (ok && all.length > 0) timerStop(4);
+}
+
+function wsInit() {
+  var container = document.getElementById('ws-container');
+  container.innerHTML = '';
+  var data = shuffle(WS_DATA);
+  data.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'ws-card';
+
+    var en = document.createElement('div');
+    en.className = 'ws-en';
+    en.textContent = item.en;
+    card.appendChild(en);
+
+    var fields = document.createElement('div');
+    fields.className = 'ws-fields';
+
+    // Artikel
+    var artInp = document.createElement('input');
+    artInp.type = 'text'; artInp.className = 'ws-art'; artInp.placeholder = 'Art.';
+    artInp.dataset.answer = item.art; artInp.dataset.field = 'art';
+    artInp.oninput = function() { timerAutoStart(4); wsLiveCheckEl(this); checkAllWsOk(); };
+
+    // Wort
+    var wordInp = document.createElement('input');
+    wordInp.type = 'text'; wordInp.className = 'ws-inp'; wordInp.placeholder = 'Nomen';
+    wordInp.dataset.answer = item.word; wordInp.dataset.field = 'word';
+    wordInp.oninput = function() { timerAutoStart(4); wsLiveCheckEl(this); checkAllWsOk(); };
+
+    // Plural
+    var plInp = document.createElement('input');
+    plInp.type = 'text'; plInp.className = 'ws-pl'; plInp.placeholder = 'Plural';
+    plInp.dataset.answer = item.pl; plInp.dataset.field = 'pl';
+    plInp.oninput = function() { timerAutoStart(4); wsLiveCheckEl(this); checkAllWsOk(); };
+
+    fields.appendChild(artInp);
+    fields.appendChild(wordInp);
+    fields.appendChild(plInp);
+    card.appendChild(fields);
+
+    var hint = document.createElement('div');
+    hint.className = 'ws-hint';
+    hint.textContent = item.hint;
+    card.appendChild(hint);
+
+    container.appendChild(card);
+  });
+}
+
+function wsShow() {
+  timerStop(4);
+  document.querySelectorAll('#ws-container .ws-art, #ws-container .ws-inp, #ws-container .ws-pl').forEach(function(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    inp.value = inp.dataset.answer;
+    inp.classList.add('correct');
+    inp.classList.remove('wrong');
+  });
+}
+
+function wsReset() {
+  timerResetOne(4);
+  document.querySelectorAll('#ws-container .ws-art, #ws-container .ws-inp, #ws-container .ws-pl').forEach(function(inp) {
+    inp.value = '';
+    inp.classList.remove('correct', 'wrong');
+  });
+}
+
+// ─── KONJUGATIONS-TAB ─────────────────────────────────────────
+var KONJ_VERBS = [
+  {
+    name: 'sein', label: 'Konjunktiv II von sein (wäre)',
+    hint: 'Bildung: war → wär- + Konjunktivendung',
+    rows: [
+      { person: 'ich',          given: null,    answer: 'wäre'   },
+      { person: 'du',           given: null,    answer: 'wärst'  },
+      { person: 'er / sie / es',given: 'wäre',  answer: null     },
+      { person: 'wir',          given: null,    answer: 'wären'  },
+      { person: 'ihr',          given: null,    answer: 'wärt'   },
+      { person: 'sie / Sie',    given: 'wären', answer: null     }
+    ]
+  },
+  {
+    name: 'haben', label: 'Konjunktiv II von haben (hätte)',
+    hint: 'Bildung: hatt- → hätt- + Konjunktivendung',
+    rows: [
+      { person: 'ich',          given: null,     answer: 'hätte'  },
+      { person: 'du',           given: null,     answer: 'hättest'},
+      { person: 'er / sie / es',given: 'hätte',  answer: null     },
+      { person: 'wir',          given: null,     answer: 'hätten' },
+      { person: 'ihr',          given: null,     answer: 'hättet' },
+      { person: 'sie / Sie',    given: 'hätten', answer: null     }
+    ]
+  },
+  {
+    name: 'werden', label: 'Konjunktiv II von werden (würde)',
+    hint: 'Bildung: wurd- → würd- + Konjunktivendung',
+    rows: [
+      { person: 'ich',          given: null,     answer: 'würde'  },
+      { person: 'du',           given: null,     answer: 'würdest'},
+      { person: 'er / sie / es',given: 'würde',  answer: null     },
+      { person: 'wir',          given: null,     answer: 'würden' },
+      { person: 'ihr',          given: null,     answer: 'würdet' },
+      { person: 'sie / Sie',    given: 'würden', answer: null     }
+    ]
+  },
+  {
+    name: 'können', label: 'Konjunktiv II von können (könnte)',
+    hint: 'Bildung: konn- → könn- (Umlaut) + Konjunktivendung',
+    rows: [
+      { person: 'ich',          given: null,      answer: 'könnte'  },
+      { person: 'du',           given: null,      answer: 'könntest'},
+      { person: 'er / sie / es',given: 'könnte',  answer: null      },
+      { person: 'wir',          given: null,      answer: 'könnten' },
+      { person: 'ihr',          given: null,      answer: 'könntet' },
+      { person: 'sie / Sie',    given: 'könnten', answer: null      }
+    ]
+  },
+  {
+    name: 'dürfen', label: 'Konjunktiv II von dürfen (dürfte)',
+    hint: 'Bildung: durf- → dürf- (Umlaut) + Konjunktivendung',
+    rows: [
+      { person: 'ich',          given: null,      answer: 'dürfte'  },
+      { person: 'du',           given: null,      answer: 'dürftest'},
+      { person: 'er / sie / es',given: 'dürfte',  answer: null      },
+      { person: 'wir',          given: null,      answer: 'dürften' },
+      { person: 'ihr',          given: null,      answer: 'dürftet' },
+      { person: 'sie / Sie',    given: 'dürften', answer: null      }
+    ]
+  },
+  {
+    name: 'müssen', label: 'Konjunktiv II von müssen (müsste)',
+    hint: 'Bildung: muss- → müss- (Umlaut) + Konjunktivendung -te',
+    rows: [
+      { person: 'ich',          given: null,      answer: 'müsste'  },
+      { person: 'du',           given: null,      answer: 'müsstest'},
+      { person: 'er / sie / es',given: 'müsste',  answer: null      },
+      { person: 'wir',          given: null,      answer: 'müssten' },
+      { person: 'ihr',          given: null,      answer: 'müsstet' },
+      { person: 'sie / Sie',    given: 'müssten', answer: null      }
+    ]
+  },
+  {
+    name: 'würde + Inf.', label: 'Konjunktiv II mit würde + Infinitiv',
+    hint: 'würde/würdest/... + Infinitiv am Ende — gilt für ALLE Verben',
+    rows: [
+      { person: 'ich',          given: null,       answer: 'würde fragen'  },
+      { person: 'du',           given: null,       answer: 'würdest fragen'},
+      { person: 'er / sie / es',given: 'würde fragen', answer: null       },
+      { person: 'wir',          given: null,       answer: 'würden fragen' },
+      { person: 'ihr',          given: null,       answer: 'würdet fragen' },
+      { person: 'sie / Sie',    given: 'würden fragen', answer: null      }
+    ]
+  }
+];
+
+var currentKonjPanel = 0;
+
+function konjBuildPanel(idx) {
+  var verb = KONJ_VERBS[idx];
+  var panel = document.createElement('div');
+  panel.className = 'konj-panel' + (idx === 0 ? ' active' : '');
+  panel.id = 'konj-panel-' + idx;
+
+  var block = document.createElement('div');
+  block.className = 'konj-block';
+
+  var h3 = document.createElement('h3');
+  h3.textContent = verb.label;
+  block.appendChild(h3);
+
+  var hintDiv = document.createElement('div');
+  hintDiv.style.cssText = 'font-size:0.85rem;color:#555;margin-bottom:10px;';
+  hintDiv.textContent = '\uD83D\uDCA1 ' + verb.hint;
+  block.appendChild(hintDiv);
+
+  var table = document.createElement('table');
+  table.className = 'konj-table';
+  var thead = document.createElement('thead');
+  thead.innerHTML = '<tr><th>Person</th><th>Konjunktiv II</th></tr>';
+  table.appendChild(thead);
+  var tbody = document.createElement('tbody');
+
+  verb.rows.forEach(function(row) {
+    var tr = document.createElement('tr');
+    var tdP = document.createElement('td');
+    tdP.className = 'person';
+    tdP.textContent = row.person;
+    tr.appendChild(tdP);
+
+    var tdV = document.createElement('td');
+    if (row.answer === null) {
+      // gegeben — nicht ausfüllbar
+      var span = document.createElement('span');
+      span.className = 'konj-given';
+      span.textContent = row.given;
+      tdV.appendChild(span);
+    } else {
+      // ausfüllbar
+      var inp = document.createElement('input');
+      inp.type = 'text';
+      inp.className = 'konj-inp';
+      inp.dataset.answer = row.answer;
+      inp.dataset.panel = idx;
+      inp.oninput = function() {
+        timerAutoStart(5);
+        konjLiveCheck(this);
+        konjCheckAllOk();
+      };
+      tdV.appendChild(inp);
+    }
+    tr.appendChild(tdV);
+    tbody.appendChild(tr);
+  });
+
+  table.appendChild(tbody);
+  block.appendChild(table);
+  panel.appendChild(block);
+  return panel;
+}
+
+function konjLiveCheck(inp) {
+  var val = inp.value.trim();
+  var ans = (inp.dataset.answer || '').toLowerCase();
+  inp.classList.remove('correct', 'wrong');
+  if (val.length === 0) return;
+  if (val === ans) { inp.classList.add('correct'); return; }
+  if (ans.indexOf(val) === 0) return;
+  inp.classList.add('wrong');
+}
+
+function konjCheckAllOk() {
+  var all = document.querySelectorAll('.konj-inp');
+  var ok = true;
+  all.forEach(function(inp) { if (!inp.classList.contains('correct')) ok = false; });
+  if (ok && all.length > 0) timerStop(5);
+}
+
+function konjInit() {
+  var container = document.getElementById('konj-panels');
+  container.innerHTML = '';
+  KONJ_VERBS.forEach(function(v, i) {
+    container.appendChild(konjBuildPanel(i));
+  });
+  currentKonjPanel = 0;
+}
+
+function konjShowPanel(idx, btn) {
+  currentKonjPanel = idx;
+  document.querySelectorAll('.konj-panel').forEach(function(p) { p.classList.remove('active'); });
+  var panel = document.getElementById('konj-panel-' + idx);
+  if (panel) panel.classList.add('active');
+  document.querySelectorAll('.konj-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+}
+
+function konjShow() {
+  timerStop(5);
+  document.querySelectorAll('.konj-inp').forEach(function(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    inp.value = inp.dataset.answer;
+    inp.classList.add('correct');
+    inp.classList.remove('wrong');
+    var hint = document.createElement('span');
+    hint.className = 'correction-hint';
+    hint.textContent = inp.dataset.answer;
+    inp.insertAdjacentElement('afterend', hint);
+  });
+}
+
+function konjReset() {
+  timerResetOne(5);
+  konjInit();
+}
+
+// ─── VERBPOSITION-ÜBUNG ────────────────────────────────────────
+var VP_DATA = [
+  // Aussagesatz
+  { type: 'aus', segs: [{t:'Ich '},{b:'würde',s:'m'},{t:' gerne meine Stärken beschreiben.'}],
+    hint: 'Aussagesatz: Verb auf Position 2' },
+  { type: 'aus', segs: [{t:'Sie '},{b:'könnte',s:'m'},{t:' die Bewerbung morgen einreichen.'}],
+    hint: 'Aussagesatz: Verb auf Position 2' },
+  { type: 'aus', segs: [{t:'Wir '},{b:'hätten',s:'m'},{t:' gerne mehr Erfahrung eingebracht.'}],
+    hint: 'Aussagesatz: Verb auf Position 2' },
+  { type: 'aus', segs: [{t:'Morgen '},{b:'dürfte',s:'m'},{t:' er seinen Lebenslauf vorlegen.'}],
+    hint: 'Umstellung: Adverb auf Pos. 1, Verb auf Pos. 2' },
+  // Frage
+  { type: 'frage', segs: [{b:'Könnten',s:'l'},{t:' Sie mir von Ihrer Erfahrung berichten?'}],
+    hint: 'Frage: Verb auf Position 1' },
+  { type: 'frage', segs: [{b:'Dürfte',s:'m'},{t:' ich nach dem Gehalt fragen?'}],
+    hint: 'Frage: Verb auf Position 1' },
+  { type: 'frage', segs: [{b:'Hätten',s:'m'},{t:' Sie Interesse, die Stelle anzutreten?'}],
+    hint: 'Frage: Verb auf Position 1' },
+  { type: 'frage', segs: [{b:'Würden',s:'m'},{t:' Sie uns Ihre Qualifikationen vorlegen?'}],
+    hint: 'Frage: Verb auf Position 1' },
+  // Nebensatz
+  { type: 'neben', segs: [{t:'Ich würde gerne wissen, wie hoch das Gehalt '},{b:'wäre',s:'m'},{t:'.'}],
+    hint: 'Nebensatz: Verb ans Ende' },
+  { type: 'neben', segs: [{t:'Es wäre schön, wenn Sie meinen Lebenslauf vorlegen '},{b:'könnten',s:'l'},{t:'.'}],
+    hint: 'Nebensatz: Verb ans Ende' },
+  { type: 'neben', segs: [{t:'Dürfte ich fragen, ob die Stelle noch offen '},{b:'wäre',s:'m'},{t:'?'}],
+    hint: 'Nebensatz: Verb ans Ende' },
+  { type: 'neben', segs: [{t:'Ich würde es begrüßen, wenn wir das Gehalt besprechen '},{b:'könnten',s:'l'},{t:'.'}],
+    hint: 'Nebensatz: Verb ans Ende' }
+];
+
+var VP_TYPE_LABELS = { aus: '📗 Aussagesatz', frage: '🔵 Frage', neben: '🟠 Nebensatz' };
+
+function vpInit() {
+  var container = document.getElementById('vp-container');
+  container.innerHTML = '';
+  var data = shuffle(VP_DATA);
+  data.forEach(function(item) {
+    var box = document.createElement('div');
+    box.className = 'vp-lücke-box';
+
+    var badge = document.createElement('span');
+    badge.style.cssText = 'font-size:0.78rem;color:#888;margin-right:8px;';
+    badge.textContent = VP_TYPE_LABELS[item.type] || '';
+    box.appendChild(badge);
+
+    item.segs.forEach(function(seg) {
+      if (seg.t !== undefined) {
+        box.appendChild(document.createTextNode(seg.t));
+      } else {
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'l-inp';
+        inp.dataset.answer = seg.b;
+        inp.style.width = (sizeMap[seg.s] || 90) + 'px';
+        inp.title = item.hint;
+        inp.oninput = function() {
+          timerAutoStart(6);
+          liveCheck(this);
+          vpCheckAllOk();
+        };
+        box.appendChild(inp);
+      }
+    });
+
+    // Tipp-Icon
+    var tipBtn = document.createElement('span');
+    tipBtn.style.cssText = 'font-size:0.78rem;color:#9c27b0;margin-left:8px;cursor:help;';
+    tipBtn.title = item.hint;
+    tipBtn.textContent = '💡';
+    box.appendChild(tipBtn);
+
+    container.appendChild(box);
+  });
+}
+
+function vpCheckAllOk() {
+  var all = document.querySelectorAll('#vp-container .l-inp');
+  var ok = true;
+  all.forEach(function(inp) { if (!inp.classList.contains('correct')) ok = false; });
+  if (ok && all.length > 0) timerStop(6);
+}
+
+function vpShow() {
+  timerStop(6);
+  document.querySelectorAll('#vp-container .l-inp').forEach(function(inp) {
+    showHint(inp);
+  });
+}
+
+function vpReset() {
+  timerResetOne(6);
+  document.querySelectorAll('#vp-container .l-inp').forEach(function(inp) {
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+    inp.value = '';
+    inp.classList.remove('correct', 'wrong');
+  });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+lueckeInit();
+zuoInit();
+sbInit();
+wsInit();
+konjInit();
+vpInit();
+loadBestTimes();
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Das Verb „werden" – Übungen</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #1a1a2e;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 22px 28px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.header h1 { font-size: 1.5rem; margin-bottom: 4px; }
+.header p  { font-size: 0.9rem; opacity: 0.85; }
+
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+
+
+
+
+.section { display: none; max-width: 1000px; margin: 0 auto; }
+.section.active { display: block; }
+
+/* ─── ENTDECKUNGS-TAB ─────────────────── */
+.entdeck-intro {
+  background: #f3e5f5; border-radius: 12px;
+  padding: 18px 22px; margin-bottom: 20px;
+  border-left: 5px solid #9c27b0; font-size: 0.97rem; line-height: 1.9;
+}
+.entdeck-intro h3 { color: #6a1b9a; margin-bottom: 12px; font-size: 1.05rem; }
+.hl { background: #e1bee7; border-radius: 4px; padding: 0 4px; color: #4a148c; font-weight: 700; }
+
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background .3s; }
+.pdot.done { background: #667eea; }
+
+.mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+.mc-step.active { display: block; }
+.mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 0.97rem; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-btn {
+  padding: 9px 16px; border: 2px solid #c5cae9; border-radius: 8px;
+  background: #fff; cursor: pointer; text-align: left; font-size: 0.92rem;
+  transition: all .2s;
+}
+.mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+.mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-btn.wrong   { border-color: #e53935; background: #ffebee; color: #c62828; }
+.mc-feedback { margin-top: 10px; font-size: 0.88rem; min-height: 1.3em; }
+.mc-feedback.ok  { color: #2e7d32; font-weight: 700; }
+.mc-feedback.err { color: #c62828; }
+
+.regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 10px; }
+.regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.05rem; }
+.regel-karte ul { margin-left: 18px; }
+.regel-karte li { color: #333; line-height: 2.1; font-size: 0.95rem; }
+.rk-example { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; border-left: 3px solid #7c4dff; font-size: 0.9rem; color: #333; line-height: 1.9; }
+.rk-example b { color: #3949ab; }
+
+/* ─── ALLGEMEIN ───────────────────────── */
+.card {
+  background: white; border-radius: 12px;
+  padding: 20px 24px; margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.card h3 { font-size: 1rem; color: #444; margin-bottom: 12px; }
+
+.timer-bar {
+  display: flex; align-items: center; gap: 12px;
+  background: white; border-radius: 10px;
+  padding: 10px 16px; margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  font-size: 0.85rem; color: #666;
+}
+.timer-display { font-weight: 700; color: #667eea; font-size: 1rem; }
+.best-display  { color: #f39c12; font-weight: 600; }
+
+.btn-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.btn {
+  padding: 8px 16px; border: none; border-radius: 8px;
+  cursor: pointer; font-size: 0.85rem; font-weight: 600;
+  transition: all .2s;
+}
+.btn-show  { background: #e8f4fd; color: #1a73e8; }
+.btn-show:hover  { background: #d0e8fb; }
+.btn-reset { background: #fce8e6; color: #d93025; }
+.btn-reset:hover { background: #f5c6c3; }
+
+.score-box { text-align: right; font-size: 0.83rem; color: #888; margin-bottom: 8px; }
+.score-box span { font-weight: 700; color: #667eea; }
+
+/* ─── LÜCKENTEXT ──────────────────────── */
+.luecke-satz {
+  padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  font-size: 0.95rem; line-height: 2.2;
+}
+.luecke-satz:last-child { border-bottom: none; }
+.luecke-nr { color: #bbb; font-size: 0.78rem; margin-right: 6px; }
+.luecke-hint { font-size: 0.74rem; color: #aaa; font-style: italic; margin-left: 8px; }
+
+.wortkasten {
+  background: #f3f4ff; border-radius: 8px;
+  padding: 10px 16px; margin-bottom: 16px;
+  font-size: 0.88rem; color: #333;
+  border-left: 3px solid #667eea;
+}
+
+input.blank {
+  border: 2px solid #c5cae9; border-radius: 6px;
+  padding: 3px 8px; font-size: 0.9rem;
+  font-family: inherit; outline: none;
+  transition: border-color .2s, background .2s;
+  background: white; margin: 0 2px;
+}
+input.blank:focus { border-color: #667eea; }
+input.blank.correct { border-color: #27ae60; background: #e8f5e9; }
+input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
+
+.correction-hint {
+  font-size: 0.78rem; color: #27ae60; font-weight: 700;
+  margin-left: 4px; white-space: nowrap;
+}
+
+/* ─── ZUORDNUNG ───────────────────────── */
+.zuo-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px;
+}
+
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.drop-zone h4 {
+  font-size: 0.78rem; color: #667eea; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+
+.chip-bank {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 12px; background: #f8f9fa;
+  border-radius: 10px; margin-bottom: 14px; min-height: 54px;
+}
+
+.chip {
+  padding: 6px 14px; border-radius: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white; cursor: grab; font-size: 0.83rem;
+  font-weight: 600; user-select: none;
+  transition: transform .15s, opacity .15s;
+  white-space: nowrap;
+}
+.chip:active { cursor: grabbing; transform: scale(1.04); }
+.chip.selected { outline: 3px solid #f39c12; }
+.chip.correct { background: linear-gradient(135deg, #27ae60, #2ecc71) !important; }
+.chip.wrong   { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
+
+.zuo-counter { font-size: 0.82rem; color: #888; margin-bottom: 8px; }
+
+/* ─── SATZBAU ─────────────────────────── */
+.sb-block { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid #eee; }
+.sb-block:last-child { border-bottom: none; }
+.sb-label { font-size: 0.76rem; color: #667eea; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+.chip-pool { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 44px; }
+.drop-row {
+  display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px;
+  padding: 8px 10px; border-radius: 8px;
+  border: 2px dashed #c5cae9; background: #fafbff;
+}
+.drop-row.dragover { background: #e8eaff; border-color: #667eea; }
+
+.chip.comma-chip { padding: 6px 8px; min-width: 24px; font-size: 1.05em; }
+.drop-row .chip.comma-chip { margin-left: -4px; }
+
+/* ─── FOOTER ──────────────────────────── */
+.author-footer {
+  text-align: center; margin-top: 40px; padding: 16px;
+  font-size: 0.8rem; color: #aaa;
+}
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+@media (max-width: 600px) {
+  body { padding: 10px; }
+  .header h1 { font-size: 1.2rem; }
+}
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e8ebff; color: #667eea; }
+.nav-btn.active { background: white; color: #667eea; border-bottom: 3px solid #667eea; font-weight: 700; }
+@media (max-width: 600px) {
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; font-size: 0.78em; padding: 10px 4px; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>Das Verb <em>werden</em> — Übungen</h1>
+  <p>B1 · Die vier häufigsten Formen: <strong>werden · wird · wurde · würde</strong></p>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection(0)">📖 Entdeckung</button>
+  <button class="nav-btn" onclick="showSection(1)">✏️ Form wählen</button>
+  <button class="nav-btn" onclick="showSection(2)">🔀 Vollverb oder Hilfsverb?</button>
+  <button class="nav-btn" onclick="showSection(3)">🧩 Satzbau</button>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 0 — ENTDECKUNG -->
+<div class="section active" id="sec-0">
+  <div class="entdeck-intro">
+    <h3>🔍 Schau dir diese Sätze an — was fällt dir auf?</h3>
+    <p>Er <span class="hl">wird</span> langsam müde.</p>
+    <p>Das 🏠 Haus <span class="hl">wurde</span> komplett renoviert.</p>
+    <p>Ich <span class="hl">würde</span> gern Arzt werden.</p>
+    <p>Sie <span class="hl">werden</span> nächstes Jahr Eltern.</p>
+    <p>Das 💊 Medikament <span class="hl">wird</span> täglich verabreicht.</p>
+    <p>Er <span class="hl">würde</span> kommen, wenn er Zeit hätte.</p>
+  </div>
+
+  <div class="progress-dots">
+    <div class="pdot" id="pdot0"></div>
+    <div class="pdot" id="pdot1"></div>
+    <div class="pdot" id="pdot2"></div>
+    <div class="pdot" id="pdot3"></div>
+  </div>
+
+  <div class="mc-step active" id="mc-step0">
+    <h4>Schritt 1: In welchen Sätzen beschreibt <em>werden</em> eine Veränderung — etwas verändert sich?</h4>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="mcCheck(0,this,false)">„Das Haus wurde renoviert." und „Das Medikament wird verabreicht."</button>
+      <button class="mc-btn" onclick="mcCheck(0,this,true)">„Er wird langsam müde." und „Sie werden nächstes Jahr Eltern."</button>
+      <button class="mc-btn" onclick="mcCheck(0,this,false)">„Ich würde gern Arzt werden." und „Er würde kommen, wenn …"</button>
+    </div>
+    <div class="mc-feedback" id="mcfb0"></div>
+  </div>
+
+  <div class="mc-step" id="mc-step1">
+    <h4>Schritt 2: „Das Haus wurde renoviert." — welche Funktion hat <em>wurde</em> hier?</h4>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="mcCheck(1,this,false)">Es beschreibt eine Zustandsveränderung des Hauses (Vollverb).</button>
+      <button class="mc-btn" onclick="mcCheck(1,this,true)">Es ist Hilfsverb — zusammen mit „renoviert" bildet es das Passiv.</button>
+      <button class="mc-btn" onclick="mcCheck(1,this,false)">Es drückt einen Wunsch aus (Konjunktiv II).</button>
+    </div>
+    <div class="mc-feedback" id="mcfb1"></div>
+  </div>
+
+  <div class="mc-step" id="mc-step2">
+    <h4>Schritt 3: „Ich würde gern Arzt werden." — was drückt <em>würde</em> aus?</h4>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="mcCheck(2,this,false)">Eine sichere Tatsache in der Gegenwart.</button>
+      <button class="mc-btn" onclick="mcCheck(2,this,false)">Ein abgeschlossenes Ereignis in der Vergangenheit.</button>
+      <button class="mc-btn" onclick="mcCheck(2,this,true)">Einen Wunsch oder eine hypothetische Vorstellung — Konjunktiv II.</button>
+    </div>
+    <div class="mc-feedback" id="mcfb2"></div>
+  </div>
+
+  <div class="mc-step" id="mc-step3">
+    <h4>Schritt 4: Welche Form passt? „Das 📰 Ergebnis ___ morgen bekannt gegeben."</h4>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="mcCheck(3,this,false)">wurde — Passiv Vergangenheit</button>
+      <button class="mc-btn" onclick="mcCheck(3,this,true)">wird — Passiv Gegenwart / Zukunft</button>
+      <button class="mc-btn" onclick="mcCheck(3,this,false)">würde — Konjunktiv II</button>
+    </div>
+    <div class="mc-feedback" id="mcfb3"></div>
+  </div>
+
+  <div class="regel-karte" id="regelkarte">
+    <h3>📋 Die vier wichtigsten Formen von <em>werden</em></h3>
+    <ul>
+      <li><strong>werden</strong> — Infinitiv · Präsens 1./3. Pl. · Futur I · Passiv Futur</li>
+      <li><strong>wird</strong> — Präsens 3. Sg. · Vollverb (Zustandsveränderung) · Passiv Präsens</li>
+      <li><strong>wurde</strong> — Präteritum 1./3. Sg. · Vollverb Vergangenheit · Passiv Präteritum</li>
+      <li><strong>würde</strong> — Konjunktiv II · Wunsch · Hypothese · höfliche Bitte</li>
+    </ul>
+    <div class="rk-example">
+      <b>Vollverb:</b> Er <b>wird</b> Arzt. · Sie <b>wurde</b> krank. · Ich <b>würde</b> gern Lehrer werden.<br>
+      <b>Passiv:</b> Das Haus <b>wird</b> gebaut. · Das Haus <b>wurde</b> gebaut.<br>
+      <b>Futur I:</b> Wir <b>werden</b> das Problem lösen. · Du <b>wirst</b> es schaffen.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 1 — LÜCKENTEXT -->
+<div class="section" id="sec-1">
+  <div class="timer-bar">
+    ⏱ <span class="timer-display" id="timer-1">0:00</span>
+    &nbsp;·&nbsp; Bestzeit: <span class="best-display" id="best-1">—</span>
+  </div>
+  <div class="card">
+    <div class="score-box">Richtig: <span id="score1">0</span> / <span id="total1">0</span></div>
+    <div class="wortkasten">
+      <strong>Formen:</strong> &nbsp;
+      <code>werden</code> &nbsp;·&nbsp;
+      <code>wird</code> &nbsp;·&nbsp;
+      <code>wurde</code> &nbsp;·&nbsp;
+      <code>würde</code> &nbsp;·&nbsp;
+      <code>wirst</code> &nbsp;·&nbsp;
+      <code>wurden</code>
+    </div>
+    <div id="luecke-container"></div>
+    <div class="btn-row">
+      <button class="btn btn-show" onclick="lueckeShow()">👁 Lösungen</button>
+      <button class="btn btn-reset" onclick="lueckeReset()">🔄 Neu starten</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 2 — ZUORDNUNG -->
+<div class="section" id="sec-2">
+  <div class="timer-bar">
+    ⏱ <span class="timer-display" id="timer-2">0:00</span>
+    &nbsp;·&nbsp; Bestzeit: <span class="best-display" id="best-2">—</span>
+  </div>
+  <div class="card">
+    <h3>Ordne jeden Satz zu: Ist <em>werden / wird / wurde / würde</em> hier <strong>Vollverb</strong> oder <strong>Hilfsverb</strong>?</h3>
+    <div class="zuo-counter" id="zuo-counter">Platziert: 0 / 0</div>
+    <div class="chip-bank" id="zuo-bank"></div>
+    <div class="zuo-layout">
+      <div class="drop-zone" id="zone-vollverb" data-cat="vollverb">
+        <h4>🟢 Vollverb — Zustandsveränderung</h4>
+      </div>
+      <div class="drop-zone" id="zone-hilfsverb" data-cat="hilfsverb">
+        <h4>🔵 Hilfsverb — Passiv / Futur / Konj. II</h4>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-show" onclick="zuoShow()">👁 Lösungen</button>
+      <button class="btn btn-reset" onclick="zuoReset()">🔄 Neu starten</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ TAB 3 — SATZBAU -->
+<div class="section" id="sec-3">
+  <div class="timer-bar">
+    ⏱ <span class="timer-display" id="timer-3">0:00</span>
+    &nbsp;·&nbsp; Bestzeit: <span class="best-display" id="best-3">—</span>
+  </div>
+  <div class="card">
+    <h3>Bringe die Wörter in die richtige Reihenfolge. Klicke auf einen Chip, um ihn zu platzieren — klicke in der Zeile auf ihn, um ihn zurückzulegen.</h3>
+    <div id="sb-container"></div>
+    <div class="btn-row">
+      <button class="btn btn-show" onclick="sbShow()">👁 Lösungen</button>
+      <button class="btn btn-reset" onclick="sbReset()">🔄 Neu starten</button>
+    </div>
+  </div>
+</div>
+
+<div class="author-footer">
+  <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+  <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+<script>
+'use strict';
+
+// ─── NAVIGATION ──────────────────────────────────────────────────
+function showSection(n) {
+  document.querySelectorAll('.section').forEach(function(s, i) {
+    s.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+    b.classList.toggle('active', i === n);
+  });
+}
+
+// ─── TIMER ───────────────────────────────────────────────────────
+var TIMER_PREFIX = 'werden_ueb2_';
+var timerStarted  = [false, false, false, false];
+var timerRunning  = [false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0];
+var timerIntervals = [null, null, null, null];
+
+function timerAutoStart(n) {
+  if (timerStarted[n]) return;
+  timerStarted[n] = true;
+  timerRunning[n] = true;
+  timerIntervals[n] = setInterval(function() {
+    timerSeconds[n]++;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }, 1000);
+}
+function timerStop(n) {
+  if (!timerRunning[n]) return;
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false;
+  var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+  if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+    localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+    var el = document.getElementById('best-' + n);
+    if (el) el.textContent = fmtTime(timerSeconds[n]);
+  }
+}
+function timerResetOne(n) {
+  clearInterval(timerIntervals[n]);
+  timerRunning[n] = false; timerStarted[n] = false; timerSeconds[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '0:00';
+}
+function fmtTime(s) {
+  return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60);
+}
+function loadBestTimes() {
+  for (var i = 1; i <= 3; i++) {
+    var v = localStorage.getItem(TIMER_PREFIX + i);
+    if (v) {
+      var el = document.getElementById('best-' + i);
+      if (el) el.textContent = fmtTime(parseInt(v));
+    }
+  }
+}
+
+// ─── MC-SYSTEM (Entdeckung) ───────────────────────────────────────
+function mcCheck(step, btn, correct) {
+  var btns = btn.parentElement.querySelectorAll('.mc-btn');
+  btns.forEach(function(b) { b.disabled = true; });
+  var fb = document.getElementById('mcfb' + step);
+  if (correct) {
+    btn.classList.add('correct');
+    fb.textContent = '\u2713 Richtig! Weiter zum n\u00e4chsten Schritt.';
+    fb.className = 'mc-feedback ok';
+    document.getElementById('pdot' + step).classList.add('done');
+    setTimeout(function() {
+      var next = document.getElementById('mc-step' + (step + 1));
+      if (next) { next.classList.add('active'); }
+      else { document.getElementById('regelkarte').style.display = 'block'; }
+    }, 700);
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = '\u2717 Nicht ganz \u2014 schau nochmal genau hin.';
+    fb.className = 'mc-feedback err';
+    setTimeout(function() {
+      btns.forEach(function(b) { b.disabled = false; b.classList.remove('wrong', 'correct'); });
+      fb.textContent = ''; fb.className = 'mc-feedback';
+    }, 1400);
+  }
+}
+
+// ─── LIVECHECK ────────────────────────────────────────────────────
+function liveCheck(inp) {
+  var val = inp.value.trim();
+  var ans = (inp.dataset.answer || '').toLowerCase();
+  inp.classList.remove('correct', 'wrong');
+  if (val.length === 0) return;
+  if (val === ans) { inp.classList.add('correct'); }
+  else if (ans.indexOf(val) === 0) { /* gültiger Präfix — neutral */ }
+  else { inp.classList.add('wrong'); }
+}
+function showHint(inp) {
+  var next = inp.nextElementSibling;
+  if (next && next.classList.contains('correction-hint')) next.remove();
+  if (!inp.classList.contains('correct')) {
+    var hint = document.createElement('span');
+    hint.className = 'correction-hint';
+    hint.textContent = inp.dataset.answer;
+    inp.insertAdjacentElement('afterend', hint);
+  }
+  inp.value = inp.dataset.answer;
+  inp.classList.add('correct'); inp.classList.remove('wrong');
+}
+
+// ─── LÜCKENTEXT DATEN ─────────────────────────────────────────────
+// Alle Sätze aus Quasthoff-Kollokationen + Top-100-Nomen
+var LUECKEN_DATA = [
+  // WERDEN — Vollverb / Futur / Passiv-Futur
+  { segs: [{t:'Sie '},{b:'werden',s:'m'},{t:' n\u00e4chstes Jahr Eltern \u2014 das ver\u00e4ndert alles.'}],
+    hint:'Pr\u00e4sens 3. Pl. / Vollverb' },
+  { segs: [{t:'Wir '},{b:'werden',s:'m'},{t:' das Problem gemeinsam l\u00f6sen.'}],
+    hint:'Futur I 1. Pl.' },
+  { segs: [{t:'Das Ergebnis '},{b:'wird',s:'m'},{t:' morgen offiziell bekannt gegeben.'}],
+    hint:'Passiv Pr\u00e4sens 3. Sg.' },
+  // WIRD — Vollverb Zustandsveränderung
+  { segs: [{t:'Er '},{b:'wird',s:'m'},{t:' langsam m\u00fcde \u2014 er braucht eine Pause.'}],
+    hint:'Pr\u00e4sens 3. Sg. / Vollverb' },
+  { segs: [{t:'Das Wasser '},{b:'wird',s:'m'},{t:' im Sommer w\u00e4rmer.'}],
+    hint:'Pr\u00e4sens 3. Sg. / Vollverb' },
+  { segs: [{t:'Es '},{b:'wird',s:'m'},{t:' Zeit \u2014 wir m\u00fcssen gehen.'}],
+    hint:'Pr\u00e4sens 3. Sg. / feste Wendung' },
+  { segs: [{t:'Du '},{b:'wirst',s:'m'},{t:' es schaffen \u2014 ich glaube daran.'}],
+    hint:'Futur I / Pr\u00e4sens 2. Sg.' },
+  // WIRD — Passiv Präsens
+  { segs: [{t:'Das 🏠 Haus '},{b:'wird',s:'m'},{t:' gerade komplett renoviert.'}],
+    hint:'Passiv Pr\u00e4sens' },
+  { segs: [{t:'Das 💊 Medikament '},{b:'wird',s:'m'},{t:' t\u00e4glich verabreicht.'}],
+    hint:'Passiv Pr\u00e4sens' },
+  // WURDE — Vollverb Vergangenheit
+  { segs: [{t:'Das Kind '},{b:'wurde',s:'m'},{t:' krank und musste zu Hause bleiben.'}],
+    hint:'Pr\u00e4teritum 3. Sg. / Vollverb' },
+  { segs: [{t:'Er '},{b:'wurde',s:'m'},{t:' sehr erfolgreich und bekannt in seiner Branche.'}],
+    hint:'Pr\u00e4teritum 3. Sg. / Vollverb' },
+  { segs: [{t:'Ich '},{b:'wurde',s:'m'},{t:' Vater \u2014 das hat mein Leben ver\u00e4ndert.'}],
+    hint:'Pr\u00e4teritum 1. Sg. / Vollverb' },
+  // WURDE — Passiv Präteritum
+  { segs: [{t:'Der 🏛️ Politiker '},{b:'wurde',s:'m'},{t:' bei den Wahlen gew\u00e4hlt.'}],
+    hint:'Passiv Pr\u00e4teritum' },
+  { segs: [{t:'Die Frage '},{b:'wurde',s:'m'},{t:' nicht beantwortet.'}],
+    hint:'Passiv Pr\u00e4teritum' },
+  // WURDEN — Passiv Präteritum Plural
+  { segs: [{t:'Die 💊 Medikamente '},{b:'wurden',s:'m'},{t:' t\u00e4glich verabreicht.'}],
+    hint:'Passiv Pr\u00e4teritum Pl.' },
+  // WÜRDE — Konjunktiv II
+  { segs: [{t:'Ich '},{b:'w\u00fcrde',s:'m'},{t:' gern Arzt werden, aber das Studium ist sehr lang.'}],
+    hint:'Konjunktiv II 1. Sg.' },
+  { segs: [{t:'Er '},{b:'w\u00fcrde',s:'m'},{t:' kommen, wenn er Zeit h\u00e4tte.'}],
+    hint:'Konjunktiv II 3. Sg.' },
+  { segs: [{t:'Sie '},{b:'w\u00fcrde',s:'m'},{t:' eine gute Lehrerin werden, wenn sie die Stelle bekommt.'}],
+    hint:'Konjunktiv II 3. Sg.' },
+  { segs: [{t:'Das '},{b:'w\u00fcrde',s:'m'},{t:' ich nie tun.'}],
+    hint:'Konjunktiv II 1. Sg.' },
+  { segs: [{t:'Ich '},{b:'w\u00fcrde',s:'m'},{t:' dir raten, zum Arzt zu gehen.'}],
+    hint:'Konjunktiv II 1. Sg. / h\u00f6flich' },
+];
+
+var lueckeInputs = [];
+
+function lueckeInit() {
+  var container = document.getElementById('luecke-container');
+  container.innerHTML = '';
+  lueckeInputs = [];
+
+  LUECKEN_DATA.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'luecke-satz';
+
+    var nr = document.createElement('span');
+    nr.className = 'luecke-nr';
+    nr.textContent = (idx + 1) + '.';
+    div.appendChild(nr);
+
+    item.segs.forEach(function(seg) {
+      if (seg.t !== undefined) {
+        div.appendChild(document.createTextNode(seg.t));
+      } else {
+        var w = { s: 65, m: 95, l: 140, xl: 185 }[seg.s] || 95;
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'blank';
+        inp.style.width = w + 'px';
+        inp.dataset.answer = seg.b;
+        inp.autocomplete = 'off';
+        inp.spellcheck = false;
+        inp.oninput = function() {
+          timerAutoStart(1);
+          liveCheck(this);
+          updateScore1();
+          checkAllOk1();
+        };
+        div.appendChild(inp);
+        lueckeInputs.push(inp);
+      }
+    });
+
+    // Hint rechts
+    var hint = document.createElement('span');
+    hint.className = 'luecke-hint';
+    hint.textContent = item.hint;
+    div.appendChild(hint);
+
+    container.appendChild(div);
+  });
+
+  document.getElementById('total1').textContent = lueckeInputs.length;
+  updateScore1();
+}
+
+function updateScore1() {
+  var ok = lueckeInputs.filter(function(i) { return i.classList.contains('correct'); }).length;
+  document.getElementById('score1').textContent = ok;
+}
+function checkAllOk1() {
+  if (lueckeInputs.every(function(i) { return i.classList.contains('correct'); })) timerStop(1);
+}
+function lueckeShow() {
+  lueckeInputs.forEach(function(inp) { showHint(inp); });
+  timerStop(1); updateScore1();
+}
+function lueckeReset() {
+  lueckeInputs.forEach(function(inp) {
+    inp.value = ''; inp.classList.remove('correct', 'wrong');
+    var next = inp.nextElementSibling;
+    if (next && next.classList.contains('correction-hint')) next.remove();
+  });
+  timerResetOne(1); updateScore1();
+}
+
+// ─── ZUORDNUNG DATEN ──────────────────────────────────────────────
+var ZUO_DATA = [
+  { text: 'Er wird langsam m\u00fcde.',                          cat: 'vollverb' },
+  { text: 'Das Haus wird renoviert.',                            cat: 'hilfsverb' },
+  { text: 'Sie wurde sehr erfolgreich.',                         cat: 'vollverb' },
+  { text: 'Der Politiker wurde gew\u00e4hlt.',                   cat: 'hilfsverb' },
+  { text: 'Ich w\u00fcrde gern Arzt werden.',                    cat: 'vollverb' },
+  { text: 'Er w\u00fcrde kommen, wenn er Zeit h\u00e4tte.',      cat: 'hilfsverb' },
+  { text: 'Das Kind wurde krank.',                               cat: 'vollverb' },
+  { text: 'Das Medikament wird t\u00e4glich verabreicht.',       cat: 'hilfsverb' },
+  { text: 'Sie werden n\u00e4chstes Jahr Eltern.',               cat: 'vollverb' },
+  { text: 'Wir werden das Problem l\u00f6sen.',                  cat: 'hilfsverb' },
+  { text: 'Das Wasser wird w\u00e4rmer.',                        cat: 'vollverb' },
+  { text: 'Das Ergebnis wird bekannt gegeben.',                  cat: 'hilfsverb' },
+  { text: 'Er wurde sehr beliebt.',                              cat: 'vollverb' },
+  { text: 'Die Frage wurde nicht beantwortet.',                  cat: 'hilfsverb' },
+];
+
+var zuoSelected = null;
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function colorZuordnungChip(chip) {
+  var zone = chip.closest('.drop-zone');
+  if (zone) {
+    chip.classList.remove('correct', 'wrong');
+    chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+  } else {
+    chip.classList.remove('correct', 'wrong');
+  }
+}
+function colorAllZuordnungChips() {
+  document.querySelectorAll('#sec-2 .chip').forEach(function(chip) { colorZuordnungChip(chip); });
+  updateZuoCounter();
+  checkZuoAllOk();
+}
+function updateZuoCounter() {
+  var placed = document.querySelectorAll('#sec-2 .drop-zone .chip').length;
+  document.getElementById('zuo-counter').textContent = 'Platziert: ' + placed + ' / ' + ZUO_DATA.length;
+}
+function checkZuoAllOk() {
+  var chips = document.querySelectorAll('#sec-2 .chip');
+  if (chips.length !== ZUO_DATA.length) return;
+  if (Array.from(chips).every(function(c) { return c.classList.contains('correct'); })) timerStop(2);
+}
+
+function zuoInit() {
+  var bank  = document.getElementById('zuo-bank');
+  var zoneV = document.getElementById('zone-vollverb');
+  var zoneH = document.getElementById('zone-hilfsverb');
+
+  Array.from(zoneV.children).forEach(function(c) { if (c.tagName !== 'H4') c.remove(); });
+  Array.from(zoneH.children).forEach(function(c) { if (c.tagName !== 'H4') c.remove(); });
+  bank.innerHTML = '';
+  zuoSelected = null;
+
+  shuffle(ZUO_DATA).forEach(function(item) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = item.text;
+    chip.draggable = true;
+    chip.dataset.cat = item.cat;
+
+    chip.addEventListener('dragstart', function(e) {
+      e.dataTransfer.setData('text/plain', item.text);
+      chip.style.opacity = '0.5';
+      timerAutoStart(2);
+    });
+    chip.addEventListener('dragend', function() {
+      chip.style.opacity = '1';
+      colorAllZuordnungChips();
+    });
+    chip.addEventListener('click', function() {
+      timerAutoStart(2);
+      if (zuoSelected === chip) { chip.classList.remove('selected'); zuoSelected = null; return; }
+      if (zuoSelected) zuoSelected.classList.remove('selected');
+      zuoSelected = chip; chip.classList.add('selected');
+    });
+    bank.appendChild(chip);
+  });
+
+  function makeDrop(zone) {
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault(); zone.classList.remove('dragover');
+      var text = e.dataTransfer.getData('text/plain');
+      var chip = Array.from(document.querySelectorAll('#sec-2 .chip')).find(function(c) {
+        return c.textContent === text;
+      });
+      if (chip) { zone.appendChild(chip); colorAllZuordnungChips(); }
+    });
+    zone.addEventListener('click', function() {
+      if (zuoSelected && !zone.contains(zuoSelected)) {
+        zone.appendChild(zuoSelected);
+        zuoSelected.classList.remove('selected'); zuoSelected = null;
+        colorAllZuordnungChips();
+      }
+    });
+  }
+  makeDrop(zoneV); makeDrop(zoneH);
+
+  bank.addEventListener('dragover', function(e) { e.preventDefault(); });
+  bank.addEventListener('drop', function(e) {
+    e.preventDefault();
+    var text = e.dataTransfer.getData('text/plain');
+    var chip = Array.from(document.querySelectorAll('#sec-2 .chip')).find(function(c) { return c.textContent === text; });
+    if (chip) { bank.appendChild(chip); colorAllZuordnungChips(); }
+  });
+  bank.addEventListener('click', function() {
+    if (zuoSelected && !bank.contains(zuoSelected)) {
+      bank.appendChild(zuoSelected);
+      zuoSelected.classList.remove('selected'); zuoSelected = null;
+      colorAllZuordnungChips();
+    }
+  });
+
+  updateZuoCounter();
+}
+
+function zuoShow() {
+  var zoneV = document.getElementById('zone-vollverb');
+  var zoneH = document.getElementById('zone-hilfsverb');
+  document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
+    if (chip.dataset.cat === 'vollverb') zoneV.appendChild(chip);
+    else zoneH.appendChild(chip);
+    chip.classList.remove('selected', 'wrong'); chip.classList.add('correct');
+  });
+  timerStop(2); updateZuoCounter();
+}
+function zuoReset() { zuoInit(); timerResetOne(2); }
+
+// ─── SATZBAU DATEN ────────────────────────────────────────────────
+var SB_DATA = [
+  { id:1, parts:['Er','wird','langsam','m\u00fcde',',','wenn','er','lange','arbeitet','.'],
+           answer:['er','wird','langsam','m\u00fcde',',','wenn','er','lange','arbeitet','.'] },
+  { id:2, parts:['Das','Haus','wurde','komplett','renoviert','.'],
+           answer:['das','haus','wurde','komplett','renoviert','.'] },
+  { id:3, parts:['Ich','w\u00fcrde','gern','Arzt','werden',',','aber','das','Studium','ist','lang','.'],
+           answer:['ich','w\u00fcrde','gern','arzt','werden',',','aber','das','studium','ist','lang','.'] },
+  { id:4, parts:['Sie','werden','n\u00e4chstes','Jahr','Eltern','werden','.'],
+           answer:['sie','werden','n\u00e4chstes','jahr','eltern','werden','.'] },
+  { id:5, parts:['Das','Ergebnis','wird','morgen','bekannt','gegeben','.'],
+           answer:['das','ergebnis','wird','morgen','bekannt','gegeben','.'] },
+  { id:6, parts:['Er','w\u00fcrde','kommen',',','wenn','er','Zeit','h\u00e4tte','.'],
+           answer:['er','w\u00fcrde','kommen',',','wenn','er','zeit','h\u00e4tte','.'] },
+  { id:7, parts:['Der','Politiker','wurde','bei','den','Wahlen','gew\u00e4hlt','.'],
+           answer:['der','politiker','wurde','bei','den','wahlen','gew\u00e4hlt','.'] },
+  { id:8, parts:['Wir','werden','das','Problem','gemeinsam','l\u00f6sen','.'],
+           answer:['wir','werden','das','problem','gemeinsam','l\u00f6sen','.'] },
+];
+
+function sbInit() {
+  var container = document.getElementById('sb-container');
+  container.innerHTML = '';
+
+  SB_DATA.forEach(function(data, idx) {
+    var block = document.createElement('div');
+    block.className = 'sb-block';
+
+    var lbl = document.createElement('div');
+    lbl.className = 'sb-label';
+    lbl.textContent = 'Satz ' + data.id;
+    block.appendChild(lbl);
+
+    var pool = document.createElement('div');
+    pool.className = 'chip-pool';
+    pool.id = 'pool-' + idx;
+
+    shuffle(data.parts).forEach(function(part) {
+      var chip = document.createElement('div');
+      chip.className = (part === ',' || part === '.') ? 'chip comma-chip' : 'chip';
+      chip.textContent = part;
+      chip.dataset.orig = part;
+      chip.draggable = true;
+
+      chip.addEventListener('click', function() {
+        timerAutoStart(3);
+        var row = document.getElementById('row-' + idx);
+        if (row.contains(chip)) {
+          pool.appendChild(chip);
+          chip.classList.remove('correct','wrong');
+        } else {
+          row.appendChild(chip);
+        }
+        updateCaps(idx); colorSbRow(idx);
+      });
+      chip.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/plain', idx + '\x00' + part);
+        chip.style.opacity = '0.5';
+        timerAutoStart(3);
+      });
+      chip.addEventListener('dragend', function() { chip.style.opacity = '1'; });
+
+      pool.appendChild(chip);
+    });
+    block.appendChild(pool);
+
+    var row = document.createElement('div');
+    row.className = 'drop-row';
+    row.id = 'row-' + idx;
+    row.addEventListener('dragover', function(e) { e.preventDefault(); row.classList.add('dragover'); });
+    row.addEventListener('dragleave', function() { row.classList.remove('dragover'); });
+    row.addEventListener('drop', function(e) {
+      e.preventDefault(); row.classList.remove('dragover');
+      var parts = e.dataTransfer.getData('text/plain').split('\x00');
+      var srcIdx = parseInt(parts[0]);
+      var orig = parts[1];
+      var src = document.getElementById('pool-' + srcIdx) || document.getElementById('row-' + srcIdx);
+      var chip = src ? Array.from(src.querySelectorAll('.chip')).find(function(c) { return c.dataset.orig === orig; }) : null;
+      if (chip) { row.appendChild(chip); updateCaps(idx); colorSbRow(idx); }
+    });
+    block.appendChild(row);
+    container.appendChild(block);
+  });
+}
+
+function updateCaps(idx) {
+  var row = document.getElementById('row-' + idx);
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c, i) {
+    var orig = c.dataset.orig;
+    c.textContent = (i === 0 && orig !== ',' && orig !== '.') ?
+      orig.charAt(0).toUpperCase() + orig.slice(1) : orig;
+  });
+}
+
+function colorSbRow(idx) {
+  var row = document.getElementById('row-' + idx);
+  var data = SB_DATA[idx];
+  Array.from(row.querySelectorAll('.chip')).forEach(function(chip, i) {
+    chip.classList.remove('correct', 'wrong');
+    if (i < data.answer.length) {
+      chip.classList.add(chip.dataset.orig.toLowerCase() === data.answer[i] ? 'correct' : 'wrong');
+    } else {
+      chip.classList.add('wrong');
+    }
+  });
+  checkSbAllOk();
+}
+
+function checkSbAllOk() {
+  var all = SB_DATA.every(function(data, idx) {
+    var chips = Array.from(document.getElementById('row-' + idx).querySelectorAll('.chip'));
+    return chips.length === data.answer.length &&
+      chips.every(function(c, i) { return c.dataset.orig.toLowerCase() === data.answer[i]; });
+  });
+  if (all) timerStop(3);
+}
+
+function sbShow() {
+  SB_DATA.forEach(function(data, idx) {
+    var pool = document.getElementById('pool-' + idx);
+    var row  = document.getElementById('row-' + idx);
+    var all  = Array.from(pool.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+    data.parts.forEach(function(part) {
+      var chip = all.find(function(c) { return c.dataset.orig === part; });
+      if (chip) { row.appendChild(chip); chip.classList.remove('wrong'); chip.classList.add('correct'); all.splice(all.indexOf(chip), 1); }
+    });
+    updateCaps(idx);
+  });
+  timerStop(3);
+}
+function sbReset() { sbInit(); timerResetOne(3); }
+
+// ─── INIT ─────────────────────────────────────────────────────────
+lueckeInit();
+zuoInit();
+sbInit();
+loadBestTimes();
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H&ouml;fliche Modalverben &ndash; B1/B2</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 1.5em; }
+.subtitle { text-align: center; color: #888; margin-bottom: 20px; font-size: 0.95em; }
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+
+
+
+.section { display: none; }
+.section.active { display: block; }
+h2 { color: #333; font-size: 1.15em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn-show { background: #f0f0f0; color: #555; }
+.btn-show:hover { background: #e0e0e0; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+
+/* Info / Help boxes */
+.help-box { background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 20px; font-size: 0.9em; line-height: 1.7; color: #444; }
+.help-box strong { color: #667eea; }
+.info-box { background: #fff3cd; border-left: 4px solid #f39c12; border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; font-size: 0.9em; line-height: 1.8; color: #444; }
+.info-box strong { color: #e67e22; }
+.info-box .example { display: block; margin: 3px 0; padding: 4px 10px; background: #fff8e1; border-radius: 6px; font-size: 0.92em; }
+
+/* Übersichtstabelle */
+.overview-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9em; }
+.overview-table th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 10px 12px; text-align: left; }
+.overview-table th:first-child { border-radius: 8px 0 0 0; }
+.overview-table th:last-child { border-radius: 0 8px 0 0; }
+.overview-table td { padding: 10px 12px; border-bottom: 1px solid #eee; vertical-align: top; line-height: 1.6; }
+.overview-table tr:nth-child(even) td { background: #f8f9ff; }
+.overview-table .verb-cell { font-weight: 700; color: #667eea; white-space: nowrap; }
+.overview-table .level-badge { display: inline-block; font-size: 0.72em; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-left: 4px; vertical-align: middle; }
+.badge-formal { background: #e8f0fe; color: #3b5bdb; }
+.badge-informal { background: #fff0f6; color: #c2255c; }
+.badge-neutral { background: #e6fcf5; color: #0ca678; }
+
+/* Stufenvergleich-Karten */
+.stufe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.stufe-card { border-radius: 12px; padding: 14px 16px; }
+.stufe-card.direkt { background: #fdecea; border: 2px solid #e74c3c; }
+.stufe-card.neutral { background: #e8f8f0; border: 2px solid #27ae60; }
+.stufe-card.sehr-hoeflich { background: #e8f0fe; border: 2px solid #3b5bdb; }
+.stufe-label { font-weight: 700; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.stufe-card.direkt .stufe-label { color: #e74c3c; }
+.stufe-card.neutral .stufe-label { color: #27ae60; }
+.stufe-card.sehr-hoeflich .stufe-label { color: #3b5bdb; }
+.stufe-example { font-size: 0.9em; line-height: 1.6; color: #333; }
+
+/* Lückentext */
+.ex-card { background: #f8f9ff; padding: 16px 20px; margin-bottom: 14px; border-radius: 10px; border-left: 4px solid #667eea; }
+.ex-sentence { font-size: 1.0em; line-height: 2.4; color: #333; display: block; }
+.nowrap-group { display: inline-flex; align-items: baseline; white-space: nowrap; gap: 0; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.s { min-width: 70px; width: 70px; }
+input.blank.m { min-width: 110px; width: 110px; }
+input.blank.l { min-width: 160px; width: 160px; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { color: #27ae60; font-weight: 600; font-size: 0.85em; margin-left: 4px; white-space: nowrap; }
+
+/* Zuordnung */
+.zuordnung-categories { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.zuordnung-cat { background: #f0f0f0; border: 2px dashed #ccc; border-radius: 10px; padding: 12px; min-height: 110px; }
+.zuordnung-cat-title { font-weight: 700; color: #667eea; text-align: center; margin-bottom: 8px; font-size: 0.92em; }
+.chip-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.88em; transition: all 0.2s; user-select: none; }
+.chip:hover { transform: scale(1.04); box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
+.chip.placed { background: #667eea; color: white; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+
+/* Satzbau */
+.satzbau-item { background: #f8f9ff; padding: 16px 20px; margin-bottom: 20px; border-radius: 10px; border-left: 4px solid #667eea; }
+.drop-row { background: white; border: 2px dashed #ccc; border-radius: 10px; padding: 14px; min-height: 58px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.drop-row .chip { margin: 0; }
+.chip.punct { min-width: 30px; padding: 8px 10px; font-size: 1.2em; font-weight: 700; text-align: center; }
+.drop-row .chip.punct { margin-left: -4px; }
+
+/* Situation-Karten */
+.situation-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 20px; }
+.situation-card { background: #f8f9ff; border-radius: 12px; padding: 18px 20px; border-left: 4px solid #764ba2; }
+.situation-label { font-weight: 700; color: #764ba2; font-size: 0.88em; margin-bottom: 10px; }
+.situation-prompt { font-size: 0.95em; color: #333; margin-bottom: 10px; line-height: 1.6; }
+.situation-options { display: flex; flex-direction: column; gap: 6px; }
+.situation-option { display: flex; align-items: flex-start; gap: 10px; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
+.situation-option:hover { background: #f0f0f0; }
+.situation-option.selected { border-color: #667eea; background: #f0f4ff; }
+.situation-option.correct-ans { border-color: #27ae60; background: #e8f8f0; }
+.situation-option.wrong-ans { border-color: #e74c3c; background: #fdeaea; }
+.option-letter { font-weight: 700; color: #667eea; min-width: 20px; font-size: 0.9em; }
+.option-text { font-size: 0.9em; line-height: 1.5; color: #333; }
+.situation-feedback { display: none; margin-top: 10px; font-size: 0.88em; font-weight: 600; padding: 6px 10px; border-radius: 6px; }
+.situation-feedback.correct { display: block; color: #27ae60; background: #e8f8f0; }
+.situation-feedback.wrong { display: block; color: #e74c3c; background: #fdeaea; }
+
+/* Responsive */
+@media (max-width: 650px) {
+    .stufe-grid { grid-template-columns: 1fr; }
+    .zuordnung-categories { grid-template-columns: 1fr; }
+    .nav-btn { font-size: 0.78em; padding: 8px 12px; }
+}
+
+/* Author Footer */
+.author-footer { margin-top: 40px; padding: 16px 20px; text-align: center; font-size: 0.8em; color: #888; border-top: 1px solid #e0e0e0; }
+.author-footer a { color: #667eea; text-decoration: none; font-weight: 500; }
+.author-footer .author-name { font-weight: 600; color: #555; }
+
+/* ── Konjugations-Tab ── */
+.konj-tabs-hm { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.konj-tab-hm { padding: 7px 16px; border-radius: 20px; border: 2px solid #c5cae9; background: #fff; color: #555; cursor: pointer; font-size: 0.85em; font-weight: 600; transition: all .2s; }
+.konj-tab-hm.active { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; border-color: transparent; }
+.konj-panel-hm { display: none; }
+.konj-panel-hm.active { display: block; }
+.konj-hint-hm { font-size: 0.82em; color: #666; margin-bottom: 10px; }
+.konj-table-hm { width: 100%; border-collapse: collapse; font-size: 0.9em; margin-bottom: 10px; }
+.konj-table-hm th { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; padding: 8px 12px; text-align: left; }
+.konj-table-hm th:first-child { border-radius: 8px 0 0 0; }
+.konj-table-hm th:last-child { border-radius: 0 8px 0 0; }
+.konj-table-hm td { padding: 8px 12px; border-bottom: 1px solid #eee; vertical-align: middle; }
+.konj-table-hm tr:nth-child(even) td { background: #f8f9ff; }
+.konj-person { color: #666; font-size: 0.85em; min-width: 80px; }
+.konj-given-hm { font-weight: 700; color: #3949ab; }
+.konj-inp-hm { border: none; border-bottom: 2px solid #667eea; background: transparent; font-size: 0.92em; font-family: inherit; color: #1a237e; font-weight: 600; outline: none; padding: 2px 4px; width: 150px; transition: border-color .2s; }
+.konj-inp-hm.correct { border-bottom-color: #27ae60; color: #27ae60; }
+.konj-inp-hm.wrong { border-bottom-color: #e74c3c; color: #e74c3c; }
+
+/* ── Verbposition-Tab ── */
+.vp-regel-hm { background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; border-left: 4px solid #3949ab; }
+.vp-titel { color: #1a237e; font-weight: 700; font-size: 0.97em; margin-bottom: 10px; }
+.vp-schema-hm { display: flex; gap: 0; margin: 10px 0; overflow-x: auto; }
+.vp-cell { padding: 9px 12px; text-align: center; min-width: 80px; font-size: 0.82em; border: 2px solid #c5cae9; background: #fff; font-weight: 600; }
+.vp-cell:first-child { border-radius: 8px 0 0 8px; }
+.vp-cell:last-child { border-radius: 0 8px 8px 0; }
+.vp-cell.pos1-hm { background: #e8f5e9; border-color: #43a047; color: #2e7d32; }
+.vp-cell.pos2-hm { background: #e3f2fd; border-color: #1976d2; color: #0d47a1; }
+.vp-cell.mid-hm { background: #fafbff; border-color: #c5cae9; color: #555; flex: 1; }
+.vp-cell.ende-hm { background: #fff3e0; border-color: #f57c00; color: #e65100; }
+.vp-ex-hm { background: #fff; border-radius: 8px; padding: 8px 12px; margin: 5px 0; font-size: 0.9em; line-height: 1.7; border-left: 3px solid #667eea; }
+.c1 { color: #2e7d32; font-weight: 700; }
+.c2 { color: #0d47a1; font-weight: 700; }
+.ce { color: #e65100; font-weight: 700; }
+.vp-lücke-hm { background: #f8f9ff; border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; font-size: 0.95em; line-height: 2; border-left: 4px solid #667eea; }
+input.vp-inp { border: none; border-bottom: 2px solid #667eea; background: transparent; font-size: 0.92em; font-family: inherit; color: #1a237e; font-weight: 600; outline: none; padding: 2px 4px; width: 120px; transition: border-color .2s; }
+input.vp-inp.correct { border-bottom-color: #27ae60; color: #27ae60; }
+input.vp-inp.wrong { border-bottom-color: #e74c3c; color: #e74c3c; }
+.vp-en-hint { display: block; font-size: 0.8em; color: #888; font-style: italic; margin-top: 4px; padding-left: 2px; }
+/* Aliase für neues satzbau-drag-drop Pattern */
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 60px; margin-bottom: 10px; }
+.sentence-builder { background: white; border: 2px dashed #ccc; border-radius: 10px; padding: 14px; min-height: 60px; margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+@media (max-width: 600px) {
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; font-size: 0.78em; padding: 10px 4px; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>H&ouml;fliche Modalverben</h1>
+    <div class="subtitle">k&ouml;nnten &middot; w&uuml;rden &middot; d&uuml;rften &middot; sollten &middot; m&ouml;chten &middot; h&auml;tten &middot; B1/B2</div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)">&#128218; &Uuml;bersicht</div>
+        <div class="nav-btn" onclick="showSection(1)">&#127397; H&ouml;flichkeitsstufen</div>
+        <div class="nav-btn" onclick="showSection(2)">&#127381; Zuordnung</div>
+        <div class="nav-btn" onclick="showSection(3)">&#9997; L&uuml;ckentext</div>
+        <div class="nav-btn" onclick="showSection(4)">&#127279; Satzbau</div>
+        <div class="nav-btn" onclick="showSection(5)">&#127919; Situationen</div>
+        <div class="nav-btn" onclick="showSection(6)">&#128202; Konjugation</div>
+        <div class="nav-btn" onclick="showSection(7)">&#128208; Verbposition</div>
+    </div>
+
+    <!-- TAB 0: Übersicht -->
+    <div class="section active" id="sec0">
+        <h2>&#128218; Die h&ouml;flichen Modalverben im &Uuml;berblick</h2>
+        <div class="info-box">
+            <strong>Warum Konjunktiv II?</strong><br>
+            Im Deutschen zeigen wir H&ouml;flichkeit durch den <strong>Konjunktiv II</strong> der Modalverben.
+            Diese Formen klingen wie eine Vergangenheitsform &ndash; sind es aber nicht!
+            <span class="example">Indikativ: <em>Kannst du mir helfen?</em> &rarr; direkt, unter Freunden</span>
+            <span class="example">Konjunktiv II: <em>K&ouml;nntest du mir helfen?</em> &rarr; h&ouml;flicher, distanzierter</span>
+            <span class="example">Konjunktiv II + Sie: <em>K&ouml;nnten Sie mir tatkr&auml;ftig helfen?</em> &rarr; formell, sehr h&ouml;flich</span>
+        </div>
+
+        <table class="overview-table">
+            <thead>
+                <tr>
+                    <th>Verb (Infinitiv)</th>
+                    <th>Konjunktiv II (ich)</th>
+                    <th>Bedeutung &amp; Verwendung</th>
+                    <th>Beispiel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="verb-cell">k&ouml;nnen</td>
+                    <td><strong>k&ouml;nnte</strong></td>
+                    <td>H&ouml;fliche Bitte, Anfrage, Angebot<br><span class="level-badge badge-formal">formell</span><span class="level-badge badge-informal">informell</span></td>
+                    <td><em>K&ouml;nnten Sie mir kurz helfen?</em></td>
+                </tr>
+                <tr>
+                    <td class="verb-cell">werden</td>
+                    <td><strong>w&uuml;rde</strong></td>
+                    <td>H&ouml;flichste Bitte (Ersatzform), Wunsch<br><span class="level-badge badge-formal">formell</span></td>
+                    <td><em>W&uuml;rden Sie das bitte erl&auml;utern?</em></td>
+                </tr>
+                <tr>
+                    <td class="verb-cell">d&uuml;rfen</td>
+                    <td><strong>d&uuml;rfte</strong></td>
+                    <td>Sehr formelle Erlaubnis, vorsichtige Aussage<br><span class="level-badge badge-formal">formell</span></td>
+                    <td><em>D&uuml;rfte ich Sie kurz etwas fragen?</em></td>
+                </tr>
+                <tr>
+                    <td class="verb-cell">m&ouml;gen</td>
+                    <td><strong>m&ouml;chte</strong></td>
+                    <td>Wunsch, Bestellung, sanfte Bitte<br><span class="level-badge badge-neutral">neutral</span></td>
+                    <td><em>Ich m&ouml;chte bitte einen Tisch reservieren.</em></td>
+                </tr>
+                <tr>
+                    <td class="verb-cell">sollen</td>
+                    <td><strong>sollte</strong></td>
+                    <td>Ratschlag, Empfehlung, indirekte Aufforderung<br><span class="level-badge badge-neutral">neutral</span></td>
+                    <td><em>Sie sollten das ausdr&uuml;cklich erw&auml;hnen.</em></td>
+                </tr>
+                <tr>
+                    <td class="verb-cell">m&uuml;ssen</td>
+                    <td><strong>m&uuml;sste</strong></td>
+                    <td>Vorsichtige Notwendigkeit, abgeschw&auml;chte Pflicht<br><span class="level-badge badge-neutral">neutral</span></td>
+                    <td><em>Ich m&uuml;sste das noch kurz pr&uuml;fen.</em></td>
+                </tr>
+                <tr>
+                    <td class="verb-cell">haben</td>
+                    <td><strong>h&auml;tte</strong></td>
+                    <td>H&ouml;flicher Wunsch, Bestellung, sanfte Anfrage<br><span class="level-badge badge-neutral">neutral</span><span class="level-badge badge-formal">formell</span></td>
+                    <td><em>Ich h&auml;tte gern einen Kaffee, bitte.</em></td>
+                </tr>
+                <tr>
+                    <td class="verb-cell">wollen</td>
+                    <td><strong>wollte</strong></td>
+                    <td>Selten h&ouml;flich &ndash; besser <em>m&ouml;chte</em> verwenden<br><span class="level-badge badge-informal">informal</span></td>
+                    <td><em>Ich wollte nur kurz nachfragen &hellip;</em></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="info-box">
+            <strong>Bildung: Konjunktiv II der Modalverben</strong><br>
+            Pr&auml;teritum-Stamm + Umlaut (au&szlig;er <em>sollen</em> und <em>wollen</em>)
+            <span class="example">kann &rarr; konnte &rarr; <strong>k&ouml;nnte</strong> &nbsp;&nbsp; darf &rarr; durfte &rarr; <strong>d&uuml;rfte</strong></span>
+            <span class="example">muss &rarr; musste &rarr; <strong>m&uuml;sste</strong> &nbsp;&nbsp; soll &rarr; sollte &rarr; <strong>sollte</strong> (kein Umlaut!)</span>
+            <span class="example">will &rarr; wollte &rarr; <strong>wollte</strong> (kein Umlaut!) &nbsp;&nbsp; wird &rarr; w&uuml;rde</span>
+            <span class="example">hat &rarr; hatte &rarr; <strong>h&auml;tte</strong> (Umlaut!) &nbsp;&nbsp;&rarr; <em>&bdquo;Ich h&auml;tte gern &hellip;&ldquo;</em> &ndash; sehr natürliche Bestellformel</span>
+        </div>
+    </div>
+
+    <!-- TAB 1: Höflichkeitsstufen -->
+    <div class="section" id="sec1">
+        <h2>&#127397; H&ouml;flichkeitsstufen im Vergleich</h2>
+        <div class="help-box">
+            Dieselbe Situation &ndash; drei verschiedene Sprachregister. Lerne, <strong>wann</strong> du was benutzt.
+        </div>
+
+        <h3 style="color:#555; font-size:1em; margin-bottom:12px;">&#128203; Situation 1: Jemanden um Hilfe bitten</h3>
+        <div class="stufe-grid">
+            <div class="stufe-card direkt">
+                <div class="stufe-label">&#9888; Direkt</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Hilf mir!&ldquo;</em><br>
+                    <em>&bdquo;Kannst du mir helfen?&ldquo;</em><br><br>
+                    Nur unter engen Freunden oder in dringenden Situationen.
+                </div>
+            </div>
+            <div class="stufe-card neutral">
+                <div class="stufe-label">&#10003; H&ouml;flich (du / ihr)</div>
+                <div class="stufe-example">
+                    <em>&bdquo;K&ouml;nntest du mir tatkr&auml;ftig helfen?&ldquo;</em><br>
+                    <em>&bdquo;W&uuml;rdest du mir kurz helfen?&ldquo;</em><br><br>
+                    Mit Bekannten, Kollegen, in halbformellen Situationen.
+                </div>
+            </div>
+            <div class="stufe-card sehr-hoeflich">
+                <div class="stufe-label">&#11088; Sehr h&ouml;flich (Sie)</div>
+                <div class="stufe-example">
+                    <em>&bdquo;K&ouml;nnten Sie mir bitte helfen?&ldquo;</em><br>
+                    <em>&bdquo;D&uuml;rfte ich Sie kurz um Hilfe bitten?&ldquo;</em><br><br>
+                    Mit Fremden, Vorgesetzten, Kunden, in formellen Situationen.
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color:#555; font-size:1em; margin-bottom:12px; margin-top:20px;">&#128203; Situation 2: Eine Frage stellen</h3>
+        <div class="stufe-grid">
+            <div class="stufe-card direkt">
+                <div class="stufe-label">&#9888; Direkt</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Was kostet das?&ldquo;</em><br>
+                    <em>&bdquo;Wann f&auml;hrt der Zug?&ldquo;</em><br><br>
+                    Sachlich, aber kann schroff wirken.
+                </div>
+            </div>
+            <div class="stufe-card neutral">
+                <div class="stufe-label">&#10003; H&ouml;flich</div>
+                <div class="stufe-example">
+                    <em>&bdquo;K&ouml;nnen Sie mir sagen, was das kostet?&ldquo;</em><br>
+                    <em>&bdquo;M&ouml;chten Sie mir erkl&auml;ren, wie das funktioniert?&ldquo;</em><br><br>
+                    Standard in Gesch&auml;ften, mit Fremden.
+                </div>
+            </div>
+            <div class="stufe-card sehr-hoeflich">
+                <div class="stufe-label">&#11088; Sehr h&ouml;flich (Sie)</div>
+                <div class="stufe-example">
+                    <em>&bdquo;D&uuml;rfte ich fragen, was das kostet?&ldquo;</em><br>
+                    <em>&bdquo;W&uuml;rden Sie mir freundlicherweise erkl&auml;ren &hellip;?&ldquo;</em><br><br>
+                    Im B&uuml;ro, beim Arzt, mit Autorit&auml;tspersonen.
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color:#555; font-size:1em; margin-bottom:12px; margin-top:20px;">&#128203; Situation 3: Etwas bestellen / einen Wunsch äußern</h3>
+        <div class="stufe-grid">
+            <div class="stufe-card direkt">
+                <div class="stufe-label">&#9888; Direkt</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Ich will einen Kaffee!&ldquo;</em><br>
+                    <em>&bdquo;Einen Espresso, schnell.&ldquo;</em><br><br>
+                    Klingt fordernd &ndash; im Restaurant unangemessen.
+                </div>
+            </div>
+            <div class="stufe-card neutral">
+                <div class="stufe-label">&#10003; H&ouml;flich</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Ich m&ouml;chte einen Kaffee, bitte.&ldquo;</em><br>
+                    <em>&bdquo;Ich h&auml;tte gern einen Espresso.&ldquo;</em><br><br>
+                    <strong>h&auml;tte gern</strong> ist eine sehr nat&uuml;rliche, weiche Bestellformel &ndash; neutral und freundlich.
+                </div>
+            </div>
+            <div class="stufe-card sehr-hoeflich">
+                <div class="stufe-label">&#11088; Sehr h&ouml;flich (formell)</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Ich w&uuml;rde gerne einen Kaffee bestellen.&ldquo;</em><br>
+                    <em>&bdquo;H&auml;tten Sie vielleicht noch ein Zimmer frei?&ldquo;</em><br><br>
+                    <strong>H&auml;tten Sie &hellip;?</strong> klingt sehr h&ouml;flich und einladend &ndash; in Hotel, Gesch&auml;ft oder B&uuml;ro.
+                </div>
+            </div>
+        </div>
+
+        <h3 style="color:#555; font-size:1em; margin-bottom:12px; margin-top:20px;">&#128203; Situation 4: Einen Ratschlag geben</h3>
+        <div class="stufe-grid">
+            <div class="stufe-card direkt">
+                <div class="stufe-label">&#9888; Direkt</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Geh zum Arzt!&ldquo;</em><br>
+                    <em>&bdquo;Du musst mehr schlafen.&ldquo;</em><br><br>
+                    Kann bevormundend wirken.
+                </div>
+            </div>
+            <div class="stufe-card neutral">
+                <div class="stufe-label">&#10003; H&ouml;flich</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Du solltest mehr schlafen.&ldquo;</em><br>
+                    <em>&bdquo;Ich w&uuml;rde dir empfehlen, mehr Wasser zu trinken.&ldquo;</em><br><br>
+                    Freundlicher Rat, nicht aufdringlich.
+                </div>
+            </div>
+            <div class="stufe-card sehr-hoeflich">
+                <div class="stufe-label">&#11088; Sehr h&ouml;flich (Sie)</div>
+                <div class="stufe-example">
+                    <em>&bdquo;Sie sollten das ausdr&uuml;cklich erw&auml;hnen.&ldquo;</em><br>
+                    <em>&bdquo;Ich w&uuml;rde Ihnen dringend empfehlen &hellip;&ldquo;</em><br><br>
+                    Professioneller Kontext: Arzt, Anwalt, Berater.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Zuordnung -->
+    <div class="section" id="sec2">
+        <h2>&#127381; Zuordnung &ndash; h&ouml;flich oder nicht?</h2>
+        <div class="help-box">
+            Ordne jeden Satz zu: <strong>H&ouml;flich (Konjunktiv II)</strong> oder <strong>Direkt (Indikativ)</strong>?
+        </div>
+        <div class="zuordnung-categories" id="zuord-cats">
+            <div class="zuordnung-cat" id="cat-hoeflich" ondragover="event.preventDefault()" ondrop="dropGeneric(event,'zuord-bank')" onclick="clickCat(event,'zuord-bank')">
+                <div class="zuordnung-cat-title">&#11088; H&ouml;flich – Konjunktiv II</div>
+            </div>
+            <div class="zuordnung-cat" id="cat-direkt" ondragover="event.preventDefault()" ondrop="dropGeneric(event,'zuord-bank')" onclick="clickCat(event,'zuord-bank')">
+                <div class="zuordnung-cat-title">&#9888; Direkt – Indikativ</div>
+            </div>
+        </div>
+        <div class="chip-bank" id="zuord-bank"></div>
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="showLoesungGeneric('sec2', ZUORD_DATA, 'zd', '.zuordnung-cat')">L&ouml;sung zeigen</button>
+            <button class="btn btn-reset" onclick="resetZuordnung('sec2', '.zuordnung-cat', 'zuord-bank', ZUORD_DATA, 'zd', 2, initZuordnung)">Reset</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time" id="timer-2">&#9201; 0:00</span>
+            <span class="best-time" id="best-2">&#127942; --:--</span>
+        </div>
+    </div>
+
+    <!-- TAB 3: Lückentext -->
+    <div class="section" id="sec3">
+        <h2>&#9997; L&uuml;ckentext &ndash; h&ouml;fliche Form einsetzen</h2>
+        <div class="help-box">
+            Setze die richtige <strong>Konjunktiv II-Form</strong> des Modalverbs ein.<br>
+            Hinweise in Klammern helfen dir bei der Wahl.
+        </div>
+        <div id="luecken-container"></div>
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="showLueckenLoesung('hm-l')">L&ouml;sung zeigen</button>
+            <button class="btn btn-reset" onclick="resetLuecken('hm-l')">Reset</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time" id="timer-3">&#9201; 0:00</span>
+            <span class="best-time" id="best-3">&#127942; --:--</span>
+        </div>
+    </div>
+
+    <!-- TAB 4: Satzbau -->
+    <div class="section" id="sec4">
+        <h2>&#127279; Satzbau &ndash; h&ouml;fliche S&auml;tze zusammensetzen</h2>
+        <div class="help-box">
+            Setze die W&ouml;rter in der richtigen Reihenfolge zusammen. Das konjugierte Modalverb steht auf <strong>Position 2</strong>, der Infinitiv am <strong>Satzende</strong>.
+        </div>
+        <div id="satzbau-container"></div>
+        <div class="btn-row">
+            <button class="btn btn-reset" onclick="resetSatzbau()">Reset</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time" id="timer-4">&#9201; 0:00</span>
+            <span class="best-time" id="best-4">&#127942; --:--</span>
+        </div>
+    </div>
+
+    <!-- TAB 5: Situationen -->
+    <div class="section" id="sec5">
+        <h2>&#127919; Was sagst du in dieser Situation?</h2>
+        <div class="help-box">
+            W&auml;hle die <strong>passendste</strong> Formulierung f&uuml;r die jeweilige Situation.
+        </div>
+        <div id="situation-container"></div>
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="showSituationLoesung()">L&ouml;sungen zeigen</button>
+            <button class="btn btn-reset" onclick="resetSituationen()">Reset</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time" id="timer-5">&#9201; 0:00</span>
+            <span class="best-time" id="best-5">&#127942; --:--</span>
+        </div>
+    </div>
+
+    <!-- TAB 6: Konjugation -->
+    <div class="section" id="sec6">
+        <h2>&#128202; Konjugation — H&ouml;fliche Modalverben</h2>
+        <div class="help-box">
+            Erg&auml;nze die fehlenden Konjunktiv-II-Formen. W&auml;hle ein Verb oben.
+            <br><strong>Bildungsprinzip:</strong> Pr&auml;teritumstamm + Umlaut + Konjunktivendung
+            &nbsp;|&nbsp; <em>k&ouml;nnte · d&uuml;rfte · sollte · m&uuml;sste · w&uuml;rde</em>
+        </div>
+        <div class="konj-tabs-hm" id="konj-tabs-hm"></div>
+        <div id="konj-panels-hm"></div>
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="konjHmShow()">L&ouml;sungen zeigen</button>
+            <button class="btn btn-reset" onclick="konjHmReset()">Reset</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time" id="timer-6">&#9201; 0:00</span>
+            <span class="best-time" id="best-6">&#127942; --:--</span>
+        </div>
+    </div>
+
+    <!-- TAB 7: Verbposition -->
+    <div class="section" id="sec7">
+        <h2>&#128208; Verbposition bei h&ouml;flichen Formen</h2>
+
+        <!-- Regel 1 -->
+        <div class="vp-regel-hm">
+            <div class="vp-titel">&#128994; Regel 1 — Aussagesatz: Verb auf Position&nbsp;2</div>
+            <div class="vp-schema-hm">
+                <div class="vp-cell pos1-hm">Pos. 1<br><small>Subjekt</small></div>
+                <div class="vp-cell pos2-hm">Pos. 2<br><small>Modalverb</small></div>
+                <div class="vp-cell mid-hm">Mittelfeld</div>
+                <div class="vp-cell ende-hm">Ende<br><small>Infinitiv</small></div>
+            </div>
+            <div class="vp-ex-hm"><span class="c1">Ich</span> <span class="c2">m&ouml;chte</span> gerne einen Termin vereinbaren.</div>
+            <div class="vp-ex-hm"><span class="c1">Sie</span> <span class="c2">sollten</span> das ausdr&uuml;cklich <span class="ce">erw&auml;hnen</span>.</div>
+            <div class="vp-ex-hm"><span class="c1">Ich</span> <span class="c2">w&uuml;rde</span> das gerne noch einmal <span class="ce">pr&uuml;fen</span>.</div>
+        </div>
+
+        <!-- Regel 2 -->
+        <div class="vp-regel-hm">
+            <div class="vp-titel">&#128309; Regel 2 — H&ouml;fliche Frage: Verb auf Position&nbsp;1</div>
+            <div class="vp-schema-hm">
+                <div class="vp-cell pos2-hm">Pos. 1<br><small>Modalverb</small></div>
+                <div class="vp-cell pos1-hm">Subjekt<br><small>nach Verb</small></div>
+                <div class="vp-cell mid-hm">Mittelfeld</div>
+                <div class="vp-cell ende-hm">Ende<br><small>Infinitiv / ?</small></div>
+            </div>
+            <div class="vp-ex-hm"><span class="c2">K&ouml;nnten</span> <span class="c1">Sie</span> mir kurz <span class="ce">helfen</span>?</div>
+            <div class="vp-ex-hm"><span class="c2">D&uuml;rfte</span> <span class="c1">ich</span> Sie etwas <span class="ce">fragen</span>?</div>
+            <div class="vp-ex-hm"><span class="c2">W&uuml;rden</span> <span class="c1">Sie</span> das bitte noch einmal <span class="ce">erkl&auml;ren</span>?</div>
+        </div>
+
+        <!-- Regel 3 -->
+        <div class="vp-regel-hm">
+            <div class="vp-titel">&#128992; Regel 3 — Nebensatz: Verb ans Ende</div>
+            <div class="vp-schema-hm">
+                <div class="vp-cell pos1-hm">Hauptsatz<br><small>+ Konj.</small></div>
+                <div class="vp-cell mid-hm">Mittelfeld</div>
+                <div class="vp-cell ende-hm">Ende<br><small>Modalverb (finit)</small></div>
+            </div>
+            <div class="vp-ex-hm">Ich w&auml;re froh, wenn Sie mir <span class="ce">helfen k&ouml;nnten</span>.</div>
+            <div class="vp-ex-hm">Es w&auml;re sch&ouml;n, falls Sie das noch einmal erkl&auml;ren <span class="ce">w&uuml;rden</span>.</div>
+            <div class="vp-ex-hm">D&uuml;rfte ich fragen, ob ein Termin m&ouml;glich <span class="ce">w&auml;re</span>?</div>
+        </div>
+
+        <!-- Übung -->
+        <h2 style="margin-top:24px;">&#9997; &Uuml;bung: Verb in die richtige Position</h2>
+        <div class="help-box">Erg&auml;nze die h&ouml;fliche Konjunktiv-II-Form an der richtigen Stelle. Das &#128161;-Symbol zeigt den Positionstyp.</div>
+        <div class="timer-display" style="justify-content:flex-start;margin-bottom:12px;">
+            <span class="current-time" id="timer-7">&#9201; 0:00</span>
+            <span class="best-time" id="best-7">&#127942; --:--</span>
+        </div>
+        <div id="vp-hm-container"></div>
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="vpHmShow()">L&ouml;sungen zeigen</button>
+            <button class="btn btn-reset" onclick="vpHmReset()">Reset</button>
+        </div>
+    </div>
+
+    <div class="author-footer">
+        Erstellt von <span class="author-name">Frank Burkert</span> &middot;
+        <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a> &middot;
+        DaF B1/B2 &middot; H&ouml;fliche Modalverben
+    </div>
+</div>
+
+<script>
+var TIMER_PREFIX = 'b1b2-hoefliche-modal';
+
+/* ============================================================
+   TIMER SYSTEM
+   ============================================================ */
+var timerState = {};
+function padZ(n) { return n < 10 ? '0' + n : '' + n; }
+function fmtTime(s) { return Math.floor(s / 60) + ':' + padZ(s % 60); }
+
+function startTimer(idx) {
+    if (timerState[idx] && timerState[idx].running) return;
+    if (timerState[idx] && timerState[idx].stopped) return;
+    if (!timerState[idx]) timerState[idx] = { interval: null, seconds: 0, running: false, stopped: false };
+    timerState[idx].running = true;
+    timerState[idx].interval = setInterval(function() {
+        timerState[idx].seconds++;
+        var el = document.getElementById('timer-' + idx);
+        if (el) el.textContent = '\u23F1 ' + fmtTime(timerState[idx].seconds);
+    }, 1000);
+}
+
+function stopTimer(idx) {
+    if (!timerState[idx] || !timerState[idx].running) return;
+    clearInterval(timerState[idx].interval);
+    timerState[idx].running = false;
+    timerState[idx].stopped = true;
+    var best = localStorage.getItem(TIMER_PREFIX + '-best-' + idx);
+    var cur = timerState[idx].seconds;
+    if (!best || cur < parseInt(best)) {
+        localStorage.setItem(TIMER_PREFIX + '-best-' + idx, cur);
+        var bEl = document.getElementById('best-' + idx);
+        if (bEl) bEl.textContent = '\uD83C\uDFC6 ' + fmtTime(cur);
+    }
+}
+
+function resetTimer(idx) {
+    if (timerState[idx]) clearInterval(timerState[idx].interval);
+    timerState[idx] = { interval: null, seconds: 0, running: false, stopped: false };
+    var el = document.getElementById('timer-' + idx);
+    if (el) el.textContent = '\u23F1 0:00';
+}
+
+function loadBestTimes() {
+    for (var i = 2; i < 8; i++) {
+        var best = localStorage.getItem(TIMER_PREFIX + '-best-' + i);
+        if (best) {
+            var bEl = document.getElementById('best-' + i);
+            if (bEl) bEl.textContent = '\uD83C\uDFC6 ' + fmtTime(parseInt(best));
+        }
+    }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+/* ============================================================
+   DATA: Zuordnung
+   ============================================================ */
+var ZUORD_DATA = [
+    { id: 'zd1',  text: 'K\u00f6nnten Sie mir kurz helfen?',                   cat: 'cat-hoeflich' },
+    { id: 'zd2',  text: 'D\u00fcrfte ich Sie etwas fragen?',                   cat: 'cat-hoeflich' },
+    { id: 'zd3',  text: 'W\u00fcrden Sie das bitte erl\u00e4utern?',           cat: 'cat-hoeflich' },
+    { id: 'zd4',  text: 'Sie sollten das ausdr\u00fccklich erw\u00e4hnen.',    cat: 'cat-hoeflich' },
+    { id: 'zd5',  text: 'Ich m\u00f6chte einen Termin vereinbaren.',           cat: 'cat-hoeflich' },
+    { id: 'zd6',  text: 'Hilf mir sofort!',                                    cat: 'cat-direkt'   },
+    { id: 'zd7',  text: 'Was kostet das?',                                     cat: 'cat-direkt'   },
+    { id: 'zd8',  text: 'Kannst du mir das erkl\u00e4ren?',                    cat: 'cat-direkt'   },
+    { id: 'zd9',  text: 'Du musst mehr \u00fcben.',                            cat: 'cat-direkt'   },
+    { id: 'zd10', text: 'Ich will einen Kaffee.',                              cat: 'cat-direkt'   }
+];
+
+/* ============================================================
+   DATA: Lückentext
+   ============================================================ */
+var LUECKEN_DATA = [
+    { text: '<b>___</b> Sie mir bitte tatkr\u00e4ftig helfen? (k\u00f6nnen, Sie, formell)', blank: { answer: 'K\u00f6nnten', size: 'm', css: 'hm-l' } },
+    { text: 'Ich <b>___</b> gern einen Tisch f\u00fcr zwei Personen reservieren. (m\u00f6gen)', blank: { answer: 'm\u00f6chte', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> Sie das bitte noch einmal erkl\u00e4ren? (werden, Sie, formell)', blank: { answer: 'W\u00fcrden', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> ich Sie kurz etwas fragen? (d\u00fcrfen, sehr formell)', blank: { answer: 'D\u00fcrfte', size: 'm', css: 'hm-l' } },
+    { text: 'Sie <b>___</b> das ausdr\u00fccklich erw\u00e4hnen \u2013 das ist sehr wichtig. (sollen, Ratschlag)', blank: { answer: 'sollten', size: 'm', css: 'hm-l' } },
+    { text: 'Ich <b>___</b> noch kurz pr\u00fcfen, ob das stimmt. (m\u00fcssen, abgeschw\u00e4cht)', blank: { answer: 'm\u00fcsste', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> du mir kurz helfen? (k\u00f6nnen, du, informell)', blank: { answer: 'K\u00f6nntest', size: 'm', css: 'hm-l' } },
+    { text: 'Ich <b>___</b> Ihnen dringend empfehlen, das zu \u00fcberpr\u00fcfen. (werden, formell)', blank: { answer: 'w\u00fcrde', size: 'm', css: 'hm-l' } },
+    { text: 'Wir <b>___</b> uns morgen treffen \u2013 passt das Ihnen? (k\u00f6nnen, Vorschlag)', blank: { answer: 'k\u00f6nnten', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> ich kurz st\u00f6ren? (d\u00fcrfen, sehr h\u00f6flich)', blank: { answer: 'D\u00fcrfte', size: 'm', css: 'hm-l' } },
+    { text: 'Ich <b>___</b> gern einen Espresso, bitte. (haben, Bestellung)', blank: { answer: 'h\u00e4tte', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> Sie vielleicht noch ein Zimmer frei? (haben, h\u00f6fliche Anfrage)', blank: { answer: 'H\u00e4tten', size: 'm', css: 'hm-l' } },
+    { text: 'Wir <b>___</b> gern zwei Men\u00fcs vom Tagesangebot. (haben, Bestellung)', blank: { answer: 'h\u00e4tten', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> du vielleicht kurz Zeit f\u00fcr mich? (haben, informell-h\u00f6flich)', blank: { answer: 'H\u00e4ttest', size: 'm', css: 'hm-l' } },
+    { text: 'Ich <b>___</b> gern noch eine Frage zu Ihrem Angebot. (haben, formell)', blank: { answer: 'h\u00e4tte', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> Sie mir bitte die Rechnung bringen? (werden, Restaurant)', blank: { answer: 'W\u00fcrden', size: 'm', css: 'hm-l' } },
+    { text: 'Er <b>___</b> das Formular ausf\u00fcllen \u2013 das ist Pflicht. (m\u00fcssen, abgeschw\u00e4cht)', blank: { answer: 'm\u00fcsste', size: 'm', css: 'hm-l' } },
+    { text: '<b>___</b> Sie mir erkl\u00e4ren, wie das Ger\u00e4t funktioniert? (k\u00f6nnen, formell)', blank: { answer: 'K\u00f6nnten', size: 'm', css: 'hm-l' } },
+    { text: 'Ich <b>___</b> eine Auskunft \u00fcber die \u00d6ffnungszeiten. (haben, h\u00f6fliche Bitte)', blank: { answer: 'h\u00e4tte', size: 'm', css: 'hm-l' } },
+    { text: 'Sie <b>___</b> eigentlich mehr Pausen einlegen \u2013 das w\u00e4re besser f\u00fcr Ihre Gesundheit. (sollen, Ratschlag)', blank: { answer: 'sollten', size: 'm', css: 'hm-l' } }
+];
+
+/* ============================================================
+   DATA: Satzbau
+   ============================================================ */
+var SATZBAU_DATA = [
+    {
+        parts: ['k\u00f6nnten', 'sie', 'mir', 'bitte', 'helfen'],
+        valid: [['k\u00f6nnten', 'sie', 'mir', 'bitte', 'helfen']]
+    },
+    {
+        parts: ['w\u00fcrden', 'sie', 'das', 'freundlicherweise', 'erl\u00e4utern'],
+        valid: [['w\u00fcrden', 'sie', 'das', 'freundlicherweise', 'erl\u00e4utern']]
+    },
+    {
+        parts: ['sie', 'sollten', 'das', 'ausdr\u00fccklich', 'erw\u00e4hnen'],
+        valid: [['sie', 'sollten', 'das', 'ausdr\u00fccklich', 'erw\u00e4hnen']]
+    },
+    {
+        parts: ['ich', 'm\u00f6chte', 'einen', 'termin', 'vereinbaren'],
+        valid: [['ich', 'm\u00f6chte', 'einen', 'termin', 'vereinbaren']]
+    },
+    {
+        parts: ['d\u00fcrfte', 'ich', 'sie', 'kurz', 'etwas', 'fragen'],
+        valid: [['d\u00fcrfte', 'ich', 'sie', 'kurz', 'etwas', 'fragen']]
+    }
+];
+
+/* ============================================================
+   DATA: Situationen
+   ============================================================ */
+var SITUATION_DATA = [
+    {
+        context: '\uD83C\uDFE5 Sie sind beim Arzt und wollen fragen, ob Sie r\u00e4uchern d\u00fcrfen.',
+        question: 'Was sagen Sie?',
+        options: [
+            { text: 'Darf ich rauchen?' },
+            { text: 'D\u00fcrfte ich fragen, ob das Rauchen erlaubt ist?', correct: true },
+            { text: 'Ich will rauchen.' }
+        ],
+        feedback: '\u201ED\u00fcrfte ich fragen \u2026\u201C ist die formellste und h\u00f6flichste Form f\u00fcr diese Situation. \u201EDarf ich\u201C ist korrekt, aber weniger h\u00f6flich beim Arzt.'
+    },
+    {
+        context: '\uD83D\uDCBC Im B\u00fcro: Ihr Kollege (du) soll Ihnen ein Dokument schicken.',
+        question: 'Wie formulieren Sie die Bitte h\u00f6flich?',
+        options: [
+            { text: 'Schick mir das Dokument!' },
+            { text: 'K\u00f6nntest du mir das Dokument schicken?', correct: true },
+            { text: 'Du musst mir das Dokument schicken.' }
+        ],
+        feedback: '\u201EK\u00f6nntest du \u2026?\u201C ist die h\u00f6fliche Form unter Kollegen (du-Ebene). Der Imperativ klingt zu direkt, \u201Emusst\u201C klingt wie ein Befehl.'
+    },
+    {
+        context: '\uD83C\uDFE8 Im Hotel: Sie m\u00f6chten ein Zimmer reservieren.',
+        question: 'Was sagen Sie an der Rezeption?',
+        options: [
+            { text: 'Ich will ein Zimmer!', },
+            { text: 'Ich m\u00f6chte ein Zimmer f\u00fcr zwei N\u00e4chte reservieren, bitte.', correct: true },
+            { text: 'Reservieren Sie mir sofort ein Zimmer.' }
+        ],
+        feedback: '\u201EIch m\u00f6chte \u2026\u201C ist der Standard f\u00fcr h\u00f6fliche W\u00fcnsche und Bestellungen \u2013 neutral und freundlich. \u201Eich will\u201C klingt fordernd.'
+    },
+    {
+        context: '\uD83D\uDC69\u200D\uD83C\uDFEB Als Lehrer: Ein Sch\u00fcler soll h\u00e4ufiger \u00fcben.',
+        question: 'Wie geben Sie den Ratschlag freundlich?',
+        options: [
+            { text: 'Du musst mehr \u00fcben!', },
+            { text: '\u00DCbe mehr!', },
+            { text: 'Du solltest regelm\u00e4\u00dfig \u00fcben \u2013 das hilft enorm.', correct: true }
+        ],
+        feedback: '\u201EDu solltest \u2026\u201C gibt einen Ratschlag ohne Druck \u2013 h\u00f6flich und einladend. \u201Emusst\u201C klingt nach Zwang, der Imperativ nach Befehl.'
+    },
+    {
+        context: '\uD83D\uDCDE Am Telefon: Sie rufen in einer Firma an und m\u00f6chten mit der Gesch\u00e4ftsf\u00fchrung sprechen.',
+        question: 'Wie formulieren Sie Ihre Bitte?',
+        options: [
+            { text: 'Verbinden Sie mich sofort!', },
+            { text: 'K\u00f6nnten Sie mich bitte mit der Gesch\u00e4ftsf\u00fchrung verbinden?', correct: true },
+            { text: 'Ich will die Gesch\u00e4ftsf\u00fchrung sprechen.' }
+        ],
+        feedback: '\u201EK\u00f6nnten Sie \u2026?\u201C ist die ideale Formulierung am Telefon: h\u00f6flich, professionell und klar. Der Imperativ wirkt unh\u00f6flich, \u201Eich will\u201C klingt fordernd.'
+    },
+    {
+        context: '\uD83C\uDF74 Im Restaurant: Sie m\u00f6chten die Karte sehen.',
+        question: 'Was sagen Sie zum Kellner?',
+        options: [
+            { text: 'Bringen Sie mir die Karte!', },
+            { text: 'K\u00f6nnten Sie mir bitte die Karte bringen?', correct: true },
+            { text: 'Ich brauche die Karte.' }
+        ],
+        feedback: '\u201EK\u00f6nnten Sie mir bitte \u2026?\u201C ist im Restaurant die h\u00f6flichste und nat\u00fcrlichste Form. Der Imperativ klingt fordernd, \u201Eich brauche\u201C ist zu direkt.'
+    },
+    {
+        context: '\u2615 Im Caf\u00e9: Sie m\u00f6chten einen Kaffee und ein St\u00fcck Kuchen bestellen.',
+        question: 'Wie bestellen Sie h\u00f6flich?',
+        options: [
+            { text: 'Ich will einen Kaffee und Kuchen.', },
+            { text: 'Einen Kaffee!', },
+            { text: 'Ich h\u00e4tte gern einen Kaffee und ein St\u00fcck Kuchen, bitte.', correct: true }
+        ],
+        feedback: '\u201EIch h\u00e4tte gern \u2026\u201C ist die typische, sehr nat\u00fcrliche Bestellformel im Deutschen. Sie klingt weich, freundlich und kompetent. \u201Eich will\u201C wirkt fordernd.'
+    },
+    {
+        context: '\uD83C\uDFE8 An der Hotelrezeption: Sie fragen, ob noch Zimmer verf\u00fcgbar sind.',
+        question: 'Wie formulieren Sie Ihre Frage?',
+        options: [
+            { text: 'Haben Sie noch Zimmer?', },
+            { text: 'H\u00e4tten Sie vielleicht noch ein Einzelzimmer f\u00fcr heute Nacht?', correct: true },
+            { text: 'Ich brauche ein Zimmer!' }
+        ],
+        feedback: '\u201EH\u00e4tten Sie \u2026?\u201C ist die h\u00f6fliche Konjunktiv-II-Form von \u201Ehaben\u201C. Das \u201Evielleicht\u201C macht die Frage noch weicher und zeigt, dass Sie verstehen, wenn kein Zimmer frei ist.'
+    },
+    {
+        context: '\uD83D\uDCBB Im Kundendienst: Ein Kunde wartet sehr lange. Sie m\u00f6chten sich h\u00f6flich entschuldigen.',
+        question: 'Was sagen Sie?',
+        options: [
+            { text: 'Warten Sie weiter.', },
+            { text: 'W\u00fcrden Sie bitte noch einen Moment Geduld haben \u2013 ich k\u00fcmmere mich sofort darum.', correct: true },
+            { text: 'Es dauert noch.' }
+        ],
+        feedback: '\u201EW\u00fcrden Sie bitte \u2026\u201C ist eine sehr formelle und h\u00f6fliche Bitte. Das \u201Esofort darum k\u00fcmmere\u201C zeigt zus\u00e4tzlich Engagement und L\u00f6sungsorientierung.'
+    },
+    {
+        context: '\uD83D\uDCDA In der Bibliothek: Sie m\u00f6chten ein Buch ausleihen, das gerade nicht verf\u00fcgbar ist.',
+        question: 'Was fragen Sie die Bibliothekarin?',
+        options: [
+            { text: 'Wann kommt das Buch zur\u00fcck?', },
+            { text: 'H\u00e4tten Sie vielleicht ein \u00e4hnliches Buch zu diesem Thema f\u00fcr mich?', correct: true },
+            { text: 'Geben Sie mir ein anderes Buch!' }
+        ],
+        feedback: '\u201EH\u00e4tten Sie \u2026?\u201C zeigt, dass Sie verstehen, dass die Bibliothekarin nicht verpflichtet ist zu helfen. Diese Form ist sehr h\u00f6flich und offen.'
+    },
+    {
+        context: '\uD83D\uDE82 Im Zug: Jemand sitzt auf Ihrem reservierten Platz.',
+        question: 'Wie sprechen Sie die Person h\u00f6flich an?',
+        options: [
+            { text: 'Das ist mein Platz! Stehen Sie auf!', },
+            { text: 'Entschuldigung, ich glaube, das ist mein reservierter Platz \u2013 d\u00fcrfte ich Sie bitten, sich einen anderen Platz zu suchen?', correct: true },
+            { text: 'Sie m\u00fcssen woanders sitzen.' }
+        ],
+        feedback: '\u201ED\u00fcrfte ich Sie bitten \u2026?\u201C ist eine extrem h\u00f6fliche Form, die Konflikte vermeidet. Die Einleitung mit \u201EEntschuldigung, ich glaube\u201C mildert die Situation zus\u00e4tzlich.'
+    }
+];
+
+/* ============================================================
+   DRAG & DROP – Zuordnung
+   ============================================================ */
+function makeChipZuordnung(data, bankId, chipPrefix, catSelector, timerIdx) {
+    var bank = document.getElementById(bankId);
+    bank.innerHTML = '';
+    var shuffled = data.slice().sort(function() { return Math.random() - 0.5; });
+    shuffled.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.id = chipPrefix + '-chip-' + item.id;
+        chip.draggable = true;
+        chip.textContent = item.text;
+        chip.dataset.answer = item.cat;
+        chip.ondragstart = function(e) {
+            e.dataTransfer.setData('text', chip.id);
+            startTimer(timerIdx);
+        };
+        chip.addEventListener('click', function() {
+            if (!chip.classList.contains('placed')) startTimer(timerIdx);
+        });
+        bank.appendChild(chip);
+    });
+}
+
+function colorZuordnungChip(chip) {
+    var zone = chip.parentNode;
+    chip.classList.remove('correct', 'wrong');
+    if (chip.classList.contains('placed') && zone) {
+        chip.classList.add(zone.id === chip.dataset.answer ? 'correct' : 'wrong');
+    }
+}
+function colorAllZuordnungChips() {
+    document.querySelectorAll('#zuord-bank .chip, #cat-hoeflich .chip, #cat-direkt .chip').forEach(function(chip) {
+        colorZuordnungChip(chip);
+    });
+}
+function dropGeneric(e, bankId) {
+    e.preventDefault();
+    var id = e.dataTransfer.getData('text');
+    var chip = document.getElementById(id);
+    if (!chip) return;
+    e.currentTarget.appendChild(chip);
+    chip.classList.add('placed');
+    colorAllZuordnungChips();
+}
+
+function clickCat(e, bankId) {
+    if (e.target.classList.contains('chip') && e.target.classList.contains('placed')) {
+        document.getElementById(bankId).appendChild(e.target);
+        e.target.classList.remove('placed', 'correct', 'wrong');
+    }
+}
+
+function showLoesungGeneric(secId, data, chipPrefix, catSelector) {
+    data.forEach(function(item) {
+        var chip = document.getElementById(chipPrefix + '-chip-' + item.id);
+        if (!chip) return;
+        if (chip.parentNode && chip.parentNode.id !== item.cat) {
+            var target = document.getElementById(item.cat);
+            if (target) target.appendChild(chip);
+            chip.classList.add('placed');
+        }
+        chip.classList.remove('correct', 'wrong');
+        chip.classList.add(chip.parentNode && chip.parentNode.id === item.cat ? 'correct' : 'wrong');
+    });
+    stopTimer(parseInt(secId.replace('sec', '')));
+}
+
+function resetZuordnung(secId, catSelector, bankId, data, chipPrefix, timerIdx, initFn) {
+    var sec = document.getElementById(secId);
+    sec.querySelectorAll(catSelector).forEach(function(cat) {
+        cat.querySelectorAll('.chip').forEach(function(chip) {
+            chip.classList.remove('placed', 'correct', 'wrong');
+            document.getElementById(bankId).appendChild(chip);
+        });
+    });
+    resetTimer(timerIdx);
+    if (initFn) initFn();
+}
+
+/* ============================================================
+   LÜCKENTEXT
+   ============================================================ */
+function renderLuecken(data, containerId, cssClass, timerIdx) {
+    var container = document.getElementById(containerId);
+    container.innerHTML = '';
+    data.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'ex-card';
+        var span = document.createElement('span');
+        span.className = 'ex-sentence';
+        var parts = item.text.split('<b>___</b>');
+        var before = document.createElement('span');
+        before.innerHTML = parts[0] || '';
+        span.appendChild(before);
+        var group = document.createElement('span');
+        group.className = 'nowrap-group';
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'blank ' + item.blank.size + ' ' + cssClass;
+        inp.dataset.answer = item.blank.answer;
+        (function(ti) {
+            inp.addEventListener('focus', function() { startTimer(ti); });
+            inp.addEventListener('input', function() {
+                var val = inp.value.trim();
+                var ans = inp.dataset.answer;
+                inp.classList.remove('correct', 'wrong');
+                if (val === ans) inp.classList.add('correct');
+                else if (val.length >= ans.length) inp.classList.add('wrong');
+            });
+        })(timerIdx);
+        var hint = document.createElement('span');
+        hint.className = 'correction-hint';
+        group.appendChild(inp);
+        group.appendChild(hint);
+        span.appendChild(group);
+        var after = document.createElement('span');
+        after.innerHTML = parts[1] || '';
+        span.appendChild(after);
+        card.appendChild(span);
+        container.appendChild(card);
+    });
+}
+
+function showLueckenLoesung(cssClass) {
+    document.querySelectorAll('input.' + cssClass).forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('correct', 'wrong');
+        inp.classList.add('correct');
+        var hint = inp.nextElementSibling;
+        if (hint && hint.classList.contains('correction-hint')) hint.textContent = '\u2713 ' + inp.dataset.answer;
+    });
+    stopTimer(3);
+}
+
+function resetLuecken(cssClass) {
+    document.querySelectorAll('input.' + cssClass).forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+        var hint = inp.nextElementSibling;
+        if (hint && hint.classList.contains('correction-hint')) hint.textContent = '';
+    });
+    resetTimer(3);
+}
+
+/* ============================================================
+   SATZBAU
+   ============================================================ */
+
+
+
+// ===== SATZBAU (neu: satzbau-drag-drop Pattern) =====
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                    && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        c.textContent = isProper ? orig : (i === 0 ? sbCapitalize(orig) : orig);
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before); else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = SATZBAU_DATA[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        startTimer(4);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = SATZBAU_DATA.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) stopTimer(4);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = SATZBAU_DATA[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word) {
+        var chip = allChips[word];
+        if (chip) { chip.classList.remove('correct', 'incorrect'); row.appendChild(chip); }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbUpdateCapitalization(row); sbCheckAuto(idx); }, 100);
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer')
+                 || document.getElementById('satzbau-container');
+    if (!container) return;
+    while (container.firstChild) container.removeChild(container.firstChild);
+    SATZBAU_DATA.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container'; bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder'; row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback'; fb.id = 'sb-fb-' + idx;
+        var solBtn = document.createElement('button');
+        solBtn.className = 'btn btn-show'; solBtn.textContent = 'Lösung';
+        (function(i) { solBtn.onclick = function() { sbShowSolution(i); }; })(idx);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(solBtn);
+        container.appendChild(item);
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+    });
+}
+
+function resetSatzbau() {
+    SATZBAU_DATA.forEach(function(_, idx) {
+        var bank = document.getElementById('sb-bank-' + idx);
+        var row  = document.getElementById('sb-row-' + idx);
+        var fb   = document.getElementById('sb-fb-' + idx);
+        if (bank) while (bank.firstChild) bank.removeChild(bank.firstChild);
+        if (row)  while (row.firstChild)  row.removeChild(row.firstChild);
+        if (fb)   { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+    });
+    initSatzbau();
+}
+
+
+/* ============================================================
+   SITUATIONEN
+   ============================================================ */
+function initSituationen() {
+    var container = document.getElementById('situation-container');
+    container.innerHTML = '';
+    SITUATION_DATA.forEach(function(item, idx) {
+        var card = document.createElement('div');
+        card.className = 'situation-card';
+        var label = document.createElement('div');
+        label.className = 'situation-label';
+        label.textContent = 'Situation ' + (idx + 1);
+        var prompt = document.createElement('div');
+        prompt.className = 'situation-prompt';
+        prompt.textContent = item.context + ' ' + item.question;
+        var opts = document.createElement('div');
+        opts.className = 'situation-options';
+        var letters = ['a', 'b', 'c'];
+        item.options.forEach(function(opt, oi) {
+            var optDiv = document.createElement('div');
+            optDiv.className = 'situation-option';
+            var letter = document.createElement('span');
+            letter.className = 'option-letter';
+            letter.textContent = letters[oi] + ')';
+            var text = document.createElement('span');
+            text.className = 'option-text';
+            text.textContent = opt.text;
+            optDiv.appendChild(letter);
+            optDiv.appendChild(text);
+            optDiv.addEventListener('click', function() {
+                startTimer(5);
+                opts.querySelectorAll('.situation-option').forEach(function(o) {
+                    o.classList.remove('selected', 'correct-ans', 'wrong-ans');
+                });
+                optDiv.classList.add('selected');
+            });
+            opts.appendChild(optDiv);
+        });
+        var fb = document.createElement('div');
+        fb.className = 'situation-feedback';
+        fb.id = 'fb-' + idx;
+        fb.textContent = item.feedback;
+        card.appendChild(label);
+        card.appendChild(prompt);
+        card.appendChild(opts);
+        card.appendChild(fb);
+        container.appendChild(card);
+    });
+}
+
+function showSituationLoesung() {
+    SITUATION_DATA.forEach(function(item, idx) {
+        var card = document.getElementById('situation-container').children[idx];
+        var opts = card.querySelectorAll('.situation-option');
+        opts.forEach(function(opt, oi) {
+            opt.classList.remove('selected');
+            if (item.options[oi].correct) {
+                opt.classList.add('correct-ans');
+            } else {
+                opt.classList.add('wrong-ans');
+            }
+        });
+        var fb = document.getElementById('fb-' + idx);
+        if (fb) {
+            fb.classList.remove('wrong');
+            fb.classList.add('correct');
+        }
+    });
+    stopTimer(5);
+}
+
+function resetSituationen() {
+    resetTimer(5);
+    initSituationen();
+}
+
+/* ============================================================
+   KONJUGATION
+   ============================================================ */
+var KONJ_HM_VERBS = [
+    {
+        name: 'k\u00f6nnen', label: 'k\u00f6nnen \u2192 k\u00f6nnte',
+        hint: 'Pr\u00e4teritumstamm: konn- \u2192 k\u00f6nn- (Umlaut) + Konjunktivendung',
+        rows: [
+            { person: 'ich',           given: null,        answer: 'k\u00f6nnte'   },
+            { person: 'du',            given: null,        answer: 'k\u00f6nntest' },
+            { person: 'er / sie / es', given: 'k\u00f6nnte',   answer: null        },
+            { person: 'wir',           given: null,        answer: 'k\u00f6nnten'  },
+            { person: 'ihr',           given: null,        answer: 'k\u00f6nntet'  },
+            { person: 'sie / Sie',     given: 'k\u00f6nnten',  answer: null        }
+        ]
+    },
+    {
+        name: 'd\u00fcrfen', label: 'd\u00fcrfen \u2192 d\u00fcrfte',
+        hint: 'Pr\u00e4teritumstamm: durf- \u2192 d\u00fcrf- (Umlaut) + Konjunktivendung',
+        rows: [
+            { person: 'ich',           given: null,        answer: 'd\u00fcrfte'   },
+            { person: 'du',            given: null,        answer: 'd\u00fcrftest' },
+            { person: 'er / sie / es', given: 'd\u00fcrfte',   answer: null        },
+            { person: 'wir',           given: null,        answer: 'd\u00fcrften'  },
+            { person: 'ihr',           given: null,        answer: 'd\u00fcrftet'  },
+            { person: 'sie / Sie',     given: 'd\u00fcrften',  answer: null        }
+        ]
+    },
+    {
+        name: 'sollen', label: 'sollen \u2192 sollte',
+        hint: 'Pr\u00e4teritumstamm: soll- (kein Umlaut) + Konjunktivendung',
+        rows: [
+            { person: 'ich',           given: null,     answer: 'sollte'   },
+            { person: 'du',            given: null,     answer: 'solltest' },
+            { person: 'er / sie / es', given: 'sollte',  answer: null       },
+            { person: 'wir',           given: null,     answer: 'sollten'  },
+            { person: 'ihr',           given: null,     answer: 'solltet'  },
+            { person: 'sie / Sie',     given: 'sollten', answer: null       }
+        ]
+    },
+    {
+        name: 'm\u00fcssen', label: 'm\u00fcssen \u2192 m\u00fcsste',
+        hint: 'Pr\u00e4teritumstamm: muss- \u2192 m\u00fcss- (Umlaut) + Konjunktivendung',
+        rows: [
+            { person: 'ich',           given: null,       answer: 'm\u00fcsste'   },
+            { person: 'du',            given: null,       answer: 'm\u00fcsstest'  },
+            { person: 'er / sie / es', given: 'm\u00fcsste',  answer: null        },
+            { person: 'wir',           given: null,       answer: 'm\u00fcssten'  },
+            { person: 'ihr',           given: null,       answer: 'm\u00fcsstet'  },
+            { person: 'sie / Sie',     given: 'm\u00fcssten', answer: null        }
+        ]
+    },
+    {
+        name: 'werden', label: 'werden \u2192 w\u00fcrde',
+        hint: 'Pr\u00e4teritumstamm: wurd- \u2192 w\u00fcrd- (Umlaut) + Konjunktivendung',
+        rows: [
+            { person: 'ich',           given: null,       answer: 'w\u00fcrde'   },
+            { person: 'du',            given: null,       answer: 'w\u00fcrdest' },
+            { person: 'er / sie / es', given: 'w\u00fcrde',   answer: null       },
+            { person: 'wir',           given: null,       answer: 'w\u00fcrden'  },
+            { person: 'ihr',           given: null,       answer: 'w\u00fcrdet'  },
+            { person: 'sie / Sie',     given: 'w\u00fcrden',  answer: null       }
+        ]
+    },
+    {
+        name: 'm\u00f6gen', label: 'm\u00f6gen \u2192 m\u00f6chte (h\u00f6fliche Form)',
+        hint: 'M\u00f6chte ist die h\u00f6fliche Konjunktiv-II-Form von m\u00f6gen — sehr gebr\u00e4uchlich',
+        rows: [
+            { person: 'ich',           given: null,       answer: 'm\u00f6chte'   },
+            { person: 'du',            given: null,       answer: 'm\u00f6chtest' },
+            { person: 'er / sie / es', given: 'm\u00f6chte',  answer: null        },
+            { person: 'wir',           given: null,       answer: 'm\u00f6chten'  },
+            { person: 'ihr',           given: null,       answer: 'm\u00f6chtet'  },
+            { person: 'sie / Sie',     given: 'm\u00f6chten', answer: null        }
+        ]
+    }
+];
+
+var currentKonjHm = 0;
+
+function buildKonjHm() {
+    var tabsEl = document.getElementById('konj-tabs-hm');
+    var panelsEl = document.getElementById('konj-panels-hm');
+    tabsEl.innerHTML = '';
+    panelsEl.innerHTML = '';
+
+    KONJ_HM_VERBS.forEach(function(verb, idx) {
+        // Tab button
+        var btn = document.createElement('button');
+        btn.className = 'konj-tab-hm' + (idx === 0 ? ' active' : '');
+        btn.textContent = verb.name;
+        btn.onclick = function() {
+            currentKonjHm = idx;
+            document.querySelectorAll('.konj-panel-hm').forEach(function(p) { p.classList.remove('active'); });
+            document.querySelectorAll('.konj-tab-hm').forEach(function(b) { b.classList.remove('active'); });
+            document.getElementById('konj-phm-' + idx).classList.add('active');
+            btn.classList.add('active');
+        };
+        tabsEl.appendChild(btn);
+
+        // Panel
+        var panel = document.createElement('div');
+        panel.className = 'konj-panel-hm' + (idx === 0 ? ' active' : '');
+        panel.id = 'konj-phm-' + idx;
+
+        var hint = document.createElement('div');
+        hint.className = 'konj-hint-hm';
+        hint.textContent = '\uD83D\uDCA1 ' + verb.hint;
+        panel.appendChild(hint);
+
+        var table = document.createElement('table');
+        table.className = 'konj-table-hm';
+        table.innerHTML = '<thead><tr><th>Person</th><th>Konjunktiv II</th></tr></thead>';
+        var tbody = document.createElement('tbody');
+
+        verb.rows.forEach(function(row) {
+            var tr = document.createElement('tr');
+            var tdP = document.createElement('td');
+            tdP.className = 'konj-person';
+            tdP.textContent = row.person;
+            tr.appendChild(tdP);
+            var tdV = document.createElement('td');
+            if (row.answer === null) {
+                var span = document.createElement('span');
+                span.className = 'konj-given-hm';
+                span.textContent = row.given;
+                tdV.appendChild(span);
+            } else {
+                var inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'konj-inp-hm';
+                inp.dataset.answer = row.answer;
+                inp.oninput = function() {
+                    startTimer(6);
+                    konjHmLiveCheck(inp);
+                    konjHmCheckAll();
+                };
+                tdV.appendChild(inp);
+            }
+            tr.appendChild(tdV);
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        panel.appendChild(table);
+        panelsEl.appendChild(panel);
+    });
+}
+
+function konjHmLiveCheck(inp) {
+    var val = inp.value.trim();
+    var ans = (inp.dataset.answer || '').toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) { inp.classList.add('correct'); return; }
+    if (ans.indexOf(val) === 0) return;
+    inp.classList.add('wrong');
+}
+
+function konjHmCheckAll() {
+    var all = document.querySelectorAll('.konj-inp-hm');
+    var ok = true;
+    all.forEach(function(inp) { if (!inp.classList.contains('correct')) ok = false; });
+    if (ok && all.length > 0) stopTimer(6);
+}
+
+function konjHmShow() {
+    stopTimer(6);
+    document.querySelectorAll('.konj-inp-hm').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct');
+        inp.classList.remove('wrong');
+    });
+}
+
+function konjHmReset() {
+    resetTimer(6);
+    buildKonjHm();
+}
+
+/* ============================================================
+   VERBPOSITION-ÜBUNG
+   ============================================================ */
+// VP_HM_DATA: Jeder Satz hat bis zu 2 Lücken (blank1 Pflicht, blank2 optional)
+// pre/mid/post = Textteile; en = englische Übersetzung des ganzen Satzes
+var VP_HM_DATA = [
+    // ─── Aussagesätze ───────────────────────────────────────────
+    {
+        type: 'aus',
+        pre: 'Ich ', blank1: { ans: 'm\u00f6chte', w: 100 }, mid: ' gerne einen Termin ',
+        blank2: { ans: 'vereinbaren', w: 130 }, post: '.',
+        en: 'I would like to make an appointment.'
+    },
+    {
+        type: 'aus',
+        pre: 'Sie ', blank1: { ans: 'sollten', w: 90 }, mid: ' das ausdr\u00fccklich ',
+        blank2: { ans: 'erw\u00e4hnen', w: 110 }, post: '.',
+        en: 'You should mention that explicitly.'
+    },
+    {
+        type: 'aus',
+        pre: 'Ich ', blank1: { ans: 'w\u00fcrde', w: 90 }, mid: ' das gerne noch einmal ',
+        blank2: { ans: 'pr\u00fcfen', w: 90 }, post: '.',
+        en: 'I would like to check that again.'
+    },
+    {
+        type: 'aus',
+        pre: 'Er ', blank1: { ans: 'm\u00fcsste', w: 95 }, mid: ' den Antrag noch einmal ',
+        blank2: { ans: 'pr\u00fcfen', w: 90 }, post: '.',
+        en: 'He would need to check the application once more.'
+    },
+    {
+        type: 'aus',
+        pre: 'Ich ', blank1: { ans: 'h\u00e4tte', w: 90 }, mid: ' gern einen Kaffee, ',
+        blank2: null, post: 'bitte.',
+        en: 'I would like a coffee, please.'
+    },
+    {
+        type: 'aus',
+        pre: 'Wir ', blank1: { ans: 'h\u00e4tten', w: 100 }, mid: ' gern zwei Men\u00fcs vom Tagesangebot ',
+        blank2: { ans: 'bestellen', w: 110 }, post: '.',
+        en: 'We would like to order two set menus of the day.'
+    },
+    {
+        type: 'aus',
+        pre: 'Ich ', blank1: { ans: 'w\u00fcrde', w: 90 }, mid: ' Ihnen dringend ',
+        blank2: { ans: 'empfehlen', w: 110 }, post: ', das zu \u00fcberpr\u00fcfen.',
+        en: 'I would strongly recommend that you check this.'
+    },
+    // ─── H\u00f6fliche Fragen ──────────────────────────────────────
+    {
+        type: 'frage',
+        pre: '', blank1: { ans: 'K\u00f6nnten', w: 100 }, mid: ' Sie mir bitte kurz ',
+        blank2: { ans: 'helfen', w: 85 }, post: '?',
+        en: 'Could you please help me for a moment?'
+    },
+    {
+        type: 'frage',
+        pre: '', blank1: { ans: 'D\u00fcrfte', w: 90 }, mid: ' ich Sie etwas ',
+        blank2: { ans: 'fragen', w: 85 }, post: '?',
+        en: 'Might I ask you something?'
+    },
+    {
+        type: 'frage',
+        pre: '', blank1: { ans: 'W\u00fcrden', w: 95 }, mid: ' Sie das bitte noch einmal ',
+        blank2: { ans: 'erkl\u00e4ren', w: 100 }, post: '?',
+        en: 'Would you please explain that once more?'
+    },
+    {
+        type: 'frage',
+        pre: '', blank1: { ans: 'H\u00e4tten', w: 95 }, mid: ' Sie vielleicht noch ein Zimmer ',
+        blank2: null, post: 'frei?',
+        en: 'Would you happen to have a room available?'
+    },
+    {
+        type: 'frage',
+        pre: '', blank1: { ans: 'K\u00f6nntest', w: 100 }, mid: ' du mir kurz ',
+        blank2: { ans: 'helfen', w: 85 }, post: '?',
+        en: 'Could you help me for a moment? (informal)'
+    },
+    {
+        type: 'frage',
+        pre: '', blank1: { ans: 'H\u00e4ttest', w: 100 }, mid: ' du vielleicht kurz ',
+        blank2: null, post: 'Zeit f\u00fcr mich?',
+        en: 'Would you happen to have a moment for me? (informal)'
+    },
+    // ─── Neben- und Konditionals\u00e4tze ────────────────────────
+    {
+        type: 'neben',
+        pre: 'Ich w\u00e4re froh, wenn Sie mir ',
+        blank1: { ans: 'helfen', w: 85 }, mid: ' ',
+        blank2: { ans: 'k\u00f6nnten', w: 100 }, post: '.',
+        en: 'I would be glad if you could help me.'
+    },
+    {
+        type: 'neben',
+        pre: 'Es w\u00e4re sch\u00f6n, falls Sie das noch einmal ',
+        blank1: { ans: 'erkl\u00e4ren', w: 100 }, mid: ' ',
+        blank2: { ans: 'w\u00fcrden', w: 90 }, post: '.',
+        en: 'It would be nice if you could explain that once more.'
+    },
+    {
+        type: 'neben',
+        pre: 'D\u00fcrfte ich fragen, ob ein Termin m\u00f6glich ',
+        blank1: { ans: 'w\u00e4re', w: 80 }, mid: null,
+        blank2: null, post: '?',
+        en: 'Might I ask whether an appointment would be possible?'
+    },
+    {
+        type: 'neben',
+        pre: 'Ich m\u00f6chte wissen, ob Sie mir ',
+        blank1: { ans: 'helfen', w: 85 }, mid: ' ',
+        blank2: { ans: 'k\u00f6nnten', w: 100 }, post: '.',
+        en: 'I would like to know whether you could help me.'
+    },
+    {
+        type: 'neben',
+        pre: 'Wir w\u00e4ren dankbar, wenn Sie das noch einmal ',
+        blank1: { ans: '\u00fcberpr\u00fcfen', w: 110 }, mid: ' ',
+        blank2: { ans: 'k\u00f6nnten', w: 100 }, post: '.',
+        en: 'We would be grateful if you could check that once more.'
+    },
+    {
+        type: 'neben',
+        pre: 'Es w\u00e4re toll, wenn Sie uns Bescheid ',
+        blank1: { ans: 'geben', w: 80 }, mid: ' ',
+        blank2: { ans: 'k\u00f6nnten', w: 100 }, post: '.',
+        en: 'It would be great if you could let us know.'
+    },
+    {
+        type: 'neben',
+        pre: 'Ich h\u00e4tte es lieber, wenn Sie etwas leiser ',
+        blank1: { ans: 'sprechen', w: 95 }, mid: ' ',
+        blank2: { ans: 'k\u00f6nnten', w: 100 }, post: '.',
+        en: 'I would prefer it if you could speak a little more quietly.'
+    }
+];
+
+var VP_TYPE_ICONS = { aus: '\uD83D\uDFE2 Aussagesatz', frage: '\uD83D\uDD35 Frage', neben: '\uD83D\uDFE0 Nebensatz' };
+
+function buildVpHm() {
+    var container = document.getElementById('vp-hm-container');
+    container.innerHTML = '';
+    var data = VP_HM_DATA.slice().sort(function() { return Math.random() - 0.5; });
+    data.forEach(function(item) {
+        var box = document.createElement('div');
+        box.className = 'vp-l\u00fccke-hm';
+
+        // Typ-Badge
+        var badge = document.createElement('span');
+        badge.style.cssText = 'font-size:0.76em;color:#888;margin-right:6px;display:block;margin-bottom:4px;';
+        badge.textContent = VP_TYPE_ICONS[item.type] || '';
+        box.appendChild(badge);
+
+        // Satz-Zeile
+        var line = document.createElement('span');
+        line.style.cssText = 'display:block;line-height:2.2;';
+
+        // pre-Text
+        if (item.pre) line.appendChild(document.createTextNode(item.pre));
+
+        // Lücke 1
+        var inp1 = document.createElement('input');
+        inp1.type = 'text';
+        inp1.className = 'vp-inp';
+        inp1.style.width = item.blank1.w + 'px';
+        inp1.dataset.answer = item.blank1.ans;
+        inp1.oninput = function() { startTimer(7); vpHmLiveCheck(inp1); vpHmCheckAll(); };
+        line.appendChild(inp1);
+
+        // mid-Text + Lücke 2
+        if (item.mid !== null && item.mid !== undefined) {
+            if (item.mid) line.appendChild(document.createTextNode(item.mid));
+            if (item.blank2) {
+                var inp2 = document.createElement('input');
+                inp2.type = 'text';
+                inp2.className = 'vp-inp';
+                inp2.style.width = item.blank2.w + 'px';
+                inp2.dataset.answer = item.blank2.ans;
+                inp2.oninput = function() { startTimer(7); vpHmLiveCheck(inp2); vpHmCheckAll(); };
+                line.appendChild(inp2);
+            }
+        }
+
+        // post-Text
+        if (item.post) line.appendChild(document.createTextNode(' ' + item.post));
+        box.appendChild(line);
+
+        // Englische Übersetzung
+        if (item.en) {
+            var enSpan = document.createElement('span');
+            enSpan.className = 'vp-en-hint';
+            enSpan.textContent = '\uD83C\uDDEC\uD83C\uDDE7 ' + item.en;
+            box.appendChild(enSpan);
+        }
+
+        container.appendChild(box);
+    });
+}
+
+function vpHmLiveCheck(inp) {
+    var val = inp.value.trim();
+    var ans = (inp.dataset.answer || '').toLowerCase();
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) { inp.classList.add('correct'); return; }
+    if (ans.indexOf(val) === 0) return;
+    inp.classList.add('wrong');
+}
+
+function vpHmCheckAll() {
+    var all = document.querySelectorAll('#vp-hm-container .vp-inp');
+    var ok = true;
+    all.forEach(function(inp) { if (!inp.classList.contains('correct')) ok = false; });
+    if (ok && all.length > 0) stopTimer(7);
+}
+
+function vpHmShow() {
+    stopTimer(7);
+    document.querySelectorAll('#vp-hm-container .vp-inp').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.add('correct');
+        inp.classList.remove('wrong');
+    });
+}
+
+function vpHmReset() {
+    resetTimer(7);
+    buildVpHm();
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function initZuordnung() {
+    makeChipZuordnung(ZUORD_DATA, 'zuord-bank', 'zd', '.zuordnung-cat', 2);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadBestTimes();
+    initZuordnung();
+    renderLuecken(LUECKEN_DATA, 'luecken-container', 'hm-l', 3);
+    initSatzbau();
+    initSituationen();
+    buildKonjHm();
+    buildVpHm();
+});
+</script>
+</body>
+</html>

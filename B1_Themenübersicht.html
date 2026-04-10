@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 Themenübersicht</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; padding: 20px; }
+  h1 { text-align: center; color: #1a237e; margin-bottom: 6px; font-size: 1.6em; }
+  .subtitle { text-align: center; color: #666; margin-bottom: 24px; font-size: 0.95em; }
+
+  /* Band-Tabs */
+  .band-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+  .band-tab { padding: 10px 28px; border-radius: 24px; border: none; cursor: pointer;
+              font-size: 1em; font-weight: 600; transition: all 0.2s; }
+  .band-tab.b11 { background: #e8eaf6; color: #3949ab; }
+  .band-tab.b12 { background: #e8f5e9; color: #2e7d32; }
+  .band-tab.b13 { background: #fff3e0; color: #e65100; }
+  .band-tab.active { box-shadow: 0 4px 14px rgba(0,0,0,0.15); transform: scale(1.05); }
+  .band-tab.b11.active { background: #3949ab; color: white; }
+  .band-tab.b12.active { background: #2e7d32; color: white; }
+  .band-tab.b13.active { background: #e65100; color: white; }
+
+  /* Band-Inhalt */
+  .band-content { display: none; }
+  .band-content.active { display: block; }
+
+  /* Einheit-Block */
+  .einheit { background: white; border-radius: 14px; margin-bottom: 20px;
+             box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+  .einheit-header { padding: 14px 20px; font-weight: 700; font-size: 1.05em;
+                    display: flex; align-items: center; gap: 10px; }
+  .b11 .einheit-header { background: linear-gradient(135deg, #3949ab, #5c6bc0); color: white; }
+  .b12 .einheit-header { background: linear-gradient(135deg, #2e7d32, #43a047); color: white; }
+  .b13 .einheit-header { background: linear-gradient(135deg, #e65100, #ef6c00); color: white; }
+
+  /* Lektions-Grid */
+  .lektionen { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0; }
+  .lektion { padding: 11px 16px; border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0;
+             display: flex; align-items: flex-start; gap: 10px; }
+  .lektion:hover { background: #fafafa; }
+  .lektion-code { font-size: 0.72em; font-weight: 700; padding: 3px 7px; border-radius: 8px;
+                  white-space: nowrap; min-width: 52px; text-align: center; flex-shrink: 0; margin-top: 1px; }
+  .typ-X { background: #e3f2fd; color: #1565c0; }
+  .typ-G { background: #fce4ec; color: #ad1457; }
+  .typ-R { background: #e8f5e9; color: #2e7d32; }
+  .typ-S { background: #fff8e1; color: #f57f17; }
+  .typ-W { background: #ede7f6; color: #4527a0; }
+  .lektion-thema { font-size: 0.9em; line-height: 1.4; }
+  .lektion-thema.done { color: #aaa; }
+  .done-badge { font-size: 0.7em; background: #27ae60; color: white;
+                padding: 1px 6px; border-radius: 8px; margin-left: 6px; vertical-align: middle; }
+
+  /* Legende */
+  .legende { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; }
+  .leg { padding: 4px 12px; border-radius: 12px; font-size: 0.82em; font-weight: 600; }
+
+  /* Statistik */
+  .stats { text-align: center; color: #888; font-size: 0.85em; margin-bottom: 20px; }
+
+  @media (max-width: 600px) {
+    .lektionen { grid-template-columns: 1fr; }
+    .band-tab { padding: 8px 16px; font-size: 0.9em; }
+  }
+</style>
+</head>
+<body>
+
+<h1>📚 B1 Themenübersicht</h1>
+<p class="subtitle">B1.1 · B1.2 · B1.3 — alle Lektionen im Überblick</p>
+
+<div class="legende">
+  <span class="leg typ-X">X = Übungslektion</span>
+  <span class="leg typ-G">G = Grammatik</span>
+  <span class="leg typ-R">R = Lesetext</span>
+  <span class="leg typ-S">S = Sprechen</span>
+  <span class="leg typ-W">W = Schreiben</span>
+  <span style="padding:4px 12px;border-radius:12px;font-size:0.82em;background:#e8f8f0;color:#27ae60;font-weight:600;">✓ = HTML fertig</span>
+</div>
+
+<div class="band-tabs">
+  <button class="band-tab b11 active" onclick="showBand('b11')">B1.1</button>
+  <button class="band-tab b12" onclick="showBand('b12')">B1.2</button>
+  <button class="band-tab b13" onclick="showBand('b13')">B1.3</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- B1.1 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="band-content b11 active" id="band-b11">
+
+  <!-- Einheit 101 -->
+  <div class="einheit b11">
+    <div class="einheit-header">💼 Einheit 101 — Beruf &amp; Arbeit</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">1011X</span><span class="lektion-thema">Das Vorstellungsgespräch <span class="done-badge">✓ HTML</span></span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1012G</span><span class="lektion-thema">Konjunktiv II Modalverben <span class="done-badge">✓ HTML</span></span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1013R</span><span class="lektion-thema">Neue Berufe</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1014X</span><span class="lektion-thema">Einen Vertrag verhandeln</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1015G</span><span class="lektion-thema">Temporaladverbien</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1016R</span><span class="lektion-thema">Kulturelle Unterschiede am Arbeitsplatz</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1017X</span><span class="lektion-thema">Besprechungen in der Firma</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">1018S</span><span class="lektion-thema">Ein Gespräch mit dem Vorgesetzten führen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 102 -->
+  <div class="einheit b11">
+    <div class="einheit-header">🌿 Einheit 102 — Umwelt &amp; Natur</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">1021X</span><span class="lektion-thema">Umweltprobleme und Umweltschutz</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1022G</span><span class="lektion-thema">Präpositionen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1023R</span><span class="lektion-thema">Luftverschmutzung</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1024X</span><span class="lektion-thema">Umweltschutz und Recycling</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1025G</span><span class="lektion-thema">Adjektive</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1026R</span><span class="lektion-thema">Vom Menschen ausgelöste Katastrophen</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1027X</span><span class="lektion-thema">Naturkatastrophen</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">1028S</span><span class="lektion-thema">Wie umweltbewusst bist du?</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 103 -->
+  <div class="einheit b11">
+    <div class="einheit-header">🌍 Einheit 103 — Kultur &amp; Identität</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">1031X</span><span class="lektion-thema">Identität und Sprachkultur</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1032G</span><span class="lektion-thema">Lokaladverbien</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1033R</span><span class="lektion-thema">Berlin als multikulturelle Stadt</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1034X</span><span class="lektion-thema">Multikulturalismus</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1035G</span><span class="lektion-thema">Infinitivkonstruktionen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1036R</span><span class="lektion-thema">Deutsche Traditionen</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1037X</span><span class="lektion-thema">Globalisierung</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">1038S</span><span class="lektion-thema">Die kulturelle Vielfalt</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 104 -->
+  <div class="einheit b11">
+    <div class="einheit-header">💻 Einheit 104 — Digital &amp; Medien</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">1041X</span><span class="lektion-thema">Privatsphäre in einer vernetzten Welt</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1042G</span><span class="lektion-thema">Pronomen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1043R</span><span class="lektion-thema">Partnersuche online</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1044X</span><span class="lektion-thema">Online einkaufen</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1045G</span><span class="lektion-thema">Negation</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1046R</span><span class="lektion-thema">Mit Fake News umgehen</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1047X</span><span class="lektion-thema">Sprache im Journalismus</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">1048S</span><span class="lektion-thema">Über Online-Sicherheit und Datenschutz diskutieren</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 105 -->
+  <div class="einheit b11">
+    <div class="einheit-header">🏙️ Einheit 105 — Stadt &amp; Land</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">1051X</span><span class="lektion-thema">Landflucht</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1052G</span><span class="lektion-thema">Genitiv</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1053R</span><span class="lektion-thema">Kulturelle Angebote in der Großstadt</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1054X</span><span class="lektion-thema">Eine Wohnung mieten</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1055G</span><span class="lektion-thema">Infinitiv mit zu</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1056R</span><span class="lektion-thema">Das Leben auf dem Land</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1057X</span><span class="lektion-thema">Heimweh</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">1058S</span><span class="lektion-thema">Der beste Ort zum Leben</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 106 -->
+  <div class="einheit b11">
+    <div class="einheit-header">🏛️ Einheit 106 — Geschichte</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">1061X</span><span class="lektion-thema">Historische Ereignisse</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1062G</span><span class="lektion-thema">Verb lassen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1063R</span><span class="lektion-thema">Der Fall der Berliner Mauer</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1064X</span><span class="lektion-thema">Historische Persönlichkeiten</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">1065G</span><span class="lektion-thema">Verb werden</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">1066R</span><span class="lektion-thema">Immanuel Kant</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">1067X</span><span class="lektion-thema">Chronologisch erzählen</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">1068S</span><span class="lektion-thema">Über historische Fakten sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 107 Schreiben -->
+  <div class="einheit b11">
+    <div class="einheit-header">✍️ Einheit 107 — Schreiben</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-W">1071W</span><span class="lektion-thema">Ein Motivationsschreiben verfassen</span></div>
+      <div class="lektion"><span class="lektion-code typ-W">1072W</span><span class="lektion-thema">Einen Beschwerdebrief verfassen</span></div>
+    </div>
+  </div>
+
+</div><!-- end b11 -->
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- B1.2 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="band-content b12" id="band-b12">
+
+  <!-- Einheit 201 -->
+  <div class="einheit b12">
+    <div class="einheit-header">📺 Einheit 201 — Werbung &amp; Marketing</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">2011X</span><span class="lektion-thema">Werbekampagne</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2012G</span><span class="lektion-thema">Mischverben</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2013R</span><span class="lektion-thema">Werbegeschichte</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2014X</span><span class="lektion-thema">Werbung beschreiben</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2015G</span><span class="lektion-thema">Nullartikel</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2016R</span><span class="lektion-thema">Marketingstrategien</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2017X</span><span class="lektion-thema">Die Zukunft der Werbung</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">2018S</span><span class="lektion-thema">Über alte und neue Werbekampagnen sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 202 -->
+  <div class="einheit b12">
+    <div class="einheit-header">🎭 Einheit 202 — Subkulturen &amp; Lifestyle</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">2021X</span><span class="lektion-thema">Urbane Szenen</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2022G</span><span class="lektion-thema">Futur I</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2023R</span><span class="lektion-thema">Die Mainstream-Kultur</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2024X</span><span class="lektion-thema">An einer Diskussion teilnehmen</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2025G</span><span class="lektion-thema">Konjunktiv II Modalverben <span class="done-badge">✓ HTML</span></span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2026R</span><span class="lektion-thema">Reisen als Subkultur</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2027X</span><span class="lektion-thema">Tattoos und Piercings</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">2028S</span><span class="lektion-thema">Über Subkulturen sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 203 -->
+  <div class="einheit b12">
+    <div class="einheit-header">👨‍👩‍👧 Einheit 203 — Familie &amp; Gefühle</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">2031X</span><span class="lektion-thema">Familienstrukturen</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2032G</span><span class="lektion-thema">Partizip II als Adjektiv <span class="done-badge">✓ HTML</span></span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2033R</span><span class="lektion-thema">Adoption</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2034X</span><span class="lektion-thema">Gefühle ausdrücken</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2035G</span><span class="lektion-thema">Infinitivsätze</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2036R</span><span class="lektion-thema">Bikulturelle Familien</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2037X</span><span class="lektion-thema">Was ist Liebe?</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">2038S</span><span class="lektion-thema">Über Familien und Gefühle sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 204 -->
+  <div class="einheit b12">
+    <div class="einheit-header">🎬 Einheit 204 — Film &amp; Entertainment</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">2041X</span><span class="lektion-thema">Film- und Theaterkritik</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2042G</span><span class="lektion-thema">Indirekte Fragesätze</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2043R</span><span class="lektion-thema">Mehr Folgen, bitte!</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2044X</span><span class="lektion-thema">Gefühle über Dinge und Ereignisse</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2045G</span><span class="lektion-thema">Passiversatzformen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2046R</span><span class="lektion-thema">Video-on-Demand</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2047X</span><span class="lektion-thema">Einen Grund äußern</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">2048S</span><span class="lektion-thema">Shows und Programme</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 205 -->
+  <div class="einheit b12">
+    <div class="einheit-header">✈️ Einheit 205 — Ausland &amp; Erfahrungen</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">2051X</span><span class="lektion-thema">Ins Ausland übersiedeln</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2052G</span><span class="lektion-thema">Perfekt</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2053R</span><span class="lektion-thema">Ein Auslandspraktikum machen</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2054X</span><span class="lektion-thema">Internationale Erfahrungen</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2055G</span><span class="lektion-thema">Plusquamperfekt Modalverben</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2056R</span><span class="lektion-thema">Sprachassistenz in Deutschland</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2057X</span><span class="lektion-thema">Möglichkeiten ausdrücken</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">2058S</span><span class="lektion-thema">Über das Leben im Ausland diskutieren</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 206 -->
+  <div class="einheit b12">
+    <div class="einheit-header">🔧 Einheit 206 — DIY &amp; Handel</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">2061X</span><span class="lektion-thema">Mach es selbst!</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2062G</span><span class="lektion-thema">Relativsatz <span class="done-badge">✓ HTML</span></span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2063R</span><span class="lektion-thema">Ein Haus renovieren</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2064X</span><span class="lektion-thema">Lokaler Handel</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">2065G</span><span class="lektion-thema">Komplementsatz <span class="done-badge">✓ HTML</span></span></div>
+      <div class="lektion"><span class="lektion-code typ-R">2066R</span><span class="lektion-thema">Aus Müll basteln</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">2067X</span><span class="lektion-thema">Gegensatz und Ausnahme ausdrücken</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">2068S</span><span class="lektion-thema">Mit neuen Fähigkeiten das Leben ändern</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 207 Schreiben -->
+  <div class="einheit b12">
+    <div class="einheit-header">✍️ Einheit 207 — Schreiben</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-W">2071W</span><span class="lektion-thema">Ein Skript für einen Dialog schreiben</span></div>
+      <div class="lektion"><span class="lektion-code typ-W">2072W</span><span class="lektion-thema">Eine Werbeanzeige schreiben</span></div>
+    </div>
+  </div>
+
+</div><!-- end b12 -->
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- B1.3 -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="band-content b13" id="band-b13">
+
+  <!-- Einheit 301 -->
+  <div class="einheit b13">
+    <div class="einheit-header">🎲 Einheit 301 — Spiele &amp; Sport</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">3011X</span><span class="lektion-thema">Die Kultur der Brettspiele</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3012G</span><span class="lektion-thema">Mischverben</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3013R</span><span class="lektion-thema">Die Olympischen Spiele</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3014X</span><span class="lektion-thema">Konsequenzen ausdrücken</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3015G</span><span class="lektion-thema">Partizip I</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3016R</span><span class="lektion-thema">Mit Spielzeug aufwachsen</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3017X</span><span class="lektion-thema">Spielstände und Klassifizierungen</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">3018S</span><span class="lektion-thema">Über verschiedene Spielarten sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 302 -->
+  <div class="einheit b13">
+    <div class="einheit-header">⭐ Einheit 302 — Prominenz &amp; Kommunikation</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">3021X</span><span class="lektion-thema">Ich habe etwas dazu zu sagen</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3022G</span><span class="lektion-thema">Verben situativ</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3023R</span><span class="lektion-thema">Lebensweise der Berühmtheiten</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3024X</span><span class="lektion-thema">Gesprächig werden</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3025G</span><span class="lektion-thema">Verben mit Direktivergänzung</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3026R</span><span class="lektion-thema">Bekannte Autoren</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3027X</span><span class="lektion-thema">Ratschläge geben</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">3028S</span><span class="lektion-thema">Verhalten berühmter Personen besprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 303 -->
+  <div class="einheit b13">
+    <div class="einheit-header">🎓 Einheit 303 — Bildung &amp; Schule</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">3031X</span><span class="lektion-thema">Das Studentenleben</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3032G</span><span class="lektion-thema">Akkusativergänzungen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3033R</span><span class="lektion-thema">Das deutsche Schulsystem</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3034X</span><span class="lektion-thema">Das Benotungssystem</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3035G</span><span class="lektion-thema">Modalverben subjektiv</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3036R</span><span class="lektion-thema">Mehrsprachig aufwachsen</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3037X</span><span class="lektion-thema">Sich um einen Studienplatz bewerben</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">3038S</span><span class="lektion-thema">Über Bildung diskutieren</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 304 -->
+  <div class="einheit b13">
+    <div class="einheit-header">🛒 Einheit 304 — Konsum &amp; Nachhaltigkeit</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">3041X</span><span class="lektion-thema">Bewusstes Konsumverhalten</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3042G</span><span class="lektion-thema">Verb melden</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3043R</span><span class="lektion-thema">Der Einfluss der Medien auf das Konsumverhalten</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3044X</span><span class="lektion-thema">Eine komplexe Situation erklären</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3045G</span><span class="lektion-thema">Nominativ / Akkusativ / Dativergänzung</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3046R</span><span class="lektion-thema">Die Rückverfolgbarkeit der Produkte</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3047X</span><span class="lektion-thema">Eine Präsentation vorbereiten</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">3048S</span><span class="lektion-thema">Über Konsumverhalten sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 305 -->
+  <div class="einheit b13">
+    <div class="einheit-header">🚀 Einheit 305 — Science-Fiction &amp; Fiktion</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">3051X</span><span class="lektion-thema">Utopische und dystopische Fiktion</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3052G</span><span class="lektion-thema">Wortverbindungen / Feste Ausdrücke</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3053R</span><span class="lektion-thema">Apokalyptische und postapokalyptische Fiktion</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3054X</span><span class="lektion-thema">Strukturen der Narration</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3055G</span><span class="lektion-thema">Reziprokpronomen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3056R</span><span class="lektion-thema">Futuristische Science-Fiction</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3057X</span><span class="lektion-thema">Vager und gezielter Sprachgebrauch</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">3058S</span><span class="lektion-thema">Über Science-Fiction sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 306 -->
+  <div class="einheit b13">
+    <div class="einheit-header">💄 Einheit 306 — Schönheit &amp; Selbstbild</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-X">3061X</span><span class="lektion-thema">Schönheitskanon heute und damals</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3062G</span><span class="lektion-thema">Verb legen</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3063R</span><span class="lektion-thema">Schönheitsstandards in verschiedenen Kulturen</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3064X</span><span class="lektion-thema">Das Aussehen beschreiben</span></div>
+      <div class="lektion"><span class="lektion-code typ-G">3065G</span><span class="lektion-thema">Verb heben</span></div>
+      <div class="lektion"><span class="lektion-code typ-R">3066R</span><span class="lektion-thema">Selbstakzeptanz</span></div>
+      <div class="lektion"><span class="lektion-code typ-X">3067X</span><span class="lektion-thema">Emotionen ausdrücken</span></div>
+      <div class="lektion"><span class="lektion-code typ-S">3068S</span><span class="lektion-thema">Über Schönheitskanons sprechen</span></div>
+    </div>
+  </div>
+
+  <!-- Einheit 307 Schreiben -->
+  <div class="einheit b13">
+    <div class="einheit-header">✍️ Einheit 307 — Schreiben</div>
+    <div class="lektionen">
+      <div class="lektion"><span class="lektion-code typ-W">3071W</span><span class="lektion-thema">Eine Biografie schreiben</span></div>
+      <div class="lektion"><span class="lektion-code typ-W">3072W</span><span class="lektion-thema">Einen Artikel schreiben</span></div>
+    </div>
+  </div>
+
+</div><!-- end b13 -->
+
+<div class="author-footer">
+  <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+  <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+<style>
+.author-footer { margin-top: 40px; padding: 16px 20px; text-align: center; font-size: 0.8em; color: #888; border-top: 1px solid #e0e0e0; }
+.author-footer a { color: #3949ab; text-decoration: none; font-weight: 500; }
+.author-footer .author-name { font-weight: 600; color: #555; }
+</style>
+
+<script>
+function showBand(id) {
+  document.querySelectorAll('.band-content').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.band-tab').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById('band-' + id).classList.add('active');
+  document.querySelector('.band-tab.' + id).classList.add('active');
+}
+</script>
+
+</body>
+</html>

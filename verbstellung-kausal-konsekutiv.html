@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verbstellung – Kausal &amp; Konsekutiv</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #2c3e50; }
+
+/* ── NAVIGATION ── */
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { padding: 9px 16px; border: none; border-radius: 6px 6px 0 0; background: rgba(255,255,255,.18); color: #fff; cursor: pointer; font-size: 13px; font-weight: 600; transition: background .2s; }
+
+
+
+.section { display: none; padding: 28px 20px; max-width: 980px; margin: 0 auto; }
+.section.active { display: block; }
+.sec-header { margin-bottom: 22px; }
+.sec-header h2 { font-size: 1.3em; color: #667eea; margin-bottom: 6px; }
+.sec-header p { color: #555; font-size: 0.95em; line-height: 1.6; }
+
+/* ── FARBCODES FÜR SATZGLIEDER ── */
+/* S=Subjekt blau, P=Prädikat lila, O=Objekt grün, A=Adverbiale orange, K=Konnektor rot */
+.bl-s  { background: #dbeafe; border: 2px solid #3b82f6; color: #1e40af; }
+.bl-p  { background: #ede9fe; border: 2px solid #764ba2; color: #4c1d95; }
+.bl-o  { background: #d1fae5; border: 2px solid #10b981; color: #065f46; }
+.bl-a  { background: #ffedd5; border: 2px solid #f97316; color: #7c2d12; }
+.bl-k  { background: #fce7f3; border: 2px solid #ec4899; color: #831843; }
+.bl-neg { background: #f1f5f9; border: 2px solid #94a3b8; color: #475569; }
+
+/* ── TAB 0: SCHAUBILD ── */
+.schema-wrap { display: flex; flex-direction: column; gap: 24px; }
+
+/* Legende */
+.legende { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.82em; }
+.leg-block { width: 28px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: 700; }
+
+/* Positions-Raster */
+.pos-header { display: grid; grid-template-columns: 60px repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
+.pos-label { text-align: center; font-size: 0.72em; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .05em; padding: 4px; }
+.pos-label.highlight { background: #667eea; color: #fff; border-radius: 5px; }
+
+/* Satz-Zeile */
+.satz-zeile { display: grid; grid-template-columns: 60px repeat(4, 1fr); gap: 6px; align-items: start; margin-bottom: 10px; }
+.satz-typ { font-size: 0.78em; font-weight: 700; color: #667eea; writing-mode: horizontal-tb; display: flex; align-items: center; padding-right: 4px; }
+.satz-zelle { min-height: 52px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 6px 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.satz-zelle.leer { background: #f8fafc; border-style: dashed; }
+.satz-zelle.aktiv { border-color: #667eea; background: #f0f2ff; }
+
+/* Blöcke */
+.block { border-radius: 6px; padding: 4px 10px; font-size: 0.88em; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.block .label { font-size: 0.68em; font-weight: 700; opacity: 0.7; text-transform: uppercase; }
+
+/* Verbpos-Markierung */
+.verb-pos { font-size: 0.7em; text-align: center; color: #764ba2; font-weight: 700; margin-top: 2px; }
+
+/* Trennlinie */
+.schema-divider { border: none; border-top: 2px dashed #d0dde8; margin: 8px 0; }
+
+/* Regelbox */
+.regelbox { background: linear-gradient(135deg,#667eea,#764ba2); color: #fff; border-radius: 10px; padding: 16px 20px; margin-top: 8px; }
+.regelbox h3 { font-size: 1em; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.3); padding-bottom: 6px; }
+.regel-row { display: flex; align-items: baseline; gap: 10px; margin: 6px 0; font-size: 0.88em; line-height: 1.5; }
+.regel-tag { min-width: 130px; font-weight: 700; opacity: .9; }
+
+/* ── TAB 1: BAUKASTEN ── */
+.baukasten-wrap { display: flex; flex-direction: column; gap: 28px; }
+
+.aufgabe-box { background: #fff; border: 1px solid #d0dde8; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.aufgabe-box h3 { font-size: 0.9em; color: #667eea; margin-bottom: 12px; font-weight: 700; }
+
+/* Zwei Ausgangssätze */
+.ausgangssaetze { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.ausgangssatz { background: #f8fafc; border: 1.5px solid #c8d4e0; border-radius: 8px; padding: 8px 14px; font-size: 0.92em; color: #444; }
+.ausgangssatz strong { color: #667eea; }
+
+/* Konnektor-Auswahl */
+.konnektor-pool { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.k-chip { padding: 7px 16px; border: 2px solid #c8d4e0; border-radius: 20px; background: #fff; cursor: pointer; font-size: 0.88em; font-weight: 700; transition: all .15s; color: #444; }
+.k-chip:hover { border-color: #667eea; background: #f0f2ff; color: #667eea; }
+.k-chip.selected { border-color: #ec4899; background: #fce7f3; color: #831843; }
+.k-chip.correct { border-color: #27ae60; background: #d4edda; color: #1a6f3c; }
+
+/* Ergebnis-Satz */
+.ergebnis-bereich { min-height: 54px; background: #f9fafb; border: 2px dashed #b8c8d8; border-radius: 10px; padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; transition: border-color .2s; }
+.ergebnis-bereich.aktiv { border-color: #667eea; background: #f0f2ff; }
+.ergebnis-bereich.ok { border-color: #27ae60; border-style: solid; background: #f0faf4; }
+
+/* Verbpos-Anzeige */
+.verbpos-anzeige { display: none; background: #ede9fe; border-radius: 8px; padding: 8px 14px; font-size: 0.85em; color: #4c1d95; font-weight: 600; margin-top: 6px; }
+.verbpos-anzeige.sichtbar { display: block; }
+
+/* Feedback */
+.bk-fb { font-size: 0.85em; font-weight: 700; margin-top: 8px; min-height: 20px; }
+.bk-fb.ok  { color: #27ae60; }
+.bk-fb.err { color: #e74c3c; }
+
+/* Timer */
+.timer-bar { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #dde; border-radius: 8px; padding: 8px 14px; margin-bottom: 16px; font-size: 0.88em; color: #555; }
+.timer-display { font-weight: 700; font-size: 1.1em; color: #764ba2; font-variant-numeric: tabular-nums; min-width: 52px; }
+.timer-best { color: #f39c12; font-weight: 600; }
+
+.action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.btn-show  { padding: 9px 20px; border: none; border-radius: 7px; background: #27ae60; color: #fff; cursor: pointer; font-size: 0.92em; font-weight: 700; }
+.btn-show:hover { background: #1e8449; }
+.btn-reset { padding: 9px 20px; border: none; border-radius: 7px; background: #ecf0f1; color: #555; cursor: pointer; font-size: 0.92em; font-weight: 700; }
+.btn-reset:hover { background: #dde3e8; }
+
+.author-footer { text-align: center; padding: 20px; font-size: 0.8em; color: #aaa; margin-top: 20px; }
+.author-footer a { color: #aaa; }
+
+@media (max-width: 640px) {
+  .pos-header, .satz-zeile { grid-template-columns: 45px repeat(4, 1fr); }
+  .block { font-size: 0.78em; padding: 3px 7px; }
+}
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+@media (max-width: 600px) {
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; font-size: 0.78em; padding: 10px 4px; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection(0)">0 · Schaubild</button>
+  <button class="nav-btn" onclick="showSection(1)">1 · Baukasten</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 0 · SCHAUBILD
+══════════════════════════════════════════ -->
+<div class="section active" id="sec-0">
+  <div class="sec-header">
+    <h2>📐 Verbstellung: Kausal &amp; Konsekutiv</h2>
+    <p>Dieselbe Aussage – vier verschiedene grammatische Formen. Der Unterschied liegt in der <strong>Position des Verbs</strong>.</p>
+  </div>
+
+  <!-- Legende -->
+  <div class="legende">
+    <div class="leg-item"><div class="leg-block bl-s">S</div> Subjekt</div>
+    <div class="leg-item"><div class="leg-block bl-p">P</div> Prädikat</div>
+    <div class="leg-item"><div class="leg-block bl-o">O</div> Objekt</div>
+    <div class="leg-item"><div class="leg-block bl-a">A</div> Adverbiale</div>
+    <div class="leg-item"><div class="leg-block bl-k">K</div> Konnektor</div>
+    <div class="leg-item"><div class="leg-block bl-neg">–</div> Negation</div>
+  </div>
+
+  <br>
+
+  <!-- ── KAUSAL ── -->
+  <div class="schema-wrap">
+
+    <div>
+      <div style="font-size:0.82em; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">
+        KAUSAL — Grund angeben
+      </div>
+
+      <!-- Positions-Kopfzeile -->
+      <div class="pos-header">
+        <div></div>
+        <div class="pos-label highlight">Pos. 1</div>
+        <div class="pos-label highlight">Pos. 2 · Verb</div>
+        <div class="pos-label">Mittelfeld</div>
+        <div class="pos-label highlight">Satzende</div>
+      </div>
+
+      <!-- Subjunktion: weil -->
+      <div class="satz-zeile">
+        <div class="satz-typ">Subj.</div>
+        <div class="satz-zelle">
+          <span class="block bl-s"><span class="label">S</span> Er</span>
+          <span class="block bl-neg">nicht</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-p"><span class="label">P</span> kommt</span>
+        </div>
+        <div class="satz-zelle leer"></div>
+        <div class="satz-zelle" style="flex-direction:column; align-items:flex-start;">
+          <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
+            <span class="block bl-k"><span class="label">K</span> weil</span>
+            <span class="block bl-s"><span class="label">S</span> er</span>
+            <span class="block bl-a"><span class="label">A</span> krank</span>
+            <span class="block bl-p" style="border-color:#e74c3c; color:#c0392b;">→ ist ←</span>
+          </div>
+          <div class="verb-pos">Verb ans Ende</div>
+        </div>
+      </div>
+
+      <!-- Konjunktion: denn -->
+      <div class="satz-zeile">
+        <div class="satz-typ">Konj.</div>
+        <div class="satz-zelle">
+          <span class="block bl-s"><span class="label">S</span> Er</span>
+          <span class="block bl-neg">nicht</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-p"><span class="label">P</span> kommt</span>
+        </div>
+        <div class="satz-zelle" style="flex-direction:column; align-items:flex-start;">
+          <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
+            <span class="block bl-k"><span class="label">K</span> denn</span>
+            <span class="block bl-s"><span class="label">S</span> er</span>
+            <span class="block bl-p" style="border-color:#3b82f6; color:#1e40af;">ist</span>
+            <span class="block bl-a"><span class="label">A</span> krank</span>
+          </div>
+          <div class="verb-pos">Verb bleibt Pos. 2</div>
+        </div>
+        <div class="satz-zelle leer"></div>
+      </div>
+
+      <!-- Präposition: wegen -->
+      <div class="satz-zeile">
+        <div class="satz-typ">Präp.</div>
+        <div class="satz-zelle">
+          <span class="block bl-s"><span class="label">S</span> Er</span>
+          <span class="block bl-neg">nicht</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-p"><span class="label">P</span> kommt</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-k"><span class="label">K</span> wegen</span>
+          <span class="block bl-a"><span class="label">A</span> seiner Krankheit</span>
+        </div>
+        <div class="satz-zelle leer" style="justify-content:center;">
+          <span style="font-size:0.75em; color:#aaa; font-style:italic;">kein 2. Verb</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="schema-divider">
+
+    <!-- ── KONSEKUTIV ── -->
+    <div>
+      <div style="font-size:0.82em; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">
+        KONSEKUTIV — Folge angeben
+      </div>
+
+      <div class="pos-header">
+        <div></div>
+        <div class="pos-label highlight">Pos. 1</div>
+        <div class="pos-label highlight">Pos. 2 · Verb</div>
+        <div class="pos-label">Mittelfeld</div>
+        <div class="pos-label">Satzende</div>
+      </div>
+
+      <!-- Konjunktionaladverb: deshalb -->
+      <div class="satz-zeile">
+        <div class="satz-typ">Adv.</div>
+        <div class="satz-zelle" style="flex-direction:column; align-items:flex-start;">
+          <div style="display:flex; flex-wrap:wrap; gap:4px;">
+            <span class="block bl-s"><span class="label">S</span> Er</span>
+            <span class="block bl-p"><span class="label">P</span> war</span>
+            <span class="block bl-a"><span class="label">A</span> krank</span>
+          </div>
+          <div style="font-size:0.72em; color:#aaa; margin-top:2px;">Satz 1</div>
+        </div>
+        <div class="satz-zelle" style="flex-direction:column; align-items:flex-start;">
+          <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
+            <span class="block bl-k" style="border-color:#e74c3c; color:#c0392b;">→ deshalb ←</span>
+          </div>
+          <div class="verb-pos">Pos. 1 → Inversion!</div>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-p" style="border-color:#e74c3c; color:#c0392b;">→ kommt ←</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-s"><span class="label">S</span> er</span>
+          <span class="block bl-neg">nicht</span>
+        </div>
+        <div class="satz-zelle leer"></div>
+      </div>
+
+      <!-- Subjunktion: sodass -->
+      <div class="satz-zeile">
+        <div class="satz-typ">Subj.</div>
+        <div class="satz-zelle">
+          <span class="block bl-s"><span class="label">S</span> Er</span>
+          <span class="block bl-neg">nicht</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-p"><span class="label">P</span> kommt</span>
+        </div>
+        <div class="satz-zelle leer"></div>
+        <div class="satz-zelle" style="flex-direction:column; align-items:flex-start;">
+          <div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">
+            <span class="block bl-k"><span class="label">K</span> sodass</span>
+            <span class="block bl-s"><span class="label">S</span> er</span>
+            <span class="block bl-neg">nicht</span>
+            <span class="block bl-p" style="border-color:#e74c3c; color:#c0392b;">→ kommen kann ←</span>
+          </div>
+          <div class="verb-pos">Verb ans Ende</div>
+        </div>
+      </div>
+
+      <!-- Präposition: infolge -->
+      <div class="satz-zeile">
+        <div class="satz-typ">Präp.</div>
+        <div class="satz-zelle">
+          <span class="block bl-s"><span class="label">S</span> Er</span>
+          <span class="block bl-neg">nicht</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-p"><span class="label">P</span> kommt</span>
+        </div>
+        <div class="satz-zelle">
+          <span class="block bl-k"><span class="label">K</span> infolge</span>
+          <span class="block bl-a"><span class="label">A</span> seiner Krankheit</span>
+        </div>
+        <div class="satz-zelle leer" style="justify-content:center;">
+          <span style="font-size:0.75em; color:#aaa; font-style:italic;">kein 2. Verb</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /schema-wrap -->
+
+  <!-- Regelkarte -->
+  <div class="regelbox" style="margin-top:24px;">
+    <h3>Die Regel: Verbposition bestimmt die Wortart</h3>
+    <div class="regel-row">
+      <span class="regel-tag">Subjunktion (weil, sodass)</span>
+      <span>→ Nebensatz · Verb geht ans <strong>Ende</strong></span>
+    </div>
+    <div class="regel-row">
+      <span class="regel-tag">Konjunktion (denn)</span>
+      <span>→ Hauptsatz · Verb bleibt auf <strong>Position 2</strong>, keine Inversion</span>
+    </div>
+    <div class="regel-row">
+      <span class="regel-tag">Konjunktionaladverb (deshalb)</span>
+      <span>→ Hauptsatz · steht auf <strong>Position 1</strong> → Inversion: Verb vor Subjekt</span>
+    </div>
+    <div class="regel-row">
+      <span class="regel-tag">Präposition (wegen, infolge)</span>
+      <span>→ Nominalphrase · <strong>kein zweites Verb</strong></span>
+    </div>
+    <div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,.3); font-size:0.85em; opacity:.85;">
+      ⚠️ Kausal hat <strong>kein Konjunktionaladverb</strong> — deshalb/deswegen/daher sind <em>konsekutiv</em> (Folge), nicht kausal (Grund).
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 1 · BAUKASTEN
+══════════════════════════════════════════ -->
+<div class="section" id="sec-1">
+  <div class="sec-header">
+    <h2>🧱 Baukasten – Sätze verbinden</h2>
+    <p>Wählen Sie einen Konnektor. Der Baukasten zeigt Ihnen sofort, wie sich die Verbposition verändert.</p>
+  </div>
+
+  <div class="timer-bar">
+    <span>⏱</span>
+    <span class="timer-display" id="timer-1">0:00</span>
+    <span>Bestzeit: <span class="timer-best" id="best-1">–</span></span>
+  </div>
+
+  <div class="baukasten-wrap" id="baukasten-container"></div>
+
+  <div class="action-bar">
+    <button class="btn-show"  onclick="bkShow()">👁 Lösungen</button>
+    <button class="btn-reset" onclick="bkReset()">🔄 Neu starten</button>
+  </div>
+</div>
+
+<div class="author-footer">
+  <span>&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+  <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function showSection(n) {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// ═══════════════════════════════════════════════════
+// TIMER – Auto-Start / Auto-Stop
+// ═══════════════════════════════════════════════════
+const TIMER_PREFIX = 'verbstellung_kk_';
+let timerInterval = null, timerSeconds = 0, timerRunning = false, timerStarted = false;
+
+function timerAutoStart() {
+  if (timerStarted) return;
+  timerStarted = true; timerRunning = true;
+  timerInterval = setInterval(() => {
+    timerSeconds++;
+    const m = Math.floor(timerSeconds/60), s = timerSeconds%60;
+    document.getElementById('timer-1').textContent = m+':'+(s<10?'0':'')+s;
+  }, 1000);
+}
+
+function timerStop() {
+  if (!timerRunning) return;
+  clearInterval(timerInterval); timerRunning = false;
+  const prev = localStorage.getItem(TIMER_PREFIX+'1');
+  if (!prev || timerSeconds < parseInt(prev)) {
+    localStorage.setItem(TIMER_PREFIX+'1', timerSeconds);
+    loadBestTime();
+  }
+}
+
+function timerResetAll() {
+  clearInterval(timerInterval);
+  timerRunning = false; timerStarted = false; timerSeconds = 0;
+  document.getElementById('timer-1').textContent = '0:00';
+}
+
+function loadBestTime() {
+  const v = localStorage.getItem(TIMER_PREFIX+'1');
+  if (v) {
+    const sec = parseInt(v), m = Math.floor(sec/60), s = sec%60;
+    document.getElementById('best-1').textContent = m+':'+(s<10?'0':'')+s;
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// BAUKASTEN-DATEN
+// Jede Aufgabe: zwei Ausgangssätze + mögliche Konnektoren
+// correct: der vorgesehene Konnektor dieser Aufgabe
+// pos: Verbpositions-Erklärung
+// result: fertiger Satz als Blöcke [{text, cls}]
+// ═══════════════════════════════════════════════════
+const BK_DATA = [
+  {
+    id: 0,
+    label: 'Aufgabe 1 — Kausal',
+    s1: 'Er kommt heute nicht zur Arbeit.',
+    s2: 'Er ist krank.',
+    konnektoren: [
+      { word: 'weil',    cat: 'kausal',      correct: true,
+        pos: 'Subjunktion → Verb geht ans Ende des Nebensatzes',
+        result: [
+          {t:'Er kommt heute nicht zur Arbeit,', c:'bl-neg'},
+          {t:'weil', c:'bl-k'},
+          {t:'er', c:'bl-s'},
+          {t:'krank', c:'bl-a'},
+          {t:'ist.', c:'bl-p'},
+        ]
+      },
+      { word: 'denn',    cat: 'kausal',      correct: true,
+        pos: 'Koordinierende Konjunktion → Verb bleibt auf Position 2, keine Inversion',
+        result: [
+          {t:'Er kommt heute nicht zur Arbeit,', c:'bl-neg'},
+          {t:'denn', c:'bl-k'},
+          {t:'er', c:'bl-s'},
+          {t:'ist', c:'bl-p'},
+          {t:'krank.', c:'bl-a'},
+        ]
+      },
+      { word: 'wegen',   cat: 'kausal',      correct: true,
+        pos: 'Präposition → kein zweites Verb, Nominalphrase mit Genitiv',
+        result: [
+          {t:'Er kommt heute', c:'bl-neg'},
+          {t:'wegen', c:'bl-k'},
+          {t:'seiner Krankheit', c:'bl-a'},
+          {t:'nicht zur Arbeit.', c:'bl-neg'},
+        ]
+      },
+      { word: 'deshalb', cat: 'konsekutiv',  correct: false,
+        pos: '⚠️ deshalb ist konsekutiv (Folge) — hier wird aber ein Grund angegeben!',
+        result: []
+      },
+    ]
+  },
+  {
+    id: 1,
+    label: 'Aufgabe 2 — Konsekutiv',
+    s1: 'Er war sehr krank.',
+    s2: 'Er kann heute nicht kommen.',
+    konnektoren: [
+      { word: 'deshalb',      cat: 'konsekutiv', correct: true,
+        pos: 'Konjunktionaladverb → steht auf Position 1 → Inversion: Verb vor Subjekt!',
+        result: [
+          {t:'Er war sehr krank.', c:'bl-a'},
+          {t:'Deshalb', c:'bl-k'},
+          {t:'kann', c:'bl-p'},
+          {t:'er', c:'bl-s'},
+          {t:'heute nicht kommen.', c:'bl-neg'},
+        ]
+      },
+      { word: 'deswegen',     cat: 'konsekutiv', correct: true,
+        pos: 'Konjunktionaladverb → steht auf Position 1 → Inversion: Verb vor Subjekt!',
+        result: [
+          {t:'Er war sehr krank.', c:'bl-a'},
+          {t:'Deswegen', c:'bl-k'},
+          {t:'kann', c:'bl-p'},
+          {t:'er', c:'bl-s'},
+          {t:'heute nicht kommen.', c:'bl-neg'},
+        ]
+      },
+      { word: 'sodass',       cat: 'konsekutiv', correct: true,
+        pos: 'Subjunktion → Verb geht ans Ende des Nebensatzes',
+        result: [
+          {t:'Er war sehr krank,', c:'bl-a'},
+          {t:'sodass', c:'bl-k'},
+          {t:'er', c:'bl-s'},
+          {t:'heute nicht', c:'bl-neg'},
+          {t:'kommen konnte.', c:'bl-p'},
+        ]
+      },
+      { word: 'weil',         cat: 'kausal',     correct: false,
+        pos: '⚠️ weil gibt einen Grund an — hier wird aber eine Folge ausgedrückt!',
+        result: []
+      },
+    ]
+  },
+  {
+    id: 2,
+    label: 'Aufgabe 3 — Kausal mit Inversion?',
+    s1: 'Sie hat die Prüfung bestanden.',
+    s2: 'Sie hat intensiv gelernt.',
+    konnektoren: [
+      { word: 'weil',       cat: 'kausal',     correct: true,
+        pos: 'Subjunktion → Verb ans Ende: … weil sie intensiv gelernt hat.',
+        result: [
+          {t:'Sie hat die Prüfung bestanden,', c:'bl-o'},
+          {t:'weil', c:'bl-k'},
+          {t:'sie', c:'bl-s'},
+          {t:'intensiv', c:'bl-a'},
+          {t:'gelernt hat.', c:'bl-p'},
+        ]
+      },
+      { word: 'da',         cat: 'kausal',     correct: true,
+        pos: 'Subjunktion (wie weil) → Verb ans Ende: … da sie intensiv gelernt hat.',
+        result: [
+          {t:'Da', c:'bl-k'},
+          {t:'sie', c:'bl-s'},
+          {t:'intensiv', c:'bl-a'},
+          {t:'gelernt hat,', c:'bl-p'},
+          {t:'hat sie die Prüfung bestanden.', c:'bl-o'},
+        ]
+      },
+      { word: 'denn',       cat: 'kausal',     correct: true,
+        pos: 'Konjunktion → Verb bleibt auf Position 2: … denn sie hat intensiv gelernt.',
+        result: [
+          {t:'Sie hat die Prüfung bestanden,', c:'bl-o'},
+          {t:'denn', c:'bl-k'},
+          {t:'sie', c:'bl-s'},
+          {t:'hat', c:'bl-p'},
+          {t:'intensiv gelernt.', c:'bl-a'},
+        ]
+      },
+      { word: 'daher',      cat: 'konsekutiv', correct: false,
+        pos: '⚠️ daher ist konsekutiv — es drückt eine Folge aus, keinen Grund!',
+        result: []
+      },
+    ]
+  },
+  {
+    id: 3,
+    label: 'Aufgabe 4 — Konsekutiv: Inversion erkennen',
+    s1: 'Das Projekt war ein großer Erfolg.',
+    s2: 'Die Firma bekommt einen neuen Auftrag.',
+    konnektoren: [
+      { word: 'folglich',     cat: 'konsekutiv', correct: true,
+        pos: 'Konjunktionaladverb → Position 1 → Inversion: Verb direkt nach folglich',
+        result: [
+          {t:'Das Projekt war ein großer Erfolg.', c:'bl-a'},
+          {t:'Folglich', c:'bl-k'},
+          {t:'bekommt', c:'bl-p'},
+          {t:'die Firma', c:'bl-s'},
+          {t:'einen neuen Auftrag.', c:'bl-o'},
+        ]
+      },
+      { word: 'sodass',       cat: 'konsekutiv', correct: true,
+        pos: 'Subjunktion → Verb ans Ende: … sodass die Firma einen neuen Auftrag bekommt.',
+        result: [
+          {t:'Das Projekt war ein großer Erfolg,', c:'bl-a'},
+          {t:'sodass', c:'bl-k'},
+          {t:'die Firma', c:'bl-s'},
+          {t:'einen neuen Auftrag', c:'bl-o'},
+          {t:'bekommt.', c:'bl-p'},
+        ]
+      },
+      { word: 'infolge',      cat: 'konsekutiv', correct: true,
+        pos: 'Präposition + Genitiv → kein zweites Verb',
+        result: [
+          {t:'Infolge', c:'bl-k'},
+          {t:'des großen Projekterfolgs', c:'bl-a'},
+          {t:'bekommt die Firma', c:'bl-p'},
+          {t:'einen neuen Auftrag.', c:'bl-o'},
+        ]
+      },
+      { word: 'weil',         cat: 'kausal',     correct: false,
+        pos: '⚠️ weil gibt einen Grund an — hier wird aber die Folge des Projekterfolgs beschrieben!',
+        result: []
+      },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════
+// BAUKASTEN RENDERN
+// ═══════════════════════════════════════════════════
+let bkState = {}; // { aufgabeId: gewählter Konnektor-Index }
+
+function bkInit() {
+  const con = document.getElementById('baukasten-container');
+  con.innerHTML = '';
+  bkState = {};
+
+  BK_DATA.forEach(aufg => {
+    const box = document.createElement('div');
+    box.className = 'aufgabe-box';
+    box.id = 'bk-'+aufg.id;
+
+    // Titel
+    const h3 = document.createElement('h3');
+    h3.textContent = aufg.label;
+    box.appendChild(h3);
+
+    // Ausgangssätze
+    const as = document.createElement('div');
+    as.className = 'ausgangssaetze';
+    [aufg.s1, aufg.s2].forEach((s,i) => {
+      const d = document.createElement('div');
+      d.className = 'ausgangssatz';
+      d.innerHTML = `<strong>Satz ${i+1}:</strong> ${s}`;
+      as.appendChild(d);
+    });
+    box.appendChild(as);
+
+    // Frage
+    const frage = document.createElement('div');
+    frage.style.cssText = 'font-size:0.88em; color:#555; margin-bottom:10px; font-weight:600;';
+    frage.textContent = 'Welche Konnektoren passen? Klicken Sie und beobachten Sie die Verbposition.';
+    box.appendChild(frage);
+
+    // Konnektor-Pool
+    const pool = document.createElement('div');
+    pool.className = 'konnektor-pool';
+    aufg.konnektoren.forEach((k, ki) => {
+      const chip = document.createElement('button');
+      chip.className = 'k-chip';
+      chip.textContent = k.word;
+      chip.dataset.aufg = aufg.id;
+      chip.dataset.ki = ki;
+      chip.onclick = () => { timerAutoStart(); bkSelect(aufg.id, ki); };
+      pool.appendChild(chip);
+    });
+    box.appendChild(pool);
+
+    // Ergebnis-Bereich
+    const erg = document.createElement('div');
+    erg.className = 'ergebnis-bereich';
+    erg.id = 'bk-erg-'+aufg.id;
+    erg.innerHTML = '<span style="color:#bbb; font-size:0.85em; font-style:italic;">→ Wählen Sie einen Konnektor</span>';
+    box.appendChild(erg);
+
+    // Verbpos-Anzeige
+    const vp = document.createElement('div');
+    vp.className = 'verbpos-anzeige';
+    vp.id = 'bk-vp-'+aufg.id;
+    box.appendChild(vp);
+
+    // Feedback
+    const fb = document.createElement('div');
+    fb.className = 'bk-fb';
+    fb.id = 'bk-fb-'+aufg.id;
+    box.appendChild(fb);
+
+    con.appendChild(box);
+  });
+}
+
+function bkSelect(aufgId, ki) {
+  const aufg = BK_DATA.find(a => a.id === aufgId);
+  const k = aufg.konnektoren[ki];
+  bkState[aufgId] = ki;
+
+  // Chips aktualisieren
+  const box = document.getElementById('bk-'+aufgId);
+  box.querySelectorAll('.k-chip').forEach((c,i) => {
+    c.classList.remove('selected','correct');
+    if (i === ki) c.classList.add(k.correct ? 'correct' : 'selected');
+  });
+
+  // Ergebnis
+  const erg = document.getElementById('bk-erg-'+aufgId);
+  erg.className = 'ergebnis-bereich' + (k.correct ? ' ok' : ' aktiv');
+  erg.innerHTML = '';
+
+  if (k.correct && k.result.length > 0) {
+    k.result.forEach(seg => {
+      const bl = document.createElement('span');
+      bl.className = 'block ' + seg.c;
+      bl.textContent = seg.t;
+      erg.appendChild(bl);
+    });
+  } else if (!k.correct) {
+    erg.innerHTML = '<span style="color:#e74c3c; font-size:0.88em; font-weight:700;">✗ Dieser Konnektor passt hier nicht.</span>';
+  }
+
+  // Verbpos-Anzeige
+  const vp = document.getElementById('bk-vp-'+aufgId);
+  vp.textContent = k.pos;
+  vp.className = 'verbpos-anzeige sichtbar';
+  vp.style.background = k.correct ? '#d4edda' : '#fde8e8';
+  vp.style.color = k.correct ? '#1a6f3c' : '#c0392b';
+
+  // Feedback
+  const fb = document.getElementById('bk-fb-'+aufgId);
+  if (k.correct) {
+    fb.textContent = '✓ Richtig! ' + k.cat.charAt(0).toUpperCase() + k.cat.slice(1) + '.';
+    fb.className = 'bk-fb ok';
+  } else {
+    fb.textContent = '✗ Nicht passend für diese Bedeutung.';
+    fb.className = 'bk-fb err';
+  }
+
+  checkAllCorrect();
+}
+
+function checkAllCorrect() {
+  const allOk = BK_DATA.every(aufg => {
+    const ki = bkState[aufg.id];
+    if (ki === undefined) return false;
+    return aufg.konnektoren[ki].correct;
+  });
+  if (allOk) timerStop();
+}
+
+function bkShow() {
+  BK_DATA.forEach(aufg => {
+    // Ersten korrekten Konnektor wählen
+    const ki = aufg.konnektoren.findIndex(k => k.correct);
+    if (ki >= 0) bkSelect(aufg.id, ki);
+  });
+  timerStop();
+}
+
+function bkReset() {
+  bkInit();
+  timerResetAll();
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+bkInit();
+loadBestTime();
+</script>
+</div>
+</body>
+</html>

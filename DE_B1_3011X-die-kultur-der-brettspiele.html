@@ -8,73 +8,121 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
 .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+
+/* HEADER */
 .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
 .header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
 .header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
 .header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+
+/* NAV */
 .nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
 .nav-btn { flex: 1; padding: 14px 8px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .nav-btn:last-child { border-right: none; }
-.nav-btn:hover { background: #e8ecff; color: #667eea; }
-.nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 600; border-bottom: 3px solid #667eea; }
 .nav-emoji { font-size: 1.3em; line-height: 1.2; }
-.nav-label { font-size: 0.75em; margin-top: 2px; line-height: 1.2; }
-.section { display: none; }
+.nav-label { font-size: 0.72em; margin-top: 2px; line-height: 1.2; }
+
+/* SECTIONS */
+.section { display: none; padding: 28px 30px; }
 .section.active { display: block; }
 .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: block; }
-@media (max-width: 600px) { .tab-banner { max-height: 120px; } }
-.section-content { padding: 28px 30px; }
-.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
+
+/* CONTROL BAR */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { border-color: #667eea; color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.current-time { color: #667eea; }
+.best-time { color: #f39c12; }
+
+/* SECTION TITLES & HILFE */
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 10px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 18px; }
 .hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
 .hilfe-box strong { color: #5a3e9e; }
-.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
-.tc-buttons { display:flex; gap:6px; }
-.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
-.tc-buttons button:hover { background:#f0f0f0; color:#555; }
-.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
-.timer-display { color:#667eea; font-weight:700; }
-.best-display  { color:#f39c12; font-weight:600; }
+
+/* VORENTLASTUNG — VOKABELKARTEN */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 16px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 4px; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+
+/* LESETEXT */
+.story-text { max-width: 640px; margin: 0 auto; font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 1.85; color: #1a1a1a; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-of-type { text-indent: 0; }
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; max-width: 640px; margin-left: auto; margin-right: auto; }
+.vocab-hl { background: #ffe9a0; border-radius: 3px; padding: 1px 3px; font-weight: 600; cursor: help; }
+
+/* GENUS — DRAG & DROP */
+.genus-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f0f0f8; border-radius: 10px; min-height: 60px; margin-bottom: 20px; border: 1px dashed #bbb; }
+.genus-zones { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+.drop-zone { min-height: 120px; border-radius: 10px; border: 2px dashed #c5cae9; padding: 10px; background: #fafbff; transition: all .2s; display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+.drop-zone-label { text-align: center; font-weight: 700; color: #5a3e9e; font-size: 0.95em; margin-bottom: 6px; padding: 6px; background: #f0ecff; border-radius: 6px; }
+.drop-zone-wrap { display: flex; flex-direction: column; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 6px 12px; border-radius: 18px; cursor: move; font-weight: 500; font-size: 0.88em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+
+/* LÜCKENTEXT */
 .luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
-.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1.0em; padding: 2px 4px; transition: border-color 0.2s; min-width: 110px; }
-.luecken-inp:focus { border-bottom-color: #667eea; }
-.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
-.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
-.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
-.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
-.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+input.blank { border: none; border-bottom: 2px solid #c5cae9; background: transparent; padding: 3px 6px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; min-width: 4ch; }
+input.blank:focus { border-bottom-color: #667eea; }
+input.blank.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+input.blank.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; color: #27ae60; font-weight: 700; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; color: #e74c3c; }
+
+/* MULTIPLE CHOICE */
+.mc-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; }
+.mc-question { font-size: 1.05em; color: #333; margin-bottom: 10px; line-height: 1.5; }
+.mc-options { display: flex; flex-wrap: wrap; gap: 6px; }
+.mc-opt { background: #fff; border: 1.5px solid #c5cae9; border-radius: 20px; padding: 5px 14px; font-size: 11px; color: #555; cursor: pointer; transition: all 0.15s; font-weight: 500; font-family: inherit; }
+.mc-opt:hover { border-color: #667eea; color: #667eea; }
+.mc-opt.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.mc-opt.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+.mc-opt:disabled { cursor: default; }
+
+/* SATZBAU */
+.satzbau-item { background: #fafbff; border: 1px solid #e0e4ff; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: #f8f8f8; border-radius: 10px; min-height: 52px; margin-bottom: 8px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 52px; align-items: center; margin-bottom: 6px; }
 .sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
 .sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
-.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
-.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
-.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
-.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 6px 14px; color: #333; font-weight: 700; font-size: 1.1em; min-width: 18px; text-align: center; }
 .chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
 .chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
 .sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
-.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback { font-size: 0.88em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
 .satzbau-feedback.correct { color: #27ae60; }
 .satzbau-feedback.incorrect { color: #e74c3c; }
-.satzbau-item { margin-bottom: 20px; }
-.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.vocab-en { font-weight: 600; color: #764ba2; min-width: 160px; font-size: 0.95em; }
-.vocab-arrow { color: #ccc; font-size: 1.2em; }
-.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
-.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
-.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
-.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
-.vocab-inputs input.art { width: 70px; }
-.vocab-inputs input.wort { width: 130px; }
-.vocab-inputs input.plural { width: 140px; }
-.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
-.score-box { background: #e8f8f0; border: 1px solid #27ae60; border-radius: 8px; padding: 10px 16px; margin-top: 14px; font-size: 0.9em; color: #1a7a3c; font-weight: 600; display: none; }
+
+/* WORTSCHATZ */
+#wortschatzContainer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ws-prompt { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 6px; }
+.ws-inputs { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ws-inputs input.art { width: 70px; }
+.ws-inputs input.wort { width: 160px; }
+.ws-inputs input.plural { width: 140px; }
+.ws-inputs input.solo { width: 220px; }
+
+/* MOBILE */
 @media (max-width: 600px) {
   body { padding: 8px; }
   .nav { flex-wrap: wrap; }
-  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.75em; padding: 10px 6px; border-right: 1px solid #ddd; }
+  .nav-btn { flex: 1 1 25%; min-width: 0; font-size: 0.72em; padding: 10px 4px; border-right: 1px solid #ddd; }
   .nav-btn:last-child { border-right: 1px solid #ddd; }
-  .vocab-item { flex-direction: column; align-items: flex-start; }
+  .section { padding: 18px 16px; }
+  .tab-banner { max-height: 120px; }
+  .genus-zones { grid-template-columns: 1fr 1fr; }
+  #wortschatzContainer { grid-template-columns: 1fr; }
 }
+
+/* FOOTER */
 .author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
 .author-footer a { color: #aaa; }
 .author-name { font-weight: 700; }
@@ -84,98 +132,145 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 <div class="container">
   <div class="header">
     <h1>Die Kultur der Brettspiele</h1>
-    <p style="font-family: Georgia, serif;">B1.3 – Lektion 3011X &nbsp;|&nbsp; Kommunikation</p>
+    <p>B1.3 – Lektion 3011X · Kommunikation</p>
     <div class="big-emoji">🎲</div>
   </div>
 
   <div class="nav">
-    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">💡</span><span class="nav-label">Wörter</span></div>
-    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
-    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
-    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">📖</span><span class="nav-label">Vorentlastung</span></div>
+    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">📄</span><span class="nav-label">Lesetext</span></div>
+    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🔤</span><span class="nav-label">Genus</span></div>
+    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">☑️</span><span class="nav-label">Multiple Choice</span></div>
+    <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showSection(6)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
   </div>
 
+  <!-- TAB 0 — VORENTLASTUNG -->
   <div class="section active" id="sec-0">
-  <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="section-title">💡 Schlüsselwörter</div>
-<div class="hilfe-box">
-<strong>das Brettspiel</strong> (-e) — the board game<br>
-<strong>der Spieler</strong> (-) — the player<br>
-<strong>die Regel</strong> (-n) — the rule<br>
-<strong>gewinnen</strong> — to win<br>
-<strong>verlieren</strong> — to lose<br>
-<strong>der Würfel</strong> (-) — the die/dice<br>
-<strong>das Spielfeld</strong> (-er) — the game board<br>
-<strong>der Zug</strong> (Züge) — the move / turn<br>
-<strong>stratégisch</strong> — strategic<br>
-<strong>kooperativ</strong> — cooperative
-</div>
-  </div>
+    <img class="tab-banner" src="https://images.pexels.com/photos/278918/pexels-photo-278918.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schlüsselwörter zum Thema Brettspiele">
+    <div class="section-title">📖 Vorentlastung</div>
+    <div class="section-sub">Lies die Schlüsselwörter, bevor du den Text liest.</div>
+    <div class="hilfe-box"><strong>Tipp:</strong> Diese Wörter sind im Lesetext <span class="vocab-hl">gelb markiert</span>. Sie helfen dir, den Text leichter zu verstehen.</div>
+    <div id="vocabGrid" class="vocab-grid"></div>
   </div>
 
+  <!-- TAB 1 — LESETEXT -->
   <div class="section" id="sec-1">
-  <img class="tab-banner" src="https://images.pexels.com/photos/1422408/pexels-photo-1422408.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="timer-controls">
-  <div class="tc-buttons"><button onclick="showLueckeLoesung()">💡 Lösungen</button><button onclick="resetLuecke()">↺ Neustart</button></div>
-  <div class="tc-times">
-    <span>⏱ <span class="timer-display" id="timer-1">00:00</span></span>
-    <span>🏆 <span class="best-display" id="best-1">--:--</span></span>
-  </div>
-</div>
-<div class="section-title">✏️ Lückentext</div>
-<div class="hilfe-box"><strong>Aufgabe:</strong> Fülle die Lücken mit den richtigen Wörtern aus.</div>
-<div class="wortkasten"><strong>Wörter:</strong> gewinnen · verlieren · würfeln · spielen · ziehen · aufgeben · erklären · herausfordern · kooperieren · siegen</div>
-    <div class="luecken-item">Wir <input class="luecken-inp" data-answer="spielen" oninput="liveCheck(this)" placeholder=""> jeden Freitag Brettspiele.</div>
-    <div class="luecken-item">Er hat das Spiel <input class="luecken-inp" data-answer="gewonnen" oninput="liveCheck(this)" placeholder=""> und freut sich sehr.</div>
-    <div class="luecken-item">Sie musste <input class="luecken-inp" data-answer="aufgeben" oninput="liveCheck(this)" placeholder="">, weil die Lage hoffnungslos war.</div>
-    <div class="luecken-item">Bitte <input class="luecken-inp" data-answer="erkläre" oninput="liveCheck(this)" placeholder=""> mir die Regeln noch einmal!</div>
-    <div class="luecken-item">Er <input class="luecken-inp" data-answer="würfelt" oninput="liveCheck(this)" placeholder=""> und bekommt eine Sechs.</div>
-    <div class="luecken-item">Die Mannschaft hat die Gegner erfolgreich <input class="luecken-inp" data-answer="herausgefordert" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">In diesem Spiel müssen alle Spieler <input class="luecken-inp" data-answer="kooperieren" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Sie <input class="luecken-inp" data-answer="zieht" oninput="liveCheck(this)" placeholder=""> ihre Figur drei Felder weiter.</div>
-    <div class="luecken-item">Das Team hat in der Meisterschaft <input class="luecken-inp" data-answer="gesiegt" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Leider hat er das Spiel gegen seinen Bruder <input class="luecken-inp" data-answer="verloren" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Wir <input class="luecken-inp" data-answer="spielen" oninput="liveCheck(this)" placeholder=""> dieses Spiel seit Jahren zusammen.</div>
-    <div class="luecken-item">Die Kinder <input class="luecken-inp" data-answer="würfeln" oninput="liveCheck(this)" placeholder=""> abwechselnd.</div>
+    <img class="tab-banner" src="https://images.pexels.com/photos/6218131/pexels-photo-6218131.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Menschen spielen ein Brettspiel">
+    <div class="section-title">📄 Die Kultur der Brettspiele</div>
+    <div class="section-sub">Lies den Text in Ruhe. Die gelb markierten Wörter kennst du schon aus der Vorentlastung.</div>
+    <div class="story-text">
+      <p>Das Brettspiel begleitet die Menschheit seit Jahrtausenden. Schon vor über viertausend Jahren spielten Menschen im alten Ägypten „Senet“, ein Spiel mit Spielbrett und Figuren, das bis heute fasziniert. In Indien entstand um das sechste Jahrhundert „Chaturanga“ – der Vorläufer des modernen Schachs. Jede Kultur hat ihre eigenen Brettspiele entwickelt, und doch ähneln sich die Grundprinzipien überall auf der Welt.</p>
 
-<div class="score-box" id="lueckeScore"></div>
-  </div>
+      <p>In Deutschland erlebt das Brettspiel seit den 1990er Jahren eine echte Renaissance. Der sogenannte „German-Style“ – also Spiele mit klaren Regeln, eleganter Mechanik und wenig Zufall – hat internationalen Ruhm erlangt. Titel wie „Die Siedler von Catan“ oder „Carcassonne“ werden heute in Dutzenden Sprachen gespielt und jedes Jahr auf großen Messen in Essen vorgestellt.</p>
+
+      <figure style="margin:18px 0;text-align:center;">
+        <img src="https://images.pexels.com/photos/13088197/pexels-photo-13088197.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Schachfiguren auf einem Spielbrett" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+        <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Schach gehört zu den ältesten Strategiespielen der Welt.</figcaption>
+      </figure>
+
+      <p>Doch ein Brettspiel ist mehr als bloßer Zeitvertreib. Es fördert das strategische Denken, die Konzentration und das soziale Miteinander. Wer eine Partie spielt, lernt mit seinem Mitspieler zu verhandeln, eine Regel zu befolgen und auch mal zu verlieren. Eine kluge Strategie allein reicht oft nicht – manchmal entscheidet der Würfel über Sieg oder Niederlage. Besonders das kooperative Spiel, bei dem alle gemeinsam gegen das Spiel antreten, hat in den letzten Jahren an Beliebtheit gewonnen. Es vermittelt, dass Erfolg nicht immer bedeutet, den anderen zu besiegen.</p>
+
+      <p>Psychologen betonen, dass ein Brettspiel auch im Erwachsenenalter wichtig bleibt. Wer regelmäßig eine Partie wagt, trainiert das Gehirn, verbessert seine Entscheidungsfähigkeit und baut Stress ab. In vielen Familien gehört der wöchentliche Spieleabend längst zum festen Ritual. Und anders als beim Fernsehen sitzen alle gemeinsam am Tisch, reden, lachen, ärgern sich – und teilen ein Stück gemeinsamer Zeit.</p>
+
+      <p>Auch in Cafés und Bibliotheken verbreiten sich sogenannte Spielebars, wo sich Fremde an einem Tisch treffen, um eine Partie zu wagen. Die Kultur der Brettspiele ist lebendiger denn je – analog, unaufgeregt und zutiefst menschlich. In einer Welt, die immer digitaler wird, erinnert der Würfel in der Hand daran, wie schön es sein kann, zusammen an einem Tisch zu sitzen und ehrlich um den Sieg zu kämpfen.</p>
+    </div>
+    <div class="story-source">Sachtext für den DaF-Unterricht · B1.3 – Lektion 3011X</div>
   </div>
 
+  <!-- TAB 2 — GENUS -->
   <div class="section" id="sec-2">
-  <img class="tab-banner" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="timer-controls">
-  <div class="tc-buttons"><button onclick="resetSatzbau()">↺ Neustart</button></div>
-  <div class="tc-times">
-    <span>⏱ <span class="timer-display" id="timer-2">00:00</span></span>
-    <span>🏆 <span class="best-display" id="best-2">--:--</span></span>
-  </div>
-</div>
-<div class="section-title">🧩 Satzbau</div>
-<div class="hilfe-box"><strong>Aufgabe:</strong> Ziehe die Wörter in die richtige Reihenfolge.</div>
-<div id="sbContainer"></div>
-  </div>
+    <img class="tab-banner" src="https://images.pexels.com/photos/8111254/pexels-photo-8111254.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Brettspielfiguren aus Holz">
+    <div class="section-title">🔤 Genus</div>
+    <div class="section-sub">Ziehe jedes Wort zum passenden Artikel. Feedback ist sofort.</div>
+    <div class="control-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="resetGenus()">↺ Neustart</button>
+      </div>
+      <div class="timer-display">
+        <span class="current-time">⏱ <span id="timer-2">00:00</span></span>
+        <span class="best-time">🏆 <span id="best-2">--:--</span></span>
+      </div>
+    </div>
+    <div class="genus-bank" id="genusBank"></div>
+    <div class="genus-zones">
+      <div class="drop-zone-wrap"><div class="drop-zone-label">der</div><div class="drop-zone" data-cat="der"></div></div>
+      <div class="drop-zone-wrap"><div class="drop-zone-label">die</div><div class="drop-zone" data-cat="die"></div></div>
+      <div class="drop-zone-wrap"><div class="drop-zone-label">das</div><div class="drop-zone" data-cat="das"></div></div>
+      <div class="drop-zone-wrap"><div class="drop-zone-label">die (Pl.)</div><div class="drop-zone" data-cat="pl"></div></div>
+    </div>
   </div>
 
+  <!-- TAB 3 — LÜCKENTEXT -->
   <div class="section" id="sec-3">
-  <img class="tab-banner" src="https://images.pexels.com/photos/933964/pexels-photo-933964.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="timer-controls">
-  <div class="tc-buttons"><button onclick="showVocabLoesung()">💡 Lösungen</button><button onclick="resetVocab()">↺ Neustart</button></div>
-  <div class="tc-times">
-    <span>⏱ <span class="timer-display" id="timer-3">00:00</span></span>
-    <span>🏆 <span class="best-display" id="best-3">--:--</span></span>
-  </div>
-</div>
-<div class="section-title">🔠 Wortschatz</div>
-<div class="hilfe-box"><strong>Aufgabe:</strong> Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
-<div id="vocabContainer"></div>
-  </div>
+    <img class="tab-banner" src="https://images.pexels.com/photos/1314435/pexels-photo-1314435.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Monopoly-Brettspiel mit Spielfiguren">
+    <div class="section-title">✏️ Lückentext</div>
+    <div class="section-sub">Fülle die Lücken mit Wörtern aus dem Text.</div>
+    <div class="control-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="showLueckeLoesung()">Lösungen</button>
+        <button class="btn" onclick="resetLuecke()">↺ Neustart</button>
+      </div>
+      <div class="timer-display">
+        <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+        <span class="best-time">🏆 <span id="best-3">--:--</span></span>
+      </div>
+    </div>
+    <div id="lueckeContainer"></div>
   </div>
 
+  <!-- TAB 4 — MULTIPLE CHOICE -->
+  <div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/6990050/pexels-photo-6990050.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Spielfiguren (Meeples) zur Auswahl">
+    <div class="section-title">☑️ Multiple Choice</div>
+    <div class="section-sub">Wähle die richtige Antwort zu jeder Frage zum Text.</div>
+    <div class="control-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="resetMc()">↺ Neustart</button>
+      </div>
+      <div class="timer-display">
+        <span class="current-time">⏱ <span id="timer-4">00:00</span></span>
+        <span class="best-time">🏆 <span id="best-4">--:--</span></span>
+      </div>
+    </div>
+    <div id="mcContainer"></div>
+  </div>
+
+  <!-- TAB 5 — SATZBAU -->
+  <div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5125159/pexels-photo-5125159.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Scrabble-Buchstaben zusammensetzen">
+    <div class="section-title">🧩 Satzbau</div>
+    <div class="section-sub">Ordne die Chips zu sinnvollen Sätzen. Feedback erscheint, sobald die Bank leer ist.</div>
+    <div class="control-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="initSatzbau()">↺ Alle neu</button>
+      </div>
+      <div class="timer-display">
+        <span class="current-time">⏱ <span id="timer-5">00:00</span></span>
+        <span class="best-time">🏆 <span id="best-5">--:--</span></span>
+      </div>
+    </div>
+    <div id="satzbauContainer"></div>
+  </div>
+
+  <!-- TAB 6 — WORTSCHATZ -->
+  <div class="section" id="sec-6">
+    <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wortschatz im Wörterbuch">
+    <div class="section-title">🔠 Wortschatz</div>
+    <div class="section-sub">Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural.</div>
+    <div class="control-bar">
+      <div class="btn-row">
+        <button class="btn" onclick="showWortschatzLoesung()">Lösungen</button>
+        <button class="btn" onclick="resetWortschatz()">↺ Neustart</button>
+      </div>
+      <div class="timer-display">
+        <span class="current-time">⏱ <span id="timer-6">00:00</span></span>
+        <span class="best-time">🏆 <span id="best-6">--:--</span></span>
+      </div>
+    </div>
+    <div id="wortschatzContainer"></div>
+  </div>
 
   <div class="author-footer">
     <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
@@ -184,206 +279,720 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 </div><!-- /container -->
 
 <script>
+// ─── DATEN ───────────────────────────────────────────────────────────────────
+
+var VORENTLASTUNG = [
+  { term: "das Brettspiel, -e",     def: "🎲 Ein Spiel mit Spielbrett und Figuren, das man zu zweit oder zu mehreren spielt." },
+  { term: "die Regel, -n",           def: "📜 Eine Anweisung, wie man etwas machen soll oder darf." },
+  { term: "die Strategie, -n",       def: "🎯 Ein geplanter Weg, um ein Ziel zu erreichen." },
+  { term: "der Mitspieler, -",       def: "👥 Eine Person, die mit anderen zusammen spielt." },
+  { term: "die Partie, -n",          def: "🎮 Ein einzelnes Spiel vom Anfang bis zum Ende." },
+  { term: "der Würfel, -",           def: "🎲 Ein kleiner Gegenstand mit sechs Seiten und Punkten." },
+  { term: "der Zufall",              def: "🍀 Etwas, das man nicht planen oder steuern kann." },
+  { term: "die Renaissance",         def: "🌱 Eine Zeit, in der etwas Altes neu entdeckt und beliebt wird." },
+  { term: "kooperativ",              def: "🤝 Wenn alle zusammenarbeiten und gemeinsam ein Ziel erreichen." },
+  { term: "verhandeln",              def: "💬 Mit anderen sprechen, um eine gemeinsame Lösung zu finden." }
+];
+
+var GENUS_DATA = [
+  { word: "🎲 Brettspiel",  cat: "das" },
+  { word: "📜 Regel",        cat: "die" },
+  { word: "🎯 Strategie",    cat: "die" },
+  { word: "👥 Mitspieler",   cat: "der" },
+  { word: "🎮 Partie",       cat: "die" },
+  { word: "🎲 Würfel",       cat: "der" },
+  { word: "🏆 Sieg",         cat: "der" },
+  { word: "🧠 Denken",       cat: "das" },
+  { word: "📚 Bibliothek",   cat: "die" },
+  { word: "☕ Café",          cat: "das" },
+  { word: "🌍 Kultur",       cat: "die" },
+  { word: "🎪 Messe",        cat: "die" },
+  { word: "👨‍👩‍👧 Familie",    cat: "die" },
+  { word: "🎲 Figuren",      cat: "pl" },
+  { word: "♟️ Schachfiguren", cat: "pl" }
+];
+
+var LUECKEN_DATA = [
+  { pre: "Das Brettspiel ",                      ans: "begleitet",  hint: "(Verb)",       post: " die Menschheit seit Jahrtausenden." },
+  { pre: "In Indien entstand der Vorläufer des modernen ", ans: "Schachs", hint: "(Nomen)", post: "." },
+  { pre: "Der sogenannte German-Style hat internationalen ", ans: "Ruhm", hint: "(Nomen)", post: " erlangt." },
+  { pre: "Moderne Spiele haben klare Regeln und wenig ",    ans: "Zufall", hint: "(Nomen)", post: "." },
+  { pre: "Wer eine Partie spielt, lernt auch mal zu ",      ans: "verlieren", hint: "(Verb)", post: "." },
+  { pre: "Kooperative Spiele haben an ",                     ans: "Beliebtheit", hint: "(Nomen)", post: " gewonnen." },
+  { pre: "Wer regelmäßig spielt, ",                          ans: "trainiert", hint: "(Verb)", post: " das Gehirn." },
+  { pre: "In vielen Familien gehört der Spieleabend zum festen ", ans: "Ritual", hint: "(Nomen)", post: "." },
+  { pre: "Manchmal entscheidet der ",                        ans: "Würfel", hint: "(Nomen)", post: " über Sieg oder Niederlage." },
+  { pre: "In Spielebars treffen sich ",                      ans: "Fremde", hint: "(Nomen)", post: ", um eine Partie zu wagen." }
+];
+
+var MC_DATA = [
+  { q: "Seit wann begleiten Brettspiele die Menschheit?",
+    opts: ["seit Jahrtausenden", "seit dem 20. Jahrhundert", "seit dem Mittelalter", "seit 100 Jahren"], correct: 0 },
+  { q: "Wo entstand der Vorläufer des modernen Schachs?",
+    opts: ["in Ägypten", "in Indien", "in China", "in Deutschland"], correct: 1 },
+  { q: "Was bedeutet „German-Style“ bei Brettspielen?",
+    opts: ["viel Würfelglück", "lange Spielzeit", "klare Regeln und elegante Mechanik", "hoher Preis"], correct: 2 },
+  { q: "In welcher deutschen Stadt findet eine wichtige Spielemesse statt?",
+    opts: ["in Berlin", "in München", "in Köln", "in Essen"], correct: 3 },
+  { q: "Was fördern Brettspiele laut Text?",
+    opts: ["strategisches Denken und soziales Miteinander", "nur das Gedächtnis", "vor allem Sprachen", "hauptsächlich Muskeln"], correct: 0 },
+  { q: "Was ist das Besondere an kooperativen Spielen?",
+    opts: ["es gibt keine Regeln", "alle Spieler spielen gemeinsam gegen das Spiel", "man spielt allein", "man würfelt nicht"], correct: 1 },
+  { q: "Was sagen Psychologen über Brettspiele?",
+    opts: ["sie sind nur für Kinder", "sie machen nervös", "sie trainieren das Gehirn und bauen Stress ab", "sie ersetzen das Fernsehen"], correct: 2 },
+  { q: "Was ist laut Text ein festes Ritual in vielen Familien?",
+    opts: ["das Sonntagsessen", "der Fernsehabend", "der Kirchgang", "der wöchentliche Spieleabend"], correct: 3 },
+  { q: "Was sind „Spielebars“?",
+    opts: ["Cafés und Orte, wo man Brettspiele spielt", "Bars mit Alkohol", "Online-Plattformen", "Spielwarenläden"], correct: 0 },
+  { q: "Was ist laut Text typisch für die Kultur der Brettspiele?",
+    opts: ["sie ist vor allem digital", "sie ist analog und menschlich", "sie ist rein wirtschaftlich", "sie ist verschwunden"], correct: 1 }
+];
+
+var satzbauData = [
+  { parts: ['in', 'Indien', 'entstand', 'im', 'sechsten', 'Jahrhundert', 'der', 'Vorläufer', 'des', 'modernen', 'Schachs'],
+    valid: [['in', 'Indien', 'entstand', 'im', 'sechsten', 'Jahrhundert', 'der', 'Vorläufer', 'des', 'modernen', 'Schachs']], punct: '.' },
+  { parts: ['der', 'sogenannte', 'German-Style', 'hat', 'weltweit', 'einen', 'großen', 'Ruhm', 'erlangt'],
+    valid: [['der', 'sogenannte', 'German-Style', 'hat', 'weltweit', 'einen', 'großen', 'Ruhm', 'erlangt']], punct: '.' },
+  { parts: ['moderne', 'Brettspiele', 'haben', 'klare', 'Regeln', 'und', 'wenig', 'Zufall', 'im', 'Spiel'],
+    valid: [['moderne', 'Brettspiele', 'haben', 'klare', 'Regeln', 'und', 'wenig', 'Zufall', 'im', 'Spiel']], punct: '.' },
+  { parts: ['wer', 'eine', 'Partie', 'spielt', ',', 'lernt', 'auch', 'mal', 'ehrlich', 'zu', 'verlieren'],
+    valid: [['wer', 'eine', 'Partie', 'spielt', ',', 'lernt', 'auch', 'mal', 'ehrlich', 'zu', 'verlieren']], punct: '.' },
+  { parts: ['kooperative', 'Spiele', 'haben', 'in', 'den', 'letzten', 'Jahren', 'an', 'Beliebtheit', 'gewonnen'],
+    valid: [['kooperative', 'Spiele', 'haben', 'in', 'den', 'letzten', 'Jahren', 'an', 'Beliebtheit', 'gewonnen']], punct: '.' },
+  { parts: ['ein', 'gutes', 'Brettspiel', 'fördert', 'das', 'strategische', 'Denken', 'und', 'die', 'Konzentration'],
+    valid: [['ein', 'gutes', 'Brettspiel', 'fördert', 'das', 'strategische', 'Denken', 'und', 'die', 'Konzentration']], punct: '.' },
+  { parts: ['in', 'vielen', 'Familien', 'gehört', 'der', 'Spieleabend', 'zum', 'festen', 'wöchentlichen', 'Ritual'],
+    valid: [['in', 'vielen', 'Familien', 'gehört', 'der', 'Spieleabend', 'zum', 'festen', 'wöchentlichen', 'Ritual']], punct: '.' },
+  { parts: ['Psychologen', 'betonen', 'die', 'Bedeutung', 'der', 'Brettspiele', 'auch', 'für', 'Erwachsene'],
+    valid: [['Psychologen', 'betonen', 'die', 'Bedeutung', 'der', 'Brettspiele', 'auch', 'für', 'Erwachsene']], punct: '.' },
+  { parts: ['in', 'Essen', 'werden', 'jedes', 'Jahr', 'neue', 'Brettspiele', 'auf', 'Messen', 'vorgestellt'],
+    valid: [['in', 'Essen', 'werden', 'jedes', 'Jahr', 'neue', 'Brettspiele', 'auf', 'Messen', 'vorgestellt']], punct: '.' },
+  { parts: ['wer', 'regelmäßig', 'eine', 'Partie', 'spielt', ',', 'trainiert', 'sein', 'Gehirn', 'und', 'baut', 'Stress', 'ab'],
+    valid: [['wer', 'regelmäßig', 'eine', 'Partie', 'spielt', ',', 'trainiert', 'sein', 'Gehirn', 'und', 'baut', 'Stress', 'ab']], punct: '.' }
+];
+
+var WORTSCHATZ = [
+  { type: "n", en: "🎲 (the) board game",  artikel: "das", de: "Brettspiel", plural: "Brettspiele" },
+  { type: "n", en: "📜 (the) rule",         artikel: "die", de: "Regel",      plural: "Regeln" },
+  { type: "n", en: "👥 (the) fellow player", artikel: "der", de: "Mitspieler", plural: "Mitspieler" },
+  { type: "n", en: "🎯 (the) strategy",     artikel: "die", de: "Strategie",  plural: "Strategien" },
+  { type: "n", en: "🎮 (the) round/game",   artikel: "die", de: "Partie",     plural: "Partien" },
+  { type: "n", en: "🎲 (the) die",           artikel: "der", de: "Würfel",     plural: "Würfel" },
+  { type: "n", en: "🏆 (the) victory",      artikel: "der", de: "Sieg",       plural: "Siege" },
+  { type: "p", en: "🏆 to win",             de: "gewinnen" },
+  { type: "p", en: "😔 to lose",            de: "verlieren" },
+  { type: "p", en: "🤝 cooperative",        de: "kooperativ" }
+];
 
 // ─── TIMER ───────────────────────────────────────────────────────────────────
 var _tv = {}, _ti = {}, _tr = {};
 var BEST_KEY = 'best_3011X_';
-function initTimers(ns) {{ ns.forEach(function(n){{ _tv[n]=0; _ti[n]=null; _tr[n]=false; }}); loadBests(ns); }}
-function timerTick(n) {{ _tv[n]++; var m=Math.floor(_tv[n]/60),s=_tv[n]%60; var el=document.getElementById('timer-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }}
-function timerAutoStart(n) {{ if(_tr[n]) return; _tr[n]=true; _ti[n]=setInterval(function(){{timerTick(n);}},1000); }}
-function timerStop(n) {{ if(!_tr[n]) return; clearInterval(_ti[n]); _tr[n]=false; var k=BEST_KEY+n; var prev=parseInt(localStorage.getItem(k)||'99999'); if(_tv[n]<prev){{ localStorage.setItem(k,_tv[n]); var m=Math.floor(_tv[n]/60),s=_tv[n]%60; var el=document.getElementById('best-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }} }}
-function resetTimer(n) {{ clearInterval(_ti[n]); _tr[n]=false; _tv[n]=0; var el=document.getElementById('timer-'+n); if(el) el.textContent='00:00'; }}
-function loadBests(ns) {{ ns.forEach(function(n){{ var s=parseInt(localStorage.getItem(BEST_KEY+n)||'0'); if(s>0){{ var m=Math.floor(s/60),ss=s%60; var el=document.getElementById('best-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }} }}); }}
+
+function initTimers(ns) {
+  ns.forEach(function(n) { _tv[n] = 0; _ti[n] = null; _tr[n] = false; });
+  loadBests(ns);
+}
+function timerTick(n) {
+  _tv[n]++;
+  var m = Math.floor(_tv[n] / 60), s = _tv[n] % 60;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+}
+function timerAutoStart(n) {
+  if (_tr[n]) return;
+  _tr[n] = true;
+  _ti[n] = setInterval(function() { timerTick(n); }, 1000);
+}
+function timerStop(n) {
+  if (!_tr[n]) return;
+  clearInterval(_ti[n]); _tr[n] = false;
+  var k = BEST_KEY + n;
+  var prev = parseInt(localStorage.getItem(k) || '99999');
+  if (_tv[n] < prev) {
+    localStorage.setItem(k, _tv[n]);
+    var m = Math.floor(_tv[n] / 60), s = _tv[n] % 60;
+    var el = document.getElementById('best-' + n);
+    if (el) el.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+}
+function resetTimer(n) {
+  clearInterval(_ti[n]); _tr[n] = false; _tv[n] = 0;
+  var el = document.getElementById('timer-' + n);
+  if (el) el.textContent = '00:00';
+}
+function loadBests(ns) {
+  ns.forEach(function(n) {
+    var s = parseInt(localStorage.getItem(BEST_KEY + n) || '0');
+    if (s > 0) {
+      var m = Math.floor(s / 60), ss = s % 60;
+      var el = document.getElementById('best-' + n);
+      if (el) el.textContent = (m < 10 ? '0' : '') + m + ':' + (ss < 10 ? '0' : '') + ss;
+    }
+  });
+}
 
 // ─── NAVIGATION ──────────────────────────────────────────────────────────────
 function showSection(n) {
-  document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active',i===n); });
-  document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active',i===n); });
+  document.querySelectorAll('.section').forEach(function(s, i) { s.classList.toggle('active', i === n); });
+  document.querySelectorAll('.nav-btn').forEach(function(b, i) { b.classList.toggle('active', i === n); });
 }
 
-// ─── LÜCKENTEXT ──────────────────────────────────────────────────────────────
-function liveCheck(inp) {{
-  timerAutoStart(1);
-  var val=inp.value.trim(), ans=inp.dataset.answer||'';
-  inp.classList.remove('ok','no');
-  if(!val) return;
-  if(val===ans) {{ inp.classList.add('ok'); checkLueckeDone(); }}
-  else if(!ans.startsWith(val)) {{ inp.classList.add('no'); }}
-}}
-function checkLueckeDone() {{
-  var all=document.querySelectorAll('#sec-1 .luecken-inp');
-  if(Array.from(all).every(function(i){{return i.classList.contains('ok');}})) {{
-    timerStop(1);
-    var s=document.getElementById('lueckeScore'); if(s){{s.textContent='🎉 Alle Lücken korrekt!'; s.style.display='block';}}
-  }}
-}}
-function showLueckeLoesung() {{
-  document.querySelectorAll('#sec-1 .luecken-inp').forEach(function(i){{ i.value=i.dataset.answer; i.classList.add('ok'); }});
-}}
-function resetLuecke() {{
-  document.querySelectorAll('#sec-1 .luecken-inp').forEach(function(i){{ i.value=''; i.classList.remove('ok','no'); }});
-  var s=document.getElementById('lueckeScore'); if(s) s.style.display='none';
-  resetTimer(1);
-}}
+// ─── TAB 0 — VORENTLASTUNG ───────────────────────────────────────────────────
+function initVorentlastung() {
+  var grid = document.getElementById('vocabGrid');
+  grid.innerHTML = '';
+  VORENTLASTUNG.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'vocab-card';
+    var term = document.createElement('div');
+    term.className = 'vocab-term';
+    term.textContent = item.term;
+    var def = document.createElement('div');
+    def.className = 'vocab-def';
+    def.textContent = item.def;
+    card.appendChild(term);
+    card.appendChild(def);
+    grid.appendChild(card);
+  });
+}
 
-// ─── SATZBAU ─────────────────────────────────────────────────────────────────
-var sbDragged = null;
-function shuffleArr(a) {{ var b=a.slice(); for(var i=b.length-1;i>0;i--){{ var j=Math.floor(Math.random()*(i+1)),t=b[i]; b[i]=b[j]; b[j]=t; }} return b; }}
-function getSbCursor() {{ var c=document.getElementById('sb-insert-cursor'); if(!c){{ c=document.createElement('div'); c.id='sb-insert-cursor'; c.style.cssText='width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;'; }} return c; }}
-function getSbInsertPos(zone,clientX) {{ var chips=Array.from(zone.querySelectorAll('.chip')); for(var i=0;i<chips.length;i++){{ var r=chips[i].getBoundingClientRect(); if(clientX<r.left+r.width/2) return chips[i]; }} return null; }}
-function sbCapitalize(s) {{ return s.charAt(0).toUpperCase()+s.slice(1); }}
-function sbUpdateCapitalization(zone) {{
-  var chips=Array.from(zone.querySelectorAll('.chip'));
-  chips.forEach(function(c,i) {{
-    var orig=c.dataset.orig;
-    if(!orig||orig===','||orig===';') return;
-    var isProper=orig.charAt(0)===orig.charAt(0).toUpperCase()&&orig.charAt(0)!==orig.charAt(0).toLowerCase();
-    c.textContent=isProper?orig:(i===0?sbCapitalize(orig):orig);
-  }});
-}}
-function sbMakeChip(word, isTarget) {{
-  var chip=document.createElement('div'); chip.className='chip';
-  var isPunct=/^[.,!?;:]$/.test(word);
-  if(isPunct) chip.classList.add('punct-chip');
-  chip.textContent=word; chip.dataset.orig=word; chip.draggable=!isTarget;
-  if(!isTarget) {{
-    chip.addEventListener('dragstart',function(e){{ sbDragged=chip; timerAutoStart(2); e.dataTransfer.setData('text/plain',''); setTimeout(function(){{chip.style.opacity='0.4';}},0); }});
-    chip.addEventListener('dragend',function(){{ chip.style.opacity=''; sbDragged=null; var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode) c.parentNode.removeChild(c); }});
-  }}
-  return chip;
-}}
-function sbRegisterZone(zone) {{
-  zone.addEventListener('dragover',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=getSbCursor(),bef=getSbInsertPos(zone,e.clientX); if(bef) zone.insertBefore(cur,bef); else zone.appendChild(cur); }});
-  zone.addEventListener('dragleave',function(e){{ if(!zone.contains(e.relatedTarget)){{ var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode===zone) zone.removeChild(c); }} }});
-  zone.addEventListener('drop',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=document.getElementById('sb-insert-cursor'); if(cur&&cur.parentNode===zone){{ zone.insertBefore(sbDragged,cur); zone.removeChild(cur); }} else {{ zone.appendChild(sbDragged); }} sbDragged=null; }});
-}}
-function sbCheckAuto(itemIdx) {{
-  var zone=document.getElementById('sb_zone_'+itemIdx);
-  var fb=document.getElementById('sb_fb_'+itemIdx);
-  if(!zone) return;
-  setTimeout(function() {{
-    var chips=Array.from(zone.querySelectorAll('.chip'));
-    var ans=SATZBAU_DATA[itemIdx].words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
-    var got=chips.filter(function(c){{return !/^[.,!?;:]$/.test(c.dataset.orig);}}).map(function(c){{return c.dataset.orig;}});
-    if(got.length===0) return;
-    var ok=JSON.stringify(got)===JSON.stringify(ans);
-    chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
-    if(fb) {{ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge – verschiebe die Chips!'; }}
-    if(ok) checkSatzbauComplete();
-  }}, 500);
-}}
-function sbColorRow(idx,ok) {{
-  var zone=document.getElementById('sb_zone_'+idx);
-  if(!zone) return;
-  var chips=Array.from(zone.querySelectorAll('.chip'));
-  chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
-}}
-function checkSatzbauComplete() {{
-  var allOk=SATZBAU_DATA.every(function(_,i){{ var z=document.getElementById('sb_zone_'+i); return z&&Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('correct');}})&&!Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('incorrect');}}); }});
-  if(allOk) timerStop(2);
-}}
-function buildSatzbau() {{
-  var cont=document.getElementById('sbContainer'); if(!cont) return;
-  cont.innerHTML='';
-  SATZBAU_DATA.forEach(function(item,idx) {{
-    var div=document.createElement('div'); div.className='satzbau-item';
-    var nonPunct=item.words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
-    var shuffled=shuffleArr(nonPunct);
-    var pool=document.createElement('div'); pool.className='chips-container'; pool.id='sb_pool_'+idx;
-    shuffled.forEach(function(w) {{
-      var chip=sbMakeChip(w,false);
-      chip.addEventListener('click',function() {{ var z=document.getElementById('sb_zone_'+idx); z.appendChild(chip); sbUpdateCapitalization(z); sbCheckAuto(idx); }});
-      pool.appendChild(chip);
-    }});
-    sbRegisterZone(pool);
-    var zone=document.createElement('div'); zone.className='sentence-builder'; zone.id='sb_zone_'+idx;
-    item.words.filter(function(w){{return /^[.,!?;:]$/.test(w);}}).forEach(function(w) {{
-      var pc=sbMakeChip(w,true); zone.appendChild(pc);
-    }});
-    sbRegisterZone(zone);
-    zone.addEventListener('drop',function(){{ sbUpdateCapitalization(zone); setTimeout(function(){{sbCheckAuto(idx);}},50); }});
-    zone.addEventListener('click',function(e) {{
-      var chip=e.target.closest('.chip:not(.punct-chip)');
-      if(chip&&zone.contains(chip)) {{ pool.appendChild(chip); sbUpdateCapitalization(zone); sbCheckAuto(idx); }}
-    }});
-    var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb_fb_'+idx;
-    div.appendChild(pool); div.appendChild(zone); div.appendChild(fb);
+// ─── TAB 1 — VOKABEL-HERVORHEBUNG ────────────────────────────────────────────
+function highlightVocabInText() {
+  var storyText = document.querySelector('.story-text');
+  if (!storyText) return;
+  var words = VORENTLASTUNG.map(function(item) {
+    var term = item.term.replace(/^(der|die|das)\s+/i, '');
+    return term.split(',')[0].trim();
+  }).filter(function(w) { return w && w.length > 3; });
+  if (words.length === 0) return;
+
+  function walkAndHighlight(node) {
+    if (node.nodeType === 3) {
+      var text = node.nodeValue;
+      var replaced = text;
+      words.forEach(function(word) {
+        var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+        replaced = replaced.replace(regex, '\x01\x02');
+      });
+      if (replaced !== text) {
+        var span = document.createElement('span');
+        var parts = replaced.split(/\x01|\x02/);
+        var isHighlight = false;
+        parts.forEach(function(part) {
+          if (!part) { isHighlight = !isHighlight; return; }
+          if (isHighlight) {
+            var hl = document.createElement('span');
+            hl.className = 'vocab-hl';
+            hl.title = '📖 Vokabel aus der Vorentlastung';
+            hl.textContent = part;
+            span.appendChild(hl);
+          } else {
+            span.appendChild(document.createTextNode(part));
+          }
+          isHighlight = !isHighlight;
+        });
+        node.parentNode.replaceChild(span, node);
+      }
+    } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+      Array.from(node.childNodes).forEach(walkAndHighlight);
+    }
+  }
+  walkAndHighlight(storyText);
+}
+
+// ─── TAB 2 — GENUS ───────────────────────────────────────────────────────────
+var draggedChip = null;
+
+function initGenus() {
+  var bank = document.getElementById('genusBank');
+  bank.innerHTML = '';
+  // Zonen leeren
+  document.querySelectorAll('#sec-2 .drop-zone').forEach(function(z) { z.innerHTML = ''; });
+  // Shuffle
+  var items = GENUS_DATA.slice();
+  for (var i = items.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = items[i]; items[i] = items[j]; items[j] = t;
+  }
+  items.forEach(function(item) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = item.word;
+    chip.dataset.cat = item.cat;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+      draggedChip = chip;
+      timerAutoStart(2);
+      e.dataTransfer.setData('text/plain', '');
+      setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+      chip.style.opacity = '';
+      colorAllGenusChips();
+    });
+    chip.addEventListener('click', function() {
+      // Click-to-Bank: zurück in Bank
+      bank.appendChild(chip);
+      colorAllGenusChips();
+    });
+    bank.appendChild(chip);
+  });
+
+  // Zonen registrieren (nur einmal)
+  if (!bank.dataset.registered) {
+    document.querySelectorAll('#sec-2 .drop-zone').forEach(function(zone) {
+      zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        if (draggedChip) { zone.appendChild(draggedChip); draggedChip = null; }
+        colorAllGenusChips();
+      });
+      zone.addEventListener('click', function() {
+        if (draggedChip) { zone.appendChild(draggedChip); draggedChip = null; colorAllGenusChips(); }
+      });
+    });
+    bank.addEventListener('dragover', function(e) { e.preventDefault(); });
+    bank.addEventListener('drop', function(e) {
+      e.preventDefault();
+      if (draggedChip) { bank.appendChild(draggedChip); draggedChip = null; colorAllGenusChips(); }
+    });
+    bank.dataset.registered = '1';
+  }
+}
+
+function colorGenusChip(chip) {
+  var zone = chip.closest('.drop-zone');
+  if (zone && zone.dataset.cat) {
+    chip.classList.remove('correct', 'wrong');
+    chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+  } else {
+    chip.classList.remove('correct', 'wrong');
+  }
+}
+function colorAllGenusChips() {
+  document.querySelectorAll('#sec-2 .chip').forEach(colorGenusChip);
+  checkGenusAllOk();
+}
+function checkGenusAllOk() {
+  var all = Array.from(document.querySelectorAll('#sec-2 .drop-zone .chip'));
+  if (all.length !== GENUS_DATA.length) return;
+  var ok = all.every(function(c) { return c.classList.contains('correct'); });
+  if (ok) timerStop(2);
+}
+function resetGenus() { resetTimer(2); initGenus(); }
+
+// ─── TAB 3 — LÜCKENTEXT ──────────────────────────────────────────────────────
+function initLuecke() {
+  var cont = document.getElementById('lueckeContainer');
+  cont.innerHTML = '';
+  LUECKEN_DATA.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'luecken-item';
+    var pre = document.createTextNode(item.pre);
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'blank';
+    inp.dataset.ans = item.ans;
+    inp.placeholder = '';
+    // Breite aus max(Antwort, Hint)
+    var textLen = Math.max(item.ans.length, (item.hint || '').length);
+    inp.style.width = (textLen + 4) + 'ch';
+    inp.addEventListener('input', function() {
+      timerAutoStart(3);
+      lueckeLiveCheck(inp);
+    });
+    var hint = document.createElement('span');
+    hint.style.cssText = 'color:#aaa;font-size:0.82em;margin-left:6px;';
+    hint.textContent = item.hint;
+    var post = document.createTextNode(item.post);
+    div.appendChild(pre);
+    div.appendChild(inp);
+    div.appendChild(hint);
+    div.appendChild(post);
     cont.appendChild(div);
-  }});
-}}
-function resetSatzbau() {{ buildSatzbau(); resetTimer(2); }}
+  });
+}
+function lueckeLiveCheck(inp) {
+  var val = inp.value.trim();
+  var ans = inp.dataset.ans || '';
+  inp.classList.remove('ok', 'no');
+  if (!val) return;
+  if (val === ans) {
+    inp.classList.add('ok');
+    checkLueckeDone();
+    return;
+  }
+  if (ans.toLowerCase().startsWith(val.toLowerCase())) return;
+  inp.classList.add('no');
+}
+function checkLueckeDone() {
+  var all = document.querySelectorAll('#sec-3 .blank');
+  if (Array.from(all).every(function(i) { return i.classList.contains('ok'); })) timerStop(3);
+}
+function showLueckeLoesung() {
+  document.querySelectorAll('#sec-3 .blank').forEach(function(i) {
+    i.value = i.dataset.ans;
+    i.classList.remove('no');
+    i.classList.add('ok');
+  });
+}
+function resetLuecke() {
+  resetTimer(3);
+  initLuecke();
+}
 
-// ─── WORTSCHATZ ──────────────────────────────────────────────────────────────
-function initVocab() {{
-  var cont=document.getElementById('vocabContainer'); if(!cont) return;
-  cont.innerHTML='';
-  var items=shuffleArr(WORTSCHATZ);
-  items.forEach(function(w) {{
-    var div=document.createElement('div'); div.className='vocab-item';
-    var en=document.createElement('div'); en.className='vocab-en'; en.textContent=w.en;
-    var arrow=document.createElement('div'); arrow.className='vocab-arrow'; arrow.textContent='→';
-    var inputs=document.createElement('div'); inputs.className='vocab-inputs';
-    if(w.type==='n') {{
-      var iA=document.createElement('input'); iA.className='art'; iA.placeholder='Artikel'; iA.setAttribute('data-answer',w.art);
-      iA.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iA,w.art); checkVocabAllDone(); }});
-      var iW=document.createElement('input'); iW.className='wort'; iW.placeholder='Deutsch'; iW.setAttribute('data-answer',w.wort);
-      iW.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iW,w.wort); checkVocabAllDone(); }});
-      var iP=document.createElement('input'); iP.className='plural'; iP.placeholder='Plural'; iP.setAttribute('data-answer',w.plural);
-      iP.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iP,w.plural); checkVocabAllDone(); }});
-      inputs.appendChild(iA); inputs.appendChild(iW); inputs.appendChild(iP);
-    }} else {{
-      var iD=document.createElement('input'); iD.className='wort'; iD.placeholder='Deutsch'; iD.setAttribute('data-answer',w.de);
-      iD.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iD,w.de); checkVocabAllDone(); }});
+// ─── TAB 4 — MULTIPLE CHOICE ─────────────────────────────────────────────────
+function initMc() {
+  var cont = document.getElementById('mcContainer');
+  cont.innerHTML = '';
+  MC_DATA.forEach(function(item, idx) {
+    var div = document.createElement('div');
+    div.className = 'mc-item';
+    var q = document.createElement('div');
+    q.className = 'mc-question';
+    q.textContent = (idx + 1) + '. ' + item.q;
+    div.appendChild(q);
+    var opts = document.createElement('div');
+    opts.className = 'mc-options';
+    item.opts.forEach(function(o, oi) {
+      var btn = document.createElement('button');
+      btn.className = 'mc-opt';
+      btn.textContent = o;
+      btn.addEventListener('click', function() { mcPick(div, btn, oi, item.correct); });
+      opts.appendChild(btn);
+    });
+    div.appendChild(opts);
+    cont.appendChild(div);
+  });
+}
+function mcPick(itemDiv, btn, picked, correct) {
+  timerAutoStart(4);
+  var btns = itemDiv.querySelectorAll('.mc-opt');
+  btns.forEach(function(b) { b.disabled = true; });
+  if (picked === correct) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    btns[correct].classList.add('correct');
+  }
+  checkMcDone();
+}
+function checkMcDone() {
+  var items = document.querySelectorAll('#sec-4 .mc-item');
+  var done = 0;
+  items.forEach(function(d) { if (d.querySelector('.mc-opt.correct')) done++; });
+  if (done === MC_DATA.length) timerStop(4);
+}
+function resetMc() { resetTimer(4); initMc(); }
+
+// ─── TAB 5 — SATZBAU ─────────────────────────────────────────────────────────
+var sbDragged = null;
+
+function getSbCursor() {
+  var c = document.getElementById('sb-insert-cursor');
+  if (!c) {
+    c = document.createElement('div');
+    c.id = 'sb-insert-cursor';
+    c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+  }
+  return c;
+}
+function getSbInsertPos(zone, clientX) {
+  var chips = Array.from(zone.querySelectorAll('.chip'));
+  for (var i = 0; i < chips.length; i++) {
+    var r = chips[i].getBoundingClientRect();
+    if (clientX < r.left + r.width / 2) return chips[i];
+  }
+  return null;
+}
+function sbCapitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function sbUpdateCapitalization(row) {
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  chips.forEach(function(c, i) {
+    var orig = c.dataset.orig;
+    if (orig === ',' || orig === ';') return;
+    var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+    if (isProper) { c.textContent = orig; }
+    else { c.textContent = (i === 0) ? sbCapitalize(orig) : orig; }
+  });
+}
+function sbMakeChip(word, idx) {
+  var chip = document.createElement('div');
+  chip.className = 'chip';
+  chip.textContent = word;
+  chip.dataset.orig = word;
+  chip.dataset.sbIdx = String(idx);
+  chip.draggable = true;
+  if (word === ',' || word === ';') chip.classList.add('punct-chip');
+  chip.addEventListener('dragstart', function(e) {
+    sbDragged = chip;
+    timerAutoStart(5);
+    e.dataTransfer.setData('text/plain', '');
+    setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+  });
+  chip.addEventListener('dragend', function() {
+    chip.style.opacity = '';
+    sbDragged = null;
+    var c = document.getElementById('sb-insert-cursor');
+    if (c && c.parentNode) c.parentNode.removeChild(c);
+  });
+  return chip;
+}
+function sbRegisterZone(zone, idx) {
+  zone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    if (!sbDragged) return;
+    if (sbDragged.dataset.sbIdx !== String(idx)) return;
+    var cursor = getSbCursor();
+    var before = getSbInsertPos(zone, e.clientX);
+    if (before) zone.insertBefore(cursor, before);
+    else zone.appendChild(cursor);
+  });
+  zone.addEventListener('dragleave', function(e) {
+    if (!zone.contains(e.relatedTarget)) {
+      var c = document.getElementById('sb-insert-cursor');
+      if (c && c.parentNode === zone) zone.removeChild(c);
+    }
+  });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    if (!sbDragged) return;
+    if (sbDragged.dataset.sbIdx !== String(idx)) return;
+    var cursor = document.getElementById('sb-insert-cursor');
+    if (cursor && cursor.parentNode === zone) {
+      zone.insertBefore(sbDragged, cursor);
+      zone.removeChild(cursor);
+    } else {
+      zone.appendChild(sbDragged);
+    }
+    sbDragged = null;
+    var row = document.getElementById('sb-row-' + idx);
+    sbUpdateCapitalization(row);
+    sbCheckAuto(idx);
+  });
+}
+function sbColorRow(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  var order = chips.map(function(c) { return c.dataset.orig; });
+  var ok = satzbauData[idx].valid.some(function(v) {
+    return JSON.stringify(v) === JSON.stringify(order);
+  });
+  chips.forEach(function(c) {
+    c.classList.remove('correct', 'incorrect');
+    c.classList.add(ok ? 'correct' : 'incorrect');
+  });
+  var existing = row.querySelector('.sb-punkt');
+  if (existing) existing.parentNode.removeChild(existing);
+  if (ok) {
+    var punkt = document.createElement('span');
+    punkt.className = 'sb-punkt';
+    punkt.textContent = satzbauData[idx].punct || '.';
+    row.appendChild(punkt);
+  }
+  return ok;
+}
+function sbCheckAuto(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row = document.getElementById('sb-row-' + idx);
+  var fb = document.getElementById('sb-fb-' + idx);
+  if (bank.querySelectorAll('.chip').length > 0) {
+    row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    return;
+  }
+  setTimeout(function() {
+    var ok = sbColorRow(idx);
+    if (ok) {
+      row.classList.add('correct');
+      row.classList.remove('incorrect');
+      fb.className = 'satzbau-feedback correct';
+      fb.textContent = '✓ Korrekt!';
+      sbCheckAllDone();
+    } else {
+      row.classList.add('incorrect');
+      row.classList.remove('correct');
+      fb.className = 'satzbau-feedback incorrect';
+      fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+    }
+  }, 500);
+}
+function sbCheckAllDone() {
+  var allOk = satzbauData.every(function(_, i) {
+    var row = document.getElementById('sb-row-' + i);
+    return row && row.classList.contains('correct');
+  });
+  if (allOk) timerStop(5);
+}
+function sbShowSolution(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row = document.getElementById('sb-row-' + idx);
+  var fb = document.getElementById('sb-fb-' + idx);
+  var solution = satzbauData[idx].valid[0];
+  var allChips = {};
+  Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild) row.removeChild(row.firstChild);
+  solution.forEach(function(word, i) {
+    var chip = allChips[word];
+    if (chip) {
+      if (word !== ',' && word !== ';') {
+        var isProper = word.charAt(0) === word.charAt(0).toUpperCase() && word.charAt(0) !== word.charAt(0).toLowerCase();
+        chip.textContent = isProper ? word : ((i === 0) ? sbCapitalize(word) : word);
+      }
+      chip.classList.remove('correct', 'incorrect');
+      row.appendChild(chip);
+    }
+  });
+  fb.textContent = '';
+  setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+function sbResetOne(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row = document.getElementById('sb-row-' + idx);
+  var fb = document.getElementById('sb-fb-' + idx);
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild) row.removeChild(row.firstChild);
+  row.classList.remove('correct', 'incorrect');
+  fb.textContent = '';
+  fb.className = 'satzbau-feedback';
+  var parts = satzbauData[idx].parts.slice();
+  for (var i = parts.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = parts[i]; parts[i] = parts[j]; parts[j] = t;
+  }
+  parts.forEach(function(word) { bank.appendChild(sbMakeChip(word, idx)); });
+}
+function initSatzbau() {
+  var container = document.getElementById('satzbauContainer');
+  container.innerHTML = '';
+  resetTimer(5);
+  satzbauData.forEach(function(ex, idx) {
+    var item = document.createElement('div');
+    item.className = 'satzbau-item';
+    var bank = document.createElement('div');
+    bank.className = 'chips-container';
+    bank.id = 'sb-bank-' + idx;
+    var row = document.createElement('div');
+    row.className = 'sentence-builder';
+    row.id = 'sb-row-' + idx;
+    var fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb-fb-' + idx;
+    var parts = ex.parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = parts[i]; parts[i] = parts[j]; parts[j] = t;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word, idx)); });
+    sbRegisterZone(bank, idx);
+    sbRegisterZone(row, idx);
+    var btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+    var solveBtn = document.createElement('button');
+    solveBtn.className = 'btn';
+    solveBtn.textContent = 'Lösen';
+    solveBtn.setAttribute('data-idx', idx);
+    solveBtn.addEventListener('click', function() { sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'btn';
+    resetBtn.textContent = '↺ Neustart';
+    resetBtn.setAttribute('data-idx', idx);
+    resetBtn.addEventListener('click', function() { sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+    btnRow.appendChild(solveBtn);
+    btnRow.appendChild(resetBtn);
+    item.appendChild(bank);
+    item.appendChild(row);
+    item.appendChild(fb);
+    item.appendChild(btnRow);
+    container.appendChild(item);
+  });
+}
+
+// ─── TAB 6 — WORTSCHATZ ──────────────────────────────────────────────────────
+function initWortschatz() {
+  var cont = document.getElementById('wortschatzContainer');
+  cont.innerHTML = '';
+  var items = WORTSCHATZ.slice();
+  for (var i = items.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = items[i]; items[i] = items[j]; items[j] = t;
+  }
+  items.forEach(function(w) {
+    var card = document.createElement('div');
+    card.className = 'luecken-item';
+    var prompt = document.createElement('div');
+    prompt.className = 'ws-prompt';
+    prompt.textContent = w.en;
+    card.appendChild(prompt);
+    var inputs = document.createElement('div');
+    inputs.className = 'ws-inputs';
+    if (w.type === 'n') {
+      var iA = document.createElement('input'); iA.className = 'blank art'; iA.placeholder = 'Artikel'; iA.dataset.ans = w.artikel; iA.dataset.field = 'art';
+      var iW = document.createElement('input'); iW.className = 'blank wort'; iW.placeholder = 'Wort'; iW.dataset.ans = w.de; iW.dataset.field = 'wort';
+      var iP = document.createElement('input'); iP.className = 'blank plural'; iP.placeholder = 'Plural'; iP.dataset.ans = w.plural; iP.dataset.field = 'plural';
+      [iA, iW, iP].forEach(function(inp) {
+        inp.addEventListener('input', function() { timerAutoStart(6); wortschatzCheck(inp); });
+        inputs.appendChild(inp);
+      });
+      if (w.plural === '–') { iP.value = '–'; iP.disabled = true; iP.classList.add('correct'); iP.style.opacity = '0.6'; }
+    } else {
+      var iD = document.createElement('input'); iD.className = 'blank solo'; iD.placeholder = 'Deutsch'; iD.dataset.ans = w.de; iD.dataset.field = 'solo';
+      iD.addEventListener('input', function() { timerAutoStart(6); wortschatzCheck(iD); });
       inputs.appendChild(iD);
-    }}
-    div.appendChild(en); div.appendChild(arrow); div.appendChild(inputs); cont.appendChild(div);
-  }});
-}}
-function vocabLiveCheck(inp,ans) {{
-  var val=inp.value.trim(); inp.classList.remove('correct','wrong');
-  if(!val) return;
-  if(val===ans) {{ inp.classList.add('correct'); }} else if(!ans.startsWith(val)) {{ inp.classList.add('wrong'); }}
-}}
-function checkVocabAllDone() {{
-  var all=document.querySelectorAll('#vocabContainer input'); if(!all.length) return;
-  if(Array.from(all).every(function(i){{return i.classList.contains('correct');}})) timerStop(3);
-}}
-function showVocabLoesung() {{
-  document.querySelectorAll('#vocabContainer input').forEach(function(i){{ i.value=i.getAttribute('data-answer'); i.classList.remove('wrong'); i.classList.add('correct'); }});
-}}
-function resetVocab() {{ initVocab(); resetTimer(3); }}
+    }
+    card.appendChild(inputs);
+    cont.appendChild(card);
+  });
+}
+function wortschatzCheck(inp) {
+  var val = inp.value.trim();
+  var ans = inp.dataset.ans || '';
+  var field = inp.dataset.field;
+  inp.classList.remove('correct', 'wrong');
+  if (!val) return;
+  // Artikel: case-insensitive; Wort/Plural/Solo: case-sensitive
+  var match = (field === 'art') ? (val.toLowerCase() === ans.toLowerCase()) : (val === ans);
+  if (match) {
+    inp.classList.add('correct');
+    checkWortschatzAllOk();
+    return;
+  }
+  // Prefix prüfen
+  var prefixOk = (field === 'art')
+    ? ans.toLowerCase().startsWith(val.toLowerCase())
+    : ans.startsWith(val);
+  if (prefixOk) return;
+  inp.classList.add('wrong');
+}
+function checkWortschatzAllOk() {
+  var all = document.querySelectorAll('#wortschatzContainer input.blank');
+  if (!all.length) return;
+  if (Array.from(all).every(function(i) { return i.classList.contains('correct'); })) timerStop(6);
+}
+function showWortschatzLoesung() {
+  document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(i) {
+    i.value = i.dataset.ans;
+    i.classList.remove('wrong');
+    i.classList.add('correct');
+  });
+}
+function resetWortschatz() { resetTimer(6); initWortschatz(); }
 
-const SATZBAU_DATA = [
-  { words: ['Brettspiele', 'fördern', 'das', 'strategische', 'Denken', '.'] },
-  { words: ['Er', 'hat', 'das', 'Spiel', 'nach', 'drei', 'Stunden', 'gewonnen', '.'] },
-  { words: ['Die', 'Regeln', 'sind', 'leicht', 'zu', 'erklären', '.'] },
-  { words: ['Wir', 'spielen', 'jeden', 'Samstag', 'gemeinsam', '.'] },
-  { words: ['Sie', 'forderte', 'ihn', 'zu', 'einem', 'Duell', 'heraus', '.'] },
-  { words: ['Der', 'Würfel', 'entscheidet', 'über', 'den', 'nächsten', 'Zug', '.'] },
-  { words: ['Das', 'kooperative', 'Spiel', 'macht', 'großen', 'Spaß', '.'] },
-  { words: ['Er', 'zog', 'seine', 'Figur', 'ans', 'Ziel', '.'] }
-];
-
-var WORTSCHATZ = [
-  {type:'n', en:'the board game', art:'das', wort:'Brettspiel', plural:'Brettspiele'},
-  {type:'n', en:'the player', art:'der', wort:'Spieler', plural:'Spieler'},
-  {type:'n', en:'the rule', art:'die', wort:'Regel', plural:'Regeln'},
-  {type:'n', en:'the dice', art:'der', wort:'Würfel', plural:'Würfel'},
-  {type:'n', en:'the move / turn', art:'der', wort:'Zug', plural:'Züge'},
-  {type:'n', en:'the game board', art:'das', wort:'Spielfeld', plural:'Spielfelder'},
-  {type:'v', en:'to win', de:'gewinnen'},
-  {type:'v', en:'to lose', de:'verlieren'},
-  {type:'v', en:'to roll the dice', de:'würfeln'},
-  {type:'v', en:'to give up', de:'aufgeben'},
-  {type:'v', en:'to cooperate', de:'kooperieren'},
-  {type:'v', en:'to challenge', de:'herausfordern'}
-];
-
-buildSatzbau();
-initVocab();
-
-// INIT
-initTimers([1,2,3]);
+// ─── INIT ────────────────────────────────────────────────────────────────────
+initTimers([2, 3, 4, 5, 6]);
+initVorentlastung();
+initGenus();
+initLuecke();
+initMc();
+initSatzbau();
+initWortschatz();
+highlightVocabInText();
 
 </script>
 </body>

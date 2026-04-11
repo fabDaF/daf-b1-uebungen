@@ -6,389 +6,1026 @@
 <title>Die Olympischen Spiele – B1.3</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
 .header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
 .header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
 .header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
-.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
-.nav-btn { flex: 1; padding: 14px 8px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.88em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 .nav-btn:last-child { border-right: none; }
-.nav-btn:hover { background: #e8ecff; color: #667eea; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
 .nav-btn.active { background: white; color: #667eea; font-weight: 700; border-bottom: 3px solid #667eea; }
 .nav-emoji { font-size: 1.3em; line-height: 1.2; }
-.nav-label { font-size: 0.75em; margin-top: 2px; line-height: 1.2; }
-.section { display: none; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+
+.section { display: none; padding: 28px; }
 .section.active { display: block; }
-.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); display: block; }
-@media (max-width: 600px) { .tab-banner { max-height: 120px; } }
-.section-content { padding: 28px 30px; }
-.section-title { font-size: 1.15em; font-weight: 700; color: #5a3e9e; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e8e4f5; }
-.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
-.hilfe-box strong { color: #5a3e9e; }
-.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
-.tc-buttons { display:flex; gap:6px; }
-.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
-.tc-buttons button:hover { background:#f0f0f0; color:#555; }
-.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
-.timer-display { color:#667eea; font-weight:700; }
-.best-display  { color:#f39c12; font-weight:600; }
-.luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
-.luecken-inp { border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-family: inherit; font-size: 1.0em; padding: 2px 4px; transition: border-color 0.2s; min-width: 110px; }
-.luecken-inp:focus { border-bottom-color: #667eea; }
-.luecken-inp.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
-.luecken-inp.no { border-bottom-color: #e74c3c; color: #e74c3c; }
-.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
-.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
-.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
-.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
-.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
-.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
-.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
-.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
-.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; }
-.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
-.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
-.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
-.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
-.satzbau-feedback.correct { color: #27ae60; }
-.satzbau-feedback.incorrect { color: #e74c3c; }
-.satzbau-item { margin-bottom: 20px; }
-.vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.vocab-en { font-weight: 600; color: #764ba2; min-width: 160px; font-size: 0.95em; }
-.vocab-arrow { color: #ccc; font-size: 1.2em; }
-.vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.vocab-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
-.vocab-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
-.vocab-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
-.vocab-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
-.vocab-inputs input.art { width: 70px; }
-.vocab-inputs input.wort { width: 130px; }
-.vocab-inputs input.plural { width: 140px; }
-.vocab-hint { color: #27ae60; font-weight: 600; font-size: 0.8em; margin-left: 6px; }
-.score-box { background: #e8f8f0; border: 1px solid #27ae60; border-radius: 8px; padding: 10px 16px; margin-top: 14px; font-size: 0.9em; color: #1a7a3c; font-weight: 600; display: none; }
+
 @media (max-width: 600px) {
-  body { padding: 8px; }
-  .nav { flex-wrap: wrap; }
-  .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.75em; padding: 10px 6px; border-right: 1px solid #ddd; }
-  .nav-btn:last-child { border-right: 1px solid #ddd; }
-  .vocab-item { flex-direction: column; align-items: flex-start; }
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
 }
-.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+
+.tab-banner {
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    object-position: center 30%;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    display: block;
+}
+@media (max-width: 600px) {
+    .tab-banner { max-height: 120px; }
+}
+
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 8px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+
+.hilfe-box {
+    background: #f0f4ff; border-left: 4px solid #667eea;
+    border-radius: 0 8px 8px 0; padding: 14px 18px;
+    margin-bottom: 22px; font-size: 0.9em; color: #444;
+    line-height: 1.6;
+}
+
+/* ── CONTROL BAR ── */
+.control-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px; padding: 6px 12px;
+    background: #f8f9fa; border-radius: 8px;
+}
+.btn-row { display: flex; gap: 6px; }
+.btn {
+    background: none; border: 1px solid #ddd; border-radius: 6px;
+    padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer;
+    transition: all 0.15s; font-weight: 500;
+}
+.btn:hover { border-color: #667eea; color: #667eea; }
+.btn-show { color: #667eea; border-color: #d5d9ff; }
+.btn-reset { color: #e74c3c; border-color: #f3c6c1; }
+.timer-display {
+    display: flex; gap: 14px; font-size: 0.82em;
+    color: #bbb; font-variant-numeric: tabular-nums;
+}
+.current-time { color: #667eea; font-weight: 600; }
+.best-time    { color: #27ae60; font-weight: 600; }
+
+/* ── VORENTLASTUNG ── */
+.vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px; margin-bottom: 24px;
+}
+.vocab-card {
+    background: #f8f9ff;
+    border: 1px solid #dde3ff;
+    border-radius: 10px;
+    padding: 14px 16px;
+}
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 2px; }
+.vocab-en   { color: #999; font-size: 0.85em; margin-bottom: 5px; font-style: italic; }
+.vocab-def  { color: #555; font-size: 0.92em; line-height: 1.5; }
+
+/* ── STORY TEXT ── */
+.story-text {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.story-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.story-text p:first-child { text-indent: 0; }
+.story-text .dialog {
+    font-style: normal;
+    text-indent: 0;
+    padding-left: 1.1em;
+    border-left: 3px solid #667eea;
+    color: #2a2a6e;
+    margin-left: 0;
+}
+.story-text figure { margin: 18px 0; text-align: center; text-indent: 0; }
+.story-text figure img { width: 100%; max-width: 600px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+.story-text figure figcaption { margin-top: 6px; font-size: 0.85em; color: #667eea; font-weight: 600; font-family: 'Segoe UI', sans-serif; }
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; font-family: 'Segoe UI', sans-serif; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+/* ── VOCAB HIGHLIGHT ── */
+.vocab-hl {
+    background: #ffe9a0;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 600;
+    cursor: help;
+}
+
+/* ── RICHTIG/FALSCH ── */
+.rf-list {
+    display: flex; flex-direction: column; gap: 8px;
+    max-width: 650px; margin-left: auto; margin-right: auto;
+}
+.rf-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: #f9f9f9; border-radius: 8px;
+    font-size: 0.95em; border: 1.5px solid #ddd;
+}
+.rf-text { flex: 1; color: #333; line-height: 1.5; }
+.rf-btns { display: flex; gap: 6px; }
+.rf-btn {
+    padding: 4px 14px; border-radius: 14px; border: 1.5px solid #9b59b6;
+    background: #fff; color: #6c3483; font-size: 0.8rem;
+    font-weight: 700; cursor: pointer;
+}
+.rf-btn:hover { background: #f3e5f5; }
+.rf-btn.sel-r { background: #27ae60; color: #fff; border-color: #27ae60; }
+.rf-btn.sel-f { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.rf-result { font-size: 0.9rem; font-weight: 700; min-width: 24px; }
+.rf-result.ok  { color: #27ae60; }
+.rf-result.err { color: #e74c3c; }
+.rf-title {
+    font-size: 1.0em; color: #555; margin-bottom: 12px; font-weight: 600;
+    max-width: 650px; margin-left: auto; margin-right: auto;
+}
+
+/* ── LÜCKENTEXT ── */
+.luecke-item {
+    background: #f8f9ff; border-left: 4px solid #667eea;
+    border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;
+    font-size: 0.97em; line-height: 1.9; color: #333;
+}
+input.blank {
+    border: none; border-bottom: 2px solid #667eea;
+    outline: none; font-size: 0.97em; font-family: inherit;
+    padding: 2px 4px; background: transparent; color: #222;
+    transition: border-color 0.2s; min-width: 110px;
+}
+input.blank.ok    { border-bottom-color: #27ae60; color: #27ae60; }
+input.blank.wrong { border-bottom-color: #e74c3c; color: #e74c3c; }
+
+/* ── SATZBAU ── */
+.sb-item {
+    background: #fafbff; border: 1px solid #e0e7ff;
+    border-radius: 12px; padding: 16px; margin-bottom: 16px;
+}
+.chips-container {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 14px; background: #f8f8f8;
+    border-radius: 10px; min-height: 56px; margin-bottom: 10px;
+}
+.sentence-builder {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    padding: 14px; background: white;
+    border: 2px dashed #ccc; border-radius: 10px;
+    min-height: 56px; align-items: center; margin-bottom: 6px;
+}
+.sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.chip {
+    background: white; border: 2px solid #667eea; color: #667eea;
+    padding: 8px 14px; border-radius: 20px; cursor: move;
+    font-weight: 500; font-size: 0.9em; transition: all 0.2s;
+    user-select: none; white-space: nowrap;
+}
+.chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.punct-chip {
+    background: #f8f8f8; border: 2px solid #667eea;
+    padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em;
+    min-width: 18px; text-align: center;
+}
+.chip.punct-chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.sb-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.sb-feedback.correct   { color: #27ae60; }
+.sb-feedback.incorrect { color: #e74c3c; }
+
+/* ── WORTSCHATZ ── */
+#wortschatzContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+#wortschatzContainer .luecke-item {
+    background: #f8f9ff; padding: 12px 14px;
+    border-radius: 10px; border-left: 4px solid #667eea;
+    display: flex; flex-direction: column; gap: 6px;
+    margin-bottom: 0;
+}
+.ws-en { font-weight: 600; color: #764ba2; font-size: 0.93em; }
+.ws-inputs { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; width: 100%; }
+.ws-inputs input.blank { min-width: auto; }
+.ws-inputs input.art    { width: 70px; flex-shrink: 0; }
+.ws-inputs input.wort   { flex: 1; min-width: 150px; }
+.ws-inputs input.plural { width: 130px; flex-shrink: 0; }
+.ws-inputs input.verb   { flex: 1; min-width: 200px; }
+
+@media (max-width: 700px) {
+    #wortschatzContainer { grid-template-columns: 1fr; }
+}
+
+/* ── AUTHOR FOOTER ── */
+.author-footer {
+    text-align: center; margin-top: 40px; padding: 16px;
+    font-size: 0.8rem; color: #aaa;
+}
 .author-footer a { color: #aaa; }
 .author-name { font-weight: 700; }
+
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.4rem; }
+}
 </style>
 </head>
 <body>
+
 <div class="container">
-  <div class="header">
+
+<div class="header">
     <h1>Die Olympischen Spiele</h1>
-    <p style="font-family: Georgia, serif;">B1.3 – Lektion 3013R &nbsp;|&nbsp; Kommunikation</p>
+    <p>B1.3 – Lektion 3013R · Lesen</p>
     <div class="big-emoji">🏅</div>
-  </div>
-
-  <div class="nav">
-    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">💡</span><span class="nav-label">Wörter</span></div>
-    <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
-    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
-    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
-  </div>
-
-  <div class="section active" id="sec-0">
-  <img class="tab-banner" src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="section-title">💡 Schlüsselwörter</div>
-<div class="hilfe-box"><strong>Vorentlastung — Schlüsselwörter</strong></div>
-<div class="hilfe-box">
-<strong>die Olympischen Spiele</strong> — the Olympic Games<br>
-<strong>der Athlet</strong> (-en) — the athlete<br>
-<strong>die Medaille</strong> (-n) — the medal<br>
-<strong>die Eröffnungsfeier</strong> (-n) — the opening ceremony<br>
-<strong>der Weltrekord</strong> (-e) — the world record<br>
-<strong>teilnehmen</strong> — to participate<br>
-<strong>austragen</strong> — to host (an event)<br>
-<strong>der Gastgeber</strong> (-) — the host<br>
-<strong>die Disziplin</strong> (-en) — the discipline / sport<br>
-<strong>fair play</strong> — fair play
 </div>
-<div class="hilfe-box" style="margin-top:14px;">
-<strong>🇬🇧 Background in English:</strong><br>
-The Olympic Games are the world's biggest sporting event, held every four years. Athletes from around the world compete in many sports. The Games began in ancient Greece and were revived in 1896 in Athens. The motto is "Citius, Altius, Fortius" — Faster, Higher, Stronger.
+
+<div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+        <span class="nav-emoji">🌅</span>
+        <span class="nav-label">Vorentlastung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+        <span class="nav-emoji">📖</span>
+        <span class="nav-label">Geschichte</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+        <span class="nav-emoji">❓</span>
+        <span class="nav-label">Verständnis</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+        <span class="nav-emoji">✏️</span>
+        <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+        <span class="nav-emoji">🧩</span>
+        <span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(5)">
+        <span class="nav-emoji">📚</span>
+        <span class="nav-label">Wortschatz</span>
+    </div>
 </div>
-  </div>
-  </div>
 
-  <div class="section" id="sec-1">
-  <img class="tab-banner" src="https://images.pexels.com/photos/1059120/pexels-photo-1059120.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="timer-controls">
-  <div class="tc-buttons"><button onclick="showLueckeLoesung()">💡 Lösungen</button><button onclick="resetLuecke()">↺ Neustart</button></div>
-  <div class="tc-times">
-    <span>⏱ <span class="timer-display" id="timer-1">00:00</span></span>
-    <span>🏆 <span class="best-display" id="best-1">--:--</span></span>
-  </div>
+<!-- SECTION 0: VORENTLASTUNG -->
+<div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/31376813/pexels-photo-31376813.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Olympische Ringe in Paris">
+    <div class="section-title">🌅 Vorentlastung</div>
+    <div class="section-sub">Wichtige Wörter rund um die Olympischen Spiele — lies sie einmal durch, bevor du die Geschichte liest.</div>
+    <div class="vocab-grid">
+                <div class="vocab-card"><div class="vocab-term">die Olympischen Spiele (Pl.)</div><div class="vocab-en">the Olympic Games</div><div class="vocab-def">Das größte internationale Sportereignis der Welt. Alle vier Jahre treffen sich die besten Athleten aus über 200 Ländern.</div></div>
+                <div class="vocab-card"><div class="vocab-term">der Athlet, -en / die Athletin, -nen</div><div class="vocab-en">the athlete</div><div class="vocab-def">Eine Person, die professionell Sport macht und an Wettkämpfen teilnimmt.</div></div>
+                <div class="vocab-card"><div class="vocab-term">die Medaille, -n</div><div class="vocab-en">the medal</div><div class="vocab-def">Eine runde Auszeichnung für Gewinner: Gold für den ersten, Silber für den zweiten, Bronze für den dritten Platz.</div></div>
+                <div class="vocab-card"><div class="vocab-term">der persönliche Rekord</div><div class="vocab-en">personal record (PR)</div><div class="vocab-def">Die eigene beste Zeit oder Leistung in einer Sportart. Auch wenn man nicht gewinnt, ist ein neuer persönlicher Rekord ein Erfolg.</div></div>
+                <div class="vocab-card"><div class="vocab-term">der Wettkampf, Wettkämpfe</div><div class="vocab-en">the competition</div><div class="vocab-def">Ein sportlicher Vergleich zwischen mehreren Athleten. Wer gewinnt, kommt weiter oder bekommt einen Preis.</div></div>
+                <div class="vocab-card"><div class="vocab-term">das Finale, -s</div><div class="vocab-en">the final</div><div class="vocab-def">Die letzte Runde eines Wettbewerbs. Nur die besten Athleten erreichen das Finale.</div></div>
+                <div class="vocab-card"><div class="vocab-term">die Zielgerade, -n</div><div class="vocab-en">the home stretch</div><div class="vocab-def">Die letzten hundert Meter vor dem Ziel. Hier entscheidet sich oft der Sieg.</div></div>
+                <div class="vocab-card"><div class="vocab-term">die olympische Flamme</div><div class="vocab-en">the Olympic flame</div><div class="vocab-def">Das Feuer, das während der ganzen Spiele brennt. Es wird vor jedem Turnier in Griechenland entzündet.</div></div>
+    </div>
 </div>
-<div class="section-title">✏️ Lückentext</div>
-<div class="hilfe-box"><strong>Aufgabe:</strong> Fülle die Lücken mit den richtigen Wörtern aus.</div>
-<div class="wortkasten"><strong>Wörter:</strong> austragen · teilnehmen · aufstellen · erreichen · übertreffen · feiern · eröffnen · vergeben · stattfinden · übergeben</div>
-    <div class="luecken-item">Die Olympischen Spiele <input class="luecken-inp" data-answer="finden" oninput="liveCheck(this)" placeholder=""> alle vier Jahre statt.</div>
-    <div class="luecken-item">Athen hat die ersten modernen Spiele im Jahr 1896 <input class="luecken-inp" data-answer="ausgetragen" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Tausende von Athleten <input class="luecken-inp" data-answer="nehmen" oninput="liveCheck(this)" placeholder=""> an den Spielen teil.</div>
-    <div class="luecken-item">Der Sprinter hat einen neuen Weltrekord <input class="luecken-inp" data-answer="aufgestellt" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Sie hat ihre persönliche Bestzeit <input class="luecken-inp" data-answer="übertroffen" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Das Publikum <input class="luecken-inp" data-answer="feierte" oninput="liveCheck(this)" placeholder=""> die Sieger lautstark.</div>
-    <div class="luecken-item">Der Präsident <input class="luecken-inp" data-answer="eröffnete" oninput="liveCheck(this)" placeholder=""> die Spiele offiziell.</div>
-    <div class="luecken-item">Die Goldmedaille wurde an den besten Sportler <input class="luecken-inp" data-answer="vergeben" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Das olympische Feuer wurde dem Gastgeber <input class="luecken-inp" data-answer="übergeben" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Die Athleten wollen ihre Ziele <input class="luecken-inp" data-answer="erreichen" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Paris hat die Spiele im Jahr 2024 <input class="luecken-inp" data-answer="ausgetragen" oninput="liveCheck(this)" placeholder="">.</div>
-    <div class="luecken-item">Viele Nationen <input class="luecken-inp" data-answer="nehmen" oninput="liveCheck(this)" placeholder=""> an den Wettbewerben teil.</div>
 
-<div class="score-box" id="lueckeScore"></div>
-  </div>
-  </div>
-
-  <div class="section" id="sec-2">
-  <img class="tab-banner" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="timer-controls">
-  <div class="tc-buttons"><button onclick="resetSatzbau()">↺ Neustart</button></div>
-  <div class="tc-times">
-    <span>⏱ <span class="timer-display" id="timer-2">00:00</span></span>
-    <span>🏆 <span class="best-display" id="best-2">--:--</span></span>
-  </div>
+<!-- SECTION 1: GESCHICHTE -->
+<div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/5961847/pexels-photo-5961847.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Läufer auf der Tartanbahn">
+    <div class="section-title">📖 Karim im Stade de France</div>
+    <div class="section-sub">Eine Geschichte von Karim Benali — Paris, Sommer 2024.</div>
+    <div class="story-text">
+        <p>Karim stieg in Saint-Denis aus der Métro. Tausende Menschen liefen in dieselbe Richtung, alle schweigend und zugleich ungeduldig. Er trug ein Ticket in der Brusttasche, das ihm ein Kollege an diesem Morgen in letzter Minute geschenkt hatte. Er war nicht wegen der Spiele nach Paris gekommen, sondern wegen einer Konferenz. Aber an diesem Abend fand das Finale über zehntausend Meter statt, und ein Läufer aus Marokko war dabei.</p>
+        <figure><img src="https://images.pexels.com/photos/12585946/pexels-photo-12585946.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Läufer am Startblock"><figcaption>Die letzten Sekunden vor dem Start — konzentriert, still, reglos.</figcaption></figure>
+        <p>Das Stadion war voll. Neunzigtausend Menschen, Fahnen aus vielleicht fünfzig Ländern, eine laute, warme Unruhe. Karim setzte sich auf seinen Platz und versuchte, den marokkanischen Läufer zu finden. Die Athleten kamen langsam auf die Bahn. Er sah schmale Beine, konzentrierte Gesichter, das leise Zucken vor einem Rennen.</p>
+        <p class="dialog">„Erster Rang, Bahn fünf — Soufiane El Bakkali, Marokko“, sagte die Stimme im Lautsprecher.</p>
+        <p>Neben Karim saß eine ältere Französin. Sie hatte eine blau-weiß-rote Fahne über die Knie gelegt, aber sie schaute zu ihm hinüber.</p>
+        <p class="dialog">„Sie sind für ihn da, nicht wahr?“, fragte sie leise.</p>
+        <p>Karim nickte. Sie lächelte und fuhr fort.</p>
+        <p class="dialog">„Ich war 1976 in Montreal, als Nadia Comăneci die erste Zehn bekam. So etwas vergisst man nie.“</p>
+        <p>Der Startschuss fiel. Die ersten Runden waren ruhig, fast höflich. Niemand wollte die Führung übernehmen. Dann, nach zwanzig Minuten, zog ein Äthiopier an. Er lief schneller und schneller, und drei Läufer folgten ihm. El Bakkali war dabei.</p>
+        <p>In der letzten Runde trat jemand an, den Karim nicht kannte — ein Kenianer mit roten Socken. Er überholte den Äthiopier auf der Zielgeraden. Der Marokkaner kämpfte um Silber. Zehn Meter vor dem Ziel holte er seinen letzten Konkurrenten ein und gewann die silberne Medaille.</p>
+        <figure><img src="https://images.pexels.com/photos/7267591/pexels-photo-7267591.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Olympische Medaillen"><figcaption>Gold, Silber, Bronze — drei Farben, drei Geschichten.</figcaption></figure>
+        <p>Das Stadion brach in Jubel aus. Die alte Frau neben Karim klatschte mit beiden Händen. Karim blieb sitzen. Er schaute auf die Uhr auf der Anzeigetafel: 26:43,11 — ein neuer persönlicher Rekord.</p>
+        <p>Draußen war es kühl geworden. Karim ging an der langen Warteschlange zur Métro vorbei und suchte eine ruhige Ecke am Kanal. Er wählte die Nummer seines Vaters in Casablanca.</p>
+        <p class="dialog">„Baba, er hat Silber geholt. Und einen persönlichen Rekord aufgestellt.“</p>
+        <p>Sein Vater schwieg einen Moment. Dann sagte er:</p>
+        <p class="dialog">„Ich habe es im Fernsehen gesehen. Dein Großvater hätte das auch gesehen, weißt du das?“</p>
+        <p>Karim wusste es. Sein Großvater hatte früher an Marathonläufen teilgenommen, in einer Zeit, in der Marokko noch keine olympischen Medaillen gewann. Er wollte etwas antworten, aber er fand die Worte nicht. Über dem Stadion leuchtete die olympische Flamme. Das Licht spiegelte sich im dunklen Wasser des Kanals.</p>
+        <p class="dialog">„Ja“, sagte er schließlich. „Er hätte es gesehen.“</p>
+        <div class="story-source">Quelle: B1.3 – Lektion 3013R – Die Olympischen Spiele</div>
+    </div>
 </div>
-<div class="section-title">🧩 Satzbau</div>
-<div class="hilfe-box"><strong>Aufgabe:</strong> Ziehe die Wörter in die richtige Reihenfolge.</div>
-<div id="sbContainer"></div>
-  </div>
-  </div>
 
-  <div class="section" id="sec-3">
-  <img class="tab-banner" src="https://images.pexels.com/photos/6238297/pexels-photo-6238297.jpeg?auto=compress&cs=tinysrgb&w=800" alt="">
-  <div class="section-content">
-<div class="timer-controls">
-  <div class="tc-buttons"><button onclick="showVocabLoesung()">💡 Lösungen</button><button onclick="resetVocab()">↺ Neustart</button></div>
-  <div class="tc-times">
-    <span>⏱ <span class="timer-display" id="timer-3">00:00</span></span>
-    <span>🏆 <span class="best-display" id="best-3">--:--</span></span>
-  </div>
+<!-- SECTION 2: VERSTÄNDNIS -->
+<div class="section" id="sec-2">
+    <img class="tab-banner" src="https://images.pexels.com/photos/34649361/pexels-photo-34649361.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Zuschauer im Olympiastadion">
+    <div class="section-title">❓ Verständnis: Richtig oder Falsch?</div>
+    <div class="section-sub">Beantworte die Fragen zu „Karim im Stade de France“.</div>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="showLoesungRF()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetRF(); resetTimer(2);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-2">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-2">--:--</span></span>
+        </div>
+    </div>
+    <div class="rf-title">Ist die Aussage richtig oder falsch?</div>
+    <div id="rfContainer" class="rf-list"></div>
 </div>
-<div class="section-title">🔠 Wortschatz</div>
-<div class="hilfe-box"><strong>Aufgabe:</strong> Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural!</div>
-<div id="vocabContainer"></div>
-  </div>
-  </div>
 
+<!-- SECTION 3: LÜCKENTEXT -->
+<div class="section" id="sec-3">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Schreiben im Notizbuch">
+    <div class="section-title">✏️ Lückentext</div>
+    <div class="section-sub">Ergänze die passende Verbform. Die Sätze greifen Motive aus der Geschichte auf.</div>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="showLoesungLuecken()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetLuecken(); resetTimer(3);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-3">--:--</span></span>
+        </div>
+    </div>
+    <div id="lueckenContainer"></div>
+</div>
 
-  <div class="author-footer">
+<!-- SECTION 4: SATZBAU -->
+<div class="section" id="sec-4">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3769714/pexels-photo-3769714.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Sätze an der Tafel bauen">
+    <div class="section-title">🧩 Satzbau</div>
+    <div class="section-sub">Ziehe die Wörter in die richtige Reihenfolge. Die Sätze stammen aus der Geschichte.</div>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="showLoesungSatzbau()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetSatzbau(); resetTimer(4);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-4">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-4">--:--</span></span>
+        </div>
+    </div>
+    <div id="sbContainer"></div>
+</div>
+
+<!-- SECTION 5: WORTSCHATZ -->
+<div class="section" id="sec-5">
+    <img class="tab-banner" src="https://images.pexels.com/photos/7450476/pexels-photo-7450476.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Wörterbuchseite">
+    <div class="section-title">📚 Wortschatz</div>
+    <div class="section-sub">Übersetze ins Deutsche. Bei Nomen: Artikel + Wort + Plural.</div>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn btn-show" onclick="showLoesungWortschatz()">Lösungen</button>
+            <button class="btn btn-reset" onclick="resetWortschatz(); resetTimer(5);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+            <span class="current-time">⏱ <span id="timer-5">00:00</span></span>
+            <span class="best-time">🏆 <span id="best-5">--:--</span></span>
+        </div>
+    </div>
+    <div id="wortschatzContainer"></div>
+</div>
+
+<div class="author-footer">
     <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
     <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
-  </div>
+</div>
+
 </div><!-- /container -->
 
 <script>
+// ═════════════════════════════════════════════════════════════════════════
+// DATA
+// ═════════════════════════════════════════════════════════════════════════
 
-// ─── TIMER ───────────────────────────────────────────────────────────────────
-var _tv = {}, _ti = {}, _tr = {};
-var BEST_KEY = 'best_3013R_';
-function initTimers(ns) {{ ns.forEach(function(n){{ _tv[n]=0; _ti[n]=null; _tr[n]=false; }}); loadBests(ns); }}
-function timerTick(n) {{ _tv[n]++; var m=Math.floor(_tv[n]/60),s=_tv[n]%60; var el=document.getElementById('timer-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }}
-function timerAutoStart(n) {{ if(_tr[n]) return; _tr[n]=true; _ti[n]=setInterval(function(){{timerTick(n);}},1000); }}
-function timerStop(n) {{ if(!_tr[n]) return; clearInterval(_ti[n]); _tr[n]=false; var k=BEST_KEY+n; var prev=parseInt(localStorage.getItem(k)||'99999'); if(_tv[n]<prev){{ localStorage.setItem(k,_tv[n]); var m=Math.floor(_tv[n]/60),s=_tv[n]%60; var el=document.getElementById('best-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s; }} }}
-function resetTimer(n) {{ clearInterval(_ti[n]); _tr[n]=false; _tv[n]=0; var el=document.getElementById('timer-'+n); if(el) el.textContent='00:00'; }}
-function loadBests(ns) {{ ns.forEach(function(n){{ var s=parseInt(localStorage.getItem(BEST_KEY+n)||'0'); if(s>0){{ var m=Math.floor(s/60),ss=s%60; var el=document.getElementById('best-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }} }}); }}
+var VORENTLASTUNG_WORDS = [
+    „Olympischen Spiele“,
+    „Athlet“,
+    „Medaille“,
+    „persönliche Rekord“,
+    „Wettkampf“,
+    „Finale“,
+    „Zielgerade“,
+    „olympische Flamme“
+];
 
-// ─── NAVIGATION ──────────────────────────────────────────────────────────────
-function showSection(n) {
-  document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active',i===n); });
-  document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active',i===n); });
-}
+var RF_DATA = [
+        {„q“:„Karim ist extra wegen der Olympischen Spiele nach Paris gekommen.“,„a“:false},
+        {„q“:„Ein Kollege hat Karim das Ticket in letzter Minute geschenkt.“,„a“:true},
+        {„q“:„Die ältere Französin neben Karim erinnert sich an Olympia 1976 in Montreal.“,„a“:true},
+        {„q“:„Ein Äthiopier gewinnt das Rennen über zehntausend Meter.“,„a“:false},
+        {„q“:„Soufiane El Bakkali stellt bei diesem Rennen einen neuen persönlichen Rekord auf.“,„a“:true},
+        {„q“:„Karim ruft seine Mutter in Casablanca an.“,„a“:false},
+        {„q“:„Karims Großvater hat früher an Marathonläufen teilgenommen.“,„a“:true},
+        {„q“:„Marokko hatte zur Zeit von Karims Großvater noch keine olympischen Medaillen.“,„a“:true}
+];
 
-// ─── LÜCKENTEXT ──────────────────────────────────────────────────────────────
-function liveCheck(inp) {{
-  timerAutoStart(1);
-  var val=inp.value.trim(), ans=inp.dataset.answer||'';
-  inp.classList.remove('ok','no');
-  if(!val) return;
-  if(val===ans) {{ inp.classList.add('ok'); checkLueckeDone(); }}
-  else if(!ans.startsWith(val)) {{ inp.classList.add('no'); }}
-}}
-function checkLueckeDone() {{
-  var all=document.querySelectorAll('#sec-1 .luecken-inp');
-  if(Array.from(all).every(function(i){{return i.classList.contains('ok');}})) {{
-    timerStop(1);
-    var s=document.getElementById('lueckeScore'); if(s){{s.textContent='🎉 Alle Lücken korrekt!'; s.style.display='block';}}
-  }}
-}}
-function showLueckeLoesung() {{
-  document.querySelectorAll('#sec-1 .luecken-inp').forEach(function(i){{ i.value=i.dataset.answer; i.classList.add('ok'); }});
-}}
-function resetLuecke() {{
-  document.querySelectorAll('#sec-1 .luecken-inp').forEach(function(i){{ i.value=''; i.classList.remove('ok','no'); }});
-  var s=document.getElementById('lueckeScore'); if(s) s.style.display='none';
-  resetTimer(1);
-}}
+var LUECKEN_DATA = [
+        {„html“:„Der marokkanische Läufer hat bei diesem Rennen einen neuen persönlichen Rekord ___.“,„answer“:„aufgestellt“},
+        {„html“:„Paris hat die Olympischen Spiele im Sommer 2024 ___.“,„answer“:„ausgetragen“},
+        {„html“:„Über zehntausend Athleten aus zweihundert Ländern ___ an den Spielen teil.“,„answer“:„nahmen“},
+        {„html“:„Auf der Zielgeraden ___ der Kenianer den Äthiopier und holte Gold.“,„answer“:„überholte“},
+        {„html“:„Marokko hat bei den Spielen 2024 zwei silberne Medaillen ___.“,„answer“:„gewonnen“},
+        {„html“:„Die drei besten Läufer werden nach dem Finale mit einer Medaille ___.“,„answer“:„ausgezeichnet“},
+        {„html“:„Im Mehrkampf ___ die Athleten in zehn verschiedenen Disziplinen gegeneinander an.“,„answer“:„treten“},
+        {„html“:„Als El Bakkali ins Ziel lief, ___ das Stadion in Jubel aus.“,„answer“:„brach“},
+        {„html“:„Der französische Präsident ___ die Spiele am Ufer der Seine offiziell.“,„answer“:„eröffnete“},
+        {„html“:„Karims Großvater hatte früher in Marokko an langen Marathonläufen ___.“,„answer“:„teilgenommen“},
+        {„html“:„Die Schwimmerin hat ihre Bronzemedaille hart ___ und drei Jahre dafür trainiert.“,„answer“:„erkämpft“},
+        {„html“:„Am Abend nach dem Finale ___ die ganze Stadt ihren Sieger auf den Straßen.“,„answer“:„feierte“}
+];
 
-// ─── SATZBAU ─────────────────────────────────────────────────────────────────
-var sbDragged = null;
-function shuffleArr(a) {{ var b=a.slice(); for(var i=b.length-1;i>0;i--){{ var j=Math.floor(Math.random()*(i+1)),t=b[i]; b[i]=b[j]; b[j]=t; }} return b; }}
-function getSbCursor() {{ var c=document.getElementById('sb-insert-cursor'); if(!c){{ c=document.createElement('div'); c.id='sb-insert-cursor'; c.style.cssText='width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;'; }} return c; }}
-function getSbInsertPos(zone,clientX) {{ var chips=Array.from(zone.querySelectorAll('.chip')); for(var i=0;i<chips.length;i++){{ var r=chips[i].getBoundingClientRect(); if(clientX<r.left+r.width/2) return chips[i]; }} return null; }}
-function sbCapitalize(s) {{ return s.charAt(0).toUpperCase()+s.slice(1); }}
-function sbUpdateCapitalization(zone) {{
-  var chips=Array.from(zone.querySelectorAll('.chip'));
-  chips.forEach(function(c,i) {{
-    var orig=c.dataset.orig;
-    if(!orig||orig===','||orig===';') return;
-    var isProper=orig.charAt(0)===orig.charAt(0).toUpperCase()&&orig.charAt(0)!==orig.charAt(0).toLowerCase();
-    c.textContent=isProper?orig:(i===0?sbCapitalize(orig):orig);
-  }});
-}}
-function sbMakeChip(word, isTarget) {{
-  var chip=document.createElement('div'); chip.className='chip';
-  var isPunct=/^[.,!?;:]$/.test(word);
-  if(isPunct) chip.classList.add('punct-chip');
-  chip.textContent=word; chip.dataset.orig=word; chip.draggable=!isTarget;
-  if(!isTarget) {{
-    chip.addEventListener('dragstart',function(e){{ sbDragged=chip; timerAutoStart(2); e.dataTransfer.setData('text/plain',''); setTimeout(function(){{chip.style.opacity='0.4';}},0); }});
-    chip.addEventListener('dragend',function(){{ chip.style.opacity=''; sbDragged=null; var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode) c.parentNode.removeChild(c); }});
-  }}
-  return chip;
-}}
-function sbRegisterZone(zone) {{
-  zone.addEventListener('dragover',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=getSbCursor(),bef=getSbInsertPos(zone,e.clientX); if(bef) zone.insertBefore(cur,bef); else zone.appendChild(cur); }});
-  zone.addEventListener('dragleave',function(e){{ if(!zone.contains(e.relatedTarget)){{ var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode===zone) zone.removeChild(c); }} }});
-  zone.addEventListener('drop',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=document.getElementById('sb-insert-cursor'); if(cur&&cur.parentNode===zone){{ zone.insertBefore(sbDragged,cur); zone.removeChild(cur); }} else {{ zone.appendChild(sbDragged); }} sbDragged=null; }});
-}}
-function sbCheckAuto(itemIdx) {{
-  var zone=document.getElementById('sb_zone_'+itemIdx);
-  var fb=document.getElementById('sb_fb_'+itemIdx);
-  if(!zone) return;
-  setTimeout(function() {{
-    var chips=Array.from(zone.querySelectorAll('.chip'));
-    var ans=SATZBAU_DATA[itemIdx].words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
-    var got=chips.filter(function(c){{return !/^[.,!?;:]$/.test(c.dataset.orig);}}).map(function(c){{return c.dataset.orig;}});
-    if(got.length===0) return;
-    var ok=JSON.stringify(got)===JSON.stringify(ans);
-    chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
-    if(fb) {{ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge – verschiebe die Chips!'; }}
-    if(ok) checkSatzbauComplete();
-  }}, 500);
-}}
-function sbColorRow(idx,ok) {{
-  var zone=document.getElementById('sb_zone_'+idx);
-  if(!zone) return;
-  var chips=Array.from(zone.querySelectorAll('.chip'));
-  chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
-}}
-function checkSatzbauComplete() {{
-  var allOk=SATZBAU_DATA.every(function(_,i){{ var z=document.getElementById('sb_zone_'+i); return z&&Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('correct');}})&&!Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('incorrect');}}); }});
-  if(allOk) timerStop(2);
-}}
-function buildSatzbau() {{
-  var cont=document.getElementById('sbContainer'); if(!cont) return;
-  cont.innerHTML='';
-  SATZBAU_DATA.forEach(function(item,idx) {{
-    var div=document.createElement('div'); div.className='satzbau-item';
-    var nonPunct=item.words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
-    var shuffled=shuffleArr(nonPunct);
-    var pool=document.createElement('div'); pool.className='chips-container'; pool.id='sb_pool_'+idx;
-    shuffled.forEach(function(w) {{
-      var chip=sbMakeChip(w,false);
-      chip.addEventListener('click',function() {{ var z=document.getElementById('sb_zone_'+idx); z.appendChild(chip); sbUpdateCapitalization(z); sbCheckAuto(idx); }});
-      pool.appendChild(chip);
-    }});
-    sbRegisterZone(pool);
-    var zone=document.createElement('div'); zone.className='sentence-builder'; zone.id='sb_zone_'+idx;
-    item.words.filter(function(w){{return /^[.,!?;:]$/.test(w);}}).forEach(function(w) {{
-      var pc=sbMakeChip(w,true); zone.appendChild(pc);
-    }});
-    sbRegisterZone(zone);
-    zone.addEventListener('drop',function(){{ sbUpdateCapitalization(zone); setTimeout(function(){{sbCheckAuto(idx);}},50); }});
-    zone.addEventListener('click',function(e) {{
-      var chip=e.target.closest('.chip:not(.punct-chip)');
-      if(chip&&zone.contains(chip)) {{ pool.appendChild(chip); sbUpdateCapitalization(zone); sbCheckAuto(idx); }}
-    }});
-    var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb_fb_'+idx;
-    div.appendChild(pool); div.appendChild(zone); div.appendChild(fb);
-    cont.appendChild(div);
-  }});
-}}
-function resetSatzbau() {{ buildSatzbau(); resetTimer(2); }}
-
-// ─── WORTSCHATZ ──────────────────────────────────────────────────────────────
-function initVocab() {{
-  var cont=document.getElementById('vocabContainer'); if(!cont) return;
-  cont.innerHTML='';
-  var items=shuffleArr(WORTSCHATZ);
-  items.forEach(function(w) {{
-    var div=document.createElement('div'); div.className='vocab-item';
-    var en=document.createElement('div'); en.className='vocab-en'; en.textContent=w.en;
-    var arrow=document.createElement('div'); arrow.className='vocab-arrow'; arrow.textContent='→';
-    var inputs=document.createElement('div'); inputs.className='vocab-inputs';
-    if(w.type==='n') {{
-      var iA=document.createElement('input'); iA.className='art'; iA.placeholder='Artikel'; iA.setAttribute('data-answer',w.art);
-      iA.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iA,w.art); checkVocabAllDone(); }});
-      var iW=document.createElement('input'); iW.className='wort'; iW.placeholder='Deutsch'; iW.setAttribute('data-answer',w.wort);
-      iW.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iW,w.wort); checkVocabAllDone(); }});
-      var iP=document.createElement('input'); iP.className='plural'; iP.placeholder='Plural'; iP.setAttribute('data-answer',w.plural);
-      iP.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iP,w.plural); checkVocabAllDone(); }});
-      inputs.appendChild(iA); inputs.appendChild(iW); inputs.appendChild(iP);
-    }} else {{
-      var iD=document.createElement('input'); iD.className='wort'; iD.placeholder='Deutsch'; iD.setAttribute('data-answer',w.de);
-      iD.addEventListener('input',function(){{ timerAutoStart(3); vocabLiveCheck(iD,w.de); checkVocabAllDone(); }});
-      inputs.appendChild(iD);
-    }}
-    div.appendChild(en); div.appendChild(arrow); div.appendChild(inputs); cont.appendChild(div);
-  }});
-}}
-function vocabLiveCheck(inp,ans) {{
-  var val=inp.value.trim(); inp.classList.remove('correct','wrong');
-  if(!val) return;
-  if(val===ans) {{ inp.classList.add('correct'); }} else if(!ans.startsWith(val)) {{ inp.classList.add('wrong'); }}
-}}
-function checkVocabAllDone() {{
-  var all=document.querySelectorAll('#vocabContainer input'); if(!all.length) return;
-  if(Array.from(all).every(function(i){{return i.classList.contains('correct');}})) timerStop(3);
-}}
-function showVocabLoesung() {{
-  document.querySelectorAll('#vocabContainer input').forEach(function(i){{ i.value=i.getAttribute('data-answer'); i.classList.remove('wrong'); i.classList.add('correct'); }});
-}}
-function resetVocab() {{ initVocab(); resetTimer(3); }}
-
-const SATZBAU_DATA = [
-  { words: ['Die', 'Olympischen', 'Spiele', 'finden', 'alle', 'vier', 'Jahre', 'statt', '.'] },
-  { words: ['Athen', 'hat', 'die', 'ersten', 'modernen', 'Spiele', 'ausgetragen', '.'] },
-  { words: ['Der', 'Athlet', 'hat', 'einen', 'neuen', 'Weltrekord', 'aufgestellt', '.'] },
-  { words: ['Die', 'Goldmedaille', 'wurde', 'an', 'den', 'Sieger', 'vergeben', '.'] },
-  { words: ['Das', 'Publikum', 'feierte', 'die', 'Athleten', 'begeistert', '.'] },
-  { words: ['Sie', 'übertraf', 'ihre', 'persönliche', 'Bestzeit', '.'] },
-  { words: ['Der', 'Präsident', 'eröffnete', 'die', 'Spiele', 'feierlich', '.'] },
-  { words: ['Das', 'olympische', 'Motto', 'lautet', '„Schneller', ',', 'Höher', ',', 'Stärker"', '.'] }
+var SATZBAU_DATA = [
+        {„words“:[„Karim“,„stieg“,„in Saint-Denis“,„aus der Métro“,„.“]},
+        {„words“:[„Ein Kollege“,„hatte“,„ihm“,„das Ticket“,„in letzter Minute“,„geschenkt“,„.“]},
+        {„words“:[„Neben Karim“,„saß“,„eine ältere Französin“,„mit einer Fahne“,„.“]},
+        {„words“:[„Der Kenianer“,„überholte“,„den Äthiopier“,„auf der Zielgeraden“,„.“]},
+        {„words“:[„Das Stadion“,„brach“,„nach dem Zieleinlauf“,„in Jubel“,„aus“,„.“]},
+        {„words“:[„Karim“,„wählte“,„am Kanal“,„die Nummer“,„seines Vaters“,„.“]},
+        {„words“:[„Sein Großvater“,„hat“,„früher“,„an Marathonläufen“,„teilgenommen“,„.“]},
+        {„words“:[„Die olympische Flamme“,„leuchtete“,„über“,„dem Stadion“,„von Saint-Denis“,„.“]}
 ];
 
 var WORTSCHATZ = [
-  {type:'n', en:'the athlete', art:'der', wort:'Athlet', plural:'Athleten'},
-  {type:'n', en:'the medal', art:'die', wort:'Medaille', plural:'Medaillen'},
-  {type:'n', en:'the world record', art:'der', wort:'Weltrekord', plural:'Weltrekorde'},
-  {type:'n', en:'the opening ceremony', art:'die', wort:'Eröffnungsfeier', plural:'Eröffnungsfeiern'},
-  {type:'n', en:'the host', art:'der', wort:'Gastgeber', plural:'Gastgeber'},
-  {type:'n', en:'the discipline / sport', art:'die', wort:'Disziplin', plural:'Disziplinen'},
-  {type:'v', en:'to host (an event)', de:'austragen'},
-  {type:'v', en:'to participate', de:'teilnehmen'},
-  {type:'v', en:'to set a record', de:'aufstellen'},
-  {type:'v', en:'to surpass', de:'übertreffen'},
-  {type:'v', en:'to award', de:'vergeben'},
-  {type:'n', en:'the best time', art:'die', wort:'Bestzeit', plural:'Bestzeiten'}
+        {„id“:0,„type“:„n“,„en“:„athlete“,„artikel“:„der“,„de“:„Athlet“,„plural“:„Athleten“},
+        {„id“:1,„type“:„n“,„en“:„medal“,„artikel“:„die“,„de“:„Medaille“,„plural“:„Medaillen“},
+        {„id“:2,„type“:„n“,„en“:„competition“,„artikel“:„der“,„de“:„Wettkampf“,„plural“:„Wettkämpfe“},
+        {„id“:3,„type“:„n“,„en“:„stadium“,„artikel“:„das“,„de“:„Stadion“,„plural“:„Stadien“},
+        {„id“:4,„type“:„n“,„en“:„home stretch“,„artikel“:„die“,„de“:„Zielgerade“,„plural“:„Zielgeraden“},
+        {„id“:5,„type“:„n“,„en“:„winner“,„artikel“:„der“,„de“:„Sieger“,„plural“:„–“},
+        {„id“:6,„type“:„v“,„en“:„to participate“,„de“:„teilnehmen“},
+        {„id“:7,„type“:„v“,„en“:„to compete“,„de“:„antreten“},
+        {„id“:8,„type“:„v“,„en“:„to overtake“,„de“:„überholen“},
+        {„id“:9,„type“:„v“,„en“:„to set (a record)“,„de“:„aufstellen“},
+        {„id“:10,„type“:„v“,„en“:„to win“,„de“:„gewinnen“},
+        {„id“:11,„type“:„v“,„en“:„to host“,„de“:„austragen“}
 ];
 
-buildSatzbau();
-initVocab();
+// ═════════════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═════════════════════════════════════════════════════════════════════════
 
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s, i) {
+        s.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function(b, i) {
+        b.classList.toggle('active', i === idx);
+    });
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// TIMER
+// ═════════════════════════════════════════════════════════════════════════
+
+var TIMER_PREFIX = 'OLYMP_3013R_';
+var timerStarted  = [false, false, false, false, false, false];
+var timerRunning  = [false, false, false, false, false, false];
+var timerSeconds  = [0, 0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null, null];
+
+function updateTimerDisplay(idx) {
+    var s = timerSeconds[idx];
+    var m = Math.floor(s / 60);
+    var sec = s % 60;
+    var el = document.getElementById('timer-' + idx);
+    if (el) el.textContent = (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function tickTimer(idx) {
+    timerSeconds[idx]++;
+    updateTimerDisplay(idx);
+}
+
+function timerAutoStart(idx) {
+    if (timerStarted[idx]) return;
+    timerStarted[idx] = true;
+    timerRunning[idx] = true;
+    timerIntervals[idx] = setInterval(function() { tickTimer(idx); }, 1000);
+}
+
+function stopTimer(idx) {
+    if (!timerRunning[idx]) return;
+    clearInterval(timerIntervals[idx]);
+    timerRunning[idx] = false;
+    var key = TIMER_PREFIX + idx;
+    var prev = parseInt(localStorage.getItem(key) || '999999');
+    if (timerSeconds[idx] > 0 && timerSeconds[idx] < prev) {
+        localStorage.setItem(key, timerSeconds[idx]);
+        loadBestTime(idx);
+    }
+}
+
+function resetTimer(idx) {
+    clearInterval(timerIntervals[idx]);
+    timerRunning[idx] = false;
+    timerStarted[idx] = false;
+    timerSeconds[idx] = 0;
+    updateTimerDisplay(idx);
+}
+
+function loadBestTime(idx) {
+    var key = TIMER_PREFIX + idx;
+    var s = parseInt(localStorage.getItem(key) || '0');
+    if (s > 0) {
+        var m = Math.floor(s / 60);
+        var sec = s % 60;
+        var el = document.getElementById('best-' + idx);
+        if (el) el.textContent = (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// RICHTIG / FALSCH
+// ═════════════════════════════════════════════════════════════════════════
+
+function initRF() {
+    var cont = document.getElementById('rfContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+    RF_DATA.forEach(function(item, i) {
+        var div = document.createElement('div');
+        div.className = 'rf-item';
+        div.innerHTML = '<div class="rf-text">' + item.q + '</div>' +
+            '<div class="rf-btns">' +
+            '  <button class="rf-btn" onclick="rfSelect(' + i + ', true, this)">R</button>' +
+            '  <button class="rf-btn" onclick="rfSelect(' + i + ', false, this)">F</button>' +
+            '</div>' +
+            '<div class="rf-result" id="rf-res-' + i + '"></div>';
+        cont.appendChild(div);
+    });
+}
+
+function rfSelect(idx, choice, btn) {
+    timerAutoStart(2);
+    var parent = btn.parentNode;
+    var btns = parent.querySelectorAll('.rf-btn');
+    btns.forEach(function(b) { b.classList.remove('sel-r', 'sel-f'); });
+    btn.classList.add(choice ? 'sel-r' : 'sel-f');
+    var correct = RF_DATA[idx].a === choice;
+    var res = document.getElementById('rf-res-' + idx);
+    if (res) {
+        res.textContent = correct ? '✓' : '✗';
+        res.className = 'rf-result ' + (correct ? 'ok' : 'err');
+    }
+    checkRFDone();
+}
+
+function checkRFDone() {
+    var allOk = RF_DATA.every(function(_, i) {
+        var r = document.getElementById('rf-res-' + i);
+        return r && r.classList.contains('ok');
+    });
+    if (allOk) stopTimer(2);
+}
+
+function showLoesungRF() {
+    RF_DATA.forEach(function(item, i) {
+        var btns = document.querySelectorAll('#rfContainer .rf-item')[i].querySelectorAll('.rf-btn');
+        btns.forEach(function(b) { b.classList.remove('sel-r', 'sel-f'); });
+        btns[item.a ? 0 : 1].classList.add(item.a ? 'sel-r' : 'sel-f');
+        var res = document.getElementById('rf-res-' + i);
+        if (res) { res.textContent = '✓'; res.className = 'rf-result ok'; }
+    });
+}
+
+function resetRF() {
+    initRF();
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// LÜCKENTEXT
+// ═════════════════════════════════════════════════════════════════════════
+
+function initLuecken() {
+    var cont = document.getElementById('lueckenContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item, i) {
+        var div = document.createElement('div');
+        div.className = 'luecke-item';
+        var html = item.html.replace('___', '<input class="blank" data-answer="' + item.answer + '" data-idx="' + i + '" oninput="lueckeCheck(this)" autocomplete="off">');
+        div.innerHTML = html;
+        cont.appendChild(div);
+    });
+}
+
+function lueckeCheck(inp) {
+    timerAutoStart(3);
+    var val = inp.value.trim();
+    var ans = inp.dataset.answer;
+    inp.classList.remove('ok', 'wrong');
+    if (!val) return;
+    if (val === ans) {
+        inp.classList.add('ok');
+        checkLueckenDone();
+    } else if (!ans.toLowerCase().startsWith(val.toLowerCase())) {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkLueckenDone() {
+    var all = document.querySelectorAll('#lueckenContainer input.blank');
+    var allOk = Array.from(all).every(function(i) { return i.classList.contains('ok'); });
+    if (allOk) stopTimer(3);
+}
+
+function showLoesungLuecken() {
+    document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('wrong');
+        inp.classList.add('ok');
+    });
+}
+
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'wrong');
+    });
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// SATZBAU — modern draggedChip pattern
+// ═════════════════════════════════════════════════════════════════════════
+
+var sbDragged = null;
+
+function shuffleArr(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+}
+
+function sbCapitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbUpdateCapitalization(zone) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        if (!orig || /^[.,!?;:]$/.test(orig)) return;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        c.textContent = isProper ? orig : (i === 0 ? sbCapitalize(orig) : orig);
+    });
+}
+
+function sbMakeChip(word, isTarget) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    var isPunct = /^[.,!?;:]$/.test(word);
+    if (isPunct) chip.classList.add('punct-chip');
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(4);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, itemIdx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cur = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cur, before);
+        else zone.appendChild(cur);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cur = document.getElementById('sb-insert-cursor');
+        if (cur && cur.parentNode === zone) {
+            zone.insertBefore(sbDragged, cur);
+            zone.removeChild(cur);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(itemIdx);
+    });
+}
+
+function sbCheckAuto(itemIdx) {
+    var zone = document.getElementById('sb-zone-' + itemIdx);
+    var fb = document.getElementById('sb-fb-' + itemIdx);
+    if (!zone) return;
+    setTimeout(function() {
+        var chips = Array.from(zone.querySelectorAll('.chip'));
+        var target = SATZBAU_DATA[itemIdx].words;
+        var targetNoPunct = target.filter(function(w) { return !/^[.,!?;:]$/.test(w); });
+        var gotNoPunct = chips.filter(function(c) { return !/^[.,!?;:]$/.test(c.dataset.orig); }).map(function(c) { return c.dataset.orig; });
+        if (gotNoPunct.length < targetNoPunct.length) return;
+        var ok = JSON.stringify(gotNoPunct) === JSON.stringify(targetNoPunct);
+        chips.forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+            c.classList.add(ok ? 'correct' : 'incorrect');
+        });
+        zone.classList.remove('correct', 'incorrect');
+        zone.classList.add(ok ? 'correct' : 'incorrect');
+        if (fb) {
+            fb.className = 'sb-feedback ' + (ok ? 'correct' : 'incorrect');
+            fb.textContent = ok ? '✓ Korrekt!' : '✗ Noch nicht richtig — verschiebe die Chips!';
+        }
+        if (ok) checkSatzbauComplete();
+    }, 500);
+}
+
+function initSatzbau() {
+    var cont = document.getElementById('sbContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+    SATZBAU_DATA.forEach(function(item, idx) {
+        var wrap = document.createElement('div');
+        wrap.className = 'sb-item';
+
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+
+        var zone = document.createElement('div');
+        zone.className = 'sentence-builder';
+        zone.id = 'sb-zone-' + idx;
+
+        var fb = document.createElement('div');
+        fb.className = 'sb-feedback';
+        fb.id = 'sb-fb-' + idx;
+
+        var shuffled = shuffleArr(item.words);
+        shuffled.forEach(function(w) {
+            var chip = sbMakeChip(w, false);
+            bank.appendChild(chip);
+        });
+
+        wrap.appendChild(bank);
+        wrap.appendChild(zone);
+        wrap.appendChild(fb);
+        cont.appendChild(wrap);
+
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(zone, idx);
+    });
+}
+
+function checkSatzbauComplete() {
+    var allOk = SATZBAU_DATA.every(function(_, i) {
+        var z = document.getElementById('sb-zone-' + i);
+        if (!z) return false;
+        return z.classList.contains('correct');
+    });
+    if (allOk) stopTimer(4);
+}
+
+function showLoesungSatzbau() {
+    SATZBAU_DATA.forEach(function(item, idx) {
+        var zone = document.getElementById('sb-zone-' + idx);
+        var bank = document.getElementById('sb-bank-' + idx);
+        if (!zone || !bank) return;
+        zone.innerHTML = '';
+        bank.innerHTML = '';
+        item.words.forEach(function(w) {
+            var chip = sbMakeChip(w, false);
+            chip.classList.add('correct');
+            zone.appendChild(chip);
+        });
+        zone.classList.remove('incorrect');
+        zone.classList.add('correct');
+        var fb = document.getElementById('sb-fb-' + idx);
+        if (fb) { fb.className = 'sb-feedback correct'; fb.textContent = '✓ Korrekt!'; }
+        sbUpdateCapitalization(zone);
+    });
+}
+
+function resetSatzbau() {
+    initSatzbau();
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// WORTSCHATZ — new pattern (luecke-item + initWortschatz)
+// ═════════════════════════════════════════════════════════════════════════
+
+var wortschatzInited = false;
+
+function initWortschatz() {
+    if (wortschatzInited) return;
+    var cont = document.getElementById('wortschatzContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+    WORTSCHATZ.forEach(function(w, i) {
+        var row = document.createElement('div');
+        row.className = 'luecke-item';
+        var en = '<div class="ws-en">' + w.en + '</div>';
+        var inputs;
+        if (w.type === 'n') {
+            inputs = '<div class="ws-inputs">' +
+                '<input class="blank art"    data-id="' + i + '" data-field="artikel" placeholder="Artikel" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank wort"   data-id="' + i + '" data-field="de"      placeholder="Wort"    oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank plural" data-id="' + i + '" data-field="plural"  placeholder="Plural"  oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '</div>';
+        } else {
+            inputs = '<div class="ws-inputs">' +
+                '<input class="blank verb" data-id="' + i + '" data-field="de" placeholder="Verb (Infinitiv)" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '</div>';
+        }
+        row.innerHTML = en + inputs;
+        cont.appendChild(row);
+    });
+    wortschatzInited = true;
+}
+
+function wortschatzCheck(inp) {
+    timerAutoStart(5);
+    var id = parseInt(inp.dataset.id);
+    var field = inp.dataset.field;
+    var target = WORTSCHATZ[id][field];
+    var val = inp.value.trim();
+    inp.classList.remove('ok', 'wrong');
+    if (!val) return;
+    if (val === target) {
+        inp.classList.add('ok');
+        checkWortschatzAllOk();
+    } else if (!target.toLowerCase().startsWith(val.toLowerCase())) {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkWortschatzAllOk() {
+    var all = document.querySelectorAll('#wortschatzContainer input.blank');
+    var allOk = Array.from(all).every(function(i) { return i.classList.contains('ok'); });
+    if (allOk) stopTimer(5);
+}
+
+function showLoesungWortschatz() {
+    document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
+        var id = parseInt(inp.dataset.id);
+        var field = inp.dataset.field;
+        inp.value = WORTSCHATZ[id][field];
+        inp.classList.remove('wrong');
+        inp.classList.add('ok');
+    });
+}
+
+function resetWortschatz() {
+    document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'wrong');
+    });
+}
+
+// ═════════════════════════════════════════════════════════════════════════
+// VOCAB HIGHLIGHT
+// ═════════════════════════════════════════════════════════════════════════
+
+function highlightVocabInText() {
+    var storyText = document.querySelector('.story-text');
+    if (!storyText) return;
+    var words = VORENTLASTUNG_WORDS.filter(function(w) { return w && w.length > 3; });
+    if (!words.length) return;
+
+    function walk(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var esc = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                var re = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + esc + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+                replaced = replaced.replace(re, '\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/[\x01\x02]/);
+                var isHl = false;
+                parts.forEach(function(p) {
+                    if (!p) { isHl = !isHl; return; }
+                    if (isHl) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = p;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(p));
+                    }
+                    isHl = !isHl;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walk);
+        }
+    }
+    walk(storyText);
+}
+
+// ═════════════════════════════════════════════════════════════════════════
 // INIT
-initTimers([1,2,3]);
+// ═════════════════════════════════════════════════════════════════════════
+
+document.addEventListener('DOMContentLoaded', function() {
+    initRF();
+    initLuecken();
+    initSatzbau();
+    initWortschatz();
+    for (var i = 0; i < 6; i++) loadBestTime(i);
+    highlightVocabInText();
+});
 
 </script>
 </body>

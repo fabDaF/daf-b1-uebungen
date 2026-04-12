@@ -33,8 +33,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 /* CONTROL BAR */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 .timer-val { color: #667eea; font-weight: 700; }
 .best-val { color: #f39c12; font-weight: 600; }
@@ -636,12 +636,12 @@ var sbDragged = null;
 
 var satzbauData = [
     { parts: ['Online-Shopping', 'ist', 'in', 'Deutschland', 'immer', 'beliebter', 'geworden'], valid: [['Online-Shopping', 'ist', 'in', 'Deutschland', 'immer', 'beliebter', 'geworden']], punct: '.' },
-    { parts: ['Die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein'], valid: [['Die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein']], punct: '.' },
-    { parts: ['Du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist'], valid: [['Du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist']], punct: '.' },
-    { parts: ['Nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen'], valid: [['Nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen']], punct: '.' },
-    { parts: ['Die', 'Quittung', 'schützt', 'dich', 'immer', 'gegen', 'Betrug'], valid: [['Die', 'Quittung', 'schützt', 'dich', 'immer', 'gegen', 'Betrug']], punct: '.' },
-    { parts: ['Auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt'], valid: [['Auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt']], punct: '.' },
-    { parts: ['Morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da'], valid: [['Morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da']], punct: '.' },
+    { parts: ['die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein'], valid: [['die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein']], punct: '.' },
+    { parts: ['du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist'], valid: [['du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist']], punct: '.' },
+    { parts: ['nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen'], valid: [['nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen']], punct: '.' },
+    { parts: ['die', 'Quittung', 'schützt', 'dich', 'immer', 'gegen', 'Betrug'], valid: [['die', 'Quittung', 'schützt', 'dich', 'immer', 'gegen', 'Betrug']], punct: '.' },
+    { parts: ['auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt'], valid: [['auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt']], punct: '.' },
+    { parts: ['morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da'], valid: [['morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da']], punct: '.' },
 ];
 
 function getSbCursor() {
@@ -859,14 +859,14 @@ function initSatzbau() {
         fb.id = 'sb-fb-' + n;
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

@@ -625,6 +625,21 @@ function genusCheckAuto() {
     }
 }
 
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var ex   = SATZBAU_DATA[idx];
+    if (!bank || !row || !ex) return;
+    var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+    row.innerHTML = ''; bank.innerHTML = '';
+    row.classList.remove('correct', 'incorrect');
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+    var shuffled = allChips.slice().sort(function(){ return Math.random()-0.5; });
+    shuffled.forEach(function(c){ c.classList.remove('correct','incorrect'); bank.appendChild(c); });
+}
+
 function showSolution(tabIdx) {
     if (tabIdx === 2) {
         GENUS_DATA.forEach(function(item) {
@@ -812,14 +827,14 @@ function mcAnswer(qIdx, oIdx) {
 // ===== TAB 5: SATZBAU =====
 var sbDragged = null;
 var SATZBAU_DATA = [
-    { parts: ["Ich", "freue", "mich", "über", "gute", "Nachrichten"], valid: [["Ich", "freue", "mich", "über", "gute", "Nachrichten"]], punct: "." },
-    { parts: ["Sie", "ist", "über", "das", "Ergebnis", "enttäuscht"], valid: [["Sie", "ist", "über", "das", "Ergebnis", "enttäuscht"]], punct: "." },
-    { parts: ["Er", "fürchtet", "sich", "vor", "Veränderungen"], valid: [["Er", "fürchtet", "sich", "vor", "Veränderungen"]], punct: "." },
-    { parts: ["Wir", "ärgern", "uns", "über", "die", "Ungerechtigkeit"], valid: [["Wir", "ärgern", "uns", "über", "die", "Ungerechtigkeit"]], punct: "." },
-    { parts: ["Sie", "schämt", "sich", "für", "ihren", "Fehler"], valid: [["Sie", "schämt", "sich", "für", "ihren", "Fehler"]], punct: "." },
-    { parts: ["Nach", "der", "Krise", "ist", "er", "erleichtert"], valid: [["Nach", "der", "Krise", "ist", "er", "erleichtert"]], punct: "." },
+    { parts: ["Ich", "freue", "mich", "wirklich", "über", "gute", "Nachrichten"], valid: [["Ich", "freue", "mich", "wirklich", "über", "gute", "Nachrichten"]], punct: "." },
+    { parts: ["Sie", "ist", "sehr", "über", "das", "Ergebnis", "enttäuscht"], valid: [["Sie", "ist", "sehr", "über", "das", "Ergebnis", "enttäuscht"]], punct: "." },
+    { parts: ["Er", "fürchtet", "sich", "immer", "noch", "vor", "Veränderungen"], valid: [["Er", "fürchtet", "sich", "immer", "noch", "vor", "Veränderungen"]], punct: "." },
+    { parts: ["Wir", "ärgern", "uns", "sehr", "über", "die", "Ungerechtigkeit"], valid: [["Wir", "ärgern", "uns", "sehr", "über", "die", "Ungerechtigkeit"]], punct: "." },
+    { parts: ["Sie", "schämt", "sich", "sehr", "für", "ihren", "Fehler"], valid: [["Sie", "schämt", "sich", "sehr", "für", "ihren", "Fehler"]], punct: "." },
+    { parts: ["Nach", "der", "Krise", "ist", "er", "endlich", "erleichtert"], valid: [["Nach", "der", "Krise", "ist", "er", "endlich", "erleichtert"]], punct: "." },
     { parts: ["Die", "Freude", "in", "seinem", "Gesicht", "war", "deutlich"], valid: [["Die", "Freude", "in", "seinem", "Gesicht", "war", "deutlich"]], punct: "." },
-    { parts: ["Gefühle", "auszudrücken", "ist", "sehr", "wichtig"], valid: [["Gefühle", "auszudrücken", "ist", "sehr", "wichtig"]], punct: "." }
+    { parts: ["Gefühle", "auszudrücken", "ist", "sehr", "wichtig", "für", "uns"], valid: [["Gefühle", "auszudrücken", "ist", "sehr", "wichtig", "für", "uns"]], punct: "." }
 ];
 
 function getSbCursor() {
@@ -1010,6 +1025,21 @@ function sbShowSolution(idx) {
     setTimeout(function() { sbCheckAuto(idx); }, 100);
 }
 
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var ex   = SATZBAU_DATA[idx];
+    if (!bank || !row || !ex) return;
+    var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+    row.innerHTML = ''; bank.innerHTML = '';
+    row.classList.remove('correct', 'incorrect');
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+    var shuffled = allChips.slice().sort(function(){ return Math.random()-0.5; });
+    shuffled.forEach(function(c){ c.classList.remove('correct','incorrect'); bank.appendChild(c); });
+}
+
 function showSolution(tabIdx) {
     if (tabIdx === 5) {
         for (var i = 0; i < SATZBAU_DATA.length; i++) {
@@ -1051,9 +1081,22 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
 
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnL = document.createElement('button');
+        btnL.textContent = 'L\u00f6sen';
+        btnL.className = 'btn-satzbau';
+        btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnN = document.createElement('button');
+        btnN.textContent = 'Neustart';
+        btnN.className = 'btn-satzbau';
+        btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnL);
+        btnRow.appendChild(btnN);
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
+        item.appendChild(btnRow);
         container.appendChild(item);
     });
 }

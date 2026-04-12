@@ -107,7 +107,7 @@ h2.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bo
 /* ── TIMER CONTROLS ── */
 .timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
 .btn-row { display:flex; gap:6px; }
-.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
 .btn:hover { background:#f0f0f0; color:#555; }
 .timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 .timer-val { color:#667eea; font-weight:700; }
@@ -990,13 +990,13 @@ function resetLuecken() {
 //  SATZBAU (Tab 3)
 // ═══════════════════════════════════════════════════════
 var satzbauData = [
-    { parts: ['Jemand', 'immer', 'auch', 'hat', 'mein', 'Fahrrad', 'gestohlen'], valid:[['Jemand','hat','mein','Fahrrad','gestohlen']], punct:'.' },
-    { parts: ['Niemand', 'auch', 'weiß', 'wo', 'er', 'jetzt', 'ist'], valid:[['Niemand','weiß','wo','er','jetzt','ist']], punct:'.' },
-    { parts: ['Jeder', 'auch', 'kann', 'an', 'der', 'Konferenz', 'teilnehmen'], valid:[['Jeder','kann','an','der','Konferenz','teilnehmen']], punct:'.' },
-    { parts: ['Ich','freue','mich','auf','das','Konzert','heute','Abend'], valid:[['Ich','freue','mich','auf','das','Konzert','heute','Abend']], punct:'.' },
-    { parts: ['Sie','stellt','sich','dem','neuen','Kollegen','vor'], valid:[['Sie','stellt','sich','dem','neuen','Kollegen','vor']], punct:'.' },
-    { parts: ['Dieses', 'auch', 'Buch', 'hat', 'mir', 'jemand', 'empfohlen'], valid:[['Dieses','Buch','hat','mir','jemand','empfohlen']], punct:'.' },
-    { parts: ['Manche', 'immer', 'auch', 'Menschen', 'mögen', 'keine', 'Veränderungen'], valid:[['Manche','Menschen','mögen','keine','Veränderungen']], punct:'.' },
+    { parts: ['jemand', 'hat', 'mein', 'Fahrrad', 'gestohlen'], valid:[['jemand','hat','mein','Fahrrad','gestohlen']], punct:'.' },
+    { parts: ['niemand', 'weiß', 'wo', 'er', 'jetzt', 'ist'], valid:[['niemand','weiß','wo','er','jetzt','ist']], punct:'.' },
+    { parts: ['jeder', 'kann', 'an', 'der', 'Konferenz', 'teilnehmen'], valid:[['jeder','kann','an','der','Konferenz','teilnehmen']], punct:'.' },
+    { parts: ['ich','freue','mich','auf','das','Konzert','heute','Abend'], valid:[['ich','freue','mich','auf','das','Konzert','heute','Abend']], punct:'.' },
+    { parts: ['sie','stellt','sich','dem','neuen','Kollegen','vor'], valid:[['sie','stellt','sich','dem','neuen','Kollegen','vor']], punct:'.' },
+    { parts: ['dieses', 'Buch', 'hat', 'mir', 'jemand', 'empfohlen'], valid:[['dieses','Buch','hat','mir','jemand','empfohlen']], punct:'.' },
+    { parts: ['manche', 'Menschen', 'mögen', 'keine', 'Veränderungen'], valid:[['manche','Menschen','mögen','keine','Veränderungen']], punct:'.' },
 ];
 
 // ── Satzbau: Mandatory SKILL pattern (satzbau-drag-drop) ──────────────────
@@ -1228,14 +1228,14 @@ function initSatzbau() {
         sbRegisterZone(row, idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

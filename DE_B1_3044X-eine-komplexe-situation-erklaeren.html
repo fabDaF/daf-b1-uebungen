@@ -259,10 +259,10 @@ var satzbauData = [
   { parts: ['er', 'erläutert', 'die', 'Situation', 'mit', 'einfachen', 'Worten'], valid: [['er', 'erläutert', 'die', 'Situation', 'mit', 'einfachen', 'Worten']], punct: '.' },
   { parts: ['sie', 'veranschaulicht', 'ihren', 'Punkt', 'mit', 'einem', 'Beispiel'], valid: [['sie', 'veranschaulicht', 'ihren', 'Punkt', 'mit', 'einem', 'Beispiel']], punct: '.' },
   { parts: ['er', 'analysiert', 'das', 'Problem', 'aus', 'verschiedenen', 'Perspektiven'], valid: [['er', 'analysiert', 'das', 'Problem', 'aus', 'verschiedenen', 'Perspektiven']], punct: '.' },
-  { parts: ['sie', 'hat', 'die', 'Punkte', 'kurz', 'zusammengefasst'], valid: [['sie', 'hat', 'die', 'Punkte', 'kurz', 'zusammengefasst']], punct: '.' },
-  { parts: ['das', 'Diagramm', 'verdeutlicht', 'den', 'Zusammenhang'], valid: [['das', 'Diagramm', 'verdeutlicht', 'den', 'Zusammenhang']], punct: '.' },
-  { parts: ['er', 'unterstreicht', 'die', 'Wichtigkeit', 'des', 'Themas'], valid: [['er', 'unterstreicht', 'die', 'Wichtigkeit', 'des', 'Themas']], punct: '.' },
-  { parts: ['sie', 'differenziert', 'zwischen', 'zwei', 'verschiedenen', 'Fällen'], valid: [['sie', 'differenziert', 'zwischen', 'zwei', 'verschiedenen', 'Fällen']], punct: '.' }
+  { parts: ['sie', 'hat', 'die', 'Punkte', 'bereits', 'kurz', 'zusammengefasst'], valid: [['sie', 'hat', 'die', 'Punkte', 'bereits', 'kurz', 'zusammengefasst']], punct: '.' },
+  { parts: ['das', 'Diagramm', 'verdeutlicht', 'den', 'Zusammenhang', 'sehr', 'gut'], valid: [['das', 'Diagramm', 'verdeutlicht', 'den', 'Zusammenhang', 'sehr', 'gut']], punct: '.' },
+  { parts: ['er', 'unterstreicht', 'besonders', 'die', 'Wichtigkeit', 'des', 'Themas'], valid: [['er', 'unterstreicht', 'besonders', 'die', 'Wichtigkeit', 'des', 'Themas']], punct: '.' },
+  { parts: ['sie', 'differenziert', 'klar', 'zwischen', 'zwei', 'verschiedenen', 'Fällen'], valid: [['sie', 'differenziert', 'klar', 'zwischen', 'zwei', 'verschiedenen', 'Fällen']], punct: '.' }
 ];
 
 var sbDragged = null;
@@ -298,14 +298,17 @@ function sbCheckAuto(idx) {
   var zone=document.getElementById('sb-row-'+idx);
   var fb=document.getElementById('sb-fb-'+idx);
   if(!zone) return;
-  var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
+  var chipsNow=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
   var expected=satzbauData[idx].parts.length;
-  if(chips.length<expected) return;
-  var got=chips.map(function(c){ return c.dataset.orig; });
-  var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
-  zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
-  if(fb){ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge'; }
-  if(ok) sbCheckAllDone();
+  if(chipsNow.length<expected) return;
+  setTimeout(function() {
+    var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
+    var got=chips.map(function(c){ return c.dataset.orig; });
+    var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
+    zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
+    if(fb){ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge'; }
+    if(ok) sbCheckAllDone();
+  }, 500);
 }
 function sbCheckAllDone() {
   var allOk=satzbauData.every(function(_,i){ var z=document.getElementById('sb-row-'+i); if(!z) return false; var chips=z.querySelectorAll('.chip'); return chips.length>0&&Array.from(chips).every(function(c){return c.classList.contains('correct');}); });
@@ -330,6 +333,32 @@ function sbShowSolution() {
     if(fb){ fb.className='satzbau-feedback correct'; fb.textContent='✓ Korrekt!'; }
   });
 }
+
+function sbShowSolution(idx) {
+  var bank=document.getElementById('sb-bank-'+idx);
+  var zone=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  var item=satzbauData[idx];
+  if(!bank||!zone||!item) return;
+  bank.innerHTML=''; zone.innerHTML='';
+  var sol=item.valid[0];
+  sol.forEach(function(w){ var chip=sbMakeChip(w,idx); chip.classList.add('correct'); zone.appendChild(chip); });
+  var pc=document.createElement('div'); pc.className='chip punct-chip correct'; pc.textContent=item.punct; zone.appendChild(pc);
+  sbUpdateCapitalization(zone);
+  if(fb){ fb.className='satzbau-feedback correct'; fb.textContent='✓ Korrekt!'; }
+}
+
+function sbResetOne(idx) {
+  var bank=document.getElementById('sb-bank-'+idx);
+  var zone=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  var item=satzbauData[idx];
+  if(!bank||!zone||!item) return;
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c){ c.classList.remove('correct','incorrect'); bank.appendChild(c); });
+  zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+  if(fb){ fb.className='satzbau-feedback'; fb.textContent=''; }
+}
+
 function initSatzbau() {
   var cont=document.getElementById('sbContainer'); if(!cont) return;
   cont.innerHTML='';
@@ -351,7 +380,13 @@ function initSatzbau() {
       if(chip&&zone.contains(chip)){ bank.appendChild(chip); sbUpdateCapitalization(zone); var fb=document.getElementById('sb-fb-'+idx); if(fb){fb.className='satzbau-feedback';fb.textContent='';} zone.querySelectorAll('.chip').forEach(function(c){c.classList.remove('correct','incorrect');}); }
     });
     var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb-fb-'+idx;
-    div.appendChild(bank); div.appendChild(zone); div.appendChild(fb);
+    var btnRow=document.createElement('div'); btnRow.className='sb-btn-row';
+    var btnL=document.createElement('button'); btnL.textContent='L\u00f6sen'; btnL.className='btn-satzbau';
+    btnL.onclick=(function(i){return function(){sbShowSolution(i);};})(idx);
+    var btnN=document.createElement('button'); btnN.textContent='Neustart'; btnN.className='btn-satzbau';
+    btnN.onclick=(function(i){return function(){sbResetOne(i);};})(idx);
+    btnRow.appendChild(btnL); btnRow.appendChild(btnN);
+    div.appendChild(bank); div.appendChild(zone); div.appendChild(fb); div.appendChild(btnRow);
     cont.appendChild(div);
   });
 }

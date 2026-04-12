@@ -254,11 +254,11 @@ function resetTab(n) {
 var satzbauData = [
   { parts: ['beim', 'Einkauf', 'achte', 'ich', 'auf', 'die', 'Herkunft', 'der', 'Produkte'], valid: [['beim', 'Einkauf', 'achte', 'ich', 'auf', 'die', 'Herkunft', 'der', 'Produkte']], punct: '.' },
   { parts: ['ich', 'kaufe', 'lieber', 'weniger', 'aber', 'bessere', 'Qualität'], valid: [['ich', 'kaufe', 'lieber', 'weniger', 'aber', 'bessere', 'Qualität']], punct: '.' },
-  { parts: ['ich', 'versuche', 'Plastikverpackungen', 'zu', 'vermeiden'], valid: [['ich', 'versuche', 'Plastikverpackungen', 'zu', 'vermeiden']], punct: '.' },
+  { parts: ['ich', 'versuche', 'immer', 'mehr', 'Plastikverpackungen', 'zu', 'vermeiden'], valid: [['ich', 'versuche', 'immer', 'mehr', 'Plastikverpackungen', 'zu', 'vermeiden']], punct: '.' },
   { parts: ['ich', 'finde', 'dass', 'bewusster', 'Konsum', 'wichtig', 'ist'], valid: [['ich', 'finde', 'dass', 'bewusster', 'Konsum', 'wichtig', 'ist']], punct: '.' },
-  { parts: ['ich', 'bevorzuge', 'nachhaltige', 'Marken'], valid: [['ich', 'bevorzuge', 'nachhaltige', 'Marken']], punct: '.' },
+  { parts: ['ich', 'bevorzuge', 'klar', 'lokale', 'und', 'nachhaltige', 'Marken'], valid: [['ich', 'bevorzuge', 'klar', 'lokale', 'und', 'nachhaltige', 'Marken']], punct: '.' },
   { parts: ['ich', 'denke', 'dass', 'jeder', 'Konsument', 'Verantwortung', 'trägt'], valid: [['ich', 'denke', 'dass', 'jeder', 'Konsument', 'Verantwortung', 'trägt']], punct: '.' },
-  { parts: ['ich', 'wähle', 'bewusst', 'umweltfreundliche', 'Alternativen'], valid: [['ich', 'wähle', 'bewusst', 'umweltfreundliche', 'Alternativen']], punct: '.' }
+  { parts: ['ich', 'wähle', 'immer', 'bewusst', 'günstige', 'umweltfreundliche', 'Alternativen'], valid: [['ich', 'wähle', 'immer', 'bewusst', 'günstige', 'umweltfreundliche', 'Alternativen']], punct: '.' }
 ];
 
 var sbDragged = null;
@@ -297,30 +297,51 @@ function sbCheckAuto(idx) {
   var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
   var expected=satzbauData[idx].parts.length;
   if(chips.length<expected) return;
-  var got=chips.map(function(c){ return c.dataset.orig; });
-  var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
-  zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
-  if(fb){ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge'; }
-  if(ok) sbCheckAllDone();
+  setTimeout(function() {
+    var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
+    var got=chips.map(function(c){ return c.dataset.orig; });
+    var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
+    zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
+    if(fb){ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge'; }
+    if(ok) sbCheckAllDone();
+  }, 500);
 }
 function sbCheckAllDone() {
   var allOk=satzbauData.every(function(_,i){ var z=document.getElementById('sb-row-'+i); if(!z) return false; var chips=z.querySelectorAll('.chip'); return chips.length>0&&Array.from(chips).every(function(c){return c.classList.contains('correct');}); });
   if(allOk) stopTimer(2);
 }
-function sbShowSolution() {
-  stopTimer(2);
-  satzbauData.forEach(function(item,idx) {
-    var bank=document.getElementById('sb-bank-'+idx);
-    var zone=document.getElementById('sb-row-'+idx);
-    var fb=document.getElementById('sb-fb-'+idx);
-    if(!zone) return;
-    bank.innerHTML=''; zone.innerHTML='';
-    var sol=item.valid[0];
-    sol.forEach(function(w){ var chip=sbMakeChip(w,idx); chip.classList.add('correct'); zone.appendChild(chip); });
-    var pc=document.createElement('div'); pc.className='chip punct-chip correct'; pc.textContent=item.punct; zone.appendChild(pc);
-    sbUpdateCapitalization(zone);
-    if(fb){ fb.className='satzbau-feedback correct'; fb.textContent='✓ Korrekt!'; }
-  });
+function sbColorRow(idx) {
+  var zone=document.getElementById('sb-row-'+idx);
+  if(!zone) return;
+  var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
+  var got=chips.map(function(c){ return c.dataset.orig; });
+  var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
+  zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
+}
+function sbResetOne(idx) {
+  var bank=document.getElementById('sb-bank-'+idx);
+  var zone=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  if(!zone||!bank) return;
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c){ c.classList.remove('correct','incorrect'); bank.appendChild(c); });
+  if(fb){ fb.className='satzbau-feedback'; fb.textContent=''; }
+}
+function sbShowSolution(idx) {
+  if(idx===undefined){
+    stopTimer(2);
+    satzbauData.forEach(function(_,i){ sbShowSolution(i); });
+    return;
+  }
+  var item=satzbauData[idx];
+  var bank=document.getElementById('sb-bank-'+idx);
+  var zone=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  if(!zone||!bank) return;
+  bank.innerHTML=''; zone.innerHTML='';
+  item.valid[0].forEach(function(w){ var chip=sbMakeChip(w,idx); chip.classList.add('correct'); zone.appendChild(chip); });
+  var pc=document.createElement('div'); pc.className='chip punct-chip correct'; pc.textContent=item.punct; zone.appendChild(pc);
+  sbUpdateCapitalization(zone);
+  if(fb){ fb.className='satzbau-feedback correct'; fb.textContent='✓ Korrekt!'; }
 }
 function initSatzbau() {
   var cont=document.getElementById('sbContainer'); if(!cont) return;
@@ -344,6 +365,13 @@ function initSatzbau() {
     });
     var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb-fb-'+idx;
     div.appendChild(bank); div.appendChild(zone); div.appendChild(fb);
+    var btnRow=document.createElement('div'); btnRow.className='sb-btn-row';
+    var btnS=document.createElement('button'); btnS.className='btn-satzbau'; btnS.textContent='Lösen';
+    btnS.onclick=(function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnR=document.createElement('button'); btnR.className='btn-satzbau'; btnR.textContent='Neustart';
+    btnR.onclick=(function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnS); btnRow.appendChild(btnR);
+    div.appendChild(btnRow);
     cont.appendChild(div);
   });
 }

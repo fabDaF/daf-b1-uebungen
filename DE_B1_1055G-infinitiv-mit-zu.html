@@ -853,6 +853,26 @@ function initSatzbau() {
     sbRegisterZone(bank, idx);
     sbRegisterZone(row, idx);
   });
+  // Wire up per-item buttons with canonical closures
+  satzbauData.forEach(function(_, idx) {
+    var bank = document.getElementById('sb-bank-'+idx);
+    if (!bank) return;
+    var container = bank.parentElement;
+    var btnRow = container.querySelector('.sb-btn-row');
+    if (btnRow) {
+      btnRow.innerHTML = '';
+      var btnS = document.createElement('button');
+      btnS.textContent = 'Lösen';
+      btnS.className = 'btn-satzbau';
+      btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+      var btnR = document.createElement('button');
+      btnR.textContent = 'Neustart';
+      btnR.className = 'btn-satzbau';
+      btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+      btnRow.appendChild(btnS);
+      btnRow.appendChild(btnR);
+    }
+  });
 }
 
 function resetSatzbau() { initSatzbau(); }

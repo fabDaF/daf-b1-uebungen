@@ -324,15 +324,15 @@ function sbRegisterZone(zone) {
   });
 }
 
-function sbCheckAuto(itemIdx) {
+function sbCheckAuto(idx) {
   setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + itemIdx);
+    const zone = document.getElementById('sb_zone_' + idx);
     if (!zone) return;
     const chips = zone.querySelectorAll('.chip');
     const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[itemIdx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ans = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
     const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(itemIdx, ok && got.length > 0);
+    sbColorRow(idx, ok && got.length > 0);
   }, 500);
 }
 
@@ -435,24 +435,55 @@ function buildSatzbau() {
   });
 }
 
+
+function sbShowSolution(idx) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const pool = document.getElementById('sb_pool_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (!zone || !pool) return;
+  const answer = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => pool.appendChild(c));
+  Array.from(pool.querySelectorAll('.chip')).forEach(c => c.classList.remove('correct','incorrect'));
+  answer.forEach(w => {
+    const chip = Array.from(pool.querySelectorAll('.chip')).find(c => c.textContent === w);
+    if (chip) { chip.classList.add('correct'); zone.appendChild(chip); }
+  });
+  if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '\u2713 Richtig!'; }
+  zone.className = 'sentence-builder correct';
+}
+function sbResetOne(idx) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const pool = document.getElementById('sb_pool_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (!zone || !pool) return;
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => { c.classList.remove('correct','incorrect'); pool.appendChild(c); });
+  zone.className = 'sentence-builder';
+  if (fb) { fb.className = 'satzbau-feedback'; fb.textContent = ''; }
+}
+function initSatzbau() {
+  buildSatzbau();
+  SATZBAU_DATA.forEach((_, idx) => {
+    const zone = document.getElementById('sb_zone_' + idx);
+    if (!zone) return;
+    const item = zone.parentElement;
+    if (!item.querySelector('.sb-btn-row')) {
+      const btnRow = document.createElement('div');
+      btnRow.className = 'sb-btn-row';
+      const btnL = document.createElement('button');
+      btnL.textContent = 'L\u00f6sen'; btnL.className = 'btn-satzbau';
+      btnL.onclick = (i => () => sbShowSolution(i))(idx);
+      const btnN = document.createElement('button');
+      btnN.textContent = 'Neustart'; btnN.className = 'btn-satzbau';
+      btnN.onclick = (i => () => sbResetOne(i))(idx);
+      btnRow.appendChild(btnL); btnRow.appendChild(btnN);
+      item.appendChild(btnRow);
+    }
+  });
+}
 function resetSatzbau() { buildSatzbau(); resetTimer(3); }
 
 function showTab(n){document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));}
 
-(function(){const c=document.getElementById('lueckenText');LUECKEN.forEach((item,idx)=>{const p=document.createElement('p');p.style.marginBottom='10px';p.innerHTML=`${item.before}<input type="text" id="luecke-${idx}" data-answer="${item.blank.toLowerCase()}" placeholder="..." oninput="liveCheck(this)" style="width:${Math.max(100,item.blank.length*12)}px"/>${item.after}`;c.appendChild(p);});})();
-function liveCheck(inp){inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===inp.dataset.answer)inp.classList.add('ok');autoStopIfDone();}
-function checkLuecken(){let correct=0;LUECKEN.forEach((item,idx)=>{const inp=document.getElementById(`luecke-${idx}`);inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}else inp.classList.add('err');});const res=document.getElementById('lueckenResult');if(correct===LUECKEN.length){res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';stopTimer('L');saveBest('L');}else{res.textContent=`${correct} von ${LUECKEN.length} richtig.`;res.style.color='#7a0000';}}
-function autoStopIfDone(){if([...document.querySelectorAll('#lueckenText input')].every(i=>i.classList.contains('ok'))){stopTimer('L');saveBest('L');document.getElementById('lueckenResult').textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;document.getElementById('lueckenResult').style.color='#1a5e17';}}
-
-(function(){const c=document.getElementById('satzbauContainer');SATZBAU_SAETZE.forEach((chips,idx)=>{const shuffled=fisherYates([...chips]);const div=document.createElement('div');div.className='sb-task';div.innerHTML=`<div class="aufgabe">Ordne die Satzteile:</div><div class="sb-chips" id="sbChips-${idx}">${shuffled.map((c,i)=>sbMakeChip(c,i,idx)).join('')}</div><div class="sb-drop" id="sbDrop-${idx}" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="sbDrop(event,${idx})"></div><div class="sb-feedback" id="sbFb-${idx}"></div>`;c.appendChild(div);});})();
-function sbMakeChip(text,i,idx){return `<div class="sb-chip" draggable="true" data-idx="${idx}" data-chip="${i}" data-text="${text.replace(/"/g,'&quot;')}" ondragstart="sbDragStart(event)" onclick="sbClick(this,${idx})">${text}</div>`;}
-let sbSel=null;
-function sbClick(chip,idx){const drop=document.getElementById(`sbDrop-${idx}`),src=document.getElementById(`sbChips-${idx}`);if(chip.parentElement===src){if(sbSel)sbSel.classList.remove('selected');sbSel=chip;chip.classList.add('selected');drop.appendChild(chip);chip.classList.remove('selected');sbSel=null;sbCheckAuto(idx);}else{if(sbSel)sbSel.classList.remove('selected');sbSel=null;src.appendChild(chip);sbCheckAuto(idx);}}
-function sbDragStart(ev){ev.dataTransfer.setData('text/plain',ev.target.dataset.chip);ev.target.classList.add('dragging');setTimeout(()=>ev.target.classList.remove('dragging'),300);}
-function sbDrop(ev,idx){ev.preventDefault();const drop=document.getElementById(`sbDrop-${idx}`);drop.classList.remove('drag-over');const chip=[...document.querySelectorAll(`.sb-chip[data-idx="${idx}"]`)].find(c=>c.dataset.chip===ev.dataTransfer.getData('text/plain'));if(chip){drop.appendChild(chip);sbCheckAuto(idx);}}
-function sbCheckAuto(idx){setTimeout(()=>{const drop=document.getElementById(`sbDrop-${idx}`),fb=document.getElementById(`sbFb-${idx}`),chips=[...drop.querySelectorAll('.sb-chip')].map(c=>c.dataset.text);if(chips.length!==SATZBAU_SAETZE[idx].length){fb.textContent='';return;}if(chips.join(' ')===SATZBAU_SAETZE[idx].join(' ')){fb.textContent='✅ Richtig!';fb.style.color='#1a5e17';sbCheckAllDone();}else{fb.textContent='❌ Noch nicht ganz richtig.';fb.style.color='#7a0000';}},500);}
-function sbCheckAllDone(){if(SATZBAU_SAETZE.every((_,i)=>{const fb=document.getElementById(`sbFb-${i}`);return fb&&fb.textContent.startsWith('✅');})){stopTimer('S');saveBest('S');}}
-function fisherYates(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 
 let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
 function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}

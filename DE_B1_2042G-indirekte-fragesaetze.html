@@ -794,10 +794,10 @@ function resetZuoTab() {
 
 var sbDragged = null;
 var SB_DATA = [
-  { parts: ['Ich', 'möchte', 'wissen', 'wo', 'du', 'wohnst'], valid: [['Ich', 'möchte', 'wissen', 'wo', 'du', 'wohnst']], punct: '.' },
+  { parts: ['Ich', 'möchte', 'genau', 'wissen', 'wo', 'du', 'wohnst'], valid: [['Ich', 'möchte', 'genau', 'wissen', 'wo', 'du', 'wohnst']], punct: '.' },
   { parts: ['Können', 'Sie', 'mir', 'sagen', 'wann', 'der', 'Zug', 'kommt'], valid: [['Können', 'Sie', 'mir', 'sagen', 'wann', 'der', 'Zug', 'kommt']], punct: '.' },
-  { parts: ['Ich', 'frage', 'mich', 'ob', 'du', 'kommst'], valid: [['Ich', 'frage', 'mich', 'ob', 'du', 'kommst']], punct: '.' },
-  { parts: ['Wissen', 'Sie', 'wie', 'alt', 'sie', 'ist'], valid: [['Wissen', 'Sie', 'wie', 'alt', 'sie', 'ist']], punct: '.' },
+  { parts: ['Ich', 'frage', 'mich', 'wirklich', 'ob', 'du', 'kommst'], valid: [['Ich', 'frage', 'mich', 'wirklich', 'ob', 'du', 'kommst']], punct: '.' },
+  { parts: ['Wissen', 'Sie', 'eigentlich', 'wie', 'alt', 'sie', 'ist'], valid: [['Wissen', 'Sie', 'eigentlich', 'wie', 'alt', 'sie', 'ist']], punct: '.' },
   { parts: ['Ich', 'möchte', 'wissen', 'ob', 'ihr', 'Zeit', 'habt'], valid: [['Ich', 'möchte', 'wissen', 'ob', 'ihr', 'Zeit', 'habt']], punct: '.' },
   { parts: ['Können', 'Sie', 'mir', 'sagen', 'wer', 'dein', 'Freund', 'ist'], valid: [['Können', 'Sie', 'mir', 'sagen', 'wer', 'dein', 'Freund', 'ist']], punct: '.' },
   { parts: ['Ich', 'frage', 'mich', 'ob', 'das', 'eine', 'gute', 'Idee', 'ist'], valid: [['Ich', 'frage', 'mich', 'ob', 'das', 'eine', 'gute', 'Idee', 'ist']], punct: '.' },
@@ -956,6 +956,68 @@ function resetSbTab() {
   timerResetOne(4);
   initSb();
 }
+function sbShowSolution(idx) {
+  var ex = SB_DATA[idx];
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row = document.getElementById('sb-row-' + idx);
+  var fb = document.getElementById('sb-fb-' + idx);
+  var solution = ex.valid[0];
+  var allChips = {};
+  Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild) row.removeChild(row.firstChild);
+  solution.forEach(function(word) {
+    var chip = allChips[word];
+    if (chip) { chip.classList.remove('wrong'); chip.classList.add('correct'); row.appendChild(chip); }
+  });
+  var existing = row.querySelector('.sb-punkt');
+  if (existing) existing.remove();
+  var punkt = document.createElement('span');
+  punkt.className = 'sb-punkt';
+  punkt.textContent = ex.punct || '.';
+  row.appendChild(punkt);
+  row.classList.add('correct'); row.classList.remove('wrong');
+  if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Korrekt!'; }
+}
+function sbResetOne(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row = document.getElementById('sb-row-' + idx);
+  var fb = document.getElementById('sb-fb-' + idx);
+  var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+  allChips.forEach(function(c) { c.classList.remove('correct', 'wrong'); });
+  var punkt = row.querySelector('.sb-punkt');
+  if (punkt) punkt.remove();
+  while (row.firstChild) row.removeChild(row.firstChild);
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  for (var i = allChips.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = allChips[i]; allChips[i] = allChips[j]; allChips[j] = tmp;
+  }
+  allChips.forEach(function(c) { bank.appendChild(c); });
+  row.classList.remove('correct', 'wrong');
+  if (fb) { fb.className = 'satzbau-feedback'; fb.textContent = ''; }
+}
+function initSatzbau() {
+  initSb();
+  SB_DATA.forEach(function(_, idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    if (!bank) return;
+    var item = bank.parentElement;
+    if (!item.querySelector('.sb-btn-row')) {
+      var btnRow = document.createElement('div');
+      btnRow.className = 'sb-btn-row';
+      var btnL = document.createElement('button');
+      btnL.textContent = 'L\u00f6sen'; btnL.className = 'btn-satzbau';
+      btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+      var btnN = document.createElement('button');
+      btnN.textContent = 'Neustart'; btnN.className = 'btn-satzbau';
+      btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+      btnRow.appendChild(btnL); btnRow.appendChild(btnN);
+      item.appendChild(btnRow);
+    }
+  });
+}
 
 function shuffle(arr) {
   var a = arr.slice();
@@ -968,7 +1030,7 @@ function shuffle(arr) {
 
 initLuecken();
 initZuo();
-initSb();
+initSatzbau();
 loadBestTimes();
 </script>
 </body>

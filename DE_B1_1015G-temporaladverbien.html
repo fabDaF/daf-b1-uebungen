@@ -908,21 +908,17 @@ function initSatzbau() {
     sbRegisterZone(row, idx);
 
     var btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
-
-    var solveBtn = document.createElement('button');
-    solveBtn.className = 'btn-row';
-    solveBtn.style.cssText = 'background:none; border:1px solid #c0b0e8; border-radius:16px; padding:5px 14px; cursor:pointer; font-size:.85rem; color:#5a3e9e;';
-    solveBtn.textContent = 'Lösen';
-    (function(i){ solveBtn.addEventListener('click', function(){ sbShowSolution(i); }); })(idx);
-
-    var resetBtn = document.createElement('button');
-    resetBtn.style.cssText = 'background:none; border:1px solid #c0b0e8; border-radius:16px; padding:5px 14px; cursor:pointer; font-size:.85rem; color:#5a3e9e;';
-    resetBtn.textContent = '\u21ba Neustart';
-    (function(i){ resetBtn.addEventListener('click', function(){ sbResetOne(i); }); })(idx);
-
-    btnRow.appendChild(solveBtn);
-    btnRow.appendChild(resetBtn);
+    btnRow.className = 'sb-btn-row';
+    var btnS = document.createElement('button');
+    btnS.textContent = 'Lösen';
+    btnS.className = 'btn-satzbau';
+    btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnR = document.createElement('button');
+    btnR.textContent = 'Neustart';
+    btnR.className = 'btn-satzbau';
+    btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnS);
+    btnRow.appendChild(btnR);
 
     item.appendChild(bank);
     item.appendChild(row);

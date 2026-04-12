@@ -904,16 +904,16 @@ function initSatzbau() {
 
     var btnRow = document.createElement('div');
     btnRow.className = 'sb-btn-row';
-    var losenBtn = document.createElement('button');
-    losenBtn.className = 'sb-btn';
-    losenBtn.textContent = 'Lösen';
-    losenBtn.addEventListener('click', function() { sbShowSolution(idx); });
-    var neuBtn = document.createElement('button');
-    neuBtn.className = 'sb-btn';
-    neuBtn.textContent = '↺ Neustart';
-    neuBtn.addEventListener('click', function() { sbResetOne(idx); });
-    btnRow.appendChild(losenBtn);
-    btnRow.appendChild(neuBtn);
+    var btnS = document.createElement('button');
+    btnS.textContent = 'Lösen';
+    btnS.className = 'btn-satzbau';
+    btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnR = document.createElement('button');
+    btnR.textContent = 'Neustart';
+    btnR.className = 'btn-satzbau';
+    btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnS);
+    btnRow.appendChild(btnR);
     wrapper.appendChild(btnRow);
 
     container.appendChild(wrapper);

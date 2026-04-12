@@ -565,12 +565,18 @@ function initSatzbau() {
         for (var i = parts.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp; }
         parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
         sbRegisterZone(bank, idx); sbRegisterZone(row, idx);
-        var btnRow = document.createElement('div'); btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
-        var sb = document.createElement('button'); sb.className = 'btn'; sb.textContent = 'Lösen'; sb.setAttribute('data-idx', idx);
-        sb.addEventListener('click', function() { sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
-        var rb = document.createElement('button'); rb.className = 'btn'; rb.textContent = '↺ Neustart'; rb.setAttribute('data-idx', idx);
-        rb.addEventListener('click', function() { sbResetOne(parseInt(this.getAttribute('data-idx'))); });
-        btnRow.appendChild(sb); btnRow.appendChild(rb);
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnS = document.createElement('button');
+        btnS.textContent = 'Lösen';
+        btnS.className = 'btn-satzbau';
+        btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnR = document.createElement('button');
+        btnR.textContent = 'Neustart';
+        btnR.className = 'btn-satzbau';
+        btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnS);
+        btnRow.appendChild(btnR);
         item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
         container.appendChild(item);
     });

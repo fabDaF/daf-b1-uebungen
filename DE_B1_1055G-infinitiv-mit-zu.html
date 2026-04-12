@@ -28,7 +28,7 @@ body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:lin
 .hilfe-box { background:#f0f4ff; border-left:4px solid #667eea; border-radius:0 8px 8px 0; padding:14px 18px; margin-bottom:22px; font-size:0.9em; color:#444; line-height:1.6; }
 .control-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding:6px 12px; background:#f8f9fa; border-radius:8px; }
 .btn-row { display:flex; gap:6px; }
-.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
 .btn:hover { border-color:#667eea; color:#667eea; }
 .timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 
@@ -281,27 +281,27 @@ input.blank.wrong { border-color:#e74c3c; background:#ffebee; }
         <div class="chips-container" id="sb-bank-0"></div>
         <div class="sentence-builder" id="sb-row-0"></div>
         <div class="satzbau-feedback" id="sb-fb-0"></div>
-        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(0)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(0)">Neustart</button></div>
+        <div class="sb-btn-row" style="display:flex; gap:8px; margin-top:6px;"><button class="btn" onclick="sbShowSolution(0)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(0)">↺ Neustart</button></div>
         <div class="chips-container" id="sb-bank-1"></div>
         <div class="sentence-builder" id="sb-row-1"></div>
         <div class="satzbau-feedback" id="sb-fb-1"></div>
-        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(1)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(1)">Neustart</button></div>
+        <div class="sb-btn-row" style="display:flex; gap:8px; margin-top:6px;"><button class="btn" onclick="sbShowSolution(1)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(1)">↺ Neustart</button></div>
         <div class="chips-container" id="sb-bank-2"></div>
         <div class="sentence-builder" id="sb-row-2"></div>
         <div class="satzbau-feedback" id="sb-fb-2"></div>
-        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(2)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(2)">Neustart</button></div>
+        <div class="sb-btn-row" style="display:flex; gap:8px; margin-top:6px;"><button class="btn" onclick="sbShowSolution(2)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(2)">↺ Neustart</button></div>
         <div class="chips-container" id="sb-bank-3"></div>
         <div class="sentence-builder" id="sb-row-3"></div>
         <div class="satzbau-feedback" id="sb-fb-3"></div>
-        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(3)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(3)">Neustart</button></div>
+        <div class="sb-btn-row" style="display:flex; gap:8px; margin-top:6px;"><button class="btn" onclick="sbShowSolution(3)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(3)">↺ Neustart</button></div>
         <div class="chips-container" id="sb-bank-4"></div>
         <div class="sentence-builder" id="sb-row-4"></div>
         <div class="satzbau-feedback" id="sb-fb-4"></div>
-        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(4)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(4)">Neustart</button></div>
+        <div class="sb-btn-row" style="display:flex; gap:8px; margin-top:6px;"><button class="btn" onclick="sbShowSolution(4)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(4)">↺ Neustart</button></div>
         <div class="chips-container" id="sb-bank-5"></div>
         <div class="sentence-builder" id="sb-row-5"></div>
         <div class="satzbau-feedback" id="sb-fb-5"></div>
-        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(5)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(5)">Neustart</button></div>
+        <div class="sb-btn-row" style="display:flex; gap:8px; margin-top:6px;"><button class="btn" onclick="sbShowSolution(5)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(5)">↺ Neustart</button></div>
       </div>
     </div>
   </div>
@@ -861,13 +861,14 @@ function initSatzbau() {
     var btnRow = container.querySelector('.sb-btn-row');
     if (btnRow) {
       btnRow.innerHTML = '';
+      btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
       var btnS = document.createElement('button');
       btnS.textContent = 'Lösen';
-      btnS.className = 'btn-satzbau';
+      btnS.className = 'btn';
       btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
       var btnR = document.createElement('button');
-      btnR.textContent = 'Neustart';
-      btnR.className = 'btn-satzbau';
+      btnR.textContent = '↺ Neustart';
+      btnR.className = 'btn';
       btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
       btnRow.appendChild(btnS);
       btnRow.appendChild(btnR);

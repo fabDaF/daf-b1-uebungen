@@ -810,7 +810,7 @@ function initSatzbau() {
     const container = document.getElementById('satzbauContainer');
     container.innerHTML = '';
 
-    SATZBAU.forEach(ex => {
+    SATZBAU.forEach((ex, sbIdx) => {
         const div = document.createElement('div');
         div.className = 'satzbau-item';
 
@@ -872,6 +872,13 @@ function initSatzbau() {
 
         div.appendChild(dropRow);
         div.appendChild(bank);
+        var btnRow=document.createElement('div'); btnRow.className='sb-btn-row';
+        var btnS=document.createElement('button'); btnS.className='btn-satzbau'; btnS.textContent='Lösen';
+        btnS.onclick=(function(i){ return function(){ sbShowSolution(i); }; })(sbIdx);
+        var btnR=document.createElement('button'); btnR.className='btn-satzbau'; btnR.textContent='Neustart';
+        btnR.onclick=(function(i){ return function(){ sbResetOne(i); }; })(sbIdx);
+        btnRow.appendChild(btnS); btnRow.appendChild(btnR);
+        div.appendChild(btnRow);
         container.appendChild(div);
     });
 }
@@ -979,8 +986,53 @@ function checkSatzbauAuto(exId) {
     if (allDone) stopTimer(4);
 }
 
+function sbColorRow(idx) {
+  var ex=SATZBAU[idx]; if(!ex) return false;
+  var row=document.getElementById('sb-drop-'+ex.id);
+  var bank=document.getElementById('sb-bank-'+ex.id);
+  if(!row||!bank) return false;
+  if(bank.querySelectorAll('.chip').length>0) return false;
+  var chips=Array.from(row.querySelectorAll('.chip'));
+  var userOrder=chips.map(function(c){ return c.dataset.text; });
+  var ok=ex.valid.some(function(v){ return v.length===userOrder.length&&v.every(function(p,i){ return p===userOrder[i]; }); });
+  chips.forEach(function(c){ c.classList.remove('correct','wrong'); c.classList.add(ok?'correct':'wrong'); });
+  return ok;
+}
+function sbCheckAuto(idx) {
+  var ex=SATZBAU[idx]; if(!ex) return;
+  setTimeout(function(){ checkSatzbauAuto(ex.id); }, 500);
+}
+function sbShowSolution(idx) {
+  var ex=SATZBAU[idx]; if(!ex) return;
+  var row=document.getElementById('sb-drop-'+ex.id);
+  var bank=document.getElementById('sb-bank-'+ex.id);
+  if(!row||!bank) return;
+  var allChips=[...row.querySelectorAll('.chip'),...bank.querySelectorAll('.chip')];
+  row.innerHTML='';
+  ex.valid[0].forEach(function(p){
+    var chip=allChips.find(function(c){ return c.dataset.text===p; });
+    if(chip){ chip.classList.remove('wrong'); chip.classList.add('correct'); row.appendChild(chip); }
+  });
+  var point=document.createElement('span'); point.className='fixed-dot';
+  point.textContent=ex.punct||'.'; point.style.fontSize='1.5em'; point.style.marginLeft='4px';
+  row.appendChild(point);
+  updateCaps(ex.id);
+}
+function sbResetOne(idx) {
+  var ex=SATZBAU[idx]; if(!ex) return;
+  var row=document.getElementById('sb-drop-'+ex.id);
+  var bank=document.getElementById('sb-bank-'+ex.id);
+  if(!row||!bank) return;
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c){
+    c.classList.remove('correct','wrong'); bank.appendChild(c);
+  });
+  row.innerHTML='';
+  var point=document.createElement('span'); point.className='fixed-dot';
+  point.textContent=ex.punct||'.'; point.style.fontSize='1.5em'; point.style.marginLeft='4px';
+  row.appendChild(point);
+}
 function showSatzbauLoesung() {
-    SATZBAU.forEach(ex => {
+    SATZBAU.forEach((ex, sbIdx) => {
         const row = document.getElementById('sb-drop-' + ex.id);
         const bank = document.getElementById('sb-bank-' + ex.id);
 

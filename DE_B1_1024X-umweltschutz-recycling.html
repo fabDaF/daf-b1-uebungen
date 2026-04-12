@@ -60,7 +60,7 @@ body {
 /* ===== TIMER ===== */
 .timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
 .btn-row { display:flex; gap:6px; }
-.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
 .btn:hover { background:#f0f0f0; color:#555; }
 .timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 
@@ -773,8 +773,8 @@ function resetBed() { initBed(); }
 // ===== TAB 3: SATZBAU =====
 var satzbauData = [
     {
-        parts: ['viele', 'immer', 'auch', 'Rohstoffe', 'können', 'wiederverwertet', 'werden'],
-        valid: [['viele', 'immer', 'auch', 'Rohstoffe', 'können', 'wiederverwertet', 'werden']],
+        parts: ['viele', 'Rohstoffe', 'können', 'immer', 'auch', 'wiederverwertet', 'werden'],
+        valid: [['viele', 'Rohstoffe', 'können', 'immer', 'auch', 'wiederverwertet', 'werden']],
         punct: '.'
     },
     {
@@ -798,8 +798,8 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['nicht', 'auch', 'jeder', 'Abfall', 'ist', 'wertloser', 'Müll'],
-        valid: [['nicht', 'auch', 'jeder', 'Abfall', 'ist', 'wertloser', 'Müll']],
+        parts: ['nicht', 'jeder', 'Abfall', 'ist', 'wertloser', 'Müll'],
+        valid: [['nicht', 'jeder', 'Abfall', 'ist', 'wertloser', 'Müll']],
         punct: '.'
     },
     {
@@ -1020,14 +1020,14 @@ function initSatzbau() {
         sbRegisterZone(row, idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

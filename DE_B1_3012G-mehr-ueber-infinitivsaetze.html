@@ -969,13 +969,13 @@ function resetZuordnung() {
 // ===== SATZBAU SYSTEM =====
 var SB_DATA = [
     {parts: ['Ich', 'habe', 'Lust', ',', 'heute', 'zu', 'tanzen', '.'], answer: ['ich', 'habe', 'lust', ',', 'heute', 'zu', 'tanzen', '.']},
-    {parts: ['Er', 'scheint', 'krank', 'zu', 'sein', '.'], answer: ['er', 'scheint', 'krank', 'zu', 'sein', '.']},
+    {parts: ['Er', 'scheint', 'wirklich', 'krank', 'zu', 'sein', '.'], answer: ['er', 'scheint', 'wirklich', 'krank', 'zu', 'sein', '.']},
     {parts: ['Sie', 'bittet', 'mich', ',', 'zu', 'warten', '.'], answer: ['sie', 'bittet', 'mich', ',', 'zu', 'warten', '.']},
     {parts: ['Statt', 'zu', 'schlafen', ',', 'arbeitet', 'er', '.'], answer: ['statt', 'zu', 'schlafen', ',', 'arbeitet', 'er', '.']},
     {parts: ['Wir', 'haben', 'keine', 'Zeit', ',', 'zu', 'helfen', '.'], answer: ['wir', 'haben', 'keine', 'zeit', ',', 'zu', 'helfen', '.']},
     {parts: ['Das', 'Wetter', 'droht', 'schlecht', 'zu', 'werden', '.'], answer: ['das', 'wetter', 'droht', 'schlecht', 'zu', 'werden', '.']},
     {parts: ['Ich', 'rate', 'dir', ',', 'den', 'Arzt', 'zu', 'fragen', '.'], answer: ['ich', 'rate', 'dir', ',', 'den', 'arzt', 'zu', 'fragen', '.']},
-    {parts: ['Du', 'brauchst', 'nicht', 'zu', 'kommen', '.'], answer: ['du', 'brauchst', 'nicht', 'zu', 'kommen', '.']}
+    {parts: ['Du', 'brauchst', 'heute', 'nicht', 'zu', 'kommen', '.'], answer: ['du', 'brauchst', 'heute', 'nicht', 'zu', 'kommen', '.']}
 ];
 
 function initSatzbau() {
@@ -1044,9 +1044,22 @@ function initSatzbau() {
             }
         });
 
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnL = document.createElement('button');
+        btnL.textContent = 'L\u00f6sen';
+        btnL.className = 'btn-satzbau';
+        btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnN = document.createElement('button');
+        btnN.textContent = 'Neustart';
+        btnN.className = 'btn-satzbau';
+        btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnL);
+        btnRow.appendChild(btnN);
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
+        item.appendChild(btnRow);
         con.appendChild(item);
     });
 }
@@ -1094,6 +1107,36 @@ function sbCheckAllDone() {
         return chips.length > 0 && Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
     });
     if (allOk) timerStop(4);
+}
+
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    if (!row) return false;
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c){ return c.dataset.orig.toLowerCase(); });
+    return JSON.stringify(order) === JSON.stringify(SB_DATA[idx].answer);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    if (!bank || !row) return;
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ bank.appendChild(c); });
+    SB_DATA[idx].answer.forEach(function(word){
+        var chip = Array.from(bank.querySelectorAll('.chip')).find(function(c){ return c.dataset.orig.toLowerCase() === word; });
+        if (chip) row.appendChild(chip);
+    });
+    sbCheckAuto(idx);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (!bank || !row) return;
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ bank.appendChild(c); });
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
 }
 
 function showSbLoesung() {

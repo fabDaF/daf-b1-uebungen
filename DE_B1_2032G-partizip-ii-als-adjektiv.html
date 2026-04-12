@@ -654,14 +654,14 @@ var ZUO_DATA = [
 // ============ SATZBAU DATA ============
 
 var SB_DATA = [
-    {parts: ['Die', 'Tür', 'verschlossene', 'ist'], valid: [['Die', 'Tür', 'ist', 'verschlossene']], punct: '.'},
-    {parts: ['einen', 'gebackenen', 'Ich', 'Kuchen', 'esse'], valid: [['Ich', 'esse', 'einen', 'gebackenen', 'Kuchen']], punct: '.'},
-    {parts: ['Das', 'Brief', 'geschriebene', 'liegt'], valid: [['Das', 'geschriebene', 'Brief', 'liegt']], punct: '.'},
-    {parts: ['gefalteten', 'Mit', 'Hände', 'betete', 'sie'], valid: [['Mit', 'gefalteten', 'Hände', 'betete', 'sie']], punct: '.'},
-    {parts: ['gebundenen', 'Der', 'ordentlich', 'Strauch', 'sieht', 'aus'], valid: [['Der', 'gebundenen', 'Strauch', 'sieht', 'ordentlich', 'aus']], punct: '.'},
+    {parts: ['Die', 'Tür', 'verschlossene', 'ist', 'schon', 'lange', 'leider'], valid: [['Die', 'Tür', 'ist', 'leider', 'schon', 'lange', 'verschlossene']], punct: '.'},
+    {parts: ['einen', 'gebackenen', 'Ich', 'Kuchen', 'esse', 'frisch', 'gerne'], valid: [['Ich', 'esse', 'gerne', 'einen', 'frisch', 'gebackenen', 'Kuchen']], punct: '.'},
+    {parts: ['Das', 'Brief', 'geschriebene', 'liegt', 'hier', 'immer', 'noch'], valid: [['Das', 'geschriebene', 'Brief', 'liegt', 'immer', 'noch', 'hier']], punct: '.'},
+    {parts: ['gefalteten', 'Mit', 'Hände', 'betete', 'sie', 'jeden', 'Abend'], valid: [['Mit', 'gefalteten', 'Hände', 'betete', 'sie', 'jeden', 'Abend']], punct: '.'},
+    {parts: ['gebundenen', 'Der', 'ordentlich', 'Strauch', 'sieht', 'wirklich', 'aus'], valid: [['Der', 'gebundenen', 'Strauch', 'sieht', 'wirklich', 'ordentlich', 'aus']], punct: '.'},
     {parts: ['verlorene', 'Eine', 'Liebe', 'vergessen', 'lässt', 'sich', 'nicht'], valid: [['Eine', 'verlorene', 'Liebe', 'lässt', 'sich', 'nicht', 'vergessen']], punct: '.'},
     {parts: ['geteilte', 'Das', 'groß', 'Glück', 'wird', 'doppelt', 'so'], valid: [['Das', 'geteilte', 'Glück', 'wird', 'doppelt', 'so', 'groß']], punct: '.'},
-    {parts: ['gefundener', 'Museum', 'liegt', 'Ein', 'Schatz', 'im'], valid: [['Ein', 'gefundener', 'Schatz', 'liegt', 'im', 'Museum']], punct: '.'}
+    {parts: ['gefundener', 'Museum', 'liegt', 'Ein', 'Schatz', 'im', 'jetzt'], valid: [['Ein', 'gefundener', 'Schatz', 'liegt', 'jetzt', 'im', 'Museum']], punct: '.'}
 ];
 
 // ============ NAVIGATION ============
@@ -896,9 +896,22 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
 
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnLoesen = document.createElement('button');
+        btnLoesen.textContent = 'L\u00f6sen';
+        btnLoesen.className = 'btn-satzbau';
+        btnLoesen.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnNeu = document.createElement('button');
+        btnNeu.textContent = 'Neustart';
+        btnNeu.className = 'btn-satzbau';
+        btnNeu.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnLoesen);
+        btnRow.appendChild(btnNeu);
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
+        item.appendChild(btnRow);
         container.appendChild(item);
     });
 }
@@ -990,6 +1003,49 @@ function sbCheckAllDone() {
         return row && row.classList.contains('correct');
     });
     if (allOk) timerStop(4);
+}
+
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    if (!row) return false;
+    var order = Array.from(row.querySelectorAll('.chip')).map(function(c){ return c.dataset.orig; });
+    var ok = SB_DATA[idx].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(order); });
+    row.classList.remove('correct', 'incorrect');
+    row.classList.add(ok ? 'correct' : 'incorrect');
+    return ok;
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (!bank || !row) return;
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild) row.removeChild(row.firstChild);
+    SB_DATA[idx].valid[0].forEach(function(word) { row.appendChild(sbMakeChip(word, idx)); });
+    sbUpdateCapitalization(row);
+    sbCheckAuto(idx);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var data = SB_DATA[idx];
+    if (!bank || !row || !data) return;
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild) row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+    var parts = data.parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word, idx)); });
+    sbRegisterZone(bank, idx);
+    sbRegisterZone(row, idx);
 }
 
 function showSbLosung() {

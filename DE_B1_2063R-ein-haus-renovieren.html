@@ -515,6 +515,75 @@ function buildSatzbau() {
   });
 }
 
+
+// ─── Canonical Satzbau wrappers (audit-compliant) ───────────
+function sbCheckAuto(idx) {
+  var pool = document.getElementById('sb_pool_' + idx);
+  var zone = document.getElementById('sb_zone_' + idx);
+  if (!zone) return;
+  if (pool && pool.querySelectorAll('.chip:not(.punct-chip)').length > 0) {
+    zone.className = 'sentence-builder';
+    return;
+  }
+  setTimeout(function() {
+    var chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+    var got = Array.from(chips).map(function(c) { return c.textContent; });
+    var ans = SATZBAU_DATA[idx].words.filter(function(w) { return !/^[.,!?;:]$/.test(w); });
+    var ok = got.length === ans.length && got.every(function(w, i) { return w === ans[i]; });
+    sbColorRow(idx, ok && got.length > 0);
+  }, 500);
+}
+function sbShowSolution(idx) {
+  var pool = document.getElementById('sb_pool_' + idx);
+  var zone = document.getElementById('sb_zone_' + idx);
+  if (!pool || !zone) return;
+  var nonPunct = SATZBAU_DATA[idx].words.filter(function(w) { return !/^[.,!?;:]$/.test(w); });
+  var chips = {};
+  Array.from(pool.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { chips[c.textContent] = c; });
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { chips[c.textContent] = c; });
+  pool.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { pool.removeChild(c); });
+  zone.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { zone.removeChild(c); });
+  nonPunct.forEach(function(w) {
+    var chip = chips[w];
+    if (chip) zone.appendChild(chip);
+  });
+  sbUpdateCapitalization(zone);
+  setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+function sbResetOne(idx) {
+  var pool = document.getElementById('sb_pool_' + idx);
+  var zone = document.getElementById('sb_zone_' + idx);
+  if (!pool || !zone) return;
+  var allChips = [];
+  Array.from(pool.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { allChips.push(c); });
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { allChips.push(c); });
+  pool.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { pool.removeChild(c); });
+  zone.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { zone.removeChild(c); });
+  for (var i = allChips.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = allChips[i]; allChips[i] = allChips[j]; allChips[j] = tmp;
+  }
+  allChips.forEach(function(c) { pool.appendChild(c); });
+  zone.className = 'sentence-builder';
+}
+function initSatzbau() {
+  buildSatzbau();
+  SATZBAU_DATA.forEach(function(item, idx) {
+    var div = document.getElementById('sb_zone_' + idx);
+    if (!div) return;
+    var parent = div.parentElement;
+    var btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+    var solveBtn = document.createElement('button');
+    solveBtn.className = 'btn'; solveBtn.textContent = 'Lösen';
+    (function(i) { solveBtn.addEventListener('click', function() { sbShowSolution(i); }); })(idx);
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'btn'; resetBtn.textContent = '↺ Neustart';
+    (function(i) { resetBtn.addEventListener('click', function() { sbResetOne(i); }); })(idx);
+    btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+    parent.appendChild(btnRow);
+  });
+}
 function resetSatzbau() { buildSatzbau(); resetTimer(4); }
 
 // TIMER

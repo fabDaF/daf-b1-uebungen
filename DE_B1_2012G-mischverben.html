@@ -514,7 +514,63 @@ function buildSatzbau() {
     cont.appendChild(div);
   });
 }
-function resetSatzbau() { buildSatzbau(); resetTimer(3); }
+function sbColorRow(idx) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  if (!zone) return false;
+  const got = Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).map(c => c.textContent);
+  const ans = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
+  const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+  zone.className = 'sentence-builder' + (ok && got.length ? ' correct' : got.length ? ' incorrect' : '');
+  return ok;
+}
+
+function sbShowSolution(idx) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const pool = document.getElementById('sb_pool_' + idx);
+  const fb   = document.getElementById('sb_fb_' + idx);
+  const answer = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => pool.appendChild(c));
+  answer.forEach(w => {
+    const chip = Array.from(pool.querySelectorAll('.chip')).find(c => c.textContent === w);
+    if (chip) { chip.classList.add('correct'); zone.appendChild(chip); }
+  });
+  if (fb) { fb.textContent = '\u2713 Richtig!'; fb.className = 'satzbau-feedback correct'; }
+}
+
+function sbResetOne(idx) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const pool = document.getElementById('sb_pool_' + idx);
+  const fb   = document.getElementById('sb_fb_' + idx);
+  if (!zone || !pool) return;
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => {
+    c.classList.remove('correct', 'incorrect');
+    pool.appendChild(c);
+  });
+  zone.className = 'sentence-builder';
+  if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+}
+
+function initSatzbau() {
+  buildSatzbau();
+  document.querySelectorAll('#satzbauContainer .satzbau-item').forEach(function(div, idx) {
+    if (div.querySelector('.sb-btn-row')) return;
+    const btnRow = document.createElement('div');
+    btnRow.className = 'sb-btn-row';
+    const btnLoesen = document.createElement('button');
+    btnLoesen.textContent = 'L\u00f6sen';
+    btnLoesen.className = 'btn-satzbau';
+    btnLoesen.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    const btnNeu = document.createElement('button');
+    btnNeu.textContent = 'Neustart';
+    btnNeu.className = 'btn-satzbau';
+    btnNeu.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnLoesen);
+    btnRow.appendChild(btnNeu);
+    div.appendChild(btnRow);
+  });
+}
+
+function resetSatzbau() { initSatzbau(); resetTimer(3); }
 
 // ══════════════════════════════════════════════
 // FORMEN ÜBEN
@@ -564,7 +620,7 @@ function resetVocab() { initVocab(); resetTimer(4); }
 document.addEventListener('DOMContentLoaded', () => {
   loadBestTimes();
   buildLuecken();
-  buildSatzbau();
+  initSatzbau();
   initVocab();
 });
 </script>

@@ -976,13 +976,13 @@ function resetZuordnung() {
 // ===== SATZBAU SYSTEM =====
 var SB_DATA = [
     {parts: ['Es', 'ist', 'wichtig', ',', 'pünktlich', 'zu', 'kommen', '.'], answer: ['es', 'ist', 'wichtig', ',', 'pünktlich', 'zu', 'kommen', '.']},
-    {parts: ['Sie', 'versucht', ',', 'früher', 'aufzustehen', '.'], answer: ['sie', 'versucht', ',', 'früher', 'aufzustehen', '.']},
+    {parts: ['Sie', 'versucht', ',', 'immer', 'früher', 'aufzustehen', '.'], answer: ['sie', 'versucht', ',', 'immer', 'früher', 'aufzustehen', '.']},
     {parts: ['Ich', 'hoffe', ',', 'dich', 'zu', 'sehen', '.'], answer: ['ich', 'hoffe', ',', 'dich', 'zu', 'sehen', '.']},
     {parts: ['um', 'in', 'Deutschland', 'zu', 'arbeiten', 'lernt', 'er', 'Deutsch', '.'], answer: ['er', 'lernt', 'deutsch', ',', 'um', 'in', 'deutschland', 'zu', 'arbeiten', '.']},
-    {parts: ['ohne', 'zu', 'winken', 'geht', 'sie', '.'], answer: ['sie', 'geht', ',', 'ohne', 'zu', 'winken', '.']},
+    {parts: ['ohne', 'zu', 'winken', 'geht', 'sie', 'schnell', '.'], answer: ['sie', 'geht', 'schnell', 'ohne', 'zu', 'winken', '.']},
     {parts: ['Es', 'ist', 'möglich', ',', 'das', 'Problem', 'zu', 'lösen', '.'], answer: ['es', 'ist', 'möglich', ',', 'das', 'problem', 'zu', 'lösen', '.']},
     {parts: ['Sie', 'vergisst', ',', 'die', 'Tür', 'zu', 'schließen', '.'], answer: ['sie', 'vergisst', ',', 'die', 'tür', 'zu', 'schließen', '.']},
-    {parts: ['Wir', 'beginnen', ',', 'zu', 'arbeiten', '.'], answer: ['wir', 'beginnen', ',', 'zu', 'arbeiten', '.']}
+    {parts: ['Wir', 'beginnen', ',', 'jetzt', 'zu', 'arbeiten', '.'], answer: ['wir', 'beginnen', ',', 'jetzt', 'zu', 'arbeiten', '.']}
 ];
 
 function initSatzbau() {
@@ -1051,9 +1051,22 @@ function initSatzbau() {
             }
         });
 
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnL = document.createElement('button');
+        btnL.textContent = 'L\u00f6sen';
+        btnL.className = 'btn-satzbau';
+        btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnN = document.createElement('button');
+        btnN.textContent = 'Neustart';
+        btnN.className = 'btn-satzbau';
+        btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnL);
+        btnRow.appendChild(btnN);
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
+        item.appendChild(btnRow);
         con.appendChild(item);
     });
 }
@@ -1099,6 +1112,41 @@ function sbCheckAllDone() {
         return row && row.classList.contains('correct');
     });
     if (allOk) timerStop(4);
+}
+
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    if (!row) return false;
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c){ return c.dataset.orig.toLowerCase(); });
+    var ok = JSON.stringify(order) === JSON.stringify(SB_DATA[idx].answer);
+    row.classList.remove('correct', 'incorrect');
+    if (ok && chips.length) row.classList.add('correct');
+    return ok;
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    if (!bank || !row) return;
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ bank.appendChild(c); });
+    SB_DATA[idx].answer.forEach(function(word) {
+        var chip = Array.from(bank.querySelectorAll('.chip')).find(function(c){
+            return c.dataset.orig.toLowerCase() === word;
+        });
+        if (chip) row.appendChild(chip);
+    });
+    sbCheckAuto(idx);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (!bank || !row) return;
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ bank.appendChild(c); });
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
 }
 
 function showSbLoesung() {

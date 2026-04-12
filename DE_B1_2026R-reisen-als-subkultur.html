@@ -743,9 +743,9 @@ function resetLuecken() {
 
 // ===== SATZBAU =====
 var satzbauData = [
-    { parts: ['Karim', 'sitzt', 'im', 'Hostel', 'in', 'Budapest'], valid: [['Karim', 'sitzt', 'im', 'Hostel', 'in', 'Budapest']], punct: '.' },
+    { parts: ['Karim', 'sitzt', 'gerade', 'im', 'Hostel', 'in', 'Budapest'], valid: [['Karim', 'sitzt', 'gerade', 'im', 'Hostel', 'in', 'Budapest']], punct: '.' },
     { parts: ['Die', 'Subkultur', 'der', 'Backpacker', 'ist', 'eine', 'Philosophie'], valid: [['Die', 'Subkultur', 'der', 'Backpacker', 'ist', 'eine', 'Philosophie']], punct: '.' },
-    { parts: ['Elena', 'kommt', 'aus', 'Sofia'], valid: [['Elena', 'kommt', 'aus', 'Sofia']], punct: '.' },
+    { parts: ['Elena', 'kommt', 'aus', 'der', 'schönen', 'Stadt', 'Sofia'], valid: [['Elena', 'kommt', 'aus', 'der', 'schönen', 'Stadt', 'Sofia']], punct: '.' },
     { parts: ['Man', 'misst', 'den', 'Wert', 'nicht', 'am', 'Gehalt'], valid: [['Man', 'misst', 'den', 'Wert', 'nicht', 'am', 'Gehalt']], punct: '.' },
 ];
 
@@ -939,8 +939,60 @@ function initSatzbau() {
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnLoesen = document.createElement('button');
+        btnLoesen.textContent = 'L\u00f6sen';
+        btnLoesen.className = 'btn-satzbau';
+        btnLoesen.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnNeu = document.createElement('button');
+        btnNeu.textContent = 'Neustart';
+        btnNeu.className = 'btn-satzbau';
+        btnNeu.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnLoesen);
+        btnRow.appendChild(btnNeu);
+        item.appendChild(btnRow);
         container.appendChild(item);
     });
+}
+
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) { chip.textContent = (i === 0) ? sbCapitalize(word) : word; chip.classList.remove('correct', 'wrong'); row.appendChild(chip); }
+    });
+    if (fb) fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    var ex   = satzbauData[idx];
+    if (!bank || !row || !ex) return;
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'wrong');
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+    var parts = ex.parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+    sbRegisterZone(bank, idx);
+    sbRegisterZone(row, idx);
 }
 
 function showSBLoesung() {

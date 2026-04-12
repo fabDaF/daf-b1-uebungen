@@ -107,7 +107,7 @@ h2.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bo
 /* ── TIMER CONTROLS ── */
 .timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
 .btn-row { display:flex; gap:6px; }
-.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
 .btn:hover { background:#f0f0f0; color:#555; }
 .timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 .timer-val { color:#667eea; font-weight:700; }
@@ -739,25 +739,13 @@ var satzbauBuilt = false;
 var sbDragged = null;
 
 var satzbauData = [
-    { parts: ['Ich', 'meist', 'immer', 'auch', 'sehe', 'hier', 'nichts'], valid: [['ich', 'meist', 'immer', 'auch', 'sehe', 'hier', 'nichts']], punct: '.' },
-    { parts: ['Er', 'meist', 'immer', 'auch', 'ist', 'niemandem', 'begegnet'], valid: [['er', 'meist', 'immer', 'auch', 'ist', 'niemandem', 'begegnet']], punct: '.' },
-    { parts: ['Ich', 'meist', 'immer', 'auch', 'gehe', 'heute', 'nirgendwohin'], valid: [['ich', 'meist', 'immer', 'auch', 'gehe', 'heute', 'nirgendwohin']], punct: '.' },
+    { parts: ['ich', 'sehe', 'hier', 'leider', 'gar', 'nichts'], valid: [['ich', 'sehe', 'hier', 'leider', 'gar', 'nichts']], punct: '.' },
+    { parts: ['er', 'ist', 'noch', 'niemandem', 'begegnet'], valid: [['er', 'ist', 'noch', 'niemandem', 'begegnet']], punct: '.' },
+    { parts: ['ich', 'gehe', 'heute', 'leider', 'nirgendwohin'], valid: [['ich', 'gehe', 'heute', 'leider', 'nirgendwohin']], punct: '.' },
     { parts: ['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen'], valid: [['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen']], punct: '.' },
-    { parts: ['Alle', 'immer', 'auch', 'haben', 'Urlaub', 'außer', 'mir'], valid: [['alle', 'immer', 'auch', 'haben', 'Urlaub', 'außer', 'mir']], punct: '.' },
-    { parts: ['Das', 'immer', 'auch', 'Land', 'wurde', 'endlich', 'unabhängig'], valid: [['das', 'immer', 'auch', 'Land', 'wurde', 'endlich', 'unabhängig']], punct: '.' },
-    { parts: ['Die', 'meist', 'immer', 'auch', 'Maschine', 'läuft', 'pausenlos'], valid: [['die', 'meist', 'immer', 'auch', 'Maschine', 'läuft', 'pausenlos']], punct: '.' },
-];
-
-// Fix: store parts with correct case for display but compare lowercase in valid
-// Redefine with proper case handling
-var satzbauData = [
-    { parts: ['ich', 'meist', 'immer', 'auch', 'sehe', 'hier', 'nichts'], valid: [['ich', 'sehe', 'hier', 'nichts']], punct: '.' },
-    { parts: ['er', 'meist', 'immer', 'auch', 'ist', 'niemandem', 'begegnet'], valid: [['er', 'ist', 'niemandem', 'begegnet']], punct: '.' },
-    { parts: ['ich', 'meist', 'immer', 'auch', 'gehe', 'heute', 'nirgendwohin'], valid: [['ich', 'gehe', 'heute', 'nirgendwohin']], punct: '.' },
-    { parts: ['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen'], valid: [['sie', 'möchte', 'weder', 'Pizza', 'noch', 'Nudeln', 'essen']], punct: '.' },
-    { parts: ['alle', 'immer', 'auch', 'haben', 'Urlaub', 'außer', 'mir'], valid: [['alle', 'haben', 'Urlaub', 'außer', 'mir']], punct: '.' },
-    { parts: ['das', 'immer', 'auch', 'Land', 'wurde', 'endlich', 'unabhängig'], valid: [['das', 'Land', 'wurde', 'endlich', 'unabhängig']], punct: '.' },
-    { parts: ['die', 'meist', 'immer', 'auch', 'Maschine', 'läuft', 'pausenlos'], valid: [['die', 'Maschine', 'läuft', 'pausenlos']], punct: '.' },
+    { parts: ['alle', 'haben', 'heute', 'Urlaub', 'außer', 'mir'], valid: [['alle', 'haben', 'heute', 'Urlaub', 'außer', 'mir']], punct: '.' },
+    { parts: ['das', 'Land', 'wurde', 'schließlich', 'unabhängig'], valid: [['das', 'Land', 'wurde', 'schließlich', 'unabhängig']], punct: '.' },
+    { parts: ['die', 'Maschine', 'läuft', 'hier', 'völlig', 'pausenlos'], valid: [['die', 'Maschine', 'läuft', 'hier', 'völlig', 'pausenlos']], punct: '.' },
 ];
 
 function getSbCursor() {
@@ -1017,14 +1005,14 @@ function initSatzbau() {
         sbRegisterZone(row, idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

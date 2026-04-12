@@ -843,18 +843,18 @@ const SATZBAU = [
     },
     {
         id: 9, hint: "⏱️ Gleichzeitigkeit (bei + Dat.)",
-        parts: ["bei", "Regen", "bleiben", "wir", "zu Hause"],
+        parts: ["bei", "starkem", "Regen", "bleiben", "wir", "meistens", "zu Hause"],
         valid: [
-            ["bei", "Regen", "bleiben", "wir", "zu Hause"],
-            ["wir", "bleiben", "bei", "Regen", "zu Hause"]
+            ["bei", "starkem", "Regen", "bleiben", "wir", "meistens", "zu Hause"],
+            ["wir", "bleiben", "bei", "starkem", "Regen", "meistens", "zu Hause"]
         ]
     },
     {
         id: 10, hint: "⏭️ Nachzeitigkeit (vor + Dat.)",
-        parts: ["vor", "dem Unterricht", "trinke", "ich", "einen Kaffee"],
+        parts: ["vor", "dem", "Unterricht", "trinke", "ich", "einen", "Kaffee"],
         valid: [
-            ["vor", "dem Unterricht", "trinke", "ich", "einen Kaffee"],
-            ["ich", "trinke", "vor", "dem Unterricht", "einen Kaffee"]
+            ["vor", "dem", "Unterricht", "trinke", "ich", "einen", "Kaffee"],
+            ["ich", "trinke", "vor", "dem", "Unterricht", "einen", "Kaffee"]
         ]
     }
 ];
@@ -862,7 +862,7 @@ const SATZBAU = [
 let sbSelected = null;
 
 function checkSatzbauAuto() {
-    SATZBAU.forEach(ex => {
+    SATZBAU.forEach((ex, sbIdx) => {
         const row = document.querySelector(`.drop-row[data-sb-id="${ex.id}"]`);
         const wrapper = document.querySelector(`.sb-exercise[data-sb-id="${ex.id}"]`);
         const chips = [...row.querySelectorAll('.chip')];
@@ -871,6 +871,58 @@ function checkSatzbauAuto() {
         wrapper.classList.remove('correct-row', 'wrong-row');
         wrapper.classList.add(ok ? 'correct-row' : 'wrong-row');
     });
+}
+
+function initSatzbau() { sbInit(); }
+
+function sbColorRow(idx) {
+    var ex = SATZBAU[idx]; if (!ex) return false;
+    var row = document.querySelector('.drop-row[data-sb-id="' + ex.id + '"]');
+    var wrapper = document.querySelector('.sb-exercise[data-sb-id="' + ex.id + '"]');
+    if (!row || !wrapper) return false;
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var answer = chips.map(function(c) { return c.dataset.orig; });
+    var ok = ex.valid.some(function(v) {
+        return v.length === answer.length && v.every(function(w, i) { return w === answer[i]; });
+    });
+    wrapper.classList.remove('correct-row', 'wrong-row');
+    if (chips.length > 0) wrapper.classList.add(ok ? 'correct-row' : 'wrong-row');
+    return ok;
+}
+
+function sbCheckAuto(idx) { setTimeout(function() { sbColorRow(idx); }, 500); }
+
+function sbShowSolution(idx) {
+    var ex = SATZBAU[idx]; if (!ex) return;
+    var row = document.querySelector('.drop-row[data-sb-id="' + ex.id + '"]');
+    var bank = document.querySelector('.chip-bank[data-sb-id="' + ex.id + '"]');
+    var wrapper = document.querySelector('.sb-exercise[data-sb-id="' + ex.id + '"]');
+    if (!row || !bank) return;
+    var dot = row.querySelector('.fixed-dot');
+    var allChips = Array.from(row.querySelectorAll('.chip')).concat(Array.from(bank.querySelectorAll('.chip')));
+    allChips.forEach(function(c) { bank.appendChild(c); });
+    var available = Array.from(bank.querySelectorAll('.chip'));
+    ex.valid[0].forEach(function(part) {
+        var chip = available.find(function(c) { return c.dataset.orig === part; });
+        if (chip) { row.insertBefore(chip, dot); available.splice(available.indexOf(chip), 1); }
+    });
+    if (wrapper) { wrapper.classList.remove('wrong-row'); wrapper.classList.add('correct-row'); }
+    updateCaps(ex.id);
+}
+
+function sbResetOne(idx) {
+    var ex = SATZBAU[idx]; if (!ex) return;
+    var row = document.querySelector('.drop-row[data-sb-id="' + ex.id + '"]');
+    var bank = document.querySelector('.chip-bank[data-sb-id="' + ex.id + '"]');
+    var wrapper = document.querySelector('.sb-exercise[data-sb-id="' + ex.id + '"]');
+    if (!row || !bank) return;
+    var dot = row.querySelector('.fixed-dot');
+    var allChips = Array.from(row.querySelectorAll('.chip')).concat(Array.from(bank.querySelectorAll('.chip')));
+    allChips.forEach(function(c) { bank.appendChild(c); });
+    row.innerHTML = '';
+    if (dot) row.appendChild(dot);
+    if (wrapper) wrapper.classList.remove('correct-row', 'wrong-row');
+    updateCaps(ex.id);
 }
 
 function sbInit() {
@@ -970,6 +1022,19 @@ function sbInit() {
             }
         });
 
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnS = document.createElement('button');
+        btnS.textContent = 'Lösen';
+        btnS.className = 'btn-satzbau';
+        btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(sbIdx);
+        var btnR = document.createElement('button');
+        btnR.textContent = 'Neustart';
+        btnR.className = 'btn-satzbau';
+        btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(sbIdx);
+        btnRow.appendChild(btnS);
+        btnRow.appendChild(btnR);
+        wrapper.appendChild(btnRow);
         c.appendChild(wrapper);
     });
 }

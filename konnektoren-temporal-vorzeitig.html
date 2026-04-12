@@ -630,13 +630,13 @@ const SATZBAU = [
     },
     {
         id:6, hint:"Vorzeitigkeit (danach — Inversion)",
-        parts:["er","stand","auf","danach","duschte","er"],
-        valid:[["er","stand","auf","danach","duschte","er"]]
+        parts:["er","stand","früh","auf","danach","duschte","er"],
+        valid:[["er","stand","früh","auf","danach","duschte","er"]]
     },
     {
         id:7, hint:"Vorzeitigkeit (danach — Tagesablauf)",
-        parts:["der Unterricht","endete","danach","ging","er","in die Mensa"],
-        valid:[["der Unterricht","endete","danach","ging","er","in die Mensa"]]
+        parts:["der Unterricht","endete",",","danach","ging","er","in die Mensa"],
+        valid:[["der Unterricht","endete",",","danach","ging","er","in die Mensa"]]
     },
     {
         id:8, hint:"Vorzeitigkeit (anschließend — Inversion)",
@@ -645,30 +645,82 @@ const SATZBAU = [
     },
     {
         id:9, hint:"Vorzeitigkeit (nach + Dativ)",
-        parts:["nach","dem Frühstück","ging","er","in die Schule"],
+        parts:["nach","dem","Frühstück","ging","er","in","die Schule"],
         valid:[
-            ["nach","dem Frühstück","ging","er","in die Schule"],
-            ["er","ging","nach","dem Frühstück","in die Schule"]
+            ["nach","dem","Frühstück","ging","er","in","die Schule"],
+            ["er","ging","nach","dem","Frühstück","in","die Schule"]
         ]
     },
     {
         id:10, hint:"Vorzeitigkeit (nach + Dativ — Abendessen)",
-        parts:["nach","dem Abendessen","sah","er","fern"],
+        parts:["nach","dem","Abendessen","sah","er","noch","fern"],
         valid:[
-            ["nach","dem Abendessen","sah","er","fern"],
-            ["er","sah","nach","dem Abendessen","fern"]
+            ["nach","dem","Abendessen","sah","er","noch","fern"],
+            ["er","sah","nach","dem","Abendessen","noch","fern"]
         ]
     },
 ];
 
 let sbSelected = null;
 
+function initSatzbau() { sbInit(); }
+
+function sbColorRow(idx) {
+    var ex = SATZBAU[idx]; if (!ex) return false;
+    var row = document.querySelector('.drop-row[data-sb-id="' + ex.id + '"]');
+    var wrapper = document.querySelector('.sb-exercise[data-sb-id="' + ex.id + '"]');
+    if (!row || !wrapper) return false;
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var answer = chips.map(function(c) { return c.dataset.orig; });
+    var ok = ex.valid.some(function(v) {
+        return v.length === answer.length && v.every(function(w, i) { return w === answer[i]; });
+    });
+    wrapper.classList.remove('correct-row', 'wrong-row');
+    if (chips.length > 0) wrapper.classList.add(ok ? 'correct-row' : 'wrong-row');
+    return ok;
+}
+
+function sbCheckAuto(idx) { setTimeout(function() { sbColorRow(idx); }, 500); }
+
+function sbShowSolution(idx) {
+    var ex = SATZBAU[idx]; if (!ex) return;
+    var row = document.querySelector('.drop-row[data-sb-id="' + ex.id + '"]');
+    var bank = document.querySelector('.chip-bank[data-sb-id="' + ex.id + '"]');
+    var wrapper = document.querySelector('.sb-exercise[data-sb-id="' + ex.id + '"]');
+    if (!row || !bank) return;
+    var dot = row.querySelector('.fixed-dot');
+    var allChips = Array.from(row.querySelectorAll('.chip')).concat(Array.from(bank.querySelectorAll('.chip')));
+    allChips.forEach(function(c) { bank.appendChild(c); });
+    var available = Array.from(bank.querySelectorAll('.chip'));
+    ex.valid[0].forEach(function(part) {
+        var chip = available.find(function(c) { return c.dataset.orig === part; });
+        if (chip) { row.insertBefore(chip, dot); available.splice(available.indexOf(chip), 1); }
+    });
+    if (wrapper) { wrapper.classList.remove('wrong-row'); wrapper.classList.add('correct-row'); }
+    updateCaps(ex.id);
+}
+
+function sbResetOne(idx) {
+    var ex = SATZBAU[idx]; if (!ex) return;
+    var row = document.querySelector('.drop-row[data-sb-id="' + ex.id + '"]');
+    var bank = document.querySelector('.chip-bank[data-sb-id="' + ex.id + '"]');
+    var wrapper = document.querySelector('.sb-exercise[data-sb-id="' + ex.id + '"]');
+    if (!row || !bank) return;
+    var dot = row.querySelector('.fixed-dot');
+    var allChips = Array.from(row.querySelectorAll('.chip')).concat(Array.from(bank.querySelectorAll('.chip')));
+    allChips.forEach(function(c) { bank.appendChild(c); });
+    row.innerHTML = '';
+    if (dot) row.appendChild(dot);
+    if (wrapper) wrapper.classList.remove('correct-row', 'wrong-row');
+    updateCaps(ex.id);
+}
+
 function sbInit() {
     const c = document.getElementById('sb-container');
     c.innerHTML = '';
     sbSelected = null;
 
-    SATZBAU.forEach(ex => {
+    SATZBAU.forEach((ex, sbIdx) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'sb-exercise';
         wrapper.dataset.sbId = ex.id;
@@ -741,6 +793,19 @@ function sbInit() {
             if (chip) { bank.appendChild(chip); updateCaps(ex.id); checkSatzbauAuto(); }
         });
 
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnS = document.createElement('button');
+        btnS.textContent = 'Lösen';
+        btnS.className = 'btn-satzbau';
+        btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(sbIdx);
+        var btnR = document.createElement('button');
+        btnR.textContent = 'Neustart';
+        btnR.className = 'btn-satzbau';
+        btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(sbIdx);
+        btnRow.appendChild(btnS);
+        btnRow.appendChild(btnR);
+        wrapper.appendChild(btnRow);
         c.appendChild(wrapper);
     });
 }

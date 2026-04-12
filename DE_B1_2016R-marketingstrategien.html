@@ -375,7 +375,87 @@ let sbDragged=null;
 function sbMakeChip(word,isStatic=false){ const span=document.createElement('span'); span.className='sb-chip'+(isStatic?' static-chip':''); span.textContent=word; if(!isStatic){ span.draggable=true; span.ondragstart=e=>{ sbDragged=span; span.classList.add('dragging'); }; span.ondragend=e=>{ span.classList.remove('dragging'); sbDragged=null; }; } return span; }
 function sbRegisterZone(zone,idx){ zone.ondragover=e=>{ e.preventDefault(); zone.classList.add('drag-over'); }; zone.ondragleave=e=>zone.classList.remove('drag-over'); zone.ondrop=e=>{ e.preventDefault(); zone.classList.remove('drag-over'); if(sbDragged) zone.appendChild(sbDragged); setTimeout(()=>sbCheckAuto(idx),500); }; }
 function sbUpdateCapitalization(zone){ const chips=[...zone.querySelectorAll('.sb-chip:not(.static-chip)')]; chips.forEach((ch,i)=>{ const w=ch.dataset.original||ch.textContent; if(!ch.dataset.original) ch.dataset.original=w; if(i===0) ch.textContent=w[0].toUpperCase()+w.slice(1); else ch.textContent=w; }); }
-function sbCheckAuto(idx){ const zone=document.getElementById('sb_drop_'+idx); const fb=document.getElementById('sb_fb_'+idx); sbUpdateCapitalization(zone); const chips=[...zone.querySelectorAll('.sb-chip')]; const attempt=chips.map(c=>c.textContent).join(' '); const correct=SATZBAU_DATA[idx].correct; if(chips.length===0){ fb.textContent=''; return; } if(attempt===correct){ fb.className='sb-feedback ok'; fb.textContent='✓ Richtig!'; const allDone=[...document.querySelectorAll('.sb-feedback')].every(f=>f.classList.contains('ok')); if(allDone) stopTimer(4); } else if(chips.length===correct.split(' ').length){ fb.className='sb-feedback err'; fb.textContent='✗ Noch nicht richtig.'; } else fb.textContent=''; }
+function sbCheckAuto(idx){
+  const zone=document.getElementById('sb_drop_'+idx);
+  const src=document.getElementById('sb_src_'+idx);
+  const fb=document.getElementById('sb_fb_'+idx);
+  if(src && src.querySelectorAll('.sb-chip').length>0){
+    if(fb){ fb.textContent=''; fb.className='sb-feedback'; }
+    return;
+  }
+  setTimeout(function(){
+    if(!zone||!fb) return;
+    sbUpdateCapitalization(zone);
+    const chips=[...zone.querySelectorAll('.sb-chip')];
+    const attempt=chips.map(c=>c.textContent).join(' ');
+    const correct=SATZBAU_DATA[idx].correct;
+    if(chips.length===0){ fb.textContent=''; return; }
+    if(attempt===correct){
+      fb.className='sb-feedback ok'; fb.textContent='✓ Richtig!';
+      const allDone=[...document.querySelectorAll('.sb-feedback')].every(f=>f.classList.contains('ok'));
+      if(allDone) stopTimer(4);
+    } else if(chips.length===correct.split(' ').length){
+      fb.className='sb-feedback err'; fb.textContent='✗ Noch nicht richtig.';
+    } else {
+      fb.textContent='';
+    }
+  },500);
+}
+function sbColorRow(idx) {
+  const zone = document.getElementById('sb_drop_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (!zone) return false;
+  const chips = [...zone.querySelectorAll('.sb-chip')];
+  const attempt = chips.map(c => c.textContent).join(' ');
+  const correct = SATZBAU_DATA[idx].correct;
+  const ok = attempt === correct && chips.length > 0;
+  chips.forEach(c => { c.classList.remove('correct', 'wrong'); c.classList.add(ok ? 'correct' : 'wrong'); });
+  return ok;
+}
+function sbShowSolution(idx) {
+  const src = document.getElementById('sb_src_' + idx);
+  const drop = document.getElementById('sb_drop_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (!src || !drop) return;
+  const correct = SATZBAU_DATA[idx].correct.split(' ');
+  const allChips = [...src.querySelectorAll('.sb-chip'), ...drop.querySelectorAll('.sb-chip')];
+  src.querySelectorAll('.sb-chip').forEach(c => drop.appendChild(c));
+  drop.querySelectorAll('.sb-chip').forEach(c => src.appendChild(c));
+  // now all in src
+  correct.forEach(w => {
+    const chip = [...src.querySelectorAll('.sb-chip')].find(c => c.textContent === w && src.contains(c));
+    if (chip) { chip.classList.add('correct'); drop.appendChild(chip); }
+  });
+  if (fb) { fb.className = 'sb-feedback ok'; fb.textContent = '\u2713 Richtig!'; }
+}
+function sbResetOne(idx) {
+  const src = document.getElementById('sb_src_' + idx);
+  const drop = document.getElementById('sb_drop_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (!src || !drop) return;
+  [...drop.querySelectorAll('.sb-chip')].forEach(c => { c.classList.remove('correct', 'wrong'); src.appendChild(c); });
+  if (fb) { fb.className = 'sb-feedback'; fb.textContent = ''; }
+}
+function initSatzbau() {
+  buildSatzbau();
+  SATZBAU_DATA.forEach((_, idx) => {
+    const drop = document.getElementById('sb_drop_' + idx);
+    if (!drop) return;
+    const item = drop.parentElement;
+    if (!item.querySelector('.sb-btn-row')) {
+      const btnRow = document.createElement('div');
+      btnRow.className = 'sb-btn-row';
+      const btnL = document.createElement('button');
+      btnL.textContent = 'L\u00f6sen'; btnL.className = 'btn-satzbau';
+      btnL.onclick = (i => () => sbShowSolution(i))(idx);
+      const btnN = document.createElement('button');
+      btnN.textContent = 'Neustart'; btnN.className = 'btn-satzbau';
+      btnN.onclick = (i => () => sbResetOne(i))(idx);
+      btnRow.appendChild(btnL); btnRow.appendChild(btnN);
+      item.appendChild(btnRow);
+    }
+  });
+}
 function buildSatzbau(){ const c=document.getElementById('sb-container'); c.innerHTML=''; SATZBAU_DATA.forEach((d,idx)=>{ let shuffled=[...d.chips]; let ok=false; for(let attempt=0;attempt<50&&!ok;attempt++){ for(let i=shuffled.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]; } ok=shuffled.some((w,i)=>w!==d.chips[i]); } const div=document.createElement('div'); div.className='sb-item'; const prompt=document.createElement('div'); prompt.className='sb-prompt'; prompt.textContent=(idx+1)+'. '+d.prompt; div.appendChild(prompt); const chipArea=document.createElement('div'); chipArea.className='sb-chips'; chipArea.id='sb_src_'+idx; shuffled.forEach(w=>{ const isPunct=/^[.,!?;:—–,]$/.test(w); chipArea.appendChild(sbMakeChip(w,isPunct)); }); const dropZone=document.createElement('div'); dropZone.className='sb-drop'; dropZone.id='sb_drop_'+idx; sbRegisterZone(dropZone,idx); sbRegisterZone(chipArea,idx); const fb=document.createElement('div'); fb.className='sb-feedback'; fb.id='sb_fb_'+idx; div.appendChild(chipArea); div.appendChild(dropZone); div.appendChild(fb); c.appendChild(div); }); }
 
 // ── WORTSCHATZ ───────────────────────────────────────────────────

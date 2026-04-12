@@ -370,14 +370,17 @@ function initSatzbau() {
     if (!div) return;
     var parent = div.parentElement;
     var btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
-    var solveBtn = document.createElement('button');
-    solveBtn.className = 'btn'; solveBtn.textContent = 'Lösen';
-    (function(i) { solveBtn.addEventListener('click', function() { sbShowSolution(i); }); })(idx);
-    var resetBtn = document.createElement('button');
-    resetBtn.className = 'btn'; resetBtn.textContent = '↺ Neustart';
-    (function(i) { resetBtn.addEventListener('click', function() { sbResetOne(i); }); })(idx);
-    btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+    btnRow.className = 'sb-btn-row';
+    var btnS = document.createElement('button');
+    btnS.textContent = 'Lösen';
+    btnS.className = 'btn-satzbau';
+    btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnR = document.createElement('button');
+    btnR.textContent = 'Neustart';
+    btnR.className = 'btn-satzbau';
+    btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnS);
+    btnRow.appendChild(btnR);
     parent.appendChild(btnRow);
   });
 }

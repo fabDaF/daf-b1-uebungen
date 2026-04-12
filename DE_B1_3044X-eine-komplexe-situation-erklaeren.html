@@ -380,12 +380,18 @@ function initSatzbau() {
       if(chip&&zone.contains(chip)){ bank.appendChild(chip); sbUpdateCapitalization(zone); var fb=document.getElementById('sb-fb-'+idx); if(fb){fb.className='satzbau-feedback';fb.textContent='';} zone.querySelectorAll('.chip').forEach(function(c){c.classList.remove('correct','incorrect');}); }
     });
     var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb-fb-'+idx;
-    var btnRow=document.createElement('div'); btnRow.className='sb-btn-row';
-    var btnL=document.createElement('button'); btnL.textContent='L\u00f6sen'; btnL.className='btn-satzbau';
-    btnL.onclick=(function(i){return function(){sbShowSolution(i);};})(idx);
-    var btnN=document.createElement('button'); btnN.textContent='Neustart'; btnN.className='btn-satzbau';
-    btnN.onclick=(function(i){return function(){sbResetOne(i);};})(idx);
-    btnRow.appendChild(btnL); btnRow.appendChild(btnN);
+    var btnRow = document.createElement('div');
+    btnRow.className = 'sb-btn-row';
+    var btnS = document.createElement('button');
+    btnS.textContent = 'Lösen';
+    btnS.className = 'btn-satzbau';
+    btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnR = document.createElement('button');
+    btnR.textContent = 'Neustart';
+    btnR.className = 'btn-satzbau';
+    btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnS);
+    btnRow.appendChild(btnR);
     div.appendChild(bank); div.appendChild(zone); div.appendChild(fb); div.appendChild(btnRow);
     cont.appendChild(div);
   });

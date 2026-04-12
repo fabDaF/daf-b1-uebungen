@@ -375,13 +375,13 @@ function resetTab(n) {
 
 /* ═══ SATZBAU ═══ */
 var satzbauData = [
-  { parts: ['er', 'gibt', 'dem', 'Kind', 'ein', 'Buch'], valid: [['er', 'gibt', 'dem', 'Kind', 'ein', 'Buch']], punct: '.' },
-  { parts: ['sie', 'schenkt', 'ihrer', 'Mutter', 'Blumen'], valid: [['sie', 'schenkt', 'ihrer', 'Mutter', 'Blumen']], punct: '.' },
-  { parts: ['er', 'erklärt', 'den', 'Schülern', 'die', 'Aufgabe'], valid: [['er', 'erklärt', 'den', 'Schülern', 'die', 'Aufgabe']], punct: '.' },
-  { parts: ['sie', 'empfiehlt', 'ihrem', 'Chef', 'das', 'Restaurant'], valid: [['sie', 'empfiehlt', 'ihrem', 'Chef', 'das', 'Restaurant']], punct: '.' },
-  { parts: ['er', 'bringt', 'seinem', 'Vater', 'Blumen', 'mit'], valid: [['er', 'bringt', 'seinem', 'Vater', 'Blumen', 'mit']], punct: '.' },
-  { parts: ['sie', 'zeigt', 'dem', 'Touristen', 'den', 'Weg'], valid: [['sie', 'zeigt', 'dem', 'Touristen', 'den', 'Weg']], punct: '.' },
-  { parts: ['wir', 'schicken', 'unserer', 'Freundin', 'eine', 'E-Mail'], valid: [['wir', 'schicken', 'unserer', 'Freundin', 'eine', 'E-Mail']], punct: '.' }
+  { parts: ['er', 'gibt', 'dem', 'Kind', 'ein', 'schönes', 'Buch'], valid: [['er', 'gibt', 'dem', 'Kind', 'ein', 'schönes', 'Buch']], punct: '.' },
+  { parts: ['sie', 'schenkt', 'ihrer', 'Mutter', 'schöne', 'rote', 'Blumen'], valid: [['sie', 'schenkt', 'ihrer', 'Mutter', 'schöne', 'rote', 'Blumen']], punct: '.' },
+  { parts: ['er', 'erklärt', 'geduldig', 'den', 'Schülern', 'die', 'Aufgabe'], valid: [['er', 'erklärt', 'geduldig', 'den', 'Schülern', 'die', 'Aufgabe']], punct: '.' },
+  { parts: ['sie', 'empfiehlt', 'ihrem', 'Chef', 'das', 'Restaurant', 'wärmstens'], valid: [['sie', 'empfiehlt', 'ihrem', 'Chef', 'das', 'Restaurant', 'wärmstens']], punct: '.' },
+  { parts: ['er', 'bringt', 'seinem', 'Vater', 'frische', 'Blumen', 'mit'], valid: [['er', 'bringt', 'seinem', 'Vater', 'frische', 'Blumen', 'mit']], punct: '.' },
+  { parts: ['sie', 'zeigt', 'dem', 'Touristen', 'freundlich', 'den', 'Weg'], valid: [['sie', 'zeigt', 'dem', 'Touristen', 'freundlich', 'den', 'Weg']], punct: '.' },
+  { parts: ['wir', 'schicken', 'unserer', 'Freundin', 'eine', 'lange', 'E-Mail'], valid: [['wir', 'schicken', 'unserer', 'Freundin', 'eine', 'lange', 'E-Mail']], punct: '.' }
 ];
 
 var sbDragged = null;
@@ -417,14 +417,17 @@ function sbCheckAuto(idx) {
   var zone=document.getElementById('sb-row-'+idx);
   var fb=document.getElementById('sb-fb-'+idx);
   if(!zone) return;
-  var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
+  var chipsNow=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
   var expected=satzbauData[idx].parts.length;
-  if(chips.length<expected) return;
-  var got=chips.map(function(c){ return c.dataset.orig; });
-  var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
-  zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
-  if(fb){ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge'; }
-  if(ok) sbCheckAllDone();
+  if(chipsNow.length<expected) return;
+  setTimeout(function() {
+    var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
+    var got=chips.map(function(c){ return c.dataset.orig; });
+    var ok=satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
+    zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); });
+    if(fb){ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge'; }
+    if(ok) sbCheckAllDone();
+  }, 500);
 }
 function sbCheckAllDone() {
   var allOk=satzbauData.every(function(_,i){ var z=document.getElementById('sb-row-'+i); if(!z) return false; var chips=z.querySelectorAll('.chip'); return chips.length>0&&Array.from(chips).every(function(c){return c.classList.contains('correct');}); });
@@ -445,6 +448,38 @@ function sbShowSolution() {
     if(fb){ fb.className='satzbau-feedback correct'; fb.textContent='✓ Korrekt!'; }
   });
 }
+
+function sbColorRow(idx) {
+  var zone=document.getElementById('sb-row-'+idx); if(!zone) return false;
+  var chips=Array.from(zone.querySelectorAll('.chip:not(.punct-chip)'));
+  var got=chips.map(function(c){ return c.dataset.orig; });
+  return satzbauData[idx].valid.some(function(v){ return JSON.stringify(got)===JSON.stringify(v); });
+}
+
+function sbShowSolution(idx) {
+  var bank=document.getElementById('sb-bank-'+idx);
+  var zone=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  var item=satzbauData[idx];
+  if(!bank||!zone||!item) return;
+  bank.innerHTML=''; zone.innerHTML='';
+  item.valid[0].forEach(function(w){ var chip=sbMakeChip(w,idx); chip.classList.add('correct'); zone.appendChild(chip); });
+  var pc=document.createElement('div'); pc.className='chip punct-chip correct'; pc.textContent=item.punct; zone.appendChild(pc);
+  sbUpdateCapitalization(zone);
+  if(fb){ fb.className='satzbau-feedback correct'; fb.textContent='✓ Korrekt!'; }
+}
+
+function sbResetOne(idx) {
+  var bank=document.getElementById('sb-bank-'+idx);
+  var zone=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  var item=satzbauData[idx];
+  if(!bank||!zone||!item) return;
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c){ c.classList.remove('correct','incorrect'); bank.appendChild(c); });
+  zone.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+  if(fb){ fb.className='satzbau-feedback'; fb.textContent=''; }
+}
+
 function initSatzbau() {
   var cont=document.getElementById('sbContainer'); if(!cont) return;
   cont.innerHTML='';
@@ -466,7 +501,19 @@ function initSatzbau() {
       if(chip&&zone.contains(chip)){ bank.appendChild(chip); sbUpdateCapitalization(zone); var fb=document.getElementById('sb-fb-'+idx); if(fb){fb.className='satzbau-feedback';fb.textContent='';} zone.querySelectorAll('.chip').forEach(function(c){c.classList.remove('correct','incorrect');}); }
     });
     var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb-fb-'+idx;
-    div.appendChild(bank); div.appendChild(zone); div.appendChild(fb);
+    var btnRow = document.createElement('div');
+    btnRow.className = 'sb-btn-row';
+    var btnS = document.createElement('button');
+    btnS.textContent = 'Lösen';
+    btnS.className = 'btn-satzbau';
+    btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnR = document.createElement('button');
+    btnR.textContent = 'Neustart';
+    btnR.className = 'btn-satzbau';
+    btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnS);
+    btnRow.appendChild(btnR);
+    div.appendChild(bank); div.appendChild(zone); div.appendChild(fb); div.appendChild(btnRow);
     cont.appendChild(div);
   });
 }

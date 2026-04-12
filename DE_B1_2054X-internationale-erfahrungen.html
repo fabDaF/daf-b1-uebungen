@@ -677,12 +677,12 @@ var MC_DATA = [
 var satzbauData = [
     { parts: ['in', 'fremde', 'welten', 'eintauchen', 'kann', 'bereichernd', 'sein'], valid: [['in', 'fremde', 'welten', 'eintauchen', 'kann', 'bereichernd', 'sein']], punct: '.' },
     { parts: ['man', 'braucht', 'ein', 'visum', 'für', 'die', 'einreise'], valid: [['man', 'braucht', 'ein', 'visum', 'für', 'die', 'einreise']], punct: '.' },
-    { parts: ['der', 'austauschdienst', 'hilft', 'bei', 'den', 'behördenwegen'], valid: [['der', 'austauschdienst', 'hilft', 'bei', 'den', 'behördenwegen']], punct: '.' },
+    { parts: ['der', 'austauschdienst', 'hilft', 'immer', 'bei', 'den', 'behördenwegen'], valid: [['der', 'austauschdienst', 'hilft', 'immer', 'bei', 'den', 'behördenwegen']], punct: '.' },
     { parts: ['das', 'visum', 'beantragt', 'man', 'bei', 'der', 'botschaft'], valid: [['das', 'visum', 'beantragt', 'man', 'bei', 'der', 'botschaft']], punct: '.' },
-    { parts: ['freiwillige', 'arbeit', 'ist', 'lehrreich', 'und', 'bereichernd'], valid: [['freiwillige', 'arbeit', 'ist', 'lehrreich', 'und', 'bereichernd']], punct: '.' },
-    { parts: ['sie', 'ist', 'einem', 'kulturschock', 'ausgesetzt'], valid: [['sie', 'ist', 'einem', 'kulturschock', 'ausgesetzt']], punct: '.' },
-    { parts: ['erfahrungen', 'auf', 'dem', 'arbeitsmarkt', 'sind', 'wichtig'], valid: [['erfahrungen', 'auf', 'dem', 'arbeitsmarkt', 'sind', 'wichtig']], punct: '.' },
-    { parts: ['die', 'hochschule', 'hat', 'ein', 'auslandsamt'], valid: [['die', 'hochschule', 'hat', 'ein', 'auslandsamt']], punct: '.' }
+    { parts: ['freiwillige', 'arbeit', 'ist', 'sehr', 'lehrreich', 'und', 'bereichernd'], valid: [['freiwillige', 'arbeit', 'ist', 'sehr', 'lehrreich', 'und', 'bereichernd']], punct: '.' },
+    { parts: ['sie', 'ist', 'dort', 'stark', 'einem', 'kulturschock', 'ausgesetzt'], valid: [['sie', 'ist', 'dort', 'stark', 'einem', 'kulturschock', 'ausgesetzt']], punct: '.' },
+    { parts: ['erfahrungen', 'auf', 'dem', 'arbeitsmarkt', 'sind', 'sehr', 'wichtig'], valid: [['erfahrungen', 'auf', 'dem', 'arbeitsmarkt', 'sind', 'sehr', 'wichtig']], punct: '.' },
+    { parts: ['die', 'hochschule', 'hat', 'ein', 'eigenes', 'großes', 'auslandsamt'], valid: [['die', 'hochschule', 'hat', 'ein', 'eigenes', 'großes', 'auslandsamt']], punct: '.' }
 ];
 
 // ========================
@@ -1064,9 +1064,22 @@ function initSatzbau() {
         feedback.className = 'satzbau-feedback';
         feedback.setAttribute('data-sent', idx);
 
+        let btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        let btnL = document.createElement('button');
+        btnL.textContent = 'L\u00f6sen';
+        btnL.className = 'btn-satzbau';
+        btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        let btnN = document.createElement('button');
+        btnN.textContent = 'Neustart';
+        btnN.className = 'btn-satzbau';
+        btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnL);
+        btnRow.appendChild(btnN);
         div.appendChild(bank);
         div.appendChild(builder);
         div.appendChild(feedback);
+        div.appendChild(btnRow);
         cont.appendChild(div);
     });
 }
@@ -1099,20 +1112,20 @@ function sbChipDrop(e, sentIdx) {
     sbCheckAuto(sentIdx);
 }
 
-function sbCheckAuto(sentIdx) {
-    let builder = document.querySelector(`.sentence-builder[data-sent="${sentIdx}"]`);
+function sbCheckAuto(idx) {
+    let builder = document.querySelector(`.sentence-builder[data-sent="${idx}"]`);
     let chips = builder.querySelectorAll('.sb-chip');
     let sentence = [];
     chips.forEach(c => sentence.push(c.textContent.toLowerCase()));
 
     let isValid = false;
-    sbState[sentIdx].valid.forEach(pattern => {
+    sbState[idx].valid.forEach(pattern => {
         if (sentence.join(' ') === pattern.join(' ')) {
             isValid = true;
         }
     });
 
-    let feedback = document.querySelector(`.satzbau-feedback[data-sent="${sentIdx}"]`);
+    let feedback = document.querySelector(`.satzbau-feedback[data-sent="${idx}"]`);
     if (isValid) {
         chips.forEach(c => c.classList.remove('wrong-pos'));
         feedback.classList.add('show', 'correct');
@@ -1144,6 +1157,38 @@ function sbCheckAllDone() {
         }
     }
     return allDone;
+}
+
+
+function sbColorRow(idx) {
+    var builder = document.querySelector('.sentence-builder[data-sent="' + idx + '"]');
+    if (!builder) return false;
+    var chips = Array.from(builder.querySelectorAll('.sb-chip'));
+    var sentence = chips.map(function(c){ return c.textContent.toLowerCase(); });
+    return sbState[idx].valid.some(function(pattern){
+        return sentence.join(' ') === pattern.join(' ');
+    });
+}
+
+function sbShowSolution(idx) {
+    var builder = document.querySelector('.sentence-builder[data-sent="' + idx + '"]');
+    var bank    = document.querySelector('.chip-bank[data-sent="' + idx + '"]');
+    if (!builder || !bank) return;
+    Array.from(builder.querySelectorAll('.sb-chip')).forEach(function(c){ bank.appendChild(c); });
+    sbState[idx].valid[0].forEach(function(word){
+        var chip = Array.from(bank.querySelectorAll('.sb-chip')).find(function(c){ return c.textContent.toLowerCase() === word; });
+        if (chip) { var punkt = builder.querySelector('.sb-punkt'); builder.insertBefore(chip, punkt); }
+    });
+    sbCheckAuto(idx);
+}
+
+function sbResetOne(idx) {
+    var builder  = document.querySelector('.sentence-builder[data-sent="' + idx + '"]');
+    var bank     = document.querySelector('.chip-bank[data-sent="' + idx + '"]');
+    var feedback = document.querySelector('.satzbau-feedback[data-sent="' + idx + '"]');
+    if (!builder || !bank) return;
+    Array.from(builder.querySelectorAll('.sb-chip')).forEach(function(c){ bank.appendChild(c); });
+    if (feedback) { feedback.textContent = ''; feedback.className = 'satzbau-feedback'; }
 }
 
 function resetAllSatzbau() {

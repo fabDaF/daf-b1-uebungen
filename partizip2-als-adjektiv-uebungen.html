@@ -803,29 +803,22 @@ function resetUmformung() {
 // TAB 4: SATZBAU — nach satzbau-drag-drop Skill
 // ══════════════════════════════════════════════════════════
 var satzbauData = [
-  { parts: ['das vergessene Kind', 'war', 'sehr verängstigt'],
-    valid: [['das vergessene Kind','war','sehr verängstigt'],
-            ['sehr verängstigt','war','das vergessene Kind']], punct: '.' },
-  { parts: ['die gestressten Eltern', 'fuhren', 'schnell', 'zum Parkplatz zurück'],
-    valid: [['die gestressten Eltern','fuhren','schnell','zum Parkplatz zurück'],
-            ['schnell','fuhren','die gestressten Eltern','zum Parkplatz zurück']], punct: '.' },
-  { parts: ['er', 'aß', '100g gebratenen Schinken', 'zum Frühstück'],
-    valid: [['er','aß','100g gebratenen Schinken','zum Frühstück'],
-            ['zum Frühstück','aß','er','100g gebratenen Schinken']], punct: '.' },
-  { parts: ['die verletzte Frau', 'wurde', 'sofort', 'ins Krankenhaus gebracht'],
-    valid: [['die verletzte Frau','wurde','sofort','ins Krankenhaus gebracht'],
-            ['sofort','wurde','die verletzte Frau','ins Krankenhaus gebracht']], punct: '.' },
-  { parts: ['wir', 'kauften', 'eine gebrauchte Waschmaschine'],
-    valid: [['wir','kauften','eine gebrauchte Waschmaschine']], punct: '.' },
-  { parts: ['das gestohlene Fahrrad', 'wurde', 'nach zwei Tagen', 'gefunden'],
-    valid: [['das gestohlene Fahrrad','wurde','nach zwei Tagen','gefunden'],
-            ['nach zwei Tagen','wurde','das gestohlene Fahrrad','gefunden']], punct: '.' },
-  { parts: ['die erklärte Regel', 'ist', 'jetzt', 'klar'],
-    valid: [['die erklärte Regel','ist','jetzt','klar'],
-            ['jetzt','ist','die erklärte Regel','klar']], punct: '.' },
-  { parts: ['er', 'half', 'dem verletzten Mann', 'sofort'],
-    valid: [['er','half','dem verletzten Mann','sofort'],
-            ['sofort','half','er','dem verletzten Mann']], punct: '.' }
+  { parts: ['das', 'vergessene', 'Kind', 'war', 'allein', 'und', 'sehr verängstigt'],
+    valid: [['das', 'vergessene', 'Kind', 'war', 'allein', 'und', 'sehr verängstigt']], punct: '.' },
+  { parts: ['die', 'gestressten', 'Eltern', 'fuhren', 'sehr', 'schnell', 'zurück'],
+    valid: [['die', 'gestressten', 'Eltern', 'fuhren', 'sehr', 'schnell', 'zurück']], punct: '.' },
+  { parts: ['er', 'aß', 'morgens', 'zum', 'Frühstück', 'gebratenen', 'Schinken'],
+    valid: [['er', 'aß', 'morgens', 'zum', 'Frühstück', 'gebratenen', 'Schinken']], punct: '.' },
+  { parts: ['die', 'verletzte', 'Frau', 'wurde', 'sofort', 'ins', 'Krankenhaus gebracht'],
+    valid: [['die', 'verletzte', 'Frau', 'wurde', 'sofort', 'ins', 'Krankenhaus gebracht']], punct: '.' },
+  { parts: ['wir', 'kauften', 'eine', 'gebrauchte', 'aber', 'gute', 'Waschmaschine'],
+    valid: [['wir', 'kauften', 'eine', 'gebrauchte', 'aber', 'gute', 'Waschmaschine']], punct: '.' },
+  { parts: ['das', 'gestohlene', 'Fahrrad', 'wurde', 'nach', 'zwei Tagen', 'gefunden'],
+    valid: [['das', 'gestohlene', 'Fahrrad', 'wurde', 'nach', 'zwei Tagen', 'gefunden']], punct: '.' },
+  { parts: ['die', 'erklärte', 'Regel', 'ist', 'jetzt', 'viel', 'klarer'],
+    valid: [['die', 'erklärte', 'Regel', 'ist', 'jetzt', 'viel', 'klarer']], punct: '.' },
+  { parts: ['er', 'half', 'dem', 'verletzten', 'Mann', 'sofort', 'weiter'],
+    valid: [['er', 'half', 'dem', 'verletzten', 'Mann', 'sofort', 'weiter']], punct: '.' }
 ];
 
 var sbDragged = null;
@@ -997,18 +990,16 @@ function initSatzbau() {
     sbRegisterZone(bank, idx);
     sbRegisterZone(row, idx);
 
-    // Lösungs-Button pro Satz
-    var solBtn = document.createElement('button');
-    solBtn.className = 'btn btn-sol';
-    solBtn.style.marginTop = '8px';
-    solBtn.style.fontSize = '0.8em';
-    solBtn.textContent = 'Lösung';
-    (function(i) { solBtn.addEventListener('click', function() { sbShowSolution(i); }); })(idx);
-
     wrap.appendChild(bank);
     wrap.appendChild(row);
     wrap.appendChild(fb);
-    wrap.appendChild(solBtn);
+    var btnRow=document.createElement('div'); btnRow.className='sb-btn-row';
+    var btnS=document.createElement('button'); btnS.className='btn-satzbau'; btnS.textContent='Lösen';
+    btnS.onclick=(function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnR=document.createElement('button'); btnR.className='btn-satzbau'; btnR.textContent='Neustart';
+    btnR.onclick=(function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnS); btnRow.appendChild(btnR);
+    wrap.appendChild(btnRow);
     container.appendChild(wrap);
   });
 }
@@ -1036,6 +1027,20 @@ function sbShowSolution(idx) {
   });
   fb.textContent = '';
   setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+function sbResetOne(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-' + idx);
+  var fb   = document.getElementById('sb-fb-' + idx);
+  if (!bank || !row) return;
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c) {
+    c.classList.remove('correct', 'incorrect');
+    bank.appendChild(c);
+  });
+  row.classList.remove('correct', 'incorrect');
+  var punkt = row.querySelector('.sb-punkt');
+  if (punkt) row.removeChild(punkt);
+  if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
 }
 
 function resetSatzbau() {

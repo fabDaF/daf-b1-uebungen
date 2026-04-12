@@ -662,24 +662,24 @@ var LUECKEN_DATA = [
    ============================================================ */
 var SATZBAU_DATA = [
     {
-        parts: ['k\u00f6nnten', 'sie', 'mir', 'bitte', 'helfen'],
-        valid: [['k\u00f6nnten', 'sie', 'mir', 'bitte', 'helfen']]
+        parts: ['k\u00f6nnten', 'sie', 'mir', 'heute', 'noch', 'bitte', 'helfen'],
+        valid: [['k\u00f6nnten', 'sie', 'mir', 'heute', 'noch', 'bitte', 'helfen']]
     },
     {
-        parts: ['w\u00fcrden', 'sie', 'das', 'freundlicherweise', 'erl\u00e4utern'],
-        valid: [['w\u00fcrden', 'sie', 'das', 'freundlicherweise', 'erl\u00e4utern']]
+        parts: ['w\u00fcrden', 'sie', 'mir', 'das', 'bitte', 'freundlicherweise', 'erl\u00e4utern'],
+        valid: [['w\u00fcrden', 'sie', 'mir', 'das', 'bitte', 'freundlicherweise', 'erl\u00e4utern']]
     },
     {
-        parts: ['sie', 'sollten', 'das', 'ausdr\u00fccklich', 'erw\u00e4hnen'],
-        valid: [['sie', 'sollten', 'das', 'ausdr\u00fccklich', 'erw\u00e4hnen']]
+        parts: ['sie', 'sollten', 'das', 'noch', 'unbedingt', 'ausdr\u00fccklich', 'erw\u00e4hnen'],
+        valid: [['sie', 'sollten', 'das', 'noch', 'unbedingt', 'ausdr\u00fccklich', 'erw\u00e4hnen']]
     },
     {
-        parts: ['ich', 'm\u00f6chte', 'einen', 'termin', 'vereinbaren'],
-        valid: [['ich', 'm\u00f6chte', 'einen', 'termin', 'vereinbaren']]
+        parts: ['ich', 'm\u00f6chte', 'gerne', 'einen', 'kurzen', 'termin', 'vereinbaren'],
+        valid: [['ich', 'm\u00f6chte', 'gerne', 'einen', 'kurzen', 'termin', 'vereinbaren']]
     },
     {
-        parts: ['d\u00fcrfte', 'ich', 'sie', 'kurz', 'etwas', 'fragen'],
-        valid: [['d\u00fcrfte', 'ich', 'sie', 'kurz', 'etwas', 'fragen']]
+        parts: ['d\u00fcrfte', 'ich', 'sie', 'kurz', 'etwas', 'wichtiges', 'fragen'],
+        valid: [['d\u00fcrfte', 'ich', 'sie', 'kurz', 'etwas', 'wichtiges', 'fragen']]
     }
 ];
 
@@ -1109,6 +1109,20 @@ function sbShowSolution(idx) {
     fb.textContent = '';
     setTimeout(function() { sbUpdateCapitalization(row); sbCheckAuto(idx); }, 100);
 }
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row  = document.getElementById('sb-row-' + idx);
+    var fb   = document.getElementById('sb-fb-' + idx);
+    if (!bank || !row) return;
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        bank.appendChild(c);
+    });
+    row.classList.remove('correct', 'incorrect');
+    var punkt = row.querySelector('.sb-punkt');
+    if (punkt) row.removeChild(punkt);
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+}
 
 function initSatzbau() {
     var container = document.getElementById('satzbauContainer')
@@ -1124,10 +1138,13 @@ function initSatzbau() {
         row.className = 'sentence-builder'; row.id = 'sb-row-' + idx;
         var fb = document.createElement('div');
         fb.className = 'satzbau-feedback'; fb.id = 'sb-fb-' + idx;
-        var solBtn = document.createElement('button');
-        solBtn.className = 'btn btn-show'; solBtn.textContent = 'Lösung';
-        (function(i) { solBtn.onclick = function() { sbShowSolution(i); }; })(idx);
-        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(solBtn);
+        var btnRow=document.createElement('div'); btnRow.className='sb-btn-row';
+        var btnS=document.createElement('button'); btnS.className='btn btn-show'; btnS.textContent='Lösung';
+        btnS.onclick=(function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnR=document.createElement('button'); btnR.className='btn btn-reset'; btnR.textContent='Neustart';
+        btnR.onclick=(function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnS); btnRow.appendChild(btnR);
+        item.appendChild(bank); item.appendChild(row); item.appendChild(fb); item.appendChild(btnRow);
         container.appendChild(item);
         var parts = ex.parts.slice();
         for (var i = parts.length - 1; i > 0; i--) {

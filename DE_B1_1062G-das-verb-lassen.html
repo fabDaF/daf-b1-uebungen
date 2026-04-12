@@ -28,8 +28,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 .timer-display .current-time { color: #667eea; font-weight: 700; }
 .timer-display .best-time { color: #f39c12; font-weight: 600; }
@@ -517,8 +517,8 @@ function resetTimer3() {
 
 var satzbauData = [
     {
-        parts: ['ich', 'immer', 'auch', 'lasse', 'das', 'Auto', 'reparieren'],
-        valid: [['ich', 'immer', 'auch', 'lasse', 'das', 'Auto', 'reparieren']],
+        parts: ['ich', 'lasse', 'das', 'Auto', 'immer', 'reparieren'],
+        valid: [['ich', 'lasse', 'das', 'Auto', 'immer', 'reparieren']],
         punct: '.'
     },
     {
@@ -527,23 +527,23 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['das', 'immer', 'auch', 'Problem', 'lässt', 'sich', 'lösen'],
-        valid: [['das', 'immer', 'auch', 'Problem', 'lässt', 'sich', 'lösen']],
+        parts: ['das', 'Problem', 'lässt', 'sich', 'immer', 'lösen'],
+        valid: [['das', 'Problem', 'lässt', 'sich', 'immer', 'lösen']],
         punct: '.'
     },
     {
-        parts: ['er', 'auch', 'hat', 'die', 'Tür', 'offen', 'gelassen'],
-        valid: [['er', 'auch', 'hat', 'die', 'Tür', 'offen', 'gelassen']],
+        parts: ['er', 'hat', 'die', 'Tür', 'auch', 'offen', 'gelassen'],
+        valid: [['er', 'hat', 'die', 'Tür', 'auch', 'offen', 'gelassen']],
         punct: '.'
     },
     {
-        parts: ['sie', 'auch', 'haben', 'das', 'Haus', 'renovieren', 'lassen'],
-        valid: [['sie', 'auch', 'haben', 'das', 'Haus', 'renovieren', 'lassen']],
+        parts: ['sie', 'haben', 'das', 'Haus', 'auch', 'renovieren', 'lassen'],
+        valid: [['sie', 'haben', 'das', 'Haus', 'auch', 'renovieren', 'lassen']],
         punct: '.'
     },
     {
-        parts: ['lass', 'immer', 'auch', 'mich', ',', 'bitte', 'ausreden'],
-        valid: [['lass', 'immer', 'auch', 'mich', ',', 'bitte', 'ausreden']],
+        parts: ['lass', 'mich', ',', 'bitte', 'ausreden'],
+        valid: [['lass', 'mich', ',', 'bitte', 'ausreden']],
         punct: '!'
     }
 ];
@@ -757,14 +757,14 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

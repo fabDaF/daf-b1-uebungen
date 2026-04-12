@@ -1349,6 +1349,19 @@ function initSatzbau() {
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnLoesen = document.createElement('button');
+        btnLoesen.textContent = 'Lösen';
+        btnLoesen.className = 'btn-satzbau';
+        btnLoesen.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnNeu = document.createElement('button');
+        btnNeu.textContent = 'Neustart';
+        btnNeu.className = 'btn-satzbau';
+        btnNeu.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnLoesen);
+        btnRow.appendChild(btnNeu);
+        item.appendChild(btnRow);
         con.appendChild(item);
     });
 }

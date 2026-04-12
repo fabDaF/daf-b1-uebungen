@@ -1077,6 +1077,17 @@ function initSatzbau() {
         item.appendChild(bank);
         item.appendChild(row);
         item.appendChild(fb);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn'; solveBtn.textContent = 'Lösen';
+        (function(i) { solveBtn.addEventListener('click', function() { sbShowSolution(i); }); })(idx);
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn'; resetBtn.textContent = '↺ Neustart';
+        (function(i) { resetBtn.addEventListener('click', function() { sbResetOne(i); }); })(idx);
+        btnRow.appendChild(solveBtn); btnRow.appendChild(resetBtn);
+        item.appendChild(btnRow);
         container.appendChild(item);
     });
 }

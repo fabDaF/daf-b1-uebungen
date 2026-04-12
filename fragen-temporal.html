@@ -622,15 +622,15 @@ const SB_ITEMS=[
   {label:'Frage nach Zeitpunkt', parts:['Wann',',','fängt','der','Kurs','an','?'], sol:'Wann , fängt der Kurs an ?'},
   {label:'Antwort mit Zeitpunkt', parts:['Er','fängt','am','Montag','um','neun','an','.'], sol:'Er fängt am Montag um neun an .'},
   {label:'Frage nach Dauer',     parts:['Wie','lange','hat','die','Reise','gedauert','?'], sol:'Wie lange hat die Reise gedauert ?'},
-  {label:'Antwort mit Dauer',    parts:['Sie','hat','drei','Stunden','gedauert','.'], sol:'Sie hat drei Stunden gedauert .'},
-  {label:'Frage: seit wann?',    parts:['Seit','wann','lernst','du','Deutsch','?'], sol:'Seit wann lernst du Deutsch ?'},
+  {label:'Antwort mit Dauer',    parts:['Sie','hat','genau','drei','Stunden','gedauert','.'], sol:'Sie hat genau drei Stunden gedauert .'},
+  {label:'Frage: seit wann?',    parts:['Seit','wann','lernst','du','eigentlich','Deutsch','?'], sol:'Seit wann lernst du eigentlich Deutsch ?'},
   {label:'Antwort mit seit',     parts:['Ich','lerne','seit','zwei','Jahren','Deutsch','.'], sol:'Ich lerne seit zwei Jahren Deutsch .'},
-  {label:'Frage nach Häufigkeit',parts:['Wie','oft','treiben','Sie','Sport','?'], sol:'Wie oft treiben Sie Sport ?'},
+  {label:'Frage nach Häufigkeit',parts:['Wie','oft','treiben','Sie','normalerweise','Sport','?'], sol:'Wie oft treiben Sie normalerweise Sport ?'},
   {label:'Antwort mit Häufigkeit',parts:['Ich','gehe','zweimal','pro','Woche','ins','Fitnessstudio','.'], sol:'Ich gehe zweimal pro Woche ins Fitnessstudio .'}
 ];
 
 let sbStarted=false;
-function sbInit(){
+function initSatzbau(){
   sbStarted=false;
   const cont=document.getElementById('sb-container');
   cont.innerHTML='';
@@ -642,6 +642,13 @@ function sbInit(){
       <div class="drop-row" id="sb-row-${i}" ondragover="event.preventDefault();this.classList.add('over')" ondragleave="this.classList.remove('over')" ondrop="sbDrop(event,${i})"></div>
       <button class="btn" onclick="sbCheck(${i})">Prüfen</button>
       <div class="sb-fb" id="sb-fb-${i}"></div>`;
+    var btnRow=document.createElement('div'); btnRow.className='sb-btn-row';
+    var btnS=document.createElement('button'); btnS.className='btn-satzbau'; btnS.textContent='Lösen';
+    btnS.onclick=(function(idx){ return function(){ sbShowSolution(idx); }; })(i);
+    var btnR=document.createElement('button'); btnR.className='btn-satzbau'; btnR.textContent='Neustart';
+    btnR.onclick=(function(idx){ return function(){ sbResetOne(idx); }; })(i);
+    btnRow.appendChild(btnS); btnRow.appendChild(btnR);
+    div.appendChild(btnRow);
     cont.appendChild(div);
 
     const src=document.getElementById('sb-src-'+i);
@@ -660,6 +667,7 @@ function sbMoveToRow(chip,i){
   row.appendChild(chip);
   chip.onclick=()=>{ const src=document.getElementById('sb-src-'+i); src.appendChild(chip); chip.onclick=()=>sbMoveToRow(chip,i); };
   updateCaps(i);
+  sbCheckAuto(i);
 }
 
 function sbDrop(e,i){
@@ -674,6 +682,7 @@ function sbDrop(e,i){
   document.getElementById('sb-row-'+i).appendChild(chip);
   chip.onclick=()=>{ src.appendChild(chip); chip.onclick=()=>sbMoveToRow(chip,i); };
   updateCaps(i);
+  sbCheckAuto(i);
 }
 
 function updateCaps(i){
@@ -701,14 +710,68 @@ function sbCheck(i){
   }
 }
 
+function sbColorRow(idx) {
+  var row=document.getElementById('sb-row-'+idx);
+  if(!row) return false;
+  var chips=Array.from(row.querySelectorAll('.chip'));
+  var result=chips.map(function(c){ return c.dataset.orig; }).join(' ');
+  var ok=result===SB_ITEMS[idx].sol;
+  chips.forEach(function(c){ c.classList.remove('placed-ok','placed-err'); c.classList.add(ok?'placed-ok':'placed-err'); });
+  return ok;
+}
+function sbCheckAllDone() {
+  var allOk=Array.from(document.querySelectorAll('.drop-row')).every(function(r){ return r.classList.contains('ok-border'); });
+  if(allOk) timerStop(2);
+}
+function sbCheckAuto(idx) {
+  var row=document.getElementById('sb-row-'+idx);
+  if(!row) return;
+  var chips=Array.from(row.querySelectorAll('.chip'));
+  if(chips.length<SB_ITEMS[idx].parts.length) return;
+  setTimeout(function() {
+    var chips=Array.from(row.querySelectorAll('.chip'));
+    var result=chips.map(function(c){ return c.dataset.orig; }).join(' ');
+    var ok=result===SB_ITEMS[idx].sol;
+    var fb=document.getElementById('sb-fb-'+idx);
+    if(ok){ row.classList.add('ok-border'); if(fb){fb.textContent='✓ Richtig!';fb.className='sb-fb ok';} sbCheckAllDone(); }
+    else { if(fb){fb.textContent='✗ Noch nicht richtig — versuche es nochmal.';fb.className='sb-fb err';} }
+  }, 500);
+}
+function sbShowSolution(idx) {
+  var src=document.getElementById('sb-src-'+idx);
+  var row=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  if(!src||!row) return;
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c){ c.classList.remove('placed-ok','placed-err'); src.appendChild(c); });
+  SB_ITEMS[idx].sol.split(' ').forEach(function(word) {
+    var chip=Array.from(src.querySelectorAll('.chip')).find(function(c){ return c.dataset.orig===word; });
+    if(chip){ row.appendChild(chip); }
+  });
+  row.classList.add('ok-border');
+  if(fb){ fb.textContent='✓ Richtig!'; fb.className='sb-fb ok'; }
+  updateCaps(idx);
+}
+function sbResetOne(idx) {
+  var src=document.getElementById('sb-src-'+idx);
+  var row=document.getElementById('sb-row-'+idx);
+  var fb=document.getElementById('sb-fb-'+idx);
+  if(!src||!row) return;
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c){
+    c.classList.remove('placed-ok','placed-err');
+    src.appendChild(c);
+    c.onclick=function(){ timerAutoStart(2); sbMoveToRow(c,idx); };
+  });
+  row.classList.remove('ok-border','over');
+  if(fb){ fb.textContent=''; fb.className='sb-fb'; }
+}
 function sbReset(){
-  timerResetOne(2); sbInit();
+  timerResetOne(2); initSatzbau();
 }
 
 // ── INIT ──
 zuoInit();
 lueckeInit();
-sbInit();
+initSatzbau();
 loadBestTimes();
 </script>
 </body>

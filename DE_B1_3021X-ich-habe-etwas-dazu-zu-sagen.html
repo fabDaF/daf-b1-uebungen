@@ -545,7 +545,7 @@ var MC_DATA = [
         {"q":"Was ist die zentrale Lehre der Geschichte für Laura?","opts":["Dass man im Büro besser schweigen sollte","Dass ihre Meinung auch zählt und ein ruhig begründeter Einwand etwas bewegen kann","Dass Freelancer immer die beste Lösung sind","Dass Chefs nie zuhören"],"correct":1}
 ];
 
-var SATZBAU_DATA = [
+var satzbauData = [
         {"parts":["Laura","arbeitete","erst","seit","drei","Wochen","bei","der","Softwarefirma"],"valid":[["Laura","arbeitete","erst","seit","drei","Wochen","bei","der","Softwarefirma"]],"punct":"."},
         {"parts":["die","Firma","hatte","einen","großen","Auftrag","bekommen"],"valid":[["die","Firma","hatte","einen","großen","Auftrag","bekommen"]],"punct":"."},
         {"parts":["alle","Kollegen","blickten","schweigend","auf","ihre","Blöcke"],"valid":[["alle","Kollegen","blickten","schweigend","auf","ihre","Blöcke"]],"punct":"."},
@@ -982,7 +982,7 @@ function sbColorRow(idx) {
     var row = document.getElementById('sb-row-' + idx);
     var chips = Array.from(row.querySelectorAll('.chip'));
     var order = chips.map(function(c) { return c.dataset.orig; });
-    var ok = SATZBAU_DATA[idx].valid.some(function(v) {
+    var ok = satzbauData[idx].valid.some(function(v) {
         return JSON.stringify(v) === JSON.stringify(order);
     });
     chips.forEach(function(c) {
@@ -994,7 +994,7 @@ function sbColorRow(idx) {
     if (ok) {
         var punkt = document.createElement('span');
         punkt.className = 'sb-punkt';
-        punkt.textContent = SATZBAU_DATA[idx].punct || '.';
+        punkt.textContent = satzbauData[idx].punct || '.';
         row.appendChild(punkt);
     }
     return ok;
@@ -1031,7 +1031,7 @@ function sbCheckAuto(idx) {
 }
 
 function sbCheckAllDone() {
-    var allOk = SATZBAU_DATA.every(function(_, i) {
+    var allOk = satzbauData.every(function(_, i) {
         var row = document.getElementById('sb-row-' + i);
         return row && row.classList.contains('correct');
     });
@@ -1042,7 +1042,7 @@ function sbShowSolution(idx) {
     var bank = document.getElementById('sb-bank-' + idx);
     var row  = document.getElementById('sb-row-' + idx);
     var fb   = document.getElementById('sb-fb-' + idx);
-    var solution = SATZBAU_DATA[idx].valid[0];
+    var solution = satzbauData[idx].valid[0];
 
     var allChips = {};
     Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
@@ -1085,7 +1085,7 @@ function sbResetOne(idx) {
     var existing = row.querySelector('.sb-punkt');
     if (existing) existing.parentNode.removeChild(existing);
 
-    var parts = SATZBAU_DATA[idx].parts.slice();
+    var parts = satzbauData[idx].parts.slice();
     for (var i = parts.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
@@ -1098,7 +1098,7 @@ function initSatzbau() {
     if (!container) return;
     container.innerHTML = '';
 
-    SATZBAU_DATA.forEach(function(ex, idx) {
+    satzbauData.forEach(function(ex, idx) {
         var item = document.createElement('div');
         item.className = 'satzbau-item';
 
@@ -1158,7 +1158,7 @@ function initSatzbau() {
 }
 
 function showLoesungSatzbau() {
-    SATZBAU_DATA.forEach(function(_, idx) { sbShowSolution(idx); });
+    satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
 }
 
 function resetSatzbau() {

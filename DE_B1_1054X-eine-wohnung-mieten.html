@@ -28,7 +28,7 @@ body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:lin
 .hilfe-box { background:#f0f4ff; border-left:4px solid #667eea; border-radius:0 8px 8px 0; padding:14px 18px; margin-bottom:22px; font-size:0.9em; color:#444; line-height:1.6; }
 .control-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding:6px 12px; background:#f8f9fa; border-radius:8px; }
 .btn-row { display:flex; gap:6px; }
-.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
 .btn:hover { border-color:#667eea; color:#667eea; }
 .timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 .timer-display .current-time { color:#888; }
@@ -551,29 +551,29 @@ var sbDragged = null;
 
 var satzbauData = [
   {
-    parts:['zu','mieten','eine','große','Wohnung','Herausforderung','und','umzuziehen',',','ist'],
-    valid:[['Eine','Wohnung','zu','mieten','und','umzuziehen',',','ist','eine','große','Herausforderung']],
+    parts:['zu','mieten','eine','große','Wohnung','Herausforderung','und','umzuziehen',',','ist','eine'],
+    valid:[['eine','Wohnung','zu','mieten','und','umzuziehen',',','ist','eine','große','Herausforderung']],
     punct:'.'
   },
   {
     parts:['Vermieter','die','überreicht','der','Schlüssel','dem','Mieter'],
-    valid:[['Der','Vermieter','überreicht','dem','Mieter','die','Schlüssel']],
+    valid:[['der','Vermieter','überreicht','dem','Mieter','die','Schlüssel']],
     punct:'.'
   },
   {
     parts:['Mietvertrag','der','unterschrieben','hat','Mieter','den','bereits'],
-    valid:[['Der','Mieter','hat','den','Mietvertrag','bereits','unterschrieben']],
+    valid:[['der','Mieter','hat','den','Mietvertrag','bereits','unterschrieben']],
     punct:'.'
   },
   {
     parts:['immer','man','sollte','Wohnung','besichtigen','die','zuerst'],
-    valid:[['Man','sollte','die','Wohnung','immer','zuerst','besichtigen'],
-           ['Man','sollte','immer','zuerst','die','Wohnung','besichtigen']],
+    valid:[['man','sollte','die','Wohnung','immer','zuerst','besichtigen'],
+           ['man','sollte','immer','zuerst','die','Wohnung','besichtigen']],
     punct:'.'
   },
   {
     parts:['Warmmiete','Heizkosten','die','enthält','die','des','Hauses'],
-    valid:[['Die','Warmmiete','enthält','die','Heizkosten','des','Hauses']],
+    valid:[['die','Warmmiete','enthält','die','Heizkosten','des','Hauses']],
     punct:'.'
   },
 ];
@@ -677,14 +677,14 @@ function initSatzbau(){
     parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
     sbRegisterZone(bank,idx); sbRegisterZone(row,idx);
     var btnRow = document.createElement('div');
-    btnRow.className = 'sb-btn-row';
+    btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
     var btnS = document.createElement('button');
     btnS.textContent = 'Lösen';
-    btnS.className = 'btn-satzbau';
+    btnS.className = 'btn';
     btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
     var btnR = document.createElement('button');
-    btnR.textContent = 'Neustart';
-    btnR.className = 'btn-satzbau';
+    btnR.textContent = '↺ Neustart';
+    btnR.className = 'btn';
     btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
     btnRow.appendChild(btnS);
     btnRow.appendChild(btnR);

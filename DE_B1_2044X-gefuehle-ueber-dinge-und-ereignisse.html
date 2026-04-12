@@ -469,13 +469,13 @@ var mcData = [
 
 var satzbauData = [
     { parts: ["Es", "freut", "mich", ",", "dass", "du", "kommst"], valid: [["Es", "freut", "mich", ",", "dass", "du", "kommst"]], punct: "." },
-    { parts: ["Ich", "bin", "enttäuscht", "von", "dem", "Ergebnis"], valid: [["Ich", "bin", "enttäuscht", "von", "dem", "Ergebnis"]], punct: "." },
+    { parts: ["Ich", "bin", "sehr", "enttäuscht", "von", "dem", "Ergebnis"], valid: [["Ich", "bin", "sehr", "enttäuscht", "von", "dem", "Ergebnis"]], punct: "." },
     { parts: ["Das", "überrascht", "mich", ",", "dass", "Sie", "kein", "Englisch", "sprechen"], valid: [["Das", "überrascht", "mich", ",", "dass", "Sie", "kein", "Englisch", "sprechen"]], punct: "." },
     { parts: ["Es", "ist", "mir", "eine", "Last", "vom", "Herzen", "gefallen"], valid: [["Es", "ist", "mir", "eine", "Last", "vom", "Herzen", "gefallen"]], punct: "." },
-    { parts: ["Sie", "haben", "Angst", "vor", "der", "Zukunft"], valid: [["Sie", "haben", "Angst", "vor", "der", "Zukunft"]], punct: "." },
+    { parts: ["Sie", "haben", "große", "Angst", "vor", "der", "Zukunft"], valid: [["Sie", "haben", "große", "Angst", "vor", "der", "Zukunft"]], punct: "." },
     { parts: ["Ich", "hoffe", ",", "dass", "alles", "gut", "wird"], valid: [["Ich", "hoffe", ",", "dass", "alles", "gut", "wird"]], punct: "." },
     { parts: ["Es", "tut", "mir", "leid", ",", "dass", "ich", "nicht", "komme"], valid: [["Es", "tut", "mir", "leid", ",", "dass", "ich", "nicht", "komme"]], punct: "." },
-    { parts: ["Sie", "sind", "begeistert", "von", "ihrem", "Erfolg"], valid: [["Sie", "sind", "begeistert", "von", "ihrem", "Erfolg"]], punct: "." }
+    { parts: ["Sie", "sind", "sehr", "begeistert", "von", "ihrem", "Erfolg"], valid: [["Sie", "sind", "sehr", "begeistert", "von", "ihrem", "Erfolg"]], punct: "." }
 ];
 
 var timers = [{}, {}, {}, {}, {}, {}];
@@ -842,10 +842,72 @@ function initSatzbau() {
         parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
         sbRegisterZone(bank);
         sbRegisterZone(row);
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+        var btnRow = document.createElement('div');
+        btnRow.className = 'sb-btn-row';
+        var btnL = document.createElement('button');
+        btnL.textContent = 'L\u00f6sen';
+        btnL.className = 'btn-satzbau';
+        btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnN = document.createElement('button');
+        btnN.textContent = 'Neustart';
+        btnN.className = 'btn-satzbau';
+        btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnL);
+        btnRow.appendChild(btnN);
         item.appendChild(bank);
         item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
         cont.appendChild(item);
     });
+}
+
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    if (!row) return false;
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c){ return c.dataset.orig; });
+    return satzbauData[idx].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(order); });
+}
+
+function sbCheckAuto(idx) {
+    var row  = document.getElementById('sb-row-' + idx);
+    var bank = document.getElementById('sb-bank-' + idx);
+    if (row && bank) {
+        setTimeout(function(){
+            if (bank.querySelectorAll('.chip').length === 0) checkSBRow(row);
+        }, 500);
+    }
+}
+
+function sbShowSolution(idx) {
+    var row  = document.getElementById('sb-row-' + idx);
+    var bank = document.getElementById('sb-bank-' + idx);
+    if (!row || !bank) return;
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig] = c; });
+    while (row.firstChild) row.removeChild(row.firstChild);
+    satzbauData[idx].valid[0].forEach(function(word){
+        if (allChips[word]) row.appendChild(allChips[word]);
+    });
+    checkSBRow(row);
+}
+
+function sbResetOne(idx) {
+    var row  = document.getElementById('sb-row-' + idx);
+    var bank = document.getElementById('sb-bank-' + idx);
+    if (!row || !bank) return;
+    var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+    while (row.firstChild) row.removeChild(row.firstChild);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    var shuffled = allChips.slice().sort(function(){ return Math.random()-0.5; });
+    shuffled.forEach(function(c){ c.classList.remove('correct','incorrect'); bank.appendChild(c); });
 }
 
 function showLoesungSatzbau() {

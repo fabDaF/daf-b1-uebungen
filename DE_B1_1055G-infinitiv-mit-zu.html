@@ -281,21 +281,27 @@ input.blank.wrong { border-color:#e74c3c; background:#ffebee; }
         <div class="chips-container" id="sb-bank-0"></div>
         <div class="sentence-builder" id="sb-row-0"></div>
         <div class="satzbau-feedback" id="sb-fb-0"></div>
+        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(0)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(0)">Neustart</button></div>
         <div class="chips-container" id="sb-bank-1"></div>
         <div class="sentence-builder" id="sb-row-1"></div>
         <div class="satzbau-feedback" id="sb-fb-1"></div>
+        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(1)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(1)">Neustart</button></div>
         <div class="chips-container" id="sb-bank-2"></div>
         <div class="sentence-builder" id="sb-row-2"></div>
         <div class="satzbau-feedback" id="sb-fb-2"></div>
+        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(2)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(2)">Neustart</button></div>
         <div class="chips-container" id="sb-bank-3"></div>
         <div class="sentence-builder" id="sb-row-3"></div>
         <div class="satzbau-feedback" id="sb-fb-3"></div>
+        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(3)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(3)">Neustart</button></div>
         <div class="chips-container" id="sb-bank-4"></div>
         <div class="sentence-builder" id="sb-row-4"></div>
         <div class="satzbau-feedback" id="sb-fb-4"></div>
+        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(4)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(4)">Neustart</button></div>
         <div class="chips-container" id="sb-bank-5"></div>
         <div class="sentence-builder" id="sb-row-5"></div>
         <div class="satzbau-feedback" id="sb-fb-5"></div>
+        <div class="sb-btn-row"><button class="btn-satzbau" onclick="sbShowSolution(5)">L&ouml;sen</button><button class="btn-satzbau" onclick="sbResetOne(5)">Neustart</button></div>
       </div>
     </div>
   </div>
@@ -659,8 +665,8 @@ var satzbauData = [
     punct:'.'
   },
   {
-    parts:['sie','beginnt','Deutsch','zu','lernen'],
-    valid:[['sie','beginnt','Deutsch','zu','lernen']],
+    parts:['sie','beginnt','jetzt','ernsthaft','Deutsch','zu','lernen'],
+    valid:[['sie','beginnt','jetzt','ernsthaft','Deutsch','zu','lernen']],
     punct:'.'
   },
   {
@@ -850,6 +856,25 @@ function initSatzbau() {
 }
 
 function resetSatzbau() { initSatzbau(); }
+
+function sbResetOne(idx) {
+  var bank = document.getElementById('sb-bank-'+idx);
+  var row  = document.getElementById('sb-row-'+idx);
+  var fb   = document.getElementById('sb-fb-'+idx);
+  var ex   = satzbauData[idx];
+  if (!bank || !row || !ex) return;
+  bank.innerHTML = ''; row.innerHTML = '';
+  if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+  row.classList.remove('correct','incorrect');
+  var parts = ex.parts.slice();
+  for (var i = parts.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random()*(i+1));
+    var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+  }
+  parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+  sbRegisterZone(bank, idx);
+  sbRegisterZone(row, idx);
+}
 
 // ═══════════════════════════════════════════════════════════════
 // Wortschatz (Tab 4)

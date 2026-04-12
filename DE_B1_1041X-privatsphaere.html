@@ -33,8 +33,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 /* CONTROL BAR */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 .timer-val { color: #667eea; font-weight: 700; }
 .best-val { color: #f39c12; font-weight: 600; }
@@ -649,12 +649,12 @@ function resetLuecken() {
 var sbDragged = null;
 
 var satzbauData = [
-    { parts: ['Sarah', 'auch', 'hat', 'angeblich', 'ein', 'Fakeprofil', 'erstellt'], valid: [['Sarah', 'auch', 'hat', 'angeblich', 'ein', 'Fakeprofil', 'erstellt']], punct: '.' },
+    { parts: ['Sarah', 'hat', 'angeblich', 'auch', 'ein', 'Fakeprofil', 'erstellt'], valid: [['Sarah', 'hat', 'angeblich', 'auch', 'ein', 'Fakeprofil', 'erstellt']], punct: '.' },
     { parts: ['Chatten', 'ist', 'eine', 'Kommunikationsmöglichkeit', 'in', 'sozialen', 'Netzwerken'], valid: [['Chatten', 'ist', 'eine', 'Kommunikationsmöglichkeit', 'in', 'sozialen', 'Netzwerken']], punct: '.' },
     { parts: ['Fake', 'News', 'sind', 'nicht', 'immer', 'sofort', 'als', 'solche', 'erkennbar'], valid: [['Fake', 'News', 'sind', 'nicht', 'immer', 'sofort', 'als', 'solche', 'erkennbar']], punct: '.' },
-    { parts: ['Die', 'Eingabe', 'sensibler', 'Daten', 'bedroht', 'deine', 'Sicherheit', 'im', 'Netz'], valid: [['Die', 'Eingabe', 'sensibler', 'Daten', 'bedroht', 'deine', 'Sicherheit', 'im', 'Netz']], punct: '.' },
-    { parts: ['Die', 'scheinbare', 'Anonymität', 'im', 'Internet', 'verführt', 'zum', 'Posten', 'unsinniger', 'Bilder'], valid: [['Die', 'scheinbare', 'Anonymität', 'im', 'Internet', 'verführt', 'zum', 'Posten', 'unsinniger', 'Bilder']], punct: '.' },
-    { parts: ['Viele', 'halten', 'das', 'Internet', 'immer', 'noch', 'für', 'einen', 'rechtsfreien', 'Raum'], valid: [['Viele', 'halten', 'das', 'Internet', 'immer', 'noch', 'für', 'einen', 'rechtsfreien', 'Raum']], punct: '.' },
+    { parts: ['die', 'Eingabe', 'sensibler', 'Daten', 'bedroht', 'deine', 'Sicherheit', 'im', 'Netz'], valid: [['die', 'Eingabe', 'sensibler', 'Daten', 'bedroht', 'deine', 'Sicherheit', 'im', 'Netz']], punct: '.' },
+    { parts: ['die', 'scheinbare', 'Anonymität', 'im', 'Internet', 'verführt', 'zum', 'Posten', 'unsinniger', 'Bilder'], valid: [['die', 'scheinbare', 'Anonymität', 'im', 'Internet', 'verführt', 'zum', 'Posten', 'unsinniger', 'Bilder']], punct: '.' },
+    { parts: ['viele', 'halten', 'das', 'Internet', 'immer', 'noch', 'für', 'einen', 'rechtsfreien', 'Raum'], valid: [['viele', 'halten', 'das', 'Internet', 'immer', 'noch', 'für', 'einen', 'rechtsfreien', 'Raum']], punct: '.' },
     { parts: ['Meinungsfreiheit', 'bedeutet', 'nicht', ',', 'beleidigend', 'zu', 'kommentieren'], valid: [['Meinungsfreiheit', 'bedeutet', 'nicht', ',', 'beleidigend', 'zu', 'kommentieren']], punct: '.' },
 ];
 
@@ -887,14 +887,14 @@ function initSatzbau() {
         })(idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

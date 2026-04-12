@@ -554,12 +554,12 @@ var sbDragged = null;
 var satzbauData = [
   { parts: ['Karim', 'muss', 'sich', 'auf', 'das', 'Gespräch', 'vorbereiten'], valid: [['Karim', 'muss', 'sich', 'auf', 'das', 'Gespräch', 'vorbereiten']], punct: '.' },
   { parts: ['Wer', 'wird', 'dich', 'vertreten', ',', 'wenn', 'du', 'im', 'Urlaub', 'bist'], valid: [['Wer', 'wird', 'dich', 'vertreten', ',', 'wenn', 'du', 'im', 'Urlaub', 'bist']], punct: '?' },
-  { parts: ['Die', 'auch', 'Tagesordnung', 'enthält', 'drei', 'wichtige', 'Punkte'], valid: [['Die', 'auch', 'Tagesordnung', 'enthält', 'drei', 'wichtige', 'Punkte']], punct: '.' },
-  { parts: ['Wir', 'auch', 'sollten', 'einen', 'neuen', 'Termin', 'vereinbaren'], valid: [['Wir', 'auch', 'sollten', 'einen', 'neuen', 'Termin', 'vereinbaren']], punct: '.' },
-  { parts: ['Er', 'muss', 'die', 'Ergebnisse', 'bis', 'Freitag', 'präsentieren'], valid: [['Er', 'muss', 'die', 'Ergebnisse', 'bis', 'Freitag', 'präsentieren']], punct: '.' },
+  { parts: ['die', 'Tagesordnung', 'enthält', 'auch', 'drei', 'wichtige', 'Punkte'], valid: [['die', 'Tagesordnung', 'enthält', 'auch', 'drei', 'wichtige', 'Punkte']], punct: '.' },
+  { parts: ['wir', 'sollten', 'auch', 'einen', 'neuen', 'Termin', 'vereinbaren'], valid: [['wir', 'sollten', 'auch', 'einen', 'neuen', 'Termin', 'vereinbaren']], punct: '.' },
+  { parts: ['er', 'muss', 'die', 'Ergebnisse', 'bis', 'Freitag', 'präsentieren'], valid: [['er', 'muss', 'die', 'Ergebnisse', 'bis', 'Freitag', 'präsentieren']], punct: '.' },
   { parts: ['Pünktlichkeit', 'ist', 'in', 'diesem', 'Betrieb', 'sehr', 'wichtig'], valid: [['Pünktlichkeit', 'ist', 'in', 'diesem', 'Betrieb', 'sehr', 'wichtig']], punct: '.' },
-  { parts: ['könntest', 'auch', 'du', 'diese', 'Aufgabe', 'bitte', 'übernehmen'], valid: [['könntest', 'auch', 'du', 'diese', 'Aufgabe', 'bitte', 'übernehmen']], punct: '?' },
-  { parts: ['Berufliche', 'immer', 'auch', 'Erfahrung', 'ist', 'sehr', 'wertvoll'], valid: [['Berufliche', 'immer', 'auch', 'Erfahrung', 'ist', 'sehr', 'wertvoll']], punct: '.' },
+  { parts: ['könntest', 'du', 'diese', 'Aufgabe', 'bitte', 'auch', 'übernehmen'], valid: [['könntest', 'du', 'diese', 'Aufgabe', 'bitte', 'auch', 'übernehmen']], punct: '?' },
+  { parts: ['berufliche', 'Erfahrung', 'ist', 'immer', 'auch', 'sehr', 'wertvoll'], valid: [['berufliche', 'Erfahrung', 'ist', 'immer', 'auch', 'sehr', 'wertvoll']], punct: '.' },
 ];
 
 function getSbCursor() {
@@ -658,14 +658,14 @@ function initSatzbau(){
     parts.forEach(function(word){bank.appendChild(sbMakeChip(word));});
     sbRegisterZone(bank,idx);sbRegisterZone(row,idx);
     var btnRow = document.createElement('div');
-    btnRow.className = 'sb-btn-row';
+    btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
     var btnS = document.createElement('button');
     btnS.textContent = 'Lösen';
-    btnS.className = 'btn-satzbau';
+    btnS.className = 'btn';
     btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
     var btnR = document.createElement('button');
-    btnR.textContent = 'Neustart';
-    btnR.className = 'btn-satzbau';
+    btnR.textContent = '↺ Neustart';
+    btnR.className = 'btn';
     btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
     btnRow.appendChild(btnS);
     btnRow.appendChild(btnR);

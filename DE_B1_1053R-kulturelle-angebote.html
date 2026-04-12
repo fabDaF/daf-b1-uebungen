@@ -477,29 +477,28 @@ var sbDragged = null;
 
 var satzbauData = [
     {
-        parts: ['vielfältige', 'auch', 'kulturelle', 'Großstädte', 'parat', 'Angebote', 'halten'],
+        parts: ['vielfältige', 'kulturelle', 'Großstädte', 'parat', 'Angebote', 'halten'],
         valid: [['Großstädte', 'halten', 'vielfältige', 'kulturelle', 'Angebote', 'parat']],
         punct: '.'
     },
     {
-        parts: ['eine', 'auch', 'Karaoke', 'verbreitete', 'bezeichnet', 'weltweit', 'Freizeitbeschäftigung'],
+        parts: ['eine', 'Karaoke', 'verbreitete', 'bezeichnet', 'weltweit', 'Freizeitbeschäftigung'],
         valid: [['Karaoke', 'bezeichnet', 'eine', 'weltweit', 'verbreitete', 'Freizeitbeschäftigung']],
         punct: '.'
     },
     {
         parts: ['das', 'gleichzeitig', 'Publikum', 'Rudelsingen', 'beim', 'singt', 'gesamte'],
-        valid: [['Beim', 'Rudelsingen', 'singt', 'das', 'gesamte', 'Publikum', 'gleichzeitig'],
-                ['Das', 'gesamte', 'Publikum', 'singt', 'beim', 'Rudelsingen', 'gleichzeitig']],
+        valid: [['beim', 'Rudelsingen', 'singt', 'das', 'gesamte', 'Publikum', 'gleichzeitig'],
+                ['das', 'gesamte', 'Publikum', 'singt', 'beim', 'Rudelsingen', 'gleichzeitig']],
         punct: '.'
     },
     {
-        parts: ['Parcoursläufer', 'auch', 'zu', 'Architekturhindernisse', 'versucht', 'überwinden', 'der'],
-        valid: [['Der', 'Parcoursläufer', 'versucht', ',', 'Architekturhindernisse', 'zu', 'überwinden'],
-                ['Der', 'Parcoursläufer', 'versucht', 'Architekturhindernisse', 'zu', 'überwinden']],
+        parts: ['der', 'Parcoursläufer', 'versucht', ',', 'Architekturhindernisse', 'zu', 'überwinden'],
+        valid: [['der', 'Parcoursläufer', 'versucht', ',', 'Architekturhindernisse', 'zu', 'überwinden']],
         punct: '.'
     },
     {
-        parts: ['Klettern', 'auch', 'Bouldern', 'ohne', 'Seil', 'entspricht', 'dem'],
+        parts: ['Klettern', 'Bouldern', 'ohne', 'Seil', 'entspricht', 'dem'],
         valid: [['Bouldern', 'entspricht', 'dem', 'Klettern', 'ohne', 'Seil']],
         punct: '.'
     },
@@ -744,14 +743,14 @@ function initSatzbau() {
         sbRegisterZone(row, idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

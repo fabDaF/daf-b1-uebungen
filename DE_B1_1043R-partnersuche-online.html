@@ -215,7 +215,7 @@ h2.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bo
 /* ── TIMER ── */
 .timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
 .btn-row { display:flex; gap:6px; }
-.btn { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
 .btn:hover { background:#f0f0f0; color:#555; }
 .timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 .score-box { font-size:0.82rem; color:#888; }
@@ -758,13 +758,13 @@ function resetLuecken() { buildLuecken(); }
 //  SATZBAU (Tab 4) — Mandatory SKILL pattern
 // ═══════════════════════════════════════════════════════
 var satzbauData = [
-    { parts: ['Fake', 'auch', 'News', 'führen', 'oft', 'zu', 'Missverständnissen'], valid:[['Fake','News','führen','oft','zu','Missverständnissen']], punct:'.' },
-    { parts: ['Die','virtuelle','Partnersuche','ist','immer','beliebter','geworden'], valid:[['Die','virtuelle','Partnersuche','ist','immer','beliebter','geworden']], punct:'.' },
-    { parts: ['Bei','der','Anmeldung','muss','man','ein','Profil','anlegen'], valid:[['Bei','der','Anmeldung','muss','man','ein','Profil','anlegen']], punct:'.' },
-    { parts: ['Passende', 'auch', 'Partner', 'werden', 'per', 'Matching-Verfahren', 'ausgewählt'], valid:[['Passende','Partner','werden','per','Matching-Verfahren','ausgewählt']], punct:'.' },
+    { parts: ['Fake', 'News', 'führen', 'oft', 'zu', 'Missverständnissen'], valid:[['Fake','News','führen','oft','zu','Missverständnissen']], punct:'.' },
+    { parts: ['die','virtuelle','Partnersuche','ist','immer','beliebter','geworden'], valid:[['die','virtuelle','Partnersuche','ist','immer','beliebter','geworden']], punct:'.' },
+    { parts: ['bei','der','Anmeldung','muss','man','ein','Profil','anlegen'], valid:[['bei','der','Anmeldung','muss','man','ein','Profil','anlegen']], punct:'.' },
+    { parts: ['passende', 'Partner', 'werden', 'per', 'Matching-Verfahren', 'ausgewählt'], valid:[['passende','Partner','werden','per','Matching-Verfahren','ausgewählt']], punct:'.' },
     { parts: ['Kriminelle','präsentieren','sich','mit','einer','weißen','Weste'], valid:[['Kriminelle','präsentieren','sich','mit','einer','weißen','Weste']], punct:'.' },
-    { parts: ['Die','Echtheit','von','Nachrichten','ist','schwer','zu','überprüfen'], valid:[['Die','Echtheit','von','Nachrichten','ist','schwer','zu','überprüfen']], punct:'.' },
-    { parts: ['Man', 'auch', 'kann', 'den', 'Kontakt', 'auch', 'blockieren'], valid:[['Man','kann','den','Kontakt','auch','blockieren']], punct:'.' },
+    { parts: ['die','Echtheit','von','Nachrichten','ist','schwer','zu','überprüfen'], valid:[['die','Echtheit','von','Nachrichten','ist','schwer','zu','überprüfen']], punct:'.' },
+    { parts: ['man', 'kann', 'den', 'Kontakt', 'auch', 'blockieren'], valid:[['man','kann','den','Kontakt','auch','blockieren']], punct:'.' },
 ];
 
 var sbDragged = null;
@@ -983,14 +983,14 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

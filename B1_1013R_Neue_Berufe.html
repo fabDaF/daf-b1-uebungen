@@ -611,26 +611,26 @@ function mcReset(){ timerReset(4); buildMC(); }
 
 /* ── DATA: Satzbau (Skill-Standard) ── */
 var satzbauData = [
-  { parts:['Jonas','steht','an','seinem','Schreibtisch'],
-    valid:[['Jonas','steht','an','seinem','Schreibtisch']], punct:'.' },
-  { parts:['der','Asphalt','ist','noch','warm'],
-    valid:[['der','Asphalt','ist','noch','warm']], punct:'.' },
+  { parts:['Jonas','steht','nun','dort','an','seinem','Schreibtisch'],
+    valid:[['Jonas','steht','nun','dort','an','seinem','Schreibtisch']], punct:'.' },
+  { parts:['der','Asphalt','ist','noch','immer','sehr','warm'],
+    valid:[['der','Asphalt','ist','noch','immer','sehr','warm']], punct:'.' },
   { parts:['die','Nachfrage','ist','gro\u00df','\u2014','aber','auch','der','Zweifel'],
     valid:[['die','Nachfrage','ist','gro\u00df','\u2014','aber','auch','der','Zweifel']], punct:'.' },
   { parts:['zwei','Jahre','sp\u00e4ter','brauchte','ihn','keiner','mehr'],
     valid:[['zwei','Jahre','sp\u00e4ter','brauchte','ihn','keiner','mehr']], punct:'.' },
   { parts:['die','KI','wurde','zum','Katalysator','der','eigenen','Gedankenwelt'],
     valid:[['die','KI','wurde','zum','Katalysator','der','eigenen','Gedankenwelt']], punct:'.' },
-  { parts:['Dampfmaschinen','ersetzten','die','einfache','Handarbeit'],
-    valid:[['Dampfmaschinen','ersetzten','die','einfache','Handarbeit']], punct:'.' },
-  { parts:['die','KI','ersetzt','den','Intellekt'],
-    valid:[['die','KI','ersetzt','den','Intellekt']], punct:'.' },
+  { parts:['Dampfmaschinen','ersetzten','damals','die','einfache','Handarbeit','m\u00fchelos'],
+    valid:[['Dampfmaschinen','ersetzten','damals','die','einfache','Handarbeit','m\u00fchelos']], punct:'.' },
+  { parts:['die','moderne','KI','ersetzt','heute','den','menschlichen','Intellekt'],
+    valid:[['die','moderne','KI','ersetzt','heute','den','menschlichen','Intellekt']], punct:'.' },
   { parts:['die','alte','Weisheit','bewahrheitet','sich','heute','wie','nie'],
     valid:[['die','alte','Weisheit','bewahrheitet','sich','heute','wie','nie']], punct:'.' },
-  { parts:['\u00fcberall','herrscht','Mangel','an','arbeitenden','H\u00e4nden'],
-    valid:[['\u00fcberall','herrscht','Mangel','an','arbeitenden','H\u00e4nden']], punct:'.' },
-  { parts:['er','tut','einen','tiefen','Atemzug'],
-    valid:[['er','tut','einen','tiefen','Atemzug']], punct:'.' }
+  { parts:['\u00fcberall','herrscht','ein','gro\u00dfer','Mangel','an','qualifizierten','H\u00e4nden'],
+    valid:[['\u00fcberall','herrscht','ein','gro\u00dfer','Mangel','an','qualifizierten','H\u00e4nden']], punct:'.' },
+  { parts:['langsam','tut','er','einen','langen','tiefen','Atemzug'],
+    valid:[['langsam','tut','er','einen','langen','tiefen','Atemzug']], punct:'.' }
 ];
 
 /* ── Satzbau Skill-JS ── */
@@ -763,6 +763,51 @@ function sbCheckAuto(idx) {
   }, 500);
 }
 
+
+function sbShowSolution(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-' + idx);
+  var fb   = document.getElementById('sb-fb-' + idx);
+  var answer = satzbauData[idx].valid[0];
+  var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+  bank.innerHTML = '';
+  row.innerHTML = '';
+  answer.forEach(function(word) {
+    var chip = allChips.find(function(c) { return c.dataset.orig === word; });
+    if (chip) {
+      if (chip.parentNode) chip.parentNode.removeChild(chip);
+      chip.classList.remove('incorrect');
+      chip.classList.add('correct');
+      row.appendChild(chip);
+    }
+  });
+  var existing = row.querySelector('.sb-punkt');
+  if (existing) existing.parentNode.removeChild(existing);
+  var punkt = document.createElement('span');
+  punkt.className = 'sb-punkt';
+  punkt.textContent = satzbauData[idx].punct || '.';
+  row.appendChild(punkt);
+  row.classList.add('correct'); row.classList.remove('incorrect');
+  if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '\u2713 Korrekt!'; }
+}
+function sbResetOne(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-' + idx);
+  var fb   = document.getElementById('sb-fb-' + idx);
+  var allChips = Array.from(bank.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+  allChips.forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+  for (var i = allChips.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = allChips[i]; allChips[i] = allChips[j]; allChips[j] = tmp;
+  }
+  var punkt = row.querySelector('.sb-punkt');
+  if (punkt) punkt.parentNode.removeChild(punkt);
+  row.innerHTML = '';
+  bank.innerHTML = '';
+  allChips.forEach(function(c) { bank.appendChild(c); });
+  row.classList.remove('correct', 'incorrect');
+  if (fb) { fb.className = 'satzbau-feedback'; fb.textContent = ''; }
+}
 function sbCheckAllDone() {
   var allOk = satzbauData.every(function(_, i) {
     var row = document.getElementById('sb-row-' + i);
@@ -776,6 +821,8 @@ function initSatzbau() {
     var bank = document.getElementById('sb-bank-' + idx);
     var row  = document.getElementById('sb-row-'  + idx);
     if (!bank || !row) return;
+    bank.innerHTML = '';
+    row.innerHTML = '';
     var parts = ex.parts.slice();
     for (var i = parts.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
@@ -784,6 +831,22 @@ function initSatzbau() {
     parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
     sbRegisterZone(bank, idx);
     sbRegisterZone(row,  idx);
+    var item = bank.parentElement;
+    if (!item.querySelector('.sb-btn-row')) {
+      var btnRow = document.createElement('div');
+      btnRow.className = 'sb-btn-row';
+      var btnL = document.createElement('button');
+      btnL.textContent = 'L\u00f6sen';
+      btnL.className = 'btn-satzbau';
+      btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+      var btnN = document.createElement('button');
+      btnN.textContent = 'Neustart';
+      btnN.className = 'btn-satzbau';
+      btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+      btnRow.appendChild(btnL);
+      btnRow.appendChild(btnN);
+      item.appendChild(btnRow);
+    }
   });
 }
 

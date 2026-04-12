@@ -783,8 +783,8 @@ function zuoReset() { zuoInit(); timerResetOne(2); }
 var SB_DATA = [
   { id:1, parts:['Er','wird','langsam','m\u00fcde',',','wenn','er','lange','arbeitet','.'],
            answer:['er','wird','langsam','m\u00fcde',',','wenn','er','lange','arbeitet','.'] },
-  { id:2, parts:['Das','Haus','wurde','komplett','renoviert','.'],
-           answer:['das','haus','wurde','komplett','renoviert','.'] },
+  { id:2, parts:['Das','alte','Haus','wurde','komplett','renoviert','.'],
+           answer:['das','alte','haus','wurde','komplett','renoviert','.'] },
   { id:3, parts:['Ich','w\u00fcrde','gern','Arzt','werden',',','aber','das','Studium','ist','lang','.'],
            answer:['ich','w\u00fcrde','gern','arzt','werden',',','aber','das','studium','ist','lang','.'] },
   { id:4, parts:['Sie','werden','n\u00e4chstes','Jahr','Eltern','werden','.'],
@@ -910,11 +910,87 @@ function sbShow() {
   timerStop(3);
 }
 function sbReset() { sbInit(); timerResetOne(3); }
+function sbColorRow(idx) {
+  var row = document.getElementById('row-' + idx);
+  var data = SB_DATA[idx];
+  var chips = Array.from(row.querySelectorAll('.chip'));
+  var ok = chips.length === data.answer.length && chips.every(function(c, i) {
+    return c.dataset.orig.toLowerCase() === data.answer[i];
+  });
+  chips.forEach(function(chip, i) {
+    chip.classList.remove('correct', 'wrong');
+    chip.classList.add(i < data.answer.length && chip.dataset.orig.toLowerCase() === data.answer[i] ? 'correct' : 'wrong');
+  });
+  return ok;
+}
+function sbCheckAuto(idx) {
+  var pool = document.getElementById('pool-' + idx);
+  var row = document.getElementById('row-' + idx);
+  if (!row) return;
+  if (pool && pool.querySelectorAll('.chip').length > 0) {
+    row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'wrong'); });
+    return;
+  }
+  setTimeout(function() {
+    var ok = sbColorRow(idx);
+    if (ok) checkSbAllOk();
+  }, 500);
+}
+function sbShowSolution(idx) {
+  var pool = document.getElementById('pool-' + idx);
+  var row  = document.getElementById('row-' + idx);
+  var data = SB_DATA[idx];
+  var all = Array.from(pool.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+  while (row.firstChild) row.removeChild(row.firstChild);
+  while (pool.firstChild) pool.removeChild(pool.firstChild);
+  data.parts.forEach(function(part) {
+    var chip = all.find(function(c) { return c.dataset.orig === part; });
+    if (chip) { row.appendChild(chip); chip.classList.remove('wrong'); chip.classList.add('correct'); all.splice(all.indexOf(chip), 1); }
+  });
+  all.forEach(function(ch) { pool.appendChild(ch); });
+  updateCaps(idx);
+  timerStop(3);
+}
+function sbResetOne(idx) {
+  var pool = document.getElementById('pool-' + idx);
+  var row = document.getElementById('row-' + idx);
+  var allChips = Array.from(pool.querySelectorAll('.chip')).concat(Array.from(row.querySelectorAll('.chip')));
+  allChips.forEach(function(c) { c.classList.remove('correct', 'wrong'); });
+  for (var i = allChips.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = allChips[i]; allChips[i] = allChips[j]; allChips[j] = tmp;
+  }
+  while (row.firstChild) row.removeChild(row.firstChild);
+  while (pool.firstChild) pool.removeChild(pool.firstChild);
+  allChips.forEach(function(c) { pool.appendChild(c); });
+  updateCaps(idx);
+}
+function initSatzbau() {
+  sbInit();
+  SB_DATA.forEach(function(_, idx) {
+    var row = document.getElementById('row-' + idx);
+    if (!row) return;
+    var item = row.parentElement;
+    var btnRow = document.createElement('div');
+    btnRow.className = 'sb-btn-row';
+    var btnL = document.createElement('button');
+    btnL.textContent = 'L\u00f6sen';
+    btnL.className = 'btn-satzbau';
+    btnL.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+    var btnN = document.createElement('button');
+    btnN.textContent = 'Neustart';
+    btnN.className = 'btn-satzbau';
+    btnN.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+    btnRow.appendChild(btnL);
+    btnRow.appendChild(btnN);
+    item.appendChild(btnRow);
+  });
+}
 
 // ─── INIT ─────────────────────────────────────────────────────────
 lueckeInit();
 zuoInit();
-sbInit();
+initSatzbau();
 loadBestTimes();
 </script>
 

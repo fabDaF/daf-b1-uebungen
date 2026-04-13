@@ -139,8 +139,8 @@ body {
 /* Control-Bar */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 /* Hilfe-Box */
 .hilfe-box {
@@ -439,14 +439,14 @@ var LUECKEN = [
 ];
 
 var satzbauData = [
-    { parts: ['karim', 'auch', 'möchte', 'schauen', 'was', 'er', 'will'], valid: [['karim', 'auch', 'möchte', 'schauen', 'was', 'er', 'will']], punct: '.' },
+    { parts: ['karim', 'möchte', 'auch', 'schauen', 'was', 'er', 'will'], valid: [['karim', 'möchte', 'auch', 'schauen', 'was', 'er', 'will']], punct: '.' },
     { parts: ['netflix', 'kostet', 'etwa', '13', 'euro', 'pro', 'monat'], valid: [['netflix', 'kostet', 'etwa', '13', 'euro', 'pro', 'monat']], punct: '.' },
-    { parts: ['die', 'auch', 'mediathek', 'ist', 'kostenlos', 'und', 'verfügbar'], valid: [['die', 'auch', 'mediathek', 'ist', 'kostenlos', 'und', 'verfügbar']], punct: '.' },
-    { parts: ['elena', 'auch', 'hat', 'karim', 'eine', 'dokumentation', 'empfohlen'], valid: [['elena', 'auch', 'hat', 'karim', 'eine', 'dokumentation', 'empfohlen']], punct: '.' },
+    { parts: ['die', 'mediathek', 'ist', 'kostenlos', 'und', 'verfügbar'], valid: [['die', 'mediathek', 'ist', 'kostenlos', 'und', 'verfügbar']], punct: '.' },
+    { parts: ['elena', 'hat', 'karim', 'auch', 'eine', 'dokumentation', 'empfohlen'], valid: [['elena', 'hat', 'karim', 'auch', 'eine', 'dokumentation', 'empfohlen']], punct: '.' },
     { parts: ['man', 'kann', 'filme', 'herunterladen', 'und', 'offline', 'schauen'], valid: [['man', 'kann', 'filme', 'herunterladen', 'und', 'offline', 'schauen']], punct: '.' },
-    { parts: ['der', 'immer', 'auch', 'algorithmus', 'macht', 'kluge', 'empfehlungen'], valid: [['der', 'immer', 'auch', 'algorithmus', 'macht', 'kluge', 'empfehlungen']], punct: '.' },
-    { parts: ['karim', 'immer', 'auch', 'entscheidet', 'sich', 'für', 'netflix'], valid: [['karim', 'immer', 'auch', 'entscheidet', 'sich', 'für', 'netflix']], punct: '.' },
-    { parts: ['video', 'auch', 'on', 'demand', 'ist', 'die', 'zukunft'], valid: [['video', 'auch', 'on', 'demand', 'ist', 'die', 'zukunft']], punct: '.' }
+    { parts: ['der', 'algorithmus', 'macht', 'immer', 'kluge', 'empfehlungen'], valid: [['der', 'algorithmus', 'macht', 'immer', 'kluge', 'empfehlungen']], punct: '.' },
+    { parts: ['karim', 'entscheidet', 'sich', 'immer', 'für', 'netflix'], valid: [['karim', 'entscheidet', 'sich', 'immer', 'für', 'netflix']], punct: '.' },
+    { parts: ['video', 'on', 'demand', 'ist', 'die', 'zukunft'], valid: [['video', 'on', 'demand', 'ist', 'die', 'zukunft']], punct: '.' }
 ];
 
 var WORTSCHATZ = [
@@ -884,14 +884,14 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

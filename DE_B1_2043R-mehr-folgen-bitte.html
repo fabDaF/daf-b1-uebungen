@@ -139,8 +139,8 @@ body {
 /* Control-Bar */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 /* Hilfe-Box */
 .hilfe-box {
@@ -653,13 +653,13 @@ function checkLueckenAllDone() {
 // ===== SATZBAU (Tab 4) =====
 var satzbauData = [
     { parts: ['Karim', 'öffnete', 'die', 'Streaming-Plattform', 'und', 'suchte', 'eine', 'neue', 'Serie'], valid: [['Karim', 'öffnete', 'die', 'Streaming-Plattform', 'und', 'suchte', 'eine', 'neue', 'Serie']], punct: '.' },
-    { parts: ['Die', 'immer', 'auch', 'Handlung', 'war', 'sofort', 'interessant'], valid: [['Die', 'immer', 'auch', 'Handlung', 'war', 'sofort', 'interessant']], punct: '.' },
-    { parts: ['mit', 'Untertitel', 'konnte', 'Karim', 'jede', 'Szene', 'verstehen'], valid: [['Mit', 'Untertitel', 'konnte', 'Karim', 'jede', 'Szene', 'verstehen']], punct: '.' },
-    { parts: ['alle', 'auch', 'redeten', 'über', 'die', 'neue', 'Serie'], valid: [['Alle', 'redeten', 'über', 'die', 'neue', 'Serie']], punct: '.' },
-    { parts: ['die', 'auch', 'Serie', 'fesselte', 'Karim', 'so', 'sehr'], valid: [['Die', 'Serie', 'fesselte', 'Karim', 'so', 'sehr']], punct: '.' },
-    { parts: ['er', 'auch', 'schaute', 'alle', 'Folgen', 'am', 'Wochenende'], valid: [['Er', 'schaute', 'alle', 'Folgen', 'am', 'Wochenende']], punct: '.' },
-    { parts: ['süchtig', 'auch', 'nach', 'Serien', 'war', 'Karim', 'jetzt'], valid: [['S&#252;chtig', 'nach', 'Serien', 'war', 'Karim', 'jetzt']], punct: '.' },
-    { parts: ['die', 'immer', 'auch', 'nächste', 'Empfehlung', 'kommt', 'bald'], valid: [['Die', 'n&#228;chste', 'Empfehlung', 'kommt', 'bald']], punct: '.' }
+    { parts: ['Die', 'Handlung', 'war', 'sofort', 'interessant'], valid: [['Die', 'Handlung', 'war', 'sofort', 'interessant']], punct: '.' },
+    { parts: ['Mit', 'Untertitel', 'konnte', 'Karim', 'jede', 'Szene', 'verstehen'], valid: [['Mit', 'Untertitel', 'konnte', 'Karim', 'jede', 'Szene', 'verstehen']], punct: '.' },
+    { parts: ['Alle', 'redeten', 'über', 'die', 'neue', 'Serie'], valid: [['Alle', 'redeten', 'über', 'die', 'neue', 'Serie']], punct: '.' },
+    { parts: ['Die', 'Serie', 'fesselte', 'Karim', 'so', 'sehr'], valid: [['Die', 'Serie', 'fesselte', 'Karim', 'so', 'sehr']], punct: '.' },
+    { parts: ['Er', 'schaute', 'alle', 'Folgen', 'am', 'Wochenende'], valid: [['Er', 'schaute', 'alle', 'Folgen', 'am', 'Wochenende']], punct: '.' },
+    { parts: ['Süchtig', 'nach', 'Serien', 'war', 'Karim', 'jetzt'], valid: [['Süchtig', 'nach', 'Serien', 'war', 'Karim', 'jetzt']], punct: '.' },
+    { parts: ['Die', 'nächste', 'Empfehlung', 'kommt', 'bald'], valid: [['Die', 'nächste', 'Empfehlung', 'kommt', 'bald']], punct: '.' }
 ];
 
 var sbDragged = null;
@@ -841,14 +841,14 @@ function initSatzbau() {
         sbRegisterZone(bank);
         sbRegisterZone(row);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

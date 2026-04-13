@@ -104,8 +104,8 @@ body {
 /* Control-Bar */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 /* Genus / Drag & Drop */
 .genus-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }
@@ -465,14 +465,14 @@ var MC_DATA = [
 ];
 
 var SATZBAU_DATA = [
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Der", "Regisseur", "muss", "alle", "kreativen", "Entscheidungen", "treffen"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Die", "Handlung", "muss", "das", "Publikum", "sofort", "packen"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Gute", "Schauspieler", "können", "ein", "schlechtes", "Drehbuch", "verbessern"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Die", "Besetzung", "entscheidet", "oft", "über", "den", "Erfolg"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Ein", "Kritiker", "muss", "alle", "Faktoren", "analysieren"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Die", "Musik", "unterstützt", "die", "Geschichte", "im", "Film"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Spezialeffekte", "funktionieren", "nur", "wenn", "sie", "sinnvoll", "sind"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Eine", "Premiere", "ist", "das", "erste", "Mal", "für", "das", "Publikum"]], punct: "." }
+    { parts: ['Der', 'Regisseur', 'muss', 'alle', 'kreativen', 'Entscheidungen', 'treffen'], valid: [["Der", "Regisseur", "muss", "alle", "kreativen", "Entscheidungen", "treffen"]], punct: "." },
+    { parts: ['Die', 'Handlung', 'muss', 'das', 'Publikum', 'sofort', 'packen'], valid: [["Die", "Handlung", "muss", "das", "Publikum", "sofort", "packen"]], punct: "." },
+    { parts: ['Gute', 'Schauspieler', 'können', 'ein', 'schlechtes', 'Drehbuch', 'verbessern'], valid: [["Gute", "Schauspieler", "können", "ein", "schlechtes", "Drehbuch", "verbessern"]], punct: "." },
+    { parts: ['Die', 'Besetzung', 'entscheidet', 'oft', 'über', 'den', 'Erfolg'], valid: [["Die", "Besetzung", "entscheidet", "oft", "über", "den", "Erfolg"]], punct: "." },
+    { parts: ['Ein', 'Kritiker', 'muss', 'alle', 'Faktoren', 'analysieren'], valid: [["Ein", "Kritiker", "muss", "alle", "Faktoren", "analysieren"]], punct: "." },
+    { parts: ['Die', 'Musik', 'unterstützt', 'die', 'Geschichte', 'im', 'Film'], valid: [["Die", "Musik", "unterstützt", "die", "Geschichte", "im", "Film"]], punct: "." },
+    { parts: ['Spezialeffekte', 'funktionieren', 'nur', 'wenn', 'sie', 'sinnvoll', 'sind'], valid: [["Spezialeffekte", "funktionieren", "nur", "wenn", "sie", "sinnvoll", "sind"]], punct: "." },
+    { parts: ['Eine', 'Premiere', 'ist', 'das', 'erste', 'Mal', 'für', 'das', 'Publikum'], valid: [["Eine", "Premiere", "ist", "das", "erste", "Mal", "für", "das", "Publikum"]], punct: "." }
 ];
 
 // ============ TIMER & STORAGE ============
@@ -862,14 +862,14 @@ function initSatzbau() {
         sbRegisterZone(row, idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

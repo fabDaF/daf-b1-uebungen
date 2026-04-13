@@ -31,8 +31,8 @@ body {
     padding: 28px 32px 22px;
     text-align: center;
 }
-.header h1 { font-size: 1.55rem; font-weight: 700; margin-bottom: 6px; }
-.header p  { font-size: 0.92rem; opacity: 0.88; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
 
 /* ── NAV ── */
 .nav {
@@ -193,13 +193,12 @@ body {
 }
 
 /* ── TIMER-CONTROLS ── */
-.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
-.tc-buttons { display:flex; gap:6px; }
-.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
-.tc-buttons button:hover { background:#f0f0f0; color:#555; }
-.tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
-.timer-display { color:#667eea; font-weight:700; }
-.best-display  { color: #f39c12; font-weight: 600; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.best-display { color: #f39c12; font-weight: 600; }
 
 /* ── LÜCKENTEXT ── */
 .luecke-item {
@@ -350,8 +349,9 @@ input.plural-inp { width: 110px; }
 
 <!-- HEADER -->
 <div class="header">
-    <h1>🏙️ Berlin – eine multikulturelle Stadt</h1>
-    <p>B1 · Lektion 1033R · Lesen &amp; Verstehen</p>
+    <h1>Berlin – eine multikulturelle Stadt</h1>
+    <p>B1 – Lektion 1033R · Lesen &amp; Verstehen</p>
+    <div class="big-emoji">🏙️</div>
 </div>
 
 <!-- NAV -->
@@ -464,12 +464,12 @@ input.plural-inp { width: 110px; }
          alt="Fragen zum Text">
     <div class="section-title">❓ Verständnisfragen</div>
 
-    <div class="timer-controls">
-        <div class="tc-buttons">
-            <button onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
-            <button onclick="showRFLoesung()">💡 Lösungen</button>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="timerResetOne(2); resetRF()">↺ Neustart</button>
+            <button class="btn" onclick="showRFLoesung()">💡 Lösungen</button>
         </div>
-        <div class="tc-times">
+        <div class="timer-display">
             <span>⏱ <span class="timer-display" id="timer-2">0:00</span></span>
             <span>🏆 <span class="best-display" id="best-2">–</span></span>
         </div>
@@ -490,12 +490,12 @@ input.plural-inp { width: 110px; }
     <div class="section-title">✏️ Lückentext</div>
     <div class="section-sub">Ergänze die fehlenden Wörter.</div>
 
-    <div class="timer-controls">
-        <div class="tc-buttons">
-            <button onclick="showLueckeLoesung()">💡 Lösungen</button>
-            <button onclick="timerResetOne(3); resetLuecke()">↺ Neustart</button>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="showLueckeLoesung()">💡 Lösungen</button>
+            <button class="btn" onclick="timerResetOne(3); resetLuecke()">↺ Neustart</button>
         </div>
-        <div class="tc-times">
+        <div class="timer-display">
             <span>⏱ <span class="timer-display" id="timer-3">0:00</span></span>
             <span>🏆 <span class="best-display" id="best-3">–</span></span>
         </div>
@@ -521,12 +521,12 @@ input.plural-inp { width: 110px; }
     <div class="section-title">🧩 Satzbau</div>
     <div class="section-sub">Bringe die Wörter in die richtige Reihenfolge.</div>
 
-    <div class="timer-controls">
-        <div class="tc-buttons">
-            <button onclick="showAllSbSolutions()">💡 Alle lösen</button>
-            <button onclick="timerResetOne(4); initSatzbau()">↺ Neustart</button>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="showAllSbSolutions()">💡 Alle lösen</button>
+            <button class="btn" onclick="timerResetOne(4); initSatzbau()">↺ Neustart</button>
         </div>
-        <div class="tc-times">
+        <div class="timer-display">
             <span>⏱ <span class="timer-display" id="timer-4">0:00</span></span>
             <span>🏆 <span class="best-display" id="best-4">–</span></span>
         </div>
@@ -545,12 +545,12 @@ input.plural-inp { width: 110px; }
     <div class="section-title">📚 Wortschatz</div>
     <div class="section-sub">Tippe das deutsche Wort (mit Artikel und Plural).</div>
 
-    <div class="timer-controls">
-        <div class="tc-buttons">
-            <button onclick="showWortLoesung()">💡 Lösungen</button>
-            <button onclick="timerResetOne(5); initWortschatz()">↺ Neustart</button>
+    <div class="control-bar">
+        <div class="btn-row">
+            <button class="btn" onclick="showWortLoesung()">💡 Lösungen</button>
+            <button class="btn" onclick="timerResetOne(5); initWortschatz()">↺ Neustart</button>
         </div>
-        <div class="tc-times">
+        <div class="timer-display">
             <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
             <span>🏆 <span class="best-display" id="best-5">–</span></span>
         </div>

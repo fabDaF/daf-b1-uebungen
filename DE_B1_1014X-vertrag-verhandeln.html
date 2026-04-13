@@ -60,8 +60,8 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
 .chip { padding: 6px 14px; border-radius: 20px; background: white; border: 1.5px solid #8b7ed8; color: #5a3e9e; cursor: grab; font-size: 0.83rem; font-weight: 600; user-select: none; transition: transform .15s, opacity .15s; white-space: nowrap; box-shadow: 0 1px 3px rgba(102,86,234,0.08); }
 .chip:active { cursor: grabbing; transform: scale(1.04); }
 .chip.selected { outline: 2px solid #f39c12; outline-offset: 2px; }
-.chip.correct { background: #f0fff4 !important; border-color: #27ae60 !important; color: #1a7a40 !important; }
-.chip.wrong   { background: #fff5f5 !important; border-color: #e74c3c !important; color: #b03030 !important; }
+.chip.correct   { background: #27ae60 !important; border-color: #27ae60 !important; color: white !important; }
+.chip.incorrect { background: #e74c3c !important; border-color: #e74c3c !important; color: white !important; }
 .score-box { font-size: 0.82rem; color: #888; }
 .score-box span { font-weight: 700; color: #667eea; }
 
@@ -72,22 +72,19 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
 .sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; padding: 8px 10px; border-radius: 8px; border: 2px dashed #c5cae9; background: #fafbff; margin-bottom: 6px; align-items: center; transition: background .2s; }
 .sentence-builder.dragover { background: #e8eaff; border-color: #667eea; }
 .chips-container .chip, .sentence-builder .chip { background: white; border: 1.5px solid #8b7ed8; color: #5a3e9e; }
-.chips-container .chip.correct, .sentence-builder .chip.correct { background: #f0fff4 !important; border-color: #27ae60 !important; color: #1a7a40 !important; }
-.chips-container .chip.wrong, .sentence-builder .chip.wrong { background: #fff5f5 !important; border-color: #e74c3c !important; color: #b03030 !important; }
+.chips-container .chip.correct, .sentence-builder .chip.correct { background: #27ae60 !important; border-color: #27ae60 !important; color: white !important; }
+.chips-container .chip.incorrect, .sentence-builder .chip.incorrect { background: #e74c3c !important; border-color: #e74c3c !important; color: white !important; }
 .sb-punkt { color: #667eea; font-weight: 700; align-self: center; font-size: 1.1rem; }
-.satzbau-feedback { font-size: 0.82rem; min-height: 1.2em; margin-top: 4px; }
-.satzbau-feedback.ok  { color: #27ae60; font-weight: 700; }
-.satzbau-feedback.err { color: #e74c3c; }
-.sb-btn-row { display: flex; gap: 6px; margin-top: 6px; }
-.sb-btn { background: none; border: 1px solid #ddd; border-radius: 5px; padding: 3px 10px; font-size: 0.78rem; color: #888; cursor: pointer; }
-.sb-btn:hover { background: #f0f0f0; color: #555; }
+.satzbau-feedback { font-size: 0.82rem; min-height: 1.2em; margin-top: 4px; font-weight: 600; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
 #sb-insert-cursor { width: 3px; background: #667eea; border-radius: 2px; align-self: stretch; min-height: 28px; pointer-events: none; }
 
-/* TIMER-CONTROLS */
-.timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
+/* CONTROL-BAR */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display:flex; gap:6px; }
 .btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { background:#f0f0f0; color:#555; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 
 
@@ -371,14 +368,14 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
          onerror="this.style.display='none'">
 
     <div style="padding-top:20px;">
-    <div class="timer-controls">
+    <div class="control-bar">
       <div class="btn-row">
         <button class="btn" onclick="showAllSbLoesung()">Lösungen</button>
         <button class="btn" onclick="resetAllSb()">Neu starten</button>
       </div>
       <div class="timer-display">
-        <span>&#9201; <span id="timer-3">0:00</span></span>
-        <span>&#127942; Best: <span id="best-3">--:--</span></span>
+        <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
+        <span class="best-time">🏆 <span id="best-3">--:--</span></span>
       </div>
     </div>
 
@@ -780,71 +777,96 @@ function sbRegisterZone(zone, idx) {
 function sbColorRow(idx) {
   var row = document.getElementById('sb-row-' + idx);
   var chips = Array.from(row.querySelectorAll('.chip'));
-  var data = satzbauData[idx];
-  var isValid = data.valid.some(function(ans) {
-    if (chips.length !== ans.length) return false;
-    return chips.every(function(chip, i) {
-      return chip.dataset.orig.toLowerCase() === ans[i].toLowerCase();
-    });
+  var order = chips.map(function(c) { return c.dataset.orig; });
+  var ok = satzbauData[idx].valid.some(function(v) {
+    return JSON.stringify(v) === JSON.stringify(order);
   });
-  chips.forEach(function(chip) {
-    chip.classList.remove('correct', 'wrong');
-    chip.classList.add(isValid ? 'correct' : 'wrong');
+  chips.forEach(function(c) {
+    c.classList.remove('correct', 'incorrect');
+    c.classList.add(ok ? 'correct' : 'incorrect');
   });
-  return isValid;
+  var existing = row.querySelector('.sb-punkt');
+  if (existing) existing.parentNode.removeChild(existing);
+  if (ok) {
+    var punkt = document.createElement('span');
+    punkt.className = 'sb-punkt';
+    punkt.textContent = satzbauData[idx].punct || '.';
+    row.appendChild(punkt);
+  }
+  return ok;
 }
 
 function sbCheckAuto(idx) {
   var bank = document.getElementById('sb-bank-' + idx);
-  if (bank && bank.querySelectorAll('.chip').length > 0) return; // noch Chips in Bank
+  var row  = document.getElementById('sb-row-'  + idx);
+  var fb   = document.getElementById('sb-fb-'   + idx);
+  if (bank.querySelectorAll('.chip').length > 0) {
+    row.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('correct', 'incorrect'); });
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    return;
+  }
   setTimeout(function() {
+    timerAutoStart(3);
     var ok = sbColorRow(idx);
-    var fb = document.getElementById('sb-fb-' + idx);
-    if (fb) {
-      fb.textContent = ok ? '✓ Richtig!' : '✗ Noch nicht ganz — versuche es erneut.';
-      fb.className = 'satzbau-feedback ' + (ok ? 'ok' : 'err');
+    if (ok) {
+      row.classList.add('correct'); row.classList.remove('incorrect');
+      fb.className = 'satzbau-feedback correct';
+      fb.textContent = '✓ Korrekt!';
+      sbCheckAllDone();
+    } else {
+      row.classList.add('incorrect'); row.classList.remove('correct');
+      fb.className = 'satzbau-feedback incorrect';
+      fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
     }
-    sbCheckAllDone();
   }, 500);
 }
 
 function sbCheckAllDone() {
-  var allOk = satzbauData.every(function(_, idx) {
-    var row = document.getElementById('sb-row-' + idx);
-    if (!row) return false;
-    var chips = row.querySelectorAll('.chip');
-    return chips.length > 0 && Array.from(chips).every(function(c) { return c.classList.contains('correct'); });
+  var allOk = satzbauData.every(function(_, i) {
+    var row = document.getElementById('sb-row-' + i);
+    return row && row.classList.contains('correct');
   });
   if (allOk) timerStop(3);
 }
 
 function sbShowSolution(idx) {
   var bank = document.getElementById('sb-bank-' + idx);
-  var row = document.getElementById('sb-row-' + idx);
-  Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { row.appendChild(c); });
-  var ans = satzbauData[idx].valid[0];
-  var chips = Array.from(row.querySelectorAll('.chip'));
-  // Sortieren nach Antwort
-  ans.forEach(function(word) {
-    var chip = chips.find(function(c) { return c.dataset.orig.toLowerCase() === word.toLowerCase(); });
-    if (chip) row.appendChild(chip);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var fb   = document.getElementById('sb-fb-'   + idx);
+  var solution = satzbauData[idx].valid[0];
+  var allChips = {};
+  Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+  Array.from(row.querySelectorAll('.chip')).forEach(function(c)  { allChips[c.dataset.orig] = c; });
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild)  row.removeChild(row.firstChild);
+  solution.forEach(function(word, i) {
+    var chip = allChips[word];
+    if (chip) {
+      if (word !== ',' && word !== ';') chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+      chip.classList.remove('correct', 'incorrect');
+      row.appendChild(chip);
+    }
   });
-  sbUpdateCapitalization(row);
-  sbColorRow(idx);
-  var fb = document.getElementById('sb-fb-' + idx);
-  if (fb) { fb.textContent = '✓ Lösung angezeigt.'; fb.className = 'satzbau-feedback ok'; }
+  fb.textContent = '';
+  setTimeout(function() { sbCheckAuto(idx); }, 100);
 }
 
 function sbResetOne(idx) {
   var bank = document.getElementById('sb-bank-' + idx);
-  var row = document.getElementById('sb-row-' + idx);
-  Array.from(row.querySelectorAll('.chip')).forEach(function(c) {
-    c.classList.remove('correct', 'wrong');
-    c.textContent = c.dataset.orig;
-    bank.appendChild(c);
-  });
-  var fb = document.getElementById('sb-fb-' + idx);
-  if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+  var row  = document.getElementById('sb-row-'  + idx);
+  var fb   = document.getElementById('sb-fb-'   + idx);
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild)  row.removeChild(row.firstChild);
+  row.classList.remove('correct', 'incorrect');
+  fb.textContent = '';
+  fb.className = 'satzbau-feedback';
+  var parts = satzbauData[idx].parts.slice();
+  for (var i = parts.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+  }
+  parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
 }
 
 function showAllSbLoesung() {
@@ -859,48 +881,36 @@ function resetAllSb() {
 
 function initSatzbau() {
   var container = document.getElementById('satzbauContainer');
-  satzbauData.forEach(function(item, idx) {
-    var wrapper = document.createElement('div');
-    wrapper.className = 'satzbau-item';
-
-    var label = document.createElement('div');
-    label.className = 'sb-label';
-
+  container.innerHTML = '';
+  satzbauData.forEach(function(ex, idx) {
+    var item = document.createElement('div');
+    item.className = 'satzbau-item';
 
     var bank = document.createElement('div');
     bank.className = 'chips-container';
     bank.id = 'sb-bank-' + idx;
-    bank.addEventListener('dragover', function(e) { e.preventDefault(); });
-    bank.addEventListener('drop', function(e) {
-      e.preventDefault();
-      if (!sbDragged) return;
-      var cursor = document.getElementById('sb-insert-cursor');
-      if (cursor && cursor.parentNode === bank) bank.removeChild(cursor);
-      bank.appendChild(sbDragged);
-      sbDragged = null;
-      var row = document.getElementById('sb-row-' + idx);
-      sbUpdateCapitalization(row);
-    });
-    shuffle(item.parts).forEach(function(word) {
-      bank.appendChild(sbMakeChip(word));
-    });
-    wrapper.appendChild(bank);
 
     var row = document.createElement('div');
     row.className = 'sentence-builder';
     row.id = 'sb-row-' + idx;
-    sbRegisterZone(row, idx);
-    wrapper.appendChild(row);
-
-    var punkt = document.createElement('span');
-    punkt.className = 'sb-punkt';
-    punkt.textContent = item.punct || '.';
-    wrapper.appendChild(punkt);
 
     var fb = document.createElement('div');
     fb.className = 'satzbau-feedback';
     fb.id = 'sb-fb-' + idx;
-    wrapper.appendChild(fb);
+
+    var parts = ex.parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+
+    sbRegisterZone(bank, idx);
+    sbRegisterZone(row, idx);
+
+    item.appendChild(bank);
+    item.appendChild(row);
+    item.appendChild(fb);
 
     var btnRow = document.createElement('div');
     btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
@@ -914,9 +924,9 @@ function initSatzbau() {
     btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
     btnRow.appendChild(btnS);
     btnRow.appendChild(btnR);
-    wrapper.appendChild(btnRow);
+    item.appendChild(btnRow);
 
-    container.appendChild(wrapper);
+    container.appendChild(item);
   });
 }
 

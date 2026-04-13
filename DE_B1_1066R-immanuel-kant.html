@@ -21,7 +21,6 @@ body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:lin
 .nav-label { font-size:0.78em; margin-top:2px; line-height:1.2; }
 .section { display:none; }
 .section.active { display:block; }
-.tab-banner { width:100%; height:180px; object-fit:cover; display:block; }
 .pad { padding:28px 30px; }
 
 /* ===== STORY TEXT ===== */
@@ -41,16 +40,20 @@ body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:lin
 .vorent-en { color:#999; font-size:0.85em; margin-bottom:5px; font-style:italic; }
 .vorent-def { color:#555; font-size:0.92em; line-height:1.5; }
 
-/* ===== RF LAYOUT ===== */
-.rf-list { list-style:none; }
-.rf-item { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid #f0f0f0; }
-.rf-item:last-child { border-bottom:none; }
-.rf-text { flex:1; font-size:0.95em; color:#333; line-height:1.5; padding-top:2px; }
+/* ===== RF LAYOUT (skill-konform) ===== */
+.rf-list { list-style:none; display:flex; flex-direction:column; gap:8px; max-width:650px; margin-left:auto; margin-right:auto; }
+.rf-title { font-size:1.0em; color:#555; margin-bottom:12px; font-weight:600; max-width:650px; margin-left:auto; margin-right:auto; }
+.rf-item { display:flex; align-items:center; gap:10px; padding:12px 16px; background:#f9f9f9; border-radius:8px; font-size:0.95em; border:1.5px solid #ddd; }
+.rf-item:hover { background:#f3e5f5; }
+.rf-text { flex:1; color:#333; line-height:1.5; }
 .rf-btns { display:flex; gap:6px; flex-shrink:0; }
-.rf-btn { padding:5px 14px; border-radius:16px; border:1.5px solid #c5cae9; background:#fff; cursor:pointer; font-size:0.85em; font-weight:600; transition:all 0.2s; }
-.rf-btn:hover { border-color:#667eea; background:#eef0ff; }
-.rf-btn.correct { background:#27ae60; border-color:#27ae60; color:white; }
-.rf-btn.wrong { background:#e74c3c; border-color:#e74c3c; color:white; }
+.rf-btn { padding:4px 14px; border-radius:14px; border:1.5px solid #9b59b6; background:#fff; color:#6c3483; font-size:0.8rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
+.rf-btn:hover { background:#f3e5f5; }
+.rf-btn.sel-r { background:#27ae60; color:#fff; border-color:#27ae60; }
+.rf-btn.sel-f { background:#e74c3c; color:#fff; border-color:#e74c3c; }
+.rf-result { font-size:0.8rem; font-weight:700; min-width:24px; }
+.rf-result.ok { color:#27ae60; }
+.rf-result.err { color:#e74c3c; }
 .rf-feedback { font-size:0.82em; margin-top:6px; color:#555; font-style:italic; }
 
 /* ===== LÜCKENTEXT ===== */
@@ -143,7 +146,7 @@ body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:lin
 
   <div class="header">
     <h1>Immanuel Kant</h1>
-    <p style="font-family:Georgia,serif;">B1 – Lektion 1066R &nbsp;|&nbsp; Lesen &amp; Verstehen</p>
+    <p style="font-family:Georgia,serif;">B1 – Lektion 1066R · Lesen &amp; Verstehen</p>
     <div class="big-emoji">🧠</div>
   </div>
 
@@ -174,23 +177,48 @@ body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:lin
   <div class="section" id="sec-1">
     <img class="tab-banner" src="https://images.pexels.com/photos/3837494/pexels-photo-3837494.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Alte Bücher und Globus">
     <div class="pad">
-      <div class="section-title">📖 Immanuel Kant</div>
+      <div class="section-title">📖 Ein Satz, der alles verändert</div>
+      <div class="section-sub">Lies die Geschichte und beantworte dann die Fragen.</div>
       <div class="story-text" id="storyText">
-        <p>Immanuel Kant wurde am 22. April 1724 in Königsberg geboren. Königsberg ist eine Stadt, die damals in Preußen lag und heutzutage auf russischem Gebiet unter dem Namen Kaliningrad bekannt ist. Kant hatte acht Geschwister, allerdings erreichten nur drei das Erwachsenenalter. Seine Mutter legte großen Wert auf Bildung. Aus diesem Grund besuchte er zunächst ein Gymnasium, das die klassischen Sprachen lehrte.</p>
 
-        <p>Bereits mit 16 Jahren fing er an der renommierten Albertus-Universität ein Philosophiestudium an, aber er interessierte sich auch für viele andere Themen: Naturwissenschaften, elementare Mathematik und Naturphilosophie. 1746 veröffentlichte er seine Abschlussarbeit, aber sein Professor erkannte die Arbeit nicht an. Im gleichen Jahr starb Kants Vater, daher musste Immanuel sein Studium unterbrechen und anfangen, als Privatlehrer in der Schweiz und in Polen Geld zu verdienen. Erst acht Jahre später begann er wieder zu studieren und habilitierte sich im Jahr 1755.</p>
+        <p><strong>I.</strong></p>
+        <p>Karim Benali saß an seinem Schreibtisch im Büro von E.ON in Düsseldorf und starrte auf den Bildschirm. Es war Dienstagvormittag, aber er dachte nicht an die Zahlen vor ihm. Er dachte an Kant.</p>
+        <p>Stefan Meier stellte eine Tasse Kaffee auf den Tisch. „Du siehst aus wie jemand, der die ganze Nacht gelesen hat."</p>
+        <p class="dialog">„Fast", sagte Karim. „Ich habe bis Mitternacht über einen Philosophen aus Königsberg nachgedacht."</p>
 
-        <p>Danach arbeitete er als Dozent an der Universität Königsberg unter anderem in den Fächern Metaphysik, Logik und Geografie. Erst Kant etablierte Geografie als akademisches Fach. Er wollte unbedingt die Professur für Logik und Metaphysik, aber seine erste Bewerbung im Jahr 1759 scheiterte. Trotzdem lehnte er Angebote für Professuren an vielen anderen renommierten Universitäten ab. Erst 11 Jahre später bekam er endlich den gewünschten Lehrstuhl.</p>
+        <figure style="margin:18px 0;text-align:center;">
+          <img src="https://images.pexels.com/photos/256450/pexels-photo-256450.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
+               alt="Alte Bücher in einer Bibliothek"
+               style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+          <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Immanuel Kant (1724–1804) — Philosoph der Aufklärung</figcaption>
+        </figure>
 
-        <p>Kant soll ein beeindruckender Lehrer, witziger Erzähler und im Erwachsenenalter ein sehr strikt durchgeplanter Mensch gewesen sein. Er starb am 12. Februar 1804 in seiner Heimatstadt Königsberg.</p>
+        <p><strong>II.</strong></p>
+        <p>Elena Stojanovic erschien in der Tür. Sie hatte die letzten Worte gehört. „Immanuel Kant?"</p>
+        <p class="dialog">„Genau", sagte Karim. Er öffnete sein Notizbuch. „Er ist 1724 in einer kleinen preußischen Stadt geboren und hat sein ganzes Leben dort verbracht. Und trotzdem hat er die Philosophie seiner Zeit von Grund auf verändert."</p>
+        <p>Elena setzte sich. „Die Aufklärung", sagte sie. „Das hatten wir im Studium. Vernunft gegen Tradition."</p>
+        <p class="dialog">„Genau das", nickte Karim. „Kant hat gesagt, dass der Mensch alles kritisch hinterfragen soll — Meinungen, Überzeugungen, Autoritäten. Nicht einfach so akzeptieren, was andere denken."</p>
+        <p>Stefan hörte zu. „Und was ist die Moral dabei?"</p>
+        <p class="dialog">„Für Kant ist die Vernunft die höchste moralische Autorität", sagte Karim. „Nicht die Kirche. Nicht die Tradition. Sondern das eigene Denken."</p>
 
-        <p>Während seiner Studienzeit wurde Kant von den Theorien der Philosophen Isaac Newton und Gottfried Wilhelm Leibniz beeinflusst. Er gilt als eine der wichtigsten Persönlichkeiten der Aufklärung. Diese Epoche, die etwa von 1650 bis 1800 dauerte, ist durch rationales Denken charakterisiert. Man sollte sich mit Hilfe der Vernunft von alten Ideologien befreien.</p>
+        <figure style="margin:18px 0;text-align:center;">
+          <img src="https://images.pexels.com/photos/6473796/pexels-photo-6473796.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
+               alt="Person liest nachdenklich ein Buch"
+               style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+          <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">Lesen und Nachdenken — Kants Aufforderung zur Vernunft</figcaption>
+        </figure>
 
-        <p>In seinem wichtigsten Werk <em>Kritik der reinen Vernunft</em> schreibt er, dass die menschliche Vernunft die höchste moralische Autorität ist. Kant plädiert dafür, dass man nur nach diesen moralischen Regeln der Vernunft leben soll. Das ist für ihn Freiheit. Mit Vernunft soll man alles kritisch hinterfragen: alle Meinungen, Überzeugungen und Theorien.</p>
+        <p><strong>III.</strong></p>
+        <p>Karim schlug eine Seite auf. Er hatte einen Satz markiert: <em>Habe Mut, dich deines Verstandes zu bedienen!</em></p>
+        <p class="dialog">„Das ist sein bekanntester Satz", sagte er. „Er meinte, dass die meisten Menschen Angst davor haben, selbst zu denken. Sie lassen andere für sich denken — und folgen deren Ideen, ohne sie zu hinterfragen."</p>
+        <p>Elena wiegte den Kopf. „Das klingt einfach. Aber es ist es nicht."</p>
+        <p class="dialog">„Nein", sagte Karim leise. Er dachte an Entscheidungen, die er manchmal zu schnell getroffen hatte — ohne wirklich nachgedacht zu haben. „Es braucht Mut."</p>
 
-        <p>Ein weiterer wichtiger Beitrag zur Philosophie ist Kants Erkenntnistheorie: Er fragt sich, wie der Mensch etwas erkennen kann und welche Bedingungen den Erwerb von Erkenntnissen begünstigen. Seiner Meinung nach kann der Mensch die Welt nicht nur rational verstehen und erkennen. Er wird diese Gedanken immer mit sinnlichen Wahrnehmungen verbinden und sich daraus ein Bild der Welt formen.</p>
+        <p><strong>IV.</strong></p>
+        <p>Am Abend, auf dem Weg zur U-Bahn, hielt Karim kurz inne. Die Stadt war laut. Aber der Satz blieb in seinem Kopf: <em>Habe Mut, dich deines Verstandes zu bedienen.</em></p>
+        <p>Nicht als Befehl. Als Einladung.</p>
+        <p>Er zog sein Notizbuch aus der Tasche und schrieb einen einzigen Satz darunter: <em>Was denke ich eigentlich selbst?</em></p>
 
-        <p>Kant formulierte einen wichtigen Satz, der den Charakter der Aufklärung gut beschreibt: <em>Habe Mut, dich deines Verstandes zu bedienen!</em> Lange hatten die Menschen Angst davor, selbst zu denken. Aber Kant wollte, dass die Menschen nicht mehr andere für sich denken lassen und deren Ideen unkritisch folgen.</p>
       </div>
       <div class="story-source">Quelle: Lingoda – B1, Lektion 1066R – Immanuel Kant</div>
     </div>
@@ -292,36 +320,36 @@ var VORENTLASTUNG = [
 
 // ===== RF DATA =====
 var RF_DATA = [
-  { text: 'Königsberg heißt auch heute noch so.',
-    correct: false, feedback: 'Falsch! Heute heißt die Stadt Kaliningrad (Russland).' },
-  { text: 'Kants Mutter war es wichtig, dass die Kinder viel lernen.',
-    correct: true, feedback: 'Richtig! Seine Mutter legte großen Wert auf Bildung.' },
-  { text: 'Sein Professor akzeptierte seine erste Abschlussarbeit nicht.',
-    correct: true, feedback: 'Richtig! Der Professor erkannte die Arbeit nicht an.' },
-  { text: 'Kant beendete sein Studium 1746 regulär.',
-    correct: false, feedback: 'Falsch! Er musste das Studium unterbrechen und schloss es erst 1755 ab.' },
-  { text: 'Kant bekam die Professur für Logik und Metaphysik sofort.',
-    correct: false, feedback: 'Falsch! Seine erste Bewerbung scheiterte – er bekam den Lehrstuhl erst 11 Jahre später.' },
-  { text: 'Den größten Teil seines Lebens hat Kant in Königsberg verbracht.',
-    correct: true, feedback: 'Richtig! Er wurde dort geboren und starb dort.' },
-  { text: 'Kant etablierte Geografie als akademisches Fach.',
-    correct: true, feedback: 'Richtig! Erst Kant machte Geografie zu einem Universitätsfach.' },
-  { text: 'Für Kant ist Freiheit, keine moralischen Regeln zu befolgen.',
-    correct: false, feedback: 'Falsch! Für Kant ist Freiheit, nach den moralischen Regeln der Vernunft zu leben.' },
+  { text: 'Karim hat die ganze Nacht über Kant gelesen.',
+    correct: false, feedback: 'Falsch! Er hat bis Mitternacht gelesen — nicht die ganze Nacht.' },
+  { text: 'Karim arbeitet bei E.ON in Düsseldorf.',
+    correct: true, feedback: 'Richtig! Karim sitzt an seinem Schreibtisch im E.ON-Büro.' },
+  { text: 'Immanuel Kant wurde in Berlin geboren.',
+    correct: false, feedback: 'Falsch! Kant wurde 1724 in Königsberg (Preußen) geboren.' },
+  { text: 'Kant hat sein ganzes Leben in seiner Heimatstadt verbracht.',
+    correct: true, feedback: 'Richtig! Er ist in Königsberg geboren und dort geblieben.' },
+  { text: 'Die Aufklärung war eine Epoche, in der rationales Denken wichtig war.',
+    correct: true, feedback: 'Richtig! Elena erwähnt genau das aus ihrem Studium.' },
+  { text: 'Kant wollte, dass die Menschen den Ideen anderer unkritisch folgen.',
+    correct: false, feedback: 'Falsch! Kant wollte das Gegenteil: Man soll alles mit Vernunft hinterfragen.' },
+  { text: 'Für Kant ist die Vernunft die höchste moralische Autorität.',
+    correct: true, feedback: 'Richtig! Karim erklärt das Stefan im Gespräch.' },
+  { text: 'Elena hatte noch nie von der Aufklärung gehört.',
+    correct: false, feedback: 'Falsch! Elena sagt, sie hatte das Thema im Studium.' },
 ];
 
 // ===== LÜCKENTEXT DATA =====
 var LUECKEN_DATA = [
-  { text: 'Kant wurde am 22. April 1724 in ___ geboren.', ans: 'Königsberg' },
-  { text: 'Er hatte acht ___, aber nur drei erreichten das Erwachsenenalter.', ans: 'Geschwister' },
-  { text: 'Mit 16 Jahren begann er ein ___ an der Albertus-Universität.', ans: 'Philosophiestudium' },
-  { text: 'Sein Professor erkannte seine ___ nicht an.', ans: 'Abschlussarbeit' },
-  { text: 'Kant musste als ___ in der Schweiz und in Polen Geld verdienen.', ans: 'Privatlehrer' },
-  { text: 'Er habilitierte sich im Jahr ___.', ans: '1755' },
-  { text: 'Kant lehrte unter anderem Metaphysik, Logik und ___.', ans: 'Geografie' },
-  { text: 'Die Epoche der ___ dauerte etwa von 1650 bis 1800.', ans: 'Aufklärung' },
-  { text: 'In seinem wichtigsten Werk schreibt er, dass die menschliche ___ die höchste moralische Autorität ist.', ans: 'Vernunft' },
-  { text: 'Kant starb am 12. Februar 1804 in seiner ___ Königsberg.', ans: 'Heimatstadt' },
+  { text: 'Karim saß an seinem Schreibtisch im Büro von E.ON in ___.', ans: 'Düsseldorf' },
+  { text: 'Immanuel Kant wurde 1724 in ___, einer preußischen Stadt, geboren.', ans: 'Königsberg' },
+  { text: 'Kant gilt als eine der wichtigsten Persönlichkeiten der ___.', ans: 'Aufklärung' },
+  { text: 'Die ___ war eine Epoche, in der rationales Denken im Vordergrund stand.', ans: 'Aufklärung' },
+  { text: 'Für Kant ist die menschliche ___ die höchste moralische Autorität.', ans: 'Vernunft' },
+  { text: 'Man soll alles kritisch ___ und nicht einfach so akzeptieren.', ans: 'hinterfragen' },
+  { text: 'Kants bekanntester Satz lautet: Habe Mut, dich deines ___ zu bedienen!', ans: 'Verstandes' },
+  { text: 'Karim zog sein ___ aus der Tasche und schrieb einen Satz hinein.', ans: 'Notizbuch' },
+  { text: 'Laut Kant verbindet der Mensch rationales Denken immer mit sinnlicher ___.', ans: 'Wahrnehmung' },
+  { text: 'Am Abend auf dem Weg zur U-Bahn hielt Karim kurz ___.', ans: 'inne' },
 ];
 
 // ===== SATZBAU DATA =====
@@ -332,28 +360,28 @@ var satzbauData = [
     punct: '.'
   },
   {
-    parts: ['sein', 'Vater', 'starb', 'im', 'Jahr', '1746'],
-    valid: [['sein', 'Vater', 'starb', 'im', 'Jahr', '1746']],
-    punct: '.'
-  },
-  {
-    parts: ['er', 'musste', 'sein', 'Studium', 'leider', 'unterbrechen'],
-    valid: [['er', 'musste', 'sein', 'Studium', 'leider', 'unterbrechen']],
-    punct: '.'
-  },
-  {
-    parts: ['Kant', 'gilt', 'auch', 'als', 'Persönlichkeit', 'der', 'Aufklärung'],
-    valid: [['Kant', 'gilt', 'auch', 'als', 'Persönlichkeit', 'der', 'Aufklärung']],
-    punct: '.'
-  },
-  {
     parts: ['man', 'soll', 'alles', 'immer', 'kritisch', 'hinterfragen'],
     valid: [['man', 'soll', 'alles', 'immer', 'kritisch', 'hinterfragen']],
     punct: '.'
   },
   {
-    parts: ['die', 'Vernunft', 'ist', 'die', 'höchste', 'moralische', 'Autorität'],
-    valid: [['die', 'Vernunft', 'ist', 'die', 'höchste', 'moralische', 'Autorität']],
+    parts: ['Karim', 'dachte', 'die', 'ganze', 'Zeit', 'an', 'Kant'],
+    valid: [['Karim', 'dachte', 'die', 'ganze', 'Zeit', 'an', 'Kant']],
+    punct: '.'
+  },
+  {
+    parts: ['Kant', 'gilt', 'als', 'wichtige', 'Persönlichkeit', 'der', 'Aufklärung'],
+    valid: [['Kant', 'gilt', 'als', 'wichtige', 'Persönlichkeit', 'der', 'Aufklärung']],
+    punct: '.'
+  },
+  {
+    parts: ['die', 'Vernunft', 'ist', 'laut', 'Kant', 'die', 'höchste', 'moralische', 'Autorität'],
+    valid: [['die', 'Vernunft', 'ist', 'laut', 'Kant', 'die', 'höchste', 'moralische', 'Autorität']],
+    punct: '.'
+  },
+  {
+    parts: ['Karim', 'schrieb', 'einen', 'Satz', 'in', 'sein', 'Notizbuch'],
+    valid: [['Karim', 'schrieb', 'einen', 'Satz', 'in', 'sein', 'Notizbuch']],
     punct: '.'
   },
 ];
@@ -437,7 +465,8 @@ function initRF() {
   RF_DATA.forEach(function(item, idx){
     var li = document.createElement('li');
     li.className = 'rf-item';
-    li.innerHTML = '<div class="rf-text">'+item.text+'</div>'
+    li.innerHTML = '<span class="rf-result" id="rf-res-'+idx+'"></span>'
+      + '<div class="rf-text">'+item.text+'</div>'
       + '<div class="rf-btns">'
       + '<button class="rf-btn" id="rf-r-'+idx+'" onclick="checkRF('+idx+', true)">R</button>'
       + '<button class="rf-btn" id="rf-f-'+idx+'" onclick="checkRF('+idx+', false)">F</button>'
@@ -453,16 +482,12 @@ function checkRF(idx, answer) {
   var rBtn = document.getElementById('rf-r-'+idx);
   var fBtn = document.getElementById('rf-f-'+idx);
   var fb   = document.getElementById('rf-fb-'+idx);
-  rBtn.classList.remove('correct','wrong');
-  fBtn.classList.remove('correct','wrong');
+  var res  = document.getElementById('rf-res-'+idx);
+  rBtn.classList.remove('sel-r','sel-f');
+  fBtn.classList.remove('sel-r','sel-f');
   var correct = (answer === item.correct);
-  if (answer) {
-    rBtn.classList.add(correct ? 'correct' : 'wrong');
-    fBtn.classList.add(!correct ? 'correct' : 'wrong');
-  } else {
-    fBtn.classList.add(correct ? 'correct' : 'wrong');
-    rBtn.classList.add(!correct ? 'correct' : 'wrong');
-  }
+  if (answer) { rBtn.classList.add('sel-r'); } else { fBtn.classList.add('sel-f'); }
+  if (res) { res.className = 'rf-result ' + (correct ? 'ok' : 'err'); res.textContent = correct ? '✓' : '✗'; }
   fb.textContent = item.feedback;
 }
 

@@ -135,8 +135,8 @@ body {
 .rf-title { font-size: 1.0em; color: #555; margin-bottom: 12px; font-weight: 600; max-width: 650px; margin-left: auto; margin-right: auto; }
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 .hilfe-box {
     background: #f0f4ff;
@@ -388,12 +388,12 @@ var LUECKEN = [
 var satzbauData = [
     { parts: ['Stefan', 'und', 'Anja', 'ein', 'Kind', 'mögen', '.'], valid: [['Stefan', 'und', 'Anja', 'mögen', 'ein', 'Kind', '.']], punct: '.' },
     { parts: ['Der', 'Junge', 'vier', 'ist', 'Jahre', 'alt', '.'], valid: [['Der', 'Junge', 'ist', 'vier', 'Jahre', 'alt', '.']], punct: '.' },
-    { parts: ['Karim', 'E.ON', 'arbeitet', 'einer', 'deutschen', 'in', '.'], valid: [['Karim', 'arbeitet', 'in', 'einer', 'deutschen', 'E.ON-Firma', '.']], punct: '.' },
-    { parts: ['Das', 'Gutachten', 'psychologisch', 'sehr', 'war', 'intensiv', '.'], valid: [['Das', 'psychologische', 'Gutachten', 'war', 'sehr', 'intensiv', '.']], punct: '.' },
-    { parts: ['Mika', 'sich', 'leiblich', 'nach', 'Mutter', 'seiner', 'sehnt', '.'], valid: [['Mika', 'sehnt', 'sich', 'nach', 'seiner', 'leiblichen', 'Mutter', '.']], punct: '.' },
-    { parts: ['Das', 'Sorgerecht', 'Pflegefamilie', 'Stefan', 'Anja', 'von', 'zu', 'ging', '.'], valid: [['Das', 'Sorgerecht', 'ging', 'von', 'der', 'Pflegefamilie', 'zu', 'Stefan', 'und', 'Anja', '.']], punct: '.' },
-    { parts: ['Wahrheit', 'für', 'Kind', 'Identität', 'ein', 'wichtig', 'ist', '.'], valid: [['Wahrheit', 'ist', 'für', 'die', 'Identität', 'eines', 'Kindes', 'wichtig', '.']], punct: '.' },
-    { parts: ['Liebe', 'Familie', 'nicht', 'eine', 'nur', 'Behördengenehmigung', 'ist', '.'], valid: [['Eine', 'Familie', 'ist', 'nicht', 'nur', 'eine', 'Behördengenehmigung', '.']], punct: '.' }
+    { parts: ['Karim', 'E.ON-Firma', 'arbeitet', 'einer', 'deutschen', 'in', '.'], valid: [['Karim', 'arbeitet', 'in', 'einer', 'deutschen', 'E.ON-Firma', '.']], punct: '.' },
+    { parts: ['Das', 'psychologische', 'Gutachten', 'sehr', 'war', 'intensiv', '.'], valid: [['Das', 'psychologische', 'Gutachten', 'war', 'sehr', 'intensiv', '.']], punct: '.' },
+    { parts: ['Mika', 'sich', 'leiblichen', 'nach', 'Mutter', 'seiner', 'sehnt', '.'], valid: [['Mika', 'sehnt', 'sich', 'nach', 'seiner', 'leiblichen', 'Mutter', '.']], punct: '.' },
+    { parts: ['Das', 'Sorgerecht', 'der', 'Pflegefamilie', 'Stefan', 'und', 'Anja', 'von', 'zu', 'ging', '.'], valid: [['Das', 'Sorgerecht', 'ging', 'von', 'der', 'Pflegefamilie', 'zu', 'Stefan', 'und', 'Anja', '.']], punct: '.' },
+    { parts: ['Wahrheit', 'für', 'die', 'Identität', 'eines', 'Kindes', 'wichtig', 'ist', '.'], valid: [['Wahrheit', 'ist', 'für', 'die', 'Identität', 'eines', 'Kindes', 'wichtig', '.']], punct: '.' },
+    { parts: ['Familie', 'bedeutet', 'mehr', 'als', 'nur', 'eine', 'Behördengenehmigung', '.'], valid: [['Familie', 'bedeutet', 'mehr', 'als', 'nur', 'eine', 'Behördengenehmigung', '.']], punct: '.' }
 ];
 var WORTSCHATZ = [
     { type: 'n', en: 'adoption', de: 'Adoption', artikel: 'die', plural: '-en' },
@@ -759,14 +759,14 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

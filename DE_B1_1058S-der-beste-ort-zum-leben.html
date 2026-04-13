@@ -446,21 +446,9 @@ var sortPlacements0 = {};
 var draggedSortWord = null;
 var sortZonesInited = false;
 
-function registerSortZone(el, binName) {
-    el.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        el.style.outline = '2px solid #667eea';
-    });
-    el.addEventListener('dragleave', function(e) {
-        if (!el.contains(e.relatedTarget)) el.style.outline = '';
-    });
-    el.addEventListener('drop', function(e) {
-        e.preventDefault();
-        el.style.outline = '';
-        if (!draggedSortWord) return;
-        dropSortWord(draggedSortWord, binName);
-        draggedSortWord = null;
-    });
+function highlightSortBin(el, on) {
+    el.style.outline = on ? '2px solid #667eea' : '';
+    el.style.background = on ? (el.classList.contains('haft-bin') ? '#ede0ff' : '#d4f5e9') : '';
 }
 
 function dropSortWord(el, targetBin) {
@@ -500,9 +488,46 @@ function initSort0() {
     document.getElementById('sortFb0').textContent = '';
     if (!sortZonesInited) {
         sortZonesInited = true;
-        registerSortZone(pool,    'pool');
-        registerSortZone(binHaft, 'haft');
-        registerSortZone(binLos,  'los');
+
+        // Globaler dragover: Browser-Verbotscursor verhindern solange sort-drag läuft
+        document.addEventListener('dragover', function(e) {
+            if (draggedSortWord) e.preventDefault();
+        });
+
+        // Pool als Rückgabe-Zone
+        pool.addEventListener('dragenter', function(e) { if (draggedSortWord) e.preventDefault(); });
+        pool.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (!draggedSortWord) return;
+            dropSortWord(draggedSortWord, 'pool');
+            draggedSortWord = null;
+        });
+
+        // ÄUSSERE .sort-bin Divs als Drop-Zonen (decken Label + Words-Bereich ab)
+        var outerHaft = document.querySelector('.sort-bin.haft-bin');
+        var outerLos  = document.querySelector('.sort-bin.los-bin');
+
+        [
+            { outer: outerHaft, bin: 'haft' },
+            { outer: outerLos,  bin: 'los'  }
+        ].forEach(function(z) {
+            z.outer.addEventListener('dragenter', function(e) {
+                if (draggedSortWord) { e.preventDefault(); highlightSortBin(z.outer, true); }
+            });
+            z.outer.addEventListener('dragover', function(e) {
+                if (draggedSortWord) { e.preventDefault(); }
+            });
+            z.outer.addEventListener('dragleave', function(e) {
+                if (!z.outer.contains(e.relatedTarget)) highlightSortBin(z.outer, false);
+            });
+            z.outer.addEventListener('drop', function(e) {
+                e.preventDefault();
+                highlightSortBin(z.outer, false);
+                if (!draggedSortWord) return;
+                dropSortWord(draggedSortWord, z.bin);
+                draggedSortWord = null;
+            });
+        });
     }
     var shuffled = sortData0.slice();
     for (var i = shuffled.length - 1; i > 0; i--) {

@@ -139,8 +139,8 @@ body {
 /* Control-Bar */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 /* Hilfe-Box */
 .hilfe-box {
@@ -438,13 +438,13 @@ var LUECKEN = [
 
 var satzbauData = [
     { parts: ['karim', 'sitzt', 'in', 'seinem', 'b\u00fcro', 'bei', 'e.on'], valid: [['karim', 'sitzt', 'in', 'seinem', 'b\u00fcro', 'bei', 'e.on']], punct: '.' },
-    { parts: ['er', 'meist', 'immer', 'auch', 'möchte', 'etwas', 'zurückgeben'], valid: [['er', 'meist', 'immer', 'auch', 'möchte', 'etwas', 'zurückgeben']], punct: '.' },
-    { parts: ['die', 'immer', 'auch', 'bewerbung', 'war', 'überraschend', 'schwierig'], valid: [['die', 'immer', 'auch', 'bewerbung', 'war', 'überraschend', 'schwierig']], punct: '.' },
-    { parts: ['karim', 'auch', 'zieht', 'mit', 'zwei', 'studierenden', 'zusammen'], valid: [['karim', 'auch', 'zieht', 'mit', 'zwei', 'studierenden', 'zusammen']], punct: '.' },
-    { parts: ['die', 'auch', 'schüler', 'erwarten', 'einen', 'strengen', 'pr\u00fcfer'], valid: [['die', 'auch', 'schüler', 'erwarten', 'einen', 'strengen', 'pr\u00fcfer']], punct: '.' },
-    { parts: ['die', 'immer', 'auch', 'wohngemeinschaft', 'wird', 'zum', 'wendepunkt'], valid: [['die', 'immer', 'auch', 'wohngemeinschaft', 'wird', 'zum', 'wendepunkt']], punct: '.' },
-    { parts: ['ein', 'auch', 'm\u00e4dchen', 'liest', 'mit', 'neuem', 'selbstvertrauen'], valid: [['ein', 'auch', 'm\u00e4dchen', 'liest', 'mit', 'neuem', 'selbstvertrauen']], punct: '.' },
-    { parts: ['karim', 'immer', 'auch', 'schafft', 'sein', 'erstes', 'jahr'], valid: [['karim', 'immer', 'auch', 'schafft', 'sein', 'erstes', 'jahr']], punct: '.' }
+    { parts: ['er', 'möchte', 'meist', 'etwas', 'zurückgeben'], valid: [['er', 'möchte', 'meist', 'etwas', 'zurückgeben']], punct: '.' },
+    { parts: ['die', 'bewerbung', 'war', 'überraschend', 'schwierig'], valid: [['die', 'bewerbung', 'war', 'überraschend', 'schwierig']], punct: '.' },
+    { parts: ['karim', 'zieht', 'auch', 'mit', 'zwei', 'studierenden', 'zusammen'], valid: [['karim', 'zieht', 'auch', 'mit', 'zwei', 'studierenden', 'zusammen']], punct: '.' },
+    { parts: ['die', 'schüler', 'erwarten', 'einen', 'strengen', 'pr\u00fcfer'], valid: [['die', 'schüler', 'erwarten', 'einen', 'strengen', 'pr\u00fcfer']], punct: '.' },
+    { parts: ['die', 'wohngemeinschaft', 'wird', 'zum', 'wendepunkt'], valid: [['die', 'wohngemeinschaft', 'wird', 'zum', 'wendepunkt']], punct: '.' },
+    { parts: ['ein', 'm\u00e4dchen', 'liest', 'mit', 'neuem', 'selbstvertrauen'], valid: [['ein', 'm\u00e4dchen', 'liest', 'mit', 'neuem', 'selbstvertrauen']], punct: '.' },
+    { parts: ['karim', 'schafft', 'immer', 'sein', 'erstes', 'jahr'], valid: [['karim', 'schafft', 'immer', 'sein', 'erstes', 'jahr']], punct: '.' }
 ];
 
 var WORTSCHATZ = [
@@ -961,14 +961,14 @@ function initSatzbau() {
         sbRegisterZone(row, idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

@@ -84,8 +84,8 @@ body {
 
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 
 .section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
@@ -647,8 +647,8 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['die', 'auch', 'Integration', 'ist', 'ein', 'langwieriger', 'Prozess'],
-        valid: [['die', 'auch', 'Integration', 'ist', 'ein', 'langwieriger', 'Prozess']],
+        parts: ['die', 'Integration', 'ist', 'ein', 'langwieriger', 'Prozess'],
+        valid: [['die', 'Integration', 'ist', 'ein', 'langwieriger', 'Prozess']],
         punct: '.'
     },
     {
@@ -670,7 +670,7 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['am', 'auch', 'Ende', 'entwickelt', 'man', 'ein', 'Zugehörigkeitsgefühl'],
+        parts: ['am', 'Ende', 'entwickelt', 'man', 'ein', 'Zugehörigkeitsgefühl'],
         valid: [
             ['am', 'Ende', 'entwickelt', 'man', 'ein', 'Zugehörigkeitsgefühl'],
             ['man', 'entwickelt', 'am', 'Ende', 'ein', 'Zugehörigkeitsgefühl']
@@ -683,8 +683,8 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['man', 'auch', 'lernt', 'mit', 'den', 'Unterschieden', 'umzugehen'],
-        valid: [['man', 'auch', 'lernt', 'mit', 'den', 'Unterschieden', 'umzugehen']],
+        parts: ['man', 'lernt', 'auch', 'mit', 'den', 'Unterschieden', 'umzugehen'],
+        valid: [['man', 'lernt', 'auch', 'mit', 'den', 'Unterschieden', 'umzugehen']],
         punct: '.'
     },
     {
@@ -1180,14 +1180,14 @@ function initSatzbau() {
         sbRegisterZone(row, idx);
 
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

@@ -139,8 +139,8 @@ body {
 /* Control-Bar */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 /* Hilfe-Box */
 .hilfe-box {
@@ -446,11 +446,11 @@ var LUECKEN = [
 var satzbauData = [
     { parts: ['Sophie', 'hat', 'ein', 'auslandspraktikum', 'in', 'Wien', 'geplant'], valid: [['Sophie', 'hat', 'ein', 'auslandspraktikum', 'in', 'Wien', 'geplant']], punct: '.' },
     { parts: ['sie', 'musste', 'sich', 'in', 'der', 'stadt', 'orientieren'], valid: [['sie', 'musste', 'sich', 'in', 'der', 'stadt', 'orientieren']], punct: '.' },
-    { parts: ['Sophie', 'auch', 'erleidet', 'einen', 'kulturschock', 'in', 'Wien'], valid: [['Sophie', 'auch', 'erleidet', 'einen', 'kulturschock', 'in', 'Wien']], punct: '.' },
-    { parts: ['die', 'immer', 'auch', 'arbeit', 'ist', 'sehr', 'herausfordernd'], valid: [['die', 'immer', 'auch', 'arbeit', 'ist', 'sehr', 'herausfordernd']], punct: '.' },
-    { parts: ['die', 'auch', 'lernkurve', 'ist', 'steil', 'f\u00fcr', 'Sophie'], valid: [['die', 'auch', 'lernkurve', 'ist', 'steil', 'f\u00fcr', 'Sophie']], punct: '.' },
-    { parts: ['ihre', 'immer', 'auch', 'lebenseinstellung', 'gewinnt', 'die', 'oberhand'], valid: [['ihre', 'immer', 'auch', 'lebenseinstellung', 'gewinnt', 'die', 'oberhand']], punct: '.' },
-    { parts: ['Sophie', 'immer', 'auch', 'will', 'das', 'riesenrad', 'besichtigen'], valid: [['Sophie', 'immer', 'auch', 'will', 'das', 'riesenrad', 'besichtigen']], punct: '.' },
+    { parts: ['Sophie', 'erleidet', 'auch', 'einen', 'kulturschock', 'in', 'Wien'], valid: [['Sophie', 'erleidet', 'auch', 'einen', 'kulturschock', 'in', 'Wien']], punct: '.' },
+    { parts: ['die', 'arbeit', 'ist', 'sehr', 'herausfordernd'], valid: [['die', 'arbeit', 'ist', 'sehr', 'herausfordernd']], punct: '.' },
+    { parts: ['die', 'lernkurve', 'ist', 'steil', 'f\u00fcr', 'Sophie'], valid: [['die', 'lernkurve', 'ist', 'steil', 'f\u00fcr', 'Sophie']], punct: '.' },
+    { parts: ['ihre', 'lebenseinstellung', 'gewinnt', 'die', 'oberhand'], valid: [['ihre', 'lebenseinstellung', 'gewinnt', 'die', 'oberhand']], punct: '.' },
+    { parts: ['Sophie', 'will', 'das', 'riesenrad', 'besichtigen'], valid: [['Sophie', 'will', 'das', 'riesenrad', 'besichtigen']], punct: '.' },
     { parts: ['sie', 'nimmt', 'proviant', 'f\u00fcr', 'den', 'tag', 'mit'], valid: [['sie', 'nimmt', 'proviant', 'f\u00fcr', 'den', 'tag', 'mit']], punct: '.' }
 ];
 
@@ -950,14 +950,14 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

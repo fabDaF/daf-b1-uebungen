@@ -84,12 +84,9 @@ body {
 .section.active { display: block; }
 .tab-banner {
     width: 100%;
-    max-height: 180px;
+    height: 180px;
     object-fit: cover;
     display: block;
-    border-radius: 10px;
-    margin-bottom: 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 .tab-content { padding: 28px 30px; }
 /* Control bar */
@@ -378,7 +375,7 @@ body {
 
     <div class="header">
         <h1>Heimweh</h1>
-        <p>B1.1 – Lektion 1057X · Kommunikation &amp; Wortschatz</p>
+        <p style="font-family: Georgia, serif;">B1.1 – Lektion 1057X &nbsp;|&nbsp; Kommunikation &amp; Wortschatz</p>
         <div class="big-emoji">🏠</div>
     </div>
 
@@ -400,21 +397,24 @@ body {
             <div class="section-title">📚 Wortschatz zum Thema Heimweh</div>
             <div class="section-sub">Lerne die wichtigsten Wörter und Adjektive zum Thema.</div>
 
-            <div class="section-title" style="font-size:1em; margin-bottom:12px;">Adjektive &amp; Emotionen sortieren</div>
-            <div class="hilfe-box">Ordne die Adjektive in die richtige Kategorie. Klicke auf ein Wort und dann auf die passende Spalte, oder nutze Drag &amp; Drop.</div>
-            <div class="chip-bank" id="adjBank"></div>
-            <div class="adj-grid" style="margin-top:12px;">
+            <div class="section-title" style="font-size:1em; margin-bottom:12px;">Adjektive &amp; Emotionen</div>
+            <div class="adj-grid">
                 <div class="adj-col pos">
                     <h3>😊 Positiv (Fernweh / Abenteuer)</h3>
-                    <div class="drop-zone" id="adjZonePos" data-cat="pos"></div>
+                    <span class="adj-chip">abenteuerlustig</span>
+                    <span class="adj-chip">neugierig</span>
+                    <span class="adj-chip">aufgeregt</span>
+                    <span class="adj-chip">nostalgisch</span>
+                    <span class="adj-chip">optimistisch</span>
                 </div>
                 <div class="adj-col neg">
                     <h3>😞 Negativ (Heimweh / Einsamkeit)</h3>
-                    <div class="drop-zone" id="adjZoneNeg" data-cat="neg"></div>
+                    <span class="adj-chip">vereinsamt</span>
+                    <span class="adj-chip">melancholisch</span>
+                    <span class="adj-chip">pessimistisch</span>
+                    <span class="adj-chip">traurig</span>
+                    <span class="adj-chip">gelangweilt</span>
                 </div>
-            </div>
-            <div style="margin-top:10px;">
-                <button class="btn" onclick="resetAdjSort()">&#8635; Neu starten</button>
             </div>
 
             <div class="section-title" style="font-size:1em; margin-bottom:12px; margin-top:8px;">Nomen &amp; Verben</div>
@@ -572,93 +572,6 @@ function loadBestTimes() {
         if (v) { var el=document.getElementById('best-'+n); if(el) el.textContent=fmtTime(parseInt(v)); }
     });
 }
-
-// ===== TAB 0: ADJ-SORT =====
-var ADJ_DATA = [
-    { word: 'abenteuerlustig', cat: 'pos' },
-    { word: 'neugierig',       cat: 'pos' },
-    { word: 'aufgeregt',       cat: 'pos' },
-    { word: 'nostalgisch',     cat: 'pos' },
-    { word: 'optimistisch',    cat: 'pos' },
-    { word: 'vereinsamt',      cat: 'neg' },
-    { word: 'melancholisch',   cat: 'neg' },
-    { word: 'pessimistisch',   cat: 'neg' },
-    { word: 'traurig',         cat: 'neg' },
-    { word: 'gelangweilt',     cat: 'neg' }
-];
-var draggedAdj = null;
-var adjSortInited = false;
-
-function makeAdjChip(item) {
-    var chip = document.createElement('div');
-    chip.className = 'qa-chip'; chip.textContent = item.word;
-    chip.dataset.cat = item.cat; chip.draggable = true;
-    chip.addEventListener('dragstart', function(e) {
-        draggedAdj = chip; e.dataTransfer.setData('text/plain', '');
-    });
-    chip.addEventListener('dragend', function() { draggedAdj = null; colorAdjChips(); });
-    chip.addEventListener('click', function() {
-        if (chip.classList.contains('correct')) return;
-        if (chip.classList.contains('selected')) { chip.classList.remove('selected'); return; }
-        document.querySelectorAll('#adjBank .qa-chip.selected, #adjZonePos .qa-chip.selected, #adjZoneNeg .qa-chip.selected').forEach(function(c){ c.classList.remove('selected'); });
-        chip.classList.add('selected');
-    });
-    return chip;
-}
-function colorAdjChips() {
-    ['adjZonePos', 'adjZoneNeg'].forEach(function(id) {
-        var zone = document.getElementById(id);
-        zone.querySelectorAll('.qa-chip').forEach(function(chip) {
-            chip.classList.remove('correct', 'wrong');
-            chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
-        });
-    });
-    document.querySelectorAll('#adjBank .qa-chip').forEach(function(c) { c.classList.remove('correct','wrong'); });
-}
-function registerAdjZone(zone) {
-    zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('dragover'); });
-    zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
-    zone.addEventListener('drop', function(e){
-        e.preventDefault(); zone.classList.remove('dragover');
-        if (!draggedAdj) return;
-        zone.appendChild(draggedAdj); draggedAdj = null; colorAdjChips();
-    });
-    zone.addEventListener('click', function(e){
-        if (e.target === zone || e.target.classList.contains('adj-col')) {
-            var sel = document.querySelector('.qa-chip.selected');
-            if (sel) { zone.appendChild(sel); sel.classList.remove('selected'); colorAdjChips(); }
-        }
-    });
-}
-function initAdjSort() {
-    var bank = document.getElementById('adjBank');
-    var zonePos = document.getElementById('adjZonePos');
-    var zoneNeg = document.getElementById('adjZoneNeg');
-    bank.innerHTML = ''; zonePos.innerHTML = ''; zoneNeg.innerHTML = '';
-    if (!adjSortInited) {
-        adjSortInited = true;
-        bank.addEventListener('dragover', function(e){ e.preventDefault(); });
-        bank.addEventListener('drop', function(e){
-            e.preventDefault();
-            if (!draggedAdj) return;
-            bank.appendChild(draggedAdj); draggedAdj = null; colorAdjChips();
-        });
-        bank.addEventListener('click', function(e){
-            if (e.target === bank) {
-                var sel = document.querySelector('.qa-chip.selected');
-                if (sel) { bank.appendChild(sel); sel.classList.remove('selected'); colorAdjChips(); }
-            }
-        });
-        registerAdjZone(zonePos);
-        registerAdjZone(zoneNeg);
-    }
-    var shuffled = ADJ_DATA.slice();
-    for (var i = shuffled.length-1; i > 0; i--) {
-        var j = Math.floor(Math.random()*(i+1)); var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
-    }
-    shuffled.forEach(function(item) { bank.appendChild(makeAdjChip(item)); });
-}
-function resetAdjSort() { adjSortInited = false; initAdjSort(); }
 
 // ===== TAB 0: WORTSCHATZ =====
 var VOCAB_DATA = [
@@ -876,10 +789,10 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['er', 'unter', 'großer', 'Einsamkeit', 'leidet', 'im', 'Ausland'],
+        parts: ['Er', 'unter', 'großer', 'Einsamkeit', 'leidet', 'im', 'Ausland'],
         valid: [
-            ['er', 'leidet', 'im', 'Ausland', 'unter', 'großer', 'Einsamkeit'],
-            ['im', 'Ausland', 'leidet', 'er', 'unter', 'großer', 'Einsamkeit']
+            ['Er', 'leidet', 'im', 'Ausland', 'unter', 'großer', 'Einsamkeit'],
+            ['Im', 'Ausland', 'leidet', 'er', 'unter', 'großer', 'Einsamkeit']
         ],
         punct: '.'
     },
@@ -897,8 +810,8 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['er', 'hat', 'Fernweh', 'möchte', 'und', 'Welt', 'die', 'bereisen'],
-        valid: [['er', 'hat', 'Fernweh', 'und', 'möchte', 'die', 'Welt', 'bereisen']],
+        parts: ['Er', 'hat', 'Fernweh', 'möchte', 'und', 'Welt', 'die', 'bereisen'],
+        valid: [['Er', 'hat', 'Fernweh', 'und', 'möchte', 'die', 'Welt', 'bereisen']],
         punct: '.'
     },
     {
@@ -1149,7 +1062,6 @@ function resetWortschatz() {
 }
 
 // ===== INIT =====
-initAdjSort();
 initVocab0();
 initTrosten();
 initQa();

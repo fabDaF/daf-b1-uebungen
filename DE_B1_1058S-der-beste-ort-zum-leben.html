@@ -51,7 +51,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .sort-container { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-top: 16px; }
 .sort-title { font-weight: 700; color: #444; margin-bottom: 14px; font-size: 0.95em; }
 .word-pool { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: white; border: 2px dashed #c5cae9; border-radius: 8px; min-height: 56px; margin-bottom: 16px; }
-.sort-word { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: all 0.2s; user-select: none; }
+.sort-word { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: grab; font-weight: 600; font-size: 0.9em; transition: all 0.2s; user-select: none; }
+.sort-word:active { cursor: grabbing; }
 .sort-word.placed-haft { border-color: #764ba2; background: #f5f0ff; color: #764ba2; }
 .sort-word.placed-los { border-color: #27ae60; background: #eefaf5; color: #27ae60; }
 .sort-word.correct-final { background: #27ae60; border-color: #27ae60; color: white; }
@@ -443,12 +444,96 @@ var sortData0 = [
     { word: 'wissen', correct: 'los' }
 ];
 var sortPlacements0 = {};
-var draggedSortWord = null;
-var sortZonesInited = false;
+
+// Maus-Drag-Zustand (kein HTML5 DnD — zu unzuverlässig auf macOS Chrome)
+var dragEl = null, dragClone = null;
+var dragOffX = 0, dragOffY = 0;
+var dragMoved = false, dragStartX = 0, dragStartY = 0;
+var dragMoveHandler = null, dragUpHandler = null;
 
 function highlightSortBin(el, on) {
     el.style.outline = on ? '2px solid #667eea' : '';
     el.style.background = on ? (el.classList.contains('haft-bin') ? '#ede0ff' : '#d4f5e9') : '';
+}
+
+function getBinFromPoint(x, y) {
+    if (dragClone) dragClone.style.visibility = 'hidden';
+    var hit = document.elementFromPoint(x, y);
+    if (dragClone) dragClone.style.visibility = '';
+    if (!hit) return 'pool';
+    var node = hit;
+    while (node && node !== document.body) {
+        if (node.classList && node.classList.contains('haft-bin')) return 'haft';
+        if (node.classList && node.classList.contains('los-bin'))  return 'los';
+        if (node.id === 'sortPool0') return 'pool';
+        node = node.parentElement;
+    }
+    return 'pool';
+}
+
+function attachSortDrag(w) {
+    w.addEventListener('mousedown', function(e) {
+        if (e.button !== 0) return;
+        e.preventDefault();
+        dragEl = w;
+        dragMoved = false;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        var rect = w.getBoundingClientRect();
+        dragOffX = e.clientX - rect.left;
+        dragOffY = e.clientY - rect.top;
+
+        var outerHaft = document.querySelector('.sort-bin.haft-bin');
+        var outerLos  = document.querySelector('.sort-bin.los-bin');
+
+        dragMoveHandler = function(ev) {
+            if (!dragMoved) {
+                if (Math.abs(ev.clientX - dragStartX) < 5 && Math.abs(ev.clientY - dragStartY) < 5) return;
+                dragMoved = true;
+                var r = dragEl.getBoundingClientRect();
+                dragClone = dragEl.cloneNode(true);
+                dragClone.style.position = 'fixed';
+                dragClone.style.zIndex  = '9999';
+                dragClone.style.opacity = '0.85';
+                dragClone.style.pointerEvents = 'none';
+                dragClone.style.width  = r.width + 'px';
+                dragClone.style.margin = '0';
+                dragClone.style.left   = (dragStartX - dragOffX) + 'px';
+                dragClone.style.top    = (dragStartY - dragOffY) + 'px';
+                dragClone.style.transition = 'none';
+                document.body.appendChild(dragClone);
+                dragEl.style.opacity = '0.3';
+            }
+            if (dragClone) {
+                dragClone.style.left = (ev.clientX - dragOffX) + 'px';
+                dragClone.style.top  = (ev.clientY - dragOffY) + 'px';
+                var bin = getBinFromPoint(ev.clientX, ev.clientY);
+                if (outerHaft) highlightSortBin(outerHaft, bin === 'haft');
+                if (outerLos)  highlightSortBin(outerLos,  bin === 'los');
+            }
+        };
+
+        dragUpHandler = function(ev) {
+            document.removeEventListener('mousemove', dragMoveHandler);
+            document.removeEventListener('mouseup',   dragUpHandler);
+            if (dragClone && dragClone.parentNode) dragClone.parentNode.removeChild(dragClone);
+            dragClone = null;
+            if (outerHaft) highlightSortBin(outerHaft, false);
+            if (outerLos)  highlightSortBin(outerLos,  false);
+            if (!dragEl) return;
+            dragEl.style.opacity = '';
+            if (dragMoved) {
+                var bin = getBinFromPoint(ev.clientX, ev.clientY);
+                dropSortWord(dragEl, bin);
+            } else {
+                clickSort0(dragEl);
+            }
+            dragEl = null;
+        };
+
+        document.addEventListener('mousemove', dragMoveHandler);
+        document.addEventListener('mouseup',   dragUpHandler);
+    });
 }
 
 function dropSortWord(el, targetBin) {
@@ -478,7 +563,8 @@ function dropSortWord(el, targetBin) {
 
 function initSort0() {
     sortPlacements0 = {};
-    draggedSortWord = null;
+    if (dragEl) { dragEl.style.opacity = ''; dragEl = null; }
+    if (dragClone && dragClone.parentNode) { dragClone.parentNode.removeChild(dragClone); dragClone = null; }
     var pool    = document.getElementById('sortPool0');
     var binHaft = document.getElementById('sortBin0-haft');
     var binLos  = document.getElementById('sortBin0-los');
@@ -486,49 +572,7 @@ function initSort0() {
     binHaft.innerHTML = '';
     binLos.innerHTML = '';
     document.getElementById('sortFb0').textContent = '';
-    if (!sortZonesInited) {
-        sortZonesInited = true;
 
-        // Globaler dragover: Browser-Verbotscursor verhindern solange sort-drag läuft
-        document.addEventListener('dragover', function(e) {
-            if (draggedSortWord) e.preventDefault();
-        });
-
-        // Pool als Rückgabe-Zone
-        pool.addEventListener('dragenter', function(e) { if (draggedSortWord) e.preventDefault(); });
-        pool.addEventListener('drop', function(e) {
-            e.preventDefault();
-            if (!draggedSortWord) return;
-            dropSortWord(draggedSortWord, 'pool');
-            draggedSortWord = null;
-        });
-
-        // ÄUSSERE .sort-bin Divs als Drop-Zonen (decken Label + Words-Bereich ab)
-        var outerHaft = document.querySelector('.sort-bin.haft-bin');
-        var outerLos  = document.querySelector('.sort-bin.los-bin');
-
-        [
-            { outer: outerHaft, bin: 'haft' },
-            { outer: outerLos,  bin: 'los'  }
-        ].forEach(function(z) {
-            z.outer.addEventListener('dragenter', function(e) {
-                if (draggedSortWord) { e.preventDefault(); highlightSortBin(z.outer, true); }
-            });
-            z.outer.addEventListener('dragover', function(e) {
-                if (draggedSortWord) { e.preventDefault(); }
-            });
-            z.outer.addEventListener('dragleave', function(e) {
-                if (!z.outer.contains(e.relatedTarget)) highlightSortBin(z.outer, false);
-            });
-            z.outer.addEventListener('drop', function(e) {
-                e.preventDefault();
-                highlightSortBin(z.outer, false);
-                if (!draggedSortWord) return;
-                dropSortWord(draggedSortWord, z.bin);
-                draggedSortWord = null;
-            });
-        });
-    }
     var shuffled = sortData0.slice();
     for (var i = shuffled.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -539,17 +583,8 @@ function initSort0() {
         w.className = 'sort-word';
         w.textContent = item.word;
         w.dataset.word = item.word;
-        w.draggable = true;
-        w.addEventListener('dragstart', function(e) {
-            draggedSortWord = w;
-            e.dataTransfer.setData('text/plain', '');
-            setTimeout(function(){ w.style.opacity = '0.45'; }, 0);
-        });
-        w.addEventListener('dragend', function() {
-            w.style.opacity = '';
-            draggedSortWord = null;
-        });
-        w.onclick = function() { clickSort0(this); };
+        w.style.cursor = 'grab';
+        attachSortDrag(w);
         pool.appendChild(w);
     });
 }

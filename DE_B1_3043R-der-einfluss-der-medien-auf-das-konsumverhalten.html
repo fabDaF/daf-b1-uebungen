@@ -28,8 +28,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .hilfe-box strong { color: #5a3e9e; }
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 .wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
 .luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
@@ -248,13 +248,13 @@ function resetTab(n) {
 // ─── SATZBAU ─────────────────────────────────────────────────────────────────
 var sbDragged = null;
 var satzbauData = [
-    { parts: ['Werbung', 'immer', 'auch', 'beeinflusst', 'unser', 'Kaufverhalten', 'stark'], valid: [['Werbung', 'immer', 'auch', 'beeinflusst', 'unser', 'Kaufverhalten', 'stark']], punct: '.' },
+    { parts: ['Werbung', 'beeinflusst', 'immer', 'auch', 'unser', 'Kaufverhalten', 'stark'], valid: [['Werbung', 'beeinflusst', 'immer', 'auch', 'unser', 'Kaufverhalten', 'stark']], punct: '.' },
     { parts: ['er', 'hinterfragt', 'immer', ',', 'was', 'er', 'in', 'den', 'Medien', 'sieht'], valid: [['er', 'hinterfragt', 'immer', ',', 'was', 'er', 'in', 'den', 'Medien', 'sieht']], punct: '.' },
     { parts: ['der', 'Influencer', 'wirbt', 'für', 'viele', 'verschiedene', 'Produkte'], valid: [['der', 'Influencer', 'wirbt', 'für', 'viele', 'verschiedene', 'Produkte']], punct: '.' },
-    { parts: ['soziale', 'auch', 'Medien', 'verleiten', 'zum', 'impulsiven', 'Kaufen'], valid: [['soziale', 'auch', 'Medien', 'verleiten', 'zum', 'impulsiven', 'Kaufen']], punct: '.' },
-    { parts: ['Werbung', 'auch', 'zeigt', 'oft', 'ein', 'idealisiertes', 'Leben'], valid: [['Werbung', 'auch', 'zeigt', 'oft', 'ein', 'idealisiertes', 'Leben']], punct: '.' },
-    { parts: ['sie', 'auch', 'unterscheidet', 'zwischen', 'Empfehlungen', 'und', 'Werbung'], valid: [['sie', 'auch', 'unterscheidet', 'zwischen', 'Empfehlungen', 'und', 'Werbung']], punct: '.' },
-    { parts: ['er', 'auch', 'kritisiert', 'die', 'Manipulation', 'durch', 'Werbung'], valid: [['er', 'auch', 'kritisiert', 'die', 'Manipulation', 'durch', 'Werbung']], punct: '.' }
+    { parts: ['soziale', 'Medien', 'verleiten', 'auch', 'zum', 'impulsiven', 'Kaufen'], valid: [['soziale', 'Medien', 'verleiten', 'auch', 'zum', 'impulsiven', 'Kaufen']], punct: '.' },
+    { parts: ['Werbung', 'zeigt', 'auch', 'oft', 'ein', 'idealisiertes', 'Leben'], valid: [['Werbung', 'zeigt', 'auch', 'oft', 'ein', 'idealisiertes', 'Leben']], punct: '.' },
+    { parts: ['sie', 'unterscheidet', 'auch', 'zwischen', 'Empfehlungen', 'und', 'Werbung'], valid: [['sie', 'unterscheidet', 'auch', 'zwischen', 'Empfehlungen', 'und', 'Werbung']], punct: '.' },
+    { parts: ['er', 'kritisiert', 'auch', 'die', 'Manipulation', 'durch', 'Werbung'], valid: [['er', 'kritisiert', 'auch', 'die', 'Manipulation', 'durch', 'Werbung']], punct: '.' }
 ];
 
 function getSbCursor() { var c = document.getElementById('sb-insert-cursor'); if (!c) { c = document.createElement('div'); c.id = 'sb-insert-cursor'; c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;'; } return c; }
@@ -281,14 +281,14 @@ function initSatzbau() {
         sbRegisterZone(bank, idx); sbRegisterZone(row, idx);
         row.addEventListener('click', function(e) { var chip = e.target.closest('.chip:not(.punct-chip)'); if (chip && row.contains(chip)) { if (chip.dataset.sbIdx !== String(idx)) return; bank.appendChild(chip); sbUpdateCapitalization(row); sbCheckAuto(idx); } });
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

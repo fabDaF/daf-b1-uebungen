@@ -21,7 +21,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
 .section { display: none; }
 .section.active { display: block; }
-.tab-banner { width: 100%; height: 180px; object-fit: cover; display: block; }
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; display: block; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
 .content { padding: 28px 30px; }
 .section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 20px; }
 .section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
@@ -34,16 +34,27 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .timer-display .current-time { color: #667eea; font-weight: 700; }
 .timer-display .best-time { color: #f39c12; font-weight: 600; }
 
-/* Entdecken Tab */
-.entdecken-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-.entdecken-card { background: #f8f9ff; border: 1px solid #e0e4ff; border-radius: 10px; padding: 16px; }
-.entdecken-card h3 { color: #667eea; font-size: 1em; margin-bottom: 12px; border-bottom: 2px solid #e8ecff; padding-bottom: 6px; }
-.sentence-example { background: white; border-left: 3px solid #667eea; padding: 8px 12px; margin: 6px 0; border-radius: 0 6px 6px 0; font-size: 0.92em; line-height: 1.5; }
-.sentence-example .key-verb { color: #764ba2; font-weight: 700; }
-.sentence-example .meaning { color: #27ae60; font-size: 0.82em; margin-top: 3px; }
-.frage-box { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 14px; margin-top: 16px; }
-.frage-box h3 { color: #f57c00; margin-bottom: 8px; font-size: 0.95em; }
-.frage-box p { font-size: 0.9em; color: #555; line-height: 1.6; }
+/* ===== Entdecken-Tab (skill-konform) ===== */
+.entdeck-intro { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 18px 20px; margin-bottom: 24px; }
+.entdeck-intro p { font-size: 1.0em; color: #333; line-height: 2.0; }
+.hl { background: #fff3cd; border-radius: 4px; padding: 1px 4px; font-weight: 700; color: #764ba2; }
+.progress-dots { display: flex; gap: 10px; margin-bottom: 20px; }
+.pdot { width: 14px; height: 14px; border-radius: 50%; background: #e0e4ff; border: 2px solid #c5cae9; transition: all 0.3s; }
+.pdot.done { background: #27ae60; border-color: #27ae60; }
+.mc-step { display: none; }
+.mc-step.active { display: block; }
+.mc-step-q { font-size: 1.05em; font-weight: 600; color: #333; margin-bottom: 14px; line-height: 1.5; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.mc-btn { text-align: left; padding: 10px 16px; border: 1.5px solid #c5cae9; border-radius: 8px; background: white; cursor: pointer; font-size: 0.95em; color: #444; transition: all 0.2s; }
+.mc-btn:hover:not(:disabled) { border-color: #667eea; background: #eef0ff; }
+.mc-btn.correct { border-color: #27ae60; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-btn.wrong { border-color: #e74c3c; background: #ffebee; color: #c62828; }
+.mc-feedback { font-size: 0.9em; font-weight: 600; min-height: 1.3em; margin-top: 4px; }
+.mc-feedback.ok { color: #27ae60; }
+.mc-feedback.err { color: #e74c3c; }
+.regel-karte { display: none; background: linear-gradient(135deg, #f0f4ff, #e8ecff); border: 2px solid #667eea; border-radius: 12px; padding: 20px 24px; margin-top: 10px; }
+.regel-karte h3 { color: #667eea; margin-bottom: 12px; font-size: 1.05em; }
+.rk-example { background: white; border-left: 3px solid #764ba2; padding: 8px 14px; border-radius: 0 6px 6px 0; margin: 6px 0; font-size: 0.92em; color: #333; line-height: 1.6; }
 
 /* Regel Tab */
 .regel-tabelle { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.92em; }
@@ -113,7 +124,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
     .nav { flex-wrap: wrap; }
     .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
     .nav-btn:last-child { border-right: 1px solid #ddd; }
-    .entdecken-grid, .bedeutung-grid { grid-template-columns: 1fr; }
+    .bedeutung-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -121,7 +132,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 <div class="container">
     <div class="header">
         <h1>Das Verb <em>lassen</em></h1>
-        <p style="font-family: Georgia, serif;">B1 – Lektion 1062G &nbsp;|&nbsp; Grammatik: Vollverb & Hilfsverb</p>
+        <p style="font-family: Georgia, serif;">B1 – Lektion 1062G · Grammatik: Vollverb &amp; Hilfsverb</p>
         <div class="big-emoji">🔑</div>
     </div>
 
@@ -137,77 +148,76 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
     <div class="section active" id="sec-0">
         <img class="tab-banner" src="https://images.pexels.com/photos/4145354/pexels-photo-4145354.jpeg?auto=compress&cs=tinysrgb&w=1000&h=180&fit=crop" alt="Frau erklärt einem Jungen etwas am Computer">
         <div class="content">
-            <div class="section-title">🔍 Entdecken: Was bedeutet <em>lassen</em>?</div>
-            <div class="section-sub">Lies die Sätze. Was bedeutet <em>lassen</em> in jedem Satz? Überlege vor dem Weiterlesen!</div>
+            <div class="section-title">🔍 Entdecken: Das Verb <em>lassen</em></div>
+            <div class="section-sub">Lies die Sätze aufmerksam. Beobachte das Verb <em>lassen</em>.</div>
 
-            <div class="entdecken-grid">
-                <div class="entdecken-card">
-                    <h3>Gruppe A — Auftrag / Kausativ</h3>
-                    <div class="sentence-example">
-                        Ich <span class="key-verb">lasse</span> mein Auto reparieren.
-                        <div class="meaning">→ jemand anderes repariert es für mich</div>
-                    </div>
-                    <div class="sentence-example">
-                        Sie <span class="key-verb">lässt</span> sich die Haare schneiden.
-                        <div class="meaning">→ beim Friseur</div>
-                    </div>
-                    <div class="sentence-example">
-                        Wir <span class="key-verb">lassen</span> das Haus streichen.
-                        <div class="meaning">→ Maler macht es</div>
-                    </div>
-                </div>
-                <div class="entdecken-card">
-                    <h3>Gruppe B — Erlaubnis / Zulassen</h3>
-                    <div class="sentence-example">
-                        Die Eltern <span class="key-verb">lassen</span> das Kind fernsehen.
-                        <div class="meaning">→ sie erlauben es</div>
-                    </div>
-                    <div class="sentence-example">
-                        Er <span class="key-verb">lässt</span> mich das Buch behalten.
-                        <div class="meaning">→ er erlaubt, dass ich es behalte</div>
-                    </div>
-                    <div class="sentence-example">
-                        <span class="key-verb">Lass</span> mich das erklären!
-                        <div class="meaning">→ gib mir die Möglichkeit</div>
-                    </div>
-                </div>
-                <div class="entdecken-card">
-                    <h3>Gruppe C — Vollverb (zurücklassen / liegenlassen)</h3>
-                    <div class="sentence-example">
-                        Er <span class="key-verb">lässt</span> die Tür offen.
-                        <div class="meaning">→ er schließt sie nicht</div>
-                    </div>
-                    <div class="sentence-example">
-                        Ich habe den Schlüssel zu Hause <span class="key-verb">gelassen</span>.
-                        <div class="meaning">→ nicht mitgenommen</div>
-                    </div>
-                    <div class="sentence-example">
-                        <span class="key-verb">Lass</span> das!
-                        <div class="meaning">→ hör damit auf!</div>
-                    </div>
-                </div>
-                <div class="entdecken-card">
-                    <h3>Gruppe D — Bewirken / Ermöglichen</h3>
-                    <div class="sentence-example">
-                        Das <span class="key-verb">lässt</span> sich nicht ändern.
-                        <div class="meaning">→ es ist nicht möglich</div>
-                    </div>
-                    <div class="sentence-example">
-                        Der Text <span class="key-verb">lässt</span> sich gut lesen.
-                        <div class="meaning">→ man kann ihn gut lesen</div>
-                    </div>
-                    <div class="sentence-example">
-                        Das Problem <span class="key-verb">lässt</span> sich lösen.
-                        <div class="meaning">→ es ist lösbar</div>
-                    </div>
-                </div>
+            <div class="entdeck-intro">
+                <p>
+                    Ich <span class="hl">lasse</span> das Auto reparieren.<br>
+                    Die Eltern <span class="hl">lassen</span> das Kind draußen spielen.<br>
+                    Er <span class="hl">lässt</span> die Tür offen.<br>
+                    Das Problem <span class="hl">lässt</span> sich lösen.<br>
+                    Sie <span class="hl">lässt</span> sich die Haare schneiden.<br>
+                    <span class="hl">Lass</span> das! Hör bitte damit auf.
+                </p>
             </div>
 
-            <div class="frage-box">
-                <h3>💡 Beobachtung: Was haben alle Sätze gemeinsam?</h3>
-                <p>In Gruppe A und B folgt <strong>lassen</strong> einem Infinitiv → <em>lassen</em> ist hier ein <strong>Hilfsverb</strong> (Modalverb-ähnlich).<br>
-                In Gruppe C steht <em>lassen</em> allein → es ist ein <strong>Vollverb</strong>.<br>
-                In Gruppe D folgt <em>sich + Infinitiv</em> → das drückt eine <strong>Möglichkeit oder Passivbedeutung</strong> aus.</p>
+            <div class="progress-dots">
+                <div class="pdot" id="dot0-0"></div>
+                <div class="pdot" id="dot0-1"></div>
+                <div class="pdot" id="dot0-2"></div>
+                <div class="pdot" id="dot0-3"></div>
+            </div>
+
+            <div class="mc-step active" id="step0-0">
+                <div class="mc-step-q">In den meisten Sätzen oben folgt auf <em>lassen</em> ein weiteres Verb. In welcher Form steht dieses zweite Verb?</div>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="entdMcClick(0,this,false)">Im Partizip II (z.&nbsp;B. <em>repariert</em>)</button>
+                    <button class="mc-btn" onclick="entdMcClick(0,this,true)">Im Infinitiv (z.&nbsp;B. <em>reparieren</em>)</button>
+                    <button class="mc-btn" onclick="entdMcClick(0,this,false)">Im Präteritum (z.&nbsp;B. <em>reparierte</em>)</button>
+                    <button class="mc-btn" onclick="entdMcClick(0,this,false)">Im Konjunktiv (z.&nbsp;B. <em>repariere</em>)</button>
+                </div>
+                <div class="mc-feedback" id="fb0-0"></div>
+            </div>
+
+            <div class="mc-step" id="step0-1">
+                <div class="mc-step-q">„Ich lasse das Auto reparieren." — Wer repariert das Auto?</div>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="entdMcClick(1,this,false)">Ich selbst repariere es.</button>
+                    <button class="mc-btn" onclick="entdMcClick(1,this,true)">Jemand anderes repariert es für mich.</button>
+                    <button class="mc-btn" onclick="entdMcClick(1,this,false)">Niemand repariert es.</button>
+                    <button class="mc-btn" onclick="entdMcClick(1,this,false)">Das Auto repariert sich selbst.</button>
+                </div>
+                <div class="mc-feedback" id="fb0-1"></div>
+            </div>
+
+            <div class="mc-step" id="step0-2">
+                <div class="mc-step-q">„Er lässt die Tür offen." — Folgt hier ein Infinitiv auf <em>lässt</em>?</div>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="entdMcClick(2,this,false)">Ja, <em>offen</em> ist ein Infinitiv — <em>lässt</em> ist hier Hilfsverb.</button>
+                    <button class="mc-btn" onclick="entdMcClick(2,this,true)">Nein, <em>lässt</em> steht hier allein — es ist ein Vollverb.</button>
+                    <button class="mc-btn" onclick="entdMcClick(2,this,false)">Ja, <em>lässt</em> ist immer ein Hilfsverb.</button>
+                    <button class="mc-btn" onclick="entdMcClick(2,this,false)">Nein, <em>lässt</em> ist hier ein Reflexivverb.</button>
+                </div>
+                <div class="mc-feedback" id="fb0-2"></div>
+            </div>
+
+            <div class="mc-step" id="step0-3">
+                <div class="mc-step-q">„Das Problem lässt sich lösen." — Was bedeutet <em>sich lassen</em> + Infinitiv?</div>
+                <div class="mc-options">
+                    <button class="mc-btn" onclick="entdMcClick(3,this,false)">Jemand befiehlt, das Problem zu lösen.</button>
+                    <button class="mc-btn" onclick="entdMcClick(3,this,false)">Das Problem löst sich ohne Hilfe von selbst.</button>
+                    <button class="mc-btn" onclick="entdMcClick(3,this,true)">Das Problem kann gelöst werden — es drückt eine Möglichkeit aus.</button>
+                    <button class="mc-btn" onclick="entdMcClick(3,this,false)">Jemand erlaubt dem Problem, sich zu lösen.</button>
+                </div>
+                <div class="mc-feedback" id="fb0-3"></div>
+            </div>
+
+            <div class="regel-karte" id="regelkarte0">
+                <h3>📌 Die Regel: <em>lassen</em> — drei Verwendungsarten</h3>
+                <div class="rk-example"><strong>Hilfsverb (Auftrag / Erlaubnis):</strong> <em>lassen</em> + Infinitiv → jemand anderes handelt<br><span class="hl">Ich lasse das Auto reparieren.</span> &nbsp;·&nbsp; <span class="hl">Die Eltern lassen das Kind spielen.</span></div>
+                <div class="rk-example"><strong>Hilfsverb (Möglichkeit):</strong> <em>sich lassen</em> + Infinitiv → es ist möglich<br><span class="hl">Das Problem lässt sich lösen.</span> = Das Problem kann gelöst werden.</div>
+                <div class="rk-example"><strong>Vollverb (zurücklassen / aufhören):</strong> <em>lassen</em> steht allein<br><span class="hl">Er lässt die Tür offen.</span> &nbsp;·&nbsp; <span class="hl">Lass das!</span></div>
             </div>
         </div>
     </div>
@@ -868,6 +878,40 @@ function initMC() {
         box.appendChild(optsDiv);
         container.appendChild(box);
     });
+}
+
+// ===== ENTDECKEN =====
+function entdMcClick(stepIdx, btn, isCorrect) {
+    var step = document.getElementById('step0-' + stepIdx);
+    var fb = document.getElementById('fb0-' + stepIdx);
+    var btns = step.querySelectorAll('.mc-btn');
+    btns.forEach(function(b) { b.disabled = true; });
+    if (isCorrect) {
+        btn.classList.add('correct');
+        fb.className = 'mc-feedback ok';
+        fb.textContent = '✓ Richtig!';
+        document.getElementById('dot0-' + stepIdx).classList.add('done');
+        setTimeout(function() {
+            step.classList.remove('active');
+            var next = document.getElementById('step0-' + (stepIdx + 1));
+            if (next) {
+                next.classList.add('active');
+            } else {
+                document.getElementById('regelkarte0').style.display = 'block';
+            }
+        }, 800);
+    } else {
+        btn.classList.add('wrong');
+        fb.className = 'mc-feedback err';
+        fb.textContent = '✗ Nicht ganz — versuch es nochmal!';
+        setTimeout(function() {
+            btn.classList.remove('wrong');
+            btn.disabled = false;
+            btns.forEach(function(b) { b.disabled = false; });
+            fb.textContent = '';
+            fb.className = 'mc-feedback';
+        }, 1200);
+    }
 }
 
 // ===== INIT =====

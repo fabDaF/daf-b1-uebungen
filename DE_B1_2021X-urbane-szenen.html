@@ -119,19 +119,9 @@ body {
 
 .btn-row { display: flex; gap: 6px; }
 
-.btn {
-    background: none;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 4px 12px;
-    font-size: 0.82em;
-    color: #888;
-    cursor: pointer;
-    transition: all 0.15s;
-    font-weight: 500;
-}
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
 
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 
 .timer-display {
     display: flex;
@@ -1451,14 +1441,14 @@ function initSatzbau() {
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);
@@ -1471,16 +1461,16 @@ function initSatzbau() {
 }
 
 var satzbauData = [
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Menschen", "finden", "zusammen", ",", "weil", "sie", "ähnliche", "Interessen", "teilen"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Die", "Punk-Bewegung", "begann", "in", "den", "1970er", "Jahren"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Mit", "zerrissenen", "Jeans", "wollten", "sie", "provozieren"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Hip-Hop", "ist", "eine", "der", "einflussreichsten", "Jugendkulturen"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Skater", "nutzten", "verlassene", "Gebäude", "als", "Trainingsplätze"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Skateparks", "sind", "zentrale", "Orte", "für", "junge", "Menschen"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Esports", "ziehen", "Millionen", "von", "Zuschauern", "an"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Urbane", "Szenen", "sind", "Brutstätten", "für", "neue", "Kunstformen"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Diese", "Kulturen", "prägen", "das", "Gesicht", "unserer", "Städte"]], punct: "." },
-    { parts: ['auch', 'stets', 'sehr', 'wirklich', 'oft', 'meist', 'immer'], valid: [["Viele", "Trends", "beginnen", "in", "Subkulturen"]], punct: "." }
+    { parts: ['Menschen', 'finden', 'oft', 'zusammen', ',', 'weil', 'sie', 'ähnliche', 'Interessen', 'teilen'], valid: [['Menschen', 'finden', 'oft', 'zusammen', ',', 'weil', 'sie', 'ähnliche', 'Interessen', 'teilen']], punct: "." },
+    { parts: ['die', 'Punk-Bewegung', 'begann', 'meist', 'in', 'den', '1970er', 'Jahren'], valid: [['die', 'Punk-Bewegung', 'begann', 'meist', 'in', 'den', '1970er', 'Jahren']], punct: "." },
+    { parts: ['mit', 'zerrissenen', 'Jeans', 'wollten', 'sie', 'stets', 'provozieren'], valid: [['mit', 'zerrissenen', 'Jeans', 'wollten', 'sie', 'stets', 'provozieren']], punct: "." },
+    { parts: ['Hip-Hop', 'ist', 'auch', 'eine', 'der', 'einflussreichsten', 'Jugendkulturen'], valid: [['Hip-Hop', 'ist', 'auch', 'eine', 'der', 'einflussreichsten', 'Jugendkulturen']], punct: "." },
+    { parts: ['Skater', 'nutzten', 'oft', 'verlassene', 'Gebäude', 'als', 'Trainingsplätze'], valid: [['Skater', 'nutzten', 'oft', 'verlassene', 'Gebäude', 'als', 'Trainingsplätze']], punct: "." },
+    { parts: ['Skateparks', 'sind', 'wirklich', 'zentrale', 'Orte', 'für', 'junge', 'Menschen'], valid: [['Skateparks', 'sind', 'wirklich', 'zentrale', 'Orte', 'für', 'junge', 'Menschen']], punct: "." },
+    { parts: ['Esports', 'ziehen', 'immer', 'Millionen', 'von', 'Zuschauern', 'an'], valid: [['Esports', 'ziehen', 'immer', 'Millionen', 'von', 'Zuschauern', 'an']], punct: "." },
+    { parts: ['urbane', 'Szenen', 'sind', 'stets', 'Brutstätten', 'für', 'neue', 'Kunstformen'], valid: [['urbane', 'Szenen', 'sind', 'stets', 'Brutstätten', 'für', 'neue', 'Kunstformen']], punct: "." },
+    { parts: ['diese', 'Kulturen', 'prägen', 'auch', 'das', 'Gesicht', 'unserer', 'Städte'], valid: [['diese', 'Kulturen', 'prägen', 'auch', 'das', 'Gesicht', 'unserer', 'Städte']], punct: "." },
+    { parts: ['viele', 'Trends', 'beginnen', 'sehr', 'oft', 'in', 'Subkulturen'], valid: [['viele', 'Trends', 'beginnen', 'sehr', 'oft', 'in', 'Subkulturen']], punct: "." }
 ];
 </script>
 

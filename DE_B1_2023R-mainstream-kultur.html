@@ -83,8 +83,8 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 /* Control-Bar + Timer */
 .control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
 .btn-row { display: flex; gap: 6px; }
-.btn { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 0.82em; color: #888; cursor: pointer; transition: all 0.15s; font-weight: 500; }
-.btn:hover { border-color: #667eea; color: #667eea; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 .score-box { font-size: 0.82rem; color: #888; }
 .score-box span { font-weight: 700; color: #667eea; }
@@ -502,11 +502,11 @@ function resetLuecke() {
 var sbDragged = null;
 
 var satzbauData = [
-    { parts:['folgte','die','gesellschaft','stets','einem','gemeinsamen','rhythmus'], valid:[['die','gesellschaft','folgte','stets','einem','gemeinsamen','rhythmus']], punct:'.' },
-    { parts:['karim','h\u00f6rte','musik',',','die','seine','nachbarn','nicht','kannten'], valid:[['karim','h\u00f6rte','musik',',','die','seine','nachbarn','nicht','kannten']], punct:'.' },
-    { parts:['elena','zeigte','echtes','interesse','an','seiner','musik'], valid:[['elena','zeigte','echtes','interesse','an','seiner','musik']], punct:'.' },
-    { parts:['der','einfluss','des','mainstreams','war','damals','sp\u00fcrbar'], valid:[['der','einfluss','des','mainstreams','war','damals','sp\u00fcrbar']], punct:'.' },
-    { parts:['er','schickte','elena','drei','neue','eigene','lieder'], valid:[['er','schickte','elena','drei','neue','eigene','lieder']], punct:'.' }
+    { parts:['folgte','die','Gesellschaft','stets','einem','gemeinsamen','Rhythmus'], valid:[['die','Gesellschaft','folgte','stets','einem','gemeinsamen','Rhythmus']], punct:'.' },
+    { parts:['Karim','hörte','Musik',',','die','seine','Nachbarn','nicht','kannten'], valid:[['Karim','hörte','Musik',',','die','seine','Nachbarn','nicht','kannten']], punct:'.' },
+    { parts:['Elena','zeigte','echtes','Interesse','an','seiner','Musik'], valid:[['Elena','zeigte','echtes','Interesse','an','seiner','Musik']], punct:'.' },
+    { parts:['der','Einfluss','des','Mainstreams','war','damals','spürbar'], valid:[['der','Einfluss','des','Mainstreams','war','damals','spürbar']], punct:'.' },
+    { parts:['er','schickte','Elena','drei','neue','eigene','Lieder'], valid:[['er','schickte','Elena','drei','neue','eigene','Lieder']], punct:'.' }
 ];
 
 function getSbCursor(){var c=document.getElementById('sb-insert-cursor');if(!c){c=document.createElement('div');c.id='sb-insert-cursor';c.style.cssText='width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';}return c;}
@@ -631,14 +631,14 @@ function initSatzbau(){
         parts.forEach(function(word){bank.appendChild(sbMakeChip(word));});
         sbRegisterZone(bank,idx); sbRegisterZone(row,idx);
         var btnRow = document.createElement('div');
-        btnRow.className = 'sb-btn-row';
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
         var btnS = document.createElement('button');
         btnS.textContent = 'Lösen';
-        btnS.className = 'btn-satzbau';
+        btnS.className = 'btn';
         btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
         var btnR = document.createElement('button');
-        btnR.textContent = 'Neustart';
-        btnR.className = 'btn-satzbau';
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
         btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
         btnRow.appendChild(btnS);
         btnRow.appendChild(btnR);

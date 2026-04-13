@@ -466,16 +466,17 @@ function initSatzbau() {
     const zone = document.getElementById('sb_zone_' + idx);
     if (!zone) return;
     const item = zone.parentElement;
-    if (!item.querySelector('.sb-btn-row')) {
+    if (!item.querySelector('[data-sb-btns]')) {
       var btnRow = document.createElement('div');
-      btnRow.className = 'sb-btn-row';
+      btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+      btnRow.setAttribute('data-sb-btns', '1');
       var btnS = document.createElement('button');
       btnS.textContent = 'Lösen';
-      btnS.className = 'btn-satzbau';
+      btnS.className = 'btn';
       btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
       var btnR = document.createElement('button');
-      btnR.textContent = 'Neustart';
-      btnR.className = 'btn-satzbau';
+      btnR.textContent = '↺ Neustart';
+      btnR.className = 'btn';
       btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
       btnRow.appendChild(btnS);
       btnRow.appendChild(btnR);

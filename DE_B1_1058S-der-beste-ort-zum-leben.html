@@ -443,16 +443,67 @@ var sortData0 = [
     { word: 'wissen', correct: 'los' }
 ];
 var sortPlacements0 = {};
+var draggedSortWord = null;
+var sortZonesInited = false;
+
+function registerSortZone(el, binName) {
+    el.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        el.style.outline = '2px solid #667eea';
+    });
+    el.addEventListener('dragleave', function(e) {
+        if (!el.contains(e.relatedTarget)) el.style.outline = '';
+    });
+    el.addEventListener('drop', function(e) {
+        e.preventDefault();
+        el.style.outline = '';
+        if (!draggedSortWord) return;
+        dropSortWord(draggedSortWord, binName);
+        draggedSortWord = null;
+    });
+}
+
+function dropSortWord(el, targetBin) {
+    var word = el.dataset.word;
+    var item = sortData0.find(function(d){ return d.word === word; });
+    var pool    = document.getElementById('sortPool0');
+    var binHaft = document.getElementById('sortBin0-haft');
+    var binLos  = document.getElementById('sortBin0-los');
+    if (el.parentNode) el.parentNode.removeChild(el);
+    el.classList.remove('placed-haft', 'placed-los', 'correct-final', 'wrong-final');
+    if (targetBin === 'pool') {
+        delete sortPlacements0[word];
+        pool.appendChild(el);
+    } else if (targetBin === 'haft') {
+        sortPlacements0[word] = 'haft';
+        el.classList.add('placed-haft');
+        el.classList.add(item.correct === 'haft' ? 'correct-final' : 'wrong-final');
+        binHaft.appendChild(el);
+    } else {
+        sortPlacements0[word] = 'los';
+        el.classList.add('placed-los');
+        el.classList.add(item.correct === 'los' ? 'correct-final' : 'wrong-final');
+        binLos.appendChild(el);
+    }
+    updateSortFeedback();
+}
 
 function initSort0() {
     sortPlacements0 = {};
-    var pool = document.getElementById('sortPool0');
+    draggedSortWord = null;
+    var pool    = document.getElementById('sortPool0');
     var binHaft = document.getElementById('sortBin0-haft');
-    var binLos = document.getElementById('sortBin0-los');
+    var binLos  = document.getElementById('sortBin0-los');
     pool.innerHTML = '';
     binHaft.innerHTML = '';
     binLos.innerHTML = '';
     document.getElementById('sortFb0').textContent = '';
+    if (!sortZonesInited) {
+        sortZonesInited = true;
+        registerSortZone(pool,    'pool');
+        registerSortZone(binHaft, 'haft');
+        registerSortZone(binLos,  'los');
+    }
     var shuffled = sortData0.slice();
     for (var i = shuffled.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -463,6 +514,16 @@ function initSort0() {
         w.className = 'sort-word';
         w.textContent = item.word;
         w.dataset.word = item.word;
+        w.draggable = true;
+        w.addEventListener('dragstart', function(e) {
+            draggedSortWord = w;
+            e.dataTransfer.setData('text/plain', '');
+            setTimeout(function(){ w.style.opacity = '0.45'; }, 0);
+        });
+        w.addEventListener('dragend', function() {
+            w.style.opacity = '';
+            draggedSortWord = null;
+        });
         w.onclick = function() { clickSort0(this); };
         pool.appendChild(w);
     });

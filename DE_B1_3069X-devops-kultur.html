@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 – Lektion 3069X · DevOps-Kultur</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.nav-btn {
+    flex: 1;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    font-size: 0.92em;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 600; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+.section { display: none; }
+.section.active { display: block; }
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+@media (max-width: 600px) { .tab-banner { max-height: 120px; } }
+.sec-inner { padding: 28px; }
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
+.section-title { font-size: 1.4em; font-weight: 700; color: #667eea; margin-bottom: 8px; }
+.section-sub { color: #888; font-size: 0.92em; margin-bottom: 20px; }
+
+/* Vorentlastung */
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 4px; }
+.vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+.vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 5px; }
+.vocab-def { color: #555; font-size: 0.92em; line-height: 1.5; }
+
+/* Lesetext */
+.lese-text {
+    max-width: 640px;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.0em;
+    line-height: 1.9;
+    color: #1a1a1a;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+.lese-text h3 { font-size: 1.05em; color: #667eea; margin: 20px 0 6px 0; font-family: 'Segoe UI', sans-serif; }
+.lese-text p { margin-bottom: 1em; text-indent: 1.4em; }
+.lese-text p:first-child { text-indent: 0; }
+.story-source { margin-top: 24px; color: #aaa; font-size: 0.8em; text-align: right; max-width: 640px; margin-left: auto; margin-right: auto; }
+.vocab-hl { background: #ffe9a0; border-radius: 3px; padding: 1px 3px; font-weight: 600; cursor: help; }
+
+/* Genus */
+.genus-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border: 1px dashed #bbb; border-radius: 10px; min-height: 60px; margin-bottom: 18px; }
+.genus-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 600px) { .genus-grid { grid-template-columns: 1fr 1fr; } }
+.genus-zone-wrap { display: flex; flex-direction: column; align-items: center; }
+.genus-label { font-size: 1.3em; font-weight: 700; color: #667eea; margin-bottom: 8px; padding: 4px 18px; background: #eef0ff; border-radius: 20px; }
+.drop-zone { min-height: 80px; border-radius: 10px; border: 2px dashed #c5cae9; padding: 8px; background: #fafbff; width: 100%; display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; transition: background 0.2s; }
+.drop-zone.dragover { background: #e8eaff; border-color: #667eea; }
+
+/* Chips */
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 8px 14px; border-radius: 20px; cursor: move; font-weight: 500; font-size: 0.9em; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
+.chip.punct-chip { background: #f8f8f8; border: 2px solid #667eea; padding: 8px 16px; color: #333; font-weight: 700; font-size: 1.3em; min-width: 18px; text-align: center; }
+
+/* Lückentext */
+.luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
+input.blank {
+    border: none;
+    border-bottom: 2px solid #667eea;
+    background: transparent;
+    padding: 3px 6px;
+    font-family: inherit;
+    font-size: 0.95em;
+    outline: none;
+    transition: all 0.2s;
+    min-width: 4ch;
+}
+input.blank:focus { border-bottom-color: #764ba2; }
+input.blank.ok { border-bottom-color: #27ae60; color: #27ae60; font-weight: 700; }
+input.blank.no { border-bottom-color: #e74c3c; color: #e74c3c; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.wortkasten { background: #f3e5f5; border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.88em; color: #5a3e9e; line-height: 1.7; }
+
+/* Multiple Choice */
+.mc-exercise { background: #f8f9ff; border-radius: 10px; padding: 14px 18px; margin-bottom: 12px; border-left: 4px solid #667eea; }
+.mc-question { font-size: 1.0em; color: #333; margin-bottom: 10px; line-height: 1.5; }
+.mc-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc-opt { padding: 4px 14px; border: 1.5px solid #c5cae9; border-radius: 20px; background: #fff; cursor: pointer; font-size: 11px; letter-spacing: 0.3px; transition: all .2s; }
+.mc-opt:hover { border-color: #667eea; background: #eef0ff; }
+.mc-opt.correct { border-color: #27ae60; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-opt.wrong { border-color: #e74c3c; background: #ffebee; color: #c62828; }
+.mc-opt:disabled { cursor: not-allowed; opacity: 0.7; }
+
+/* Satzbau */
+.satzbau-item { background: #fafbff; border: 1px solid #e0e4ff; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+
+/* Wortschatz */
+#wortschatzContainer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { #wortschatzContainer { grid-template-columns: 1fr; } }
+
+/* Footer */
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+
+/* Responsive Nav */
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.75em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+    .sec-inner { padding: 16px; }
+    .genus-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>DevOps-Kultur</h1>
+    <p>B1 – Lektion 3069X · Lesen &amp; Verstehen</p>
+    <div class="big-emoji">💻</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-btn active" onclick="showSection(0)">
+      <span class="nav-emoji">📖</span>
+      <span class="nav-label">Vorentlastung</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(1)">
+      <span class="nav-emoji">📄</span>
+      <span class="nav-label">Lesetext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(2)">
+      <span class="nav-emoji">🔤</span>
+      <span class="nav-label">Genus</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(3)">
+      <span class="nav-emoji">✏️</span>
+      <span class="nav-label">Lückentext</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(4)">
+      <span class="nav-emoji">☑️</span>
+      <span class="nav-label">Multiple Choice</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(5)">
+      <span class="nav-emoji">🧩</span>
+      <span class="nav-label">Satzbau</span>
+    </div>
+    <div class="nav-btn" onclick="showSection(6)">
+      <span class="nav-emoji">📝</span>
+      <span class="nav-label">Wortschatz</span>
+    </div>
+  </div>
+
+  <!-- TAB 0: Vorentlastung -->
+  <div class="section active" id="sec-0">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Team-Besprechung im modernen Büro">
+    <div class="sec-inner">
+      <div class="section-title">📖 Vorentlastung</div>
+      <div class="section-sub">Lerne die wichtigsten Wörter, bevor du den Text liest.</div>
+      <div id="vorentlastungGrid" class="vocab-grid"></div>
+    </div>
+  </div>
+
+  <!-- TAB 1: Lesetext -->
+  <div class="section" id="sec-1">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Moderne Zusammenarbeit im Büro">
+    <div class="sec-inner">
+      <div class="section-title">📄 DevOps-Kultur: Wie arbeiten Teams zusammen?</div>
+      <div class="section-sub">Lies den Text und achte auf die markierten Wörter.</div>
+      <div class="lese-text">
+        <p>In modernen Unternehmen arbeiten oft viele Menschen zusammen. Wie kann das gut funktionieren? Das OpenCulture Habit Kit beschreibt fünf Haltungen, die Teams helfen, erfolgreich zu sein.</p>
+
+        <h3>Die erste Haltung: Wir lieben unsere Kunden</h3>
+        <p>Für ein gutes Team stehen die Kunden im Mittelpunkt. Das bedeutet: Man hört den Kunden zu, fragt nach ihren Wünschen und verbessert die Produkte. Teams analysieren regelmäßig, was Kunden brauchen. Sie sammeln Feedback und versuchen, schnell auf Probleme zu reagieren. Ein wichtiges Prinzip ist Transparenz: Das Team informiert die Kunden offen über Entscheidungen und Prioritäten.</p>
+
+        <h3>Die zweite Haltung: Wir lieben Technologie</h3>
+        <p>Gute Teams sind neugierig und offen für neue Ideen. Sie probieren neue Methoden aus und teilen ihre Erfahrungen mit anderen. Wichtig ist dabei: Man darf auch Fehler machen! Fehler sind eine Chance zum Lernen. Teams treffen sich regelmäßig, um über neue Technologien zu sprechen. Jeder im Team – nicht nur die Entwickler – darf Fragen stellen und neue Ideen einbringen.</p>
+
+        <h3>Die dritte Haltung: Wir schaffen das Unmögliche</h3>
+        <p>Manchmal scheinen Aufgaben sehr schwierig oder sogar unmöglich. Ein gutes Team spricht offen über Hindernisse. Man fragt in jeder Woche: „Was fühlt sich gerade unmöglich an?" Dann sucht man gemeinsam nach Lösungen. Erfolge werden gefeiert – auch kleine Fortschritte sind wichtig. Das Team hilft sich gegenseitig.</p>
+
+        <h3>Die vierte Haltung: Wir gewinnen zusammen</h3>
+        <p>Erfolg ist am größten, wenn alle zusammenarbeiten. Das bedeutet: Man teilt Informationen offen, hört auf die Ideen aller Teammitglieder und arbeitet gemeinsam an Zielen. Wenn etwas schiefgeht, sucht man nicht nach einem Schuldigen. Stattdessen lernt das Team gemeinsam aus dem Fehler.</p>
+
+        <h3>Die fünfte Haltung: Wir genießen unsere Arbeit</h3>
+        <p>Gute Arbeit macht Spaß! Teams feiern ihre Erfolge und sprechen offen über Probleme. Jedes Teammitglied soll die Möglichkeit haben, neue Dinge zu lernen und zu wachsen. Führungskräfte hören aktiv zu und sorgen für ein positives Arbeitsklima.</p>
+
+        <p>Diese fünf Haltungen helfen Teams, besser zusammenzuarbeiten. Ob im Büro oder beim Arbeiten von zu Hause – diese Prinzipien machen Teams stärker und erfolgreicher.</p>
+      </div>
+      <div class="story-source">Quelle: Adaptiert nach OpenCulture Habit Kit – DevOps Edition · B1 – Lektion 3069X</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Genus -->
+  <div class="section" id="sec-genus">
+    <img class="tab-banner" src="https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Technologie und Zusammenarbeit">
+    <div class="sec-inner">
+      <h2>🔤 Genus</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showGenusLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetGenus(); resetTimer(2);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-2">00:00</span></span>
+          <span>🏆 <span id="best-2">--:--</span></span>
+        </div>
+      </div>
+      <div class="hilfe-box">Ziehe jedes Nomen in die richtige Spalte: <strong>der</strong>, <strong>die</strong>, <strong>das</strong> oder <strong>Plural</strong>.</div>
+      <div id="genus-bank" class="genus-bank"></div>
+      <div class="genus-grid">
+        <div class="genus-zone-wrap">
+          <div class="genus-label">der</div>
+          <div class="drop-zone" id="zone-der" data-cat="der"></div>
+        </div>
+        <div class="genus-zone-wrap">
+          <div class="genus-label">die</div>
+          <div class="drop-zone" id="zone-die" data-cat="die"></div>
+        </div>
+        <div class="genus-zone-wrap">
+          <div class="genus-label">das</div>
+          <div class="drop-zone" id="zone-das" data-cat="das"></div>
+        </div>
+        <div class="genus-zone-wrap">
+          <div class="genus-label">Plural</div>
+          <div class="drop-zone" id="zone-pl" data-cat="pl"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Lückentext -->
+  <div class="section" id="sec-luecke">
+    <img class="tab-banner" src="https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Notizen schreiben am Schreibtisch">
+    <div class="sec-inner">
+      <h2>✏️ Lückentext</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showLueckeLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetLuecke(); resetTimer(3);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-3">00:00</span></span>
+          <span>🏆 <span id="best-3">--:--</span></span>
+        </div>
+      </div>
+      <div class="wortkasten">📦 Wörter: <em>analysieren · Transparenz · Lernen · sprechen · unmöglich · gefeiert · offen · gemeinsam · Schuldigen · wachsen · Kunden</em></div>
+      <div id="lueckeContainer"></div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Multiple Choice -->
+  <div class="section" id="sec-mc">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3182781/pexels-photo-3182781.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Team-Brainstorming">
+    <div class="sec-inner">
+      <h2>☑️ Multiple Choice</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showMcLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetMc(); resetTimer(4);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-4">00:00</span></span>
+          <span>🏆 <span id="best-4">--:--</span></span>
+        </div>
+      </div>
+      <div class="hilfe-box">Wähle die richtige Antwort. Klicke auf eine Option.</div>
+      <div id="mcContainer"></div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Satzbau -->
+  <div class="section" id="sec-satzbau">
+    <img class="tab-banner" src="https://images.pexels.com/photos/3182765/pexels-photo-3182765.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Team arbeitet gemeinsam">
+    <div class="sec-inner">
+      <h2>🧩 Satzbau</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showAllSbLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetAllSb(); resetTimer(5);">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-5">00:00</span></span>
+          <span>🏆 <span id="best-5">--:--</span></span>
+        </div>
+      </div>
+      <div class="hilfe-box">Bringe die Wörter in die richtige Reihenfolge. Ziehe die Chips oder klicke sie an.</div>
+      <div id="satzbauContainer"></div>
+    </div>
+  </div>
+
+  <!-- TAB 6: Wortschatz -->
+  <div class="section" id="sec-wortschatz">
+    <img class="tab-banner" src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Vokabeln lernen">
+    <div class="sec-inner">
+      <h2>📝 Wortschatz</h2>
+      <div class="control-bar">
+        <div class="btn-row">
+          <button class="btn" onclick="showWortschatzLoesung()">Lösungen</button>
+          <button class="btn" onclick="resetWortschatz()">Neu starten</button>
+        </div>
+        <div class="timer-display">
+          <span>⏱ <span id="timer-6">00:00</span></span>
+          <span>🏆 <span id="best-6">--:--</span></span>
+        </div>
+      </div>
+      <div class="hilfe-box">Tippe die deutsche Übersetzung. Bei Nomen: Artikel, Wort und Plural.</div>
+      <div id="wortschatzContainer"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="author-footer">
+    <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+    <a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+/* ---- DATA ---- */
+
+var VORENTLASTUNG = [
+    { term: "die Haltung, -en",        def: "eine Einstellung oder Meinung, die man zu etwas hat" },
+    { term: "das Feedback, -s",         def: "eine Rückmeldung über eine Leistung oder ein Produkt" },
+    { term: "das Backlog, -s",          def: "eine Liste mit Aufgaben, die noch erledigt werden müssen" },
+    { term: "die Innovation, -en",      def: "eine neue Idee oder Methode, die Fortschritt bringt" },
+    { term: "das Experiment, -e",       def: "ein Test, mit dem man etwas Neues ausprobiert" },
+    { term: "die Zusammenarbeit, –",    def: "gemeinsames Arbeiten in einer Gruppe oder einem Team" },
+    { term: "das Risiko, Risiken",      def: "die Möglichkeit, dass etwas schiefgeht" },
+    { term: "das Vertrauen, –",         def: "das Gefühl, dass man sich auf jemanden verlassen kann" },
+    { term: "die Transparenz, –",       def: "Offenheit darüber, was man tut und warum" },
+    { term: "das Hindernis, -se",       def: "etwas, das die Arbeit schwieriger oder unmöglich macht" }
+];
+
+var GENUS_DATA = [
+    { word: "🎯 Fortschritt",     cat: "der" },
+    { word: "❌ Fehler",          cat: "der" },
+    { word: "👤 Schuldige",       cat: "der" },
+    { word: "🏢 Mittelpunkt",     cat: "der" },
+    { word: "🎯 Haltung",         cat: "die" },
+    { word: "💡 Innovation",      cat: "die" },
+    { word: "🤝 Zusammenarbeit",  cat: "die" },
+    { word: "🪟 Transparenz",     cat: "die" },
+    { word: "✅ Lösung",          cat: "die" },
+    { word: "💬 Feedback",        cat: "das" },
+    { word: "🔬 Experiment",      cat: "das" },
+    { word: "⚠️ Risiko",         cat: "das" },
+    { word: "🤝 Vertrauen",       cat: "das" },
+    { word: "👥 Teammitglied",    cat: "das" },
+    { word: "🌍 Hindernisse",     cat: "pl"  }
+];
+
+var LUECKE_DATA = [
+    { pre: "Die ",                           ans: "Kunden",     post: " stehen im Mittelpunkt des Teams." },
+    { pre: "Teams ",                         ans: "analysieren", post: " regelmäßig, was Kunden brauchen." },
+    { pre: "Ein wichtiges Prinzip ist ",      ans: "Transparenz", post: "." },
+    { pre: "Fehler sind eine Chance zum ",   ans: "Lernen",     post: "." },
+    { pre: "Teams treffen sich, um über neue Technologien zu ", ans: "sprechen", post: "." },
+    { pre: "Was fühlt sich gerade ",         ans: "unmöglich",  post: " an?" },
+    { pre: "Erfolge werden ",                ans: "gefeiert",   post: " – auch kleine Fortschritte sind wichtig." },
+    { pre: "Man teilt Informationen ",       ans: "offen",      post: " und hört auf die Ideen aller." },
+    { pre: "Man sucht nicht nach einem ",   ans: "Schuldigen",  post: "." },
+    { pre: "Jedes Teammitglied soll die Möglichkeit haben, zu ", ans: "wachsen", post: "." }
+];
+
+var MC_DATA = [
+    {
+        q: "Wie viele Haltungen beschreibt das OpenCulture Habit Kit?",
+        opts: ["drei", "fünf", "sieben", "zehn"],
+        ans: 1
+    },
+    {
+        q: "Was bedeutet die erste Haltung „Wir lieben unsere Kunden"?",
+        opts: [
+            "Das Team entwickelt Produkte ohne Kundenkontakt.",
+            "Das Team stellt Kunden in den Mittelpunkt und hört zu.",
+            "Die Kunden bezahlen immer pünktlich.",
+            "Kunden dürfen keine Kritik äußern."
+        ],
+        ans: 1
+    },
+    {
+        q: "Was sollen Teams laut dem Text aus Fehlern machen?",
+        opts: ["Fehler verbergen", "Fehler bestrafen", "Fehler als Lernchance nutzen", "Fehler ignorieren"],
+        ans: 2
+    },
+    {
+        q: "Was ist ein Backlog?",
+        opts: [
+            "Ein Treffen mit Kunden",
+            "Eine Liste mit Aufgaben, die noch erledigt werden müssen",
+            "Ein Technologie-Experiment",
+            "Ein monatliches Team-Event"
+        ],
+        ans: 1
+    },
+    {
+        q: "Was fragt das Team laut der dritten Haltung jede Woche?",
+        opts: [
+            "„Wer hat Fehler gemacht?"",
+            "„Wie viel Geld haben wir ausgegeben?"",
+            "„Was fühlt sich gerade unmöglich an?"",
+            "„Wann ist das Projekt fertig?""
+        ],
+        ans: 2
+    },
+    {
+        q: "Was bedeutet Transparenz im Team?",
+        opts: [
+            "Geheime Entscheidungen treffen",
+            "Informationen für sich behalten",
+            "Nur dem Chef berichten",
+            "Offen über Entscheidungen und Prioritäten informieren"
+        ],
+        ans: 3
+    },
+    {
+        q: "Wer darf laut dem Text Fragen stellen und neue Ideen einbringen?",
+        opts: ["Nur die Entwickler", "Nur die Führungskräfte", "Nur externe Experten", "Jeder im Team"],
+        ans: 3
+    },
+    {
+        q: "Was macht ein Team, wenn etwas schiefgeht?",
+        opts: [
+            "Es sucht nach einem Schuldigen.",
+            "Es lernt gemeinsam aus dem Fehler.",
+            "Es verschweigt das Problem.",
+            "Es kündigt das Projekt."
+        ],
+        ans: 1
+    },
+    {
+        q: "Was soll laut der fünften Haltung im Team gefeiert werden?",
+        opts: ["Nur externe Anerkennung", "Nur die großen Projekte", "Teamerfolge", "Individuelle Gewinne"],
+        ans: 2
+    },
+    {
+        q: "Für wen gelten diese fünf Haltungen laut dem Text?",
+        opts: [
+            "Nur für Softwareentwickler",
+            "Nur für Führungskräfte",
+            "Nur für große Unternehmen",
+            "Für alle Teams, ob im Büro oder zu Hause"
+        ],
+        ans: 3
+    }
+];
+
+var satzbauData = [
+    {
+        parts: ['die', 'Kunden', 'stehen', 'im', 'Mittelpunkt', 'des', 'Teams'],
+        valid: [['die', 'Kunden', 'stehen', 'im', 'Mittelpunkt', 'des', 'Teams']],
+        punct: '.'
+    },
+    {
+        parts: ['Teams', 'sammeln', 'regelmäßig', 'Feedback', 'von', 'den', 'Kunden'],
+        valid: [
+            ['Teams', 'sammeln', 'regelmäßig', 'Feedback', 'von', 'den', 'Kunden'],
+            ['regelmäßig', 'sammeln', 'Teams', 'Feedback', 'von', 'den', 'Kunden']
+        ],
+        punct: '.'
+    },
+    {
+        parts: ['Fehler', 'sind', 'eine', 'Chance', 'zum', 'Lernen'],
+        valid: [['Fehler', 'sind', 'eine', 'Chance', 'zum', 'Lernen']],
+        punct: '.'
+    },
+    {
+        parts: ['jeder', 'im', 'Team', 'darf', 'neue', 'Ideen', 'einbringen'],
+        valid: [['jeder', 'im', 'Team', 'darf', 'neue', 'Ideen', 'einbringen']],
+        punct: '.'
+    },
+    {
+        parts: ['das', 'Team', 'spricht', 'offen', 'über', 'Hindernisse', 'und', 'Risiken'],
+        valid: [
+            ['das', 'Team', 'spricht', 'offen', 'über', 'Hindernisse', 'und', 'Risiken'],
+            ['offen', 'spricht', 'das', 'Team', 'über', 'Hindernisse', 'und', 'Risiken']
+        ],
+        punct: '.'
+    },
+    {
+        parts: ['kleine', 'Fortschritte', 'werden', 'auch', 'gefeiert'],
+        valid: [
+            ['kleine', 'Fortschritte', 'werden', 'auch', 'gefeiert'],
+            ['auch', 'kleine', 'Fortschritte', 'werden', 'gefeiert']
+        ],
+        punct: '.'
+    },
+    {
+        parts: ['man', 'teilt', 'Informationen', 'offen', 'mit', 'allen', 'Teammitgliedern'],
+        valid: [['man', 'teilt', 'Informationen', 'offen', 'mit', 'allen', 'Teammitgliedern']],
+        punct: '.'
+    },
+    {
+        parts: ['wenn', 'etwas', 'schiefgeht', 'lernt', 'das', 'Team', 'aus', 'dem', 'Fehler'],
+        valid: [['wenn', 'etwas', 'schiefgeht', 'lernt', 'das', 'Team', 'aus', 'dem', 'Fehler']],
+        punct: '.'
+    },
+    {
+        parts: ['Führungskräfte', 'hören', 'aktiv', 'auf', 'die', 'Probleme', 'der', 'Mitarbeiter'],
+        valid: [
+            ['Führungskräfte', 'hören', 'aktiv', 'auf', 'die', 'Probleme', 'der', 'Mitarbeiter'],
+            ['aktiv', 'hören', 'Führungskräfte', 'auf', 'die', 'Probleme', 'der', 'Mitarbeiter']
+        ],
+        punct: '.'
+    },
+    {
+        parts: ['gute', 'Arbeit', 'macht', 'mehr', 'Spaß', 'im', 'Team'],
+        valid: [['gute', 'Arbeit', 'macht', 'mehr', 'Spaß', 'im', 'Team']],
+        punct: '.'
+    }
+];
+
+var WORTSCHATZ = [
+    { id:1,  type:"n", en:"🎯 the attitude",        artikel:"die",  de:"Haltung",          plural:"Haltungen" },
+    { id:2,  type:"n", en:"💡 the innovation",       artikel:"die",  de:"Innovation",        plural:"Innovationen" },
+    { id:3,  type:"n", en:"🔬 the experiment",       artikel:"das",  de:"Experiment",        plural:"Experimente" },
+    { id:4,  type:"n", en:"🚧 the obstacle",         artikel:"das",  de:"Hindernis",         plural:"Hindernisse" },
+    { id:5,  type:"n", en:"📈 the progress",         artikel:"der",  de:"Fortschritt",       plural:"Fortschritte" },
+    { id:6,  type:"n", en:"⚠️ the risk",             artikel:"das",  de:"Risiko",            plural:"Risiken" },
+    { id:7,  type:"n", en:"🤝 the trust",            artikel:"das",  de:"Vertrauen",         plural:"–" },
+    { id:8,  type:"n", en:"🪟 the transparency",     artikel:"die",  de:"Transparenz",       plural:"–" },
+    { id:9,  type:"n", en:"✅ the solution",         artikel:"die",  de:"Lösung",            plural:"Lösungen" },
+    { id:10, type:"n", en:"💬 the feedback",         artikel:"das",  de:"Feedback",          plural:"–" },
+    { id:11, type:"n", en:"🎯 the goal",             artikel:"das",  de:"Ziel",              plural:"Ziele" },
+    { id:12, type:"n", en:"👥 the team member",      artikel:"das",  de:"Teammitglied",      plural:"Teammitglieder" },
+    { id:13, type:"p", en:"🤝 together",             de:"gemeinsam" },
+    { id:14, type:"p", en:"🔓 openly",               de:"offen" },
+    { id:15, type:"p", en:"🎉 to celebrate",         de:"feiern" },
+    { id:16, type:"p", en:"🔧 to solve",             de:"lösen" },
+    { id:17, type:"p", en:"🧪 to try out",           de:"ausprobieren" },
+    { id:18, type:"p", en:"📊 to analyze",           de:"analysieren" },
+    { id:19, type:"p", en:"🔄 continuous",           de:"kontinuierlich" },
+    { id:20, type:"p", en:"🚀 to grow / to increase",de:"wachsen" }
+];
+
+/* ---- TIMER ---- */
+var _tv = {}, _ti = {}, _tr = {};
+var BEST_KEY = 'best_3069X_';
+function initTimers(ns) {
+    ns.forEach(function(n) { _tv[n]=0; _ti[n]=null; _tr[n]=false; });
+    loadBests(ns);
+}
+function timerTick(n) {
+    _tv[n]++;
+    var m=Math.floor(_tv[n]/60), s=_tv[n]%60;
+    var el=document.getElementById('timer-'+n);
+    if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+function timerAutoStart(n) {
+    if(_tr[n]) return;
+    _tr[n]=true;
+    _ti[n]=setInterval(function(){timerTick(n);},1000);
+}
+function timerStop(n) {
+    if(!_tr[n]) return;
+    clearInterval(_ti[n]); _tr[n]=false;
+    var k=BEST_KEY+n;
+    var prev=parseInt(localStorage.getItem(k)||'99999');
+    if(_tv[n]<prev){
+        localStorage.setItem(k,_tv[n]);
+        var m=Math.floor(_tv[n]/60), s=_tv[n]%60;
+        var el=document.getElementById('best-'+n);
+        if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    }
+}
+function stopTimer(n) { timerStop(n); }
+function resetTimer(n) {
+    clearInterval(_ti[n]); _tr[n]=false; _tv[n]=0;
+    var el=document.getElementById('timer-'+n);
+    if(el) el.textContent='00:00';
+}
+function loadBests(ns) {
+    ns.forEach(function(n){
+        var s=parseInt(localStorage.getItem(BEST_KEY+n)||'0');
+        if(s>0){ var m=Math.floor(s/60),ss=s%60; var el=document.getElementById('best-'+n); if(el) el.textContent=(m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }
+    });
+}
+
+/* ---- NAVIGATION ---- */
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+/* ---- VORENTLASTUNG ---- */
+function initVorentlastung() {
+    var grid = document.getElementById('vorentlastungGrid');
+    VORENTLASTUNG.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'vocab-card';
+        var term = document.createElement('div');
+        term.className = 'vocab-term';
+        term.textContent = item.term;
+        var def = document.createElement('div');
+        def.className = 'vocab-def';
+        def.textContent = item.def;
+        card.appendChild(term);
+        card.appendChild(def);
+        grid.appendChild(card);
+    });
+}
+
+/* ---- VOKABEL-HERVORHEBUNG ---- */
+function highlightVocabInText() {
+    var lesetext = document.querySelector('.lese-text');
+    if (!lesetext) return;
+    var words = VORENTLASTUNG.map(function(item) {
+        var t = item.term.replace(/^(der|die|das)\s+/i,'');
+        return t.split(',')[0].trim();
+    }).filter(function(w){ return w && w.length > 3; });
+
+    function walk(node) {
+        if (node.nodeType === 3) {
+            var text = node.nodeValue;
+            var replaced = text;
+            words.forEach(function(word) {
+                var esc = word.replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&');
+                var re = new RegExp('(?<![a-zA-ZäöüÄÖÜß])('+esc+')(?![a-zA-ZäöüÄÖÜß])','g');
+                replaced = replaced.replace(re,'\x01$1\x02');
+            });
+            if (replaced !== text) {
+                var span = document.createElement('span');
+                var parts = replaced.split(/\x01|\x02/);
+                var isHl = false;
+                parts.forEach(function(part) {
+                    if (!part) { isHl = !isHl; return; }
+                    if (isHl) {
+                        var hl = document.createElement('span');
+                        hl.className = 'vocab-hl';
+                        hl.title = '📖 Vokabel aus der Vorentlastung';
+                        hl.textContent = part;
+                        span.appendChild(hl);
+                    } else {
+                        span.appendChild(document.createTextNode(part));
+                    }
+                    isHl = !isHl;
+                });
+                node.parentNode.replaceChild(span, node);
+            }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT') {
+            Array.from(node.childNodes).forEach(walk);
+        }
+    }
+    walk(lesetext);
+}
+
+/* ---- GENUS ---- */
+var draggedChip = null;
+
+function buildGenus() {
+    var bank = document.getElementById('genus-bank');
+    bank.innerHTML = '';
+    document.querySelectorAll('#sec-genus .drop-zone').forEach(function(z){ z.innerHTML=''; });
+
+    var items = GENUS_DATA.slice();
+    for (var i=items.length-1; i>0; i--) {
+        var j=Math.floor(Math.random()*(i+1));
+        var tmp=items[i]; items[i]=items[j]; items[j]=tmp;
+    }
+
+    items.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = item.word;
+        chip.dataset.cat = item.cat;
+        chip.draggable = true;
+        chip.addEventListener('dragstart', function(e) {
+            e.dataTransfer.setData('text/plain','');
+            draggedChip = chip;
+            timerAutoStart(2);
+            setTimeout(function(){ chip.style.opacity='0.4'; },0);
+        });
+        chip.addEventListener('dragend', function() {
+            chip.style.opacity='';
+            colorAllGenusChips();
+        });
+        chip.addEventListener('click', function() {
+            if (draggedChip === chip) {
+                draggedChip = null;
+                chip.style.outline = '';
+            } else {
+                if (draggedChip) draggedChip.style.outline = '';
+                draggedChip = chip;
+                chip.style.outline = '3px solid #667eea';
+            }
+        });
+        bank.appendChild(chip);
+    });
+
+    function registerZone(zone) {
+        zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('dragover'); });
+        zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
+        zone.addEventListener('drop', function(e){
+            e.preventDefault(); zone.classList.remove('dragover');
+            if(draggedChip){ zone.appendChild(draggedChip); draggedChip=null; }
+            colorAllGenusChips();
+        });
+        zone.addEventListener('click', function(){
+            if(draggedChip){ zone.appendChild(draggedChip); draggedChip.style.outline=''; draggedChip=null; colorAllGenusChips(); }
+        });
+    }
+
+    document.querySelectorAll('#sec-genus .drop-zone').forEach(registerZone);
+    registerZone(bank);
+}
+
+function colorGenusChip(chip) {
+    var zone = chip.closest('.drop-zone');
+    if (zone && zone.dataset.cat) {
+        chip.classList.remove('correct','wrong');
+        chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+    } else {
+        chip.classList.remove('correct','wrong');
+    }
+}
+function colorAllGenusChips() {
+    document.querySelectorAll('#sec-genus .chip').forEach(colorGenusChip);
+    checkGenusAllOk();
+}
+function checkGenusAllOk() {
+    var chips = document.querySelectorAll('#sec-genus .chip');
+    var bank = document.getElementById('genus-bank');
+    if (bank.querySelectorAll('.chip').length > 0) return;
+    var allOk = Array.from(chips).every(function(c){ return c.classList.contains('correct'); });
+    if (allOk) timerStop(2);
+}
+function showGenusLoesung() {
+    timerStop(2);
+    document.querySelectorAll('#sec-genus .chip').forEach(function(chip) {
+        var zone = document.querySelector('#sec-genus .drop-zone[data-cat="'+chip.dataset.cat+'"]');
+        if (zone) zone.appendChild(chip);
+    });
+    colorAllGenusChips();
+}
+function resetGenus() {
+    draggedChip = null;
+    buildGenus();
+}
+
+/* ---- LÜCKENTEXT ---- */
+function initLuecke() {
+    var container = document.getElementById('lueckeContainer');
+    container.innerHTML = '';
+    LUECKE_DATA.forEach(function(item) {
+        var div = document.createElement('div');
+        div.className = 'luecken-item';
+
+        var textLen = Math.max(item.ans.length, 4);
+        var inp = document.createElement('input');
+        inp.className = 'blank';
+        inp.type = 'text';
+        inp.placeholder = '';
+        inp.dataset.ans = item.ans;
+        inp.style.width = (textLen + 4) + 'ch';
+
+        inp.addEventListener('input', function() {
+            timerAutoStart(3);
+            lueckeCheck(inp);
+            checkLueckeAllOk();
+        });
+
+        div.appendChild(document.createTextNode(item.pre));
+        div.appendChild(inp);
+        div.appendChild(document.createTextNode(item.post));
+        container.appendChild(div);
+    });
+}
+function lueckeCheck(inp) {
+    var val = inp.value.trim().toLowerCase();
+    var ans = inp.dataset.ans.toLowerCase();
+    inp.classList.remove('ok','no');
+    if (!val) return;
+    if (val === ans) { inp.classList.add('ok'); return; }
+    if (ans.startsWith(val)) return;
+    inp.classList.add('no');
+}
+function checkLueckeAllOk() {
+    var all = document.querySelectorAll('#sec-luecke input.blank');
+    var ok = Array.from(all).every(function(i){ return i.classList.contains('ok'); });
+    if (ok) timerStop(3);
+}
+function showLueckeLoesung() {
+    timerStop(3);
+    document.querySelectorAll('#sec-luecke input.blank').forEach(function(inp){
+        inp.value = inp.dataset.ans;
+        inp.classList.add('ok'); inp.classList.remove('no');
+    });
+}
+function resetLuecke() {
+    document.querySelectorAll('#sec-luecke input.blank').forEach(function(inp){
+        inp.value = ''; inp.classList.remove('ok','no');
+    });
+}
+
+/* ---- MULTIPLE CHOICE ---- */
+function initMc() {
+    var container = document.getElementById('mcContainer');
+    container.innerHTML = '';
+    MC_DATA.forEach(function(item, idx) {
+        var ex = document.createElement('div');
+        ex.className = 'mc-exercise';
+        ex.dataset.mcIdx = idx;
+        var q = document.createElement('div');
+        q.className = 'mc-question';
+        q.textContent = item.q;
+        ex.appendChild(q);
+        var opts = document.createElement('div');
+        opts.className = 'mc-opts';
+        item.opts.forEach(function(opt, oi) {
+            var btn = document.createElement('button');
+            btn.className = 'mc-opt';
+            btn.textContent = opt;
+            btn.dataset.correct = (oi === item.ans) ? '1' : '0';
+            btn.addEventListener('click', function() {
+                timerAutoStart(4);
+                if (this.disabled) return;
+                var isCorrect = this.dataset.correct === '1';
+                this.classList.add(isCorrect ? 'correct' : 'wrong');
+                ex.querySelectorAll('.mc-opt').forEach(function(o){ o.disabled = true; });
+                checkMcAllOk();
+            });
+            opts.appendChild(btn);
+        });
+        ex.appendChild(opts);
+        container.appendChild(ex);
+    });
+}
+function checkMcAllOk() {
+    var all = document.querySelectorAll('#sec-mc .mc-exercise');
+    var done = Array.from(all).every(function(ex){
+        return ex.querySelector('.mc-opt.correct') !== null;
+    });
+    if (done) timerStop(4);
+}
+function showMcLoesung() {
+    timerStop(4);
+    document.querySelectorAll('#sec-mc .mc-exercise').forEach(function(ex) {
+        ex.querySelectorAll('.mc-opt').forEach(function(opt){
+            opt.disabled = true;
+            if (opt.dataset.correct === '1') opt.classList.add('correct');
+        });
+    });
+}
+function resetMc() {
+    document.querySelectorAll('#sec-mc .mc-opt').forEach(function(opt){
+        opt.classList.remove('correct','wrong');
+        opt.disabled = false;
+    });
+}
+
+/* ---- SATZBAU ---- */
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i=0; i<chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width/2) return chips[i];
+    }
+    return null;
+}
+function sbCapitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c,i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        c.textContent = isProper ? orig : (i===0 ? sbCapitalize(orig) : orig);
+    });
+}
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        timerAutoStart(5);
+        e.dataTransfer.setData('text/plain','');
+        setTimeout(function(){ chip.style.opacity='0.4'; },0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity='';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    chip.addEventListener('click', function() {
+        timerAutoStart(5);
+        if (sbDragged === chip) {
+            sbDragged = null;
+            chip.style.outline = '';
+        } else {
+            if (sbDragged) sbDragged.style.outline = '';
+            sbDragged = chip;
+            chip.style.outline = '2px solid #e67e22';
+        }
+    });
+    return chip;
+}
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        if (sbDragged.dataset.sbIdx !== String(idx)) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged || sbDragged.dataset.sbIdx !== String(idx)) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged.style.outline = '';
+        sbDragged = null;
+        var row = document.getElementById('sb-row-'+idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+    zone.addEventListener('click', function() {
+        if (sbDragged && sbDragged.dataset.sbIdx === String(idx)) {
+            zone.appendChild(sbDragged);
+            sbDragged.style.outline = '';
+            var row = document.getElementById('sb-row-'+idx);
+            sbUpdateCapitalization(row);
+            sbDragged = null;
+            sbCheckAuto(idx);
+        }
+    });
+}
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-'+idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c){ return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v){ return JSON.stringify(v)===JSON.stringify(order); });
+    chips.forEach(function(c){
+        c.classList.remove('correct','incorrect');
+        c.classList.add(ok?'correct':'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-'+idx);
+    var row  = document.getElementById('sb-row-'+idx);
+    var fb   = document.getElementById('sb-fb-'+idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+        row.classList.remove('correct','incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        timerAutoStart(5);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct'); row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect'); row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_,i) {
+        var row = document.getElementById('sb-row-'+i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) timerStop(5);
+}
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-'+idx);
+    var row  = document.getElementById('sb-row-'+idx);
+    var fb   = document.getElementById('sb-fb-'+idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig]=c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ allChips[c.dataset.orig]=c; });
+    while(bank.firstChild) bank.removeChild(bank.firstChild);
+    while(row.firstChild)  row.removeChild(row.firstChild);
+    solution.forEach(function(word,i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word!==',' && word!==';') chip.textContent = (i===0) ? sbCapitalize(word) : word;
+            chip.classList.remove('correct','incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function(){ sbCheckAuto(idx); },100);
+}
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-'+idx);
+    var row  = document.getElementById('sb-row-'+idx);
+    var fb   = document.getElementById('sb-fb-'+idx);
+    while(bank.firstChild) bank.removeChild(bank.firstChild);
+    while(row.firstChild)  row.removeChild(row.firstChild);
+    row.classList.remove('correct','incorrect');
+    fb.textContent = ''; fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i=parts.length-1; i>0; i--) {
+        var j=Math.floor(Math.random()*(i+1));
+        var tmp=parts[i]; parts[i]=parts[j]; parts[j]=tmp;
+    }
+    parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+}
+function showAllSbLoesung() {
+    timerStop(5);
+    satzbauData.forEach(function(_,idx){ sbShowSolution(idx); });
+}
+function resetAllSb() {
+    satzbauData.forEach(function(_,idx){ sbResetOne(idx); });
+}
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-'+idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-'+idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-'+idx;
+        var parts = ex.parts.slice();
+        for (var i=parts.length-1; i>0; i--) {
+            var j=Math.floor(Math.random()*(i+1));
+            var tmp=parts[i]; parts[i]=parts[j]; parts[j]=tmp;
+        }
+        parts.forEach(function(word) {
+            var chip = sbMakeChip(word);
+            chip.dataset.sbIdx = String(idx);
+            bank.appendChild(chip);
+        });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:8px;margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function(){ sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function(){ sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+/* ---- WORTSCHATZ ---- */
+function initWortschatz() {
+    var container = document.getElementById('wortschatzContainer');
+    container.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        row.style.marginBottom = '0';
+        var prompt = document.createElement('div');
+        prompt.style.cssText = 'font-weight:600;color:#667eea;margin-bottom:6px;font-size:1.05em;';
+        prompt.textContent = item.en;
+        row.appendChild(prompt);
+        var fields = document.createElement('div');
+        fields.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;align-items:center;';
+        if (item.type === 'n') {
+            var artInp = document.createElement('input');
+            artInp.className = 'blank'; artInp.type='text';
+            artInp.placeholder='Artikel'; artInp.style.width='70px';
+            artInp.dataset.answer=item.artikel; artInp.dataset.field='art';
+            artInp.oninput=function(){ wortschatzCheck(this); timerAutoStart(6); checkWortschatzAllOk(); };
+            fields.appendChild(artInp);
+            var wordInp = document.createElement('input');
+            wordInp.className='blank'; wordInp.type='text';
+            wordInp.placeholder='Wort'; wordInp.style.width='160px';
+            wordInp.dataset.answer=item.de; wordInp.dataset.field='word';
+            wordInp.oninput=function(){ wortschatzCheck(this); timerAutoStart(6); checkWortschatzAllOk(); };
+            fields.appendChild(wordInp);
+            var plInp = document.createElement('input');
+            plInp.className='blank'; plInp.type='text';
+            plInp.placeholder='Plural'; plInp.style.width='140px';
+            plInp.dataset.answer=item.plural; plInp.dataset.field='plural';
+            if (item.plural==='\u2013') {
+                plInp.value='\u2013'; plInp.disabled=true;
+                plInp.classList.add('correct'); plInp.style.opacity='0.6';
+                plInp.title='Dieses Wort hat keinen Plural';
+            } else {
+                plInp.oninput=function(){ wortschatzCheck(this); timerAutoStart(6); checkWortschatzAllOk(); };
+            }
+            fields.appendChild(plInp);
+        } else {
+            var inp = document.createElement('input');
+            inp.className='blank'; inp.type='text';
+            inp.placeholder='Deutsch'; inp.style.width='220px';
+            inp.dataset.answer=item.de; inp.dataset.field='word';
+            inp.oninput=function(){ wortschatzCheck(this); timerAutoStart(6); checkWortschatzAllOk(); };
+            fields.appendChild(inp);
+        }
+        row.appendChild(fields);
+        container.appendChild(row);
+    });
+}
+function wortschatzCheck(inp) {
+    var user=inp.value, answer=inp.dataset.answer, field=inp.dataset.field;
+    inp.classList.remove('correct','wrong');
+    if (!user) return;
+    var cmpU=(field==='art')?user.toLowerCase().trim():user.trim();
+    var cmpA=(field==='art')?answer.toLowerCase():answer;
+    if(cmpU===cmpA){ inp.classList.add('correct'); }
+    else if(cmpA.indexOf(cmpU)===0){ /* Präfix — neutral */ }
+    else { inp.classList.add('wrong'); }
+}
+function checkWortschatzAllOk() {
+    var inputs=document.querySelectorAll('#sec-wortschatz input.blank');
+    var allOk=inputs.length>0 && Array.from(inputs).every(function(i){ return i.disabled||i.classList.contains('correct'); });
+    if(allOk) timerStop(6);
+}
+function showWortschatzLoesung() {
+    timerStop(6);
+    document.querySelectorAll('#sec-wortschatz input.blank').forEach(function(inp){
+        inp.value=inp.dataset.answer;
+        inp.classList.add('correct'); inp.classList.remove('wrong');
+    });
+}
+function resetWortschatz() {
+    document.querySelectorAll('#sec-wortschatz input.blank').forEach(function(inp){
+        if(!inp.disabled){ inp.value=''; inp.classList.remove('correct','wrong'); }
+    });
+    resetTimer(6);
+}
+
+/* ---- INIT ---- */
+document.addEventListener('DOMContentLoaded', function() {
+    initTimers([2,3,4,5,6]);
+    initVorentlastung();
+    highlightVocabInText();
+    buildGenus();
+    initLuecke();
+    initMc();
+    initSatzbau();
+    initWortschatz();
+});
+</script>
+</body>
+</html>

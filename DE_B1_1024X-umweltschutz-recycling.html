@@ -779,8 +779,8 @@ var satzbauData = [
         punct: '.'
     },
     {
-        parts: ['wenn', 'wir', 'den', 'Müll', 'richtig', 'trennen', ',', 'schonen', 'wir', 'die', 'Umwelt'],
-        valid: [['wenn', 'wir', 'den', 'Müll', 'richtig', 'trennen', ',', 'schonen', 'wir', 'die', 'Umwelt']],
+        parts: ['wer', 'den', 'Müll', 'richtig', 'trennt', ',', 'schont', 'die', 'Umwelt'],
+        valid: [['wer', 'den', 'Müll', 'richtig', 'trennt', ',', 'schont', 'die', 'Umwelt']],
         punct: '.'
     },
     {
@@ -845,12 +845,13 @@ function sbUpdateCapitalization(row) {
     });
 }
 
-function sbMakeChip(word) {
+function sbMakeChip(word, idx) {
     var chip = document.createElement('div');
     chip.className = 'chip';
     if (word === ',') chip.classList.add('punct-chip');
     chip.textContent = word;
     chip.dataset.orig = word;
+    if (idx !== undefined) chip.dataset.sbIdx = String(idx);
     chip.draggable = true;
 
     chip.addEventListener('dragstart', function(e) {
@@ -891,6 +892,7 @@ function sbRegisterZone(zone, idx) {
     zone.addEventListener('drop', function(e) {
         e.preventDefault();
         if (!sbDragged) return;
+        if (sbDragged.dataset.sbIdx !== undefined && sbDragged.dataset.sbIdx !== String(idx)) return;
         var cursor = document.getElementById('sb-insert-cursor');
         if (cursor && cursor.parentNode === zone) { zone.insertBefore(sbDragged, cursor); zone.removeChild(cursor); }
         else { zone.appendChild(sbDragged); }
@@ -994,7 +996,7 @@ function sbResetOne(idx) {
     fb.textContent = ''; fb.className = 'satzbau-feedback';
     var parts = satzbauData[idx].parts.slice();
     for (var i = parts.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp; }
-    parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+    parts.forEach(function(word){ bank.appendChild(sbMakeChip(word, idx)); });
 }
 
 function initSatzbau() {
@@ -1015,7 +1017,7 @@ function initSatzbau() {
 
         var parts = ex.parts.slice();
         for (var i = parts.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var tmp=parts[i];parts[i]=parts[j];parts[j]=tmp; }
-        parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+        parts.forEach(function(word){ bank.appendChild(sbMakeChip(word, idx)); });
 
         sbRegisterZone(bank, idx);
         sbRegisterZone(row, idx);

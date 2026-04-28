@@ -518,7 +518,7 @@ Skill: `daf-bilder-pflicht`, `pexels-bild-check`
 
 ```html
 <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
-<a href="mailto:FrankBurkert@fabdaf.onmicrosoft.com">FrankBurkert@fabdaf.onmicrosoft.com</a>
+<a href="mailto:unterricht@fabdaf.onmicrosoft.com">unterricht@fabdaf.onmicrosoft.com</a>
 ```
 
 ⛔ **Niemals ändern.** Keine Verbesserungen, keine Varianten. Nur auf explizite schriftliche Anweisung.

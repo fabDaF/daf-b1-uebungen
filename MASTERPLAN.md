@@ -43,7 +43,7 @@ DE_B1_LLLLx-thema.html
 Beispiel: `DE_B1_1011X-vorstellungsgespraech.html`
 
 ### Quellmaterial
-Lingoda-PDFs unter: `Cowork/lingoda/B 1.1/`
+Quell-PDFs unter: `Cowork/quelltexte/B 1.1/`
 
 ### Dashboard
 
@@ -70,7 +70,7 @@ Jede andere Dashboard-Datei die existiert (`b1-1-dashboard.html`, `a2-1-dashboar
 ## 2. Übersicht aller Lektionen (B1.1 + B1.2)
 
 > Dieser Masterplan gilt für **alle** Niveaus. B1.1 und B1.2 folgen denselben Regeln.
-> Quellmaterial B1.2: `Cowork/lingoda/B 1.2/`
+> Quellmaterial B1.2: `Cowork/quelltexte/B 1.2/`
 > HTML-Dateien B1.2: `htmlS/B1.2/`
 
 ### B1.1
@@ -1112,7 +1112,7 @@ Alle zusätzlichen Bilder werden nach dem gleichen Workflow wie Banner eingebett
 ## 7. Arbeitsreihenfolge beim Erstellen einer neuen Datei
 
 1. **Diesen Masterplan lesen** (diese Datei)
-2. **Lingoda-PDF lesen** (`pdftotext` → vollständigen Inhalt extrahieren)
+2. **Quell-PDF lesen** (`pdftotext` → vollständigen Inhalt extrahieren)
 3. **Passende Skills lesen** (siehe Tabelle oben, Abschnitt 0)
 4. **Bilder suchen** — Batch-Suche via Chrome-MCP (siehe Abschnitt 6 oben)
 5. **Datei aufbauen** — Tab für Tab, alle Skill-Muster einhalten

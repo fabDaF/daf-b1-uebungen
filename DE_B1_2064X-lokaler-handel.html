@@ -50,214 +50,318 @@
   .luecken-text input:focus { border-color: #667eea; }
   .luecken-text input.ok { border-color: #3a9a36; background: #c8f7c5; }
   .luecken-text input.err { border-color: #cc3333; background: #ffd5d5; }
-// ══════════════════════════════════════════════
-// SATZBAU
-// ══════════════════════════════════════════════
-const SATZBAU_DATA = [
-  { words: ['Ich kaufe', 'frisches Brot', 'lieber', 'beim Bäcker', '.'] },
-  { words: ['Kleine Läden sterben aus', ',', 'wenn alle', 'nur noch', 'online kaufen', '.'] },
-  { words: ['Lokale Geschäfte', 'unterstützen', 'die regionale', 'Wirtschaft', '.'] },
-  { words: ['Auf dem Wochenmarkt', 'kaufe ich', 'frisches Gemüse', 'direkt vom Bauern', '.'] },
-  { words: ['Nachhaltigkeit', 'ist ein wichtiges Argument', 'für den', 'lokalen Handel', '.'] },
-  { words: ['Die Beratung', 'im Fachgeschäft', 'ist besser', 'als online', '.'] }
-];
+  /* SATZBAU */
+  .satzbau-item { background: #f9f3ff; border: 1px solid #d4b8f5; border-radius: 8px; padding: 14px 18px; margin-bottom: 18px; }
+  .chips-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; min-height: 36px; }
+  .chip { background: #667eea; color: #fff; border-radius: 6px; padding: 6px 12px;
+    cursor: grab; font-size: 0.92rem; user-select: none; border: 2px solid transparent; }
+  .chip:active { cursor: grabbing; }
+  .chip.punct-chip { background: #aaa; cursor: default; }
+  .chip.correct { background: #3a9a36; }
+  .sentence-builder { border: 2px dashed #b388e8; border-radius: 8px; min-height: 40px; padding: 6px 8px;
+    display: flex; flex-wrap: wrap; gap: 6px; background: #faf5ff; transition: background 0.2s; }
+  .sentence-builder.correct { background: #e8f5e9; border-color: #3a9a36; }
+  .sentence-builder.incorrect { background: #fdeaea; border-color: #cc3333; }
+  .satzbau-feedback { font-size: 0.85rem; margin-top: 6px; min-height: 1.2em; }
+  .satzbau-feedback.correct { color: #3a9a36; font-weight: 700; }
+  .btn { padding: 6px 14px; border-radius: 6px; border: 1px solid #667eea; background: #fff;
+    color: #667eea; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+  .btn:hover { background: #667eea; color: #fff; }
+  /* TIMER */
+  .timer-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .timer-display { font-size: 1.1rem; font-weight: 700; color: #667eea; min-width: 60px; }
+  .timer-btn { padding: 6px 16px; border-radius: 6px; border: 2px solid #667eea;
+    background: #fff; color: #667eea; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+  .timer-btn:hover { background: #f3e8ff; }
+  .timer-best { font-size: 0.85rem; color: #888; }
+  .check-btn { margin-top: 14px; padding: 10px 28px; background: #667eea; color: #fff;
+    border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
+  .check-btn:hover { background: #5a0090; }
+  .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
+  .sprech-card { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; }
+  .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
+    font-size: 0.75rem; color: #aaa; text-align: center; }
+  .info-box { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
+    padding: 14px 18px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6; }
 
-let sbDragged = null;
+/* ===== Schreibwerkstatt — Niveau-flexibel ===== */
+.schreib-aufgabe-karte { background: #f8f9ff; padding: 16px 18px; margin-bottom: 16px; border-radius: 10px; border-left: 4px solid #667eea; transition: all 0.25s; }
+.schreib-aufgabe-karte.gesendet { background: #f1f8e9; border-left-color: #689f38; }
+.schreib-aufgabe-nr { display: inline-block; background: #667eea; color: white; font-weight: 700; font-size: 0.85em; padding: 2px 10px; border-radius: 12px; margin-right: 8px; vertical-align: middle; }
+.schreib-aufgabe-karte.gesendet .schreib-aufgabe-nr { background: #689f38; }
+.schreib-aufgabe-titel { font-weight: 700; color: #4a148c; font-size: 1.0em; vertical-align: middle; }
+.schreib-aufgabe-karte.gesendet .schreib-aufgabe-titel { color: #33691e; }
+.schreib-aufgabe-frage { color: #555; font-size: 0.92em; line-height: 1.5; margin: 8px 0 8px 0; }
+.schreib-beispiel { font-size: 0.85em; color: #888; font-style: italic; margin-bottom: 8px; padding-left: 12px; border-left: 2px solid #e0e4ff; }
+.schreib-mini-textarea { width: 100%; min-height: 70px; border: 1.5px solid #c5cff5; border-radius: 8px; padding: 10px 12px; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.95em; line-height: 1.6; color: #1a1a1a; resize: vertical; outline: none; transition: border-color 0.2s; background: #fefefe; }
+.schreib-mini-textarea:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
+.schreib-mini-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; flex-wrap: wrap; gap: 10px; }
+.schreib-mini-meta { font-size: 0.82em; color: #888; }
+.schreib-mini-meta strong { color: #667eea; font-weight: 700; }
+.schreib-mini-status { font-size: 0.82em; color: #689f38; font-weight: 600; }
+.schreib-mini-status.error { color: #c62828; }
+.schreib-mini-btn { padding: 7px 14px; border-radius: 6px; border: 1.5px solid #667eea; background: white; color: #667eea; font-size: 0.83em; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.schreib-mini-btn:hover:not(:disabled) { background: #667eea; color: white; box-shadow: 0 2px 6px rgba(102,126,234,0.3); }
+.schreib-mini-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.schreib-mini-btn.gesendet { border-color: #689f38; color: #689f38; background: #f1f8e9; }
+.schreib-mini-btn.gesendet:hover:not(:disabled) { background: #689f38; color: white; }
+.schreib-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; padding-top: 18px; border-top: 1px solid #e0e4ff; }
+.schreib-btn { padding: 10px 20px; border-radius: 8px; border: none; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.schreib-btn-primary { background: #667eea; color: white; }
+.schreib-btn-primary:hover:not(:disabled) { background: #5568d3; box-shadow: 0 4px 12px rgba(102,126,234,0.35); transform: translateY(-1px); }
+.schreib-btn-primary:disabled { background: #c5cff5; cursor: not-allowed; }
+.schreib-btn-ghost { background: transparent; color: #667eea; border: 1.5px solid #c5cff5; }
+.schreib-btn-ghost:hover { background: #f5f7ff; border-color: #667eea; }
+.schreib-status { margin-top: 14px; padding: 12px 16px; border-radius: 8px; font-size: 0.92em; line-height: 1.5; display: none; }
+.schreib-status.success { display: block; background: #e8f5e9; border-left: 4px solid #27ae60; color: #1b5e20; }
+.schreib-status.error { display: block; background: #ffebee; border-left: 4px solid #e74c3c; color: #b71c1c; }
+.schreib-status.info { display: block; background: #e3f2fd; border-left: 4px solid #2196f3; color: #0d47a1; }
+.schreib-name { width: 100%; max-width: 320px; padding: 10px 14px; border: 1.5px solid #c5cff5; border-radius: 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: border-color 0.2s; margin-bottom: 12px; }
+.schreib-name:focus { border-color: #667eea; }
+.schreib-label { display: block; font-size: 0.88em; color: #555; margin-bottom: 6px; font-weight: 600; }
+.schreib-name-box { background: #fffaf0; border: 1.5px solid #ffd699; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; }
+.schreib-name-box .schreib-label { color: #b15c00; }
+.schreib-name.schreib-name-error { border-color: #c62828; box-shadow: 0 0 0 2px rgba(198,40,40,0.15); animation: schreib-name-shake 0.4s; }
+@keyframes schreib-name-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
 
-function sbMakeChip(word, isTarget) {
-  const span = document.createElement('span');
-  const isPunct = /^[.,!?;:]$/.test(word);
-  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
-  span.textContent = word;
-  span.draggable = !isPunct;
-  if (isPunct) { span.draggable = false; return span; }
-  span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-  span.addEventListener('dragend', () => { sbDragged = null; });
-  if (isTarget) {
-    span.addEventListener('dragover', e => e.preventDefault());
-    span.addEventListener('drop', e => {
-      e.preventDefault();
-      if (sbDragged && sbDragged !== span) span.parentNode.insertBefore(sbDragged, span);
-    });
-  }
-  return span;
-}
+</style>
+</head>
+<body>
+<div class="container">
 
-function sbRegisterZone(zone) {
-  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
-  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
-  zone.addEventListener('drop', e => {
-    e.preventDefault(); zone.style.background = '';
-    if (sbDragged) zone.appendChild(sbDragged);
-  });
-}
+  <div class="nav" id="nav">
+    <button class="active" onclick="showTab(0)">🛍️ Lokaler Handel</button>
+    <button onclick="showTab(1)">📚 Wortschatz</button>
+    <button onclick="showTab(2)">🔗 Zuordnung</button>
+    <button onclick="showTab(3)">❓ Diskussion</button>
+    <button onclick="showTab(4)">✏️ Lückentext</button>
+    <button onclick="showTab(5)">🧩 Satzbau</button>
+    <button onclick="showTab(6)">📨 Schreiben</button>
+  </div>
 
-function sbCheckAuto(idx) {
-  setTimeout(() => {
-    const zone = document.getElementById('sb_zone_' + idx);
-    if (!zone) return;
-    const chips = zone.querySelectorAll('.chip');
-    const got = Array.from(chips).map(c => c.textContent).filter(t => !/^[.,!?;:]$/.test(t));
-    const ans = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
-    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
-    sbColorRow(idx, ok && got.length > 0);
-  }, 500);
-}
+  <!-- TAB 0: LOKALER HANDEL -->
+  <div class="tab-content active" id="tab0">
+    <img src="https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Wochenmarkt" class="tab-banner">
+    <h2>Lokaler Handel — Geschäfte vor Ort</h2>
+    <div class="info-box">
+      <strong>Lokaler Handel</strong> bedeutet: Produkte und Dienstleistungen direkt aus deiner Stadt oder deiner Region zu kaufen — beim Bäcker, beim Metzger, auf dem Wochenmarkt oder im Reformhaus. Kleine Geschäfte sind oft persönlicher, beraten besser und unterstützen die regionale Wirtschaft.
+    </div>
 
-function sbColorRow(idx, ok) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (ok) {
-    zone.className = 'sentence-builder correct';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-    checkSatzbauComplete();
-  } else {
-    zone.className = 'sentence-builder incorrect';
-    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
-    if (fb) { fb.className = 'satzbau-feedback incorrect'; fb.textContent = ''; }
-  }
-}
+    <h3>Typische Geschäfte vor Ort</h3>
+    <div class="handel-grid">
+      <div class="handel-card">
+        <div class="emoji">🥖</div>
+        <div class="titel">Bäckerei</div>
+        <div class="info">Frisches Brot, Brötchen und Kuchen direkt vom Bäcker</div>
+      </div>
+      <div class="handel-card">
+        <div class="emoji">🥩</div>
+        <div class="titel">Metzgerei</div>
+        <div class="info">Fleisch, Wurst und Aufschnitt mit fachlicher Beratung</div>
+      </div>
+      <div class="handel-card">
+        <div class="emoji">🥬</div>
+        <div class="titel">Wochenmarkt</div>
+        <div class="info">Frisches Obst, Gemüse und Blumen direkt vom Bauern</div>
+      </div>
+      <div class="handel-card">
+        <div class="emoji">🌿</div>
+        <div class="titel">Reformhaus</div>
+        <div class="info">Bio-Produkte, Naturkosmetik und gesunde Lebensmittel</div>
+      </div>
+      <div class="handel-card">
+        <div class="emoji">📚</div>
+        <div class="titel">Buchhandlung</div>
+        <div class="info">Bücher mit persönlicher Beratung — keine Algorithmen</div>
+      </div>
+      <div class="handel-card">
+        <div class="emoji">🛠️</div>
+        <div class="titel">Handwerksbetrieb</div>
+        <div class="info">Reparaturen und maßgefertigte Produkte aus der Nachbarschaft</div>
+      </div>
+    </div>
 
-function sbUpdateCapitalization(zone) {
-  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-  chips.forEach((chip, i) => {
-    const orig = chip.textContent;
-    if (i === 0) {
-      chip.textContent = orig.charAt(0).toUpperCase() + orig.slice(1);
-    }
-  });
-}
+    <h3>Sprechaufgaben</h3>
+    <div class="sprech-card"><strong>A)</strong> Wo kaufst du am liebsten ein — im Supermarkt, online oder in kleinen Läden? Warum?</div>
+    <div class="sprech-card"><strong>B)</strong> Welche lokalen Geschäfte gibt es in deinem Viertel? Welche besuchst du regelmäßig?</div>
+    <div class="sprech-card"><strong>C)</strong> Was sind die Vorteile und Nachteile von lokalem Einkauf gegenüber Online-Shopping?</div>
+    <div class="footer">unterricht@fabdaf.onmicrosoft.com</div>
+  </div>
 
-function checkSatzbauComplete() {
-  const allOk = SATZBAU_DATA.every((_, i) => {
-    const zone = document.getElementById('sb_zone_' + i);
-    return zone && zone.classList.contains('correct');
-  });
-  if (allOk) stopTimer(4);
-}
+  <!-- TAB 1: WORTSCHATZ -->
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Wortschatz" class="tab-banner">
+    <h2>Wortschatz — Lokaler Handel</h2>
+    <p style="margin-bottom:12px;color:#555;">Klick auf eine Karte, um die Übersetzung zu sehen.</p>
+    <div class="vocab-grid" id="vocabGrid"></div>
+    <div class="footer">unterricht@fabdaf.onmicrosoft.com</div>
+  </div>
 
-function buildSatzbau() {
-  const cont = document.getElementById('satzbauContainer');
-  if (!cont) return;
-  cont.innerHTML = '';
-  SATZBAU_DATA.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'satzbau-item';
+  <!-- TAB 2: ZUORDNUNG -->
+  <div class="tab-content" id="tab2">
+    <img src="https://images.pexels.com/photos/5503018/pexels-photo-5503018.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Zuordnung" class="tab-banner">
+    <h2>Zuordnung — Welches Geschäft?</h2>
+    <p style="margin-bottom:16px;color:#555;">Ordne jedes Produkt dem richtigen Geschäft zu.</p>
+    <ul class="zuord-list" id="zuordList"></ul>
+    <button class="check-btn" onclick="checkZuordnung()">Überprüfen</button>
+    <div class="result-msg" id="zuordResult"></div>
+    <div class="footer">unterricht@fabdaf.onmicrosoft.com</div>
+  </div>
 
-    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
-    let shuffled;
-    let ok2 = false;
-    for (let a = 0; a < 50; a++) {
-      shuffled = shuffleArr(nonPunct);
-      if (shuffled.some((w, i) => w !== nonPunct[i])) { ok2 = true; break; }
-    }
-    if (!ok2) shuffled = shuffleArr(nonPunct);
+  <!-- TAB 3: DISKUSSION -->
+  <div class="tab-content" id="tab3">
+    <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Diskussion" class="tab-banner">
+    <h2>Diskussion — Lokal oder online kaufen?</h2>
+    <div class="info-box">
+      <strong>Lies die Situation und beantworte die Fragen.</strong>
+    </div>
+    <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:18px 20px;margin-bottom:20px;font-size:0.97rem;line-height:1.8;">
+      <p><strong>Lena:</strong> „Ich kaufe fast alles online — Kleidung, Bücher, Lebensmittel. Das ist bequemer und oft günstiger."</p>
+      <p><strong>Max:</strong> „Ich verstehe das, aber lokale Geschäfte sterben aus. Wenn niemand mehr beim Bäcker oder Buchhändler kauft, verschwinden sie. Dann ist die Innenstadt leer."</p>
+      <p><strong>Lena:</strong> „Das stimmt. Aber die Preise im Supermarkt sind einfach niedriger. Als Studentin muss ich sparen."</p>
+      <p><strong>Max:</strong> „Ich kaufe wenigstens beim Bäcker und auf dem Wochenmarkt. Da ist alles frischer und ich kenne die Verkäufer. Außerdem unterstütze ich so meine Stadt."</p>
+      <p><strong>Lena:</strong> „Du hast recht. Vielleicht kann ich öfter zum Wochenmarkt gehen. Wenigstens für Obst und Gemüse."</p>
+    </div>
+    <h3>Fragen zum Text</h3>
+    <div style="max-width:650px;">
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>1.</strong> Was kauft Lena hauptsächlich online?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>2.</strong> Welche zwei Argumente nennt Max für den lokalen Handel?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>3.</strong> Warum kauft Lena oft im Supermarkt?
+      </div>
+      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
+        <strong>4.</strong> Welchen Kompromiss findet Lena am Ende?
+      </div>
+    </div>
+    <div class="footer">unterricht@fabdaf.onmicrosoft.com</div>
+  </div>
 
-    const pool = document.createElement('div');
-    pool.className = 'chips-container';
-    pool.id = 'sb_pool_' + idx;
-    shuffled.forEach(w => {
-      const chip = sbMakeChip(w, false);
-      chip.addEventListener('click', () => {
-        const zone = document.getElementById('sb_zone_' + idx);
-        zone.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      });
-      chip.addEventListener('dragstart', e => { sbDragged = chip; e.dataTransfer.effectAllowed = 'move'; timerAutoStart(4); });
-      pool.appendChild(chip);
-    });
-    sbRegisterZone(pool);
+  <!-- TAB 4: LÜCKENTEXT -->
+  <div class="tab-content" id="tab4">
+    <img src="https://images.pexels.com/photos/3807571/pexels-photo-3807571.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Lückentext" class="tab-banner">
+    <h2>Lückentext</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerL">0:00</span>
+      <button class="timer-btn" id="timerLBtn" onclick="timerToggle('L')">▶ Start</button>
+      <span class="timer-best" id="timerLBest"></span>
+    </div>
+    <div class="luecken-text" id="lueckenText"></div>
+    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
+    <div class="result-msg" id="lueckenResult"></div>
+    <div class="footer">unterricht@fabdaf.onmicrosoft.com</div>
+  </div>
 
-    const zone = document.createElement('div');
-    zone.className = 'sentence-builder';
-    zone.id = 'sb_zone_' + idx;
+  <!-- TAB 5: SATZBAU -->
+  <div class="tab-content" id="tab5">
+    <img src="https://images.pexels.com/photos/1468379/pexels-photo-1468379.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Satzbau" class="tab-banner">
+    <h2>Satzbau</h2>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerS">0:00</span>
+      <button class="timer-btn" id="timerSBtn" onclick="timerToggle('S')">▶ Start</button>
+      <span class="timer-best" id="timerSBest"></span>
+    </div>
+    <div id="satzbauContainer"></div>
+    <div class="footer">unterricht@fabdaf.onmicrosoft.com</div>
+  </div>
 
-    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => {
-      const pc = sbMakeChip(w, false);
-      zone.appendChild(pc);
-    });
+  <!-- TAB 6: SCHREIBWERKSTATT -->
+  <div class="tab-content" id="sec-schreib">
+    <img class="tab-banner" src="https://images.pexels.com/photos/733856/pexels-photo-733856.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Notizbuch und Stift, bereit zum Schreiben">
+    <h2>📨 Schreibwerkstatt</h2>
+    <p style="margin-bottom:14px;color:#555;">Fünf kleine Schreibaufgaben rund um lokalen Handel und Geschäfte vor Ort.</p>
 
-    sbRegisterZone(zone);
-    zone.addEventListener('drop', () => {
-      sbUpdateCapitalization(zone);
-      setTimeout(() => sbCheckAuto(idx), 50);
-    });
+    <div class="info-box">
+      Schreiben ist das beste Training. Nimm dir Zeit für eine, zwei oder alle fünf Aufgaben. <strong>Jede Antwort kannst du einzeln an Frank schicken</strong> — du musst nicht alle bearbeiten. Wenn du den Sammelbutton am Ende benutzt, gehen alle noch nicht gesendeten Antworten in einer Mail.
+    </div>
 
-    zone.addEventListener('click', e => {
-      const chip = e.target.closest('.chip:not(.punct-chip)');
-      if (chip && zone.contains(chip)) {
-        pool.appendChild(chip);
-        sbUpdateCapitalization(zone);
-        sbCheckAuto(idx);
-      }
-    });
+    <div class="schreib-name-box">
+      <label class="schreib-label" for="sw-name">Dein Name (Pflicht — damit Frank weiß, wer geschrieben hat):</label>
+      <input type="text" id="sw-name" class="schreib-name" placeholder="z. B. Maria Lopez" required>
+    </div>
 
-    const fb = document.createElement('div');
-    fb.className = 'satzbau-feedback';
-    fb.id = 'sb_fb_' + idx;
+    <div class="schreib-aufgabe-karte">
+      <span class="schreib-aufgabe-nr">1</span><span class="schreib-aufgabe-titel">Wo kaufst du regelmäßig ein?</span>
+      <div class="schreib-aufgabe-frage">Beschreib in 3-5 Sätzen, wo du normalerweise einkaufst — Supermarkt, kleine Läden, Online?</div>
+      <div class="schreib-beispiel">Beispiel: „Lebensmittel kaufe ich meistens im Supermarkt — Aldi und Lidl, weil günstig. Frisches Obst und Gemüse auf dem Wochenmarkt am Samstag. Brot beim Bäcker um die Ecke. Kleidung fast immer online — schnell und bequem."</div>
+      <textarea class="schreib-mini-textarea" data-aufgabe="1" data-titel="Wo kaufst du regelmäßig ein?"></textarea>
+      <div class="schreib-mini-footer">
+        <span class="schreib-mini-meta">Wörter: <strong class="wc-1">0</strong> <span class="schreib-mini-status" id="sw-status-1"></span></span>
+        <button class="schreib-mini-btn" id="sw-send-1" onclick="schreibSendenEinzeln(1)">📨 An Frank senden</button>
+      </div>
+    </div>
 
-    div.appendChild(pool);
-    div.appendChild(zone);
-    div.appendChild(fb);
-    cont.appendChild(div);
-  });
-}
+    <div class="schreib-aufgabe-karte">
+      <span class="schreib-aufgabe-nr">2</span><span class="schreib-aufgabe-titel">Drei Argumente für lokales Einkaufen</span>
+      <div class="schreib-aufgabe-frage">Schreib drei Gründe, warum lokal einkaufen sinnvoll ist (3-5 Sätze).</div>
+      <div class="schreib-beispiel">Beispiel: „Erstens: Frische — beim Bäcker schmeckt das Brot anders als aus dem Supermarkt. Zweitens: Beratung — der Buchhändler kennt mich, empfiehlt mir gute Bücher. Drittens: meine Stadt bleibt lebendig — ohne kleine Läden wird die Innenstadt zur Geisterzone."</div>
+      <textarea class="schreib-mini-textarea" data-aufgabe="2" data-titel="Drei Argumente für lokales Einkaufen"></textarea>
+      <div class="schreib-mini-footer">
+        <span class="schreib-mini-meta">Wörter: <strong class="wc-2">0</strong> <span class="schreib-mini-status" id="sw-status-2"></span></span>
+        <button class="schreib-mini-btn" id="sw-send-2" onclick="schreibSendenEinzeln(2)">📨 An Frank senden</button>
+      </div>
+    </div>
 
-function resetSatzbau() { buildSatzbau(); resetTimer(4); }
-function sbShowSolution(idx) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const pool = document.getElementById('sb_pool_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (!zone || !pool) return;
-  const answer = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
-  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => pool.appendChild(c));
-  Array.from(pool.querySelectorAll('.chip')).forEach(c => c.classList.remove('correct','incorrect'));
-  answer.forEach(w => {
-    const chip = Array.from(pool.querySelectorAll('.chip')).find(c => c.textContent === w);
-    if (chip) { chip.classList.add('correct'); zone.appendChild(chip); }
-  });
-  if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
-  zone.className = 'sentence-builder correct';
-}
-function sbResetOne(idx) {
-  const zone = document.getElementById('sb_zone_' + idx);
-  const pool = document.getElementById('sb_pool_' + idx);
-  const fb = document.getElementById('sb_fb_' + idx);
-  if (!zone || !pool) return;
-  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => { c.classList.remove('correct','incorrect'); pool.appendChild(c); });
-  zone.className = 'sentence-builder';
-  if (fb) { fb.className = 'satzbau-feedback'; fb.textContent = ''; }
-}
-function initSatzbau() {
-  buildSatzbau();
-  SATZBAU_DATA.forEach((_, idx) => {
-    const zone = document.getElementById('sb_zone_' + idx);
-    if (!zone) return;
-    const item = zone.parentElement;
-    if (!item.querySelector('[data-sb-btns]')) {
-      var btnRow = document.createElement('div');
-      btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
-      btnRow.setAttribute('data-sb-btns', '1');
-      var btnS = document.createElement('button');
-      btnS.textContent = 'Lösen';
-      btnS.className = 'btn';
-      btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
-      var btnR = document.createElement('button');
-      btnR.textContent = '↺ Neustart';
-      btnR.className = 'btn';
-      btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
-      btnRow.appendChild(btnS);
-      btnRow.appendChild(btnR);
-      item.appendChild(btnRow);
-    }
-  });
-}
+    <div class="schreib-aufgabe-karte">
+      <span class="schreib-aufgabe-nr">3</span><span class="schreib-aufgabe-titel">Online vs. lokal</span>
+      <div class="schreib-aufgabe-frage">Gibt es Sachen, die du nur online kaufst, und andere nur lokal? Begründe (3-5 Sätze mit „weil").</div>
+      <div class="schreib-beispiel">Beispiel: „Bücher kaufe ich oft online, weil die Auswahl größer ist. Aber Kleidung gerne im Geschäft, weil ich anprobieren will. Lebensmittel meistens lokal, weil ich frische Sachen sehen möchte. Elektronik online, weil die Preise im Geschäft oft höher sind."</div>
+      <textarea class="schreib-mini-textarea" data-aufgabe="3" data-titel="Online vs. lokal"></textarea>
+      <div class="schreib-mini-footer">
+        <span class="schreib-mini-meta">Wörter: <strong class="wc-3">0</strong> <span class="schreib-mini-status" id="sw-status-3"></span></span>
+        <button class="schreib-mini-btn" id="sw-send-3" onclick="schreibSendenEinzeln(3)">📨 An Frank senden</button>
+      </div>
+    </div>
+
+    <div class="schreib-aufgabe-karte">
+      <span class="schreib-aufgabe-nr">4</span><span class="schreib-aufgabe-titel">Ein lokales Geschäft, das du liebst</span>
+      <div class="schreib-aufgabe-frage">Beschreib einen kleinen Laden in deiner Stadt, den du gern besuchst (3-5 Sätze).</div>
+      <div class="schreib-beispiel">Beispiel: „In meiner Straße gibt es eine kleine Buchhandlung, die ich seit Jahren besuche. Die Inhaberin heißt Carmen und kennt meinen Geschmack. Sie empfiehlt mir Bücher, an die ich nie gedacht hätte. Das Café im Hinterzimmer macht den besten Cortado in der Gegend."</div>
+      <textarea class="schreib-mini-textarea" data-aufgabe="4" data-titel="Ein lokales Geschäft, das du liebst"></textarea>
+      <div class="schreib-mini-footer">
+        <span class="schreib-mini-meta">Wörter: <strong class="wc-4">0</strong> <span class="schreib-mini-status" id="sw-status-4"></span></span>
+        <button class="schreib-mini-btn" id="sw-send-4" onclick="schreibSendenEinzeln(4)">📨 An Frank senden</button>
+      </div>
+    </div>
+
+    <div class="schreib-aufgabe-karte">
+      <span class="schreib-aufgabe-nr">5</span><span class="schreib-aufgabe-titel">Mini-Dialog: Auf dem Wochenmarkt</span>
+      <div class="schreib-aufgabe-frage">Du kaufst auf dem Wochenmarkt ein. Schreib einen Mini-Dialog mit dem Verkäufer (zwei Fragen, zwei Antworten).</div>
+      <div class="schreib-beispiel">Beispiel: „— Sind die Tomaten von Ihnen? — Ja, alle aus meinem Garten — heute morgen geerntet. — Wie viel kostet ein Kilo? — 3,50 Euro. Bisschen teurer als im Supermarkt, aber Sie schmecken den Unterschied."</div>
+      <textarea class="schreib-mini-textarea" data-aufgabe="5" data-titel="Mini-Dialog: Auf dem Wochenmarkt"></textarea>
+      <div class="schreib-mini-footer">
+        <span class="schreib-mini-meta">Wörter: <strong class="wc-5">0</strong> <span class="schreib-mini-status" id="sw-status-5"></span></span>
+        <button class="schreib-mini-btn" id="sw-send-5" onclick="schreibSendenEinzeln(5)">📨 An Frank senden</button>
+      </div>
+    </div>
+
+    <div class="schreib-actions">
+      <button class="schreib-btn schreib-btn-primary" id="sw-btn-all" onclick="schreibSendenAlleNochOffenen()">📨 Alle noch nicht gesendeten Antworten schicken</button>
+      <button class="schreib-btn schreib-btn-ghost" onclick="schreibKopieren()">📋 In Zwischenablage</button>
+      <button class="schreib-btn schreib-btn-ghost" onclick="schreibLeeren()">🗑️ Alles zurücksetzen</button>
+    </div>
+    <div class="schreib-status" id="sw-status"></div>
+    <div class="footer">unterricht@fabdaf.onmicrosoft.com</div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+const TIMER_PREFIX = 'best2064X';
 
 const WORTSCHATZ = [
   { word: 'der lokale Handel', en: 'local trade / commerce' },
-  { word: 'die Metzgerei, -en', en: 'butcher\'s shop' },
+  { word: 'die Metzgerei, -en', en: "butcher's shop" },
   { word: 'die Bäckerei, -en', en: 'bakery' },
   { word: 'der Wochenmarkt, -¨e', en: 'weekly market' },
   { word: 'das Reformhaus, -¨er', en: 'health food shop' },
@@ -298,16 +402,542 @@ const LUECKEN = [
   { before: 'Im Reformhaus findet man viele ', blank: 'regionale', after: ' Bioprodukte.' },
 ];
 
+const SATZBAU_DATA = [
+  { words: ['Ich kaufe', 'frisches Brot', 'lieber', 'beim Bäcker', '.'] },
+  { words: ['Kleine Läden sterben aus', ',', 'wenn alle', 'nur noch', 'online kaufen', '.'] },
+  { words: ['Lokale Geschäfte', 'unterstützen', 'die regionale', 'Wirtschaft', '.'] },
+  { words: ['Auf dem Wochenmarkt', 'kaufe ich', 'frisches Gemüse', 'direkt vom Bauern', '.'] },
+  { words: ['Nachhaltigkeit', 'ist ein wichtiges Argument', 'für den', 'lokalen Handel', '.'] },
+  { words: ['Die Beratung', 'im Fachgeschäft', 'ist besser', 'als online', '.'] }
+];
 
-let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
-function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}
-function startTimer(k){if(timerRunning[k])return;timerRunning[k]=true;document.getElementById(`timer${k}Btn`).textContent='⏸ Pause';timerIntervals[k]=setInterval(()=>{timerSeconds[k]++;document.getElementById(`timer${k}`).textContent=formatTime(timerSeconds[k]);},1000);}
-function stopTimer(k){clearInterval(timerIntervals[k]);timerRunning[k]=false;document.getElementById(`timer${k}Btn`).textContent='▶ Weiter';}
-function saveBest(k){const sk=TIMER_PREFIX+'_'+k,prev=parseInt(localStorage.getItem(sk)||'999999');if(timerSeconds[k]<prev){localStorage.setItem(sk,timerSeconds[k]);document.getElementById(`timer${k}Best`).textContent='🏆 Neue Bestzeit: '+formatTime(timerSeconds[k]);}else{document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(prev);}}
-function formatTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
-(function(){['L','S'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
-function initVocab() { var g=document.getElementById('vocabGrid'); if(g){ g.innerHTML=''; WORTSCHATZ.forEach(function(v){var c=document.createElement('div');c.className='vocab-card';c.innerHTML='<div class="word">'+v.word+'</div><div class="translation">'+v.en+'</div>';c.addEventListener('click',function(){c.classList.toggle('revealed');});g.appendChild(c);}); } }
-initVocab();
+// ── TABS ───────────────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
+}
+
+// ── VOCAB ──────────────────────────────────────────────
+(function() {
+  const g = document.getElementById('vocabGrid');
+  WORTSCHATZ.forEach(v => {
+    const c = document.createElement('div'); c.className = 'vocab-card';
+    c.innerHTML = '<div class="word">' + v.word + '</div><div class="translation">' + v.en + '</div>';
+    c.addEventListener('click', () => c.classList.toggle('revealed'));
+    g.appendChild(c);
+  });
+})();
+
+// ── ZUORDNUNG ──────────────────────────────────────────
+(function() {
+  const list = document.getElementById('zuordList');
+  const cats = ['Bäckerei','Metzgerei','Wochenmarkt','Reformhaus'];
+  ZUORDNUNG_ITEMS.forEach((item, idx) => {
+    const li = document.createElement('li'); li.className = 'zuord-item';
+    const opts = cats.map(c => '<option value="' + c + '">' + c + '</option>').join('');
+    li.innerHTML = '<div class="satz">' + (idx+1) + '. ' + item.satz + '</div>' +
+      '<select id="zuord-' + idx + '"><option value="">— wählen —</option>' + opts + '</select>';
+    list.appendChild(li);
+  });
+})();
+
+function checkZuordnung() {
+  let correct = 0;
+  ZUORDNUNG_ITEMS.forEach((item, idx) => {
+    const sel = document.getElementById('zuord-' + idx);
+    sel.classList.remove('ok','err');
+    if (sel.value === item.cat) { sel.classList.add('ok'); correct++; }
+    else sel.classList.add('err');
+  });
+  const res = document.getElementById('zuordResult');
+  res.textContent = correct === ZUORDNUNG_ITEMS.length
+    ? '✅ Alle ' + ZUORDNUNG_ITEMS.length + ' Zuordnungen richtig!'
+    : correct + ' von ' + ZUORDNUNG_ITEMS.length + ' richtig.';
+  res.style.color = correct === ZUORDNUNG_ITEMS.length ? '#1a5e17' : '#7a0000';
+}
+
+// ── LÜCKENTEXT ─────────────────────────────────────────
+(function() {
+  const c = document.getElementById('lueckenText');
+  LUECKEN.forEach((item, idx) => {
+    const p = document.createElement('p'); p.style.marginBottom = '10px';
+    p.innerHTML = item.before +
+      '<input type="text" id="luecke-' + idx + '" data-answer="' + item.blank.toLowerCase() + '" ' +
+      'placeholder="..." oninput="liveCheck(this)" style="width:' + Math.max(100, item.blank.length*11) + 'px"/>' +
+      item.after;
+    c.appendChild(p);
+  });
+})();
+
+function liveCheck(inp) {
+  inp.classList.remove('ok','err');
+  if (inp.value.trim().toLowerCase() === inp.dataset.answer) inp.classList.add('ok');
+  autoStopIfDone();
+}
+function checkLuecken() {
+  let correct = 0;
+  LUECKEN.forEach((item, idx) => {
+    const inp = document.getElementById('luecke-' + idx);
+    inp.classList.remove('ok','err');
+    if (inp.value.trim().toLowerCase() === item.blank.toLowerCase()) { inp.classList.add('ok'); correct++; }
+    else inp.classList.add('err');
+  });
+  const res = document.getElementById('lueckenResult');
+  if (correct === LUECKEN.length) {
+    res.textContent = '✅ Alle ' + LUECKEN.length + ' Lücken richtig!';
+    res.style.color = '#1a5e17'; stopTimer('L'); saveBest('L');
+  } else {
+    res.textContent = correct + ' von ' + LUECKEN.length + ' richtig.';
+    res.style.color = '#7a0000';
+  }
+}
+function autoStopIfDone() {
+  if ([...document.querySelectorAll('#lueckenText input')].every(i => i.classList.contains('ok'))) {
+    stopTimer('L'); saveBest('L');
+    const res = document.getElementById('lueckenResult');
+    res.textContent = '✅ Alle ' + LUECKEN.length + ' Lücken richtig!'; res.style.color = '#1a5e17';
+  }
+}
+
+// ── SATZBAU ────────────────────────────────────────────
+let sbDragged = null;
+
+function shuffleArr(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function sbMakeChip(word) {
+  const span = document.createElement('span');
+  const isPunct = /^[.,!?;:]$/.test(word);
+  span.className = 'chip' + (isPunct ? ' punct-chip' : '');
+  span.textContent = word;
+  span.draggable = !isPunct;
+  if (!isPunct) {
+    span.addEventListener('dragstart', e => { sbDragged = span; e.dataTransfer.effectAllowed = 'move'; });
+    span.addEventListener('dragend', () => { sbDragged = null; });
+  }
+  return span;
+}
+
+function sbRegisterZone(zone) {
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.background = '#e8eaff'; });
+  zone.addEventListener('dragleave', () => { zone.style.background = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.style.background = '';
+    if (sbDragged) zone.appendChild(sbDragged);
+  });
+}
+
+function sbCheckAuto(idx) {
+  const pool = document.getElementById('sb_pool_' + idx);
+  const zone = document.getElementById('sb_zone_' + idx);
+  if (!zone) return;
+  if (pool && pool.querySelectorAll('.chip:not(.punct-chip)').length > 0) {
+    zone.className = 'sentence-builder';
+    return;
+  }
+  setTimeout(() => {
+    const got = Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).map(c => c.textContent);
+    const ans = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
+    const ok = got.length === ans.length && got.every((w, i) => w === ans[i]);
+    sbColorRow(idx, ok && got.length > 0);
+  }, 500);
+}
+
+function sbColorRow(idx, ok) {
+  const zone = document.getElementById('sb_zone_' + idx);
+  const fb = document.getElementById('sb_fb_' + idx);
+  if (ok) {
+    zone.className = 'sentence-builder correct';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.add('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '✓ Richtig!'; }
+  } else {
+    zone.className = 'sentence-builder incorrect';
+    zone.querySelectorAll('.chip').forEach(c => { if (!c.classList.contains('punct-chip')) c.classList.remove('correct'); });
+    if (fb) { fb.className = 'satzbau-feedback'; fb.textContent = ''; }
+  }
+}
+
+function sbUpdateCapitalization(zone) {
+  const chips = zone.querySelectorAll('.chip:not(.punct-chip)');
+  chips.forEach((chip, i) => {
+    if (i === 0) {
+      const t = chip.textContent;
+      chip.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+    }
+  });
+}
+
+function buildSatzbau() {
+  const cont = document.getElementById('satzbauContainer');
+  if (!cont) return;
+  cont.innerHTML = '';
+  SATZBAU_DATA.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'satzbau-item';
+    const nonPunct = item.words.filter(w => !/^[.,!?;:]$/.test(w));
+    const shuffled = shuffleArr(nonPunct);
+
+    const pool = document.createElement('div');
+    pool.className = 'chips-container';
+    pool.id = 'sb_pool_' + idx;
+    shuffled.forEach(w => {
+      const chip = sbMakeChip(w);
+      chip.addEventListener('click', () => {
+        const zone = document.getElementById('sb_zone_' + idx);
+        zone.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      });
+      pool.appendChild(chip);
+    });
+    sbRegisterZone(pool);
+
+    const zone = document.createElement('div');
+    zone.className = 'sentence-builder';
+    zone.id = 'sb_zone_' + idx;
+    item.words.filter(w => /^[.,!?;:]$/.test(w)).forEach(w => zone.appendChild(sbMakeChip(w)));
+    sbRegisterZone(zone);
+    zone.addEventListener('drop', () => {
+      sbUpdateCapitalization(zone);
+      setTimeout(() => sbCheckAuto(idx), 50);
+    });
+    zone.addEventListener('click', e => {
+      const chip = e.target.closest('.chip:not(.punct-chip)');
+      if (chip && zone.contains(chip)) {
+        pool.appendChild(chip);
+        sbUpdateCapitalization(zone);
+        sbCheckAuto(idx);
+      }
+    });
+
+    const fb = document.createElement('div');
+    fb.className = 'satzbau-feedback';
+    fb.id = 'sb_fb_' + idx;
+
+    const btnRow = document.createElement('div');
+    btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+    const btnS = document.createElement('button'); btnS.textContent = 'Lösen'; btnS.className = 'btn';
+    btnS.onclick = () => sbShowSolution(idx);
+    const btnR = document.createElement('button'); btnR.textContent = '↺ Neustart'; btnR.className = 'btn';
+    btnR.onclick = () => sbResetOne(idx);
+    btnRow.appendChild(btnS); btnRow.appendChild(btnR);
+
+    div.appendChild(pool); div.appendChild(zone); div.appendChild(fb); div.appendChild(btnRow);
+    cont.appendChild(div);
+  });
+}
+
+function sbShowSolution(idx) {
+  const pool = document.getElementById('sb_pool_' + idx);
+  const zone = document.getElementById('sb_zone_' + idx);
+  if (!pool || !zone) return;
+  const nonPunct = SATZBAU_DATA[idx].words.filter(w => !/^[.,!?;:]$/.test(w));
+  const chips = {};
+  Array.from(pool.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => chips[c.textContent] = c);
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => chips[c.textContent] = c);
+  pool.querySelectorAll('.chip:not(.punct-chip)').forEach(c => pool.removeChild(c));
+  zone.querySelectorAll('.chip:not(.punct-chip)').forEach(c => zone.removeChild(c));
+  nonPunct.forEach(w => { if (chips[w]) zone.appendChild(chips[w]); });
+  sbUpdateCapitalization(zone);
+  setTimeout(() => sbCheckAuto(idx), 100);
+}
+
+function sbResetOne(idx) {
+  const pool = document.getElementById('sb_pool_' + idx);
+  const zone = document.getElementById('sb_zone_' + idx);
+  if (!pool || !zone) return;
+  const all = [];
+  Array.from(pool.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => all.push(c));
+  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(c => all.push(c));
+  pool.querySelectorAll('.chip:not(.punct-chip)').forEach(c => pool.removeChild(c));
+  zone.querySelectorAll('.chip:not(.punct-chip)').forEach(c => zone.removeChild(c));
+  shuffleArr(all).forEach(c => pool.appendChild(c));
+  zone.className = 'sentence-builder';
+}
+
+buildSatzbau();
+
+// ── TIMER ──────────────────────────────────────────────
+let timerIntervals = {L:null, S:null}, timerSeconds = {L:0, S:0}, timerRunning = {L:false, S:false};
+function timerToggle(k) { timerRunning[k] ? stopTimer(k) : startTimer(k); }
+function startTimer(k) {
+  if (timerRunning[k]) return;
+  timerRunning[k] = true;
+  document.getElementById('timer'+k+'Btn').textContent = '⏸ Pause';
+  timerIntervals[k] = setInterval(() => {
+    timerSeconds[k]++;
+    document.getElementById('timer'+k).textContent = formatTime(timerSeconds[k]);
+  }, 1000);
+}
+function stopTimer(k) { clearInterval(timerIntervals[k]); timerRunning[k] = false; document.getElementById('timer'+k+'Btn').textContent = '▶ Weiter'; }
+function saveBest(k) {
+  const sk = TIMER_PREFIX + '_' + k;
+  const prev = parseInt(localStorage.getItem(sk) || '999999');
+  if (timerSeconds[k] < prev) {
+    localStorage.setItem(sk, timerSeconds[k]);
+    document.getElementById('timer'+k+'Best').textContent = '🏆 Neue Bestzeit: ' + formatTime(timerSeconds[k]);
+  } else {
+    document.getElementById('timer'+k+'Best').textContent = 'Bestzeit: ' + formatTime(prev);
+  }
+}
+function formatTime(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2, '0'); }
+(function() {
+  ['L','S'].forEach(k => {
+    const v = localStorage.getItem(TIMER_PREFIX + '_' + k);
+    if (v) document.getElementById('timer'+k+'Best').textContent = 'Bestzeit: ' + formatTime(parseInt(v));
+  });
+})();
+
+/* ===== SCHREIBWERKSTATT (B1) =================================== */
+var SCHREIB_NAME_KEY      = 'schreibwerkstatt_B1_2064X_name';
+var SCHREIB_KEY_PREFIX    = 'schreibwerkstatt_B1_2064X_';
+var SCHREIB_SENT_PREFIX   = 'schreibwerkstatt_B1_2064X_sent_';
+var FORMSUBMIT_ENDPOINT   = 'https://formsubmit.co/ajax/unterricht@fabdaf.onmicrosoft.com';
+var SCHREIB_LEKTION       = 'B1 – Lektion 2064X · Lokaler Handel';
+var SCHREIB_MIN_CHARS     = 12;
+
+function initSchreibwerkstatt() {
+  var nameInp = document.getElementById('sw-name');
+  if (nameInp) {
+    var savedName = localStorage.getItem(SCHREIB_NAME_KEY);
+    if (savedName) nameInp.value = savedName;
+    nameInp.addEventListener('input', function () {
+      localStorage.setItem(SCHREIB_NAME_KEY, nameInp.value);
+    });
+  }
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    var saved = localStorage.getItem(SCHREIB_KEY_PREFIX + nr);
+    if (saved) ta.value = saved;
+    schreibUpdateCount(ta);
+    var sentInfo = localStorage.getItem(SCHREIB_SENT_PREFIX + nr);
+    if (sentInfo) schreibKarteAlsGesendetMarkieren(nr, sentInfo, true);
+    ta.addEventListener('input', function () {
+      schreibUpdateCount(ta);
+      localStorage.setItem(SCHREIB_KEY_PREFIX + nr, ta.value);
+      var btn = document.getElementById('sw-send-' + nr);
+      if (btn && btn.classList.contains('gesendet')) {
+        btn.classList.remove('gesendet');
+        btn.innerHTML = '📨 Erneut senden';
+      }
+      var st = document.getElementById('sw-status-' + nr);
+      if (st && st.classList.contains('error')) {
+        st.classList.remove('error');
+        st.textContent = '';
+      }
+    });
+  });
+}
+
+function schreibUpdateCount(ta) {
+  var nr = ta.dataset.aufgabe;
+  var text = ta.value.trim();
+  var words = text ? text.split(/\s+/).filter(function (w) { return w.length > 0; }).length : 0;
+  var wc = document.querySelector('.wc-' + nr);
+  if (wc) wc.textContent = words;
+}
+
+function schreibKarteAlsGesendetMarkieren(nr, info, beimLaden) {
+  var ta = document.querySelector('.schreib-mini-textarea[data-aufgabe="' + nr + '"]');
+  var karte = ta && ta.closest('.schreib-aufgabe-karte');
+  if (karte) karte.classList.add('gesendet');
+  var btn = document.getElementById('sw-send-' + nr);
+  if (btn) {
+    btn.classList.add('gesendet');
+    btn.innerHTML = beimLaden ? '✓ schon gesendet · erneut senden' : '✓ gesendet · erneut senden';
+  }
+  var status = document.getElementById('sw-status-' + nr);
+  if (status) { status.classList.remove('error'); status.textContent = '✓ ' + info; }
+}
+
+function schreibStatusZeigen(typ, text) {
+  var box = document.getElementById('sw-status');
+  if (!box) return;
+  box.className = 'schreib-status ' + typ;
+  box.innerHTML = text;
+}
+
+function schreibAktuellerName() {
+  var nameInp = document.getElementById('sw-name');
+  return (nameInp && nameInp.value || '').trim();
+}
+
+function schreibNamePflicht() {
+  var name = schreibAktuellerName();
+  if (!name) {
+    var nameInp = document.getElementById('sw-name');
+    if (nameInp) {
+      nameInp.classList.add('schreib-name-error');
+      try { nameInp.focus(); nameInp.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      setTimeout(function () { nameInp.classList.remove('schreib-name-error'); }, 3000);
+    }
+    return false;
+  }
+  return true;
+}
+
+function schreibPostFormsubmit(subject, message, onOk, onErr) {
+  return fetch(FORMSUBMIT_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      name: schreibAktuellerName(),
+      _subject: subject,
+      _template: 'box',
+      _captcha: 'false',
+      lektion: SCHREIB_LEKTION,
+      message: message
+    })
+  })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(onOk)
+    .catch(onErr);
+}
+
+function schreibSendenEinzeln(nr) {
+  var ta = document.querySelector('.schreib-mini-textarea[data-aufgabe="' + nr + '"]');
+  var btn = document.getElementById('sw-send-' + nr);
+  if (!ta || !btn) return;
+  if (!schreibNamePflicht()) {
+    var stN = document.getElementById('sw-status-' + nr);
+    if (stN) { stN.classList.add('error'); stN.textContent = 'Bitte zuerst deinen Namen oben eintragen.'; }
+    return;
+  }
+  var text = ta.value.trim();
+  if (text.length < SCHREIB_MIN_CHARS) {
+    var st = document.getElementById('sw-status-' + nr);
+    if (st) { st.classList.add('error'); st.textContent = 'noch zu kurz — schreib bitte etwas mehr'; }
+    return;
+  }
+  var titel = ta.dataset.titel || ('Aufgabe ' + nr);
+  var subject = 'B1 2064X · Aufgabe ' + nr + ' · ' + titel + ' · ' + schreibAktuellerName();
+  var message = '=== Aufgabe ' + nr + ': ' + titel + ' ===\n\n' + text;
+  btn.disabled = true;
+  var origLabel = btn.innerHTML;
+  btn.innerHTML = '⏳ Wird gesendet …';
+
+  schreibPostFormsubmit(subject, message,
+    function () {
+      btn.disabled = false;
+      var jetzt = new Date();
+      var info = 'gesendet um ' + String(jetzt.getHours()).padStart(2, '0') + ':' + String(jetzt.getMinutes()).padStart(2, '0');
+      localStorage.setItem(SCHREIB_SENT_PREFIX + nr, info);
+      schreibKarteAlsGesendetMarkieren(nr, info, false);
+    },
+    function () {
+      btn.disabled = false; btn.innerHTML = origLabel;
+      var st = document.getElementById('sw-status-' + nr);
+      if (st) {
+        var subjectEnc = encodeURIComponent(subject);
+        var bodyEnc = encodeURIComponent('Name: ' + schreibAktuellerName() + '\n\n' + message);
+        st.classList.add('error');
+        st.innerHTML = '✗ Versand fehlgeschlagen — <a href="mailto:unterricht@fabdaf.onmicrosoft.com?subject=' + subjectEnc + '&body=' + bodyEnc + '" style="color:#c62828;font-weight:700;">stattdessen per Mail-Programm</a>';
+      }
+    }
+  );
+}
+
+function schreibSendenAlleNochOffenen() {
+  var btn = document.getElementById('sw-btn-all');
+  if (!schreibNamePflicht()) {
+    schreibStatusZeigen('error', '✗ Bitte zuerst deinen Namen oben eintragen.');
+    return;
+  }
+  var offene = [];
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    var text = ta.value.trim();
+    var sent = localStorage.getItem(SCHREIB_SENT_PREFIX + nr);
+    if (text.length >= SCHREIB_MIN_CHARS && !sent) offene.push({ nr: nr, ta: ta, text: text });
+  });
+  if (offene.length === 0) {
+    schreibStatusZeigen('info', 'ℹ Es gibt nichts Neues zu senden — alle Antworten sind entweder leer/sehr kurz oder bereits gesendet.');
+    return;
+  }
+  var teile = offene.map(function (o) {
+    var titel = o.ta.dataset.titel || ('Aufgabe ' + o.nr);
+    return '=== Aufgabe ' + o.nr + ': ' + titel + ' ===\n\n' + o.text;
+  });
+  var subject = 'B1 2064X · ' + offene.length + ' Antworten · ' + schreibAktuellerName();
+  var message = teile.join('\n\n');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Wird gesendet …';
+  schreibStatusZeigen('info', '⏳ ' + offene.length + ' Antworten werden übermittelt …');
+  schreibPostFormsubmit(subject, message,
+    function () {
+      btn.disabled = false;
+      btn.innerHTML = '📨 Alle noch nicht gesendeten Antworten schicken';
+      var jetzt = new Date();
+      var info = 'gesendet um ' + String(jetzt.getHours()).padStart(2, '0') + ':' + String(jetzt.getMinutes()).padStart(2, '0');
+      offene.forEach(function (o) {
+        localStorage.setItem(SCHREIB_SENT_PREFIX + o.nr, info);
+        schreibKarteAlsGesendetMarkieren(o.nr, info, false);
+      });
+      schreibStatusZeigen('success', '✓ <strong>' + offene.length + ' Antworten übermittelt.</strong> Frank meldet sich.');
+    },
+    function () {
+      btn.disabled = false;
+      btn.innerHTML = '📨 Alle noch nicht gesendeten Antworten schicken';
+      schreibStatusZeigen('error', '✗ Direkter Versand nicht möglich. Bitte einzeln pro Karte versuchen oder „In Zwischenablage" verwenden.');
+    }
+  );
+}
+
+function schreibKopieren() {
+  var teile = [];
+  teile.push('Lektion: ' + SCHREIB_LEKTION);
+  teile.push('Name: ' + (schreibAktuellerName() || '(kein Name)'));
+  teile.push('');
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    var text = ta.value.trim();
+    if (text.length >= SCHREIB_MIN_CHARS) {
+      var titel = ta.dataset.titel || ('Aufgabe ' + nr);
+      teile.push('=== Aufgabe ' + nr + ': ' + titel + ' ===');
+      teile.push(text);
+      teile.push('');
+    }
+  });
+  if (teile.length <= 3) {
+    schreibStatusZeigen('info', 'ℹ Noch nichts zum Kopieren — schreib mindestens eine Antwort.');
+    return;
+  }
+  var alles = teile.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(alles).then(
+      function () { schreibStatusZeigen('success', '✓ In Zwischenablage kopiert. Du kannst es jetzt in deine Mail einfügen.'); },
+      function () { schreibStatusZeigen('error', '✗ Kopieren fehlgeschlagen. Bitte den Text manuell markieren.'); }
+    );
+  } else {
+    schreibStatusZeigen('error', '✗ Dein Browser unterstützt das automatische Kopieren nicht.');
+  }
+}
+
+function schreibLeeren() {
+  if (!confirm('Wirklich ALLE Antworten zurücksetzen? Auch die schon gesendeten Markierungen werden entfernt.')) return;
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    ta.value = '';
+    localStorage.removeItem(SCHREIB_KEY_PREFIX + nr);
+    localStorage.removeItem(SCHREIB_SENT_PREFIX + nr);
+    schreibUpdateCount(ta);
+    var karte = ta.closest('.schreib-aufgabe-karte');
+    if (karte) karte.classList.remove('gesendet');
+    var btn = document.getElementById('sw-send-' + nr);
+    if (btn) { btn.classList.remove('gesendet'); btn.innerHTML = '📨 An Frank senden'; }
+    var st = document.getElementById('sw-status-' + nr);
+    if (st) { st.className = 'schreib-mini-status'; st.textContent = ''; }
+  });
+  schreibStatusZeigen('info', 'ℹ Alle Antworten zurückgesetzt.');
+}
+
+initSchreibwerkstatt();
 </script>
 </body>
 </html>

@@ -310,6 +310,9 @@ input.luecken-inp.no    { border-color: #e74c3c; background: #ffebee; }
 .chip.correct   { background: #27ae60; border-color: #27ae60; color: white; }
 .chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
 .chip.selected  { background: #e8eaff; border-color: #3949ab; }
+.chip.punct-chip { background: #ececf3; border-color: #667eea; color: #4a4a4a; padding: 7px 11px; font-weight: 700; }
+.chip.punct-chip.correct { background: #27ae60; border-color: #27ae60; color: white; }
+.chip.punct-chip.incorrect { background: #e74c3c; border-color: #e74c3c; color: white; }
 .sb-punkt {
     font-size: 1.1em; font-weight: 700; color: #27ae60;
     margin-left: 2px; align-self: center; user-select: none;
@@ -950,7 +953,7 @@ var satzbauData = [
     { parts: ['ein', 'Termin', 'ist', 'mehr', 'als', 'ein', 'spontanes', 'Treffen'], valid: [['ein', 'Termin', 'ist', 'mehr', 'als', 'ein', 'spontanes', 'Treffen']], punct: '.' },
     { parts: ['der', 'Osterhase', 'versteckt', 'die', 'bunten', 'Eier', 'im', 'Garten'], valid: [['der', 'Osterhase', 'versteckt', 'die', 'bunten', 'Eier', 'im', 'Garten']], punct: '.' },
     { parts: ['Pünktlichkeit', 'und', 'Ordnungsliebe', 'gelten', 'als', 'typisch', 'deutsch'], valid: [['Pünktlichkeit', 'und', 'Ordnungsliebe', 'gelten', 'als', 'typisch', 'deutsch']], punct: '.' },
-    { parts: ['was', 'der', 'Deutsche', 'macht,', 'macht', 'er', 'immer', 'gründlich'], valid: [['was', 'der', 'Deutsche', 'macht,', 'macht', 'er', 'immer', 'gründlich']], punct: '.' },
+    { parts: ['was', 'der', 'Deutsche', 'macht',',', 'macht', 'er', 'immer', 'gründlich'], valid: [['was', 'der', 'Deutsche', 'macht',',', 'macht', 'er', 'immer', 'gründlich']], punct: '.' },
     { parts: ['an', 'Karfreitag', 'bleiben', 'die', 'Geschäfte', 'in', 'Deutschland', 'geschlossen'], valid: [['an', 'Karfreitag', 'bleiben', 'die', 'Geschäfte', 'in', 'Deutschland', 'geschlossen']], punct: '.' },
     { parts: ['der', 'Oberbürgermeister', 'eröffnet', 'das', 'Fest', 'mit', 'den', 'Worten:', "O'zapft", 'is!'], valid: [["der", "Oberbürgermeister", "eröffnet", "das", "Fest", "mit", "den", "Worten:", "O\'zapft", "is!"]], punct: '' },
 ];
@@ -963,6 +966,7 @@ var sbDragged = null;
 function sbMakeChip(word) {
     var c = document.createElement('span');
     c.className = 'chip';
+    if (word === ',' || word === ';') c.classList.add('punct-chip');
     c.textContent = word;
     c.dataset.orig = word;
     c.draggable = true;

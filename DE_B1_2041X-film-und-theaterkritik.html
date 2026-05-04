@@ -153,8 +153,29 @@ input.blank {
     min-width: 4ch;
 }
 input.blank:focus { border-bottom-color: #667eea; }
-input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
-input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; color: #27ae60; font-weight: 700; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; color: #e74c3c; }
+/* Wortkasten */
+.wort-bank {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    background: #f0f2ff; border: 1px solid #c5cae9;
+    border-radius: 10px; padding: 12px 14px; margin-bottom: 18px;
+}
+.wort-bank-label {
+    width: 100%; font-size: 0.78em; font-weight: 700;
+    color: #667eea; text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 4px;
+}
+.wort-chip {
+    padding: 5px 14px; border-radius: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white; font-size: 0.87em; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: opacity 0.2s, transform 0.12s, box-shadow 0.12s;
+    user-select: none;
+}
+.wort-chip:hover:not(.used) { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(102,126,234,0.4); }
+.wort-chip.used { opacity: 0.22; cursor: default; pointer-events: none; }
 /* Multiple Choice */
 .mc-item {
     background: #f8f9ff;
@@ -829,17 +850,45 @@ function showGenusLoesung() {
 
 // ============ TAB 3: LÜCKENTEXT ============
 
+var lkActiveInput = null;
+
 function initLueckentext() {
     var container = document.getElementById('lueckenContainer');
     container.innerHTML = '';
 
-    LUECKEN_DATA.forEach(function(item, idx) {
+    // Wortkasten: Antworten mischen
+    var words = LUECKEN_DATA.map(function(item) { return item.answer; });
+    for (var i = words.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = words[i]; words[i] = words[j]; words[j] = tmp;
+    }
+    var bank = document.createElement('div');
+    bank.className = 'wort-bank';
+    bank.id = 'luecken-bank';
+    var lbl = document.createElement('div');
+    lbl.className = 'wort-bank-label';
+    lbl.textContent = '📦 Wortkasten – klicke ein Wort, dann das passende Feld';
+    bank.appendChild(lbl);
+    words.forEach(function(word) {
+        var btn = document.createElement('button');
+        btn.className = 'wort-chip';
+        btn.textContent = word;
+        btn.dataset.word = word;
+        btn.addEventListener('click', function() { insertWordFromBank(word); });
+        bank.appendChild(btn);
+    });
+    container.appendChild(bank);
+
+    // Sätze aufbauen
+    LUECKEN_DATA.forEach(function(item) {
         var div = document.createElement('div');
         div.className = 'luecken-item';
         div.innerHTML = item.sentence;
 
         var inputs = div.querySelectorAll('input.blank');
         inputs.forEach(function(inp) {
+            inp.setAttribute('size', Math.max(inp.dataset.answer.length + 2, 6));
+            inp.addEventListener('focus', function() { lkActiveInput = inp; });
             inp.oninput = function() {
                 timerAutoStart(3);
                 liveCheck(this);
@@ -851,19 +900,63 @@ function initLueckentext() {
     });
 }
 
+function insertWordFromBank(word) {
+    // Ziel: fokussiertes Feld (wenn nicht schon korrekt) oder erstes leeres
+    var allInputs = Array.from(document.querySelectorAll('#sec-3 input.blank'));
+    var target = null;
+    if (lkActiveInput && !lkActiveInput.classList.contains('correct') &&
+        document.body.contains(lkActiveInput)) {
+        target = lkActiveInput;
+    } else {
+        target = allInputs.find(function(inp) {
+            return !inp.classList.contains('correct') && !inp.value;
+        }) || allInputs.find(function(inp) {
+            return !inp.classList.contains('correct');
+        });
+    }
+    if (!target) return;
+
+    // Alten Chip freigeben wenn das Feld schon einen Chip-Wert hatte
+    var prev = target.dataset.usedChipWord;
+    if (prev) {
+        var prevChip = document.querySelector('.wort-chip[data-word="' + prev + '"]');
+        if (prevChip) prevChip.classList.remove('used');
+    }
+
+    // Wort einsetzen + Chip sperren
+    target.value = word;
+    target.dataset.usedChipWord = word;
+    var chip = document.querySelector('.wort-chip[data-word="' + word + '"]');
+    if (chip) chip.classList.add('used');
+
+    timerAutoStart(3);
+    liveCheck(target);
+    checkAllInputs(3);
+    target.focus();
+    lkActiveInput = target;
+}
+
 function liveCheck(inp) {
-    var answer = inp.dataset.answer || '';
-    var userAnswer = inp.value.trim();
+    var ansLc = (inp.dataset.answer || '').toLowerCase();
+    var valLc = inp.value.trim().toLowerCase();
 
     inp.classList.remove('correct', 'wrong');
-    if (userAnswer.length === 0) return;
 
-    if (userAnswer.toLowerCase() === answer.toLowerCase()) {
-        inp.classList.add('correct');
-    } else if (userAnswer.length >= answer.length) {
-        // Rot erst wenn mindestens so viele Zeichen wie die Antwort – kein falsches Rot beim Tippen
-        inp.classList.add('wrong');
+    // Chip-Rückgabe: wenn der Benutzer das Feld manuell geändert hat
+    var prev = inp.dataset.usedChipWord;
+    if (prev && prev.toLowerCase() !== valLc) {
+        var prevChip = document.querySelector('.wort-chip[data-word="' + prev + '"]');
+        if (prevChip) prevChip.classList.remove('used');
+        inp.dataset.usedChipWord = '';
     }
+
+    if (!valLc) return;                             // leer → neutral
+    if (valLc === ansLc) {                          // vollständig korrekt → grün
+        inp.classList.add('correct');
+        return;
+    }
+    if (ansLc.startsWith(valLc)) return;            // gültiger Prefix → neutral (lila per :focus)
+    inp.classList.add('wrong');                     // kein Prefix → rot
 }
 
 function checkAllInputs(tabIdx) {
@@ -889,8 +982,13 @@ function showLuesung(idx) {
             var inputs = document.querySelectorAll('#sec-' + idx + ' input[data-answer="' + item.answer + '"]');
             inputs.forEach(function(inp) {
                 inp.value = item.answer;
+                inp.dataset.usedChipWord = item.answer;
+                inp.classList.remove('wrong');
                 inp.classList.add('correct');
             });
+            // Zugehörigen Chip sperren
+            var chip = document.querySelector('.wort-chip[data-word="' + item.answer + '"]');
+            if (chip) chip.classList.add('used');
         });
     }
 }

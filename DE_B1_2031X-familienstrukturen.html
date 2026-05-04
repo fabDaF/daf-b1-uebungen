@@ -287,6 +287,13 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
   .schreib-name-box { padding: 12px 14px; }
 }
 /* /Schreibwerkstatt-Innenraum-Fix */
+
+/* Wortkasten */
+.wort-bank { display:flex; flex-wrap:wrap; gap:8px; background:#f0f2ff; border:1px solid #c5cae9; border-radius:10px; padding:12px 14px; margin-bottom:18px; }
+.wort-bank-label { width:100%; font-size:0.78em; font-weight:700; color:#667eea; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+.wort-chip { padding:5px 14px; border-radius:20px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-size:0.87em; font-weight:600; cursor:pointer; border:none; transition:opacity 0.2s,transform 0.12s; user-select:none; }
+.wort-chip:hover:not(.used) { transform:translateY(-2px); box-shadow:0 4px 10px rgba(102,126,234,0.35); }
+.wort-chip.used { opacity:0.22; cursor:default; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -613,7 +620,7 @@ function showGenusLoesung() { GENUS_DATA.forEach(function(it, idx) { var d=docum
 
 function initLueckentext() { var con=document.getElementById("lueckenContainer"); con.innerHTML=""; LUECKEN_DATA.forEach(function(it) { var d=document.createElement("div"); d.className="luecken-item"; d.innerHTML=it.text; con.appendChild(d); }); setupLueckenInput(); }
 function setupLueckenInput() { document.querySelectorAll("input.blank").forEach(function(inp) { inp.oninput=function() { timerAutoStart(3); liveCheck(this); checkAllLuecken(); }; }); }
-function liveCheck(e) { var s=e.getAttribute("data-sol").toLowerCase(); var v=e.value.toLowerCase().trim(); e.classList.remove("correct", "wrong"); if (v==="") { } else if (v===s) { e.classList.add("correct"); } else { e.classList.add("wrong"); } }
+function liveCheck(e) { var s=e.getAttribute("data-sol").toLowerCase(); var v=e.value.toLowerCase().trim(); e.classList.remove("correct","wrong"); if(!v) return; if(v===s){e.classList.add("correct");return;} if(s.startsWith(v)) return; e.classList.add("wrong"); }
 function checkAllLuecken() { var ok=true; document.querySelectorAll("input.blank").forEach(function(i) { if (!i.classList.contains("correct")) ok=false; }); if (ok) stopTimer(3); }
 
 function initMC() { var con=document.getElementById("mcContainer"); con.innerHTML=""; MC_DATA.forEach(function(it, qIdx) { var d=document.createElement("div"); d.className="mc-item"; d.innerHTML="<div class=\"mc-question\">"+it.q+"</div><div class=\"mc-options\" id=\"mc-opts-"+qIdx+"\"></div>"; con.appendChild(d); var od=document.getElementById("mc-opts-"+qIdx); it.opts.forEach(function(o, oIdx) { var p=document.createElement("div"); p.className="mc-pill"; p.textContent=o; p.onclick=function() { timerAutoStart(4); selectMCOption(qIdx, oIdx, it.correct, p); }; od.appendChild(p); }); }); }
@@ -684,7 +691,8 @@ function showSection(idx) { document.querySelectorAll(".section").forEach(functi
 
 function highlightVocabInText() { var lt=document.getElementById("lesetext"); if (!lt) return; var wds=VORENTLASTUNG.map(function(it) { return it.term.replace(/^(der|die|das)\s+/i, "").split(",")[0].trim(); }).filter(function(w) { return w && w.length>3; }); function wah(n) { if (n.nodeType===3) { var t=n.nodeValue; var rpl=t; wds.forEach(function(w) { var esc=w.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"); var rx=new RegExp("(?<![a-zA-ZäöüÄÖÜß])("+esc+")(?![a-zA-ZäöüÄÖÜß])", "g"); rpl=rpl.replace(rx, "\x01$1\x02"); }); if (rpl!==t) { var sp=document.createElement("span"); var pts=rpl.split(/\x01|\x02/); var ish=false; pts.forEach(function(pt) { if (!pt) { ish=!ish; return; } if (ish) { var hl=document.createElement("span"); hl.className="vocab-hl"; hl.title="📖 Vokabel aus der Vorentlastung"; hl.textContent=pt; sp.appendChild(hl); } else { sp.appendChild(document.createTextNode(pt)); } ish=!ish; }); n.parentNode.replaceChild(sp, n); } } else if (n.nodeType===1 && n.nodeName!=="SCRIPT") { Array.from(n.childNodes).forEach(wah); } } wah(lt); }
 
-document.addEventListener("DOMContentLoaded", function() { initVorentlastung(); initGenus(); initLueckentext(); initMC(); initSatzbau(); highlightVocabInText(); });
+document.addEventListener("DOMContentLoaded", function() { initVorentlastung(); initGenus(); initLueckentext();
+  buildWordBank(document.getElementById('lueckenContainer')); initMC(); initSatzbau(); highlightVocabInText(); });
 
 /* ===== SCHREIBWERKSTATT (B1) =================================== */
 var SCHREIB_NAME_KEY      = 'schreibwerkstatt_B1_2031X_name';
@@ -1004,6 +1012,69 @@ function schreibLeeren() {
 }
 /* ===== Ende Schreibwerkstatt =================================== */
 
+
+
+// ── WORTKASTEN ──────────────────────────────────────────────────────────────
+var lkContainer = null, lkActiveInput = null;
+function buildWordBank(containerEl) {
+    if (!containerEl) return;
+    lkContainer = containerEl;
+    var inputs = Array.from(containerEl.querySelectorAll(
+        'input[data-answer], input[data-ans], input.blank'));
+    var seen = {}, words = [];
+    inputs.forEach(function(inp) {
+        var w = inp.dataset.answer || inp.dataset.ans || inp.dataset.sol || '';
+        if (w && !seen[w]) { seen[w] = true; words.push(w); }
+    });
+    if (!words.length) return;
+    for (var i = words.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = words[i]; words[i] = words[j]; words[j] = t;
+    }
+    var bank = document.createElement('div');
+    bank.className = 'wort-bank';
+    var lbl = document.createElement('div');
+    lbl.className = 'wort-bank-label';
+    lbl.textContent = '\u{1F4E6} Wortkasten \u2013 klicke ein Wort, dann das Feld';
+    bank.appendChild(lbl);
+    words.forEach(function(w) {
+        var btn = document.createElement('button');
+        btn.className = 'wort-chip'; btn.textContent = w; btn.dataset.word = w;
+        btn.addEventListener('click', function(){ insertWordFromBank(w); });
+        bank.appendChild(btn);
+    });
+    containerEl.insertBefore(bank, containerEl.firstChild);
+    containerEl.addEventListener('focusin', function(e) {
+        if (e.target.matches('input.blank,input[data-ans],input[data-answer]'))
+            lkActiveInput = e.target;
+    });
+    containerEl.addEventListener('input', function(e) {
+        if (e.target.matches('input.blank,input[data-ans],input[data-answer]'))
+            syncWordBankChips();
+    });
+}
+function syncWordBankChips() {
+    if (!lkContainer) return;
+    var bank = lkContainer.querySelector('.wort-bank');
+    if (!bank) return;
+    bank.querySelectorAll('.wort-chip').forEach(function(c){ c.classList.remove('used'); });
+    lkContainer.querySelectorAll('input.blank,input[data-ans],input[data-answer]').forEach(function(inp) {
+        var w = inp.value.trim();
+        if (w) { var c = bank.querySelector('.wort-chip[data-word="'+w+'"]'); if(c) c.classList.add('used'); }
+    });
+}
+function insertWordFromBank(w) {
+    if (!lkContainer) return;
+    var all = Array.from(lkContainer.querySelectorAll('input.blank,input[data-ans],input[data-answer]'));
+    var ok = function(i){ return !i.classList.contains('correct')&&!i.classList.contains('ok'); };
+    var t = (lkActiveInput && lkContainer.contains(lkActiveInput) && ok(lkActiveInput)) ? lkActiveInput
+          : (all.find(function(i){ return !i.value && ok(i); }) || all.find(ok));
+    if (!t) return;
+    t.value = w;
+    t.dispatchEvent(new Event('input',{bubbles:true}));
+    t.focus(); lkActiveInput = t;
+}
+// ────────────────────────────────────────────────────────────────────────────
 </script>
 
 </body>

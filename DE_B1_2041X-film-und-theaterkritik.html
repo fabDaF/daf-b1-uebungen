@@ -611,14 +611,14 @@ var MC_DATA = [
 ];
 
 var SATZBAU_DATA = [
-    { parts: ['Der', 'Regisseur', 'muss', 'alle', 'kreativen', 'Entscheidungen', 'treffen'], valid: [["Der", "Regisseur", "muss", "alle", "kreativen", "Entscheidungen", "treffen"]], punct: "." },
-    { parts: ['Die', 'Handlung', 'muss', 'das', 'Publikum', 'sofort', 'packen'], valid: [["Die", "Handlung", "muss", "das", "Publikum", "sofort", "packen"]], punct: "." },
-    { parts: ['Gute', 'Schauspieler', 'können', 'ein', 'schlechtes', 'Drehbuch', 'verbessern'], valid: [["Gute", "Schauspieler", "können", "ein", "schlechtes", "Drehbuch", "verbessern"]], punct: "." },
-    { parts: ['Die', 'Besetzung', 'entscheidet', 'oft', 'über', 'den', 'Erfolg'], valid: [["Die", "Besetzung", "entscheidet", "oft", "über", "den", "Erfolg"]], punct: "." },
-    { parts: ['Ein', 'Kritiker', 'muss', 'alle', 'Faktoren', 'analysieren'], valid: [["Ein", "Kritiker", "muss", "alle", "Faktoren", "analysieren"]], punct: "." },
-    { parts: ['Die', 'Musik', 'unterstützt', 'die', 'Geschichte', 'im', 'Film'], valid: [["Die", "Musik", "unterstützt", "die", "Geschichte", "im", "Film"]], punct: "." },
+    { parts: ['der', 'Regisseur', 'muss', 'alle', 'kreativen', 'Entscheidungen', 'treffen'], valid: [["der", "Regisseur", "muss", "alle", "kreativen", "Entscheidungen", "treffen"]], punct: "." },
+    { parts: ['die', 'Handlung', 'muss', 'das', 'Publikum', 'sofort', 'packen'], valid: [["die", "Handlung", "muss", "das", "Publikum", "sofort", "packen"]], punct: "." },
+    { parts: ['gute', 'Schauspieler', 'können', 'ein', 'schlechtes', 'Drehbuch', 'verbessern'], valid: [["gute", "Schauspieler", "können", "ein", "schlechtes", "Drehbuch", "verbessern"]], punct: "." },
+    { parts: ['die', 'Besetzung', 'entscheidet', 'oft', 'über', 'den', 'Erfolg'], valid: [["die", "Besetzung", "entscheidet", "oft", "über", "den", "Erfolg"]], punct: "." },
+    { parts: ['ein', 'Kritiker', 'muss', 'alle', 'Faktoren', 'analysieren'], valid: [["ein", "Kritiker", "muss", "alle", "Faktoren", "analysieren"]], punct: "." },
+    { parts: ['die', 'Musik', 'unterstützt', 'die', 'Geschichte', 'im', 'Film'], valid: [["die", "Musik", "unterstützt", "die", "Geschichte", "im", "Film"]], punct: "." },
     { parts: ['Spezialeffekte', 'funktionieren', 'nur', 'wenn', 'sie', 'sinnvoll', 'sind'], valid: [["Spezialeffekte", "funktionieren", "nur", "wenn", "sie", "sinnvoll", "sind"]], punct: "." },
-    { parts: ['Eine', 'Premiere', 'ist', 'das', 'erste', 'Mal', 'für', 'das', 'Publikum'], valid: [["Eine", "Premiere", "ist", "das", "erste", "Mal", "für", "das", "Publikum"]], punct: "." }
+    { parts: ['eine', 'Premiere', 'ist', 'das', 'erste', 'Mal', 'für', 'das', 'Publikum'], valid: [["eine", "Premiere", "ist", "das", "erste", "Mal", "für", "das", "Publikum"]], punct: "." }
 ];
 
 // ============ TIMER & STORAGE ============
@@ -1047,6 +1047,8 @@ function sbMakeChip(word) {
     chip.addEventListener('dragend', function() {
         chip.style.opacity = '';
         sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
     });
 
     return chip;
@@ -1057,7 +1059,7 @@ function sbGetCursor() {
     if (!c) {
         c = document.createElement('div');
         c.id = 'sb-insert-cursor';
-        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;flex-shrink:0;';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
     }
     return c;
 }
@@ -1192,15 +1194,22 @@ function sbShowSolution(idx) {
     var row = document.getElementById('sb-row-' + idx);
     var solution = SATZBAU_DATA[idx].valid[0];
 
+    // Sammle Chips als Arrays, damit Duplikat-Wörter (z.B. "die"/"die") korrekt behandelt werden
     var allChips = {};
-    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
-    Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    function collectChip(c) {
+        var key = c.dataset.orig;
+        if (!allChips[key]) allChips[key] = [];
+        allChips[key].push(c);
+    }
+    Array.from(bank.querySelectorAll('.chip')).forEach(collectChip);
+    Array.from(row.querySelectorAll('.chip')).forEach(collectChip);
 
     while (bank.firstChild) bank.removeChild(bank.firstChild);
     while (row.firstChild) row.removeChild(row.firstChild);
 
     solution.forEach(function(word, i) {
-        var chip = allChips[word];
+        var arr = allChips[word];
+        var chip = arr && arr.shift();
         if (chip) {
             if (word !== ',' && word !== ';') {
                 chip.textContent = (i === 0) ? sbCapitalize(word) : word;

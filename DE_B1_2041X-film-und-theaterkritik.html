@@ -856,13 +856,12 @@ function liveCheck(inp) {
     var userAnswer = inp.value.trim();
 
     inp.classList.remove('correct', 'wrong');
-    if (userAnswer.length === 0) {
-        return;
-    }
+    if (userAnswer.length === 0) return;
 
     if (userAnswer.toLowerCase() === answer.toLowerCase()) {
         inp.classList.add('correct');
-    } else {
+    } else if (userAnswer.length >= answer.length) {
+        // Rot erst wenn mindestens so viele Zeichen wie die Antwort – kein falsches Rot beim Tippen
         inp.classList.add('wrong');
     }
 }

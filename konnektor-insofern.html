@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Der Konnektor &bdquo;insofern&ldquo; (B1)</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+
+/* Header */
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+.header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: white; margin-bottom: 8px; border: none; padding: 0; }
+.header .subtitle { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
+.header .big-emoji { font-size: 2.6em; display: block; margin-top: 8px; }
+
+/* Nav */
+.nav { display: flex; flex-wrap: nowrap; background: #f8f9fa; border-top: 1px solid #ddd; border-left: 1px solid #ddd; border-right: 1px solid #ddd; }
+.nav-btn { flex: 1; padding: 14px 10px; text-align: center; cursor: pointer; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; transition: all 0.3s; font-size: 0.92em; font-weight: 500; color: #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.nav-btn:last-child { border-right: none; }
+.nav-btn:hover { background: #e9ecef; color: #495057; }
+.nav-btn.active { background: white; color: #667eea; font-weight: 600; border-bottom: 3px solid #667eea; }
+.nav-emoji { font-size: 1.3em; line-height: 1.2; }
+.nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+
+@media (max-width: 600px) {
+    body { padding: 8px; }
+    .nav { flex-wrap: wrap; }
+    .nav-btn { flex: 1 1 33%; min-width: 0; font-size: 0.8em; padding: 10px 6px; border-right: 1px solid #ddd; }
+    .nav-btn:last-child { border-right: 1px solid #ddd; }
+}
+
+/* Sections */
+.section { display: none; padding: 28px 30px 30px 30px; }
+.section.active { display: block; }
+h2 { color: #333; font-size: 1.25em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #f0f0f0; }
+
+/* Tab-Banner */
+.tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+@media (max-width: 600px) { .tab-banner { max-height: 120px; } }
+
+/* Hilfe-Box */
+.hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.92em; color: #444; line-height: 1.65; }
+.hilfe-box strong { color: #667eea; }
+
+/* Control-Bar */
+.control-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding: 6px 12px; background: #f8f9fa; border-radius: 8px; }
+.btn-row { display: flex; gap: 6px; }
+.btn { background: #f5f7ff; border: 1px solid #c5cff5; border-radius: 8px; padding: 6px 16px; font-size: 0.85em; color: #667eea; cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.btn:hover { background: #667eea; color: white; border-color: #667eea; }
+.timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
+
+/* Entdeckung */
+.entdeck-intro { background: #f3e5f5; border-radius: 12px; padding: 18px 22px; margin-bottom: 20px; border-left: 5px solid #9c27b0; font-size: 0.97rem; line-height: 1.85; }
+.entdeck-intro h3 { color: #6a1b9a; margin-bottom: 10px; font-size: 1.05rem; }
+.entdeck-intro p { margin-bottom: 8px; }
+.entdeck-intro p.gruppe { background: #fff; border-radius: 6px; padding: 8px 12px; margin-bottom: 8px; }
+.hl { background: #ffe082; border-radius: 4px; padding: 0 4px; color: #5d4037; font-weight: 700; }
+.hl-blue { background: #bbdefb; border-radius: 4px; padding: 0 4px; color: #0d47a1; font-weight: 700; }
+.mc-step { display: none; background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+.mc-step.active { display: block; }
+.mc-step h4 { color: #3949ab; margin-bottom: 12px; font-size: 1rem; line-height: 1.5; }
+.mc-options { display: flex; flex-direction: column; gap: 8px; }
+.mc-btn { padding: 10px 16px; border: 2px solid #c5cae9; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; font-size: 0.95rem; transition: all 0.2s; }
+.mc-btn:hover { border-color: #667eea; background: #f3f4ff; }
+.mc-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.mc-btn.wrong { border-color: #e53935; background: #ffebee; color: #c62828; }
+.mc-feedback { margin-top: 10px; font-size: 0.9rem; min-height: 1.3em; }
+.mc-feedback.ok { color: #2e7d32; font-weight: 700; }
+.mc-feedback.err { color: #c62828; }
+.progress-dots { display: flex; gap: 8px; margin-bottom: 20px; }
+.pdot { width: 14px; height: 14px; border-radius: 50%; background: #c5cae9; transition: background 0.3s; }
+.pdot.done { background: #667eea; }
+.regel-karte { display: none; background: linear-gradient(135deg, #e8eaf6, #ede7f6); border-radius: 14px; padding: 22px 26px; border-left: 5px solid #3949ab; margin-top: 10px; }
+.regel-karte h3 { color: #1a237e; margin-bottom: 12px; font-size: 1.08rem; }
+.regel-karte ul { margin-left: 18px; }
+.regel-karte li { color: #333; line-height: 1.85; font-size: 0.97rem; margin-bottom: 4px; }
+.regel-karte .rk-example { background: #fff; border-radius: 8px; padding: 10px 14px; margin-top: 12px; border-left: 3px solid #7c4dff; font-size: 0.92rem; color: #333; line-height: 1.6; }
+
+/* Bedeutungs-Tab (MC pro Satz) */
+.bed-card { background: #f8f9ff; padding: 18px 22px; margin-bottom: 14px; border-radius: 12px; border-left: 4px solid #667eea; }
+.bed-satz { font-size: 1.05em; line-height: 1.7; color: #222; margin-bottom: 12px; font-style: italic; }
+.bed-frage { font-size: 0.88em; color: #667eea; font-weight: 600; margin-bottom: 8px; }
+.bed-options { display: flex; flex-direction: column; gap: 6px; }
+.bed-btn { padding: 8px 14px; border: 2px solid #c5cae9; border-radius: 8px; background: #fff; cursor: pointer; text-align: left; font-size: 0.92em; transition: all 0.2s; }
+.bed-btn:hover { border-color: #667eea; background: #f3f4ff; }
+.bed-btn.correct { border-color: #43a047; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+.bed-btn.wrong { border-color: #e53935; background: #ffebee; color: #c62828; }
+
+/* Position-Tab — Schaubild */
+.schema-block { background: #fafbff; border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+.schema-block h3 { color: #667eea; font-size: 1em; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+.schema-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+.schema-cell { background: #fff; padding: 10px 12px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; border: 1px solid #e0e0ff; }
+.schema-cell.head { background: #667eea; color: white; font-family: inherit; font-weight: 700; text-align: center; font-size: 0.85em; }
+.schema-cell .pos-num { color: #999; font-size: 0.78em; }
+.schema-cell .verb { color: #d32f2f; font-weight: 700; }
+.schema-cell .konnektor { color: #1976d2; font-weight: 700; }
+.schema-meaning { font-size: 0.85em; color: #666; font-style: italic; margin-top: 6px; }
+@media (max-width: 600px) {
+    .schema-row { grid-template-columns: 1fr; }
+}
+
+/* Position-Tab — Zuordnung */
+.zuo-categories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.zuo-cat { background: #f0f0f0; border: 2px dashed #ccc; border-radius: 10px; padding: 12px; min-height: 110px; }
+.zuo-cat-title { font-weight: 700; color: #667eea; text-align: center; margin-bottom: 8px; font-size: 0.9em; }
+.zuo-cat-sub { font-size: 0.74em; color: #999; text-align: center; margin-bottom: 8px; font-style: italic; }
+.zuo-cat .drop-area { display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; }
+.chip-bank { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 60px; }
+.chip { background: white; border: 2px solid #667eea; color: #667eea; padding: 7px 13px; border-radius: 18px; cursor: move; font-weight: 500; font-size: 0.88em; transition: all 0.2s; user-select: none; }
+.chip:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
+.chip.placed { background: #667eea; color: white; }
+.chip.correct { background: #27ae60 !important; border-color: #27ae60 !important; color: white !important; }
+.chip.wrong { background: #e74c3c !important; border-color: #e74c3c !important; color: white !important; }
+@media (max-width: 600px) {
+    .zuo-categories { grid-template-columns: 1fr; }
+}
+
+/* Lückentext */
+.ex-card { background: #f8f9ff; padding: 16px 20px; margin-bottom: 14px; border-radius: 10px; border-left: 4px solid #667eea; position: relative; }
+.ex-sentence { font-size: 1.0em; line-height: 2.4; color: #333; display: block; }
+.nowrap-group { display: inline-flex; align-items: baseline; white-space: nowrap; gap: 0; }
+input.blank { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+input.blank:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+input.blank.s { min-width: 70px; width: 70px; }
+input.blank.m { min-width: 100px; width: 100px; }
+input.blank.l { min-width: 150px; width: 150px; }
+input.blank.xl { min-width: 200px; width: 200px; }
+input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.correction-hint { color: #27ae60; font-weight: 600; font-size: 0.85em; margin-left: 4px; white-space: nowrap; }
+.wortkasten { background: #fff8e1; border: 2px dashed #ffb74d; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; font-size: 0.95em; color: #5d4037; line-height: 1.8; text-align: center; }
+.wortkasten strong { color: #e65100; margin-right: 8px; }
+.hint-meaning { display: inline-block; color: #999; font-size: 0.85em; margin-left: 6px; font-style: italic; }
+
+/* Satzbau */
+.satzbau-item { background: #fafbff; padding: 16px 20px; margin-bottom: 18px; border-radius: 12px; border: 1px solid #e0e0ff; }
+.sb-label { font-size: 0.85em; color: #667eea; margin-bottom: 8px; font-weight: 600; }
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; }
+.sentence-builder { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; background: white; border: 2px dashed #ccc; border-radius: 10px; min-height: 56px; align-items: center; margin-top: 8px; margin-bottom: 6px; }
+.sentence-builder.correct { border-color: #27ae60; background: #f0fff4; }
+.sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
+.sb-punkt { font-size: 1.2em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+.satzbau-feedback { font-size: 0.88em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
+.satzbau-feedback.correct { color: #27ae60; }
+.satzbau-feedback.incorrect { color: #e74c3c; }
+.chip.punct-chip { background: #f0f0f0; color: #667eea; font-weight: 700; }
+
+/* Wortschatz */
+.luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vocab-en { font-weight: 600; color: #764ba2; min-width: 220px; font-size: 0.95em; }
+.vocab-arrow { color: #ccc; font-size: 1.2em; }
+.luecken-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.luecken-inputs input { border: none; border-bottom: 2px solid #667eea; background: #fff; padding: 4px 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; }
+.luecken-inputs input:focus { border-bottom-color: #764ba2; background: #f0f7ff; }
+.luecken-inputs input.correct { border-bottom-color: #27ae60; background: #e8f8f0; }
+.luecken-inputs input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
+.luecken-inputs input.phrase { width: 220px; }
+
+/* Author Footer */
+.author-footer { text-align: center; margin-top: 30px; padding: 16px; font-size: 0.8rem; color: #aaa; border-top: 1px solid #f0f0f0; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Der Konnektor &bdquo;insofern&ldquo;</h1>
+        <p class="subtitle">B1 &ndash; Lektion B1.K01G &middot; Grammatik</p>
+        <div class="big-emoji">&#128279;</div>
+    </div>
+    <div class="nav">
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">&#128214;</span><span class="nav-label">Entdeckung</span></div>
+        <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">&#128161;</span><span class="nav-label">Bedeutungen</span></div>
+        <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">&#129517;</span><span class="nav-label">Position</span></div>
+        <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">&#9999;&#65039;</span><span class="nav-label">L&uuml;ckentext</span></div>
+        <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">&#129513;</span><span class="nav-label">Satzbau</span></div>
+        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">&#128218;</span><span class="nav-label">Wortschatz</span></div>
+    </div>
+
+    <!-- ===== TAB 0: ENTDECKUNG ===== -->
+    <div class="section active" id="sec-0">
+        <img class="tab-banner" src="https://images.pexels.com/photos/3109168/pexels-photo-3109168.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Lupe und Brille auf aufgeschlagenem Buch">
+        <h2>&#128214; Entdecke das Wort &bdquo;insofern&ldquo;</h2>
+        <div class="entdeck-intro">
+            <h3>&#128064; Schau dir diese vier S&auml;tze an:</h3>
+            <p class="gruppe"><b>1.</b> Wir haben heute viel gelernt. <span class="hl">Insofern</span> <b>war</b> der Unterricht ein Erfolg.</p>
+            <p class="gruppe"><b>2.</b> Das Hotel war billig. <span class="hl">Insofern</span> <b>k&ouml;nnen</b> wir uns nicht beschweren.</p>
+            <p class="gruppe"><b>3.</b> Ich kann dir helfen, <span class="hl-blue">insofern</span> ich Zeit <b>habe</b>.</p>
+            <p class="gruppe"><b>4.</b> Wir kommen morgen, <span class="hl-blue">insofern</span> das Wetter mit<b>spielt</b>.</p>
+            <p style="margin-top:10px; font-size:0.9em; color:#6a1b9a;">&#128161; Bei <span class="hl">gelb</span> markierten S&auml;tzen ist <i>insofern</i> ein <b>Adverb</b>. Bei <span class="hl-blue">blau</span> markierten S&auml;tzen ist <i>insofern</i> eine <b>Subjunktion</b>.</p>
+        </div>
+        <div class="progress-dots">
+            <div class="pdot" id="pdot0"></div>
+            <div class="pdot" id="pdot1"></div>
+            <div class="pdot" id="pdot2"></div>
+            <div class="pdot" id="pdot3"></div>
+        </div>
+
+        <div class="mc-step active" id="mc-step0">
+            <h4>&#10067; Schritt 1: In den S&auml;tzen 1 und 2 (gelb): Wo steht das Verb (war / k&ouml;nnen)?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(0, this, false)">Am Ende des Satzes</button>
+                <button class="mc-btn" onclick="mcCheck(0, this, true)">Auf Position 2 (gleich nach &bdquo;insofern&ldquo;)</button>
+                <button class="mc-btn" onclick="mcCheck(0, this, false)">Auf Position 1 (vor &bdquo;insofern&ldquo;)</button>
+            </div>
+            <div class="mc-feedback" id="mcfb0"></div>
+        </div>
+
+        <div class="mc-step" id="mc-step1">
+            <h4>&#10067; Schritt 2: In den S&auml;tzen 3 und 4 (blau): Wo steht das Verb (habe / spielt)?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(1, this, true)">Am Ende des Nebensatzes</button>
+                <button class="mc-btn" onclick="mcCheck(1, this, false)">Auf Position 2</button>
+                <button class="mc-btn" onclick="mcCheck(1, this, false)">Direkt nach &bdquo;insofern&ldquo;</button>
+            </div>
+            <div class="mc-feedback" id="mcfb1"></div>
+        </div>
+
+        <div class="mc-step" id="mc-step2">
+            <h4>&#10067; Schritt 3: Was bedeutet <i>insofern</i> in den gelben S&auml;tzen (1 und 2)?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(2, this, true)">in dieser Hinsicht / deshalb (Folge / Schlussfolgerung)</button>
+                <button class="mc-btn" onclick="mcCheck(2, this, false)">obwohl (Gegensatz)</button>
+                <button class="mc-btn" onclick="mcCheck(2, this, false)">bevor (Zeit)</button>
+            </div>
+            <div class="mc-feedback" id="mcfb2"></div>
+        </div>
+
+        <div class="mc-step" id="mc-step3">
+            <h4>&#10067; Schritt 4: Was bedeutet <i>insofern</i> in den blauen S&auml;tzen (3 und 4)?</h4>
+            <div class="mc-options">
+                <button class="mc-btn" onclick="mcCheck(3, this, false)">obwohl / trotzdem</button>
+                <button class="mc-btn" onclick="mcCheck(3, this, true)">soweit / wenn / unter der Bedingung, dass</button>
+                <button class="mc-btn" onclick="mcCheck(3, this, false)">deshalb / darum</button>
+            </div>
+            <div class="mc-feedback" id="mcfb3"></div>
+        </div>
+
+        <div class="regel-karte" id="regelkarte">
+            <h3>&#10004; Die Regel: Zwei Gesichter von &bdquo;insofern&ldquo;</h3>
+            <ul>
+                <li><b>1. Adverb (Konjunktionaladverb)</b> &rarr; verbindet zwei <i>Hauptsätze</i>.<br>
+                Bedeutung: <span class="hl">in dieser Hinsicht / deshalb / aus diesem Grund</span>.<br>
+                Position: Vorfeld &rarr; Verb auf <b>Position 2</b>.</li>
+                <li><b>2. Subjunktion</b> &rarr; leitet einen <i>Nebensatz</i> ein.<br>
+                Bedeutung: <span class="hl-blue">soweit / wenn / unter der Bedingung, dass</span>.<br>
+                Position: Verb am <b>Ende</b> des Nebensatzes. Oft auch: <i>insofern als</i>.</li>
+            </ul>
+            <div class="rk-example">
+                <b>Adverb:</b> &bdquo;Es regnet stark. <i>Insofern</i> <b>bleiben</b> wir zu Hause.&ldquo;<br>
+                <b>Subjunktion:</b> &bdquo;Wir bleiben zu Hause, <i>insofern</i> es stark <b>regnet</b>.&ldquo;
+            </div>
+            <div class="rk-example" style="margin-top:8px;">
+                <b>&#128161; Wichtig:</b> &bdquo;Insofern&ldquo; ist auf B1 ein eher schriftliches, gehobenes Wort. In der gesprochenen Sprache benutzt man stattdessen oft <i>deshalb</i>, <i>also</i>, <i>soweit</i> oder <i>wenn</i>.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TAB 1: BEDEUTUNGEN ===== -->
+    <div class="section" id="sec-1">
+        <img class="tab-banner" src="https://images.pexels.com/photos/7450476/pexels-photo-7450476.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Wörterbuch-Seite in Nahaufnahme">
+        <h2>&#128161; Welche Bedeutung hat &bdquo;insofern&ldquo;?</h2>
+        <div class="hilfe-box">
+            <strong>Aufgabe:</strong> Lies jeden Satz aufmerksam. Welche <b>Paraphrase</b> &mdash; also welcher Ersatz mit anderen Worten &mdash; passt am besten zu <i>insofern</i> in diesem Satz?<br>
+            &#128313; Achte auf den Kontext: Steht <i>insofern</i> auf Position 1 (Adverb) oder leitet es einen Nebensatz ein (Subjunktion)?<br>
+            &#128313; <b>Drei Hauptbedeutungen:</b> <i>deshalb / in dieser Hinsicht</i> &middot; <i>soweit / wenn</i> &middot; <i>in dem Ma&szlig;e wie</i>.
+        </div>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showBedLoesung()">L&ouml;sungen</button>
+                <button class="btn btn-reset" onclick="resetBed(); timerResetOne(1);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9201; <span id="timer-1">0:00</span></span>
+                <span class="best-time">&#127942; <span id="best-1">--:--</span></span>
+            </div>
+        </div>
+        <div id="bedContainer"></div>
+    </div>
+
+    <!-- ===== TAB 2: POSITION ===== -->
+    <div class="section" id="sec-2">
+        <img class="tab-banner" src="https://images.pexels.com/photos/28588774/pexels-photo-28588774.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Bunter Wegweiser gegen blauen Himmel">
+        <h2>&#129517; Position im Satz: Drei Konnektor-Klassen</h2>
+        <div class="hilfe-box">
+            <strong>Im Deutschen gibt es drei Arten von Konnektoren</strong> &mdash; und sie bauen den Satz unterschiedlich:<br><br>
+            &#128313; <b>Konjunktion</b> (z.B. <i>denn, aber, und, sondern, oder</i>) steht <b>vor</b> Position 1, das Verb des zweiten Hauptsatzes bleibt auf Position 2.<br>
+            &#128313; <b>Subjunktion</b> (z.B. <i>weil, dass, wenn, insofern</i>) leitet einen <b>Nebensatz</b> ein, das Verb wandert ans <b>Ende</b>.<br>
+            &#128313; <b>Adverb-Konnektor</b> (z.B. <i>deshalb, trotzdem, dann, insofern</i>) steht im <b>Vorfeld</b> (Position 1), das Verb folgt auf Position 2.<br><br>
+            <b>&#128161; Spannend:</b> <i>Insofern</i> kann sowohl Subjunktion als auch Adverb-Konnektor sein!
+        </div>
+
+        <div class="schema-block">
+            <h3>Vergleich der drei Klassen am Beispielthema &bdquo;Grund / Folge&ldquo;</h3>
+            <div class="schema-row">
+                <div class="schema-cell head">Konjunktion: <b>denn</b></div>
+                <div class="schema-cell head">Subjunktion: <b>weil</b></div>
+                <div class="schema-cell head">Adverb: <b>deshalb</b></div>
+            </div>
+            <div class="schema-row">
+                <div class="schema-cell">Wir bleiben zu Hause,<br><span class="konnektor">denn</span> es <span class="verb">regnet</span>.</div>
+                <div class="schema-cell">Wir bleiben zu Hause,<br><span class="konnektor">weil</span> es <span class="verb">regnet</span>.</div>
+                <div class="schema-cell">Es regnet.<br><span class="konnektor">Deshalb</span> <span class="verb">bleiben</span> wir zu Hause.</div>
+            </div>
+            <div class="schema-row">
+                <div class="schema-cell"><span class="pos-num">Verb auf Position 2</span><br><span class="pos-num">(Hauptsatz + Hauptsatz)</span></div>
+                <div class="schema-cell"><span class="pos-num">Verb am Ende</span><br><span class="pos-num">(Nebensatz)</span></div>
+                <div class="schema-cell"><span class="pos-num">Vorfeld + Verb-2 + Subjekt</span><br><span class="pos-num">(Inversion)</span></div>
+            </div>
+        </div>
+
+        <div class="schema-block">
+            <h3>Und nun: <i>insofern</i> in beiden Funktionen</h3>
+            <div class="schema-row">
+                <div class="schema-cell head" style="grid-column: 1 / 3;">Subjunktion <i>insofern</i> = soweit / wenn</div>
+                <div class="schema-cell head">Adverb <i>insofern</i> = deshalb / in dieser Hinsicht</div>
+            </div>
+            <div class="schema-row">
+                <div class="schema-cell" style="grid-column: 1 / 3;">Wir kommen morgen,<br><span class="konnektor">insofern</span> das Wetter <span class="verb">mitspielt</span>.</div>
+                <div class="schema-cell">Das Wetter ist gut.<br><span class="konnektor">Insofern</span> <span class="verb">kommen</span> wir morgen.</div>
+            </div>
+            <div class="schema-meaning">Bei der Subjunktion ist die Bedeutung <b>konditional</b> (eine Bedingung); beim Adverb ist sie <b>konsekutiv</b> (eine Folge oder Schlussfolgerung).</div>
+        </div>
+
+        <h3 style="margin-top:24px; margin-bottom:12px; color:#333; font-size:1.05em;">&#128313; Aufgabe: Ordne die Konnektoren in die richtige Klasse ein.</h3>
+        <div class="hilfe-box" style="margin-bottom:14px;">
+            <b>Tipp:</b> Wenn du einen Konnektor hast und unsicher bist &mdash; bilde gedanklich einen Satz mit ihm. Wandert das Verb ans Satzende? Dann ist es eine <i>Subjunktion</i>. Steht das Verb gleich nach dem Konnektor? Dann ist es ein <i>Adverb-Konnektor</i>.
+        </div>
+        <div class="zuo-categories">
+            <div class="zuo-cat" data-cat="konj">
+                <div class="zuo-cat-title">Konjunktion</div>
+                <div class="zuo-cat-sub">verbindet HS + HS</div>
+                <div class="drop-area"></div>
+            </div>
+            <div class="zuo-cat" data-cat="subj">
+                <div class="zuo-cat-title">Subjunktion</div>
+                <div class="zuo-cat-sub">Verb am Ende (NS)</div>
+                <div class="drop-area"></div>
+            </div>
+            <div class="zuo-cat" data-cat="adv">
+                <div class="zuo-cat-title">Adverb-Konnektor</div>
+                <div class="zuo-cat-sub">Vorfeld &rarr; Verb-2</div>
+                <div class="drop-area"></div>
+            </div>
+        </div>
+        <div class="chip-bank" id="zuoBank"></div>
+        <div class="control-bar" style="margin-top:14px;">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showZuoLoesung()">L&ouml;sungen</button>
+                <button class="btn btn-reset" onclick="resetZuo(); timerResetOne(2);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9201; <span id="timer-2">0:00</span></span>
+                <span class="best-time">&#127942; <span id="best-2">--:--</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TAB 3: LÜCKENTEXT ===== -->
+    <div class="section" id="sec-3">
+        <img class="tab-banner" src="https://images.pexels.com/photos/261909/pexels-photo-261909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Notizen und Stift auf Schreibtisch">
+        <h2>&#9999;&#65039; L&uuml;ckentext: Welcher Konnektor passt?</h2>
+        <div class="hilfe-box">
+            <strong>Aufgabe:</strong> Setze den passenden Konnektor in die L&uuml;cke ein. Achte auf die <b>Verbposition</b> und die <b>Bedeutung</b>.<br>
+            &#128313; <b>Insofern</b> kann zweimal vorkommen: einmal als Adverb (Verb folgt direkt), einmal als Subjunktion (Verb am Satzende).<br>
+            &#128313; Bei einigen S&auml;tzen passen mehrere Antworten &mdash; w&auml;hle die, die am besten zur Bedeutung passt.
+        </div>
+        <div class="wortkasten">
+            <strong>Wortkasten:</strong> insofern &middot; deshalb &middot; weil &middot; denn &middot; trotzdem &middot; soweit &middot; obwohl
+        </div>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showLueckenLoesung()">L&ouml;sungen</button>
+                <button class="btn btn-reset" onclick="resetLuecken(); timerResetOne(3);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9201; <span id="timer-3">0:00</span></span>
+                <span class="best-time">&#127942; <span id="best-3">--:--</span></span>
+            </div>
+        </div>
+        <div id="lueckenContainer"></div>
+    </div>
+
+    <!-- ===== TAB 4: SATZBAU ===== -->
+    <div class="section" id="sec-4">
+        <img class="tab-banner" src="https://images.pexels.com/photos/6275820/pexels-photo-6275820.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Unvollendetes Puzzle in Nahaufnahme">
+        <h2>&#129513; Satzbau mit &bdquo;insofern&ldquo;</h2>
+        <div class="hilfe-box">
+            <strong>Aufgabe:</strong> Bringe die W&ouml;rter in die richtige Reihenfolge. Achte auf:<br>
+            &#128313; <b>Insofern als Adverb</b> &rarr; Vorfeld + <b>Verb auf Position 2</b> + Subjekt + Rest.<br>
+            &#128313; <b>Insofern als Subjunktion</b> &rarr; <b>Verb am Ende</b> des Nebensatzes.<br>
+            &#128313; Klick auf einen Chip in der Bank, dann auf die Stelle in der Satz-Zeile, an der er stehen soll. Klick auf einen platzierten Chip schickt ihn zur&uuml;ck in die Bank.
+        </div>
+        <div id="satzbauContainer"></div>
+        <div class="control-bar" style="margin-top:14px;">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="satzbauData.forEach(function(_,i){sbShowSolution(i);})">L&ouml;sungen</button>
+                <button class="btn btn-reset" onclick="initSatzbau(); timerResetOne(4);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9201; <span id="timer-4">0:00</span></span>
+                <span class="best-time">&#127942; <span id="best-4">--:--</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TAB 5: WORTSCHATZ ===== -->
+    <div class="section" id="sec-5">
+        <img class="tab-banner" src="https://images.pexels.com/photos/267669/pexels-photo-267669.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Wörter auf Holzbuchstaben">
+        <h2>&#128218; Wortschatz: Konnektoren auf B1</h2>
+        <div class="hilfe-box">
+            <strong>Aufgabe:</strong> Tippe den deutschen Konnektor / die deutsche Phrase. <b>Genau so</b>, wie sie geschrieben wird (mit Komma, falls dort eines steht).
+        </div>
+        <div class="control-bar">
+            <div class="btn-row">
+                <button class="btn btn-show" onclick="showVocabLoesung()">L&ouml;sungen</button>
+                <button class="btn btn-reset" onclick="resetVocab(); timerResetOne(5);">Neu starten</button>
+            </div>
+            <div class="timer-display">
+                <span class="current-time">&#9201; <span id="timer-5">0:00</span></span>
+                <span class="best-time">&#127942; <span id="best-5">--:--</span></span>
+            </div>
+        </div>
+        <div id="vocabContainer"></div>
+    </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:unterricht@fabdaf.onmicrosoft.com">unterricht@fabdaf.onmicrosoft.com</a>
+    </div>
+</div><!-- /container -->
+
+<script>
+/* ============== NAVIGATION ============== */
+function showSection(idx) {
+    document.querySelectorAll('.section').forEach(function(s,i){ s.classList.toggle('active', i===idx); });
+    document.querySelectorAll('.nav-btn').forEach(function(b,i){ b.classList.toggle('active', i===idx); });
+}
+
+/* ============== TIMER ============== */
+var TIMER_PREFIX = 'INSOFERN_B1_';
+var timerStarted = [false, false, false, false, false, false];
+var timerRunning = [false, false, false, false, false, false];
+var timerSeconds = [0, 0, 0, 0, 0, 0];
+var timerIntervals = [null, null, null, null, null, null];
+
+function fmtTime(s) { return Math.floor(s/60) + ':' + (s%60 < 10 ? '0' : '') + (s%60); }
+
+function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function(){
+        timerSeconds[n]++;
+        var el = document.getElementById('timer-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+}
+
+function stopTimer(n) {
+    if (!timerRunning[n]) return;
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    var best = parseInt(localStorage.getItem(TIMER_PREFIX + n) || '999999');
+    if (timerSeconds[n] > 0 && timerSeconds[n] < best) {
+        localStorage.setItem(TIMER_PREFIX + n, timerSeconds[n]);
+        var el = document.getElementById('best-' + n);
+        if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }
+}
+
+function timerResetOne(n) {
+    clearInterval(timerIntervals[n]);
+    timerRunning[n] = false;
+    timerStarted[n] = false;
+    timerSeconds[n] = 0;
+    var el = document.getElementById('timer-' + n);
+    if (el) el.textContent = '0:00';
+}
+
+function loadBestTimes() {
+    for (var i = 1; i <= 5; i++) {
+        var v = localStorage.getItem(TIMER_PREFIX + i);
+        if (v) {
+            var el = document.getElementById('best-' + i);
+            if (el) el.textContent = fmtTime(parseInt(v));
+        }
+    }
+}
+
+/* ============== TAB 0: ENTDECKUNG ============== */
+var mcDone = [false, false, false, false];
+
+function mcCheck(step, btn, correct) {
+    var btns = btn.parentElement.querySelectorAll('.mc-btn');
+    btns.forEach(function(b){ b.disabled = true; b.classList.remove('correct','wrong'); });
+    var fb = document.getElementById('mcfb' + step);
+    if (correct) {
+        btn.classList.add('correct');
+        fb.textContent = '✓ Richtig! Weiter geht’s.';
+        fb.className = 'mc-feedback ok';
+        mcDone[step] = true;
+        document.getElementById('pdot' + step).classList.add('done');
+        setTimeout(function(){
+            var next = document.getElementById('mc-step' + (step + 1));
+            if (next) { next.classList.add('active'); }
+            else { document.getElementById('regelkarte').style.display = 'block'; }
+        }, 700);
+    } else {
+        btn.classList.add('wrong');
+        fb.textContent = '✗ Nicht ganz — schau noch einmal genau hin.';
+        fb.className = 'mc-feedback err';
+        setTimeout(function(){
+            btns.forEach(function(b){ b.disabled = false; b.classList.remove('wrong','correct'); });
+            fb.textContent = '';
+            fb.className = 'mc-feedback';
+        }, 1400);
+    }
+}
+
+/* ============== TAB 1: BEDEUTUNGEN ============== */
+var BED_DATA = [
+    { satz: 'Der Film war kurz, aber spannend. <b>Insofern</b> hat sich der Kinobesuch gelohnt.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'aus diesem Grund / in dieser Hinsicht', ok: true },
+          { t: 'soweit / wenn', ok: false },
+          { t: 'obwohl / trotzdem', ok: false }
+      ] },
+    { satz: 'Ich helfe dir bei den Hausaufgaben, <b>insofern</b> ich heute Abend Zeit habe.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'deshalb / darum', ok: false },
+          { t: 'soweit / falls', ok: true },
+          { t: 'obwohl', ok: false }
+      ] },
+    { satz: 'Mein neuer Job ist anstrengend. <b>Insofern</b> bin ich abends meistens m&uuml;de.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'deshalb / aus diesem Grund', ok: true },
+          { t: 'wenn / sofern', ok: false },
+          { t: 'aber / jedoch', ok: false }
+      ] },
+    { satz: 'Die Pr&uuml;fung war fair, <b>insofern als</b> alle Themen aus dem Unterricht vorkamen.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'in dem Ma&szlig;e wie / soweit', ok: true },
+          { t: 'darum / deshalb', ok: false },
+          { t: 'obwohl', ok: false }
+      ] },
+    { satz: 'Wir machen den Ausflug, <b>insofern</b> es nicht regnet.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'deshalb', ok: false },
+          { t: 'sofern / unter der Bedingung, dass', ok: true },
+          { t: 'obwohl', ok: false }
+      ] },
+    { satz: 'Sie spricht sehr gut Spanisch. <b>Insofern</b> wird sie keine Probleme in Madrid haben.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'wenn / falls', ok: false },
+          { t: 'in dieser Hinsicht / deshalb', ok: true },
+          { t: 'obwohl', ok: false }
+      ] },
+    { satz: 'Das Buch ist interessant, <b>insofern als</b> es viele Hintergr&uuml;nde erkl&auml;rt.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'soweit / in dem Ma&szlig;e wie', ok: true },
+          { t: 'deshalb', ok: false },
+          { t: 'obwohl', ok: false }
+      ] },
+    { satz: 'Ich bin viel gereist. <b>Insofern</b> kenne ich viele Kulturen.', frage: 'Welche Paraphrase passt hier?',
+      options: [
+          { t: 'wenn', ok: false },
+          { t: 'darum / aus diesem Grund', ok: true },
+          { t: 'obwohl', ok: false }
+      ] }
+];
+
+function buildBed() {
+    var c = document.getElementById('bedContainer');
+    c.innerHTML = '';
+    BED_DATA.forEach(function(item, idx) {
+        var card = document.createElement('div');
+        card.className = 'bed-card';
+        var html = '<div class="bed-satz">&bdquo;' + item.satz + '&ldquo;</div>';
+        html += '<div class="bed-frage">' + item.frage + '</div>';
+        html += '<div class="bed-options" id="bed-opts-' + idx + '">';
+        item.options.forEach(function(opt, oi) {
+            html += '<button class="bed-btn" data-idx="' + idx + '" data-oi="' + oi + '" data-ok="' + opt.ok + '">' + opt.t + '</button>';
+        });
+        html += '</div>';
+        card.innerHTML = html;
+        c.appendChild(card);
+    });
+    document.querySelectorAll('.bed-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var idx = parseInt(this.dataset.idx);
+            var ok = this.dataset.ok === 'true';
+            var siblings = this.parentElement.querySelectorAll('.bed-btn');
+            timerAutoStart(1);
+            if (ok) {
+                this.classList.remove('wrong');
+                this.classList.add('correct');
+                siblings.forEach(function(s){ if(s!==btn) s.disabled = true; });
+                checkBedAllOk();
+            } else {
+                this.classList.add('wrong');
+                var that = this;
+                setTimeout(function(){ that.classList.remove('wrong'); }, 1200);
+            }
+        });
+    });
+}
+
+function checkBedAllOk() {
+    var allOk = BED_DATA.every(function(_, idx) {
+        var opts = document.getElementById('bed-opts-' + idx);
+        return opts && opts.querySelector('.bed-btn.correct');
+    });
+    if (allOk) stopTimer(1);
+}
+
+function showBedLoesung() {
+    BED_DATA.forEach(function(item, idx) {
+        var opts = document.getElementById('bed-opts-' + idx);
+        if (!opts || opts.querySelector('.bed-btn.correct')) return;
+        item.options.forEach(function(opt, oi) {
+            if (opt.ok) {
+                var btn = opts.querySelector('.bed-btn[data-oi="' + oi + '"]');
+                if (btn) {
+                    btn.classList.add('correct');
+                    opts.querySelectorAll('.bed-btn').forEach(function(s){ if(s!==btn) s.disabled = true; });
+                }
+            }
+        });
+    });
+    checkBedAllOk();
+}
+
+function resetBed() {
+    document.querySelectorAll('.bed-btn').forEach(function(b){
+        b.classList.remove('correct','wrong');
+        b.disabled = false;
+    });
+}
+
+/* ============== TAB 2: ZUORDNUNG (Position) ============== */
+var ZUO_DATA = [
+    { word: 'denn', cat: 'konj' },
+    { word: 'aber', cat: 'konj' },
+    { word: 'und', cat: 'konj' },
+    { word: 'sondern', cat: 'konj' },
+    { word: 'weil', cat: 'subj' },
+    { word: 'dass', cat: 'subj' },
+    { word: 'obwohl', cat: 'subj' },
+    { word: 'wenn', cat: 'subj' },
+    { word: 'insofern (als) ', cat: 'subj' },
+    { word: 'deshalb', cat: 'adv' },
+    { word: 'trotzdem', cat: 'adv' },
+    { word: 'dann', cat: 'adv' },
+    { word: 'außerdem', cat: 'adv' },
+    { word: 'insofern', cat: 'adv' }
+];
+
+var draggedChip = null;
+
+function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+}
+
+function buildZuo() {
+    var bank = document.getElementById('zuoBank');
+    bank.innerHTML = '';
+    document.querySelectorAll('#sec-2 .drop-area').forEach(function(d){ d.innerHTML = ''; });
+    var data = shuffle(ZUO_DATA.slice());
+    data.forEach(function(item, idx) {
+        var chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.draggable = true;
+        chip.textContent = item.word;
+        chip.dataset.cat = item.cat;
+        chip.dataset.id = 'zuo-' + idx;
+        chip.addEventListener('dragstart', function(e){
+            draggedChip = chip;
+            e.dataTransfer.setData('text/plain', '');
+        });
+        chip.addEventListener('dragend', function(){
+            colorAllZuoChips();
+        });
+        chip.addEventListener('click', function(){
+            // Klick-Modus: aktuelle Zone vermerken, beim Klick auf Zone wird platziert
+            document.querySelectorAll('#sec-2 .chip').forEach(function(c){ c.classList.remove('placed'); });
+            chip.classList.add('placed');
+        });
+        bank.appendChild(chip);
+    });
+    // Zonen anhängen
+    document.querySelectorAll('#sec-2 .zuo-cat').forEach(function(zone) {
+        var area = zone.querySelector('.drop-area');
+        zone.addEventListener('dragover', function(e){ e.preventDefault(); });
+        zone.addEventListener('drop', function(e){
+            e.preventDefault();
+            if (!draggedChip) return;
+            area.appendChild(draggedChip);
+            draggedChip = null;
+            timerAutoStart(2);
+            colorAllZuoChips();
+        });
+        zone.addEventListener('click', function(){
+            var sel = document.querySelector('#sec-2 .chip.placed');
+            if (sel) {
+                area.appendChild(sel);
+                sel.classList.remove('placed');
+                timerAutoStart(2);
+                colorAllZuoChips();
+            }
+        });
+    });
+    // Bank: zurücklegen
+    bank.addEventListener('dragover', function(e){ e.preventDefault(); });
+    bank.addEventListener('drop', function(e){
+        e.preventDefault();
+        if (!draggedChip) return;
+        bank.appendChild(draggedChip);
+        draggedChip = null;
+        colorAllZuoChips();
+    });
+    bank.addEventListener('click', function(e){
+        if (e.target !== bank) return;
+        var sel = document.querySelector('#sec-2 .chip.placed');
+        if (sel) {
+            bank.appendChild(sel);
+            sel.classList.remove('placed');
+            colorAllZuoChips();
+        }
+    });
+}
+
+function colorAllZuoChips() {
+    document.querySelectorAll('#sec-2 .chip').forEach(function(chip) {
+        var zone = chip.closest('.zuo-cat');
+        chip.classList.remove('correct', 'wrong');
+        if (zone) {
+            chip.classList.add(chip.dataset.cat === zone.dataset.cat ? 'correct' : 'wrong');
+        }
+    });
+    checkZuoAllOk();
+}
+
+function checkZuoAllOk() {
+    var chips = document.querySelectorAll('#sec-2 .zuo-cat .chip');
+    var total = ZUO_DATA.length;
+    if (chips.length !== total) return;
+    var allOk = Array.from(chips).every(function(c){ return c.classList.contains('correct'); });
+    if (allOk) stopTimer(2);
+}
+
+function showZuoLoesung() {
+    var chips = document.querySelectorAll('#sec-2 .chip');
+    chips.forEach(function(chip) {
+        var targetZone = document.querySelector('#sec-2 .zuo-cat[data-cat="' + chip.dataset.cat + '"] .drop-area');
+        if (targetZone) targetZone.appendChild(chip);
+        chip.classList.remove('placed');
+    });
+    colorAllZuoChips();
+}
+
+function resetZuo() {
+    buildZuo();
+}
+
+/* ============== TAB 3: LÜCKENTEXT ============== */
+var LUECKEN_DATA = [
+    { id: 1, segs: [
+        {t: 'Es regnet seit Stunden. '},
+        {b: 'Insofern', s: 'm', hint: 'Adverb &middot; Verb folgt direkt'},
+        {t: ' bleiben wir lieber zu Hause.'}
+    ]},
+    { id: 2, segs: [
+        {t: 'Ich komme zu deiner Party, '},
+        {b: 'insofern', s: 'm', hint: 'Subjunktion &middot; Verb am Ende'},
+        {t: ' ich bis dahin gesund bin.'}
+    ]},
+    { id: 3, segs: [
+        {t: 'Wir sind oft krank, '},
+        {b: 'weil', s: 'm', hint: 'Subjunktion &middot; Grund'},
+        {t: ' wir zu wenig schlafen.'}
+    ]},
+    { id: 4, segs: [
+        {t: 'Es war ein langer Tag. '},
+        {b: 'Deshalb', s: 'm', hint: 'Adverb &middot; Folge'},
+        {t: ' gehe ich jetzt früh ins Bett.'}
+    ]},
+    { id: 5, segs: [
+        {t: 'Sie hat viel geübt, '},
+        {b: 'denn', s: 'm', hint: 'Konjunktion &middot; Verb-2 folgt'},
+        {t: ' sie wollte die Prüfung bestehen.'}
+    ]},
+    { id: 6, segs: [
+        {t: 'Das Café ist gemütlich, '},
+        {b: 'insofern als', s: 'l', hint: 'Subjunktion &middot; in dem Maße wie'},
+        {t: ' es ruhige Musik spielt.'}
+    ]},
+    { id: 7, segs: [
+        {t: 'Er hat sich verletzt. '},
+        {b: 'Trotzdem', s: 'm', hint: 'Adverb &middot; Gegensatz'},
+        {t: ' spielt er heute mit.'}
+    ]},
+    { id: 8, segs: [
+        {t: 'Wir kommen pünktlich an, '},
+        {b: 'soweit', s: 'm', hint: 'Subjunktion &middot; konditional'},
+        {t: ' der Zug nicht ausfällt.'}
+    ]},
+    { id: 9, segs: [
+        {t: 'Mein Kollege spricht drei Sprachen. '},
+        {b: 'Insofern', s: 'm', hint: 'Adverb &middot; in dieser Hinsicht'},
+        {t: ' ist er für internationale Projekte ideal.'}
+    ]},
+    { id: 10, segs: [
+        {t: 'Das Konzert war gut, '},
+        {b: 'obwohl', s: 'm', hint: 'Subjunktion &middot; Gegensatz'},
+        {t: ' der Saal sehr voll war.'}
+    ]},
+    { id: 11, segs: [
+        {t: 'Ich nehme das Angebot an, '},
+        {b: 'insofern', s: 'm', hint: 'Subjunktion &middot; konditional'},
+        {t: ' der Preis fair ist.'}
+    ]},
+    { id: 12, segs: [
+        {t: 'Sie hat den Bus verpasst. '},
+        {b: 'Insofern', s: 'm', hint: 'Adverb &middot; deshalb'},
+        {t: ' kommt sie heute zu spät.'}
+    ]}
+];
+
+function buildLuecken() {
+    var c = document.getElementById('lueckenContainer');
+    c.innerHTML = '';
+    LUECKEN_DATA.forEach(function(item) {
+        var card = document.createElement('div');
+        card.className = 'ex-card';
+        var sentenceWrap = document.createElement('div');
+        sentenceWrap.className = 'ex-sentence';
+        item.segs.forEach(function(seg) {
+            if (seg.t) {
+                var sp = document.createElement('span');
+                sp.textContent = seg.t;
+                sentenceWrap.appendChild(sp);
+            } else {
+                var grp = document.createElement('span');
+                grp.className = 'nowrap-group';
+                var inp = document.createElement('input');
+                inp.type = 'text';
+                inp.className = 'blank ' + (seg.s || 'm');
+                inp.dataset.answer = seg.b;
+                inp.placeholder = '';
+                inp.autocomplete = 'off';
+                inp.spellcheck = false;
+                inp.addEventListener('input', function(){
+                    timerAutoStart(3);
+                    liveCheck(inp);
+                    checkLueckenAllOk();
+                });
+                grp.appendChild(inp);
+                if (seg.hint) {
+                    var hint = document.createElement('span');
+                    hint.className = 'hint-meaning';
+                    hint.innerHTML = '(' + seg.hint + ')';
+                    grp.appendChild(hint);
+                }
+                sentenceWrap.appendChild(grp);
+            }
+        });
+        card.appendChild(sentenceWrap);
+        c.appendChild(card);
+    });
+}
+
+function liveCheck(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.answer;
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    var cmpUser = val.toLowerCase();
+    var cmpAns = ans.toLowerCase();
+    // Erstes Wort einer Subjunktion/Konjunktion: Großschreibung am Satzanfang akzeptieren
+    if (cmpUser === cmpAns) {
+        inp.classList.add('correct');
+        inp.value = ans; // Korrekte Form übernehmen (Großschreibung)
+    } else if (cmpAns.indexOf(cmpUser) === 0) {
+        // Präfix passt — neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkLueckenAllOk() {
+    var inputs = document.querySelectorAll('#sec-3 input.blank');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i){ return i.classList.contains('correct'); });
+    if (allOk) stopTimer(3);
+}
+
+function showLueckenLoesung() {
+    var inputs = document.querySelectorAll('#sec-3 input.blank');
+    inputs.forEach(function(inp) {
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('wrong');
+        inp.classList.add('correct');
+    });
+    checkLueckenAllOk();
+}
+
+function resetLuecken() {
+    var inputs = document.querySelectorAll('#sec-3 input.blank');
+    inputs.forEach(function(inp){
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
+}
+
+/* ============== TAB 4: SATZBAU ============== */
+var satzbauData = [
+    // Adverb-Funktion: Vorfeld + Verb-2
+    { parts: ['insofern', 'bin', 'ich', 'heute', 'sehr', 'müde'],
+      valid: [['insofern', 'bin', 'ich', 'heute', 'sehr', 'müde']],
+      label: 'Adverb (Folge): &bdquo;Ich habe schlecht geschlafen. ___&ldquo;',
+      punct: '.' },
+    { parts: ['insofern', 'können', 'wir', 'pläne', 'machen'],
+      valid: [['insofern', 'können', 'wir', 'pläne', 'machen']],
+      label: 'Adverb (Folge): &bdquo;Das Wetter wird gut. ___&ldquo;',
+      punct: '.' },
+    { parts: ['insofern', 'verstehe', 'ich', 'deine', 'entscheidung'],
+      valid: [['insofern', 'verstehe', 'ich', 'deine', 'entscheidung']],
+      label: 'Adverb (Folge): &bdquo;Du hast wenig Zeit. ___&ldquo;',
+      punct: '.' },
+    // Subjunktion-Funktion: Verb-Ende
+    { parts: ['ich', 'helfe', 'dir', 'gern', 'insofern', 'ich', 'es', 'kann'],
+      valid: [['ich', 'helfe', 'dir', 'gern', 'insofern', 'ich', 'es', 'kann']],
+      label: 'Subjunktion (Bedingung): Hauptsatz + ___',
+      punct: '.' },
+    { parts: ['wir', 'kommen', 'morgen', 'insofern', 'der', 'zug', 'pünktlich', 'fährt'],
+      valid: [['wir', 'kommen', 'morgen', 'insofern', 'der', 'zug', 'pünktlich', 'fährt']],
+      label: 'Subjunktion (Bedingung): &bdquo;Unter welcher Bedingung kommt ihr?&ldquo;',
+      punct: '.' },
+    { parts: ['der', 'film', 'war', 'gut', 'insofern', 'als', 'er', 'spannend', 'war'],
+      valid: [['der', 'film', 'war', 'gut', 'insofern', 'als', 'er', 'spannend', 'war']],
+      label: 'Subjunktion mit <i>als</i> (in dem Maße wie): &bdquo;Wie war der Film?&ldquo;',
+      punct: '.' },
+    // Adverb in einem fragenden Kontext
+    { parts: ['insofern', 'haben', 'wir', 'einen', 'großen', 'vorteil'],
+      valid: [['insofern', 'haben', 'wir', 'einen', 'großen', 'vorteil']],
+      label: 'Adverb (Folge): &bdquo;Unser Team kennt die Region. ___&ldquo;',
+      punct: '.' },
+    { parts: ['ich', 'kaufe', 'das', 'auto', 'insofern', 'der', 'preis', 'stimmt'],
+      valid: [['ich', 'kaufe', 'das', 'auto', 'insofern', 'der', 'preis', 'stimmt']],
+      label: 'Subjunktion (Bedingung): Hauptsatz + ___',
+      punct: '.' }
+];
+
+var sbDragged = null;
+
+function getSbCursor() {
+    var cur = document.getElementById('sb-insert-cursor');
+    if (!cur) {
+        cur = document.createElement('span');
+        cur.id = 'sb-insert-cursor';
+        cur.style.cssText = 'display:inline-block; width:3px; height:24px; background:#667eea; margin:0 2px; border-radius:2px; animation:sbBlink 0.8s infinite;';
+    }
+    return cur;
+}
+
+function sbCapitalize(word) {
+    if (!word) return word;
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+function sbUpdateCapitalization(rowId) {
+    var row = document.getElementById(rowId);
+    if (!row) return;
+    var chips = row.querySelectorAll('.chip');
+    chips.forEach(function(chip, i) {
+        var orig = chip.dataset.orig;
+        if (i === 0 && orig) {
+            chip.textContent = sbCapitalize(orig);
+        } else {
+            chip.textContent = orig;
+        }
+    });
+}
+
+function sbMakeChip(word, idx) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.draggable = true;
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.dataset.sbIdx = String(idx);
+
+    chip.addEventListener('dragstart', function(e){
+        sbDragged = chip;
+        e.dataTransfer.setData('text/plain', '');
+    });
+    chip.addEventListener('dragend', function(){
+        sbDragged = null;
+    });
+    chip.addEventListener('click', function(){
+        var inRow = chip.closest('.sentence-builder');
+        if (inRow) {
+            // Zurück in Bank
+            var bank = document.getElementById('sb-bank-' + idx);
+            bank.appendChild(chip);
+            chip.classList.remove('correct', 'wrong');
+            sbUpdateCapitalization('sb-row-' + idx);
+            sbColorRow(idx);
+            return;
+        }
+        // In Bank: andere selektierte deselektieren, sich selbst markieren
+        document.querySelectorAll('.chip.placed').forEach(function(c){
+            if (c.dataset.sbIdx === String(idx)) c.classList.remove('placed');
+        });
+        chip.classList.toggle('placed');
+    });
+    return chip;
+}
+
+function sbRegisterZone(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var bank = document.getElementById('sb-bank-' + idx);
+
+    row.addEventListener('dragover', function(e){ e.preventDefault(); });
+    row.addEventListener('drop', function(e){
+        e.preventDefault();
+        if (!sbDragged) return;
+        if (sbDragged.dataset.sbIdx !== String(idx)) return;
+        row.appendChild(sbDragged);
+        sbDragged = null;
+        timerAutoStart(4);
+        sbUpdateCapitalization('sb-row-' + idx);
+        setTimeout(function(){ sbColorRow(idx); }, 500);
+    });
+
+    row.addEventListener('click', function(e){
+        if (e.target !== row) return;
+        var sel = document.querySelector('#sb-bank-' + idx + ' .chip.placed');
+        if (!sel) return;
+        if (sel.dataset.sbIdx !== String(idx)) return;
+        row.appendChild(sel);
+        sel.classList.remove('placed');
+        timerAutoStart(4);
+        sbUpdateCapitalization('sb-row-' + idx);
+        setTimeout(function(){ sbColorRow(idx); }, 500);
+    });
+
+    bank.addEventListener('dragover', function(e){ e.preventDefault(); });
+    bank.addEventListener('drop', function(e){
+        e.preventDefault();
+        if (!sbDragged) return;
+        if (sbDragged.dataset.sbIdx !== String(idx)) return;
+        bank.appendChild(sbDragged);
+        sbDragged.classList.remove('correct', 'wrong');
+        sbDragged = null;
+        sbUpdateCapitalization('sb-row-' + idx);
+        sbColorRow(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    var bank = document.getElementById('sb-bank-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var data = satzbauData[idx];
+
+    // Alte Punkt entfernen
+    var oldPunkt = row.querySelector('.sb-punkt');
+    if (oldPunkt) oldPunkt.remove();
+
+    row.classList.remove('correct', 'incorrect');
+    fb.className = 'satzbau-feedback';
+    fb.textContent = '';
+
+    if (chips.length === 0) {
+        chips.forEach(function(c){ c.classList.remove('correct','wrong'); });
+        return;
+    }
+
+    var bankEmpty = bank.querySelectorAll('.chip').length === 0;
+    if (!bankEmpty) {
+        // Partielle Anordnung: Chips nicht einfärben (kein partielles Feedback)
+        chips.forEach(function(c){ c.classList.remove('correct','wrong'); });
+        return;
+    }
+
+    // Bank ist leer → Auswertung
+    var userOrder = chips.map(function(c){ return c.dataset.orig.toLowerCase(); });
+    var ok = data.valid.some(function(v){
+        return JSON.stringify(v) === JSON.stringify(userOrder);
+    });
+
+    chips.forEach(function(c){ c.classList.remove('correct','wrong'); });
+
+    if (ok) {
+        chips.forEach(function(c){ c.classList.add('correct'); });
+        row.classList.add('correct');
+        fb.textContent = '✓ Richtig!';
+        fb.className = 'satzbau-feedback correct';
+        var p = document.createElement('span');
+        p.className = 'sb-punkt';
+        p.textContent = data.punct || '.';
+        row.appendChild(p);
+        timerAutoStart(4);
+        sbCheckAllDone();
+    } else {
+        chips.forEach(function(c){ c.classList.add('wrong'); });
+        row.classList.add('incorrect');
+        fb.textContent = '✗ Reihenfolge stimmt noch nicht. Klick auf einen Chip, um ihn in die Bank zurückzulegen.';
+        fb.className = 'satzbau-feedback incorrect';
+    }
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, idx){
+        var row = document.getElementById('sb-row-' + idx);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) stopTimer(4);
+}
+
+function sbShowSolution(idx) {
+    var data = satzbauData[idx];
+    var row = document.getElementById('sb-row-' + idx);
+    var bank = document.getElementById('sb-bank-' + idx);
+    if (!row || !bank) return;
+    // Alle Chips zurück in Bank
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ bank.appendChild(c); });
+    // Alte Punkt entfernen
+    var oldPunkt = row.querySelector('.sb-punkt');
+    if (oldPunkt) oldPunkt.remove();
+    // Lösungsreihenfolge: erste valid-Anordnung
+    var solOrder = data.valid[0];
+    solOrder.forEach(function(word) {
+        var chip = Array.from(bank.querySelectorAll('.chip')).find(function(c){
+            return c.dataset.orig.toLowerCase() === word && !c.dataset.consumed;
+        });
+        if (chip) {
+            chip.dataset.consumed = '1';
+            row.appendChild(chip);
+        }
+    });
+    // dataset.consumed löschen
+    row.querySelectorAll('.chip').forEach(function(c){ delete c.dataset.consumed; });
+    sbUpdateCapitalization('sb-row-' + idx);
+    sbColorRow(idx);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c){ bank.appendChild(c); });
+    var oldPunkt = row.querySelector('.sb-punkt');
+    if (oldPunkt) oldPunkt.remove();
+    row.classList.remove('correct', 'incorrect');
+    var fb = document.getElementById('sb-fb-' + idx);
+    if (fb) { fb.textContent = ''; fb.className = 'satzbau-feedback'; }
+    bank.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct', 'wrong', 'placed'); });
+    // Bank shuffle
+    var chips = Array.from(bank.querySelectorAll('.chip'));
+    shuffle(chips);
+    chips.forEach(function(c){ bank.appendChild(c); });
+    sbUpdateCapitalization('sb-row-' + idx);
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(data, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        item.innerHTML =
+            '<div class="sb-label">' + (data.label || '') + '</div>' +
+            '<div class="chips-container" id="sb-bank-' + idx + '"></div>' +
+            '<div class="sentence-builder" id="sb-row-' + idx + '"></div>' +
+            '<div class="satzbau-feedback" id="sb-fb-' + idx + '"></div>';
+        container.appendChild(item);
+
+        var bank = document.getElementById('sb-bank-' + idx);
+        var parts = shuffle(data.parts.slice());
+        parts.forEach(function(word) {
+            bank.appendChild(sbMakeChip(word, idx));
+        });
+
+        // Per-Item Buttons
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var solveBtn = document.createElement('button');
+        solveBtn.className = 'btn';
+        solveBtn.textContent = 'Lösen';
+        solveBtn.setAttribute('data-idx', idx);
+        solveBtn.addEventListener('click', function(){ sbShowSolution(parseInt(this.getAttribute('data-idx'))); });
+        var resetBtn = document.createElement('button');
+        resetBtn.className = 'btn';
+        resetBtn.textContent = '↺ Neustart';
+        resetBtn.setAttribute('data-idx', idx);
+        resetBtn.addEventListener('click', function(){ sbResetOne(parseInt(this.getAttribute('data-idx'))); });
+        btnRow.appendChild(solveBtn);
+        btnRow.appendChild(resetBtn);
+        item.appendChild(btnRow);
+
+        sbRegisterZone(idx);
+    });
+}
+
+/* ============== TAB 5: WORTSCHATZ ============== */
+var WORTSCHATZ = [
+    { id: 1, en: 'in this respect / therefore', de: 'insofern' },
+    { id: 2, en: 'as far as / to the extent that', de: 'insofern als' },
+    { id: 3, en: 'because (subordinating)', de: 'weil' },
+    { id: 4, en: 'because (coordinating)', de: 'denn' },
+    { id: 5, en: 'therefore / for that reason', de: 'deshalb' },
+    { id: 6, en: 'although', de: 'obwohl' },
+    { id: 7, en: 'nevertheless', de: 'trotzdem' },
+    { id: 8, en: 'in addition', de: 'außerdem' },
+    { id: 9, en: 'as far as / provided that', de: 'soweit' },
+    { id: 10, en: 'if / when', de: 'wenn' },
+    { id: 11, en: 'so / thus', de: 'also' },
+    { id: 12, en: 'a connector / a linking word', de: 'der Konnektor' },
+    { id: 13, en: 'a subjunction', de: 'die Subjunktion' },
+    { id: 14, en: 'a conjunction', de: 'die Konjunktion' },
+    { id: 15, en: 'an adverb', de: 'das Adverb' },
+    { id: 16, en: 'a subordinate clause', de: 'der Nebensatz' },
+    { id: 17, en: 'a main clause', de: 'der Hauptsatz' },
+    { id: 18, en: 'the position', de: 'die Position' },
+    { id: 19, en: 'the meaning', de: 'die Bedeutung' },
+    { id: 20, en: 'the verb', de: 'das Verb' }
+];
+
+function buildVocab() {
+    var c = document.getElementById('vocabContainer');
+    c.innerHTML = '';
+    WORTSCHATZ.forEach(function(item) {
+        var row = document.createElement('div');
+        row.className = 'luecken-item';
+        var html = '<span class="vocab-en">' + item.en + '</span>';
+        html += '<span class="vocab-arrow">&rarr;</span>';
+        html += '<div class="luecken-inputs">';
+        html += '<input type="text" class="phrase" data-answer="' + item.de + '" placeholder="" autocomplete="off" spellcheck="false">';
+        html += '</div>';
+        row.innerHTML = html;
+        c.appendChild(row);
+    });
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp) {
+        inp.addEventListener('input', function(){
+            timerAutoStart(5);
+            wortschatzCheck(inp);
+            checkVocabAllOk();
+        });
+    });
+}
+
+function wortschatzCheck(inp) {
+    var val = inp.value.trim();
+    var ans = inp.dataset.answer;
+    inp.classList.remove('correct', 'wrong');
+    if (val.length === 0) return;
+    if (val === ans) {
+        inp.classList.add('correct');
+    } else if (ans.indexOf(val) === 0) {
+        // Präfix passt — neutral
+    } else {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkVocabAllOk() {
+    var inputs = document.querySelectorAll('#vocabContainer input');
+    var allOk = inputs.length > 0 && Array.from(inputs).every(function(i){ return i.classList.contains('correct'); });
+    if (allOk) stopTimer(5);
+}
+
+function showVocabLoesung() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp){
+        inp.value = inp.dataset.answer;
+        inp.classList.remove('wrong');
+        inp.classList.add('correct');
+    });
+    checkVocabAllOk();
+}
+
+function resetVocab() {
+    document.querySelectorAll('#vocabContainer input').forEach(function(inp){
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+    });
+}
+
+/* ============== INIT ============== */
+document.addEventListener('DOMContentLoaded', function(){
+    buildBed();
+    buildZuo();
+    buildLuecken();
+    initSatzbau();
+    buildVocab();
+    loadBestTimes();
+});
+</script>
+</body>
+</html>

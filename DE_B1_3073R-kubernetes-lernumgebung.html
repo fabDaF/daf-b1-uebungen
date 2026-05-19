@@ -743,8 +743,12 @@ function wortschatzCheck(inp) {
     var val = inp.value.trim(); var ans = inp.dataset.ans || ''; var type = inp.dataset.type;
     inp.classList.remove('correct','wrong');
     if (!val) return;
-    var ok = (type === 'art') ? val.toLowerCase() === ans.toLowerCase() : val === ans;
-    inp.classList.add(ok ? 'correct' : 'wrong');
+    var cs = (type !== 'art');
+    var vv = cs ? val : val.toLowerCase();
+    var aa = cs ? ans : ans.toLowerCase();
+    if (vv === aa) { inp.classList.add('correct'); return; }
+    if (aa.indexOf(vv) === 0) return; // noch im Präfix → neutral lassen
+    inp.classList.add('wrong');
 }
 function checkWortschatzAllOk() {
     var allInps = document.querySelectorAll('#sec-6 .blank:not([disabled])');

@@ -69,6 +69,10 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .chip.wrong { background: #e74c3c; border-color: #e74c3c; color: white; }
 
 /* LÜCKENTEXT */
+.word-bank { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 12px 16px; background: #f0ecff; border-radius: 10px; margin-bottom: 16px; border: 1px dashed #b39ddb; min-height: 48px; }
+.word-bank-label { font-size: 0.78em; color: #7b5ea7; font-weight: 700; letter-spacing: 0.05em; margin-right: 4px; white-space: nowrap; }
+.wb-chip { background: #fff; border: 1.5px solid #764ba2; border-radius: 16px; padding: 4px 14px; font-size: 0.88em; color: #4a148c; font-weight: 600; transition: all 0.25s; }
+.wb-chip.used { opacity: 0.3; text-decoration: line-through; color: #999; border-color: #ccc; }
 .luecken-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 12px; border-radius: 10px; border-left: 4px solid #667eea; line-height: 2.0; font-size: 0.95em; }
 input.blank { border: none; border-bottom: 2px solid #c5cae9; background: transparent; padding: 3px 6px; font-family: inherit; font-size: 0.95em; outline: none; transition: all 0.2s; min-width: 4ch; }
 input.blank:focus { border-bottom-color: #667eea; }
@@ -289,6 +293,7 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; color: #e
         <span class="best-time">🏆 <span id="best-3">--:--</span></span>
       </div>
     </div>
+    <div id="wordBank" class="word-bank"></div>
     <div id="lueckeContainer"></div>
   </div>
 
@@ -730,6 +735,45 @@ function checkGenusAllOk() {
 function resetGenus() { resetTimer(2); initGenus(); }
 
 // ─── TAB 3 — LÜCKENTEXT ──────────────────────────────────────────────────────
+function buildWordBank() {
+  var bank = document.getElementById('wordBank');
+  if (!bank) return;
+  var words = LUECKEN_DATA.map(function(item) { return item.ans; });
+  // Fisher-Yates shuffle
+  for (var i = words.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = words[i]; words[i] = words[j]; words[j] = tmp;
+  }
+  bank.innerHTML = '';
+  var label = document.createElement('span');
+  label.className = 'word-bank-label';
+  label.textContent = '📋 Wortbank:';
+  bank.appendChild(label);
+  words.forEach(function(w) {
+    var chip = document.createElement('span');
+    chip.className = 'wb-chip';
+    chip.textContent = w;
+    bank.appendChild(chip);
+  });
+}
+function updateWbChips() {
+  var bank = document.getElementById('wordBank');
+  if (!bank) return;
+  var okWords = [];
+  document.querySelectorAll('#sec-3 .blank').forEach(function(i) {
+    if (i.classList.contains('ok')) okWords.push(i.dataset.ans);
+  });
+  var remaining = okWords.slice();
+  bank.querySelectorAll('.wb-chip').forEach(function(chip) {
+    var idx = remaining.indexOf(chip.textContent);
+    if (idx >= 0) {
+      chip.classList.add('used');
+      remaining.splice(idx, 1);
+    } else {
+      chip.classList.remove('used');
+    }
+  });
+}
 function initLuecke() {
   var cont = document.getElementById('lueckeContainer');
   cont.innerHTML = '';
@@ -759,14 +803,16 @@ function initLuecke() {
     div.appendChild(post);
     cont.appendChild(div);
   });
+  buildWordBank();
 }
 function lueckeLiveCheck(inp) {
   var val = inp.value.trim();
   var ans = inp.dataset.ans || '';
   inp.classList.remove('ok', 'no');
-  if (!val) return;
+  if (!val) { updateWbChips(); return; }
   if (val === ans) {
     inp.classList.add('ok');
+    updateWbChips();
     checkLueckeDone();
     return;
   }
@@ -783,13 +829,11 @@ function showLueckeLoesung() {
     i.classList.remove('no');
     i.classList.add('ok');
   });
+  updateWbChips();
 }
 function resetLuecke() {
   resetTimer(3);
   initLuecke();
-  document.addEventListener('DOMContentLoaded', function(){
-    buildWordBank(document.getElementById('lueckeContainer'));
-  });
 }
 
 // ─── TAB 4 — MULTIPLE CHOICE ─────────────────────────────────────────────────

@@ -75,11 +75,9 @@ input.luecken-inp.no { border-bottom-color: #e74c3c; background: #fdeaea; border
 }
 .wortbank-chip {
   background:white; border:2px solid #667eea; color:#667eea;
-  padding:5px 12px; border-radius:14px; cursor:pointer;
+  padding:5px 12px; border-radius:14px; cursor:default;
   font-weight:500; font-size:0.9em; transition:all 0.2s; user-select:none;
 }
-.wortbank-chip:hover { background:#667eea; color:white; }
-.wortbank-chip.used { opacity:0.35; text-decoration:line-through; cursor:default; pointer-events:none; }
 
 /* ── SATZBAU ── */
 .chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #f8f8f8; border-radius: 10px; min-height: 56px; margin-bottom: 10px; }
@@ -603,18 +601,6 @@ function initZuo() {
             zuoDragged = null;
             colorAllZuoChips();
         });
-        chip.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (zuoSelected && zuoSelected === chip) {
-                zuoSelected.classList.remove('selected');
-                zuoSelected = null;
-                return;
-            }
-            if (zuoSelected) zuoSelected.classList.remove('selected');
-            zuoSelected = chip;
-            chip.classList.add('selected');
-        });
-
         bank.appendChild(chip);
     });
 }
@@ -722,29 +708,7 @@ function initWortbank() {
     var chip = document.createElement('span');
     chip.className = 'wortbank-chip';
     chip.textContent = w;
-    chip.addEventListener('click', function(){
-      if(chip.classList.contains('used')) return;
-      var focused = document.querySelector('#lueckenContainer input.blank:focus');
-      if(!focused) {
-        var empties = Array.from(document.querySelectorAll('#lueckenContainer input.blank')).filter(function(i){return !i.value;});
-        if(empties.length) focused = empties[0];
-      }
-      if(focused) {
-        focused.value = w;
-        focused.dispatchEvent(new Event('input'));
-        focused.focus();
-      }
-    });
     bank.appendChild(chip);
-  });
-}
-function updateWortbankChips() {
-  var bank = document.getElementById('wortbank-luecken');
-  if (!bank) return;
-  var inputs = Array.from(document.querySelectorAll('#lueckenContainer input.blank'));
-  var usedWords = inputs.filter(function(i){return i.classList.contains('ok');}).map(function(i){return i.dataset.ans;});
-  Array.from(bank.querySelectorAll('.wortbank-chip')).forEach(function(chip){
-    chip.classList.toggle('used', usedWords.indexOf(chip.textContent.toLowerCase()) !== -1);
   });
 }
 
@@ -814,9 +778,7 @@ function showLueckenLoesung() {
         inp.value = inp.dataset.answer;
         inp.classList.remove('no');
         inp.classList.add('ok');
-    });
-  updateWortbankChips();
-}
+    });}
 
 function resetLuecken() {
     document.querySelectorAll('#lueckenContainer input.luecken-inp').forEach(function(inp) {
@@ -887,29 +849,7 @@ function sbMakeChip(word) {
         sbDragged = null;
         var c = document.getElementById('sb-insert-cursor');
         if (c && c.parentNode) c.parentNode.removeChild(c);
-    });
-    chip.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var row = chip.closest('.sentence-builder');
-        var bank = chip.closest('.chips-container');
-        if (bank) {
-            // chip is in bank — find its row
-            var idx = parseInt(bank.id.replace('sb-bank-', ''));
-            var targetRow = document.getElementById('sb-row-' + idx);
-            targetRow.appendChild(chip);
-            sbUpdateCapitalization(targetRow);
-            sbCheckAuto(idx);
-        } else if (row) {
-            // chip is in row — return to bank
-            var idx2 = parseInt(row.id.replace('sb-row-', ''));
-            var targetBank = document.getElementById('sb-bank-' + idx2);
-            targetBank.appendChild(chip);
-            chip.textContent = chip.dataset.orig;
-            sbUpdateCapitalization(row);
-            sbCheckAuto(idx2);
-        }
-    });
-    return chip;
+    });    return chip;
 }
 
 function sbRegisterZone(zone, idx) {

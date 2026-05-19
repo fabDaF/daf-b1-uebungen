@@ -190,11 +190,9 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 }
 .wortbank-chip {
   background:white; border:2px solid #667eea; color:#667eea;
-  padding:5px 12px; border-radius:14px; cursor:pointer;
+  padding:5px 12px; border-radius:14px; cursor:default;
   font-weight:500; font-size:0.9em; transition:all 0.2s; user-select:none;
 }
-.wortbank-chip:hover { background:#667eea; color:white; }
-.wortbank-chip.used { opacity:0.35; text-decoration:line-through; cursor:default; pointer-events:none; }
 
 </style>
 </head>
@@ -641,16 +639,7 @@ function initZuord() {
         chip.textContent = item.text;
         chip.dataset.cat = item.cat;
         chip.dataset.idx = idx;
-        chip.draggable = true;
-        chip.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (this.classList.contains('correct')) return;
-            if (zuordSelected === this) { this.classList.remove('selected'); zuordSelected = null; return; }
-            if (zuordSelected) zuordSelected.classList.remove('selected');
-            zuordSelected = this;
-            this.classList.add('selected');
-        });
-        chip.addEventListener('dragstart', function(e) {
+        chip.draggable = true;        chip.addEventListener('dragstart', function(e) {
             zuordSelected = this;
             e.dataTransfer.setData('text/plain', '');
         });
@@ -766,29 +755,7 @@ function initWortbank() {
     var chip = document.createElement('span');
     chip.className = 'wortbank-chip';
     chip.textContent = w;
-    chip.addEventListener('click', function(){
-      if(chip.classList.contains('used')) return;
-      var focused = document.querySelector('#lueckenContainer input.blank:focus');
-      if(!focused) {
-        var empties = Array.from(document.querySelectorAll('#lueckenContainer input.blank')).filter(function(i){return !i.value;});
-        if(empties.length) focused = empties[0];
-      }
-      if(focused) {
-        focused.value = w;
-        focused.dispatchEvent(new Event('input'));
-        focused.focus();
-      }
-    });
     bank.appendChild(chip);
-  });
-}
-function updateWortbankChips() {
-  var bank = document.getElementById('wortbank-luecken');
-  if (!bank) return;
-  var inputs = Array.from(document.querySelectorAll('#lueckenContainer input.blank'));
-  var usedWords = inputs.filter(function(i){return i.classList.contains('ok');}).map(function(i){return i.dataset.ans;});
-  Array.from(bank.querySelectorAll('.wortbank-chip')).forEach(function(chip){
-    chip.classList.toggle('used', usedWords.indexOf(chip.textContent.toLowerCase()) !== -1);
   });
 }
 
@@ -835,9 +802,7 @@ function checkLueckenAllDone() {
 function showLueckenLoesung() {
     document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {
         if (!inp.classList.contains('ok')) { inp.value = inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no', 'prefix'); }
-    });
-  updateWortbankChips();
-}
+    });}
 
 function resetLuecken() {
     document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp) {

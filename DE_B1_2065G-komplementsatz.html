@@ -326,8 +326,8 @@ const LUECKEN = [
 document.addEventListener('DOMContentLoaded', function(){
   buildWordBank(document.getElementById('lueckenText'));
 });
-function liveCheck(inp){inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===inp.dataset.answer)inp.classList.add('ok');autoStopIfDone();}
-function checkLuecken(){let correct=0;LUECKEN.forEach((item,idx)=>{const inp=document.getElementById(`luecke-${idx}`);inp.classList.remove('ok','err');if(inp.value.trim().toLowerCase()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}else inp.classList.add('err');});const res=document.getElementById('lueckenResult');if(correct===LUECKEN.length){res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';stopTimer('L');saveBest('L');}else{res.textContent=`${correct} von ${LUECKEN.length} richtig.`;res.style.color='#7a0000';}}
+function liveCheck(inp){inp.classList.remove('ok','err');if(inp.value.trim()===inp.dataset.answer)inp.classList.add('ok');autoStopIfDone();}
+function checkLuecken(){let correct=0;LUECKEN.forEach((item,idx)=>{const inp=document.getElementById(`luecke-${idx}`);inp.classList.remove('ok','err');if(inp.value.trim()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}else inp.classList.add('err');});const res=document.getElementById('lueckenResult');if(correct===LUECKEN.length){res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';stopTimer('L');saveBest('L');}else{res.textContent=`${correct} von ${LUECKEN.length} richtig.`;res.style.color='#7a0000';}}
 function autoStopIfDone(){if([...document.querySelectorAll('#lueckenText input')].every(i=>i.classList.contains('ok'))){stopTimer('L');saveBest('L');document.getElementById('lueckenResult').textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;document.getElementById('lueckenResult').style.color='#1a5e17';}}
 
 // ══════════════════════════════════════════════

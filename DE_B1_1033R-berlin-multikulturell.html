@@ -575,6 +575,7 @@ input.plural-inp { width: 110px; }
         Multikulturalismus · Parallelgesellschaft · Reisefreiheit · Vielfalt · ausgeben
     </div>
 
+    <div id="wordBank" class="word-bank"></div>
     <div id="lueckeContainer"></div>
 
 </div>
@@ -937,6 +938,40 @@ function resetRF() { initRF(); }
 // ══════════════════════════════════════════════════════════════
 // LÜCKENTEXT
 // ══════════════════════════════════════════════════════════════
+function buildWordBank() {
+  var bank = document.getElementById('wordBank');
+  if (!bank) return;
+  var words = LUECKEN_DATA.map(function(item) { return item.ans; });
+  for (var i = words.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = words[i]; words[i] = words[j]; words[j] = tmp;
+  }
+  bank.innerHTML = '';
+  var label = document.createElement('span');
+  label.className = 'word-bank-label';
+  label.textContent = '📋 Wortbank:';
+  bank.appendChild(label);
+  words.forEach(function(w) {
+    var chip = document.createElement('span');
+    chip.className = 'wb-chip';
+    chip.textContent = w;
+    bank.appendChild(chip);
+  });
+}
+function updateWbChips() {
+  var bank = document.getElementById('wordBank');
+  if (!bank) return;
+  var okWords = [];
+  document.querySelectorAll('#sec-3 .blank').forEach(function(i) {
+    if (i.classList.contains('ok')) okWords.push(i.dataset.ans);
+  });
+  var remaining = okWords.slice();
+  bank.querySelectorAll('.wb-chip').forEach(function(chip) {
+    var idx = remaining.indexOf(chip.textContent);
+    if (idx >= 0) { chip.classList.add('used'); remaining.splice(idx, 1); }
+    else { chip.classList.remove('used'); }
+  });
+}
 function initLuecke() {
     var container = document.getElementById('lueckeContainer');
     container.innerHTML = '';
@@ -958,6 +993,7 @@ function initLuecke() {
         div.innerHTML = html;
         container.appendChild(div);
     });
+  buildWordBank();
 }
 function liveCheckLuecke(inp) {
     timerAutoStart(3);
@@ -987,6 +1023,7 @@ function showLueckeLoesung() {
         inp.classList.remove('no');
         inp.classList.add('ok');
     });
+  updateWbChips();
 }
 function resetLuecke() { initLuecke();
   buildWordBank(document.getElementById('lueckeContainer')); }

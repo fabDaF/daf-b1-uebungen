@@ -103,10 +103,13 @@ def check_shared_rules(html):
     if 'author-footer' not in html:
         results.append(fail("Author-Footer fehlt komplett"))
         errors += 1
-    elif 'fabdaf.onmicrosoft.com' in html:
-        results.append(ok("Footer mit korrekter E-Mail (onmicrosoft.com)"))
+    elif 'frankburkert-daf.de' in html:
+        results.append(ok("Footer mit korrekter E-Mail (frankburkert-daf.de)"))
     elif 'gmx.net' in html:
-        results.append(fail("Footer enthält private GMX-Adresse statt onmicrosoft.com"))
+        results.append(fail("Footer enthält private GMX-Adresse statt frankburkert-daf.de"))
+        errors += 1
+    elif 'fabdaf.onmicrosoft.com' in html:
+        results.append(fail("Footer enthält veraltete onmicrosoft.com-Adresse"))
         errors += 1
     else:
         results.append(warn("Footer vorhanden — E-Mail manuell prüfen"))

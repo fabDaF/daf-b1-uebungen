@@ -949,17 +949,19 @@ function initLuecken() {
 }
 
 function lueckeCheck(inp) {
-    timerAutoStart(3);
-    var val = inp.value.trim();
+    if (typeof timerAutoStart === 'function') timerAutoStart(3);
+    var val = inp.value;        // KEIN .trim() — Leerzeichen sind Fehler
     var ans = inp.dataset.answer;
     inp.classList.remove('ok', 'wrong');
-    if (!val) return;
-    if (val === ans) {
+    if (!val) { syncWordBankChips(); return; }
+    if (val === ans) {                   // exakt korrekt → grün
         inp.classList.add('ok');
-        checkLueckenDone();
-    } else if (!ans.toLowerCase().startsWith(val.toLowerCase())) {
+        if (typeof checkLueckenDone === 'function') checkLueckenDone();
+    } else if (!ans.startsWith(val)) {  // case-sensitive Präfix-Check → rot
         inp.classList.add('wrong');
     }
+    // Bei korrektem Präfix bleibt das Feld neutral (schwarz).
+    syncWordBankChips();
 }
 
 function checkLueckenDone() {
@@ -1779,9 +1781,10 @@ function buildWordBank(containerEl) {
     var seen = {}, words = [];
     inputs.forEach(function(inp) {
         var w = inp.dataset.answer || inp.dataset.ans || '';
-        if (w && !seen[w.toLowerCase()]) { seen[w.toLowerCase()] = true; words.push(w); }
+        if (w && !seen[w]) { seen[w] = true; words.push(w); }
     });
     if (!words.length) return;
+    // Fisher-Yates-Shuffle
     for (var i = words.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var t = words[i]; words[i] = words[j]; words[j] = t;
@@ -1790,23 +1793,18 @@ function buildWordBank(containerEl) {
     bank.className = 'wort-bank';
     var lbl = document.createElement('div');
     lbl.className = 'wort-bank-label';
-    lbl.textContent = '📦 Wortkasten – klicke ein Wort, dann das Feld';
+    lbl.innerHTML = '🔤 Wortbank – die richtigen Wörter, in zufälliger Reihenfolge.<br>Tipp sie selbst in die Lücken — achte auf Groß- und Kleinschreibung.';
     bank.appendChild(lbl);
     words.forEach(function(w) {
-        var btn = document.createElement('button');
-        btn.className = 'wort-chip'; btn.textContent = w; btn.dataset.word = w;
-        btn.addEventListener('click', function(){ insertWordFromBank(w); });
-        bank.appendChild(btn);
+        // KEIN <button> mehr — <span> ist nicht klickbar
+        var chip = document.createElement('span');
+        chip.className = 'wort-chip';
+        chip.textContent = w;
+        chip.dataset.word = w;
+        bank.appendChild(chip);
     });
     containerEl.insertBefore(bank, containerEl.firstChild);
-    containerEl.addEventListener('focusin', function(e) {
-        if (e.target.matches('input.blank,input.l-inp,input[data-ans],input[data-answer]'))
-            lkActiveInput = e.target;
-    });
-    containerEl.addEventListener('input', function(e) {
-        if (e.target.matches('input.blank,input.l-inp,input[data-ans],input[data-answer]'))
-            syncWordBankChips();
-    });
+    // KEIN focusin-/click-Listener mehr — Wortbank ist rein visuell
 }
 function syncWordBankChips() {
     if (!lkContainer) return;
@@ -1817,17 +1815,6 @@ function syncWordBankChips() {
         var w = inp.value.trim();
         if (w) { var c = bank.querySelector('.wort-chip[data-word="'+w+'"]'); if(c) c.classList.add('used'); }
     });
-}
-function insertWordFromBank(w) {
-    if (!lkContainer) return;
-    var all = Array.from(lkContainer.querySelectorAll('input.blank,input.l-inp,input[data-ans],input[data-answer]'));
-    var ok = function(i){ return !i.classList.contains('correct')&&!i.classList.contains('ok'); };
-    var t = (lkActiveInput && lkContainer.contains(lkActiveInput) && ok(lkActiveInput)) ? lkActiveInput
-          : (all.find(function(i){ return !i.value && ok(i); }) || all.find(ok));
-    if (!t) return;
-    t.value = w;
-    t.dispatchEvent(new Event('input',{bubbles:true}));
-    t.focus(); lkActiveInput = t;
 }
 // ────────────────────────────────────────────────────────────────────────────
 </script>

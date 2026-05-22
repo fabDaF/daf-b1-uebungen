@@ -945,14 +945,14 @@ function initLuecken() {
 }
 
 function lueckeCheck(inp) {
-    timerAutoStart(3);
+    if (typeof timerAutoStart === 'function') timerAutoStart(3);
     var val = inp.value;        // KEIN .trim() — Leerzeichen sind Fehler
     var ans = inp.dataset.answer;
     inp.classList.remove('ok', 'wrong');
     if (!val) { syncWordBankChips(); return; }
     if (val === ans) {                   // exakt korrekt → grün
         inp.classList.add('ok');
-        checkLueckenDone();
+        if (typeof checkLueckenDone === 'function') checkLueckenDone();
     } else if (!ans.startsWith(val)) {  // case-sensitive Präfix-Check → rot
         inp.classList.add('wrong');
     }

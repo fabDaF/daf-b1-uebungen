@@ -90,18 +90,6 @@
   .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
     font-size: 0.75rem; color: #aaa; text-align: center; }
   /* WORTSCHATZ INTERACTIVE */
-  .vocab-item { background: #f8f9ff; padding: 14px 18px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .vocab-en { font-weight: 600; color: #764ba2; min-width: 200px; font-size: 0.95em; }
-  .vocab-arrow { color: #999; font-size: 1.1em; }
-  .vocab-inputs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .vocab-inputs input.art { width: 70px; }
-  .vocab-inputs input.wort { width: 160px; }
-  .vocab-inputs input.wide { width: 240px; }
-  .vocab-inputs input.plural { width: 140px; }
-  .vocab-inputs input { border: 1.5px solid #c4b5fd; border-radius: 6px; padding: 6px 10px; font-size: 0.9em; }
-  .vocab-inputs input.correct { border-color: #22c55e; background: #f0fdf4; }
-  .vocab-hint { font-size: 1.1em; min-width: 24px; }
-  .vocab-hint.correct { color: #22c55e; }
 
 /* ===== Schreibwerkstatt — Niveau-flexibel ===== */
 .schreib-aufgabe-karte { background: #f8f9ff; padding: 16px 18px; margin-bottom: 16px; border-radius: 10px; border-left: 4px solid #667eea; transition: all 0.25s; }
@@ -174,6 +162,17 @@
 .wort-chip { padding:5px 14px; border-radius:20px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-size:0.87em; font-weight:600; cursor:pointer; border:none; transition:opacity 0.2s,transform 0.12s; user-select:none; }
 .wort-chip:hover:not(.used) { transform:translateY(-2px); box-shadow:0 4px 10px rgba(102,126,234,0.35); }
 .wort-chip.used { opacity:0.22; cursor:default; pointer-events:none; }
+/* ── WORTSCHATZ (Phase 1.2) ── */
+#wortschatzContainer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#wortschatzContainer .luecke-item { background: #f8f9ff; padding: 12px 14px; border-radius: 10px; border-left: 4px solid #667eea; display: flex; flex-direction: column; gap: 6px; margin-bottom: 0; }
+.ws-en { font-weight: 600; color: #764ba2; font-size: 0.93em; }
+.ws-inputs { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; width: 100%; }
+.ws-inputs input.blank { min-width: auto; }
+.ws-inputs input.art    { width: 70px; flex-shrink: 0; }
+.ws-inputs input.wort   { flex: 1; min-width: 150px; }
+.ws-inputs input.plural { width: 130px; flex-shrink: 0; }
+.ws-inputs input.verb   { flex: 1; min-width: 200px; }
+@media (max-width: 700px) { #wortschatzContainer { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -360,10 +359,10 @@
     <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
          alt="Vokabeln" class="tab-banner">
     <h2>Wortschatz</h2>
-    <div id="vocabContainer"></div>
+    <div id="wortschatzContainer"></div>
     <div style="margin-top:16px;display:flex;gap:10px;">
-      <button onclick="showVocabLoesung()">💡 Lösung</button>
-      <button onclick="resetVocab()">↺ Neustart</button>
+      <button onclick="showLoesungWortschatz()">💡 Lösung</button>
+      <button onclick="resetWortschatz()">↺ Neustart</button>
     </div>
     <div class="footer">unterricht@frankburkert-daf.de</div>
   </div>
@@ -763,65 +762,15 @@ var WORTSCHATZ = [
   { type: "v", en: "to cost", de: "kosten" },
 ];
 
-function initVocab() {
-  var cont = document.getElementById('vocabContainer');
-  cont.innerHTML = '';
-  WORTSCHATZ.forEach(function(item, idx) {
-    var div = document.createElement('div');
-    div.className = 'vocab-item';
-    if (item.type === 'n') {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="art" id="va' + idx + '" placeholder="Artikel" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="wort" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<input type="text" class="plural" id="vp' + idx + '" placeholder="Plural" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    } else {
-      div.innerHTML = '<span class="vocab-en">' + item.en + '</span><span class="vocab-arrow">→</span>' +
-        '<div class="vocab-inputs">' +
-        '<input type="text" class="wort wide" id="vw' + idx + '" placeholder="Deutsch" autocomplete="off" oninput="vocabLiveCheck(' + idx + ')">' +
-        '<span class="vocab-hint" id="vh' + idx + '"></span></div>';
-    }
-    cont.appendChild(div);
-  });
-}
 
-function vocabLiveCheck(idx) {
-  var item = WORTSCHATZ[idx];
-  var hint = document.getElementById('vh' + idx);
-  if (item.type === 'n') {
-    var a = document.getElementById('va' + idx).value.trim().toLowerCase();
-    var w = document.getElementById('vw' + idx).value.trim();
-    var p = document.getElementById('vp' + idx).value.trim();
-    var okA = a === item.art.toLowerCase();
-    var okW = w === item.wort;
-    var okP = p === item.plural;
-    if (okA && okW && okP) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  } else {
-    var w2 = document.getElementById('vw' + idx).value.trim();
-    if (w2 === item.de) { hint.textContent = '✓'; hint.className = 'vocab-hint correct'; }
-    else { hint.textContent = ''; hint.className = 'vocab-hint'; }
-  }
-}
 
-function showVocabLoesung() {
-  WORTSCHATZ.forEach(function(item, idx) {
-    if (item.type === 'n') {
-      document.getElementById('va' + idx).value = item.art;
-      document.getElementById('vw' + idx).value = item.wort;
-      document.getElementById('vp' + idx).value = item.plural;
-    } else {
-      document.getElementById('vw' + idx).value = item.de;
-    }
-    vocabLiveCheck(idx);
-  });
-}
 
-function resetVocab() { initVocab();
-initSchreibwerkstatt(); }
 
-initVocab();
+
+
+
+
+initWortschatz();
 
 /* ===== SCHREIBWERKSTATT (B1) =================================== */
 var SCHREIB_NAME_KEY      = 'schreibwerkstatt_B1_2063R_name';
@@ -1204,6 +1153,73 @@ function insertWordFromBank(w) {
     t.focus(); lkActiveInput = t;
 }
 // ────────────────────────────────────────────────────────────────────────────
+var wortschatzInited = false;
+
+function initWortschatz() {
+    if (wortschatzInited) return;
+    var cont = document.getElementById('wortschatzContainer');
+    if (!cont) return;
+    cont.innerHTML = '';
+    WORTSCHATZ.forEach(function(w, i) {
+        var row = document.createElement('div');
+        row.className = 'luecke-item';
+        var en = '<div class="ws-en">' + w.en + '</div>';
+        var inputs;
+        if (w.type === 'n') {
+            inputs = '<div class="ws-inputs">' +
+                '<input class="blank art"    data-id="' + i + '" data-field="artikel" placeholder="Artikel" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank wort"   data-id="' + i + '" data-field="de"      placeholder="Wort"    oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank plural" data-id="' + i + '" data-field="plural"  placeholder="Plural"  oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '</div>';
+        } else {
+            inputs = '<div class="ws-inputs">' +
+                '<input class="blank verb" data-id="' + i + '" data-field="de" placeholder="Verb (Infinitiv)" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '</div>';
+        }
+        row.innerHTML = en + inputs;
+        cont.appendChild(row);
+    });
+    wortschatzInited = true;
+}
+
+function wortschatzCheck(inp) {
+    if (typeof timerAutoStart === 'function') timerAutoStart(4);
+    var id = parseInt(inp.dataset.id);
+    var field = inp.dataset.field;
+    var target = WORTSCHATZ[id][field];
+    var val = inp.value.trim();
+    inp.classList.remove('ok', 'wrong');
+    if (!val) return;
+    if (val === target) {
+        inp.classList.add('ok');
+        checkWortschatzAllOk();
+    } else if (!target.toLowerCase().startsWith(val.toLowerCase())) {
+        inp.classList.add('wrong');
+    }
+}
+
+function checkWortschatzAllOk() {
+    var all = document.querySelectorAll('#wortschatzContainer input.blank');
+    var allOk = Array.from(all).every(function(i) { return i.classList.contains('ok'); });
+    if (allOk && typeof stopTimer === 'function') stopTimer(4);
+}
+
+function resetWortschatz() {
+    document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
+        inp.value = '';
+        inp.classList.remove('ok', 'wrong');
+    });
+}
+
+function showLoesungWortschatz() {
+    document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
+        var id = parseInt(inp.dataset.id);
+        var field = inp.dataset.field;
+        inp.value = WORTSCHATZ[id][field];
+        inp.classList.remove('wrong');
+        inp.classList.add('ok');
+    });
+}
 </script>
 </body>
 </html>

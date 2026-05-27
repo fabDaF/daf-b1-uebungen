@@ -721,7 +721,8 @@ function highlightVocabInText() {
             });
             if (!has) return;
             var span = document.createElement('span');
-            var parts = txt.split(new RegExp('(' + words.join('|') + ')', 'gi'));
+            var escapedWords = words.map(function(w) { return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+            var parts = txt.split(new RegExp('(' + escapedWords.join('|') + ')', 'gi'));
             parts.forEach(function(part) {
                 if (words.some(function(w) { return w.toLowerCase() === part.toLowerCase(); })) {
                     var hl = document.createElement('span');

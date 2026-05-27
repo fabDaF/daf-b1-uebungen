@@ -120,11 +120,11 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
 .btn:hover { background: #667eea; color: white; border-color: #667eea; }
 .timer-display { display: flex; gap: 14px; font-size: 0.82em; color: #bbb; font-variant-numeric: tabular-nums; }
 .hilfe-box { background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 22px; font-size: 0.9em; color: #444; line-height: 1.6; }
-.wort-bank { display: flex; flex-wrap: wrap; gap: 8px; background: #f0f2ff; border: 1px solid #c5cae9; border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; }
-.wort-bank-label { width: 100%; font-size: 0.78em; font-weight: 700; color: #667eea; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-.wort-chip { padding: 5px 14px; border-radius: 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; font-size: 0.87em; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.2s, transform 0.12s; user-select: none; }
-.wort-chip:hover:not(.used) { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(102,126,234,0.35); }
-.wort-chip.used { opacity: 0.22; cursor: default; pointer-events: none; }
+/* Wortbank: visuell, nicht klickbar — der Lerner muss selbst tippen. */
+.wortbank-label { font-weight:700; color:#667eea; font-size:0.85em; margin-bottom:8px; }
+.wortbank { display:flex; flex-wrap:wrap; gap:8px; padding:14px; background:#f0f0f8; border-radius:10px; min-height:48px; margin-bottom:18px; border:1px dashed #bbb; }
+.wortbank-chip { background:white; border:2px solid #667eea; color:#667eea; padding:5px 12px; border-radius:14px; font-weight:500; font-size:0.9em; user-select:none; /* KEIN cursor:pointer, KEIN hover — nicht klickbar */ }
+.wortbank-chip.used { opacity:0.35; text-decoration:line-through; }
 .author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
 .author-footer a { color: #aaa; }
 .author-name { font-weight: 700; }
@@ -292,7 +292,8 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
             <div class="hilfe-box">
                 <strong>Aufgabe:</strong> Setze das passende Relativpronomen ein. Achte auf Genus, Numerus und Kasus.
             </div>
-            <div id="wordBank" class="wort-bank"></div>
+            <div class="wortbank-label">🔤 Wortbank — die richtigen Wörter, in zufälliger Reihenfolge.<br>Tipp sie selbst in die Lücken — achte auf Groß- und Kleinschreibung.</div>
+            <div id="wordBank" class="wortbank"></div>
             <div id="lueckeContainer"></div>
         </div>
     </div>
@@ -452,66 +453,50 @@ function buildLueckeWordBank() {
     var bank = document.getElementById('wordBank');
     if (!bank) return;
     var words = [];
-    var seen = {};
     LUECKEN_DATA.forEach(function(ex) {
-        ex.segs.forEach(function(seg) {
-            if (seg.b && !seen[seg.b]) { seen[seg.b] = true; words.push(seg.b); }
-        });
+        ex.segs.forEach(function(seg) { if (seg.b) words.push(seg.b); });
     });
+    // Duplikate beibehalten — der Lerner sieht, wie oft jedes Pronomen vorkommt.
     for (var i = words.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var t = words[i]; words[i] = words[j]; words[j] = t;
     }
     bank.innerHTML = '';
-    var lbl = document.createElement('span');
-    lbl.className = 'wort-bank-label';
-    lbl.textContent = '🔤 Wortbank — Relativpronomen (zum Antippen)';
-    bank.appendChild(lbl);
     words.forEach(function(w) {
-        var btn = document.createElement('button');
-        btn.className = 'wort-chip'; btn.textContent = w; btn.dataset.word = w;
-        btn.addEventListener('click', function() { insertLueckeWord(w); });
-        bank.appendChild(btn);
+        var chip = document.createElement('span');
+        chip.className = 'wortbank-chip';
+        chip.textContent = w;
+        // KEIN addEventListener — Wortbank ist nicht klickbar (daf-kern §7)
+        bank.appendChild(chip);
     });
 }
 
-var lueckeActiveInput = null;
-document.addEventListener('focusin', function(e) {
-    if (e.target.matches('#sec-2 input.blank')) lueckeActiveInput = e.target;
-});
-function insertLueckeWord(w) {
-    var inputs = Array.from(document.querySelectorAll('#sec-2 input.blank'));
-    var notDone = function(i) { return !i.classList.contains('correct'); };
-    var t = (lueckeActiveInput && notDone(lueckeActiveInput)) ? lueckeActiveInput
-          : (inputs.find(function(i) { return !i.value && notDone(i); }) || inputs.find(notDone));
-    if (!t) return;
-    t.value = w;
-    t.dispatchEvent(new Event('input', {bubbles:true}));
-    t.focus();
-}
 function syncLueckeChips() {
     var bank = document.getElementById('wordBank');
     if (!bank) return;
     var solved = [];
     document.querySelectorAll('#sec-2 input.blank.correct').forEach(function(i) { solved.push(i.value); });
-    bank.querySelectorAll('.wort-chip').forEach(function(c) { c.classList.remove('used'); });
-    solved.forEach(function(w) {
-        var c = bank.querySelector('.wort-chip[data-word="' + w + '"]');
-        if (c) c.classList.add('used');
+    var remaining = solved.slice();
+    bank.querySelectorAll('.wortbank-chip').forEach(function(c) {
+        var idx = remaining.indexOf(c.textContent);
+        if (idx >= 0) { c.classList.add('used'); remaining.splice(idx, 1); }
+        else { c.classList.remove('used'); }
     });
 }
 
 function liveCheck(inp) {
-    var val = inp.value.trim();
+    // Case-sensitive Präfix-Regel laut daf-kern §7:
+    // - leer oder korrektes Präfix → neutral (schwarz)
+    // - exakt korrekt → grün
+    // - sobald Abweichung → rot
+    var val = inp.value;  // KEIN .trim() — Leerzeichen sind Fehler
     var ans = inp.dataset.answer;
     inp.classList.remove('correct', 'wrong');
     if (val.length === 0) return;
     if (val === ans) {
         inp.classList.add('correct');
         syncLueckeChips();
-    } else if (ans.indexOf(val) === 0) {
-        // gültiger Präfix
-    } else {
+    } else if (ans.indexOf(val) !== 0) {
         inp.classList.add('wrong');
     }
 }

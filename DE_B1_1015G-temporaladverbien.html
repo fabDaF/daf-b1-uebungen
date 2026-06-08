@@ -104,6 +104,12 @@ input.blank.wrong { border-color: #e74c3c; background: #ffebee; }
 .satzbau-feedback.correct { color:#27ae60; }
 .satzbau-feedback.incorrect { color:#e74c3c; }
 .satzbau-item { margin-bottom:22px; }
+/* Gerüst-Modus (B1+): sichtbare Lücken-Felder + wenige feste Anker, Verb beweglich */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
 .satzbau-section h2 { font-size: 1.1rem; color: #3949ab; margin-bottom: 6px; }
 .satzbau-section p.intro { font-size: 0.88rem; color: #777; margin-bottom: 16px; }
 
@@ -654,27 +660,32 @@ var sbDragged = null;
 
 var satzbauData = [
   {
-    parts:['Karim','fährt','morgen','zum','ersten','wichtigen','Meeting'],
+    row:['_','_','_','zum','_','_','Meeting'],
+    parts:['Karim','fährt','morgen','ersten','wichtigen'],
     valid:[['Karim','fährt','morgen','zum','ersten','wichtigen','Meeting'],['morgen','fährt','Karim','zum','ersten','wichtigen','Meeting']],
     punct:'.'
   },
   {
-    parts:['gestern','hat','er','das','neue','Team','kennengelernt'],
+    row:['_','_','_','das','_','Team','_'],
+    parts:['gestern','hat','er','neue','kennengelernt'],
     valid:[['gestern','hat','er','das','neue','Team','kennengelernt'],['er','hat','gestern','das','neue','Team','kennengelernt']],
     punct:'.'
   },
   {
-    parts:['Petra','erklärt','ihm','gerade','die','neuen','Abläufe'],
+    row:['_','_','_','_','die','_','Abläufe'],
+    parts:['Petra','erklärt','ihm','gerade','neuen'],
     valid:[['Petra','erklärt','ihm','gerade','die','neuen','Abläufe'],['gerade','erklärt','Petra','ihm','die','neuen','Abläufe']],
     punct:'.'
   },
   {
-    parts:['er','schaut','selten','auf','sein','neues','Handy'],
+    row:['_','_','_','auf','_','_','Handy'],
+    parts:['er','schaut','selten','sein','neues'],
     valid:[['er','schaut','selten','auf','sein','neues','Handy'],['selten','schaut','er','auf','sein','neues','Handy']],
     punct:'.'
   },
   {
-    parts:['bald','wird','er','das','neue','Projekt','leiten'],
+    row:['_','_','_','das','_','Projekt','_'],
+    parts:['bald','wird','er','neue','leiten'],
     valid:[['bald','wird','er','das','neue','Projekt','leiten'],['er','wird','bald','das','neue','Projekt','leiten']],
     punct:'.'
   },
@@ -684,7 +695,8 @@ var satzbauData = [
     punct:'.'
   },
   {
-    parts:['manchmal','denkt','er','noch','an','seine','Familie'],
+    row:['_','_','_','noch','_','_','Familie'],
+    parts:['manchmal','denkt','er','an','seine'],
     valid:[['manchmal','denkt','er','noch','an','seine','Familie'],['er','denkt','manchmal','noch','an','seine','Familie']],
     punct:'.'
   }
@@ -855,6 +867,7 @@ function sbCheckAllDone() {
 }
 
 function sbShowSolution(idx) {
+  if (satzbauData[idx].row) { sbShowSolutionGap(idx); return; }
   var bank = document.getElementById('sb-bank-' + idx);
   var row  = document.getElementById('sb-row-'  + idx);
   var fb   = document.getElementById('sb-fb-'   + idx);
@@ -881,6 +894,7 @@ function sbShowAllSolutions() {
 }
 
 function sbResetOne(idx) {
+  if (satzbauData[idx].row) { sbResetOneGap(idx); return; }
   var bank = document.getElementById('sb-bank-' + idx);
   var row  = document.getElementById('sb-row-'  + idx);
   var fb   = document.getElementById('sb-fb-'   + idx);
@@ -897,6 +911,149 @@ function sbResetOne(idx) {
     var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
   }
   parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+}
+
+/* ===== GERÜST-MODUS (B1+): sichtbare Lücken-Felder + wenige feste Anker, Verb beweglich ===== */
+function sbGapPositions(row) {
+  // Alle Satzpositionen in Reihenfolge: feste Anker-Chips UND Lücken-Slots
+  return Array.from(row.children).filter(function(n){
+    return n.classList.contains('sb-gap') || n.classList.contains('chip');
+  });
+}
+function sbGapChipOf(pos) {
+  return pos.classList.contains('sb-gap') ? pos.querySelector('.chip') : pos;
+}
+function sbGapUpdateCaps(row) {
+  sbGapPositions(row).forEach(function(pos, i){
+    var c = sbGapChipOf(pos);
+    if (!c) return;                       // leere Lücke überspringen
+    var orig = c.dataset.orig;
+    var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+    if (isProper) c.textContent = orig;
+    else c.textContent = (i === 0) ? sbCapitalize(orig) : orig;  // nur echte Satzposition 0
+  });
+}
+function sbGapSequence(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var seq = [], complete = true;
+  sbGapPositions(row).forEach(function(pos){
+    var c = sbGapChipOf(pos);
+    if (c) seq.push(c.dataset.orig);
+    else complete = false;
+  });
+  return { seq: seq, complete: complete };
+}
+function sbGapClearMarks(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+  row.classList.remove('correct','incorrect');
+  var p = row.querySelector('.sb-punkt'); if (p) p.parentNode.removeChild(p);
+}
+function sbGapAfterChange(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  sbGapUpdateCaps(row);
+  var fb  = document.getElementById('sb-fb-'  + idx);
+  var info = sbGapSequence(idx);
+  if (!info.complete) { sbGapClearMarks(idx); fb.textContent = ''; return; }
+  setTimeout(function(){
+    timerAutoStart(3);
+    var fresh = sbGapSequence(idx);
+    var ok = satzbauData[idx].valid.some(function(v){
+      return JSON.stringify(v) === JSON.stringify(fresh.seq);
+    });
+    var p = row.querySelector('.sb-punkt'); if (p) p.parentNode.removeChild(p);
+    if (ok) {
+      row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('incorrect'); c.classList.add('correct'); });
+      var punkt = document.createElement('span');
+      punkt.className = 'sb-punkt';
+      punkt.textContent = satzbauData[idx].punct || '.';
+      row.appendChild(punkt);
+      row.classList.add('correct'); row.classList.remove('incorrect');
+      fb.className = 'satzbau-feedback correct';
+      fb.textContent = '✓ Korrekt!';
+      sbCheckAllDone();
+    } else {
+      // nur die selbst gesetzten Wörter rot — Anker bleiben neutral
+      row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+      row.querySelectorAll('.sb-gap .chip').forEach(function(c){ c.classList.add('incorrect'); });
+      row.classList.add('incorrect'); row.classList.remove('correct');
+      fb.className = 'satzbau-feedback incorrect';
+      fb.textContent = '✗ Noch nicht richtig – verschiebe die Wörter!';
+    }
+  }, 450);
+}
+function sbGapMakeLocked(word) {
+  var chip = document.createElement('div');
+  chip.className = 'chip sb-locked';
+  chip.textContent = word;
+  chip.dataset.orig = word;
+  chip.dataset.locked = '1';
+  return chip;                    // nicht draggable -> Anker bleibt fest
+}
+function sbGapMakeSlot(idx) {
+  var slot = document.createElement('div');
+  slot.className = 'sb-gap';
+  slot.addEventListener('dragover', function(e){ e.preventDefault(); if (sbDragged) slot.classList.add('drag-over'); });
+  slot.addEventListener('dragleave', function(){ slot.classList.remove('drag-over'); });
+  slot.addEventListener('drop', function(e){
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    if (!sbDragged) return;
+    var occupant = slot.querySelector('.chip');
+    if (occupant && occupant !== sbDragged) {
+      document.getElementById('sb-bank-' + idx).appendChild(occupant);
+    }
+    slot.appendChild(sbDragged);   // verschiebt Chip (aus Bank oder anderem Slot)
+    sbDragged = null;
+    sbGapAfterChange(idx);
+  });
+  return slot;
+}
+function sbGapRegisterBank(bank, idx) {
+  bank.addEventListener('dragover', function(e){ e.preventDefault(); });
+  bank.addEventListener('drop', function(e){
+    e.preventDefault();
+    if (!sbDragged) return;
+    bank.appendChild(sbDragged);   // Wort zurück in die Bank
+    sbDragged = null;
+    sbGapAfterChange(idx);
+  });
+}
+function sbBuildGap(ex, idx, bank, row) {
+  var mov = ex.parts.slice();
+  for (var i = mov.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = mov[i]; mov[i] = mov[j]; mov[j] = tmp;
+  }
+  mov.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });   // bewegliche Wörter inkl. Verb
+  ex.row.forEach(function(tok){
+    row.appendChild(tok === '_' ? sbGapMakeSlot(idx) : sbGapMakeLocked(tok));
+  });
+  sbGapRegisterBank(bank, idx);
+}
+function sbResetOneGap(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var fb   = document.getElementById('sb-fb-'   + idx);
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild)  row.removeChild(row.firstChild);
+  fb.textContent = ''; fb.className = 'satzbau-feedback';
+  sbBuildGap(satzbauData[idx], idx, bank, row);
+}
+function sbShowSolutionGap(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var sol  = satzbauData[idx].valid[0];
+  var pool = {};
+  bank.querySelectorAll('.chip').forEach(function(c){ pool[c.dataset.orig] = c; });
+  row.querySelectorAll('.sb-gap .chip').forEach(function(c){ pool[c.dataset.orig] = c; });
+  sbGapPositions(row).forEach(function(pos, k){
+    if (!pos.classList.contains('sb-gap')) return;
+    var chip = pool[sol[k]];
+    if (chip) { while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(chip); delete pool[sol[k]]; }
+  });
+  sbGapAfterChange(idx);
 }
 
 function initSatzbau() {
@@ -918,15 +1075,18 @@ function initSatzbau() {
     fb.className = 'satzbau-feedback';
     fb.id = 'sb-fb-' + idx;
 
-    var parts = ex.parts.slice();
-    for (var i = parts.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    if (ex.row) {
+      sbBuildGap(ex, idx, bank, row);
+    } else {
+      var parts = ex.parts.slice();
+      for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+      }
+      parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
+      sbRegisterZone(bank, idx);
+      sbRegisterZone(row, idx);
     }
-    parts.forEach(function(word){ bank.appendChild(sbMakeChip(word)); });
-
-    sbRegisterZone(bank, idx);
-    sbRegisterZone(row, idx);
 
     var btnRow = document.createElement('div');
     btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';

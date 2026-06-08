@@ -194,6 +194,13 @@ input.blank.wrong   { border-bottom-color: #e74c3c; color: #e74c3c; }
   color: white !important;
 }
 .sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+/* FB-SATZBAU-GERUEST-CSS — Geruest-Modus (B1+): sichtbare Luecken-Felder + feste Anker */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
+
 .satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
 .satzbau-feedback.correct   { color: #27ae60; }
 .satzbau-feedback.incorrect { color: #e74c3c; }
@@ -567,22 +574,30 @@ var ZUO_DATA = [
 // Alle Sätze Quasthoff-belegt: Sport treiben (Quasthoff), Prüfung bestehen,
 // Satzbau-Daten: Nomen groß (Sport, Prüfung, Urlaub, Wasser), Rest klein
 var satzbauData = [
-  { parts: ['du', 'solltest', 'immer', 'auch', 'regelmäßig', 'Sport', 'treiben'],
-    valid: [['du', 'solltest', 'immer', 'auch', 'regelmäßig', 'Sport', 'treiben']], punct: '.' },
-  { parts: ['er', 'könnte', 'die', 'Prüfung', 'auch', 'gründlich', 'vorbereiten'],
-    valid: [['er', 'könnte', 'die', 'Prüfung', 'auch', 'gründlich', 'vorbereiten']], punct: '.' },
-  { parts: ['wir', 'müssten', 'den', 'Urlaub', 'auch', 'früher', 'buchen'],
-    valid: [['wir', 'müssten', 'den', 'Urlaub', 'auch', 'früher', 'buchen']], punct: '.' },
-  { parts: ['dürfte', 'ich', 'sie', 'auch', 'kurz', 'etwas', 'fragen'],
-    valid: [['dürfte', 'ich', 'sie', 'auch', 'kurz', 'etwas', 'fragen']], punct: '?' },
-  { parts: ['sie', 'sollten', 'immer', 'auch', 'mehr', 'Wasser', 'trinken'],
-    valid: [['sie', 'sollten', 'immer', 'auch', 'mehr', 'Wasser', 'trinken']], punct: '.' },
-  { parts: ['er', 'hätte', 'immer', 'auch', 'fleißiger', 'lernen', 'müssen'],
-    valid: [['er', 'hätte', 'immer', 'auch', 'fleißiger', 'lernen', 'müssen']], punct: '.' },
-  { parts: ['wir', 'hätten', 'den', 'Urlaub', 'auch', 'verlängern', 'können'],
-    valid: [['wir', 'hätten', 'den', 'Urlaub', 'auch', 'verlängern', 'können']], punct: '.' },
-  { parts: ['sie', 'hätte', 'früher', 'mit', 'dem', 'Lernen', 'anfangen', 'wollen'],
-    valid: [['sie', 'hätte', 'früher', 'mit', 'dem', 'Lernen', 'anfangen', 'wollen']], punct: '.' },
+  { row:['_','_','_','auch','_','Sport','_'],
+    parts:['du','solltest','immer','regelmäßig','treiben'],
+    valid:[['du','solltest','immer','auch','regelmäßig','Sport','treiben']], punct:'.' },
+  { row:['_','_','_','Prüfung','_','gründlich','_'],
+    parts:['er','könnte','die','auch','vorbereiten'],
+    valid:[['er','könnte','die','Prüfung','auch','gründlich','vorbereiten']], punct:'.' },
+  { row:['_','_','_','Urlaub','_','früher','_'],
+    parts:['wir','müssten','den','auch','buchen'],
+    valid:[['wir','müssten','den','Urlaub','auch','früher','buchen']], punct:'.' },
+  { row:['_','_','sie','_','kurz','_','_'],
+    parts:['dürfte','ich','auch','etwas','fragen'],
+    valid:[['dürfte','ich','sie','auch','kurz','etwas','fragen']], punct:'?' },
+  { row:['_','_','_','auch','_','Wasser','_'],
+    parts:['sie','sollten','immer','mehr','trinken'],
+    valid:[['sie','sollten','immer','auch','mehr','Wasser','trinken']], punct:'.' },
+  { row:['_','_','immer','_','fleißiger','_','_'],
+    parts:['er','hätte','auch','lernen','müssen'],
+    valid:[['er','hätte','immer','auch','fleißiger','lernen','müssen']], punct:'.' },
+  { row:['_','_','den','_','auch','_','_'],
+    parts:['wir','hätten','Urlaub','verlängern','können'],
+    valid:[['wir','hätten','den','Urlaub','auch','verlängern','können']], punct:'.' },
+  { row:['_','_','früher','_','dem','Lernen','_','_'],
+    parts:['sie','hätte','mit','anfangen','wollen'],
+    valid:[['sie','hätte','früher','mit','dem','Lernen','anfangen','wollen']], punct:'.' }
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -963,6 +978,7 @@ function sbCheckAllDone() {
 }
 
 function sbShowSolution(idx) {
+  if (satzbauData[idx].row) { sbShowSolutionGap(idx); return; }
   var bank = document.getElementById('sb-bank-' + idx);
   var row  = document.getElementById('sb-row-' + idx);
   var fb   = document.getElementById('sb-fb-' + idx);
@@ -985,6 +1001,7 @@ function sbShowSolution(idx) {
 }
 
 function sbResetOne(idx) {
+  if (satzbauData[idx].row) { sbResetOneGap(idx); return; }
   var bank = document.getElementById('sb-bank-' + idx);
   var row  = document.getElementById('sb-row-'  + idx);
   var fb   = document.getElementById('sb-fb-'   + idx);
@@ -1002,6 +1019,148 @@ function sbResetOne(idx) {
   }
   parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
 }
+
+/* FB-SATZBAU-GERUEST-JS */
+function sbGapPositions(row) {
+  return Array.from(row.children).filter(function(n){
+    return n.classList.contains('sb-gap') || n.classList.contains('chip');
+  });
+}
+function sbGapChipOf(pos) {
+  return pos.classList.contains('sb-gap') ? pos.querySelector('.chip') : pos;
+}
+function sbGapUpdateCaps(row) {
+  sbGapPositions(row).forEach(function(pos, i){
+    var c = sbGapChipOf(pos);
+    if (!c) return;
+    var orig = c.dataset.orig;
+    var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+    if (isProper) c.textContent = orig;
+    else c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+  });
+}
+function sbGapSequence(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var seq = [], complete = true;
+  sbGapPositions(row).forEach(function(pos){
+    var c = sbGapChipOf(pos);
+    if (c) seq.push(c.dataset.orig); else complete = false;
+  });
+  return { seq: seq, complete: complete };
+}
+function sbGapClearMarks(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+  row.classList.remove('correct','incorrect');
+  var p = row.querySelector('.sb-punkt'); if (p) p.parentNode.removeChild(p);
+}
+function sbGapAfterChange(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  sbGapUpdateCaps(row);
+  var fb  = document.getElementById('sb-fb-'  + idx);
+  var info = sbGapSequence(idx);
+  if (!info.complete) { sbGapClearMarks(idx); fb.textContent = ''; return; }
+  setTimeout(function(){
+    if (typeof timerAutoStart === 'function' && typeof SBTAB !== 'undefined') { try { timerAutoStart(SBTAB); } catch(e){} }
+    var fresh = sbGapSequence(idx);
+    var ok = satzbauData[idx].valid.some(function(v){
+      return JSON.stringify(v) === JSON.stringify(fresh.seq);
+    });
+    var p = row.querySelector('.sb-punkt'); if (p) p.parentNode.removeChild(p);
+    if (ok) {
+      row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('incorrect'); c.classList.add('correct'); });
+      var punkt = document.createElement('span');
+      punkt.className = 'sb-punkt';
+      punkt.textContent = satzbauData[idx].punct || '.';
+      row.appendChild(punkt);
+      row.classList.add('correct'); row.classList.remove('incorrect');
+      fb.className = 'satzbau-feedback correct';
+      fb.textContent = '\u2713 Korrekt!';
+      if (typeof sbCheckAllDone === 'function') { try { sbCheckAllDone(); } catch(e){} }
+    } else {
+      row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+      row.querySelectorAll('.sb-gap .chip').forEach(function(c){ c.classList.add('incorrect'); });
+      row.classList.add('incorrect'); row.classList.remove('correct');
+      fb.className = 'satzbau-feedback incorrect';
+      fb.textContent = '\u2717 Noch nicht richtig \u2013 verschiebe die W\u00f6rter!';
+    }
+  }, 450);
+}
+function sbGapMakeLocked(word) {
+  var chip = document.createElement('div');
+  chip.className = 'chip sb-locked';
+  chip.textContent = word;
+  chip.dataset.orig = word;
+  chip.dataset.locked = '1';
+  return chip;
+}
+function sbGapMakeSlot(idx) {
+  var slot = document.createElement('div');
+  slot.className = 'sb-gap';
+  slot.addEventListener('dragover', function(e){ e.preventDefault(); if (sbDragged) slot.classList.add('drag-over'); });
+  slot.addEventListener('dragleave', function(){ slot.classList.remove('drag-over'); });
+  slot.addEventListener('drop', function(e){
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    if (!sbDragged) return;
+    var occupant = slot.querySelector('.chip');
+    if (occupant && occupant !== sbDragged) {
+      document.getElementById('sb-bank-' + idx).appendChild(occupant);
+    }
+    slot.appendChild(sbDragged);
+    sbDragged = null;
+    sbGapAfterChange(idx);
+  });
+  return slot;
+}
+function sbGapRegisterBank(bank, idx) {
+  bank.addEventListener('dragover', function(e){ e.preventDefault(); });
+  bank.addEventListener('drop', function(e){
+    e.preventDefault();
+    if (!sbDragged) return;
+    bank.appendChild(sbDragged);
+    sbDragged = null;
+    sbGapAfterChange(idx);
+  });
+}
+function sbBuildGap(ex, idx, bank, row) {
+  var mov = ex.parts.slice();
+  for (var i = mov.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = mov[i]; mov[i] = mov[j]; mov[j] = tmp;
+  }
+  mov.forEach(function(word){ bank.appendChild(sbMakeChip(word, idx)); });
+  ex.row.forEach(function(tok){
+    row.appendChild(tok === '_' ? sbGapMakeSlot(idx) : sbGapMakeLocked(tok));
+  });
+  sbGapRegisterBank(bank, idx);
+}
+function sbResetOneGap(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var fb   = document.getElementById('sb-fb-'   + idx);
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild)  row.removeChild(row.firstChild);
+  fb.textContent = ''; fb.className = 'satzbau-feedback';
+  sbBuildGap(satzbauData[idx], idx, bank, row);
+}
+function sbShowSolutionGap(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var sol  = satzbauData[idx].valid[0];
+  var pool = {};
+  bank.querySelectorAll('.chip').forEach(function(c){ pool[c.dataset.orig] = c; });
+  row.querySelectorAll('.sb-gap .chip').forEach(function(c){ pool[c.dataset.orig] = c; });
+  sbGapPositions(row).forEach(function(pos, k){
+    if (!pos.classList.contains('sb-gap')) return;
+    var chip = pool[sol[k]];
+    if (chip) { while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(chip); delete pool[sol[k]]; }
+  });
+  sbGapAfterChange(idx);
+}
+/* FB-SATZBAU-GERUEST-JS-END */
+
 
 function initSatzbau() {
   var container = document.getElementById('satzbauContainer');
@@ -1027,7 +1186,10 @@ function initSatzbau() {
     fb.className = 'satzbau-feedback';
     fb.id = 'sb-fb-' + idx;
 
-    var parts = ex.parts.slice();
+    if (ex.row) { /*FB-GERUEST-INIT*/
+      sbBuildGap(ex, idx, bank, row);
+    } else {
+      var parts = ex.parts.slice();
     for (var i = parts.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
       var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
@@ -1036,6 +1198,7 @@ function initSatzbau() {
 
     sbRegisterZone(bank, idx);
     sbRegisterZone(row, idx);
+    }
 
     var btnRow = document.createElement('div');
     btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';

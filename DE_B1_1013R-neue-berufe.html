@@ -88,6 +88,13 @@ input.blank.wrong   { border-bottom-color: #e74c3c; background: #fdeaea; }
 .sentence-builder.correct   { border-color: #27ae60; background: #f0fff4; }
 .sentence-builder.incorrect { border-color: #e74c3c; background: #fff5f5; }
 .sb-punkt { font-size: 1.1em; font-weight: 700; color: #27ae60; margin-left: 2px; align-self: center; user-select: none; }
+/* FB-SATZBAU-GERUEST-CSS — Geruest-Modus (B1+): sichtbare Luecken-Felder + feste Anker */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
+
 .satzbau-feedback { font-size: 0.9em; font-weight: 600; margin-top: 6px; min-height: 1.2em; }
 .satzbau-feedback.correct   { color: #27ae60; }
 .satzbau-feedback.incorrect { color: #e74c3c; }
@@ -803,25 +810,35 @@ function mcReset(){ timerReset(4); buildMC(); }
 
 /* ── DATA: Satzbau (Skill-Standard) ── */
 var satzbauData = [
-  { parts:['Karim','sitzt','im','dritten','Stock','des','E.ON-Geb\u00e4udes'],
-    valid:[['Karim','sitzt','im','dritten','Stock','des','E.ON-Geb\u00e4udes']], punct:'.' },
-  { parts:['die','Glasfassade','h\u00e4lt','drau\u00dfen','noch','das','Abendlicht'],
-    valid:[['die','Glasfassade','h\u00e4lt','drau\u00dfen','noch','das','Abendlicht']], punct:'.' },
-  { parts:['die','Nachfrage','nach','solchen','Spezialisten','ist','riesig'],
+  { row:['_','_','im','_','Stock','_','_'],
+    parts:['Karim','sitzt','dritten','des','E.ON-Gebäudes'],
+    valid:[['Karim','sitzt','im','dritten','Stock','des','E.ON-Gebäudes']], punct:'.' },
+  { row:['_','Glasfassade','_','_','noch','_','_'],
+    parts:['die','hält','draußen','das','Abendlicht'],
+    valid:[['die','Glasfassade','hält','draußen','noch','das','Abendlicht']], punct:'.' },
+  { row:['_','_','nach','_','Spezialisten','_','_'],
+    parts:['die','Nachfrage','solchen','ist','riesig'],
     valid:[['die','Nachfrage','nach','solchen','Spezialisten','ist','riesig']], punct:'.' },
-  { parts:['zwei','Jahre','sp\u00e4ter','brauchte','ihn','dort','keiner','mehr'],
-    valid:[['zwei','Jahre','sp\u00e4ter','brauchte','ihn','dort','keiner','mehr']], punct:'.' },
-  { parts:['die','KI','ist','Katalysator','und','Kaleidoskop','zugleich'],
+  { row:['_','_','später','_','ihn','_','keiner','_'],
+    parts:['zwei','Jahre','brauchte','dort','mehr'],
+    valid:[['zwei','Jahre','später','brauchte','ihn','dort','keiner','mehr']], punct:'.' },
+  { row:['_','KI','_','_','und','_','_'],
+    parts:['die','ist','Katalysator','Kaleidoskop','zugleich'],
     valid:[['die','KI','ist','Katalysator','und','Kaleidoskop','zugleich']], punct:'.' },
-  { parts:['Dampfmaschinen','ersetzten','damals','die','einfache','Handarbeit','m\u00fchelos'],
-    valid:[['Dampfmaschinen','ersetzten','damals','die','einfache','Handarbeit','m\u00fchelos']], punct:'.' },
-  { parts:['die','moderne','KI','ersetzt','heute','den','menschlichen','Intellekt'],
+  { row:['_','_','damals','_','_','Handarbeit','_'],
+    parts:['Dampfmaschinen','ersetzten','die','einfache','mühelos'],
+    valid:[['Dampfmaschinen','ersetzten','damals','die','einfache','Handarbeit','mühelos']], punct:'.' },
+  { row:['_','moderne','_','_','heute','_','menschlichen','_'],
+    parts:['die','KI','ersetzt','den','Intellekt'],
     valid:[['die','moderne','KI','ersetzt','heute','den','menschlichen','Intellekt']], punct:'.' },
-  { parts:['die','alte','Weisheit','bewahrheitet','sich','heute','wie','nie'],
+  { row:['_','alte','_','_','_','heute','wie','_'],
+    parts:['die','Weisheit','bewahrheitet','sich','nie'],
     valid:[['die','alte','Weisheit','bewahrheitet','sich','heute','wie','nie']], punct:'.' },
-  { parts:['\u00fcberall','herrscht','ein','gro\u00dfer','Mangel','an','arbeitenden','H\u00e4nden'],
-    valid:[['\u00fcberall','herrscht','ein','gro\u00dfer','Mangel','an','arbeitenden','H\u00e4nden']], punct:'.' },
-  { parts:['Karim','kennt','den','Zweifel','an','seiner','Wahl','nicht','mehr'],
+  { row:['_','_','ein','_','Mangel','_','arbeitenden','_'],
+    parts:['überall','herrscht','großer','an','Händen'],
+    valid:[['überall','herrscht','ein','großer','Mangel','an','arbeitenden','Händen']], punct:'.' },
+  { row:['_','_','den','_','an','_','Wahl','_','_'],
+    parts:['Karim','kennt','Zweifel','seiner','nicht','mehr'],
     valid:[['Karim','kennt','den','Zweifel','an','seiner','Wahl','nicht','mehr']], punct:'.' }
 ];
 
@@ -957,6 +974,7 @@ function sbCheckAuto(idx) {
 
 
 function sbShowSolution(idx) {
+  if (satzbauData[idx].row) { sbShowSolutionGap(idx); return; }
   var bank = document.getElementById('sb-bank-' + idx);
   var row  = document.getElementById('sb-row-' + idx);
   var fb   = document.getElementById('sb-fb-' + idx);
@@ -983,6 +1001,7 @@ function sbShowSolution(idx) {
   if (fb) { fb.className = 'satzbau-feedback correct'; fb.textContent = '\u2713 Korrekt!'; }
 }
 function sbResetOne(idx) {
+  if (satzbauData[idx].row) { sbResetOneGap(idx); return; }
   var bank = document.getElementById('sb-bank-' + idx);
   var row  = document.getElementById('sb-row-' + idx);
   var fb   = document.getElementById('sb-fb-' + idx);
@@ -1008,6 +1027,148 @@ function sbCheckAllDone() {
   if (allOk) timerStop(5);
 }
 
+/* FB-SATZBAU-GERUEST-JS */
+function sbGapPositions(row) {
+  return Array.from(row.children).filter(function(n){
+    return n.classList.contains('sb-gap') || n.classList.contains('chip');
+  });
+}
+function sbGapChipOf(pos) {
+  return pos.classList.contains('sb-gap') ? pos.querySelector('.chip') : pos;
+}
+function sbGapUpdateCaps(row) {
+  sbGapPositions(row).forEach(function(pos, i){
+    var c = sbGapChipOf(pos);
+    if (!c) return;
+    var orig = c.dataset.orig;
+    var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase()
+                && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+    if (isProper) c.textContent = orig;
+    else c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+  });
+}
+function sbGapSequence(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  var seq = [], complete = true;
+  sbGapPositions(row).forEach(function(pos){
+    var c = sbGapChipOf(pos);
+    if (c) seq.push(c.dataset.orig); else complete = false;
+  });
+  return { seq: seq, complete: complete };
+}
+function sbGapClearMarks(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+  row.classList.remove('correct','incorrect');
+  var p = row.querySelector('.sb-punkt'); if (p) p.parentNode.removeChild(p);
+}
+function sbGapAfterChange(idx) {
+  var row = document.getElementById('sb-row-' + idx);
+  sbGapUpdateCaps(row);
+  var fb  = document.getElementById('sb-fb-'  + idx);
+  var info = sbGapSequence(idx);
+  if (!info.complete) { sbGapClearMarks(idx); fb.textContent = ''; return; }
+  setTimeout(function(){
+    if (typeof timerAutoStart === 'function' && typeof SBTAB !== 'undefined') { try { timerAutoStart(SBTAB); } catch(e){} }
+    var fresh = sbGapSequence(idx);
+    var ok = satzbauData[idx].valid.some(function(v){
+      return JSON.stringify(v) === JSON.stringify(fresh.seq);
+    });
+    var p = row.querySelector('.sb-punkt'); if (p) p.parentNode.removeChild(p);
+    if (ok) {
+      row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('incorrect'); c.classList.add('correct'); });
+      var punkt = document.createElement('span');
+      punkt.className = 'sb-punkt';
+      punkt.textContent = satzbauData[idx].punct || '.';
+      row.appendChild(punkt);
+      row.classList.add('correct'); row.classList.remove('incorrect');
+      fb.className = 'satzbau-feedback correct';
+      fb.textContent = '\u2713 Korrekt!';
+      if (typeof sbCheckAllDone === 'function') { try { sbCheckAllDone(); } catch(e){} }
+    } else {
+      row.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('correct','incorrect'); });
+      row.querySelectorAll('.sb-gap .chip').forEach(function(c){ c.classList.add('incorrect'); });
+      row.classList.add('incorrect'); row.classList.remove('correct');
+      fb.className = 'satzbau-feedback incorrect';
+      fb.textContent = '\u2717 Noch nicht richtig \u2013 verschiebe die W\u00f6rter!';
+    }
+  }, 450);
+}
+function sbGapMakeLocked(word) {
+  var chip = document.createElement('div');
+  chip.className = 'chip sb-locked';
+  chip.textContent = word;
+  chip.dataset.orig = word;
+  chip.dataset.locked = '1';
+  return chip;
+}
+function sbGapMakeSlot(idx) {
+  var slot = document.createElement('div');
+  slot.className = 'sb-gap';
+  slot.addEventListener('dragover', function(e){ e.preventDefault(); if (sbDragged) slot.classList.add('drag-over'); });
+  slot.addEventListener('dragleave', function(){ slot.classList.remove('drag-over'); });
+  slot.addEventListener('drop', function(e){
+    e.preventDefault();
+    slot.classList.remove('drag-over');
+    if (!sbDragged) return;
+    var occupant = slot.querySelector('.chip');
+    if (occupant && occupant !== sbDragged) {
+      document.getElementById('sb-bank-' + idx).appendChild(occupant);
+    }
+    slot.appendChild(sbDragged);
+    sbDragged = null;
+    sbGapAfterChange(idx);
+  });
+  return slot;
+}
+function sbGapRegisterBank(bank, idx) {
+  bank.addEventListener('dragover', function(e){ e.preventDefault(); });
+  bank.addEventListener('drop', function(e){
+    e.preventDefault();
+    if (!sbDragged) return;
+    bank.appendChild(sbDragged);
+    sbDragged = null;
+    sbGapAfterChange(idx);
+  });
+}
+function sbBuildGap(ex, idx, bank, row) {
+  var mov = ex.parts.slice();
+  for (var i = mov.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = mov[i]; mov[i] = mov[j]; mov[j] = tmp;
+  }
+  mov.forEach(function(word){ bank.appendChild(sbMakeChip(word, idx)); });
+  ex.row.forEach(function(tok){
+    row.appendChild(tok === '_' ? sbGapMakeSlot(idx) : sbGapMakeLocked(tok));
+  });
+  sbGapRegisterBank(bank, idx);
+}
+function sbResetOneGap(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var fb   = document.getElementById('sb-fb-'   + idx);
+  while (bank.firstChild) bank.removeChild(bank.firstChild);
+  while (row.firstChild)  row.removeChild(row.firstChild);
+  fb.textContent = ''; fb.className = 'satzbau-feedback';
+  sbBuildGap(satzbauData[idx], idx, bank, row);
+}
+function sbShowSolutionGap(idx) {
+  var bank = document.getElementById('sb-bank-' + idx);
+  var row  = document.getElementById('sb-row-'  + idx);
+  var sol  = satzbauData[idx].valid[0];
+  var pool = {};
+  bank.querySelectorAll('.chip').forEach(function(c){ pool[c.dataset.orig] = c; });
+  row.querySelectorAll('.sb-gap .chip').forEach(function(c){ pool[c.dataset.orig] = c; });
+  sbGapPositions(row).forEach(function(pos, k){
+    if (!pos.classList.contains('sb-gap')) return;
+    var chip = pool[sol[k]];
+    if (chip) { while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(chip); delete pool[sol[k]]; }
+  });
+  sbGapAfterChange(idx);
+}
+/* FB-SATZBAU-GERUEST-JS-END */
+
+
 function initSatzbau() {
   satzbauData.forEach(function(ex, idx) {
     var bank = document.getElementById('sb-bank-' + idx);
@@ -1015,7 +1176,10 @@ function initSatzbau() {
     if (!bank || !row) return;
     bank.innerHTML = '';
     row.innerHTML = '';
-    var parts = ex.parts.slice();
+    if (ex.row) { /*FB-GERUEST-INIT*/
+      sbBuildGap(ex, idx, bank, row);
+    } else {
+      var parts = ex.parts.slice();
     for (var i = parts.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
       var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
@@ -1023,6 +1187,7 @@ function initSatzbau() {
     parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
     sbRegisterZone(bank, idx);
     sbRegisterZone(row,  idx);
+    }
     var item = bank.parentElement;
     if (!item.querySelector('[data-sb-btns]')) {
       var btnRow = document.createElement('div');

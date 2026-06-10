@@ -1607,6 +1607,7 @@ function syncWordBankChips() {
 // ────────────────────────────────────────────────────────────────────────────
 </script>
 
+
 <script>
 /* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
    hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
@@ -1732,6 +1733,9 @@ function syncWordBankChips() {
   function ensureButtons(i){
     if (document.getElementById("sb-btns-" + i)) return;
     var anchor = fbEl(i) || rowEl(i); if (!anchor) return;
+    var item = anchor.closest ? anchor.closest(".satzbau-item") : null;
+    if (item && [].some.call(item.querySelectorAll("button"), function(b){
+      return /(Lösen|Lösung|Neustart)/.test(b.textContent); })) return;  // native Buttons vorhanden
     var box = document.createElement("div");
     box.id = "sb-btns-" + i;
     box.style.cssText = "display:flex;gap:8px;margin:6px 0 14px 0;";

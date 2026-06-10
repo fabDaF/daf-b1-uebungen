@@ -178,6 +178,13 @@ input.blank.wrong { border-bottom-color: #e74c3c; color: #e74c3c; background: #f
 .wort-chip { padding:5px 14px; border-radius:20px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-size:0.87em; font-weight:600; cursor:pointer; border:none; transition:opacity 0.2s,transform 0.12s; user-select:none; }
 .wort-chip:hover:not(.used) { transform:translateY(-2px); box-shadow:0 4px 10px rgba(102,126,234,0.35); }
 .wort-chip.used { opacity:0.22; cursor:default; pointer-events:none; }
+
+/* ── Gerüst-Modus (B1+): sichtbare Lücken + feste Anker ── */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
 </style>
 </head>
 <body>
@@ -221,9 +228,9 @@ input.blank.wrong { border-bottom-color: #e74c3c; color: #e74c3c; background: #f
 
                 <p>Nichts davon hatte mit ihren Filmen zu tun. Ihr Ruhm — was sie öffentlich war — schien sich auf den Hund, die Schwester, die Adresse zu konzentrieren. Karim klappte die Zeitschrift zu.</p>
 
-                <p>Am Abend erzählte er Stefan davon, am Telefon. „Ich verstehe das nicht", sagte Karim. „Wer enthüllt die Schule einer Lehrerin? Wer schreibt darüber als wäre es Nachrichten?“</p>
+                <p>Am Abend erzählte er Stefan davon, am Telefon. „Ich verstehe das nicht“, sagte Karim. „Wer enthüllt die Schule einer Lehrerin? Wer schreibt darüber als wäre es Nachrichten?“</p>
 
-                <p class="dialog">„Skandale verkaufen besser als Wohltätigkeit", sagte Stefan. „Das war schon immer so. Selbst wenn die Schauspielerin Projekte für Frauen in Not unterstützt — das steht klein, hinten.“</p>
+                <p class="dialog">„Skandale verkaufen besser als Wohltätigkeit“, sagte Stefan. „Das war schon immer so. Selbst wenn die Schauspielerin Projekte für Frauen in Not unterstützt — das steht klein, hinten.“</p>
 
                 <p>„Sollte man so jemanden nicht schützen?“</p>
 
@@ -231,7 +238,7 @@ input.blank.wrong { border-bottom-color: #e74c3c; color: #e74c3c; background: #f
 
                 <p>Karim dachte an seine Schwester, die zu Hause in Casablanca als Lehrerin arbeitet. Niemand interessierte sich für ihre Adresse. Sie konnte morgens zur Schule gehen und niemand fragte, wer sie war.</p>
 
-                <p>„Vielleicht", sagte Karim leise, „ist das ein Privileg, das man erst bemerkt, wenn andere es nicht haben.“</p>
+                <p>„Vielleicht“, sagte Karim leise, „ist das ein Privileg, das man erst bemerkt, wenn andere es nicht haben.“</p>
 
                 <p>Stefan lachte. „Du wirst philosophisch in deinem Wartezimmer.“</p>
 
@@ -516,13 +523,27 @@ function resetLuecke() {
 }
 
 var satzbauData = [
-    {"parts":["die", "Zeitung", "enthüllt", "Details", "aus", "dem", "Privatleben"],"valid":[["die", "Zeitung", "enthüllt", "Details", "aus", "dem", "Privatleben"]],"punct":"."},
-    {"parts":["sie", "schützt", "ihre", "Privatsphäre", "sehr", "konsequent"],"valid":[["sie", "schützt", "ihre", "Privatsphäre", "sehr", "konsequent"]],"punct":"."},
-    {"parts":["er", "nutzt", "seinen", "Ruhm", "für", "soziale", "Zwecke"],"valid":[["er", "nutzt", "seinen", "Ruhm", "für", "soziale", "Zwecke"]],"punct":"."},
-    {"parts":["die", "Medien", "beeinflussen", "das", "öffentliche", "Bild", "stark"],"valid":[["die", "Medien", "beeinflussen", "das", "öffentliche", "Bild", "stark"]],"punct":"."},
-    {"parts":["sie", "unterstützt", "viele", "Wohltätigkeitsprojekte"],"valid":[["sie", "unterstützt", "viele", "Wohltätigkeitsprojekte"]],"punct":"."},
-    {"parts":["er", "lebt", "ein", "sehr", "öffentliches", "Leben"],"valid":[["er", "lebt", "ein", "sehr", "öffentliches", "Leben"]],"punct":"."},
-    {"parts":["die", "Schlagzeilen", "zeigen", "nicht", "immer", "die", "Wahrheit"],"valid":[["die", "Schlagzeilen", "zeigen", "nicht", "immer", "die", "Wahrheit"]],"punct":"."}
+  { parts: ['die', 'Zeitung', 'enthüllt', 'Details', 'aus', 'dem', 'Privatleben', ',', 'die', 'der', 'Star', 'geheim', 'halten', 'wollte'],
+    valid: [['die', 'Zeitung', 'enthüllt', 'Details', 'aus', 'dem', 'Privatleben', ',', 'die', 'der', 'Star', 'geheim', 'halten', 'wollte']],
+    punct: '.' },
+  { parts: ['sie', 'schützt', 'ihre', 'Privatsphäre', 'sehr', 'konsequent', ',', 'weil', 'die', 'Presse', 'sie', 'ständig', 'verfolgt'],
+    valid: [['sie', 'schützt', 'ihre', 'Privatsphäre', 'sehr', 'konsequent', ',', 'weil', 'die', 'Presse', 'sie', 'ständig', 'verfolgt']],
+    punct: '.' },
+  { parts: ['er', 'nutzt', 'seinen', 'Ruhm', 'für', 'soziale', 'Zwecke', ',', 'weil', 'er', 'anderen', 'Menschen', 'helfen', 'möchte'],
+    valid: [['er', 'nutzt', 'seinen', 'Ruhm', 'für', 'soziale', 'Zwecke', ',', 'weil', 'er', 'anderen', 'Menschen', 'helfen', 'möchte']],
+    punct: '.' },
+  { parts: ['die', 'Medien', 'beeinflussen', 'das', 'öffentliche', 'Bild', 'stark', ',', 'das', 'die', 'Fans', 'von', 'ihren', 'Stars', 'haben'],
+    valid: [['die', 'Medien', 'beeinflussen', 'das', 'öffentliche', 'Bild', 'stark', ',', 'das', 'die', 'Fans', 'von', 'ihren', 'Stars', 'haben']],
+    punct: '.' },
+  { parts: ['sie', 'unterstützt', 'viele', 'Wohltätigkeitsprojekte', ',', 'obwohl', 'sie', 'selbst', 'nie', 'darüber', 'in', 'Interviews', 'spricht'],
+    valid: [['sie', 'unterstützt', 'viele', 'Wohltätigkeitsprojekte', ',', 'obwohl', 'sie', 'selbst', 'nie', 'darüber', 'in', 'Interviews', 'spricht']],
+    punct: '.' },
+  { parts: ['er', 'lebt', 'ein', 'sehr', 'öffentliches', 'Leben', ',', 'weil', 'er', 'die', 'Aufmerksamkeit', 'der', 'Kameras', 'genießt'],
+    valid: [['er', 'lebt', 'ein', 'sehr', 'öffentliches', 'Leben', ',', 'weil', 'er', 'die', 'Aufmerksamkeit', 'der', 'Kameras', 'genießt']],
+    punct: '.' },
+  { parts: ['die', 'Schlagzeilen', 'zeigen', 'nicht', 'immer', 'die', 'Wahrheit', ',', 'weil', 'Skandale', 'mehr', 'Zeitungen', 'verkaufen'],
+    valid: [['die', 'Schlagzeilen', 'zeigen', 'nicht', 'immer', 'die', 'Wahrheit', ',', 'weil', 'Skandale', 'mehr', 'Zeitungen', 'verkaufen']],
+    punct: '.' }
 ];
 // ─── SATZBAU (Drag-Drop) ─────────────────────────────────────────────────────
 var sbDragged = null;
@@ -1307,6 +1328,162 @@ function syncWordBankChips() {
 document.addEventListener('DOMContentLoaded', function(){
   buildWordBank(document.getElementById('sec-3'));
 });
+</script>
+
+<script>
+/* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
+   hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
+(function(){
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":4};
+  var SBGAP = [{"i":0,"row":["_","_","_","Details","_","_","Privatleben","_","_","der","_","geheim","_","_"],"parts":["die","Zeitung","enthüllt","aus","dem",",","die","Star","halten","wollte"]},{"i":1,"row":["_","_","_","Privatsphäre","_","_","_","weil","_","Presse","_","ständig","_"],"parts":["sie","schützt","ihre","sehr","konsequent",",","die","sie","verfolgt"]},{"i":2,"row":["_","_","_","Ruhm","_","soziale","_","_","weil","_","_","Menschen","_","_"],"parts":["er","nutzt","seinen","für","Zwecke",",","er","anderen","helfen","möchte"]},{"i":3,"row":["_","_","_","das","_","_","stark","_","_","die","_","_","_","Stars","_"],"parts":["die","Medien","beeinflussen","öffentliche","Bild",",","das","Fans","von","ihren","haben"]},{"i":4,"row":["_","_","_","Wohltätigkeitsprojekte","_","_","sie","_","_","darüber","_","Interviews","_"],"parts":["sie","unterstützt","viele",",","obwohl","selbst","nie","in","spricht"]},{"i":5,"row":["_","_","_","sehr","_","_","_","weil","_","die","_","_","Kameras","_"],"parts":["er","lebt","ein","öffentliches","Leben",",","er","Aufmerksamkeit","der","genießt"]},{"i":6,"row":["_","_","_","_","immer","_","Wahrheit","_","_","Skandale","_","Zeitungen","_"],"parts":["die","Schlagzeilen","zeigen","nicht","die",",","weil","mehr","verkaufen"]}];
+  SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
+    ex.row = g.row; ex.parts = g.parts;
+    if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
+  });
+  if (typeof window.sbDragged === "undefined") window.sbDragged = null;
+  function bankEl(i){ return document.getElementById(CFG.bank + i); }
+  function rowEl(i){ return document.getElementById(CFG.row + i); }
+  function fbEl(i){ return document.getElementById(CFG.fb + i); }
+  function cap(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+  function positions(row){ return Array.from(row.children).filter(function(n){ return n.classList.contains("sb-gap") || n.classList.contains("chip"); }); }
+  function chipOf(pos){ return pos.classList.contains("sb-gap") ? pos.querySelector(".chip") : pos; }
+  function updateCaps(row){ if (!CFG.caps) return;
+    positions(row).forEach(function(pos,i){ var c = chipOf(pos); if (!c) return;
+      var o = c.dataset.orig;
+      var proper = o.charAt(0) === o.charAt(0).toUpperCase() && o.charAt(0) !== o.charAt(0).toLowerCase();
+      c.textContent = proper ? o : (i === 0 ? cap(o) : o); });
+  }
+  function sequence(i){ var row = rowEl(i), seq = [], complete = true;
+    positions(row).forEach(function(pos){ var c = chipOf(pos); if (c) seq.push(c.dataset.orig); else complete = false; });
+    return { seq: seq, complete: complete }; }
+  function clearMarks(i){ var row = rowEl(i);
+    row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+    row.classList.remove("correct","incorrect");
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p); }
+  function afterChange(i){
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i), info = sequence(i);
+    if (!info.complete){ clearMarks(i); if (fb){ fb.textContent=""; fb.className="satzbau-feedback"; } return; }
+    setTimeout(function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var fresh = sequence(i);
+      var ok = satzbauData[i].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(fresh.seq); });
+      var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+      if (ok){
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("incorrect"); c.classList.add("correct"); });
+        var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+        punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+        row.classList.add("correct"); row.classList.remove("incorrect");
+        if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+        if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+      } else {
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+        row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("incorrect"); });
+        row.classList.add("incorrect"); row.classList.remove("correct");
+        if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Noch nicht richtig – verschiebe die Wörter!"; }
+      }
+    }, 450);
+  }
+  function makeChip(word, i){
+    var chip = document.createElement("div");
+    var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
+    chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
+    chip.addEventListener("dragstart", function(e){ window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    if (CFG.click) chip.addEventListener("click", function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var inSlot = chip.closest(".sb-gap");
+      if (inSlot){ bankEl(i).appendChild(chip); afterChange(i); return; }
+      var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
+      if (free){ free.appendChild(chip); afterChange(i); }
+    });
+    return chip;
+  }
+  function makeLocked(word){
+    var chip = document.createElement("div");
+    chip.className = "chip sb-locked"; chip.textContent = word;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.locked = "1";
+    return chip;
+  }
+  function makeSlot(i){
+    var slot = document.createElement("div"); slot.className = "sb-gap";
+    slot.addEventListener("dragover", function(e){ e.preventDefault(); if (window.sbDragged) slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
+    slot.addEventListener("drop", function(e){
+      e.preventDefault(); slot.classList.remove("drag-over");
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      var occ = slot.querySelector(".chip");
+      if (occ && occ !== d) bankEl(i).appendChild(occ);
+      slot.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+    return slot;
+  }
+  function registerBank(bank, i){
+    bank.addEventListener("dragover", function(e){ e.preventDefault(); });
+    bank.addEventListener("drop", function(e){
+      e.preventDefault(); var d = window.sbDragged;
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      bank.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+  }
+  function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
+    var c = el.cloneNode(false); el.parentNode.replaceChild(c, el); return c; }
+  function rebuild(i){
+    var ex = satzbauData[i]; if (!ex || !ex.row) return;
+    var bank = freshEl(CFG.bank + i), row = freshEl(CFG.row + i);
+    if (!bank || !row) return;
+    var fb = fbEl(i); if (fb){ fb.textContent = ""; fb.className = "satzbau-feedback"; }
+    var mov = ex.parts.slice();
+    for (var k = mov.length - 1; k > 0; k--){ var j = Math.floor(Math.random()*(k+1)); var t = mov[k]; mov[k] = mov[j]; mov[j] = t; }
+    mov.forEach(function(w){ bank.appendChild(makeChip(w, i)); });
+    ex.row.forEach(function(tok){ row.appendChild(tok === "_" ? makeSlot(i) : makeLocked(tok)); });
+    registerBank(bank, i);
+    ensureButtons(i);
+  }
+  function rebuildAll(){ satzbauData.forEach(function(ex,i){ if (ex.row) rebuild(i); }); }
+  function showSol(i){
+    rebuild(i);
+    var row = rowEl(i), bank = bankEl(i), sol = satzbauData[i].valid[0];
+    var pool = Array.from(bank.querySelectorAll(".chip"));
+    positions(row).forEach(function(pos,k){
+      if (!pos.classList.contains("sb-gap")) return;
+      var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
+      if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
+    });
+    afterChange(i);
+  }
+  function ensureButtons(i){
+    if (document.getElementById("sb-btns-" + i)) return;
+    var anchor = fbEl(i) || rowEl(i); if (!anchor) return;
+    var box = document.createElement("div");
+    box.id = "sb-btns-" + i;
+    box.style.cssText = "display:flex;gap:8px;margin:6px 0 14px 0;";
+    var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn"; b1.textContent = "Lösen";
+    b1.addEventListener("click", function(){ showSol(i); });
+    var b2 = document.createElement("button"); b2.type = "button"; b2.className = "btn"; b2.textContent = "↺ Neustart";
+    b2.addEventListener("click", function(){ rebuild(i); });
+    box.appendChild(b1); box.appendChild(b2);
+    anchor.parentNode.insertBefore(box, anchor.nextSibling);
+  }
+  ["initSatzbau","buildSatzbau"].forEach(function(fn){
+    if (typeof window[fn] === "function"){ var o = window[fn];
+      window[fn] = function(){ o.apply(this, arguments); rebuildAll(); }; }
+  });
+  if (typeof window.sbReset === "function" && window.sbReset.length === 0){
+    var orall = window.sbReset;
+    window.sbReset = function(){ orall.apply(this, arguments); rebuildAll(); };
+  }
+  if (typeof window.sbResetOne === "function"){
+    var orst = window.sbResetOne;
+    window.sbResetOne = function(i){ if (satzbauData[i] && satzbauData[i].row){ rebuild(i); return; } orst.apply(this, arguments); };
+  }
+  if (typeof window.sbShowSolution === "function"){
+    var osol = window.sbShowSolution;
+    window.sbShowSolution = function(i){ if (satzbauData[i] && satzbauData[i].row){ showSol(i); return; } osol.apply(this, arguments); };
+  }
+  var probe = rowEl(0) || bankEl(0);
+  if (probe && probe.children.length) rebuildAll();
+})();
 </script>
 </body>
 </html>

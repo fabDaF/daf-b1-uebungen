@@ -1697,6 +1697,7 @@ function syncWordBankChips() {
 
 
 
+
 <script>
 /* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
    hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
@@ -1754,6 +1755,10 @@ function syncWordBankChips() {
   /* Geführter Modus (B1, 2026-06-10): Sofort-Feedback pro Chip-Platzierung.
      Richtig (konsistent mit mind. einer valid-Reihenfolge) -> grün + fixiert.
      Falsch -> rot + Rücksprung in die Bank nach 800 ms. */
+  function toBank(i, chip){
+    chip.textContent = chip.dataset.orig;  // Kleinschreibung wiederherstellen — Bank darf den Satzanfang nicht verraten
+    bankEl(i).appendChild(chip);
+  }
   function consistent(i){
     var pos = positions(rowEl(i));
     var v = satzbauData[i].valid;
@@ -1784,7 +1789,7 @@ function syncWordBankChips() {
       if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Das passt hier nicht!"; }
       setTimeout(function(){
         chip.classList.remove("incorrect");
-        if (!chip.dataset.fixed && chip.closest(".sb-gap")) bankEl(i).appendChild(chip);
+        if (!chip.dataset.fixed && chip.closest(".sb-gap")) toBank(i, chip);
         updateCaps(rowEl(i));
         if (fb && /incorrect/.test(fb.className)){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
       }, 800);
@@ -1800,7 +1805,7 @@ function syncWordBankChips() {
       if (chip.dataset.fixed) return;
       if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
       var inSlot = chip.closest(".sb-gap");
-      if (inSlot){ bankEl(i).appendChild(chip); updateCaps(rowEl(i)); return; }
+      if (inSlot){ toBank(i, chip); updateCaps(rowEl(i)); return; }
       var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
       if (free){ free.appendChild(chip); placeJudge(i, chip); }
     });
@@ -1829,7 +1834,7 @@ function syncWordBankChips() {
     bank.addEventListener("drop", function(e){
       e.preventDefault(); var d = window.sbDragged;
       if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
-      bank.appendChild(d); window.sbDragged = null; updateCaps(rowEl(i));
+      toBank(i, d); window.sbDragged = null; updateCaps(rowEl(i));
     });
   }
   function freshEl(id){ var el = document.getElementById(id); if (!el) return null;

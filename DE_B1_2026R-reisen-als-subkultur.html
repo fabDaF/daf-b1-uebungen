@@ -928,8 +928,8 @@ function resetLuecken() {
 
 // ===== SATZBAU =====
 var satzbauData = [
-  { parts: ['Karim', 'sitzt', 'gerade', 'im', 'Hostel', 'in', 'Budapest', ',', 'wo', 'er', 'andere', 'Reisende', 'aus', 'aller', 'Welt', 'trifft'],
-    valid: [['Karim', 'sitzt', 'gerade', 'im', 'Hostel', 'in', 'Budapest', ',', 'wo', 'er', 'andere', 'Reisende', 'aus', 'aller', 'Welt', 'trifft']],
+  { parts: ['Karim', 'sitzt', 'gerade', 'im', 'Hostel', 'in', 'Budapest', ',', 'wo', 'er', 'andere', 'Reisende', 'trifft'],
+    valid: [['Karim', 'sitzt', 'gerade', 'im', 'Hostel', 'in', 'Budapest', ',', 'wo', 'er', 'andere', 'Reisende', 'trifft']],
     punct: '.' },
   { parts: ['die', 'Subkultur', 'der', 'Backpacker', 'ist', 'eine', 'Philosophie', ',', 'die', 'Freiheit', 'über', 'Komfort', 'stellt'],
     valid: [['die', 'Subkultur', 'der', 'Backpacker', 'ist', 'eine', 'Philosophie', ',', 'die', 'Freiheit', 'über', 'Komfort', 'stellt']],
@@ -1934,12 +1934,14 @@ function syncWordBankChips() {
 </script>
 
 
+
+
 <script>
 /* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
    hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
 (function(){
   var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":4};
-  var SBGAP = [{"i":0,"row":["_","_","_","im","_","_","Budapest","_","_","_","andere","_","_","_","Welt","_"],"parts":["Karim","sitzt","gerade","Hostel","in",",","wo","er","Reisende","aus","aller","trifft"]},{"i":1,"row":["_","_","_","Backpacker","_","_","Philosophie","_","die","_","_","Komfort","_"],"parts":["die","Subkultur","der","ist","eine",",","Freiheit","über","stellt"]},{"i":2,"row":["_","_","_","der","_","_","Sofia","_","die","_","_","einmal","_","_"],"parts":["Elena","kommt","aus","schönen","Stadt",",","Karim","unbedingt","besuchen","möchte"]},{"i":3,"row":["_","_","_","Wert","_","Reise","_","_","_","_","das","_","_","Hause","_"],"parts":["man","misst","den","einer","nicht","am","Gehalt",",","man","zu","verdient"]}];
+  var SBGAP = [{"i":0,"row":["_","_","_","im","_","in","_","_","_","er","_","Reisende","_"],"parts":["Karim","sitzt","gerade","Hostel","Budapest",",","wo","andere","trifft"]},{"i":1,"row":["_","_","_","Backpacker","_","_","Philosophie","_","die","_","_","Komfort","_"],"parts":["die","Subkultur","der","ist","eine",",","Freiheit","über","stellt"]},{"i":2,"row":["_","_","_","der","_","_","Sofia","_","die","_","_","einmal","_","_"],"parts":["Elena","kommt","aus","schönen","Stadt",",","Karim","unbedingt","besuchen","möchte"]},{"i":3,"row":["_","_","_","Wert","_","Reise","_","_","_","_","das","_","_","Hause","_"],"parts":["man","misst","den","einer","nicht","am","Gehalt",",","man","zu","verdient"]}];
   SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
     ex.row = g.row; ex.parts = g.parts;
     if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
@@ -1988,18 +1990,58 @@ function syncWordBankChips() {
       }
     }, 450);
   }
+  /* Geführter Modus (B1, 2026-06-10): Sofort-Feedback pro Chip-Platzierung.
+     Richtig (konsistent mit mind. einer valid-Reihenfolge) -> grün + fixiert.
+     Falsch -> rot + Rücksprung in die Bank nach 800 ms. */
+  function consistent(i){
+    var pos = positions(rowEl(i));
+    var v = satzbauData[i].valid;
+    return v.some(function(o){
+      for (var k = 0; k < pos.length; k++){ var c = chipOf(pos[k]); if (c && c.dataset.orig !== o[k]) return false; }
+      return true; });
+  }
+  function finishRow(i){
+    var row = rowEl(i), fb = fbEl(i);
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+    var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+    punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+    row.classList.add("correct"); row.classList.remove("incorrect");
+    if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+    if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+  }
+  function placeJudge(i, chip){
+    if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i);
+    if (consistent(i)){
+      chip.classList.remove("incorrect"); chip.classList.add("correct");
+      chip.dataset.fixed = "1"; chip.draggable = false;
+      if (sequence(i).complete){ finishRow(i); }
+      else if (fb){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+    } else {
+      chip.classList.add("incorrect");
+      if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Das passt hier nicht!"; }
+      setTimeout(function(){
+        chip.classList.remove("incorrect");
+        if (!chip.dataset.fixed && chip.closest(".sb-gap")) bankEl(i).appendChild(chip);
+        updateCaps(rowEl(i));
+        if (fb && /incorrect/.test(fb.className)){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+      }, 800);
+    }
+  }
   function makeChip(word, i){
     var chip = document.createElement("div");
     var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
     chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
     chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
-    chip.addEventListener("dragstart", function(e){ window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    chip.addEventListener("dragstart", function(e){ if (chip.dataset.fixed){ e.preventDefault(); return; } window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
     if (CFG.click) chip.addEventListener("click", function(){
+      if (chip.dataset.fixed) return;
       if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
       var inSlot = chip.closest(".sb-gap");
-      if (inSlot){ bankEl(i).appendChild(chip); afterChange(i); return; }
+      if (inSlot){ bankEl(i).appendChild(chip); updateCaps(rowEl(i)); return; }
       var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
-      if (free){ free.appendChild(chip); afterChange(i); }
+      if (free){ free.appendChild(chip); placeJudge(i, chip); }
     });
     return chip;
   }
@@ -2015,10 +2057,9 @@ function syncWordBankChips() {
     slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
     slot.addEventListener("drop", function(e){
       e.preventDefault(); slot.classList.remove("drag-over");
-      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
-      var occ = slot.querySelector(".chip");
-      if (occ && occ !== d) bankEl(i).appendChild(occ);
-      slot.appendChild(d); window.sbDragged = null; afterChange(i);
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      if (slot.querySelector(".chip")) return;  // Lücke schon belegt
+      slot.appendChild(d); window.sbDragged = null; placeJudge(i, d);
     });
     return slot;
   }
@@ -2026,8 +2067,8 @@ function syncWordBankChips() {
     bank.addEventListener("dragover", function(e){ e.preventDefault(); });
     bank.addEventListener("drop", function(e){
       e.preventDefault(); var d = window.sbDragged;
-      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
-      bank.appendChild(d); window.sbDragged = null; afterChange(i);
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      bank.appendChild(d); window.sbDragged = null; updateCaps(rowEl(i));
     });
   }
   function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
@@ -2054,7 +2095,9 @@ function syncWordBankChips() {
       var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
       if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
     });
-    afterChange(i);
+    row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("correct"); c.dataset.fixed = "1"; c.draggable = false; });
+    updateCaps(row);
+    finishRow(i);
   }
   function ensureButtons(i){
     if (document.getElementById("sb-btns-" + i)) return;

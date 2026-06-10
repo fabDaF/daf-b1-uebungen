@@ -693,15 +693,15 @@ var satzbauData = [
   { parts: ['von', 'unserer', 'Wohnung', 'aus', 'sind', 'es', 'nur', 'fünfzig', 'Meter', ',', 'bis', 'man', 'die', 'Haltestelle', 'erreicht'],
     valid: [['von', 'unserer', 'Wohnung', 'aus', 'sind', 'es', 'nur', 'fünfzig', 'Meter', ',', 'bis', 'man', 'die', 'Haltestelle', 'erreicht']],
     punct: '.' },
-  { parts: ['von', 'mir', 'aus', 'können', 'wir', 'noch', 'einen', 'Nachtisch', 'bestellen', ',', 'wenn', 'du', 'danach', 'noch', 'Hunger', 'hast'],
-    valid: [['von', 'mir', 'aus', 'können', 'wir', 'noch', 'einen', 'Nachtisch', 'bestellen', ',', 'wenn', 'du', 'danach', 'noch', 'Hunger', 'hast']],
+  { parts: ['von', 'mir', 'aus', 'können', 'wir', 'noch', 'einen', 'Nachtisch', 'bestellen', ',', 'wenn', 'du', 'Hunger', 'hast'],
+    valid: [['von', 'mir', 'aus', 'können', 'wir', 'noch', 'einen', 'Nachtisch', 'bestellen', ',', 'wenn', 'du', 'Hunger', 'hast']],
     punct: '.' },
-  { parts: ['ich', 'muss', 'die', 'Antwort', 'innerhalb', 'von', 'vier', 'Tagen', 'geben', ',', 'obwohl', 'ich', 'noch', 'viele', 'Fragen', 'habe'],
-    valid: [['ich', 'muss', 'die', 'Antwort', 'innerhalb', 'von', 'vier', 'Tagen', 'geben', ',', 'obwohl', 'ich', 'noch', 'viele', 'Fragen', 'habe'],
-      ['innerhalb', 'von', 'vier', 'Tagen', 'muss', 'ich', 'die', 'Antwort', 'geben', ',', 'obwohl', 'ich', 'noch', 'viele', 'Fragen', 'habe']],
+  { parts: ['ich', 'muss', 'die', 'Antwort', 'innerhalb', 'von', 'vier', 'Tagen', 'geben', ',', 'obwohl', 'ich', 'noch', 'Fragen', 'habe'],
+    valid: [['ich', 'muss', 'die', 'Antwort', 'innerhalb', 'von', 'vier', 'Tagen', 'geben', ',', 'obwohl', 'ich', 'noch', 'Fragen', 'habe'],
+      ['innerhalb', 'von', 'vier', 'Tagen', 'muss', 'ich', 'die', 'Antwort', 'geben', ',', 'obwohl', 'ich', 'noch', 'Fragen', 'habe']],
     punct: '.' },
-  { parts: ['vom', 'Fenster', 'aus', 'haben', 'wir', 'eine', 'tolle', 'Aussicht', ',', 'weil', 'das', 'Hotel', 'direkt', 'am', 'See', 'liegt'],
-    valid: [['vom', 'Fenster', 'aus', 'haben', 'wir', 'eine', 'tolle', 'Aussicht', ',', 'weil', 'das', 'Hotel', 'direkt', 'am', 'See', 'liegt']],
+  { parts: ['vom', 'Fenster', 'aus', 'haben', 'wir', 'eine', 'tolle', 'Aussicht', ',', 'weil', 'das', 'Hotel', 'am', 'See', 'liegt'],
+    valid: [['vom', 'Fenster', 'aus', 'haben', 'wir', 'eine', 'tolle', 'Aussicht', ',', 'weil', 'das', 'Hotel', 'am', 'See', 'liegt']],
     punct: '.' },
   { parts: ['innerhalb', 'von', 'drei', 'Tagen', 'muss', 'ich', 'alles', 'erledigen', ',', 'was', 'der', 'Chef', 'mir', 'aufgetragen', 'hat'],
     valid: [['innerhalb', 'von', 'drei', 'Tagen', 'muss', 'ich', 'alles', 'erledigen', ',', 'was', 'der', 'Chef', 'mir', 'aufgetragen', 'hat']],
@@ -1303,12 +1303,14 @@ function syncWordBankChips() {
 </script>
 
 
+
+
 <script>
 /* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
    hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
 (function(){
   var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":3};
-  var SBGAP = [{"i":0,"row":["_","_","Empfehlung","_","_","_","_","Zimmer","_","_","das","_","_","Strand","_"],"parts":["auf","deine","hin","habe","ich","ein","gebucht",",","direkt","am","liegt"]},{"i":1,"row":["_","_","Wohnung","_","_","_","_","fünfzig","_","_","bis","_","_","Haltestelle","_"],"parts":["von","unserer","aus","sind","es","nur","Meter",",","man","die","erreicht"]},{"i":2,"row":["_","_","_","_","wir","_","_","Nachtisch","_","_","_","_","danach","_","Hunger","_"],"parts":["von","mir","aus","können","noch","einen","bestellen",",","wenn","du","noch","hast"]},{"i":3,"row":["_","_","_","_","_","_","_","_","_","_","obwohl","ich","_","viele","Fragen","_"],"parts":["ich","muss","die","Antwort","innerhalb","von","vier","Tagen","geben",",","noch","habe"]},{"i":4,"row":["_","_","_","_","wir","_","_","Aussicht","_","_","das","_","_","_","See","_"],"parts":["vom","Fenster","aus","haben","eine","tolle",",","weil","Hotel","direkt","am","liegt"]},{"i":5,"row":["_","_","_","Tagen","_","_","alles","_","_","_","der","_","mir","_","_"],"parts":["innerhalb","von","drei","muss","ich","erledigen",",","was","Chef","aufgetragen","hat"]},{"i":6,"row":["_","_","Sommer","_","_","noch","_","_","_","_","neue","_","endlich","_","_"],"parts":["bis","zum","müssen","wir","warten",",","bevor","das","Schwimmbad","eröffnet","wird"]},{"i":7,"row":["_","_","Bauarbeiten","_","_","Bahnhof","_","_","_","_","Reisenden","_","Bus","_","_"],"parts":["aufgrund","von","bleibt","der","geschlossen",",","sodass","die","den","nehmen","müssen"]}];
+  var SBGAP = [{"i":0,"row":["_","_","Empfehlung","_","_","_","_","Zimmer","_","_","das","_","_","Strand","_"],"parts":["auf","deine","hin","habe","ich","ein","gebucht",",","direkt","am","liegt"]},{"i":1,"row":["_","_","Wohnung","_","_","_","_","fünfzig","_","_","bis","_","_","Haltestelle","_"],"parts":["von","unserer","aus","sind","es","nur","Meter",",","man","die","erreicht"]},{"i":2,"row":["_","_","_","_","wir","_","_","Nachtisch","_","_","wenn","_","Hunger","_"],"parts":["von","mir","aus","können","noch","einen","bestellen",",","du","hast"]},{"i":3,"row":["_","_","_","_","_","_","_","_","_","_","obwohl","ich","noch","Fragen","_"],"parts":["ich","muss","die","Antwort","innerhalb","von","vier","Tagen","geben",",","habe"]},{"i":4,"row":["_","_","_","_","wir","_","_","Aussicht","_","_","das","_","_","See","_"],"parts":["vom","Fenster","aus","haben","eine","tolle",",","weil","Hotel","am","liegt"]},{"i":5,"row":["_","_","_","Tagen","_","_","alles","_","_","_","der","_","mir","_","_"],"parts":["innerhalb","von","drei","muss","ich","erledigen",",","was","Chef","aufgetragen","hat"]},{"i":6,"row":["_","_","Sommer","_","_","noch","_","_","_","_","neue","_","endlich","_","_"],"parts":["bis","zum","müssen","wir","warten",",","bevor","das","Schwimmbad","eröffnet","wird"]},{"i":7,"row":["_","_","Bauarbeiten","_","_","Bahnhof","_","_","_","_","Reisenden","_","Bus","_","_"],"parts":["aufgrund","von","bleibt","der","geschlossen",",","sodass","die","den","nehmen","müssen"]}];
   SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
     ex.row = g.row; ex.parts = g.parts;
     if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
@@ -1357,18 +1359,58 @@ function syncWordBankChips() {
       }
     }, 450);
   }
+  /* Geführter Modus (B1, 2026-06-10): Sofort-Feedback pro Chip-Platzierung.
+     Richtig (konsistent mit mind. einer valid-Reihenfolge) -> grün + fixiert.
+     Falsch -> rot + Rücksprung in die Bank nach 800 ms. */
+  function consistent(i){
+    var pos = positions(rowEl(i));
+    var v = satzbauData[i].valid;
+    return v.some(function(o){
+      for (var k = 0; k < pos.length; k++){ var c = chipOf(pos[k]); if (c && c.dataset.orig !== o[k]) return false; }
+      return true; });
+  }
+  function finishRow(i){
+    var row = rowEl(i), fb = fbEl(i);
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+    var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+    punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+    row.classList.add("correct"); row.classList.remove("incorrect");
+    if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+    if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+  }
+  function placeJudge(i, chip){
+    if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i);
+    if (consistent(i)){
+      chip.classList.remove("incorrect"); chip.classList.add("correct");
+      chip.dataset.fixed = "1"; chip.draggable = false;
+      if (sequence(i).complete){ finishRow(i); }
+      else if (fb){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+    } else {
+      chip.classList.add("incorrect");
+      if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Das passt hier nicht!"; }
+      setTimeout(function(){
+        chip.classList.remove("incorrect");
+        if (!chip.dataset.fixed && chip.closest(".sb-gap")) bankEl(i).appendChild(chip);
+        updateCaps(rowEl(i));
+        if (fb && /incorrect/.test(fb.className)){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+      }, 800);
+    }
+  }
   function makeChip(word, i){
     var chip = document.createElement("div");
     var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
     chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
     chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
-    chip.addEventListener("dragstart", function(e){ window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    chip.addEventListener("dragstart", function(e){ if (chip.dataset.fixed){ e.preventDefault(); return; } window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
     if (CFG.click) chip.addEventListener("click", function(){
+      if (chip.dataset.fixed) return;
       if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
       var inSlot = chip.closest(".sb-gap");
-      if (inSlot){ bankEl(i).appendChild(chip); afterChange(i); return; }
+      if (inSlot){ bankEl(i).appendChild(chip); updateCaps(rowEl(i)); return; }
       var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
-      if (free){ free.appendChild(chip); afterChange(i); }
+      if (free){ free.appendChild(chip); placeJudge(i, chip); }
     });
     return chip;
   }
@@ -1384,10 +1426,9 @@ function syncWordBankChips() {
     slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
     slot.addEventListener("drop", function(e){
       e.preventDefault(); slot.classList.remove("drag-over");
-      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
-      var occ = slot.querySelector(".chip");
-      if (occ && occ !== d) bankEl(i).appendChild(occ);
-      slot.appendChild(d); window.sbDragged = null; afterChange(i);
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      if (slot.querySelector(".chip")) return;  // Lücke schon belegt
+      slot.appendChild(d); window.sbDragged = null; placeJudge(i, d);
     });
     return slot;
   }
@@ -1395,8 +1436,8 @@ function syncWordBankChips() {
     bank.addEventListener("dragover", function(e){ e.preventDefault(); });
     bank.addEventListener("drop", function(e){
       e.preventDefault(); var d = window.sbDragged;
-      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
-      bank.appendChild(d); window.sbDragged = null; afterChange(i);
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      bank.appendChild(d); window.sbDragged = null; updateCaps(rowEl(i));
     });
   }
   function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
@@ -1423,7 +1464,9 @@ function syncWordBankChips() {
       var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
       if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
     });
-    afterChange(i);
+    row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("correct"); c.dataset.fixed = "1"; c.draggable = false; });
+    updateCaps(row);
+    finishRow(i);
   }
   function ensureButtons(i){
     if (document.getElementById("sb-btns-" + i)) return;

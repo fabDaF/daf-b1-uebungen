@@ -199,6 +199,13 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .fb-wortbank{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:#f0f0f8;border-radius:10px;min-height:48px;border:1px dashed #bbb;}
 .fb-wortbank-chip{background:#fff;border:2px solid #667eea;color:#667eea;padding:5px 12px;border-radius:14px;font-weight:500;font-size:0.9em;user-select:none;}
 .fb-wortbank-chip.used{opacity:0.35;text-decoration:line-through;}
+
+/* ── Gerüst-Modus (B1+): sichtbare Lücken + feste Anker ── */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
 </style>
 </head>
 <body>
@@ -722,13 +729,27 @@ function resetLuecken() {
 var sbDragged = null;
 
 var satzbauData = [
-    { parts: ['Online-Shopping', 'ist', 'in', 'Deutschland', 'immer', 'beliebter', 'geworden'], valid: [['Online-Shopping', 'ist', 'in', 'Deutschland', 'immer', 'beliebter', 'geworden']], punct: '.' },
-    { parts: ['die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein'], valid: [['die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein']], punct: '.' },
-    { parts: ['du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist'], valid: [['du', 'musst', 'prüfen', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist']], punct: '.' },
-    { parts: ['nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen'], valid: [['nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen']], punct: '.' },
-    { parts: ['die', 'Quittung', 'schützt', 'dich', 'immer', 'gegen', 'Betrug'], valid: [['die', 'Quittung', 'schützt', 'dich', 'immer', 'gegen', 'Betrug']], punct: '.' },
-    { parts: ['auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt'], valid: [['auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt']], punct: '.' },
-    { parts: ['morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da'], valid: [['morgens', 'bestellst', 'du', 'und', 'abends', 'ist', 'das', 'Paket', 'da']], punct: '.' },
+  { parts: ['Online-Shopping', 'ist', 'in', 'Deutschland', 'immer', 'beliebter', 'geworden', ',', 'weil', 'es', 'bequem', 'und', 'zeitsparend', 'ist'],
+    valid: [['Online-Shopping', 'ist', 'in', 'Deutschland', 'immer', 'beliebter', 'geworden', ',', 'weil', 'es', 'bequem', 'und', 'zeitsparend', 'ist']],
+    punct: '.' },
+  { parts: ['die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein', ',', 'damit', 'die', 'Kunden', 'gerne', 'dort', 'einkaufen'],
+    valid: [['die', 'Webseite', 'muss', 'einfach', 'zu', 'benutzen', 'sein', ',', 'damit', 'die', 'Kunden', 'gerne', 'dort', 'einkaufen']],
+    punct: '.' },
+  { parts: ['du', 'musst', 'prüfen', ',', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist', ',', 'bevor', 'du', 'deine', 'Daten', 'eingibst'],
+    valid: [['du', 'musst', 'prüfen', ',', 'ob', 'der', 'Shop', 'vertrauenswürdig', 'ist', ',', 'bevor', 'du', 'deine', 'Daten', 'eingibst']],
+    punct: '.' },
+  { parts: ['nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen', ',', 'die', 'anderen', 'Kunden', 'bei', 'der', 'Entscheidung', 'hilft'],
+    valid: [['nach', 'der', 'Lieferung', 'kann', 'man', 'eine', 'Rezension', 'hinterlassen', ',', 'die', 'anderen', 'Kunden', 'bei', 'der', 'Entscheidung', 'hilft']],
+    punct: '.' },
+  { parts: ['die', 'Quittung', 'schützt', 'dich', 'gegen', 'Betrug', ',', 'falls', 'das', 'Paket', 'niemals', 'bei', 'dir', 'ankommt'],
+    valid: [['die', 'Quittung', 'schützt', 'dich', 'gegen', 'Betrug', ',', 'falls', 'das', 'Paket', 'niemals', 'bei', 'dir', 'ankommt']],
+    punct: '.' },
+  { parts: ['auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt', ',', 'weil', 'das', 'Internet', 'keine', 'Grenzen', 'kennt'],
+    valid: [['auf', 'dem', 'Weltmarkt', 'erreichen', 'Marken', 'die', 'ganze', 'Welt', ',', 'weil', 'das', 'Internet', 'keine', 'Grenzen', 'kennt']],
+    punct: '.' },
+  { parts: ['morgens', 'bestellst', 'du', 'die', 'Ware', ',', 'die', 'abends', 'schon', 'vor', 'deiner', 'Tür', 'steht'],
+    valid: [['morgens', 'bestellst', 'du', 'die', 'Ware', ',', 'die', 'abends', 'schon', 'vor', 'deiner', 'Tür', 'steht']],
+    punct: '.' }
 ];
 
 function getSbCursor() {
@@ -1553,6 +1574,162 @@ function showLoesungWortschatz() {
   });
 })();
 
+</script>
+
+<script>
+/* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
+   hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
+(function(){
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":3};
+  var SBGAP = [{"i":0,"row":["_","_","_","Deutschland","_","beliebter","_","_","_","_","bequem","_","zeitsparend","_"],"parts":["Online-Shopping","ist","in","immer","geworden",",","weil","es","und","ist"]},{"i":1,"row":["_","_","_","einfach","_","_","_","_","_","die","Kunden","gerne","_","_"],"parts":["die","Webseite","muss","zu","benutzen","sein",",","damit","dort","einkaufen"]},{"i":2,"row":["_","_","_","_","ob","_","Shop","_","_","_","_","du","_","Daten","_"],"parts":["du","musst","prüfen",",","der","vertrauenswürdig","ist",",","bevor","deine","eingibst"]},{"i":3,"row":["_","_","Lieferung","_","_","eine","_","_","_","die","_","_","_","_","Entscheidung","_"],"parts":["nach","der","kann","man","Rezension","hinterlassen",",","anderen","Kunden","bei","der","hilft"]},{"i":4,"row":["_","_","_","dich","_","_","_","_","das","Paket","_","_","dir","_"],"parts":["die","Quittung","schützt","gegen","Betrug",",","falls","niemals","bei","ankommt"]},{"i":5,"row":["_","_","Weltmarkt","_","_","_","ganze","_","_","_","das","_","_","Grenzen","_"],"parts":["auf","dem","erreichen","Marken","die","Welt",",","weil","Internet","keine","kennt"]},{"i":6,"row":["_","_","_","die","_","_","die","_","schon","_","_","Tür","_"],"parts":["morgens","bestellst","du","Ware",",","abends","vor","deiner","steht"]}];
+  SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
+    ex.row = g.row; ex.parts = g.parts;
+    if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
+  });
+  if (typeof window.sbDragged === "undefined") window.sbDragged = null;
+  function bankEl(i){ return document.getElementById(CFG.bank + i); }
+  function rowEl(i){ return document.getElementById(CFG.row + i); }
+  function fbEl(i){ return document.getElementById(CFG.fb + i); }
+  function cap(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+  function positions(row){ return Array.from(row.children).filter(function(n){ return n.classList.contains("sb-gap") || n.classList.contains("chip"); }); }
+  function chipOf(pos){ return pos.classList.contains("sb-gap") ? pos.querySelector(".chip") : pos; }
+  function updateCaps(row){ if (!CFG.caps) return;
+    positions(row).forEach(function(pos,i){ var c = chipOf(pos); if (!c) return;
+      var o = c.dataset.orig;
+      var proper = o.charAt(0) === o.charAt(0).toUpperCase() && o.charAt(0) !== o.charAt(0).toLowerCase();
+      c.textContent = proper ? o : (i === 0 ? cap(o) : o); });
+  }
+  function sequence(i){ var row = rowEl(i), seq = [], complete = true;
+    positions(row).forEach(function(pos){ var c = chipOf(pos); if (c) seq.push(c.dataset.orig); else complete = false; });
+    return { seq: seq, complete: complete }; }
+  function clearMarks(i){ var row = rowEl(i);
+    row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+    row.classList.remove("correct","incorrect");
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p); }
+  function afterChange(i){
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i), info = sequence(i);
+    if (!info.complete){ clearMarks(i); if (fb){ fb.textContent=""; fb.className="satzbau-feedback"; } return; }
+    setTimeout(function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var fresh = sequence(i);
+      var ok = satzbauData[i].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(fresh.seq); });
+      var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+      if (ok){
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("incorrect"); c.classList.add("correct"); });
+        var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+        punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+        row.classList.add("correct"); row.classList.remove("incorrect");
+        if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+        if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+      } else {
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+        row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("incorrect"); });
+        row.classList.add("incorrect"); row.classList.remove("correct");
+        if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Noch nicht richtig – verschiebe die Wörter!"; }
+      }
+    }, 450);
+  }
+  function makeChip(word, i){
+    var chip = document.createElement("div");
+    var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
+    chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
+    chip.addEventListener("dragstart", function(e){ window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    if (CFG.click) chip.addEventListener("click", function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var inSlot = chip.closest(".sb-gap");
+      if (inSlot){ bankEl(i).appendChild(chip); afterChange(i); return; }
+      var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
+      if (free){ free.appendChild(chip); afterChange(i); }
+    });
+    return chip;
+  }
+  function makeLocked(word){
+    var chip = document.createElement("div");
+    chip.className = "chip sb-locked"; chip.textContent = word;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.locked = "1";
+    return chip;
+  }
+  function makeSlot(i){
+    var slot = document.createElement("div"); slot.className = "sb-gap";
+    slot.addEventListener("dragover", function(e){ e.preventDefault(); if (window.sbDragged) slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
+    slot.addEventListener("drop", function(e){
+      e.preventDefault(); slot.classList.remove("drag-over");
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      var occ = slot.querySelector(".chip");
+      if (occ && occ !== d) bankEl(i).appendChild(occ);
+      slot.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+    return slot;
+  }
+  function registerBank(bank, i){
+    bank.addEventListener("dragover", function(e){ e.preventDefault(); });
+    bank.addEventListener("drop", function(e){
+      e.preventDefault(); var d = window.sbDragged;
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      bank.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+  }
+  function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
+    var c = el.cloneNode(false); el.parentNode.replaceChild(c, el); return c; }
+  function rebuild(i){
+    var ex = satzbauData[i]; if (!ex || !ex.row) return;
+    var bank = freshEl(CFG.bank + i), row = freshEl(CFG.row + i);
+    if (!bank || !row) return;
+    var fb = fbEl(i); if (fb){ fb.textContent = ""; fb.className = "satzbau-feedback"; }
+    var mov = ex.parts.slice();
+    for (var k = mov.length - 1; k > 0; k--){ var j = Math.floor(Math.random()*(k+1)); var t = mov[k]; mov[k] = mov[j]; mov[j] = t; }
+    mov.forEach(function(w){ bank.appendChild(makeChip(w, i)); });
+    ex.row.forEach(function(tok){ row.appendChild(tok === "_" ? makeSlot(i) : makeLocked(tok)); });
+    registerBank(bank, i);
+    ensureButtons(i);
+  }
+  function rebuildAll(){ satzbauData.forEach(function(ex,i){ if (ex.row) rebuild(i); }); }
+  function showSol(i){
+    rebuild(i);
+    var row = rowEl(i), bank = bankEl(i), sol = satzbauData[i].valid[0];
+    var pool = Array.from(bank.querySelectorAll(".chip"));
+    positions(row).forEach(function(pos,k){
+      if (!pos.classList.contains("sb-gap")) return;
+      var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
+      if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
+    });
+    afterChange(i);
+  }
+  function ensureButtons(i){
+    if (document.getElementById("sb-btns-" + i)) return;
+    var anchor = fbEl(i) || rowEl(i); if (!anchor) return;
+    var box = document.createElement("div");
+    box.id = "sb-btns-" + i;
+    box.style.cssText = "display:flex;gap:8px;margin:6px 0 14px 0;";
+    var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn"; b1.textContent = "Lösen";
+    b1.addEventListener("click", function(){ showSol(i); });
+    var b2 = document.createElement("button"); b2.type = "button"; b2.className = "btn"; b2.textContent = "↺ Neustart";
+    b2.addEventListener("click", function(){ rebuild(i); });
+    box.appendChild(b1); box.appendChild(b2);
+    anchor.parentNode.insertBefore(box, anchor.nextSibling);
+  }
+  ["initSatzbau","buildSatzbau"].forEach(function(fn){
+    if (typeof window[fn] === "function"){ var o = window[fn];
+      window[fn] = function(){ o.apply(this, arguments); rebuildAll(); }; }
+  });
+  if (typeof window.sbReset === "function" && window.sbReset.length === 0){
+    var orall = window.sbReset;
+    window.sbReset = function(){ orall.apply(this, arguments); rebuildAll(); };
+  }
+  if (typeof window.sbResetOne === "function"){
+    var orst = window.sbResetOne;
+    window.sbResetOne = function(i){ if (satzbauData[i] && satzbauData[i].row){ rebuild(i); return; } orst.apply(this, arguments); };
+  }
+  if (typeof window.sbShowSolution === "function"){
+    var osol = window.sbShowSolution;
+    window.sbShowSolution = function(i){ if (satzbauData[i] && satzbauData[i].row){ showSol(i); return; } osol.apply(this, arguments); };
+  }
+  var probe = rowEl(0) || bankEl(0);
+  if (probe && probe.children.length) rebuildAll();
+})();
 </script>
 </body>
 </html>

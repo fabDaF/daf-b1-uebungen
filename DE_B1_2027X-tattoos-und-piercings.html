@@ -478,6 +478,13 @@
 .fb-wortbank{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:#f0f0f8;border-radius:10px;min-height:48px;border:1px dashed #bbb;}
 .fb-wortbank-chip{background:#fff;border:2px solid #667eea;color:#667eea;padding:5px 12px;border-radius:14px;font-weight:500;font-size:0.9em;user-select:none;}
 .fb-wortbank-chip.used{opacity:0.35;text-decoration:line-through;}
+
+/* ── Gerüst-Modus (B1+): sichtbare Lücken + feste Anker ── */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
 </style>
 </head>
 <body>
@@ -1421,17 +1428,37 @@ function initSatzbau() {
 }
 
 var satzbauData = [
-    { parts: ['Tattoos', 'und', 'Piercings', 'sind', 'längst', 'kein', 'Zeichen', 'von', 'Rebellion', 'mehr'], valid: [['Tattoos', 'und', 'Piercings', 'sind', 'längst', 'kein', 'Zeichen', 'von', 'Rebellion', 'mehr']], punct: '.' },
-    { parts: ['Die', 'Geschichte', 'der', 'Tätowierung', 'reicht', 'Tausende', 'von', 'Jahren', 'zurück'], valid: [['Die', 'Geschichte', 'der', 'Tätowierung', 'reicht', 'Tausende', 'von', 'Jahren', 'zurück']], punct: '.' },
-    { parts: ['für', 'viele', 'junge', 'Menschen', 'sind', 'Tattoos', 'nicht', 'nur', 'Mode'], valid: [['für', 'viele', 'junge', 'Menschen', 'sind', 'Tattoos', 'nicht', 'nur', 'Mode']], punct: '.' },
-    { parts: ['Ein', 'Tattoo', 'kann', 'ein', 'Kunstwerk', 'sein', 'das', 'die', 'innere', 'Welt', 'trägt'], valid: [['Ein', 'Tattoo', 'kann', 'ein', 'Kunstwerk', 'sein', 'das', 'die', 'innere', 'Welt', 'trägt']], punct: '.' },
-    { parts: ['Menschen', 'nutzen', 'ihren', 'Körper', 'als', 'Leinwand', 'um', 'ihre', 'Geschichte', 'zu', 'erzählen'], valid: [['Menschen', 'nutzen', 'ihren', 'Körper', 'als', 'Leinwand', 'um', 'ihre', 'Geschichte', 'zu', 'erzählen']], punct: '.' },
-    { parts: ['Piercings', 'werden', 'häufig', 'als', 'experimenteller', 'Weg', 'wahrgenommen', 'die', 'Grenzen', 'zu', 'erforschen'], valid: [['Piercings', 'werden', 'häufig', 'als', 'experimenteller', 'Weg', 'wahrgenommen', 'die', 'Grenzen', 'zu', 'erforschen']], punct: '.' },
-    { parts: ['In', 'manchen', 'Berufsfeldern', 'können', 'Tattoos', 'berufliche', 'Nachteile', 'mit', 'sich', 'bringen'], valid: [['In', 'manchen', 'Berufsfeldern', 'können', 'Tattoos', 'berufliche', 'Nachteile', 'mit', 'sich', 'bringen']], punct: '.' },
-    { parts: ['Die', 'Zukunft', 'wird', 'zeigen', 'ob', 'diese', 'Formen', 'vollständig', 'aufgenommen', 'werden'], valid: [['Die', 'Zukunft', 'wird', 'zeigen', 'ob', 'diese', 'Formen', 'vollständig', 'aufgenommen', 'werden']], punct: '.' },
-    { parts: ['Tattoos', 'und', 'Piercings', 'verbinden', 'Mode', 'Kunst', 'und', 'persönliche', 'Bedeutung'], valid: [['Tattoos', 'und', 'Piercings', 'verbinden', 'Mode', 'Kunst', 'und', 'persönliche', 'Bedeutung']], punct: '.' },
-    { parts: ['Menschen', 'werden', 'weiterhin', 'ihre', 'Geschichte', 'auf', 'ihrer', 'Haut', 'schreiben', 'können'], valid: [['Menschen', 'werden', 'weiterhin', 'ihre', 'Geschichte', 'auf', 'ihrer', 'Haut', 'schreiben', 'können']], punct: '.' }
-  ];
+  { parts: ['Tattoos', 'und', 'Piercings', 'sind', 'kein', 'Zeichen', 'von', 'Rebellion', 'mehr', ',', 'weil', 'sie', 'längst', 'im', 'Mainstream', 'angekommen', 'sind'],
+    valid: [['Tattoos', 'und', 'Piercings', 'sind', 'kein', 'Zeichen', 'von', 'Rebellion', 'mehr', ',', 'weil', 'sie', 'längst', 'im', 'Mainstream', 'angekommen', 'sind']],
+    punct: '.' },
+  { parts: ['die', 'Geschichte', 'der', 'Tätowierung', 'reicht', 'Tausende', 'von', 'Jahren', 'zurück', ',', 'wie', 'archäologische', 'Funde', 'beweisen'],
+    valid: [['die', 'Geschichte', 'der', 'Tätowierung', 'reicht', 'Tausende', 'von', 'Jahren', 'zurück', ',', 'wie', 'archäologische', 'Funde', 'beweisen']],
+    punct: '.' },
+  { parts: ['für', 'viele', 'junge', 'Menschen', 'sind', 'Tattoos', 'nicht', 'nur', 'Mode', ',', 'sondern', 'ein', 'Ausdruck', 'ihrer', 'Persönlichkeit'],
+    valid: [['für', 'viele', 'junge', 'Menschen', 'sind', 'Tattoos', 'nicht', 'nur', 'Mode', ',', 'sondern', 'ein', 'Ausdruck', 'ihrer', 'Persönlichkeit']],
+    punct: '.' },
+  { parts: ['ein', 'Tattoo', 'kann', 'ein', 'Kunstwerk', 'sein', ',', 'das', 'die', 'innere', 'Welt', 'des', 'Trägers', 'zeigt'],
+    valid: [['ein', 'Tattoo', 'kann', 'ein', 'Kunstwerk', 'sein', ',', 'das', 'die', 'innere', 'Welt', 'des', 'Trägers', 'zeigt']],
+    punct: '.' },
+  { parts: ['Menschen', 'nutzen', 'ihren', 'Körper', 'als', 'Leinwand', ',', 'um', 'ihre', 'persönliche', 'Geschichte', 'zu', 'erzählen'],
+    valid: [['Menschen', 'nutzen', 'ihren', 'Körper', 'als', 'Leinwand', ',', 'um', 'ihre', 'persönliche', 'Geschichte', 'zu', 'erzählen']],
+    punct: '.' },
+  { parts: ['Piercings', 'werden', 'als', 'experimenteller', 'Weg', 'wahrgenommen', ',', 'die', 'Grenzen', 'des', 'eigenen', 'Körpers', 'zu', 'erforschen'],
+    valid: [['Piercings', 'werden', 'als', 'experimenteller', 'Weg', 'wahrgenommen', ',', 'die', 'Grenzen', 'des', 'eigenen', 'Körpers', 'zu', 'erforschen']],
+    punct: '.' },
+  { parts: ['in', 'manchen', 'Berufsfeldern', 'können', 'Tattoos', 'Nachteile', 'mit', 'sich', 'bringen', ',', 'obwohl', 'sich', 'die', 'Einstellungen', 'langsam', 'ändern'],
+    valid: [['in', 'manchen', 'Berufsfeldern', 'können', 'Tattoos', 'Nachteile', 'mit', 'sich', 'bringen', ',', 'obwohl', 'sich', 'die', 'Einstellungen', 'langsam', 'ändern']],
+    punct: '.' },
+  { parts: ['die', 'Zukunft', 'wird', 'zeigen', ',', 'ob', 'diese', 'Formen', 'vollständig', 'in', 'die', 'Gesellschaft', 'aufgenommen', 'werden'],
+    valid: [['die', 'Zukunft', 'wird', 'zeigen', ',', 'ob', 'diese', 'Formen', 'vollständig', 'in', 'die', 'Gesellschaft', 'aufgenommen', 'werden']],
+    punct: '.' },
+  { parts: ['Tattoos', 'und', 'Piercings', 'verbinden', 'Mode', 'und', 'Kunst', ',', 'weil', 'sie', 'immer', 'eine', 'persönliche', 'Bedeutung', 'tragen'],
+    valid: [['Tattoos', 'und', 'Piercings', 'verbinden', 'Mode', 'und', 'Kunst', ',', 'weil', 'sie', 'immer', 'eine', 'persönliche', 'Bedeutung', 'tragen']],
+    punct: '.' },
+  { parts: ['Menschen', 'werden', 'weiterhin', 'ihre', 'Geschichte', 'auf', 'ihrer', 'Haut', 'schreiben', ',', 'solange', 'es', 'Tinte', 'und', 'Nadeln', 'gibt'],
+    valid: [['Menschen', 'werden', 'weiterhin', 'ihre', 'Geschichte', 'auf', 'ihrer', 'Haut', 'schreiben', ',', 'solange', 'es', 'Tinte', 'und', 'Nadeln', 'gibt']],
+    punct: '.' }
+];
 
 /* ===== SCHREIBWERKSTATT (B1) =================================== */
 var SCHREIB_NAME_KEY      = 'schreibwerkstatt_B1_2027X_name';
@@ -2005,6 +2032,162 @@ function syncWordBankChips() {
   });
 })();
 
+</script>
+
+<script>
+/* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
+   hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
+(function(){
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":4};
+  var SBGAP = [{"i":0,"row":["_","_","Piercings","_","_","_","von","_","_","_","weil","_","_","_","Mainstream","_","_"],"parts":["Tattoos","und","sind","kein","Zeichen","Rebellion","mehr",",","sie","längst","im","angekommen","sind"]},{"i":1,"row":["_","_","_","Tätowierung","_","_","von","_","_","_","wie","_","Funde","_"],"parts":["die","Geschichte","der","reicht","Tausende","Jahren","zurück",",","archäologische","beweisen"]},{"i":2,"row":["_","_","_","Menschen","_","_","_","nur","_","_","_","_","Ausdruck","_","Persönlichkeit"],"parts":["für","viele","junge","sind","Tattoos","nicht","Mode",",","sondern","ein","ihrer"]},{"i":3,"row":["_","_","_","_","Kunstwerk","_","_","_","die","_","Welt","_","Trägers","_"],"parts":["ein","Tattoo","kann","ein","sein",",","das","innere","des","zeigt"]},{"i":4,"row":["_","_","_","Körper","_","Leinwand","_","_","ihre","_","Geschichte","_","_"],"parts":["Menschen","nutzen","ihren","als",",","um","persönliche","zu","erzählen"]},{"i":5,"row":["_","_","_","experimenteller","_","_","_","die","_","des","_","Körpers","_","_"],"parts":["Piercings","werden","als","Weg","wahrgenommen",",","Grenzen","eigenen","zu","erforschen"]},{"i":6,"row":["_","_","Berufsfeldern","_","_","_","_","sich","_","_","_","sich","_","_","langsam","_"],"parts":["in","manchen","können","Tattoos","Nachteile","mit","bringen",",","obwohl","die","Einstellungen","ändern"]},{"i":7,"row":["_","_","_","_","_","ob","_","Formen","_","in","_","Gesellschaft","_","_"],"parts":["die","Zukunft","wird","zeigen",",","diese","vollständig","die","aufgenommen","werden"]},{"i":8,"row":["_","_","Piercings","_","_","_","_","_","weil","_","immer","_","_","Bedeutung","_"],"parts":["Tattoos","und","verbinden","Mode","und","Kunst",",","sie","eine","persönliche","tragen"]},{"i":9,"row":["_","_","_","ihre","_","_","_","Haut","_","_","_","es","_","_","Nadeln","_"],"parts":["Menschen","werden","weiterhin","Geschichte","auf","ihrer","schreiben",",","solange","Tinte","und","gibt"]}];
+  SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
+    ex.row = g.row; ex.parts = g.parts;
+    if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
+  });
+  if (typeof window.sbDragged === "undefined") window.sbDragged = null;
+  function bankEl(i){ return document.getElementById(CFG.bank + i); }
+  function rowEl(i){ return document.getElementById(CFG.row + i); }
+  function fbEl(i){ return document.getElementById(CFG.fb + i); }
+  function cap(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+  function positions(row){ return Array.from(row.children).filter(function(n){ return n.classList.contains("sb-gap") || n.classList.contains("chip"); }); }
+  function chipOf(pos){ return pos.classList.contains("sb-gap") ? pos.querySelector(".chip") : pos; }
+  function updateCaps(row){ if (!CFG.caps) return;
+    positions(row).forEach(function(pos,i){ var c = chipOf(pos); if (!c) return;
+      var o = c.dataset.orig;
+      var proper = o.charAt(0) === o.charAt(0).toUpperCase() && o.charAt(0) !== o.charAt(0).toLowerCase();
+      c.textContent = proper ? o : (i === 0 ? cap(o) : o); });
+  }
+  function sequence(i){ var row = rowEl(i), seq = [], complete = true;
+    positions(row).forEach(function(pos){ var c = chipOf(pos); if (c) seq.push(c.dataset.orig); else complete = false; });
+    return { seq: seq, complete: complete }; }
+  function clearMarks(i){ var row = rowEl(i);
+    row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+    row.classList.remove("correct","incorrect");
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p); }
+  function afterChange(i){
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i), info = sequence(i);
+    if (!info.complete){ clearMarks(i); if (fb){ fb.textContent=""; fb.className="satzbau-feedback"; } return; }
+    setTimeout(function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var fresh = sequence(i);
+      var ok = satzbauData[i].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(fresh.seq); });
+      var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+      if (ok){
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("incorrect"); c.classList.add("correct"); });
+        var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+        punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+        row.classList.add("correct"); row.classList.remove("incorrect");
+        if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+        if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+      } else {
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+        row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("incorrect"); });
+        row.classList.add("incorrect"); row.classList.remove("correct");
+        if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Noch nicht richtig – verschiebe die Wörter!"; }
+      }
+    }, 450);
+  }
+  function makeChip(word, i){
+    var chip = document.createElement("div");
+    var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
+    chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
+    chip.addEventListener("dragstart", function(e){ window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    if (CFG.click) chip.addEventListener("click", function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var inSlot = chip.closest(".sb-gap");
+      if (inSlot){ bankEl(i).appendChild(chip); afterChange(i); return; }
+      var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
+      if (free){ free.appendChild(chip); afterChange(i); }
+    });
+    return chip;
+  }
+  function makeLocked(word){
+    var chip = document.createElement("div");
+    chip.className = "chip sb-locked"; chip.textContent = word;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.locked = "1";
+    return chip;
+  }
+  function makeSlot(i){
+    var slot = document.createElement("div"); slot.className = "sb-gap";
+    slot.addEventListener("dragover", function(e){ e.preventDefault(); if (window.sbDragged) slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
+    slot.addEventListener("drop", function(e){
+      e.preventDefault(); slot.classList.remove("drag-over");
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      var occ = slot.querySelector(".chip");
+      if (occ && occ !== d) bankEl(i).appendChild(occ);
+      slot.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+    return slot;
+  }
+  function registerBank(bank, i){
+    bank.addEventListener("dragover", function(e){ e.preventDefault(); });
+    bank.addEventListener("drop", function(e){
+      e.preventDefault(); var d = window.sbDragged;
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      bank.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+  }
+  function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
+    var c = el.cloneNode(false); el.parentNode.replaceChild(c, el); return c; }
+  function rebuild(i){
+    var ex = satzbauData[i]; if (!ex || !ex.row) return;
+    var bank = freshEl(CFG.bank + i), row = freshEl(CFG.row + i);
+    if (!bank || !row) return;
+    var fb = fbEl(i); if (fb){ fb.textContent = ""; fb.className = "satzbau-feedback"; }
+    var mov = ex.parts.slice();
+    for (var k = mov.length - 1; k > 0; k--){ var j = Math.floor(Math.random()*(k+1)); var t = mov[k]; mov[k] = mov[j]; mov[j] = t; }
+    mov.forEach(function(w){ bank.appendChild(makeChip(w, i)); });
+    ex.row.forEach(function(tok){ row.appendChild(tok === "_" ? makeSlot(i) : makeLocked(tok)); });
+    registerBank(bank, i);
+    ensureButtons(i);
+  }
+  function rebuildAll(){ satzbauData.forEach(function(ex,i){ if (ex.row) rebuild(i); }); }
+  function showSol(i){
+    rebuild(i);
+    var row = rowEl(i), bank = bankEl(i), sol = satzbauData[i].valid[0];
+    var pool = Array.from(bank.querySelectorAll(".chip"));
+    positions(row).forEach(function(pos,k){
+      if (!pos.classList.contains("sb-gap")) return;
+      var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
+      if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
+    });
+    afterChange(i);
+  }
+  function ensureButtons(i){
+    if (document.getElementById("sb-btns-" + i)) return;
+    var anchor = fbEl(i) || rowEl(i); if (!anchor) return;
+    var box = document.createElement("div");
+    box.id = "sb-btns-" + i;
+    box.style.cssText = "display:flex;gap:8px;margin:6px 0 14px 0;";
+    var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn"; b1.textContent = "Lösen";
+    b1.addEventListener("click", function(){ showSol(i); });
+    var b2 = document.createElement("button"); b2.type = "button"; b2.className = "btn"; b2.textContent = "↺ Neustart";
+    b2.addEventListener("click", function(){ rebuild(i); });
+    box.appendChild(b1); box.appendChild(b2);
+    anchor.parentNode.insertBefore(box, anchor.nextSibling);
+  }
+  ["initSatzbau","buildSatzbau"].forEach(function(fn){
+    if (typeof window[fn] === "function"){ var o = window[fn];
+      window[fn] = function(){ o.apply(this, arguments); rebuildAll(); }; }
+  });
+  if (typeof window.sbReset === "function" && window.sbReset.length === 0){
+    var orall = window.sbReset;
+    window.sbReset = function(){ orall.apply(this, arguments); rebuildAll(); };
+  }
+  if (typeof window.sbResetOne === "function"){
+    var orst = window.sbResetOne;
+    window.sbResetOne = function(i){ if (satzbauData[i] && satzbauData[i].row){ rebuild(i); return; } orst.apply(this, arguments); };
+  }
+  if (typeof window.sbShowSolution === "function"){
+    var osol = window.sbShowSolution;
+    window.sbShowSolution = function(i){ if (satzbauData[i] && satzbauData[i].row){ showSol(i); return; } osol.apply(this, arguments); };
+  }
+  var probe = rowEl(0) || bankEl(0);
+  if (probe && probe.children.length) rebuildAll();
+})();
 </script>
 </body>
 </html>

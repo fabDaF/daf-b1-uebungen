@@ -803,30 +803,30 @@ function zuoReset() {
 
 // ─── Satzbau (Skill: satzbau-drag-drop) ───────────────────────────────────
 var satzbauData = [
-  { row:['_','_','_','wichtig','_','eine','_'],
-    parts:['der','Lebenslauf','ist','für','Bewerbung'],
-    valid:[['der','Lebenslauf','ist','wichtig','für','eine','Bewerbung']], punct:'.' },
-  { row:['_','gutes','_','_','_',',','wenn','_','_','Stelle','_'],
-    parts:['ein','Zeugnis','ist','wichtig','du','eine','suchst'],
-    valid:[['ein','gutes','Zeugnis','ist','wichtig',',','wenn','du','eine','Stelle','suchst']], punct:'.' },
-  { row:['_','_','_','immer','_','den','_'],
-    parts:['das','Anschreiben','ergänzt','auch','Lebenslauf'],
-    valid:[['das','Anschreiben','ergänzt','immer','auch','den','Lebenslauf']], punct:'.' },
-  { row:['_','_','Englisch','_','in','_','und','_'],
-    parts:['sie','beherrscht','fließend','Wort','Schrift'],
-    valid:[['sie','beherrscht','Englisch','fließend','in','Wort','und','Schrift']], punct:'.' },
-  { row:['_','_','_','Erfahrung','_','der','_'],
-    parts:['der','Praktikant','sammelt','während','Studienzeit'],
-    valid:[['der','Praktikant','sammelt','Erfahrung','während','der','Studienzeit']], punct:'.' },
-  { row:['_','Befragte','_','_','_','präzise','_'],
-    parts:['der','muss','alle','Fragen','beantworten'],
-    valid:[['der','Befragte','muss','alle','Fragen','präzise','beantworten']], punct:'.' },
-  { row:['_','_','Mathematik','_','der','_','_'],
-    parts:['ich','werde','an','Uni','studieren'],
-    valid:[['ich','werde','Mathematik','an','der','Uni','studieren']], punct:'.' },
-  { row:['_','berufliche','_','_','_','wichtige','_'],
-    parts:['der','Hintergrund','spielt','eine','Rolle'],
-    valid:[['der','berufliche','Hintergrund','spielt','eine','wichtige','Rolle']], punct:'.' }
+  { parts: ['der', 'Lebenslauf', 'ist', 'wichtig', 'für', 'eine', 'Bewerbung', ',', 'weil', 'er', 'den', 'ersten', 'Eindruck', 'macht'],
+    valid: [['der', 'Lebenslauf', 'ist', 'wichtig', 'für', 'eine', 'Bewerbung', ',', 'weil', 'er', 'den', 'ersten', 'Eindruck', 'macht']],
+    punct: '.' },
+  { parts: ['ein', 'gutes', 'Zeugnis', 'ist', 'sehr', 'wichtig', ',', 'wenn', 'du', 'eine', 'neue', 'Stelle', 'suchst'],
+    valid: [['ein', 'gutes', 'Zeugnis', 'ist', 'sehr', 'wichtig', ',', 'wenn', 'du', 'eine', 'neue', 'Stelle', 'suchst']],
+    punct: '.' },
+  { parts: ['das', 'Anschreiben', 'ergänzt', 'den', 'Lebenslauf', ',', 'weil', 'es', 'deine', 'persönliche', 'Motivation', 'genauer', 'erklärt'],
+    valid: [['das', 'Anschreiben', 'ergänzt', 'den', 'Lebenslauf', ',', 'weil', 'es', 'deine', 'persönliche', 'Motivation', 'genauer', 'erklärt']],
+    punct: '.' },
+  { parts: ['sie', 'beherrscht', 'Englisch', 'fließend', 'in', 'Wort', 'und', 'Schrift', ',', 'wie', 'ihr', 'Zeugnis', 'beweist'],
+    valid: [['sie', 'beherrscht', 'Englisch', 'fließend', 'in', 'Wort', 'und', 'Schrift', ',', 'wie', 'ihr', 'Zeugnis', 'beweist']],
+    punct: '.' },
+  { parts: ['der', 'Praktikant', 'sammelt', 'Erfahrung', 'während', 'der', 'Studienzeit', ',', 'die', 'ihm', 'später', 'sehr', 'hilft'],
+    valid: [['der', 'Praktikant', 'sammelt', 'Erfahrung', 'während', 'der', 'Studienzeit', ',', 'die', 'ihm', 'später', 'sehr', 'hilft']],
+    punct: '.' },
+  { parts: ['der', 'Befragte', 'muss', 'alle', 'Fragen', 'präzise', 'beantworten', ',', 'wenn', 'er', 'die', 'Stelle', 'bekommen', 'will'],
+    valid: [['der', 'Befragte', 'muss', 'alle', 'Fragen', 'präzise', 'beantworten', ',', 'wenn', 'er', 'die', 'Stelle', 'bekommen', 'will']],
+    punct: '.' },
+  { parts: ['ich', 'werde', 'Mathematik', 'an', 'der', 'Uni', 'studieren', ',', 'weil', 'mich', 'Zahlen', 'schon', 'immer', 'faszinieren'],
+    valid: [['ich', 'werde', 'Mathematik', 'an', 'der', 'Uni', 'studieren', ',', 'weil', 'mich', 'Zahlen', 'schon', 'immer', 'faszinieren']],
+    punct: '.' },
+  { parts: ['der', 'berufliche', 'Hintergrund', 'spielt', 'eine', 'wichtige', 'Rolle', ',', 'wenn', 'die', 'Firma', 'neue', 'Mitarbeiter', 'sucht'],
+    valid: [['der', 'berufliche', 'Hintergrund', 'spielt', 'eine', 'wichtige', 'Rolle', ',', 'wenn', 'die', 'Firma', 'neue', 'Mitarbeiter', 'sucht']],
+    punct: '.' }
 ];
 
 var sbDragged = null;
@@ -1684,6 +1684,210 @@ function showLoesungWortschatz() {
         inp.classList.add('ok');
     });
 }
+</script>
+
+<script>
+/* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
+   hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
+(function(){
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":3};
+  var SBGAP = [{"i":0,"row":["_","_","_","wichtig","_","eine","_","_","_","er","_","_","Eindruck","_"],"parts":["der","Lebenslauf","ist","für","Bewerbung",",","weil","den","ersten","macht"]},{"i":1,"row":["_","_","Zeugnis","_","_","wichtig","_","_","_","eine","_","Stelle","_"],"parts":["ein","gutes","ist","sehr",",","wenn","du","neue","suchst"]},{"i":2,"row":["_","_","_","den","_","_","weil","_","_","persönliche","_","genauer","_"],"parts":["das","Anschreiben","ergänzt","Lebenslauf",",","es","deine","Motivation","erklärt"]},{"i":3,"row":["_","_","Englisch","_","_","Wort","_","Schrift","_","_","_","Zeugnis","_"],"parts":["sie","beherrscht","fließend","in","und",",","wie","ihr","beweist"]},{"i":4,"row":["_","_","_","Erfahrung","_","der","_","_","_","ihm","_","sehr","_"],"parts":["der","Praktikant","sammelt","während","Studienzeit",",","die","später","hilft"]},{"i":5,"row":["_","_","_","alle","_","präzise","_","_","_","er","_","Stelle","_","_"],"parts":["der","Befragte","muss","Fragen","beantworten",",","wenn","die","bekommen","will"]},{"i":6,"row":["_","_","Mathematik","_","_","Uni","_","_","_","_","Zahlen","_","immer","_"],"parts":["ich","werde","an","der","studieren",",","weil","mich","schon","faszinieren"]},{"i":7,"row":["_","_","Hintergrund","_","_","_","Rolle","_","_","die","_","_","Mitarbeiter","_"],"parts":["der","berufliche","spielt","eine","wichtige",",","wenn","Firma","neue","sucht"]}];
+  SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
+    ex.row = g.row; ex.parts = g.parts;
+    if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
+  });
+  if (typeof window.sbDragged === "undefined") window.sbDragged = null;
+  function bankEl(i){ return document.getElementById(CFG.bank + i); }
+  function rowEl(i){ return document.getElementById(CFG.row + i); }
+  function fbEl(i){ return document.getElementById(CFG.fb + i); }
+  function cap(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+  function positions(row){ return Array.from(row.children).filter(function(n){ return n.classList.contains("sb-gap") || n.classList.contains("chip"); }); }
+  function chipOf(pos){ return pos.classList.contains("sb-gap") ? pos.querySelector(".chip") : pos; }
+  function updateCaps(row){ if (!CFG.caps) return;
+    positions(row).forEach(function(pos,i){ var c = chipOf(pos); if (!c) return;
+      var o = c.dataset.orig;
+      var proper = o.charAt(0) === o.charAt(0).toUpperCase() && o.charAt(0) !== o.charAt(0).toLowerCase();
+      c.textContent = proper ? o : (i === 0 ? cap(o) : o); });
+  }
+  function sequence(i){ var row = rowEl(i), seq = [], complete = true;
+    positions(row).forEach(function(pos){ var c = chipOf(pos); if (c) seq.push(c.dataset.orig); else complete = false; });
+    return { seq: seq, complete: complete }; }
+  function clearMarks(i){ var row = rowEl(i);
+    row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+    row.classList.remove("correct","incorrect");
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p); }
+  function afterChange(i){
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i), info = sequence(i);
+    if (!info.complete){ clearMarks(i); if (fb){ fb.textContent=""; fb.className="satzbau-feedback"; } return; }
+    setTimeout(function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var fresh = sequence(i);
+      var ok = satzbauData[i].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(fresh.seq); });
+      var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+      if (ok){
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("incorrect"); c.classList.add("correct"); });
+        var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+        punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+        row.classList.add("correct"); row.classList.remove("incorrect");
+        if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+        if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+      } else {
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+        row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("incorrect"); });
+        row.classList.add("incorrect"); row.classList.remove("correct");
+        if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Noch nicht richtig – verschiebe die Wörter!"; }
+      }
+    }, 450);
+  }
+  /* Geführter Modus (B1, 2026-06-10): Sofort-Feedback pro Chip-Platzierung.
+     Richtig (konsistent mit mind. einer valid-Reihenfolge) -> grün + fixiert.
+     Falsch -> rot + Rücksprung in die Bank nach 800 ms. */
+  function toBank(i, chip){
+    chip.textContent = chip.dataset.orig;  // Kleinschreibung wiederherstellen — Bank darf den Satzanfang nicht verraten
+    bankEl(i).appendChild(chip);
+  }
+  function consistent(i){
+    var pos = positions(rowEl(i));
+    var v = satzbauData[i].valid;
+    return v.some(function(o){
+      for (var k = 0; k < pos.length; k++){ var c = chipOf(pos[k]); if (c && c.dataset.orig !== o[k]) return false; }
+      return true; });
+  }
+  function finishRow(i){
+    var row = rowEl(i), fb = fbEl(i);
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+    var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+    punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+    row.classList.add("correct"); row.classList.remove("incorrect");
+    if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+    if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+  }
+  function placeJudge(i, chip){
+    if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i);
+    if (consistent(i)){
+      chip.classList.remove("incorrect"); chip.classList.add("correct");
+      chip.dataset.fixed = "1"; chip.draggable = false;
+      if (sequence(i).complete){ finishRow(i); }
+      else if (fb){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+    } else {
+      chip.classList.add("incorrect");
+      if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Das passt hier nicht!"; }
+      setTimeout(function(){
+        chip.classList.remove("incorrect");
+        if (!chip.dataset.fixed && chip.closest(".sb-gap")) toBank(i, chip);
+        updateCaps(rowEl(i));
+        if (fb && /incorrect/.test(fb.className)){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+      }, 800);
+    }
+  }
+  function makeChip(word, i){
+    var chip = document.createElement("div");
+    var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
+    chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
+    chip.addEventListener("dragstart", function(e){ if (chip.dataset.fixed){ e.preventDefault(); return; } window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    if (CFG.click) chip.addEventListener("click", function(){
+      if (chip.dataset.fixed) return;
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var inSlot = chip.closest(".sb-gap");
+      if (inSlot){ toBank(i, chip); updateCaps(rowEl(i)); return; }
+      var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
+      if (free){ free.appendChild(chip); placeJudge(i, chip); }
+    });
+    return chip;
+  }
+  function makeLocked(word){
+    var chip = document.createElement("div");
+    chip.className = "chip sb-locked"; chip.textContent = word;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.locked = "1";
+    return chip;
+  }
+  function makeSlot(i){
+    var slot = document.createElement("div"); slot.className = "sb-gap";
+    slot.addEventListener("dragover", function(e){ e.preventDefault(); if (window.sbDragged) slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
+    slot.addEventListener("drop", function(e){
+      e.preventDefault(); slot.classList.remove("drag-over");
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      if (slot.querySelector(".chip")) return;  // Lücke schon belegt
+      slot.appendChild(d); window.sbDragged = null; placeJudge(i, d);
+    });
+    return slot;
+  }
+  function registerBank(bank, i){
+    bank.addEventListener("dragover", function(e){ e.preventDefault(); });
+    bank.addEventListener("drop", function(e){
+      e.preventDefault(); var d = window.sbDragged;
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      toBank(i, d); window.sbDragged = null; updateCaps(rowEl(i));
+    });
+  }
+  function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
+    var c = el.cloneNode(false); el.parentNode.replaceChild(c, el); return c; }
+  function rebuild(i){
+    var ex = satzbauData[i]; if (!ex || !ex.row) return;
+    var bank = freshEl(CFG.bank + i), row = freshEl(CFG.row + i);
+    if (!bank || !row) return;
+    var fb = fbEl(i); if (fb){ fb.textContent = ""; fb.className = "satzbau-feedback"; }
+    var mov = ex.parts.slice();
+    for (var k = mov.length - 1; k > 0; k--){ var j = Math.floor(Math.random()*(k+1)); var t = mov[k]; mov[k] = mov[j]; mov[j] = t; }
+    mov.forEach(function(w){ bank.appendChild(makeChip(w, i)); });
+    ex.row.forEach(function(tok){ row.appendChild(tok === "_" ? makeSlot(i) : makeLocked(tok)); });
+    registerBank(bank, i);
+    ensureButtons(i);
+  }
+  function rebuildAll(){ satzbauData.forEach(function(ex,i){ if (ex.row) rebuild(i); }); }
+  function showSol(i){
+    rebuild(i);
+    var row = rowEl(i), bank = bankEl(i), sol = satzbauData[i].valid[0];
+    var pool = Array.from(bank.querySelectorAll(".chip"));
+    positions(row).forEach(function(pos,k){
+      if (!pos.classList.contains("sb-gap")) return;
+      var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
+      if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
+    });
+    row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("correct"); c.dataset.fixed = "1"; c.draggable = false; });
+    updateCaps(row);
+    finishRow(i);
+  }
+  function ensureButtons(i){
+    if (document.getElementById("sb-btns-" + i)) return;
+    var anchor = fbEl(i) || rowEl(i); if (!anchor) return;
+    var item = anchor.closest ? anchor.closest(".satzbau-item") : null;
+    if (item && [].some.call(item.querySelectorAll("button"), function(b){
+      return /(Lösen|Lösung|Neustart)/.test(b.textContent); })) return;  // native Buttons vorhanden
+    var box = document.createElement("div");
+    box.id = "sb-btns-" + i;
+    box.style.cssText = "display:flex;gap:8px;margin:6px 0 14px 0;";
+    var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn"; b1.textContent = "Lösen";
+    b1.addEventListener("click", function(){ showSol(i); });
+    var b2 = document.createElement("button"); b2.type = "button"; b2.className = "btn"; b2.textContent = "↺ Neustart";
+    b2.addEventListener("click", function(){ rebuild(i); });
+    box.appendChild(b1); box.appendChild(b2);
+    anchor.parentNode.insertBefore(box, anchor.nextSibling);
+  }
+  ["initSatzbau","buildSatzbau"].forEach(function(fn){
+    if (typeof window[fn] === "function"){ var o = window[fn];
+      window[fn] = function(){ o.apply(this, arguments); rebuildAll(); }; }
+  });
+  if (typeof window.sbReset === "function" && window.sbReset.length === 0){
+    var orall = window.sbReset;
+    window.sbReset = function(){ orall.apply(this, arguments); rebuildAll(); };
+  }
+  if (typeof window.sbResetOne === "function"){
+    var orst = window.sbResetOne;
+    window.sbResetOne = function(i){ if (satzbauData[i] && satzbauData[i].row){ rebuild(i); return; } orst.apply(this, arguments); };
+  }
+  if (typeof window.sbShowSolution === "function"){
+    var osol = window.sbShowSolution;
+    window.sbShowSolution = function(i){ if (satzbauData[i] && satzbauData[i].row){ showSol(i); return; } osol.apply(this, arguments); };
+  }
+  var probe = rowEl(0) || bankEl(0);
+  if (probe && probe.children.length) rebuildAll();
+})();
 </script>
 </body>
 </html>

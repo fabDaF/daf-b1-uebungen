@@ -294,6 +294,13 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 .wort-chip { padding:5px 14px; border-radius:20px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; font-size:0.87em; font-weight:600; cursor:pointer; border:none; transition:opacity 0.2s,transform 0.12s; user-select:none; }
 .wort-chip:hover:not(.used) { transform:translateY(-2px); box-shadow:0 4px 10px rgba(102,126,234,0.35); }
 .wort-chip.used { opacity:0.22; cursor:default; pointer-events:none; }
+
+/* ── Gerüst-Modus (B1+): sichtbare Lücken + feste Anker ── */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
 </style>
 </head>
 <body>
@@ -353,17 +360,17 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 
                 <p>Vor der Abreise dachte er an Casablanca. Damals — sechs Jahre zuvor — war er auch mit einem Koffer, einer Versicherung und einer Mentalität voller Unsicherheit nach Deutschland gekommen. Diesmal war es leichter, aber nicht trivial. Eine andere Stadt, eine andere Sprache (Wienerisch zählte fast als eigene Sprache), eine andere Lebenseinstellung.</p>
 
-                <p class="dialog">„Du wirst sehen", hatte Stefan gesagt. „Die Wiener sind freundlicher als die Düsseldorfer. Aber sie haben einen langsameren Takt. Eine steile Lernkurve am Anfang, dann gleitet es.“</p>
+                <p class="dialog">„Du wirst sehen“, hatte Stefan gesagt. „Die Wiener sind freundlicher als die Düsseldorfer. Aber sie haben einen langsameren Takt. Eine steile Lernkurve am Anfang, dann gleitet es.“</p>
 
-                <p>In Wien stieg Karim an der falschen U-Bahn-Station aus. Mit Koffer und Rucksack lief er fünfzehn Minuten durch ein fremdes Viertel, fand schließlich die Unterkunft im neunten Bezirk — ein Zimmer in einer Altbauwohnung, hohe Decken, knarzendes Parkett. Ein Topf Proviant von der Vermieterin auf dem Küchentisch, „weil du sicher müde bist".</p>
+                <p>In Wien stieg Karim an der falschen U-Bahn-Station aus. Mit Koffer und Rucksack lief er fünfzehn Minuten durch ein fremdes Viertel, fand schließlich die Unterkunft im neunten Bezirk — ein Zimmer in einer Altbauwohnung, hohe Decken, knarzendes Parkett. Ein Topf Proviant von der Vermieterin auf dem Küchentisch, „weil du sicher müde bist“.</p>
 
-                <p>Am Abend setzte er sich an den Schreibtisch und schrieb seinem Onkel in Casablanca eine Sprachnachricht. „Vier Wochen", sagte er auf Arabisch. „Vielleicht eine kleine Entwicklung für mich.“</p>
+                <p>Am Abend setzte er sich an den Schreibtisch und schrieb seinem Onkel in Casablanca eine Sprachnachricht. „Vier Wochen“, sagte er auf Arabisch. „Vielleicht eine kleine Entwicklung für mich.“</p>
 
                 <p>Am nächsten Morgen begann seine Arbeit. Übersetzungstätigkeit für die deutsch-österreichischen Solar-Kampagnen, Assistentin der Niederlassungsleitung. Frau Steiner — herausfordernd, schnell, sehr direkt. Karim musste sich arrangieren.</p>
 
                 <p>Nach einer Woche war die erste Euphorie verflogen. Nach zwei Wochen kam das, was Stefan einen Mini-Kulturschock genannt hatte: dieses leise Gefühl, nirgendwo ganz zu sein. Karim notierte es in sein Heft, ein einzelner Satz: „Auslandserfahrung ist kein Urlaub. Sie ist Arbeit am eigenen Selbstbild.“</p>
 
-                <p>Am Freitagabend ging er allein an die Donau. Die Lichter der Stadt spiegelten sich, eine Tram rauschte vorbei. Karim atmete tief. „Es geht", sagte er leise. „Es geht.“</p>
+                <p>Am Freitagabend ging er allein an die Donau. Die Lichter der Stadt spiegelten sich, eine Tram rauschte vorbei. Karim atmete tief. „Es geht“, sagte er leise. „Es geht.“</p>
             </div>
     </div>
 </div>
@@ -566,14 +573,30 @@ var LUECKEN = [
 ];
 
 var satzbauData = [
-    { parts: ['Karim', 'hat', 'ein', 'auslandspraktikum', 'in', 'Wien', 'geplant'], valid: [['Karim', 'hat', 'ein', 'auslandspraktikum', 'in', 'Wien', 'geplant']], punct: '.' },
-    { parts: ['sie', 'musste', 'sich', 'in', 'der', 'stadt', 'orientieren'], valid: [['sie', 'musste', 'sich', 'in', 'der', 'stadt', 'orientieren']], punct: '.' },
-    { parts: ['Karim', 'erleidet', 'auch', 'einen', 'kulturschock', 'in', 'Wien'], valid: [['Karim', 'erleidet', 'auch', 'einen', 'kulturschock', 'in', 'Wien']], punct: '.' },
-    { parts: ['die', 'arbeit', 'ist', 'sehr', 'herausfordernd'], valid: [['die', 'arbeit', 'ist', 'sehr', 'herausfordernd']], punct: '.' },
-    { parts: ['die', 'lernkurve', 'ist', 'steil', 'f\u00fcr', 'Karim'], valid: [['die', 'lernkurve', 'ist', 'steil', 'f\u00fcr', 'Karim']], punct: '.' },
-    { parts: ['ihre', 'lebenseinstellung', 'gewinnt', 'die', 'oberhand'], valid: [['ihre', 'lebenseinstellung', 'gewinnt', 'die', 'oberhand']], punct: '.' },
-    { parts: ['Karim', 'will', 'das', 'riesenrad', 'besichtigen'], valid: [['Karim', 'will', 'das', 'riesenrad', 'besichtigen']], punct: '.' },
-    { parts: ['sie', 'nimmt', 'proviant', 'f\u00fcr', 'den', 'tag', 'mit'], valid: [['sie', 'nimmt', 'proviant', 'f\u00fcr', 'den', 'tag', 'mit']], punct: '.' }
+  { parts: ['Karim', 'hat', 'ein', 'Auslandspraktikum', 'in', 'Wien', 'geplant', ',', 'weil', 'er', 'neue', 'Erfahrungen', 'sammeln', 'möchte'],
+    valid: [['Karim', 'hat', 'ein', 'Auslandspraktikum', 'in', 'Wien', 'geplant', ',', 'weil', 'er', 'neue', 'Erfahrungen', 'sammeln', 'möchte']],
+    punct: '.' },
+  { parts: ['er', 'musste', 'sich', 'in', 'der', 'fremden', 'Stadt', 'orientieren', ',', 'bevor', 'die', 'Arbeit', 'richtig', 'begann'],
+    valid: [['er', 'musste', 'sich', 'in', 'der', 'fremden', 'Stadt', 'orientieren', ',', 'bevor', 'die', 'Arbeit', 'richtig', 'begann']],
+    punct: '.' },
+  { parts: ['Karim', 'erleidet', 'einen', 'Kulturschock', 'in', 'Wien', ',', 'obwohl', 'Österreich', 'und', 'Deutschland', 'sich', 'ähnlich', 'sind'],
+    valid: [['Karim', 'erleidet', 'einen', 'Kulturschock', 'in', 'Wien', ',', 'obwohl', 'Österreich', 'und', 'Deutschland', 'sich', 'ähnlich', 'sind']],
+    punct: '.' },
+  { parts: ['die', 'Arbeit', 'ist', 'sehr', 'herausfordernd', ',', 'weil', 'Karim', 'viele', 'neue', 'Aufgaben', 'übernehmen', 'muss'],
+    valid: [['die', 'Arbeit', 'ist', 'sehr', 'herausfordernd', ',', 'weil', 'Karim', 'viele', 'neue', 'Aufgaben', 'übernehmen', 'muss']],
+    punct: '.' },
+  { parts: ['die', 'Lernkurve', 'ist', 'steil', 'für', 'Karim', ',', 'der', 'jeden', 'Tag', 'etwas', 'Neues', 'entdeckt'],
+    valid: [['die', 'Lernkurve', 'ist', 'steil', 'für', 'Karim', ',', 'der', 'jeden', 'Tag', 'etwas', 'Neues', 'entdeckt']],
+    punct: '.' },
+  { parts: ['seine', 'positive', 'Lebenseinstellung', 'gewinnt', 'die', 'Oberhand', ',', 'als', 'das', 'Heimweh', 'am', 'stärksten', 'wird'],
+    valid: [['seine', 'positive', 'Lebenseinstellung', 'gewinnt', 'die', 'Oberhand', ',', 'als', 'das', 'Heimweh', 'am', 'stärksten', 'wird']],
+    punct: '.' },
+  { parts: ['Karim', 'will', 'am', 'Wochenende', 'das', 'Riesenrad', 'besichtigen', ',', 'das', 'im', 'berühmten', 'Wiener', 'Prater', 'steht'],
+    valid: [['Karim', 'will', 'am', 'Wochenende', 'das', 'Riesenrad', 'besichtigen', ',', 'das', 'im', 'berühmten', 'Wiener', 'Prater', 'steht']],
+    punct: '.' },
+  { parts: ['er', 'nimmt', 'Proviant', 'für', 'den', 'Tag', 'mit', ',', 'weil', 'der', 'Ausflug', 'bis', 'zum', 'Abend', 'dauert'],
+    valid: [['er', 'nimmt', 'Proviant', 'für', 'den', 'Tag', 'mit', ',', 'weil', 'der', 'Ausflug', 'bis', 'zum', 'Abend', 'dauert']],
+    punct: '.' }
 ];
 
 var WORTSCHATZ = [
@@ -1581,6 +1604,162 @@ function syncWordBankChips() {
     });
 }
 // ────────────────────────────────────────────────────────────────────────────
+</script>
+
+<script>
+/* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
+   hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
+(function(){
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":4};
+  var SBGAP = [{"i":0,"row":["_","_","_","Auslandspraktikum","_","Wien","_","_","_","er","_","Erfahrungen","_","_"],"parts":["Karim","hat","ein","in","geplant",",","weil","neue","sammeln","möchte"]},{"i":1,"row":["_","_","_","in","_","_","Stadt","_","_","_","_","Arbeit","_","begann"],"parts":["er","musste","sich","der","fremden","orientieren",",","bevor","die","richtig"]},{"i":2,"row":["_","_","_","Kulturschock","_","_","_","obwohl","_","und","_","_","ähnlich","_"],"parts":["Karim","erleidet","einen","in","Wien",",","Österreich","Deutschland","sich","sind"]},{"i":3,"row":["_","_","_","sehr","_","_","weil","_","viele","_","Aufgaben","_","_"],"parts":["die","Arbeit","ist","herausfordernd",",","Karim","neue","übernehmen","muss"]},{"i":4,"row":["_","_","_","steil","_","Karim","_","_","_","Tag","_","Neues","_"],"parts":["die","Lernkurve","ist","für",",","der","jeden","etwas","entdeckt"]},{"i":5,"row":["_","_","Lebenseinstellung","_","_","Oberhand","_","_","das","_","am","_","_"],"parts":["seine","positive","gewinnt","die",",","als","Heimweh","stärksten","wird"]},{"i":6,"row":["_","_","_","Wochenende","_","Riesenrad","_","_","_","im","_","_","Prater","_"],"parts":["Karim","will","am","das","besichtigen",",","das","berühmten","Wiener","steht"]},{"i":7,"row":["_","_","Proviant","_","_","Tag","_","_","_","_","Ausflug","_","_","Abend","_"],"parts":["er","nimmt","für","den","mit",",","weil","der","bis","zum","dauert"]}];
+  SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
+    ex.row = g.row; ex.parts = g.parts;
+    if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
+  });
+  if (typeof window.sbDragged === "undefined") window.sbDragged = null;
+  function bankEl(i){ return document.getElementById(CFG.bank + i); }
+  function rowEl(i){ return document.getElementById(CFG.row + i); }
+  function fbEl(i){ return document.getElementById(CFG.fb + i); }
+  function cap(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+  function positions(row){ return Array.from(row.children).filter(function(n){ return n.classList.contains("sb-gap") || n.classList.contains("chip"); }); }
+  function chipOf(pos){ return pos.classList.contains("sb-gap") ? pos.querySelector(".chip") : pos; }
+  function updateCaps(row){ if (!CFG.caps) return;
+    positions(row).forEach(function(pos,i){ var c = chipOf(pos); if (!c) return;
+      var o = c.dataset.orig;
+      var proper = o.charAt(0) === o.charAt(0).toUpperCase() && o.charAt(0) !== o.charAt(0).toLowerCase();
+      c.textContent = proper ? o : (i === 0 ? cap(o) : o); });
+  }
+  function sequence(i){ var row = rowEl(i), seq = [], complete = true;
+    positions(row).forEach(function(pos){ var c = chipOf(pos); if (c) seq.push(c.dataset.orig); else complete = false; });
+    return { seq: seq, complete: complete }; }
+  function clearMarks(i){ var row = rowEl(i);
+    row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+    row.classList.remove("correct","incorrect");
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p); }
+  function afterChange(i){
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i), info = sequence(i);
+    if (!info.complete){ clearMarks(i); if (fb){ fb.textContent=""; fb.className="satzbau-feedback"; } return; }
+    setTimeout(function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var fresh = sequence(i);
+      var ok = satzbauData[i].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(fresh.seq); });
+      var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+      if (ok){
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("incorrect"); c.classList.add("correct"); });
+        var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+        punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+        row.classList.add("correct"); row.classList.remove("incorrect");
+        if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+        if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+      } else {
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+        row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("incorrect"); });
+        row.classList.add("incorrect"); row.classList.remove("correct");
+        if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Noch nicht richtig – verschiebe die Wörter!"; }
+      }
+    }, 450);
+  }
+  function makeChip(word, i){
+    var chip = document.createElement("div");
+    var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
+    chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
+    chip.addEventListener("dragstart", function(e){ window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    if (CFG.click) chip.addEventListener("click", function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var inSlot = chip.closest(".sb-gap");
+      if (inSlot){ bankEl(i).appendChild(chip); afterChange(i); return; }
+      var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
+      if (free){ free.appendChild(chip); afterChange(i); }
+    });
+    return chip;
+  }
+  function makeLocked(word){
+    var chip = document.createElement("div");
+    chip.className = "chip sb-locked"; chip.textContent = word;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.locked = "1";
+    return chip;
+  }
+  function makeSlot(i){
+    var slot = document.createElement("div"); slot.className = "sb-gap";
+    slot.addEventListener("dragover", function(e){ e.preventDefault(); if (window.sbDragged) slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
+    slot.addEventListener("drop", function(e){
+      e.preventDefault(); slot.classList.remove("drag-over");
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      var occ = slot.querySelector(".chip");
+      if (occ && occ !== d) bankEl(i).appendChild(occ);
+      slot.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+    return slot;
+  }
+  function registerBank(bank, i){
+    bank.addEventListener("dragover", function(e){ e.preventDefault(); });
+    bank.addEventListener("drop", function(e){
+      e.preventDefault(); var d = window.sbDragged;
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked) return;
+      bank.appendChild(d); window.sbDragged = null; afterChange(i);
+    });
+  }
+  function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
+    var c = el.cloneNode(false); el.parentNode.replaceChild(c, el); return c; }
+  function rebuild(i){
+    var ex = satzbauData[i]; if (!ex || !ex.row) return;
+    var bank = freshEl(CFG.bank + i), row = freshEl(CFG.row + i);
+    if (!bank || !row) return;
+    var fb = fbEl(i); if (fb){ fb.textContent = ""; fb.className = "satzbau-feedback"; }
+    var mov = ex.parts.slice();
+    for (var k = mov.length - 1; k > 0; k--){ var j = Math.floor(Math.random()*(k+1)); var t = mov[k]; mov[k] = mov[j]; mov[j] = t; }
+    mov.forEach(function(w){ bank.appendChild(makeChip(w, i)); });
+    ex.row.forEach(function(tok){ row.appendChild(tok === "_" ? makeSlot(i) : makeLocked(tok)); });
+    registerBank(bank, i);
+    ensureButtons(i);
+  }
+  function rebuildAll(){ satzbauData.forEach(function(ex,i){ if (ex.row) rebuild(i); }); }
+  function showSol(i){
+    rebuild(i);
+    var row = rowEl(i), bank = bankEl(i), sol = satzbauData[i].valid[0];
+    var pool = Array.from(bank.querySelectorAll(".chip"));
+    positions(row).forEach(function(pos,k){
+      if (!pos.classList.contains("sb-gap")) return;
+      var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
+      if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
+    });
+    afterChange(i);
+  }
+  function ensureButtons(i){
+    if (document.getElementById("sb-btns-" + i)) return;
+    var anchor = fbEl(i) || rowEl(i); if (!anchor) return;
+    var box = document.createElement("div");
+    box.id = "sb-btns-" + i;
+    box.style.cssText = "display:flex;gap:8px;margin:6px 0 14px 0;";
+    var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn"; b1.textContent = "Lösen";
+    b1.addEventListener("click", function(){ showSol(i); });
+    var b2 = document.createElement("button"); b2.type = "button"; b2.className = "btn"; b2.textContent = "↺ Neustart";
+    b2.addEventListener("click", function(){ rebuild(i); });
+    box.appendChild(b1); box.appendChild(b2);
+    anchor.parentNode.insertBefore(box, anchor.nextSibling);
+  }
+  ["initSatzbau","buildSatzbau"].forEach(function(fn){
+    if (typeof window[fn] === "function"){ var o = window[fn];
+      window[fn] = function(){ o.apply(this, arguments); rebuildAll(); }; }
+  });
+  if (typeof window.sbReset === "function" && window.sbReset.length === 0){
+    var orall = window.sbReset;
+    window.sbReset = function(){ orall.apply(this, arguments); rebuildAll(); };
+  }
+  if (typeof window.sbResetOne === "function"){
+    var orst = window.sbResetOne;
+    window.sbResetOne = function(i){ if (satzbauData[i] && satzbauData[i].row){ rebuild(i); return; } orst.apply(this, arguments); };
+  }
+  if (typeof window.sbShowSolution === "function"){
+    var osol = window.sbShowSolution;
+    window.sbShowSolution = function(i){ if (satzbauData[i] && satzbauData[i].row){ showSol(i); return; } osol.apply(this, arguments); };
+  }
+  var probe = rowEl(0) || bankEl(0);
+  if (probe && probe.children.length) rebuildAll();
+})();
 </script>
 </body>
 </html>

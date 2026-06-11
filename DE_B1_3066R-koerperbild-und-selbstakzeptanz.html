@@ -148,6 +148,13 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .ws-inputs input.plural { width: 130px; flex-shrink: 0; }
 .ws-inputs input.verb   { flex: 1; min-width: 200px; }
 @media (max-width: 700px) { #wortschatzContainer { grid-template-columns: 1fr; } }
+
+/* ── Gerüst-Modus (B1+): sichtbare Lücken + feste Anker ── */
+.sb-gap { display:inline-flex; align-items:center; justify-content:center; min-width:66px; min-height:38px; padding:2px 6px; border:2px dashed #b9a7f0; border-radius:20px; background:#faf8ff; }
+.sb-gap.drag-over { border-color:#e67e22; background:#fff5ec; }
+.sb-gap .chip { margin:0; }
+.chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
+.chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
 </style>
 </head>
 <body>
@@ -228,7 +235,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 </div>
 <div class="section-title">🧩 Satzbau</div>
 <div class="hilfe-box"><strong>Aufgabe:</strong> Ziehe die Wörter in die richtige Reihenfolge.</div>
-<div id="sbContainer"></div>
+<div id="satzbauContainer"></div>
   </div>
   </div>
 
@@ -362,163 +369,25 @@ function resetLuecke() {{
 }}
 
 // ─── SATZBAU ─────────────────────────────────────────────────────────────────
-var sbDragged = null;
+
 function shuffleArr(a) {{ var b=a.slice(); for(var i=b.length-1;i>0;i--){{ var j=Math.floor(Math.random()*(i+1)),t=b[i]; b[i]=b[j]; b[j]=t; }} return b; }}
-function getSbCursor() {{ var c=document.getElementById('sb-insert-cursor'); if(!c){{ c=document.createElement('div'); c.id='sb-insert-cursor'; c.style.cssText='width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;'; }} return c; }}
-function getSbInsertPos(zone,clientX) {{ var chips=Array.from(zone.querySelectorAll('.chip')); for(var i=0;i<chips.length;i++){{ var r=chips[i].getBoundingClientRect(); if(clientX<r.left+r.width/2) return chips[i]; }} return null; }}
-function sbCapitalize(s) {{ return s.charAt(0).toUpperCase()+s.slice(1); }}
-function sbUpdateCapitalization(zone) {{
-  var chips=Array.from(zone.querySelectorAll('.chip'));
-  chips.forEach(function(c,i) {{
-    var orig=c.dataset.orig;
-    if(!orig||orig===','||orig===';') return;
-    var isProper=orig.charAt(0)===orig.charAt(0).toUpperCase()&&orig.charAt(0)!==orig.charAt(0).toLowerCase();
-    c.textContent=isProper?orig:(i===0?sbCapitalize(orig):orig);
-  }});
-}}
-function sbMakeChip(word, isTarget) {{
-  var chip=document.createElement('div'); chip.className='chip';
-  var isPunct=/^[.,!?;:]$/.test(word);
-  if(isPunct) chip.classList.add('punct-chip');
-  chip.textContent=word; chip.dataset.orig=word; chip.draggable=!isTarget;
-  if(!isTarget) {{
-    chip.addEventListener('dragstart',function(e){{ sbDragged=chip; timerAutoStart(2); e.dataTransfer.setData('text/plain',''); setTimeout(function(){{chip.style.opacity='0.4';}},0); }});
-    chip.addEventListener('dragend',function(){{ chip.style.opacity=''; sbDragged=null; var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode) c.parentNode.removeChild(c); }});
-  }}
-  return chip;
-}}
-function sbRegisterZone(zone) {{
-  zone.addEventListener('dragover',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=getSbCursor(),bef=getSbInsertPos(zone,e.clientX); if(bef) zone.insertBefore(cur,bef); else zone.appendChild(cur); }});
-  zone.addEventListener('dragleave',function(e){{ if(!zone.contains(e.relatedTarget)){{ var c=document.getElementById('sb-insert-cursor'); if(c&&c.parentNode===zone) zone.removeChild(c); }} }});
-  zone.addEventListener('drop',function(e){{ e.preventDefault(); if(!sbDragged) return; var cur=document.getElementById('sb-insert-cursor'); if(cur&&cur.parentNode===zone){{ zone.insertBefore(sbDragged,cur); zone.removeChild(cur); }} else {{ zone.appendChild(sbDragged); }} sbDragged=null; }});
-}}
-function sbCheckAuto(itemIdx) {{
-  var zone=document.getElementById('sb_zone_'+itemIdx);
-  var fb=document.getElementById('sb_fb_'+itemIdx);
-  if(!zone) return;
-  setTimeout(function() {{
-    var chips=Array.from(zone.querySelectorAll('.chip'));
-    var ans=SATZBAU_DATA[itemIdx].words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
-    var got=chips.filter(function(c){{return !/^[.,!?;:]$/.test(c.dataset.orig);}}).map(function(c){{return c.dataset.orig;}});
-    if(got.length===0) return;
-    var ok=JSON.stringify(got)===JSON.stringify(ans);
-    chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
-    if(fb) {{ fb.className='satzbau-feedback '+(ok?'correct':'incorrect'); fb.textContent=ok?'✓ Korrekt!':'✗ Falsche Reihenfolge – verschiebe die Chips!'; }}
-    if(ok) checkSatzbauComplete();
-  }}, 500);
-}}
-function sbColorRow(idx,ok) {{
-  var zone=document.getElementById('sb_zone_'+idx);
-  if(!zone) return;
-  var chips=Array.from(zone.querySelectorAll('.chip'));
-  chips.forEach(function(c){{ c.classList.remove('correct','incorrect'); c.classList.add(ok?'correct':'incorrect'); }});
-}}
-function checkSatzbauComplete() {{
-  var allOk=SATZBAU_DATA.every(function(_,i){{ var z=document.getElementById('sb_zone_'+i); return z&&Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('correct');}})&&!Array.from(z.querySelectorAll('.chip')).some(function(c){{return c.classList.contains('incorrect');}}); }});
-  if(allOk) timerStop(2);
-}}
-function buildSatzbau() {{
-  var cont=document.getElementById('sbContainer'); if(!cont) return;
-  cont.innerHTML='';
-  SATZBAU_DATA.forEach(function(item,idx) {{
-    var div=document.createElement('div'); div.className='satzbau-item';
-    var nonPunct=item.words.filter(function(w){{return !/^[.,!?;:]$/.test(w);}});
-    var shuffled=shuffleArr(nonPunct);
-    var pool=document.createElement('div'); pool.className='chips-container'; pool.id='sb_pool_'+idx;
-    shuffled.forEach(function(w) {{
-      var chip=sbMakeChip(w,false);
-      chip.addEventListener('click',function() {{ var z=document.getElementById('sb_zone_'+idx); z.appendChild(chip); sbUpdateCapitalization(z); sbCheckAuto(idx); }});
-      pool.appendChild(chip);
-    }});
-    sbRegisterZone(pool);
-    var zone=document.createElement('div'); zone.className='sentence-builder'; zone.id='sb_zone_'+idx;
-    item.words.filter(function(w){{return /^[.,!?;:]$/.test(w);}}).forEach(function(w) {{
-      var pc=sbMakeChip(w,true); zone.appendChild(pc);
-    }});
-    sbRegisterZone(zone);
-    zone.addEventListener('drop',function(){{ sbUpdateCapitalization(zone); setTimeout(function(){{sbCheckAuto(idx);}},50); }});
-    zone.addEventListener('click',function(e) {{
-      var chip=e.target.closest('.chip:not(.punct-chip)');
-      if(chip&&zone.contains(chip)) {{ pool.appendChild(chip); sbUpdateCapitalization(zone); sbCheckAuto(idx); }}
-    }});
-    var fb=document.createElement('div'); fb.className='satzbau-feedback'; fb.id='sb_fb_'+idx;
-    div.appendChild(pool); div.appendChild(zone); div.appendChild(fb);
-    cont.appendChild(div);
-  }});
-}}
+
+
+
+
+
+
+
+
+
+
 
 // ─── Canonical Satzbau wrappers (audit-compliant) ───────────
-function sbCheckAuto(idx) {
-  var pool = document.getElementById('sb_pool_' + idx);
-  var zone = document.getElementById('sb_zone_' + idx);
-  if (!zone) return;
-  if (pool && pool.querySelectorAll('.chip:not(.punct-chip)').length > 0) {
-    zone.className = 'sentence-builder';
-    return;
-  }
-  setTimeout(function() {
-    var chips = zone.querySelectorAll('.chip:not(.punct-chip)');
-    var got = Array.from(chips).map(function(c) { return c.textContent; });
-    var ans = SATZBAU_DATA[idx].words.filter(function(w) { return !/^[.,!?;:]$/.test(w); });
-    var ok = got.length === ans.length && got.every(function(w, i) { return w === ans[i]; });
-    sbColorRow(idx, ok && got.length > 0);
-  }, 500);
-}
-function sbShowSolution(idx) {
-  var pool = document.getElementById('sb_pool_' + idx);
-  var zone = document.getElementById('sb_zone_' + idx);
-  if (!pool || !zone) return;
-  var nonPunct = SATZBAU_DATA[idx].words.filter(function(w) { return !/^[.,!?;:]$/.test(w); });
-  var chips = {};
-  Array.from(pool.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { chips[c.textContent] = c; });
-  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { chips[c.textContent] = c; });
-  pool.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { pool.removeChild(c); });
-  zone.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { zone.removeChild(c); });
-  nonPunct.forEach(function(w) {
-    var chip = chips[w];
-    if (chip) zone.appendChild(chip);
-  });
-  sbUpdateCapitalization(zone);
-  setTimeout(function() { sbCheckAuto(idx); }, 100);
-}
-function sbResetOne(idx) {
-  var pool = document.getElementById('sb_pool_' + idx);
-  var zone = document.getElementById('sb_zone_' + idx);
-  if (!pool || !zone) return;
-  var allChips = [];
-  Array.from(pool.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { allChips.push(c); });
-  Array.from(zone.querySelectorAll('.chip:not(.punct-chip)')).forEach(function(c) { allChips.push(c); });
-  pool.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { pool.removeChild(c); });
-  zone.querySelectorAll('.chip:not(.punct-chip)').forEach(function(c) { zone.removeChild(c); });
-  for (var i = allChips.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = allChips[i]; allChips[i] = allChips[j]; allChips[j] = tmp;
-  }
-  allChips.forEach(function(c) { pool.appendChild(c); });
-  zone.className = 'sentence-builder';
-}
-function initSatzbau() {
-  buildSatzbau();
-  SATZBAU_DATA.forEach(function(item, idx) {
-    var div = document.getElementById('sb_zone_' + idx);
-    if (!div) return;
-    var parent = div.parentElement;
-    var btnRow = document.createElement('div');
-    btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
-    var btnS = document.createElement('button');
-    btnS.textContent = 'Lösen';
-    btnS.className = 'btn';
-    btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
-    var btnR = document.createElement('button');
-    btnR.textContent = '↺ Neustart';
-    btnR.className = 'btn';
-    btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
-    btnRow.appendChild(btnS);
-    btnRow.appendChild(btnR);
-    parent.appendChild(btnRow);
-  });
-}
-function resetSatzbau() {{ buildSatzbau(); resetTimer(2); }}
+
+
+
+
+
 
 // ─── WORTSCHATZ ──────────────────────────────────────────────────────────────
 
@@ -527,15 +396,298 @@ function resetSatzbau() {{ buildSatzbau(); resetTimer(2); }}
 
 
 
-const SATZBAU_DATA = [
-  { words: ['Viele', 'Menschen', 'leiden', 'unter', 'dem', 'Druck', 'der', 'Medien', '.'] },
-  { words: ['Schönheitsstandards', 'werden', 'von', 'sozialen', 'Medien', 'beeinflusst', '.'] },
-  { words: ['Selbstakzeptanz', 'ist', 'wichtiger', 'als', 'Schönheitsideale', '.'] },
-  { words: ['Jeder', 'Mensch', 'ist', 'auf', 'seine', 'eigene', 'Art', 'schön', '.'] },
-  { words: ['Die', 'Werbung', 'zeigt', 'oft', 'unrealistische', 'Körperbilder', '.'] },
-  { words: ['Man', 'vergleicht', 'sich', 'mit', 'anderen', 'und', 'findet', 'sich', 'unzulänglich', '.'] },
-  { words: ['Kein', 'Körper', 'muss', 'einem', 'Ideal', 'entsprechen', '.'] }
+var satzbauData = [
+    {
+        parts: ['viele', 'Menschen', 'leiden', 'unter', 'dem', 'Druck', 'der', 'Medien', ',', 'die', 'perfekte', 'Körper', 'zeigen'],
+        valid: [['viele', 'Menschen', 'leiden', 'unter', 'dem', 'Druck', 'der', 'Medien', ',', 'die', 'perfekte', 'Körper', 'zeigen']],
+        punct: '.'
+    },
+    {
+        parts: ['die', 'Schönheitsstandards', 'werden', 'von', 'sozialen', 'Medien', 'beeinflusst', ',', 'die', 'junge', 'Menschen', 'täglich', 'nutzen'],
+        valid: [['die', 'Schönheitsstandards', 'werden', 'von', 'sozialen', 'Medien', 'beeinflusst', ',', 'die', 'junge', 'Menschen', 'täglich', 'nutzen']],
+        punct: '.'
+    },
+    {
+        parts: ['Selbstakzeptanz', 'ist', 'viel', 'wichtiger', 'als', 'Schönheitsideale', ',', 'die', 'sich', 'ohnehin', 'ständig', 'wieder', 'ändern'],
+        valid: [['Selbstakzeptanz', 'ist', 'viel', 'wichtiger', 'als', 'Schönheitsideale', ',', 'die', 'sich', 'ohnehin', 'ständig', 'wieder', 'ändern']],
+        punct: '.'
+    },
+    {
+        parts: ['jeder', 'Mensch', 'ist', 'auf', 'seine', 'eigene', 'Art', 'schön', ',', 'auch', 'wenn', 'die', 'Werbung', 'anderes', 'behauptet'],
+        valid: [['jeder', 'Mensch', 'ist', 'auf', 'seine', 'eigene', 'Art', 'schön', ',', 'auch', 'wenn', 'die', 'Werbung', 'anderes', 'behauptet']],
+        punct: '.'
+    },
+    {
+        parts: ['die', 'Werbung', 'zeigt', 'oft', 'unrealistische', 'Körperbilder', ',', 'die', 'mit', 'Computerprogrammen', 'stark', 'bearbeitet', 'wurden'],
+        valid: [['die', 'Werbung', 'zeigt', 'oft', 'unrealistische', 'Körperbilder', ',', 'die', 'mit', 'Computerprogrammen', 'stark', 'bearbeitet', 'wurden']],
+        punct: '.'
+    },
+    {
+        parts: ['man', 'vergleicht', 'sich', 'ständig', 'mit', 'anderen', ',', 'bis', 'man', 'sich', 'selbst', 'unzulänglich', 'findet'],
+        valid: [['man', 'vergleicht', 'sich', 'ständig', 'mit', 'anderen', ',', 'bis', 'man', 'sich', 'selbst', 'unzulänglich', 'findet']],
+        punct: '.'
+    },
+    {
+        parts: ['kein', 'Körper', 'muss', 'einem', 'Ideal', 'entsprechen', ',', 'weil', 'Gesundheit', 'am', 'Ende', 'viel', 'wichtiger', 'ist'],
+        valid: [['kein', 'Körper', 'muss', 'einem', 'Ideal', 'entsprechen', ',', 'weil', 'Gesundheit', 'am', 'Ende', 'viel', 'wichtiger', 'ist']],
+        punct: '.'
+    }
 ];
+
+var sbDragged = null;
+
+function getSbCursor() {
+    var c = document.getElementById('sb-insert-cursor');
+    if (!c) {
+        c = document.createElement('div');
+        c.id = 'sb-insert-cursor';
+        c.style.cssText = 'width:3px;min-height:32px;background:#e67e22;border-radius:2px;align-self:stretch;pointer-events:none;flex-shrink:0;';
+    }
+    return c;
+}
+
+function getSbInsertPos(zone, clientX) {
+    var chips = Array.from(zone.querySelectorAll('.chip'));
+    for (var i = 0; i < chips.length; i++) {
+        var r = chips[i].getBoundingClientRect();
+        if (clientX < r.left + r.width / 2) return chips[i];
+    }
+    return null;
+}
+
+function sbCapitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function sbUpdateCapitalization(row) {
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    chips.forEach(function(c, i) {
+        var orig = c.dataset.orig;
+        var isProper = orig.charAt(0) === orig.charAt(0).toUpperCase() && orig.charAt(0) !== orig.charAt(0).toLowerCase();
+        if (isProper) {
+            c.textContent = orig;
+        } else {
+            c.textContent = (i === 0) ? sbCapitalize(orig) : orig;
+        }
+    });
+}
+
+function sbMakeChip(word) {
+    var chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = word;
+    chip.dataset.orig = word;
+    chip.draggable = true;
+    if (word === ',' || word === ';') chip.classList.add('punct-chip');
+    chip.addEventListener('dragstart', function(e) {
+        sbDragged = chip;
+        if (typeof timerAutoStart === 'function') timerAutoStart(2);
+        e.dataTransfer.setData('text/plain', '');
+        setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
+    });
+    chip.addEventListener('dragend', function() {
+        chip.style.opacity = '';
+        sbDragged = null;
+        var c = document.getElementById('sb-insert-cursor');
+        if (c && c.parentNode) c.parentNode.removeChild(c);
+    });
+    return chip;
+}
+
+function sbRegisterZone(zone, idx) {
+    zone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = getSbCursor();
+        var before = getSbInsertPos(zone, e.clientX);
+        if (before) zone.insertBefore(cursor, before);
+        else zone.appendChild(cursor);
+    });
+    zone.addEventListener('dragleave', function(e) {
+        if (!zone.contains(e.relatedTarget)) {
+            var c = document.getElementById('sb-insert-cursor');
+            if (c && c.parentNode === zone) zone.removeChild(c);
+        }
+    });
+    zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (!sbDragged) return;
+        var cursor = document.getElementById('sb-insert-cursor');
+        if (cursor && cursor.parentNode === zone) {
+            zone.insertBefore(sbDragged, cursor);
+            zone.removeChild(cursor);
+        } else {
+            zone.appendChild(sbDragged);
+        }
+        sbDragged = null;
+        var row = document.getElementById('sb-row-' + idx);
+        sbUpdateCapitalization(row);
+        sbCheckAuto(idx);
+    });
+}
+
+function sbColorRow(idx) {
+    var row = document.getElementById('sb-row-' + idx);
+    var chips = Array.from(row.querySelectorAll('.chip'));
+    var order = chips.map(function(c) { return c.dataset.orig; });
+    var ok = satzbauData[idx].valid.some(function(v) {
+        return JSON.stringify(v) === JSON.stringify(order);
+    });
+    chips.forEach(function(c) {
+        c.classList.remove('correct', 'incorrect');
+        c.classList.add(ok ? 'correct' : 'incorrect');
+    });
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    if (ok) {
+        var punkt = document.createElement('span');
+        punkt.className = 'sb-punkt';
+        punkt.textContent = satzbauData[idx].punct || '.';
+        row.appendChild(punkt);
+    }
+    return ok;
+}
+
+function sbCheckAuto(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    if (bank.querySelectorAll('.chip').length > 0) {
+        row.querySelectorAll('.chip').forEach(function(c) {
+            c.classList.remove('correct', 'incorrect');
+        });
+        row.classList.remove('correct', 'incorrect');
+        fb.textContent = '';
+        return;
+    }
+    setTimeout(function() {
+        if (typeof timerAutoStart === 'function') timerAutoStart(2);
+        var ok = sbColorRow(idx);
+        if (ok) {
+            row.classList.add('correct');
+            row.classList.remove('incorrect');
+            fb.className = 'satzbau-feedback correct';
+            fb.textContent = '✓ Korrekt!';
+            sbCheckAllDone();
+        } else {
+            row.classList.add('incorrect');
+            row.classList.remove('correct');
+            fb.className = 'satzbau-feedback incorrect';
+            fb.textContent = '✗ Falsche Reihenfolge – verschiebe die Chips!';
+        }
+    }, 500);
+}
+
+function sbCheckAllDone() {
+    var allOk = satzbauData.every(function(_, i) {
+        var row = document.getElementById('sb-row-' + i);
+        return row && row.classList.contains('correct');
+    });
+    if (allOk) if (typeof stopTimer === 'function') stopTimer(2);
+}
+
+function sbShowSolution(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    var solution = satzbauData[idx].valid[0];
+    var allChips = {};
+    Array.from(bank.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    Array.from(row.querySelectorAll('.chip')).forEach(function(c) { allChips[c.dataset.orig] = c; });
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild) row.removeChild(row.firstChild);
+    solution.forEach(function(word, i) {
+        var chip = allChips[word];
+        if (chip) {
+            if (word !== ',' && word !== ';') {
+                chip.textContent = (i === 0) ? sbCapitalize(word) : word;
+            }
+            chip.classList.remove('correct', 'incorrect');
+            row.appendChild(chip);
+        }
+    });
+    fb.textContent = '';
+    setTimeout(function() { sbCheckAuto(idx); }, 100);
+}
+
+function sbResetOne(idx) {
+    var bank = document.getElementById('sb-bank-' + idx);
+    var row = document.getElementById('sb-row-' + idx);
+    var fb = document.getElementById('sb-fb-' + idx);
+    while (bank.firstChild) bank.removeChild(bank.firstChild);
+    while (row.firstChild) row.removeChild(row.firstChild);
+    row.classList.remove('correct', 'incorrect');
+    fb.textContent = '';
+    fb.className = 'satzbau-feedback';
+    var existing = row.querySelector('.sb-punkt');
+    if (existing) existing.parentNode.removeChild(existing);
+    var parts = satzbauData[idx].parts.slice();
+    for (var i = parts.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+    }
+    parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function initSatzbau() {
+    var container = document.getElementById('satzbauContainer');
+    container.innerHTML = '';
+    satzbauData.forEach(function(ex, idx) {
+        var item = document.createElement('div');
+        item.className = 'satzbau-item';
+        var bank = document.createElement('div');
+        bank.className = 'chips-container';
+        bank.id = 'sb-bank-' + idx;
+        var row = document.createElement('div');
+        row.className = 'sentence-builder';
+        row.id = 'sb-row-' + idx;
+        var fb = document.createElement('div');
+        fb.className = 'satzbau-feedback';
+        fb.id = 'sb-fb-' + idx;
+        var parts = ex.parts.slice();
+        for (var i = parts.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
+        }
+        parts.forEach(function(word) {
+            bank.appendChild(sbMakeChip(word));
+        });
+        sbRegisterZone(bank, idx);
+        sbRegisterZone(row, idx);
+        var btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex; gap:8px; margin-top:6px;';
+        var btnS = document.createElement('button');
+        btnS.textContent = 'Lösen';
+        btnS.className = 'btn';
+        btnS.onclick = (function(i){ return function(){ sbShowSolution(i); }; })(idx);
+        var btnR = document.createElement('button');
+        btnR.textContent = '↺ Neustart';
+        btnR.className = 'btn';
+        btnR.onclick = (function(i){ return function(){ sbResetOne(i); }; })(idx);
+        btnRow.appendChild(btnS);
+        btnRow.appendChild(btnR);
+        item.appendChild(bank);
+        item.appendChild(row);
+        item.appendChild(fb);
+        item.appendChild(btnRow);
+        container.appendChild(item);
+    });
+}
+
+function resetSatzbau() { resetAllSb(); }
+function showAllSbLoesung() {
+    if (typeof stopTimer === 'function') stopTimer(2);
+    satzbauData.forEach(function(_, idx) {
+        sbShowSolution(idx);
+    });
+}
+
+function resetAllSb() {
+    satzbauData.forEach(function(_, idx) {
+        sbResetOne(idx);
+    });
+    if (typeof resetTimer === 'function') resetTimer(2);
+}
 
 var WORTSCHATZ = [
   {type:'n', en:'body image', art:'das', wort:'Körperbild', plural:'Körperbilder'},
@@ -548,7 +700,7 @@ var WORTSCHATZ = [
   {type:'v', en:'diverse (vielfältig)', de:'vielfältig'}
 ];
 
-buildSatzbau();
+initSatzbau();
 initWortschatz();
 
 // INIT
@@ -992,6 +1144,212 @@ function showLoesungWortschatz() {
         inp.classList.add('ok');
     });
 }
+</script>
+
+<script>
+/* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
+   hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
+(function(){
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":2};
+  var SBGAP = [{"i":0,"row":["_","_","_","_","dem","_","der","Medien","_","_","_","Körper","_"],"parts":["viele","Menschen","leiden","unter","Druck",",","die","perfekte","zeigen"]},{"i":1,"row":["_","_","_","von","_","_","_","_","die","junge","_","täglich","_"],"parts":["die","Schönheitsstandards","werden","sozialen","Medien","beeinflusst",",","Menschen","nutzen"]},{"i":2,"row":["_","_","_","wichtiger","_","Schönheitsideale","_","_","sich","_","ständig","_","_"],"parts":["Selbstakzeptanz","ist","viel","als",",","die","ohnehin","wieder","ändern"]},{"i":3,"row":["_","_","_","_","seine","_","_","schön","_","_","wenn","_","_","anderes","_"],"parts":["jeder","Mensch","ist","auf","eigene","Art",",","auch","die","Werbung","behauptet"]},{"i":4,"row":["_","_","_","oft","_","Körperbilder","_","die","_","_","stark","_","_"],"parts":["die","Werbung","zeigt","unrealistische",",","mit","Computerprogrammen","bearbeitet","wurden"]},{"i":5,"row":["_","_","_","ständig","_","_","_","bis","man","_","_","unzulänglich","_"],"parts":["man","vergleicht","sich","mit","anderen",",","sich","selbst","findet"]},{"i":6,"row":["_","_","_","einem","_","_","_","weil","_","_","Ende","_","wichtiger","_"],"parts":["kein","Körper","muss","Ideal","entsprechen",",","Gesundheit","am","viel","ist"]}];
+  SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
+    ex.row = g.row; ex.parts = g.parts;
+    if (typeof ex.valid[0] === "string") ex.valid = [ex.valid];
+  });
+  if (typeof window.sbDragged === "undefined") window.sbDragged = null;
+  function bankEl(i){ return document.getElementById(CFG.bank + i); }
+  function rowEl(i){ return document.getElementById(CFG.row + i); }
+  function fbEl(i){ return document.getElementById(CFG.fb + i); }
+  function cap(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+  function positions(row){ return Array.from(row.children).filter(function(n){ return n.classList.contains("sb-gap") || n.classList.contains("chip"); }); }
+  function chipOf(pos){ return pos.classList.contains("sb-gap") ? pos.querySelector(".chip") : pos; }
+  function updateCaps(row){ if (!CFG.caps) return;
+    positions(row).forEach(function(pos,i){ var c = chipOf(pos); if (!c) return;
+      var o = c.dataset.orig;
+      var proper = o.charAt(0) === o.charAt(0).toUpperCase() && o.charAt(0) !== o.charAt(0).toLowerCase();
+      c.textContent = proper ? o : (i === 0 ? cap(o) : o); });
+  }
+  function sequence(i){ var row = rowEl(i), seq = [], complete = true;
+    positions(row).forEach(function(pos){ var c = chipOf(pos); if (c) seq.push(c.dataset.orig); else complete = false; });
+    return { seq: seq, complete: complete }; }
+  function clearMarks(i){ var row = rowEl(i);
+    row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+    row.classList.remove("correct","incorrect");
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p); }
+  function afterChange(i){
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i), info = sequence(i);
+    if (!info.complete){ clearMarks(i); if (fb){ fb.textContent=""; fb.className="satzbau-feedback"; } return; }
+    setTimeout(function(){
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var fresh = sequence(i);
+      var ok = satzbauData[i].valid.some(function(v){ return JSON.stringify(v) === JSON.stringify(fresh.seq); });
+      var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+      if (ok){
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("incorrect"); c.classList.add("correct"); });
+        var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+        punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+        row.classList.add("correct"); row.classList.remove("incorrect");
+        if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+        if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+      } else {
+        row.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("correct","incorrect"); });
+        row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("incorrect"); });
+        row.classList.add("incorrect"); row.classList.remove("correct");
+        if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Noch nicht richtig – verschiebe die Wörter!"; }
+      }
+    }, 450);
+  }
+  /* Geführter Modus (B1, 2026-06-10): Sofort-Feedback pro Chip-Platzierung.
+     Richtig (konsistent mit mind. einer valid-Reihenfolge) -> grün + fixiert.
+     Falsch -> rot + Rücksprung in die Bank nach 800 ms. */
+  function toBank(i, chip){
+    chip.textContent = chip.dataset.orig;  // Kleinschreibung wiederherstellen — Bank darf den Satzanfang nicht verraten
+    bankEl(i).appendChild(chip);
+  }
+  function consistent(i){
+    var pos = positions(rowEl(i));
+    var v = satzbauData[i].valid;
+    return v.some(function(o){
+      for (var k = 0; k < pos.length; k++){ var c = chipOf(pos[k]); if (c && c.dataset.orig !== o[k]) return false; }
+      return true; });
+  }
+  function finishRow(i){
+    var row = rowEl(i), fb = fbEl(i);
+    var p = row.querySelector(".sb-punkt"); if (p) p.parentNode.removeChild(p);
+    var punkt = document.createElement("span"); punkt.className = "sb-punkt";
+    punkt.textContent = satzbauData[i].punct || "."; row.appendChild(punkt);
+    row.classList.add("correct"); row.classList.remove("incorrect");
+    if (fb){ fb.className = "satzbau-feedback correct"; fb.textContent = "✓ Korrekt!"; }
+    if (typeof sbCheckAllDone === "function") sbCheckAllDone();
+  }
+  function placeJudge(i, chip){
+    if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+    var row = rowEl(i); updateCaps(row);
+    var fb = fbEl(i);
+    if (consistent(i)){
+      chip.classList.remove("incorrect"); chip.classList.add("correct");
+      chip.dataset.fixed = "1"; chip.draggable = false;
+      if (sequence(i).complete){ finishRow(i); }
+      else if (fb){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+    } else {
+      chip.classList.add("incorrect");
+      if (fb){ fb.className = "satzbau-feedback incorrect"; fb.textContent = "✗ Das passt hier nicht!"; }
+      setTimeout(function(){
+        chip.classList.remove("incorrect");
+        if (!chip.dataset.fixed && chip.closest(".sb-gap")) toBank(i, chip);
+        updateCaps(rowEl(i));
+        if (fb && /incorrect/.test(fb.className)){ fb.className = "satzbau-feedback"; fb.textContent = ""; }
+      }, 800);
+    }
+  }
+  function makeChip(word, i){
+    var chip = document.createElement("div");
+    var isPunct = [",",".","!","?",";",":"].indexOf(word) !== -1;
+    chip.className = "chip" + (isPunct ? " punct-chip" : ""); chip.textContent = word; chip.draggable = true;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.sbIdx = String(i);
+    chip.addEventListener("dragstart", function(e){ if (chip.dataset.fixed){ e.preventDefault(); return; } window.sbDragged = chip; if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab); e.dataTransfer.effectAllowed = "move"; });
+    if (CFG.click) chip.addEventListener("click", function(){
+      if (chip.dataset.fixed) return;
+      if (typeof timerAutoStart === "function") timerAutoStart(CFG.tab);
+      var inSlot = chip.closest(".sb-gap");
+      if (inSlot){ toBank(i, chip); updateCaps(rowEl(i)); return; }
+      var free = Array.from(rowEl(i).querySelectorAll(".sb-gap")).find(function(s){ return !s.querySelector(".chip"); });
+      if (free){ free.appendChild(chip); placeJudge(i, chip); }
+    });
+    return chip;
+  }
+  function makeLocked(word){
+    var chip = document.createElement("div");
+    chip.className = "chip sb-locked"; chip.textContent = word;
+    chip.dataset.orig = word; chip.dataset.word = word; chip.dataset.locked = "1";
+    return chip;
+  }
+  function makeSlot(i){
+    var slot = document.createElement("div"); slot.className = "sb-gap";
+    slot.addEventListener("dragover", function(e){ e.preventDefault(); if (window.sbDragged) slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", function(){ slot.classList.remove("drag-over"); });
+    slot.addEventListener("drop", function(e){
+      e.preventDefault(); slot.classList.remove("drag-over");
+      var d = window.sbDragged; if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      if (slot.querySelector(".chip")) return;  // Lücke schon belegt
+      slot.appendChild(d); window.sbDragged = null; placeJudge(i, d);
+    });
+    return slot;
+  }
+  function registerBank(bank, i){
+    bank.addEventListener("dragover", function(e){ e.preventDefault(); });
+    bank.addEventListener("drop", function(e){
+      e.preventDefault(); var d = window.sbDragged;
+      if (!d || d.dataset.sbIdx !== String(i) || d.dataset.locked || d.dataset.fixed) return;
+      toBank(i, d); window.sbDragged = null; updateCaps(rowEl(i));
+    });
+  }
+  function freshEl(id){ var el = document.getElementById(id); if (!el) return null;
+    var c = el.cloneNode(false); el.parentNode.replaceChild(c, el); return c; }
+  function rebuild(i){
+    var ex = satzbauData[i]; if (!ex || !ex.row) return;
+    var bank = freshEl(CFG.bank + i), row = freshEl(CFG.row + i);
+    if (!bank || !row) return;
+    var fb = fbEl(i); if (fb){ fb.textContent = ""; fb.className = "satzbau-feedback"; }
+    var mov = ex.parts.slice();
+    for (var k = mov.length - 1; k > 0; k--){ var j = Math.floor(Math.random()*(k+1)); var t = mov[k]; mov[k] = mov[j]; mov[j] = t; }
+    mov.forEach(function(w){ bank.appendChild(makeChip(w, i)); });
+    ex.row.forEach(function(tok){ row.appendChild(tok === "_" ? makeSlot(i) : makeLocked(tok)); });
+    registerBank(bank, i);
+    ensureButtons(i);
+  }
+  function rebuildAll(){ satzbauData.forEach(function(ex,i){ if (ex.row) rebuild(i); }); }
+  function showSol(i){
+    rebuild(i);
+    var row = rowEl(i), bank = bankEl(i), sol = satzbauData[i].valid[0];
+    var pool = Array.from(bank.querySelectorAll(".chip"));
+    positions(row).forEach(function(pos,k){
+      if (!pos.classList.contains("sb-gap")) return;
+      var ix = pool.findIndex(function(c){ return c.dataset.orig === sol[k]; });
+      if (ix >= 0){ while (pos.firstChild) pos.removeChild(pos.firstChild); pos.appendChild(pool[ix]); pool.splice(ix,1); }
+    });
+    row.querySelectorAll(".sb-gap .chip").forEach(function(c){ c.classList.add("correct"); c.dataset.fixed = "1"; c.draggable = false; });
+    updateCaps(row);
+    finishRow(i);
+  }
+  function ensureButtons(i){
+    if (document.getElementById("sb-btns-" + i)) return;
+    var anchor = fbEl(i) || rowEl(i); if (!anchor) return;
+    var item = (anchor.closest ? anchor.closest(".satzbau-item") : null) || anchor.parentNode;
+    if (item && [].some.call(item.querySelectorAll("button"), function(b){
+      return /(Lösen|Lösung|Neustart)/.test(b.textContent); })) return;  // native Buttons vorhanden
+    var box = document.createElement("div");
+    box.id = "sb-btns-" + i;
+    box.style.cssText = "display:flex;gap:8px;margin:6px 0 14px 0;";
+    var b1 = document.createElement("button"); b1.type = "button"; b1.className = "btn"; b1.textContent = "Lösen";
+    b1.addEventListener("click", function(){ showSol(i); });
+    var b2 = document.createElement("button"); b2.type = "button"; b2.className = "btn"; b2.textContent = "↺ Neustart";
+    b2.addEventListener("click", function(){ rebuild(i); });
+    box.appendChild(b1); box.appendChild(b2);
+    anchor.parentNode.insertBefore(box, anchor.nextSibling);
+  }
+  ["initSatzbau","buildSatzbau"].forEach(function(fn){
+    if (typeof window[fn] === "function"){ var o = window[fn];
+      window[fn] = function(){ o.apply(this, arguments); rebuildAll(); }; }
+  });
+  if (typeof window.sbReset === "function" && window.sbReset.length === 0){
+    var orall = window.sbReset;
+    window.sbReset = function(){ orall.apply(this, arguments); rebuildAll(); };
+  }
+  if (typeof window.sbResetOne === "function"){
+    var orst = window.sbResetOne;
+    window.sbResetOne = function(i){ if (satzbauData[i] && satzbauData[i].row){ rebuild(i); return; } orst.apply(this, arguments); };
+  }
+  if (typeof window.sbShowSolution === "function"){
+    var osol = window.sbShowSolution;
+    window.sbShowSolution = function(i){ if (satzbauData[i] && satzbauData[i].row){ showSol(i); return; } osol.apply(this, arguments); };
+  }
+  /* Bugfix 2026-06-10: bei leerer Row (Free-Build) zusätzlich die Bank prüfen,
+     sonst baut sich das Gerüst beim Erstladen nie auf (nur nach Neustart). */
+  var pRow = rowEl(0), pBank = bankEl(0);
+  if ((pRow && pRow.children.length) || (pBank && pBank.children.length)) rebuildAll();
+})();
 </script>
 </body>
 </html>

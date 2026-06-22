@@ -705,7 +705,7 @@ function initWortbank() {
   var bank = document.getElementById('wortbank-luecken');
   if (!bank) return;
   bank.innerHTML = '';
-  var words = LUECKEN_DATA.map(function(d){ return d.answer; });
+  var words = ['müssen', 'sollen', 'dürfen', 'wollen', 'können']; /* Infinitiv-Wortkasten — keine konjugierte Zielform (daf-grammatik) */
   for(var i=words.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=words[i];words[i]=words[j];words[j]=t;}
   words.forEach(function(w){
     var chip = document.createElement('span');
@@ -893,14 +893,7 @@ var lkContainer = null, lkActiveInput = null;
 function buildWordBank(containerEl) {
     if (!containerEl) return;
     lkContainer = containerEl;
-    var inputs = Array.from(containerEl.querySelectorAll(
-        'input[data-answer], input[data-ans], input.blank, input.l-inp'));
-    var seen = {}, words = [];
-    inputs.forEach(function(inp) {
-        var w = inp.dataset.answer || inp.dataset.ans || '';
-        if (w && !seen[w]) { seen[w] = true; words.push(w); }
-    });
-    if (!words.length) return;
+    var words = ['müssen', 'sollen', 'dürfen', 'wollen', 'können']; /* Infinitiv-Wortkasten — keine konjugierte Zielform (daf-grammatik) */
     // Fisher-Yates-Shuffle
     for (var i = words.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -910,7 +903,7 @@ function buildWordBank(containerEl) {
     bank.className = 'wort-bank';
     var lbl = document.createElement('div');
     lbl.className = 'wort-bank-label';
-    lbl.innerHTML = '🔤 Wortbank – die richtigen Wörter, in zufälliger Reihenfolge.<br>Tipp sie selbst in die Lücken — achte auf Groß- und Kleinschreibung.';
+    lbl.innerHTML = '🔤 Wortkasten – diese Verben (Infinitiv) brauchst du. Bilde selbst die richtige Form.<br>Tipp sie selbst in die Lücken — achte auf Groß- und Kleinschreibung.';
     bank.appendChild(lbl);
     words.forEach(function(w) {
         // KEIN <button> mehr — <span> ist nicht klickbar

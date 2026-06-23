@@ -197,6 +197,24 @@ input.vp-inp.wrong { border-bottom-color: #e74c3c; color: #e74c3c; }
 .sb-gap .chip { margin:0; }
 .chip.sb-locked { background:#eef0ff; border-style:solid; border-color:#c3c9f5; color:#555; cursor:default; }
 .chip.sb-locked.correct { background:#27ae60; border-color:#27ae60; color:#fff; }
+/* ===== GENUS-TAB ===== */
+.genus-pool { display:flex; flex-wrap:wrap; gap:10px; padding:16px; background:#f0f0f8; border:1px dashed #bbb; border-radius:10px; min-height:60px; margin-bottom:18px; }
+.genus-chip { background:#fff; border:2px solid #667eea; color:#333; padding:8px 14px; border-radius:14px; font-weight:600; font-size:0.95em; cursor:grab; user-select:none; }
+.genus-chip.dragging { opacity:0.5; }
+.genus-chip.selected { outline:3px solid #f39c12; }
+.genus-chip.correct { border-color:#2e7d32; background:#e8f5e9; color:#1b5e20; }
+.genus-chip.wrong { border-color:#c62828; background:#ffebee; color:#b71c1c; }
+.genus-kategorien { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.genus-kat { background:#fafaff; border-radius:10px; padding:10px; border-top:4px solid #999; }
+.genus-kat.kat-der { border-top-color:#1565c0; }
+.genus-kat.kat-die { border-top-color:#ad1457; }
+.genus-kat.kat-das { border-top-color:#1b5e20; }
+.genus-kat.kat-pl  { border-top-color:#5e35b1; }
+.kat-title { text-align:center; font-weight:700; margin-bottom:8px; font-size:1.05em; }
+.kat-der .kat-title { color:#1565c0; } .kat-die .kat-title { color:#ad1457; } .kat-das .kat-title { color:#1b5e20; } .kat-pl .kat-title { color:#5e35b1; }
+.genus-drop { min-height:90px; background:#fff; border:2px dashed #ccc; border-radius:8px; padding:8px; display:flex; flex-direction:column; gap:6px; }
+.genus-drop.dragover { border-color:#667eea; background:#eef1ff; }
+@media (max-width:600px){ .genus-kategorien { grid-template-columns:repeat(2,1fr); } }
 </style>
 </head>
 <body>
@@ -213,6 +231,7 @@ input.vp-inp.wrong { border-bottom-color: #e74c3c; color: #e74c3c; }
         <div class="nav-btn" onclick="showSection(5)">&#127919; Situationen</div>
         <div class="nav-btn" onclick="showSection(6)">&#128202; Konjugation</div>
         <div class="nav-btn" onclick="showSection(7)">&#128208; Verbposition</div>
+        <div class="nav-btn" onclick="showSection(8)">🏷️ Genus</div>
     </div>
 
     <!-- TAB 0: Übersicht -->
@@ -573,7 +592,17 @@ input.vp-inp.wrong { border-bottom-color: #e74c3c; color: #e74c3c; }
         </div>
     </div>
 
-    <div class="author-footer">
+    
+    <!-- ===== TAB: GENUS ===== -->
+    <div class="section" id="sec-genus">
+        <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDIyMCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJHZW51cyDigJQgZGVyLCBkaWUsIGRhcyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzVkNmZjMiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2YTRhOTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8cmVjdCB3aWR0aD0iMTAwMCIgaGVpZ2h0PSIyMjAiIGZpbGw9InVybCgjYmcpIi8+CgogIDwhLS0gZGV6ZW50ZSBIYWlybGluZS1SYWhtdW5nIC0tPgogIDxyZWN0IHg9IjI0IiB5PSIyNCIgd2lkdGg9Ijk1MiIgaGVpZ2h0PSIxNzIiIHJ4PSI2IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS1vcGFjaXR5PSIwLjE4IiBzdHJva2Utd2lkdGg9IjEiLz4KCiAgPCEtLSBLaWNrZXI6IGtsZWluZSwgZ2VzcGVycnRlIFZlcnNhbGllbiAtLT4KICA8dGV4dCB4PSI1MDAiIHk9IjcyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iJ1NlZ29lIFVJJywgc3lzdGVtLXVpLCBzYW5zLXNlcmlmIgogICAgICAgIGZvbnQtc2l6ZT0iMTUiIGZvbnQtd2VpZ2h0PSI2MDAiIGxldHRlci1zcGFjaW5nPSI3IiBmaWxsPSIjZmZmZmZmIiBmaWxsLW9wYWNpdHk9IjAuNzgiPkdFTlVTJiMxNjA7JiMxNjA7JiMxODM7JiMxNjA7JiMxNjA7QVJUSUtFTCBCRVNUSU1NRU48L3RleHQ+CgogIDwhLS0gSGF1cHR6ZWlsZTogcnVoaWdlIFNlcmlmIC0tPgogIDx0ZXh0IHg9IjMyMCIgeT0iMTQ4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXNpemU9IjY2IiBmaWxsPSIjZmZmZmZmIj5kZXI8L3RleHQ+CiAgPHRleHQgeD0iNTAwIiB5PSIxNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIGZvbnQtc2l6ZT0iNjYiIGZpbGw9IiNmZmZmZmYiPmRpZTwvdGV4dD4KICA8dGV4dCB4PSI2ODAiIHk9IjE0OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSI2NiIgZmlsbD0iI2ZmZmZmZiI+ZGFzPC90ZXh0PgoKICA8IS0tIGRlemVudGUgRmFyYmFremVudGUgdW50ZXIgamVkZW0gQXJ0aWtlbCAtLT4KICA8cmVjdCB4PSIyODkiIHk9IjE2NiIgd2lkdGg9IjYyIiBoZWlnaHQ9IjMiIHJ4PSIxLjUiIGZpbGw9IiM3ZWEyZTYiLz4KICA8cmVjdCB4PSI0NjkiIHk9IjE2NiIgd2lkdGg9IjYyIiBoZWlnaHQ9IjMiIHJ4PSIxLjUiIGZpbGw9IiNkOThjYWUiLz4KICA8cmVjdCB4PSI2NDkiIHk9IjE2NiIgd2lkdGg9IjYyIiBoZWlnaHQ9IjMiIHJ4PSIxLjUiIGZpbGw9IiM4NmNiYWIiLz4KPC9zdmc+Cg==" alt="Genus üben — der, die, das">
+        <h2>🏷️ Genus</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 18px;padding:6px 12px;background:#f8f9fa;border-radius:8px;"><div style="display:flex;gap:6px;"><button class="btn btn-show" onclick="showGenusLoesung()">Lösungen</button><button class="btn btn-reset" onclick="resetGenus()">Neu starten</button></div><div style="display:flex;gap:14px;align-items:center;font-size:0.82em;color:#888;font-variant-numeric:tabular-nums;"><span>⏱ <span id="timer-8">00:00</span></span><span>🏆 <span id="best-8">--:--</span></span></div></div>
+        <div class="genus-pool" id="genusPool"></div>
+        <div class="genus-kategorien"><div class="genus-kat kat-der"><div class="kat-title">der</div><div class="genus-drop" id="drop-der" data-cat="der"></div></div><div class="genus-kat kat-die"><div class="kat-title">die</div><div class="genus-drop" id="drop-die" data-cat="die"></div></div><div class="genus-kat kat-das"><div class="kat-title">das</div><div class="genus-drop" id="drop-das" data-cat="das"></div></div><div class="genus-kat kat-pl"><div class="kat-title">Plural</div><div class="genus-drop" id="drop-pl" data-cat="pl"></div></div></div>
+        <div id="genusFeedback" style="margin-top:14px;font-weight:600;"></div>
+    </div>
+<div class="author-footer">
         Erstellt von <span class="author-name">Frank Burkert</span> &middot;
         <a href="mailto:unterricht@frankburkert-daf.de">unterricht@frankburkert-daf.de</a><br>📅 Termin vereinbaren &middot; <a href="https://termin.frankburkert-daf.de">https://termin.frankburkert-daf.de</a> &middot;
         DaF B1/B2 &middot; H&ouml;fliche Modalverben
@@ -977,116 +1006,193 @@ function resetAllSb() {
    DATA: Situationen
    ============================================================ */
 var SITUATION_DATA = [
-    {
-        context: '\uD83C\uDFE5 Sie sind beim Arzt und wollen fragen, ob Sie r\u00e4uchern d\u00fcrfen.',
-        question: 'Was sagen Sie?',
-        options: [
-            { text: 'Darf ich rauchen?' },
-            { text: 'D\u00fcrfte ich fragen, ob das Rauchen erlaubt ist?', correct: true },
-            { text: 'Ich will rauchen.' }
-        ],
-        feedback: '\u201ED\u00fcrfte ich fragen \u2026\u201C ist die formellste und h\u00f6flichste Form f\u00fcr diese Situation. \u201EDarf ich\u201C ist korrekt, aber weniger h\u00f6flich beim Arzt.'
-    },
-    {
-        context: '\uD83D\uDCBC Im B\u00fcro: Ihr Kollege (du) soll Ihnen ein Dokument schicken.',
-        question: 'Wie formulieren Sie die Bitte h\u00f6flich?',
-        options: [
-            { text: 'Schick mir das Dokument!' },
-            { text: 'K\u00f6nntest du mir das Dokument schicken?', correct: true },
-            { text: 'Du musst mir das Dokument schicken.' }
-        ],
-        feedback: '\u201EK\u00f6nntest du \u2026?\u201C ist die h\u00f6fliche Form unter Kollegen (du-Ebene). Der Imperativ klingt zu direkt, \u201Emusst\u201C klingt wie ein Befehl.'
-    },
-    {
-        context: '\uD83C\uDFE8 Im Hotel: Sie m\u00f6chten ein Zimmer reservieren.',
-        question: 'Was sagen Sie an der Rezeption?',
-        options: [
-            { text: 'Ich will ein Zimmer!', },
-            { text: 'Ich m\u00f6chte ein Zimmer f\u00fcr zwei N\u00e4chte reservieren, bitte.', correct: true },
-            { text: 'Reservieren Sie mir sofort ein Zimmer.' }
-        ],
-        feedback: '\u201EIch m\u00f6chte \u2026\u201C ist der Standard f\u00fcr h\u00f6fliche W\u00fcnsche und Bestellungen \u2013 neutral und freundlich. \u201Eich will\u201C klingt fordernd.'
-    },
-    {
-        context: '\uD83D\uDC69\u200D\uD83C\uDFEB Als Lehrer: Ein Sch\u00fcler soll h\u00e4ufiger \u00fcben.',
-        question: 'Wie geben Sie den Ratschlag freundlich?',
-        options: [
-            { text: 'Du musst mehr \u00fcben!', },
-            { text: '\u00DCbe mehr!', },
-            { text: 'Du solltest regelm\u00e4\u00dfig \u00fcben \u2013 das hilft enorm.', correct: true }
-        ],
-        feedback: '\u201EDu solltest \u2026\u201C gibt einen Ratschlag ohne Druck \u2013 h\u00f6flich und einladend. \u201Emusst\u201C klingt nach Zwang, der Imperativ nach Befehl.'
-    },
-    {
-        context: '\uD83D\uDCDE Am Telefon: Sie rufen in einer Firma an und m\u00f6chten mit der Gesch\u00e4ftsf\u00fchrung sprechen.',
-        question: 'Wie formulieren Sie Ihre Bitte?',
-        options: [
-            { text: 'Verbinden Sie mich sofort!', },
-            { text: 'K\u00f6nnten Sie mich bitte mit der Gesch\u00e4ftsf\u00fchrung verbinden?', correct: true },
-            { text: 'Ich will die Gesch\u00e4ftsf\u00fchrung sprechen.' }
-        ],
-        feedback: '\u201EK\u00f6nnten Sie \u2026?\u201C ist die ideale Formulierung am Telefon: h\u00f6flich, professionell und klar. Der Imperativ wirkt unh\u00f6flich, \u201Eich will\u201C klingt fordernd.'
-    },
-    {
-        context: '\uD83C\uDF74 Im Restaurant: Sie m\u00f6chten die Karte sehen.',
-        question: 'Was sagen Sie zum Kellner?',
-        options: [
-            { text: 'Bringen Sie mir die Karte!', },
-            { text: 'K\u00f6nnten Sie mir bitte die Karte bringen?', correct: true },
-            { text: 'Ich brauche die Karte.' }
-        ],
-        feedback: '\u201EK\u00f6nnten Sie mir bitte \u2026?\u201C ist im Restaurant die h\u00f6flichste und nat\u00fcrlichste Form. Der Imperativ klingt fordernd, \u201Eich brauche\u201C ist zu direkt.'
-    },
-    {
-        context: '\u2615 Im Caf\u00e9: Sie m\u00f6chten einen Kaffee und ein St\u00fcck Kuchen bestellen.',
-        question: 'Wie bestellen Sie h\u00f6flich?',
-        options: [
-            { text: 'Ich will einen Kaffee und Kuchen.', },
-            { text: 'Einen Kaffee!', },
-            { text: 'Ich h\u00e4tte gern einen Kaffee und ein St\u00fcck Kuchen, bitte.', correct: true }
-        ],
-        feedback: '\u201EIch h\u00e4tte gern \u2026\u201C ist die typische, sehr nat\u00fcrliche Bestellformel im Deutschen. Sie klingt weich, freundlich und kompetent. \u201Eich will\u201C wirkt fordernd.'
-    },
-    {
-        context: '\uD83C\uDFE8 An der Hotelrezeption: Sie fragen, ob noch Zimmer verf\u00fcgbar sind.',
-        question: 'Wie formulieren Sie Ihre Frage?',
-        options: [
-            { text: 'Haben Sie noch Zimmer?', },
-            { text: 'H\u00e4tten Sie vielleicht noch ein Einzelzimmer f\u00fcr heute Nacht?', correct: true },
-            { text: 'Ich brauche ein Zimmer!' }
-        ],
-        feedback: '\u201EH\u00e4tten Sie \u2026?\u201C ist die h\u00f6fliche Konjunktiv-II-Form von \u201Ehaben\u201C. Das \u201Evielleicht\u201C macht die Frage noch weicher und zeigt, dass Sie verstehen, wenn kein Zimmer frei ist.'
-    },
-    {
-        context: '\uD83D\uDCBB Im Kundendienst: Ein Kunde wartet sehr lange. Sie m\u00f6chten sich h\u00f6flich entschuldigen.',
-        question: 'Was sagen Sie?',
-        options: [
-            { text: 'Warten Sie weiter.', },
-            { text: 'W\u00fcrden Sie bitte noch einen Moment Geduld haben \u2013 ich k\u00fcmmere mich sofort darum.', correct: true },
-            { text: 'Es dauert noch.' }
-        ],
-        feedback: '\u201EW\u00fcrden Sie bitte \u2026\u201C ist eine sehr formelle und h\u00f6fliche Bitte. Das \u201Esofort darum k\u00fcmmere\u201C zeigt zus\u00e4tzlich Engagement und L\u00f6sungsorientierung.'
-    },
-    {
-        context: '\uD83D\uDCDA In der Bibliothek: Sie m\u00f6chten ein Buch ausleihen, das gerade nicht verf\u00fcgbar ist.',
-        question: 'Was fragen Sie die Bibliothekarin?',
-        options: [
-            { text: 'Wann kommt das Buch zur\u00fcck?', },
-            { text: 'H\u00e4tten Sie vielleicht ein \u00e4hnliches Buch zu diesem Thema f\u00fcr mich?', correct: true },
-            { text: 'Geben Sie mir ein anderes Buch!' }
-        ],
-        feedback: '\u201EH\u00e4tten Sie \u2026?\u201C zeigt, dass Sie verstehen, dass die Bibliothekarin nicht verpflichtet ist zu helfen. Diese Form ist sehr h\u00f6flich und offen.'
-    },
-    {
-        context: '\uD83D\uDE82 Im Zug: Jemand sitzt auf Ihrem reservierten Platz.',
-        question: 'Wie sprechen Sie die Person h\u00f6flich an?',
-        options: [
-            { text: 'Das ist mein Platz! Stehen Sie auf!', },
-            { text: 'Entschuldigung, ich glaube, das ist mein reservierter Platz \u2013 d\u00fcrfte ich Sie bitten, sich einen anderen Platz zu suchen?', correct: true },
-            { text: 'Sie m\u00fcssen woanders sitzen.' }
-        ],
-        feedback: '\u201ED\u00fcrfte ich Sie bitten \u2026?\u201C ist eine extrem h\u00f6fliche Form, die Konflikte vermeidet. Die Einleitung mit \u201EEntschuldigung, ich glaube\u201C mildert die Situation zus\u00e4tzlich.'
-    }
+  {
+    "context": "🏥 Sie sind beim Arzt und wollen fragen, ob Sie räuchern dürfen.",
+    "question": "Was sagen Sie?",
+    "options": [
+      {
+        "text": "Darf ich rauchen?"
+      },
+      {
+        "text": "Ich will rauchen."
+      },
+      {
+        "text": "Dürfte ich fragen, ob das Rauchen erlaubt ist?",
+        "correct": true
+      }
+    ],
+    "feedback": "„Dürfte ich fragen …“ ist die formellste und höflichste Form für diese Situation. „Darf ich“ ist korrekt, aber weniger höflich beim Arzt."
+  },
+  {
+    "context": "💼 Im Büro: Ihr Kollege (du) soll Ihnen ein Dokument schicken.",
+    "question": "Wie formulieren Sie die Bitte höflich?",
+    "options": [
+      {
+        "text": "Könntest du mir das Dokument schicken?",
+        "correct": true
+      },
+      {
+        "text": "Du musst mir das Dokument schicken."
+      },
+      {
+        "text": "Schick mir das Dokument!"
+      }
+    ],
+    "feedback": "„Könntest du …?“ ist die höfliche Form unter Kollegen (du-Ebene). Der Imperativ klingt zu direkt, „musst“ klingt wie ein Befehl."
+  },
+  {
+    "context": "🏨 Im Hotel: Sie möchten ein Zimmer reservieren.",
+    "question": "Was sagen Sie an der Rezeption?",
+    "options": [
+      {
+        "text": "Reservieren Sie mir sofort ein Zimmer."
+      },
+      {
+        "text": "Ich will ein Zimmer!"
+      },
+      {
+        "text": "Ich möchte ein Zimmer für zwei Nächte reservieren, bitte.",
+        "correct": true
+      }
+    ],
+    "feedback": "„Ich möchte …“ ist der Standard für höfliche Wünsche und Bestellungen – neutral und freundlich. „ich will“ klingt fordernd."
+  },
+  {
+    "context": "👩‍🏫 Als Lehrer: Ein Schüler soll häufiger üben.",
+    "question": "Wie geben Sie den Ratschlag freundlich?",
+    "options": [
+      {
+        "text": "Du solltest regelmäßig üben – das hilft enorm.",
+        "correct": true
+      },
+      {
+        "text": "Du musst mehr üben!"
+      },
+      {
+        "text": "Übe mehr!"
+      }
+    ],
+    "feedback": "„Du solltest …“ gibt einen Ratschlag ohne Druck – höflich und einladend. „musst“ klingt nach Zwang, der Imperativ nach Befehl."
+  },
+  {
+    "context": "📞 Am Telefon: Sie rufen in einer Firma an und möchten mit der Geschäftsführung sprechen.",
+    "question": "Wie formulieren Sie Ihre Bitte?",
+    "options": [
+      {
+        "text": "Ich will die Geschäftsführung sprechen."
+      },
+      {
+        "text": "Könnten Sie mich bitte mit der Geschäftsführung verbinden?",
+        "correct": true
+      },
+      {
+        "text": "Verbinden Sie mich sofort!"
+      }
+    ],
+    "feedback": "„Könnten Sie …?“ ist die ideale Formulierung am Telefon: höflich, professionell und klar. Der Imperativ wirkt unhöflich, „ich will“ klingt fordernd."
+  },
+  {
+    "context": "🍴 Im Restaurant: Sie möchten die Karte sehen.",
+    "question": "Was sagen Sie zum Kellner?",
+    "options": [
+      {
+        "text": "Könnten Sie mir bitte die Karte bringen?",
+        "correct": true
+      },
+      {
+        "text": "Bringen Sie mir die Karte!"
+      },
+      {
+        "text": "Ich brauche die Karte."
+      }
+    ],
+    "feedback": "„Könnten Sie mir bitte …?“ ist im Restaurant die höflichste und natürlichste Form. Der Imperativ klingt fordernd, „ich brauche“ ist zu direkt."
+  },
+  {
+    "context": "☕ Im Café: Sie möchten einen Kaffee und ein Stück Kuchen bestellen.",
+    "question": "Wie bestellen Sie höflich?",
+    "options": [
+      {
+        "text": "Ich will einen Kaffee und Kuchen."
+      },
+      {
+        "text": "Ich hätte gern einen Kaffee und ein Stück Kuchen, bitte.",
+        "correct": true
+      },
+      {
+        "text": "Einen Kaffee!"
+      }
+    ],
+    "feedback": "„Ich hätte gern …“ ist die typische, sehr natürliche Bestellformel im Deutschen. Sie klingt weich, freundlich und kompetent. „ich will“ wirkt fordernd."
+  },
+  {
+    "context": "🏨 An der Hotelrezeption: Sie fragen, ob noch Zimmer verfügbar sind.",
+    "question": "Wie formulieren Sie Ihre Frage?",
+    "options": [
+      {
+        "text": "Haben Sie noch Zimmer?"
+      },
+      {
+        "text": "Hätten Sie vielleicht noch ein Einzelzimmer für heute Nacht?",
+        "correct": true
+      },
+      {
+        "text": "Ich brauche ein Zimmer!"
+      }
+    ],
+    "feedback": "„Hätten Sie …?“ ist die höfliche Konjunktiv-II-Form von „haben“. Das „vielleicht“ macht die Frage noch weicher und zeigt, dass Sie verstehen, wenn kein Zimmer frei ist."
+  },
+  {
+    "context": "💻 Im Kundendienst: Ein Kunde wartet sehr lange. Sie möchten sich höflich entschuldigen.",
+    "question": "Was sagen Sie?",
+    "options": [
+      {
+        "text": "Warten Sie weiter."
+      },
+      {
+        "text": "Es dauert noch."
+      },
+      {
+        "text": "Würden Sie bitte noch einen Moment Geduld haben – ich kümmere mich sofort darum.",
+        "correct": true
+      }
+    ],
+    "feedback": "„Würden Sie bitte …“ ist eine sehr formelle und höfliche Bitte. Das „sofort darum kümmere“ zeigt zusätzlich Engagement und Lösungsorientierung."
+  },
+  {
+    "context": "📚 In der Bibliothek: Sie möchten ein Buch ausleihen, das gerade nicht verfügbar ist.",
+    "question": "Was fragen Sie die Bibliothekarin?",
+    "options": [
+      {
+        "text": "Geben Sie mir ein anderes Buch!"
+      },
+      {
+        "text": "Hätten Sie vielleicht ein ähnliches Buch zu diesem Thema für mich?",
+        "correct": true
+      },
+      {
+        "text": "Wann kommt das Buch zurück?"
+      }
+    ],
+    "feedback": "„Hätten Sie …?“ zeigt, dass Sie verstehen, dass die Bibliothekarin nicht verpflichtet ist zu helfen. Diese Form ist sehr höflich und offen."
+  },
+  {
+    "context": "🚂 Im Zug: Jemand sitzt auf Ihrem reservierten Platz.",
+    "question": "Wie sprechen Sie die Person höflich an?",
+    "options": [
+      {
+        "text": "Das ist mein Platz! Stehen Sie auf!"
+      },
+      {
+        "text": "Sie müssen woanders sitzen."
+      },
+      {
+        "text": "Entschuldigung, ich glaube, das ist mein reservierter Platz – dürfte ich Sie bitten, sich einen anderen Platz zu suchen?",
+        "correct": true
+      }
+    ],
+    "feedback": "„Dürfte ich Sie bitten …?“ ist eine extrem höfliche Form, die Konflikte vermeidet. Die Einleitung mit „Entschuldigung, ich glaube“ mildert die Situation zusätzlich."
+  }
 ];
 
 /* ============================================================
@@ -1993,5 +2099,93 @@ function initWortbank() {
   if ((pRow && pRow.children.length) || (pBank && pBank.children.length)) rebuildAll();
 })();
 </script>
+<script>
+/* ========== TAB: GENUS (injiziert) ========== */
+var GENUS_DATA = [
+  { word: "Tisch", cat: "der" },
+  { word: "Mann", cat: "der" },
+  { word: "Hund", cat: "der" },
+  { word: "Baum", cat: "der" },
+  { word: "Apfel", cat: "der" },
+  { word: "Schlüssel", cat: "der" },
+  { word: "Frau", cat: "die" },
+  { word: "Katze", cat: "die" },
+  { word: "Blume", cat: "die" },
+  { word: "Tasche", cat: "die" },
+  { word: "Lampe", cat: "die" },
+  { word: "Tür", cat: "die" },
+  { word: "Kind", cat: "das" },
+  { word: "Haus", cat: "das" },
+  { word: "Auto", cat: "das" },
+  { word: "Buch", cat: "das" },
+  { word: "Fenster", cat: "das" },
+  { word: "Bett", cat: "das" },
+  { word: "Tische", cat: "pl" },
+  { word: "Männer", cat: "pl" },
+  { word: "Frauen", cat: "pl" },
+  { word: "Kinder", cat: "pl" },
+  { word: "Häuser", cat: "pl" },
+  { word: "Bücher", cat: "pl" }
+];
+var GENUS_TIMER = 8;
+var draggedGenus = null, selectedGenus = null;
+var genusSec = 0, genusInt = null;
+function genusFmt(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+function genusTimerStart(){ if(genusInt) return; genusInt=setInterval(function(){ genusSec++; var el=document.getElementById('timer-'+GENUS_TIMER); if(el) el.textContent=genusFmt(genusSec); },1000); }
+function genusTimerStop(){ if(genusInt){ clearInterval(genusInt); genusInt=null; } var b=document.getElementById('best-'+GENUS_TIMER); if(b){ var pv=/^\d\d:\d\d$/.test(b.textContent)?parseInt(b.textContent.slice(0,2))*60+parseInt(b.textContent.slice(3)):1e9; if(genusSec<pv) b.textContent=genusFmt(genusSec); } }
+function genusTimerReset(){ if(genusInt){ clearInterval(genusInt); genusInt=null; } genusSec=0; var el=document.getElementById('timer-'+GENUS_TIMER); if(el) el.textContent='00:00'; }
+function shuffleGenus(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function createGenusChip(d){
+  var chip=document.createElement('div');
+  chip.className='genus-chip'; chip.draggable=true; chip.dataset.cat=d.cat; chip.textContent=d.word;
+  chip.addEventListener('dragstart',function(e){ genusTimerStart(); draggedGenus=chip; chip.classList.add('dragging'); e.dataTransfer.setData('text/plain',''); });
+  chip.addEventListener('dragend',function(){ chip.classList.remove('dragging'); });
+  chip.addEventListener('click',function(){
+    if(selectedGenus===chip){ chip.classList.remove('selected'); selectedGenus=null; return; }
+    if(selectedGenus) selectedGenus.classList.remove('selected');
+    selectedGenus=chip; chip.classList.add('selected'); genusTimerStart();
+  });
+  return chip;
+}
+function initGenus(){
+  var pool=document.getElementById('genusPool'); if(!pool) return;
+  pool.innerHTML='';
+  ['der','die','das','pl'].forEach(function(c){ var z=document.getElementById('drop-'+c); if(z) z.innerHTML=''; });
+  var fb=document.getElementById('genusFeedback'); if(fb) fb.textContent='';
+  shuffleGenus(GENUS_DATA).forEach(function(d){ pool.appendChild(createGenusChip(d)); });
+  document.querySelectorAll('#sec-genus .genus-drop').forEach(function(zone){
+    zone.addEventListener('dragover',function(e){ e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave',function(){ zone.classList.remove('dragover'); });
+    zone.addEventListener('drop',function(e){ e.preventDefault(); zone.classList.remove('dragover'); if(!draggedGenus) return; zone.appendChild(draggedGenus); checkGenusChip(draggedGenus, zone.dataset.cat); draggedGenus=null; updateGenusFeedback(); });
+    zone.addEventListener('click',function(){ if(!selectedGenus) return; zone.appendChild(selectedGenus); checkGenusChip(selectedGenus, zone.dataset.cat); selectedGenus.classList.remove('selected'); selectedGenus=null; updateGenusFeedback(); });
+  });
+  pool.addEventListener('dragover',function(e){ e.preventDefault(); });
+  pool.addEventListener('drop',function(e){ e.preventDefault(); if(draggedGenus){ pool.appendChild(draggedGenus); draggedGenus.classList.remove('correct','wrong'); draggedGenus=null; updateGenusFeedback(); } });
+}
+function checkGenusChip(chip,cat){
+  var ok=chip.dataset.cat===cat;
+  chip.classList.toggle('correct',ok); chip.classList.toggle('wrong',!ok);
+  if(!ok){ setTimeout(function(){ chip.classList.remove('wrong'); document.getElementById('genusPool').appendChild(chip); updateGenusFeedback(); },900); }
+}
+function updateGenusFeedback(){
+  var platziert=document.querySelectorAll('#sec-genus .genus-drop .genus-chip').length;
+  var richtig=document.querySelectorAll('#sec-genus .genus-drop .genus-chip.correct').length;
+  var fb=document.getElementById('genusFeedback'); if(!fb) return;
+  if(platziert===0){ fb.textContent=''; return; }
+  fb.textContent=richtig+' von '+GENUS_DATA.length+' richtig zugeordnet.';
+  fb.style.color=(richtig===GENUS_DATA.length)?'#2e7d32':'#555';
+  if(richtig===GENUS_DATA.length) genusTimerStop();
+}
+function showGenusLoesung(){
+  Array.from(document.querySelectorAll('#sec-genus .genus-chip')).forEach(function(chip){
+    var z=document.getElementById('drop-'+chip.dataset.cat);
+    if(z){ z.appendChild(chip); chip.classList.remove('wrong'); chip.classList.add('correct'); }
+  });
+  updateGenusFeedback();
+}
+function resetGenus(){ initGenus(); genusTimerReset(); }
+(function(){ initGenus(); })();
+</script>
+
 </body>
 </html>

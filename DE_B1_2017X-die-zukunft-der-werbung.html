@@ -249,7 +249,6 @@ input.ws-input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 .genus-drop { min-height:90px; background:#fff; border:2px dashed #ccc; border-radius:8px; padding:8px; display:flex; flex-direction:column; gap:6px; }
 .genus-drop.dragover { border-color:#667eea; background:#eef1ff; }
 @media (max-width:600px){ .genus-kategorien { grid-template-columns:repeat(2,1fr); } }
-
 /* FB-LT-V1 — Wortbank + Feedback (LUECKENTEXT-SKILL-SPEC v1.0) */
 .wortbank{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:#f0f0f8;border-radius:10px;min-height:48px;margin:8px 0 18px;border:1px dashed #bbb;}
 .wortbank-chip{background:#fff;border:2px solid #667eea;color:#667eea;padding:5px 12px;border-radius:14px;font-weight:500;font-size:0.9em;user-select:none;}
@@ -1667,7 +1666,7 @@ function resetGenus(){ initGenus(); genusTimerReset(); }
   function isTrainer(n) {
     // Wortschatz-/Genus-Trainingstab: NIE eine Lückentext-Wortbank einbauen — sonst
     // stünden die Vokabel-/Genus-Lösungen als Chips da (zerstört die Tippübung).
-    if (n.querySelector("input.art, input.wort")) return true;
+    if (n.querySelector("input.art, input.wort, input[data-field], #wortschatzContainer")) return true;
     var h = n.querySelector(".section-title, h2, h3, .tab-title");
     return !!(h && /wortschatz|genus/i.test(h.textContent || ""));
   }

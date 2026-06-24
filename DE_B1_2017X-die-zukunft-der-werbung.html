@@ -270,6 +270,13 @@ input.ws-input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 .satzbau-feedback.incorrect{color:#e74c3c;}
 .sb-label{font-weight:700;color:#444;margin:0 0 8px;}
 </style>
+<style id="fb-wortschatz-css">
+#tab5 .luecken-item{background:#f8f9ff;border-left:4px solid #667eea;border-radius:8px;padding:14px 16px;}
+#tab5 input.blank{border:none;border-bottom:2px solid #c5cae9;background:transparent;outline:none;font-family:inherit;font-size:0.95em;padding:3px 6px;transition:border-color .2s;}
+#tab5 input.blank:focus{border-bottom-color:#667eea;}
+#tab5 input.blank.correct{border-bottom-color:#27ae60;background:#e8f8f0;color:#27ae60;font-weight:700;}
+#tab5 input.blank.wrong{border-bottom-color:#e74c3c;background:#fdeaea;color:#e74c3c;}
+</style>
 </head>
 <body>
 <div class="container">
@@ -466,10 +473,11 @@ input.ws-input.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
         <span class="best-time" id="bt5"></span>
       </div>
       <div class="hilfe-box">Tippe Artikel, Nomen und Plural. Groß-/Kleinschreibung beachten!</div>
-      <div id="ws-container"></div>
-      <button class="pruef-btn" onclick="vocabLiveCheck()">✔ Prüfen</button>
-      <button class="reset-btn" onclick="wsReset()">↺ Zurücksetzen</button>
-      <div style="margin-top:12px;font-size:0.9em;color:#667eea;font-weight:700;" id="ws-score"></div>
+      <div class="btn-row" style="display:flex;gap:8px;margin-bottom:12px;">
+        <button class="btn" onclick="showWortschatzLoesung()">Lösungen</button>
+        <button class="btn" onclick="resetWortschatz()">Neu starten</button>
+      </div>
+      <div id="wortschatzContainer" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"></div>
     </div>
   </div>
     <div class="author-footer">
@@ -514,6 +522,27 @@ const LUECKEN_DATA=[
   {pre:'Die Online-Werbung ist die modernste und ',blank:'digitale',post:' Art der Werbung.'},
   {pre:'Werbung richtet sich immer an eine bestimmte ',blank:'Zielgruppe',post:'.'},
 ];
+
+
+const WORTSCHATZ=[
+{id:1,type:'n',en:'online marketing',artikel:'das',de:'Online-Marketing',plural:'\u2013'},
+{id:2,type:'n',en:'algorithm',artikel:'der',de:'Algorithmus',plural:'Algorithmen'},
+{id:3,type:'n',en:'internet advertising',artikel:'die',de:'Internetwerbung',plural:'Internetwerbungen'},
+{id:4,type:'n',en:'website',artikel:'die',de:'Webseite',plural:'Webseiten'},
+{id:5,type:'n',en:'content marketing',artikel:'das',de:'Content Marketing',plural:'\u2013'},
+{id:6,type:'n',en:'email marketing',artikel:'das',de:'E-Mail-Marketing',plural:'\u2013'},
+{id:7,type:'n',en:'social media marketing',artikel:'das',de:'Social Media Marketing',plural:'\u2013'},
+{id:8,type:'n',en:'online classified ad',artikel:'die',de:'Online-Kleinanzeige',plural:'Online-Kleinanzeigen'},
+{id:9,type:'n',en:'target group',artikel:'die',de:'Zielgruppe',plural:'Zielgruppen'},
+{id:10,type:'n',en:'digital advertising',artikel:'die',de:'digitale Werbung',plural:'\u2013'},
+{id:11,type:'n',en:'social network',artikel:'das',de:'soziale Netzwerk',plural:'soziale Netzwerke'},
+{id:12,type:'p',en:'to post (online)',de:'posten'}
+];
+function initWortschatz(){var c=document.getElementById('wortschatzContainer');if(!c)return;c.innerHTML='';WORTSCHATZ.forEach(function(item){var row=document.createElement('div');row.className='luecken-item';row.style.marginBottom='0';var p=document.createElement('div');p.style.cssText='font-weight:600;color:#667eea;margin-bottom:6px;font-size:1.05em;';p.textContent=item.en;row.appendChild(p);var fl=document.createElement('div');fl.style.cssText='display:flex;gap:8px;flex-wrap:wrap;align-items:center;';function mk(ph,w,ans,fld){var x=document.createElement('input');x.className='blank';x.type='text';x.placeholder=ph;x.style.width=w;x.dataset.answer=ans;x.dataset.field=fld;x.oninput=function(){wortschatzCheck(this);timerAutoStart(5);checkWortschatzAllOk();};return x;}if(item.type==='n'){fl.appendChild(mk('Artikel','70px',item.artikel,'art'));fl.appendChild(mk('Wort','160px',item.de,'word'));var pl;if(item.plural==='\u2013'){pl=document.createElement('input');pl.className='blank';pl.type='text';pl.placeholder='Plural';pl.style.width='140px';pl.dataset.answer=item.plural;pl.dataset.field='plural';pl.value='\u2013';pl.disabled=true;pl.classList.add('correct');pl.style.opacity='0.6';pl.title='Dieses Wort hat keinen Plural';}else{pl=mk('Plural','140px',item.plural,'plural');}fl.appendChild(pl);}else{fl.appendChild(mk('Deutsch','220px',item.de,'word'));}row.appendChild(fl);c.appendChild(row);});}
+function wortschatzCheck(inp){var u=inp.value,a=inp.dataset.answer,fld=inp.dataset.field;inp.classList.remove('correct','wrong');if(!u)return;var cu=(fld==='art')?u.toLowerCase().trim():u.trim();var ca=(fld==='art')?a.toLowerCase():a;if(cu===ca){inp.classList.add('correct');}else if(ca.indexOf(cu)===0){}else{inp.classList.add('wrong');}}
+function checkWortschatzAllOk(){var ins=document.querySelectorAll('#tab5 input.blank');var ok=ins.length>0&&Array.prototype.every.call(ins,function(i){return i.disabled||i.classList.contains('correct');});if(ok)stopTimer(5);}
+function showWortschatzLoesung(){stopTimer(5);document.querySelectorAll('#tab5 input.blank').forEach(function(i){i.value=i.dataset.answer;i.classList.add('correct');i.classList.remove('wrong');});}
+function resetWortschatz(){document.querySelectorAll('#tab5 input.blank').forEach(function(i){if(!i.disabled){i.value='';i.classList.remove('correct','wrong');}});resetTimer(5);}
 
 function buildLuecken(){
   const c=document.getElementById('luecken-container');c.innerHTML='';
@@ -909,25 +938,6 @@ function resetAllSb() {
 
 
 // ── WORTSCHATZ ───────────────────────────────────────────────────
-const VOCAB_DATA=[
-  {en:'online marketing',art:'das',wort:'Online-Marketing',plural:'–'},
-  {en:'algorithm',art:'der',wort:'Algorithmus',plural:'Algorithmen'},
-  {en:'internet advertising',art:'die',wort:'Internetwerbung',plural:'Internetwerbungen'},
-  {en:'website',art:'die',wort:'Webseite',plural:'Webseiten'},
-  {en:'content marketing',art:'das',wort:'Content Marketing',plural:'–'},
-  {en:'email marketing',art:'das',wort:'E-Mail-Marketing',plural:'–'},
-  {en:'social media marketing',art:'das',wort:'Social Media Marketing',plural:'–'},
-  {en:'online classified ad',art:'die',wort:'Online-Kleinanzeige',plural:'Online-Kleinanzeigen'},
-  {en:'target group',art:'die',wort:'Zielgruppe',plural:'Zielgruppen'},
-  {en:'digital advertising',art:'die',wort:'digitale Werbung',plural:'–'},
-  {en:'social network',art:'das',wort:'soziale Netzwerk',plural:'soziale Netzwerke'},
-  {en:'to post (online)',art:'verb',wort:'posten',plural:'–'},
-];
-
-function buildWortschatz(){const c=document.getElementById('ws-container');c.innerHTML='';VOCAB_DATA.forEach((d,i)=>{const div=document.createElement('div');div.className='ws-item';div.innerHTML=`<span class="ws-en">${d.en}</span><div class="ws-fields"><span class="ws-hint">Artikel:</span><input class="ws-input" id="ws_art_${i}" style="width:55px" type="text" autocomplete="off" placeholder="der/…"><span class="ws-hint">Nomen:</span><input class="ws-input" id="ws_wort_${i}" style="width:180px" type="text" autocomplete="off" placeholder="…"><span class="ws-hint">Pl.:</span><input class="ws-input" id="ws_pl_${i}" style="width:55px" type="text" autocomplete="off" placeholder="…"></div>`;c.appendChild(div);});}
-function vocabLiveCheck(){let correct=0;VOCAB_DATA.forEach((d,i)=>{const aEl=document.getElementById('ws_art_'+i),wEl=document.getElementById('ws_wort_'+i),pEl=document.getElementById('ws_pl_'+i);const aOk=aEl.value.trim()===d.art,wOk=wEl.value.trim()===d.wort,pOk=pEl.value.trim()===d.plural;aEl.className='ws-input '+(aEl.value.trim()===''?'':(aOk?'correct':'wrong'));wEl.className='ws-input '+(wEl.value.trim()===''?'':(wOk?'correct':'wrong'));pEl.className='ws-input '+(pEl.value.trim()===''?'':(pOk?'correct':'wrong'));if(aOk&&wOk&&pOk)correct++;});document.getElementById('ws-score').textContent=correct+' / '+VOCAB_DATA.length+' richtig';if(correct===VOCAB_DATA.length)stopTimer(5);}
-function wsReset(){VOCAB_DATA.forEach((_,i)=>{['ws_art_','ws_wort_','ws_pl_'].forEach(p=>{const el=document.getElementById(p+i);el.value='';el.className='ws-input';});});document.getElementById('ws-score').textContent='';}
-
 // ── INIT ─────────────────────────────────────────────────────────
 /* ===== VORENTLASTUNG (verbindliches Vokabelkarten-Muster) ===== */
 var VORENTLASTUNG = [
@@ -957,10 +967,8 @@ function buildVorentlastung() {
 }
 buildVorentlastung();
 buildLuecken();
-  buildWordBank(document.getElementById('luecken-container'));buildMatch();initSatzbau();buildWortschatz();loadBestTimes();
+  buildWordBank(document.getElementById('luecken-container'));buildMatch();initSatzbau();initWortschatz();loadBestTimes();
 initSchreibwerkstatt();
-function initVocab() { buildWortschatz(); }
-
 /* ===== SCHREIBWERKSTATT (B1) =================================== */
 var SCHREIB_NAME_KEY      = 'schreibwerkstatt_B1_2017X_name';
 var SCHREIB_KEY_PREFIX    = 'schreibwerkstatt_B1_2017X_';

@@ -181,7 +181,6 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .genus-drop { min-height:90px; background:#fff; border:2px dashed #ccc; border-radius:8px; padding:8px; display:flex; flex-direction:column; gap:6px; }
 .genus-drop.dragover { border-color:#667eea; background:#eef1ff; }
 @media (max-width:600px){ .genus-kategorien { grid-template-columns:repeat(2,1fr); } }
-
 /* FB-LT-V1 — Wortbank + Feedback (LUECKENTEXT-SKILL-SPEC v1.0) */
 .wortbank{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:#f0f0f8;border-radius:10px;min-height:48px;margin:8px 0 18px;border:1px dashed #bbb;}
 .wortbank-chip{background:#fff;border:2px solid #667eea;color:#667eea;padding:5px 12px;border-radius:14px;font-weight:500;font-size:0.9em;user-select:none;}
@@ -238,7 +237,7 @@ input.wrong{border-bottom:2px solid #e74c3c !important;background:#fdeaea !impor
 </div>
 <div class="section-title">✏️ Lückentext</div>
 <div class="hilfe-box"><strong>Aufgabe:</strong> Fülle die Lücken mit den richtigen Wörtern aus.</div>
-<div class="wortkasten"><strong>Wörter:</strong> ungefähr · irgendwie · etwa · präzise · genau · abschwächen · konkretisieren · ausweichen · deutlich · vage</div>
+
     <div class="luecken-item">Er kommt <input class="luecken-inp" data-answer="ungefähr" oninput="liveCheck(this)" placeholder=""> um zehn Uhr.</div>
     <div class="luecken-item">Das war <input class="luecken-inp" data-answer="irgendwie" oninput="liveCheck(this)" placeholder=""> seltsam.</div>
     <div class="luecken-item">Es waren <input class="luecken-inp" data-answer="etwa" oninput="liveCheck(this)" placeholder=""> zwanzig Personen dabei.</div>
@@ -1074,39 +1073,6 @@ function schreibLeeren() {
 
 // ── WORTKASTEN ──────────────────────────────────────────────────────────────
 var lkContainer = null, lkActiveInput = null;
-function buildWordBank(containerEl) {
-    if (!containerEl) return;
-    lkContainer = containerEl;
-    var inputs = Array.from(containerEl.querySelectorAll(
-        'input[data-answer], input[data-ans], input.blank, input.l-inp'));
-    var seen = {}, words = [];
-    inputs.forEach(function(inp) {
-        var w = inp.dataset.answer || inp.dataset.ans || '';
-        if (w && !seen[w]) { seen[w] = true; words.push(w); }
-    });
-    if (!words.length) return;
-    // Fisher-Yates-Shuffle
-    for (var i = words.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var t = words[i]; words[i] = words[j]; words[j] = t;
-    }
-    var bank = document.createElement('div');
-    bank.className = 'wort-bank';
-    var lbl = document.createElement('div');
-    lbl.className = 'wort-bank-label';
-    lbl.innerHTML = '🔤 Wortbank – die richtigen Wörter, in zufälliger Reihenfolge.<br>Tipp sie selbst in die Lücken — achte auf Groß- und Kleinschreibung.';
-    bank.appendChild(lbl);
-    words.forEach(function(w) {
-        // KEIN <button> mehr — <span> ist nicht klickbar
-        var chip = document.createElement('span');
-        chip.className = 'wort-chip';
-        chip.textContent = w;
-        chip.dataset.word = w;
-        bank.appendChild(chip);
-    });
-    containerEl.insertBefore(bank, containerEl.firstChild);
-    // KEIN focusin-/click-Listener mehr — Wortbank ist rein visuell
-}
 function syncWordBankChips() {
     if (!lkContainer) return;
     var bank = lkContainer.querySelector('.wort-bank');
@@ -1120,7 +1086,7 @@ function syncWordBankChips() {
 // ────────────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function(){
-  buildWordBank(document.getElementById('sec-1'));
+  
 });
 var wortschatzInited = false;
 

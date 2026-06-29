@@ -260,7 +260,6 @@
       <span class="timer-best" id="timerLBest"></span>
     </div>
     <div class="luecken-text" id="lueckenText"></div>
-    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
     <div class="result-msg" id="lueckenResult"></div>
   </div>
 
@@ -284,7 +283,6 @@
     <h2>Zuordnung — dass, ob oder W-Satz?</h2>
     <p style="margin-bottom:16px;color:#555;">Ordne jeden Satz dem Typ zu.</p>
     <ul class="zuord-list" id="zuordList"></ul>
-    <button class="check-btn" onclick="checkZuordnung()">Überprüfen</button>
     <div class="result-msg" id="zuordResult"></div>
   </div>
 
@@ -421,6 +419,7 @@ document.addEventListener('DOMContentLoaded', function(){
   buildWordBank(document.getElementById('lueckenText'));
 });
 function liveCheck(inp){inp.classList.remove('ok','err');if(inp.value.trim()===inp.dataset.answer)inp.classList.add('ok');autoStopIfDone();}
+function liveZuord(sel){sel.classList.remove('ok','err');if(!sel.value)return;sel.classList.add(sel.value===sel.dataset.correct?'ok':'err');var sels=document.querySelectorAll('#zuordList select');var done=0;sels.forEach(function(s){if(s.value&&s.value===s.dataset.correct)done++;});var res=document.getElementById('zuordResult');if(res&&sels.length&&done===sels.length){res.textContent='✅ Alle '+sels.length+' Zuordnungen richtig!';res.style.color='#1a5e17';}else if(res){res.textContent='';}}
 function checkLuecken(){let correct=0;LUECKEN.forEach((item,idx)=>{const inp=document.getElementById(`luecke-${idx}`);inp.classList.remove('ok','err');if(inp.value.trim()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}else inp.classList.add('err');});const res=document.getElementById('lueckenResult');if(correct===LUECKEN.length){res.textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;res.style.color='#1a5e17';stopTimer('L');saveBest('L');}else{res.textContent=`${correct} von ${LUECKEN.length} richtig.`;res.style.color='#7a0000';}}
 function autoStopIfDone(){if([...document.querySelectorAll('#lueckenText input')].every(i=>i.classList.contains('ok'))){stopTimer('L');saveBest('L');document.getElementById('lueckenResult').textContent=`✅ Alle ${LUECKEN.length} Lücken richtig!`;document.getElementById('lueckenResult').style.color='#1a5e17';}}
 
@@ -751,7 +750,7 @@ const ZUORDNUNG_ITEMS = [
   { satz: '„Wir wissen nicht, ob das stimmt.“', cat: 'ob-Satz' },
 ];
 
-(function(){const list=document.getElementById('zuordList');const cats=['dass-Satz','ob-Satz','W-Satz'];ZUORDNUNG_ITEMS.forEach((item,idx)=>{const li=document.createElement('li');li.className='zuord-item';const opts=cats.map(c=>`<option value="${c}">${c}</option>`).join('');li.innerHTML=`<div class="satz">${idx+1}. ${item.satz}</div><select id="zuord-${idx}"><option value="">— Typ —</option>${opts}</select>`;list.appendChild(li);});})();
+(function(){const list=document.getElementById('zuordList');const cats=['dass-Satz','ob-Satz','W-Satz'];ZUORDNUNG_ITEMS.forEach((item,idx)=>{const li=document.createElement('li');li.className='zuord-item';const opts=cats.map(c=>`<option value="${c}">${c}</option>`).join('');li.innerHTML=`<div class="satz">${idx+1}. ${item.satz}</div><select id="zuord-${idx}" data-correct="${item.cat}" onchange="liveZuord(this)"><option value="">— Typ —</option>${opts}</select>`;list.appendChild(li);});})();
 function checkZuordnung(){let correct=0;ZUORDNUNG_ITEMS.forEach((item,idx)=>{const sel=document.getElementById(`zuord-${idx}`);sel.classList.remove('ok','err');if(sel.value===item.cat){sel.classList.add('ok');correct++;}else sel.classList.add('err');});const res=document.getElementById('zuordResult');res.textContent=correct===ZUORDNUNG_ITEMS.length?`✅ Alle ${ZUORDNUNG_ITEMS.length} Zuordnungen richtig!`:`${correct} von ${ZUORDNUNG_ITEMS.length} richtig.`;res.style.color=correct===ZUORDNUNG_ITEMS.length?'#1a5e17':'#7a0000';}
 
 // TABS

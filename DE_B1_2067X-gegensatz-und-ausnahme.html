@@ -302,7 +302,6 @@
     <h2>Zuordnung — Gegensatz oder Ausnahme?</h2>
     <p style="margin-bottom:16px;color:#555;">Ordne jeden Satz dem richtigen Typ zu.</p>
     <ul class="zuord-list" id="zuordList"></ul>
-    <button class="check-btn" onclick="checkZuordnung()">Überprüfen</button>
     <div class="result-msg" id="zuordResult"></div>
   </div>
 
@@ -335,7 +334,6 @@
       <span class="timer-best" id="timerLBest"></span>
     </div>
     <div class="luecken-text" id="lueckenText"></div>
-    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
     <div class="result-msg" id="lueckenResult"></div>
   </div>
 
@@ -1639,5 +1637,31 @@ function showLoesungWortschatz() {
 })();
 </script>
 
+<script>
+/* FB-LIVE-FEEDBACK: ersetzt entfernte Prüfen-Buttons durch Live-Feedback (delegiert) */
+(function(){
+  function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
+  ready(function(){
+    var lt=document.getElementById('lueckenText');
+    if(lt) lt.addEventListener('input',function(e){
+      var inp=e.target; if(!inp||inp.tagName!=='INPUT') return;
+      var ans=inp.dataset.ans||inp.dataset.answer||inp.dataset.sol||inp.dataset.blank;
+      if(ans==null) return;
+      inp.classList.remove('ok','err');
+      if(inp.value.trim()===String(ans)) inp.classList.add('ok');
+    });
+    var zl=document.getElementById('zuordList');
+    if(zl) zl.addEventListener('change',function(e){
+      var sel=e.target; if(!sel||sel.tagName!=='SELECT') return;
+      var cat=null;
+      if(sel.dataset.correct) cat=sel.dataset.correct;
+      else if(typeof ZUORDNUNG_ITEMS!=='undefined'){ var i=parseInt((sel.id||'').replace('zuord-',''),10); if(ZUORDNUNG_ITEMS[i]) cat=ZUORDNUNG_ITEMS[i].cat; }
+      if(cat==null) return;
+      sel.classList.remove('ok','err');
+      if(sel.value) sel.classList.add(sel.value===cat?'ok':'err');
+    });
+  });
+})();
+</script>
 </body>
 </html>

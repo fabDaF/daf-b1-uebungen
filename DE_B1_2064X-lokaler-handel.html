@@ -313,7 +313,6 @@
     <h2>Zuordnung — Welches Geschäft?</h2>
     <p style="margin-bottom:16px;color:#555;">Ordne jedes Produkt dem richtigen Geschäft zu.</p>
     <ul class="zuord-list" id="zuordList"></ul>
-    <button class="check-btn" onclick="checkZuordnung()">Überprüfen</button>
     <div class="result-msg" id="zuordResult"></div>
   </div>
 
@@ -360,7 +359,6 @@
       <span class="timer-best" id="timerLBest"></span>
     </div>
     <div class="luecken-text" id="lueckenText"></div>
-    <button class="check-btn" onclick="checkLuecken()">Überprüfen</button>
     <div class="result-msg" id="lueckenResult"></div>
   </div>
 
@@ -812,7 +810,7 @@ function showTab(n) {
     const li = document.createElement('li'); li.className = 'zuord-item';
     const opts = cats.map(c => '<option value="' + c + '">' + c + '</option>').join('');
     li.innerHTML = '<div class="satz">' + (idx+1) + '. ' + item.satz + '</div>' +
-      '<select id="zuord-' + idx + '"><option value="">— wählen —</option>' + opts + '</select>';
+      '<select id="zuord-' + idx + '" data-correct="' + item.cat + '" onchange="liveZuord(this)"><option value="">— wählen —</option>' + opts + '</select>';
     list.appendChild(li);
   });
 })();
@@ -853,6 +851,7 @@ function liveCheck(inp) {
   if (inp.value.trim() === inp.dataset.answer) inp.classList.add('ok');
   autoStopIfDone();
 }
+function liveZuord(sel){sel.classList.remove('ok','err');if(!sel.value)return;sel.classList.add(sel.value===sel.dataset.correct?'ok':'err');var sels=document.querySelectorAll('#zuordList select');var done=0;sels.forEach(function(s){if(s.value&&s.value===s.dataset.correct)done++;});var res=document.getElementById('zuordResult');if(res&&sels.length&&done===sels.length){res.textContent='✅ Alle '+sels.length+' Zuordnungen richtig!';res.style.color='#1a5e17';}else if(res){res.textContent='';}}
 function checkLuecken() {
   let correct = 0;
   LUECKEN.forEach((item, idx) => {

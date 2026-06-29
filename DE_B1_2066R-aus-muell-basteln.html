@@ -775,7 +775,7 @@ setTimeout(highlightVocabInText,100);
 function checkRF(btn,choice,idx){const item=RF_FRAGEN[idx];btn.parentElement.querySelectorAll('.rf-btn').forEach(b=>b.classList.remove('correct','wrong'));const fb=document.getElementById(`rf-fb-${idx}`);if(choice===item.correct){btn.classList.add('correct');fb.textContent='✅ '+item.feedback;fb.style.color='#1a5e17';}else{btn.classList.add('wrong');fb.textContent='❌ '+item.feedback;fb.style.color='#7a0000';}}
 
 
-(function(){const list=document.getElementById('vokabelnList');VORENTLASTUNG.forEach(v=>{const card=document.createElement('div');card.className='wort-card';card.innerHTML=`<div class="wort-de">${v.word}</div><div class="wort-en">${v.en}</div>`;list.appendChild(card);});})();
+(function(){const list=document.getElementById('vorentlastungGrid');if(!list)return;VORENTLASTUNG.forEach(v=>{const card=document.createElement('div');card.className='wort-card';card.innerHTML=`<div class="wort-de">${v.word}</div><div class="wort-en">${v.en}</div>`;list.appendChild(card);});})();
 
 let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
 function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}

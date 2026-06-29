@@ -1417,26 +1417,31 @@ function initWortbank() {
 
 
 var wortschatzInited = false;
-
+function wsData(){ return (typeof VOCAB_DATA!=='undefined'&&VOCAB_DATA)||(typeof WS_DATA!=='undefined'&&WS_DATA)||(typeof WORTSCHATZ_DATA!=='undefined'&&WORTSCHATZ_DATA)||(typeof WORTSCHATZ!=='undefined'&&WORTSCHATZ)||[]; }
+function wsArtField(w){ return (w.artikel != null) ? 'artikel' : ((w.art != null) ? 'art' : null); }
+function wsWordField(w){ return (w.de != null) ? 'de' : ((w.wort != null) ? 'wort' : ((w.inf != null) ? 'inf' : null)); }
+function wsIsNoun(w){ return w.type ? (w.type === 'n') : (w.artikel != null || w.art != null); }
+function wsNoPlural(p){ return (!p || p === '—' || p === '–' || p === '-'); }
 function initWortschatz() {
     if (wortschatzInited) return;
     var cont = document.getElementById('wortschatzContainer');
     if (!cont) return;
     cont.innerHTML = '';
-    WORTSCHATZ.forEach(function(w, i) {
+    wsData().forEach(function(w, i) {
         var row = document.createElement('div');
         row.className = 'luecke-item';
-        var en = '<div class="ws-en">' + w.en + '</div>';
+        var en = '<div class="ws-en">' + (w.en != null ? w.en : (w.inf != null ? w.inf : '')) + '</div>';
         var inputs;
-        if (w.type === 'n') {
+        if (wsIsNoun(w)) {
+            var noPl = wsNoPlural(w.plural);
             inputs = '<div class="ws-inputs">' +
-                '<input class="blank art"    data-id="' + i + '" data-field="artikel" placeholder="Artikel" oninput="wortschatzCheck(this)" autocomplete="off">' +
-                '<input class="blank wort"   data-id="' + i + '" data-field="de"      placeholder="Wort"    oninput="wortschatzCheck(this)" autocomplete="off">' +
-                '<input class="blank plural" data-id="' + i + '" data-field="plural"  placeholder="Plural"  oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank art"    data-id="' + i + '" data-field="' + wsArtField(w) + '" placeholder="Artikel" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank wort"   data-id="' + i + '" data-field="' + wsWordField(w) + '" placeholder="Wort" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank plural" data-id="' + i + '" data-field="plural" placeholder="Plural" oninput="wortschatzCheck(this)" autocomplete="off"' + (noPl ? ' value="—" disabled' : '') + '>' +
                 '</div>';
         } else {
             inputs = '<div class="ws-inputs">' +
-                '<input class="blank verb" data-id="' + i + '" data-field="de" placeholder="Verb (Infinitiv)" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank verb" data-id="' + i + '" data-field="' + wsWordField(w) + '" placeholder="Wort" oninput="wortschatzCheck(this)" autocomplete="off">' +
                 '</div>';
         }
         row.innerHTML = en + inputs;
@@ -1444,43 +1449,37 @@ function initWortschatz() {
     });
     wortschatzInited = true;
 }
-
 function wortschatzCheck(inp) {
     if (typeof timerAutoStart === 'function') timerAutoStart(4);
     var id = parseInt(inp.dataset.id);
     var field = inp.dataset.field;
-    var target = WORTSCHATZ[id][field];
+    var rec = wsData()[id];
+    var target = (rec && field) ? rec[field] : null;
+    if (target == null) return;
     var val = inp.value.trim();
     inp.classList.remove('ok', 'wrong');
     if (!val) return;
-    if (val === target) {
-        inp.classList.add('ok');
-        checkWortschatzAllOk();
-    } else if (!target.toLowerCase().startsWith(val.toLowerCase())) {
-        inp.classList.add('wrong');
-    }
+    if (val === target) { inp.classList.add('ok'); checkWortschatzAllOk(); }
+    else if (!target.toLowerCase().startsWith(val.toLowerCase())) { inp.classList.add('wrong'); }
 }
-
 function checkWortschatzAllOk() {
     var all = document.querySelectorAll('#wortschatzContainer input.blank');
-    var allOk = Array.from(all).every(function(i) { return i.classList.contains('ok'); });
+    var allOk = Array.from(all).filter(function(i){ return !i.disabled; }).every(function(i) { return i.classList.contains('ok'); });
     if (allOk && typeof stopTimer === 'function') stopTimer(4);
 }
-
 function resetWortschatz() {
     document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
-        inp.value = '';
-        inp.classList.remove('ok', 'wrong');
+        if (inp.disabled) return;
+        inp.value = ''; inp.classList.remove('ok', 'wrong');
     });
 }
-
 function showLoesungWortschatz() {
     document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
-        var id = parseInt(inp.dataset.id);
-        var field = inp.dataset.field;
-        inp.value = WORTSCHATZ[id][field];
-        inp.classList.remove('wrong');
-        inp.classList.add('ok');
+        if (inp.disabled) return;
+        var id = parseInt(inp.dataset.id); var field = inp.dataset.field;
+        var rec = wsData()[id]; var target = (rec && field) ? rec[field] : null;
+        if (target == null) return;
+        inp.value = target; inp.classList.remove('wrong'); inp.classList.add('ok');
     });
 }
 </script>

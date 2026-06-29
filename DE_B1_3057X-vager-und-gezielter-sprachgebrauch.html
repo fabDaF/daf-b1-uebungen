@@ -1182,92 +1182,69 @@ document.addEventListener('DOMContentLoaded', function(){
   
 });
 var wortschatzInited = false;
-
-function wsMakeInput(cls, answer, ph, isArt) {
-    var inp = document.createElement('input');
-    inp.type = 'text';
-    inp.className = 'blank ' + cls;
-    inp.dataset.answer = answer;
-    if (isArt) inp.dataset.art = '1';
-    inp.placeholder = ph;
-    inp.setAttribute('autocomplete', 'off');
-    inp.setAttribute('autocapitalize', 'off');
-    inp.setAttribute('spellcheck', 'false');
-    inp.addEventListener('input', function(){ wortschatzCheck(inp); });
-    return inp;
-}
-
+function wsData(){ return (typeof VOCAB_DATA!=='undefined'&&VOCAB_DATA)||(typeof WS_DATA!=='undefined'&&WS_DATA)||(typeof WORTSCHATZ_DATA!=='undefined'&&WORTSCHATZ_DATA)||(typeof WORTSCHATZ!=='undefined'&&WORTSCHATZ)||[]; }
+function wsArtField(w){ return (w.artikel != null) ? 'artikel' : ((w.art != null) ? 'art' : null); }
+function wsWordField(w){ return (w.de != null) ? 'de' : ((w.wort != null) ? 'wort' : ((w.inf != null) ? 'inf' : null)); }
+function wsIsNoun(w){ return w.type ? (w.type === 'n') : (w.artikel != null || w.art != null); }
+function wsNoPlural(p){ return (!p || p === '—' || p === '–' || p === '-'); }
 function initWortschatz() {
+    if (wortschatzInited) return;
     var cont = document.getElementById('wortschatzContainer');
     if (!cont) return;
     cont.innerHTML = '';
-    WORTSCHATZ.forEach(function(w) {
+    wsData().forEach(function(w, i) {
         var row = document.createElement('div');
         row.className = 'luecke-item';
-        row.style.marginBottom = '0';
-        var en = document.createElement('div');
-        en.className = 'ws-en';
-        en.textContent = w.en;
-        var fields = document.createElement('div');
-        fields.className = 'ws-inputs';
-        if (w.type === 'n') {
-            fields.appendChild(wsMakeInput('art', w.art, 'Artikel', true));
-            fields.appendChild(wsMakeInput('wort', w.wort, 'Wort', false));
-            var pl = wsMakeInput('plural', w.plural, 'Plural', false);
-            if (w.plural === '–') {
-                pl.value = '–';
-                pl.disabled = true;
-                pl.classList.add('correct');
-                pl.title = 'Dieses Wort hat keinen Plural.';
-            }
-            fields.appendChild(pl);
+        var en = '<div class="ws-en">' + (w.en != null ? w.en : (w.inf != null ? w.inf : '')) + '</div>';
+        var inputs;
+        if (wsIsNoun(w)) {
+            var noPl = wsNoPlural(w.plural);
+            inputs = '<div class="ws-inputs">' +
+                '<input class="blank art"    data-id="' + i + '" data-field="' + wsArtField(w) + '" placeholder="Artikel" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank wort"   data-id="' + i + '" data-field="' + wsWordField(w) + '" placeholder="Wort" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '<input class="blank plural" data-id="' + i + '" data-field="plural" placeholder="Plural" oninput="wortschatzCheck(this)" autocomplete="off"' + (noPl ? ' value="—" disabled' : '') + '>' +
+                '</div>';
         } else {
-            fields.appendChild(wsMakeInput('verb', w.de, 'Deutsch', false));
+            inputs = '<div class="ws-inputs">' +
+                '<input class="blank verb" data-id="' + i + '" data-field="' + wsWordField(w) + '" placeholder="Wort" oninput="wortschatzCheck(this)" autocomplete="off">' +
+                '</div>';
         }
-        row.appendChild(en);
-        row.appendChild(fields);
+        row.innerHTML = en + inputs;
         cont.appendChild(row);
     });
     wortschatzInited = true;
 }
-
 function wortschatzCheck(inp) {
-    if (typeof timerAutoStart === 'function') timerAutoStart(3);
-    var answer = inp.dataset.answer || '';
-    var isArt = inp.dataset.art === '1';
-    var user = isArt ? inp.value.toLowerCase().trim() : inp.value.trim();
-    var ans  = isArt ? answer.toLowerCase() : answer;
-    inp.classList.remove('correct', 'wrong');
-    if (!inp.value) return;
-    if (user === ans) {
-        inp.classList.add('correct');
-        checkWortschatzAllOk();
-    } else if (ans.indexOf(user) !== 0) {
-        inp.classList.add('wrong');
-    }
+    if (typeof timerAutoStart === 'function') timerAutoStart(4);
+    var id = parseInt(inp.dataset.id);
+    var field = inp.dataset.field;
+    var rec = wsData()[id];
+    var target = (rec && field) ? rec[field] : null;
+    if (target == null) return;
+    var val = inp.value.trim();
+    inp.classList.remove('ok', 'wrong');
+    if (!val) return;
+    if (val === target) { inp.classList.add('ok'); checkWortschatzAllOk(); }
+    else if (!target.toLowerCase().startsWith(val.toLowerCase())) { inp.classList.add('wrong'); }
 }
-
 function checkWortschatzAllOk() {
     var all = document.querySelectorAll('#wortschatzContainer input.blank');
-    var allOk = all.length > 0 && Array.prototype.every.call(all, function(i) {
-        return i.disabled || i.classList.contains('correct');
-    });
-    if (allOk && typeof timerStop === 'function') timerStop(3);
+    var allOk = Array.from(all).filter(function(i){ return !i.disabled; }).every(function(i) { return i.classList.contains('ok'); });
+    if (allOk && typeof stopTimer === 'function') stopTimer(4);
 }
-
 function resetWortschatz() {
     document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
-        if (!inp.disabled) { inp.value = ''; inp.classList.remove('correct', 'wrong'); }
+        if (inp.disabled) return;
+        inp.value = ''; inp.classList.remove('ok', 'wrong');
     });
-    if (typeof resetTimer === 'function') resetTimer(3);
 }
-
 function showLoesungWortschatz() {
-    if (typeof timerStop === 'function') timerStop(3);
     document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
-        inp.value = inp.dataset.answer;
-        inp.classList.remove('wrong');
-        inp.classList.add('correct');
+        if (inp.disabled) return;
+        var id = parseInt(inp.dataset.id); var field = inp.dataset.field;
+        var rec = wsData()[id]; var target = (rec && field) ? rec[field] : null;
+        if (target == null) return;
+        inp.value = target; inp.classList.remove('wrong'); inp.classList.add('ok');
     });
 }
 </script>

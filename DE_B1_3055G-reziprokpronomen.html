@@ -155,23 +155,129 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .fb-jumptop.show { opacity: 1; visibility: visible; transform: translateY(0); }
 .fb-jumptop:hover { background: rgba(118, 75, 162, 0.40); color: #241048; box-shadow: 0 10px 32px rgba(102,126,234,0.50), inset 0 1px 0 rgba(255,255,255,0.65); }
 @media (max-width: 600px) { .fb-jumptop { bottom: 18px; right: 16px; padding: 12px 18px; font-size: 0.95em; } }
-</style>
+
+/* ===== VORENTLASTUNG (Vokabelkarten) ===== */
+.section-sub { color:#888; font-size:0.92em; margin-bottom:18px; }
+.vocab-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:14px; margin-top:4px; }
+.vocab-card { background:#f8f9ff; border:1px solid #dde3ff; border-radius:10px; padding:14px 16px; }
+.vocab-term { font-weight:700; color:#667eea; font-size:1.05em; margin-bottom:2px; }
+.vocab-en { color:#999; font-size:0.85em; margin-bottom:5px; font-style:italic; }
+.vocab-def { color:#555; font-size:0.92em; line-height:1.5; }
+
+/* ===== LESETEXT ===== */
+.story-text { max-width:600px; margin:0 auto; font-family:Georgia,'Times New Roman',serif; font-size:1.05em; line-height:1.8; color:#1a1a1a; text-align:justify; hyphens:auto; -webkit-hyphens:auto; }
+.story-text p { margin-bottom:1em; text-indent:1.4em; }
+.story-text p:first-child { text-indent:0; }
+.story-text .dialog { font-style:normal; text-indent:0; padding-left:1.1em; border-left:3px solid #667eea; color:#2a2a6e; margin-left:0; }
+.story-source { margin-top:24px; color:#aaa; font-size:0.8em; text-align:right; }
+.vocab-hl { background:#ffe9a0; border-radius:3px; padding:1px 3px; font-weight:600; cursor:help; }
+
+/* ===== QUIZ / MULTIPLE-CHOICE ===== */
+.mc-q { background:#f8f9ff; border-left:4px solid #667eea; border-radius:10px; padding:14px 18px; margin-bottom:14px; }
+.mc-question { font-size:1.05em; color:#333; margin-bottom:10px; font-weight:600; line-height:1.5; }
+.mc-opts { display:flex; flex-direction:column; gap:8px; }
+.mc-opt { padding:9px 14px; border:1.5px solid #c5cae9; border-radius:10px; background:#fff; cursor:pointer; font-size:0.93em; transition:all .2s; text-align:left; }
+.mc-opt:hover { border-color:#667eea; background:#eef0ff; }
+.mc-opt.correct { border-color:#27ae60; background:#e8f5e9; color:#2e7d32; font-weight:700; }
+.mc-opt.wrong { border-color:#e74c3c; background:#ffebee; color:#c62828; }
+.mc-opt.locked { pointer-events:none; }
+
+/* ===== GENUS-TAB Innen-Padding (Audit-Fix 2026-06-29) ===== */
+#sec-genus { padding:28px 30px; }
+#sec-genus > .tab-banner { width:calc(100% + 60px); max-width:none; margin:-28px -30px 18px; }
+@media (max-width:600px){ #sec-genus { padding:18px 16px; } #sec-genus > .tab-banner { width:calc(100% + 32px); margin:-18px -16px 14px; } }
+/* ===== Schreibwerkstatt — Niveau-flexibel ===== */
+.schreib-aufgabe-karte { background: #f8f9ff; padding: 16px 18px; margin-bottom: 16px; border-radius: 10px; border-left: 4px solid #667eea; transition: all 0.25s; }
+.schreib-aufgabe-karte.gesendet { background: #f1f8e9; border-left-color: #689f38; }
+.schreib-aufgabe-nr { display: inline-block; background: #667eea; color: white; font-weight: 700; font-size: 0.85em; padding: 2px 10px; border-radius: 12px; margin-right: 8px; vertical-align: middle; }
+.schreib-aufgabe-karte.gesendet .schreib-aufgabe-nr { background: #689f38; }
+.schreib-aufgabe-titel { font-weight: 700; color: #4a148c; font-size: 1.0em; vertical-align: middle; }
+.schreib-aufgabe-karte.gesendet .schreib-aufgabe-titel { color: #33691e; }
+.schreib-aufgabe-frage { color: #555; font-size: 0.92em; line-height: 1.5; margin: 8px 0 8px 0; }
+.schreib-beispiel { font-size: 0.85em; color: #888; font-style: italic; margin-bottom: 8px; padding-left: 12px; border-left: 2px solid #e0e4ff; }
+.schreib-mini-textarea { width: 100%; min-height: 350px; border: 1.5px solid #c5cff5; border-radius: 8px; padding: 10px 12px; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.95em; line-height: 1.6; color: #1a1a1a; resize: vertical; outline: none; transition: border-color 0.2s; background: #fefefe; }
+.schreib-mini-textarea:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
+.schreib-mini-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; flex-wrap: wrap; gap: 10px; }
+.schreib-mini-meta { font-size: 0.82em; color: #888; }
+.schreib-mini-meta strong { color: #667eea; font-weight: 700; }
+.schreib-mini-status { font-size: 0.82em; color: #689f38; font-weight: 600; }
+.schreib-mini-status.error { color: #c62828; }
+.schreib-mini-btn { padding: 7px 14px; border-radius: 6px; border: 1.5px solid #667eea; background: white; color: #667eea; font-size: 0.83em; font-weight: 600; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.schreib-mini-btn:hover:not(:disabled) { background: #667eea; color: white; box-shadow: 0 2px 6px rgba(102,126,234,0.3); }
+.schreib-mini-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.schreib-mini-btn.gesendet { border-color: #689f38; color: #689f38; background: #f1f8e9; }
+.schreib-mini-btn.gesendet:hover:not(:disabled) { background: #689f38; color: white; }
+.schreib-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; padding-top: 18px; border-top: 1px solid #e0e4ff; }
+.schreib-btn { padding: 10px 20px; border-radius: 8px; border: none; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.schreib-btn-primary { background: #667eea; color: white; }
+.schreib-btn-primary:hover:not(:disabled) { background: #5568d3; box-shadow: 0 4px 12px rgba(102,126,234,0.35); transform: translateY(-1px); }
+.schreib-btn-primary:disabled { background: #c5cff5; cursor: not-allowed; }
+.schreib-btn-ghost { background: transparent; color: #667eea; border: 1.5px solid #c5cff5; }
+.schreib-btn-ghost:hover { background: #f5f7ff; border-color: #667eea; }
+.schreib-status { margin-top: 14px; padding: 12px 16px; border-radius: 8px; font-size: 0.92em; line-height: 1.5; display: none; }
+.schreib-status.success { display: block; background: #e8f5e9; border-left: 4px solid #27ae60; color: #1b5e20; }
+.schreib-status.error { display: block; background: #ffebee; border-left: 4px solid #e74c3c; color: #b71c1c; }
+.schreib-status.info { display: block; background: #e3f2fd; border-left: 4px solid #2196f3; color: #0d47a1; }
+.schreib-name { width: 100%; max-width: 320px; padding: 10px 14px; border: 1.5px solid #c5cff5; border-radius: 8px; font-family: inherit; font-size: 0.95em; outline: none; transition: border-color 0.2s; margin-bottom: 12px; }
+.schreib-name:focus { border-color: #667eea; }
+.schreib-label { display: block; font-size: 0.88em; color: #555; margin-bottom: 6px; font-weight: 600; }
+.schreib-name-box { background: #fffaf0; border: 1.5px solid #ffd699; border-radius: 10px; padding: 14px 18px; margin-bottom: 18px; }
+.schreib-name-box .schreib-label { color: #b15c00; }
+.schreib-name.schreib-name-error { border-color: #c62828; box-shadow: 0 0 0 2px rgba(198,40,40,0.15); animation: schreib-name-shake 0.4s; }
+@keyframes schreib-name-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+
+
+/* Customer-Success-Fallback-Block bei Versand-Fehler (gepatcht) */
+.schreib-fb { display: flex; flex-direction: column; gap: 8px; }
+.schreib-fb-titel { font-weight: 700; font-size: 1em; color: #b71c1c; }
+.schreib-fb-text { color: #4a4a4a; font-size: 0.92em; line-height: 1.5; }
+.schreib-fb-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.schreib-fb-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 8px; border: 1.5px solid #667eea; background: white; color: #667eea; font-size: 0.9em; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.15s; }
+.schreib-fb-btn:hover { background: #667eea; color: white; box-shadow: 0 2px 6px rgba(102,126,234,0.3); }
+.schreib-fb-btn-prim { background: #667eea; color: white; }
+.schreib-fb-btn-prim:hover { background: #4f63c2; color: white; }
+.schreib-fb-hilfe { color: #6c6c6c; font-size: 0.86em; font-style: italic; margin-top: 4px; }
+
+
+/* Schreibwerkstatt-Innenraum-Fix 2026-04-29 v2 (class-basiert): mehr horizontaler Atem */
+.section:has(.schreib-aufgabe-karte) { padding: 28px 30px 14px 30px; box-sizing: border-box; }
+.section:has(.schreib-aufgabe-karte) > h2 { margin-bottom: 12px; }
+.schreib-aufgabe-karte { padding: 18px 22px 18px 26px; }
+.schreib-name-box { padding: 16px 22px; }
+@media (max-width: 600px) {
+  .section:has(.schreib-aufgabe-karte) { padding: 16px 14px 10px 14px; }
+  .schreib-aufgabe-karte { padding: 14px 14px 14px 18px; }
+  .schreib-name-box { padding: 12px 14px; }
+}
+/* /Schreibwerkstatt-Innenraum-Fix */
+
+/* FB-SCHREIB-PAD (G): Schreibwerkstatt-Inhalt einruecken, Banner randlos */
+#sec-schreib { padding: 28px 30px; }
+#sec-schreib > .tab-banner { width: calc(100% + 60px); max-width: none; margin: -28px -30px 18px; }
+@media (max-width: 600px) { #sec-schreib { padding: 18px 16px; } #sec-schreib > .tab-banner { width: calc(100% + 32px); margin: -18px -16px 14px; } }
+
+#wortschatzContainer input.blank { border:none; border-bottom:2px solid #c5cae9; background:transparent; padding:3px 6px; font-family:inherit; font-size:0.95em; outline:none; transition:border-color 0.2s; }
+#wortschatzContainer input.blank:focus { border-bottom-color:#667eea; }
+#wortschatzContainer input.blank:disabled { opacity:0.6; }</style>
 </head>
 <body>
 <div class="container">
   <div class="header">
     <h1>Reziprokpronomen</h1>
-    <p style="font-family: Georgia, serif;">B1.3 – Lektion 3055G &nbsp;|&nbsp; Grammatik</p>
+    <p style="font-family: Georgia, serif;">B1.3 – Lektion 3055G · Grammatik</p>
     <div class="big-emoji">🔄</div>
   </div>
 
   <div class="nav">
-    <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔍</span><span class="nav-label">Entdecken</span></div>
+        <div class="nav-btn active" onclick="showSection(0)"><span class="nav-emoji">🔍</span><span class="nav-label">Entdecken</span></div>
     <div class="nav-btn" onclick="showSection(1)"><span class="nav-emoji">📋</span><span class="nav-label">Regel</span></div>
-    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
-    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
-    <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">🏷️</span><span class="nav-label">Genus</span></div>
-        <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    <div class="nav-btn" onclick="showSection(2)"><span class="nav-emoji">📄</span><span class="nav-label">Lesetext</span></div>
+    <div class="nav-btn" onclick="showSection(3)"><span class="nav-emoji">☑️</span><span class="nav-label">Quiz</span></div>
+    <div class="nav-btn" onclick="showSection(4)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></div>
+    <div class="nav-btn" onclick="showSection(5)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></div>
+    <div class="nav-btn" onclick="showSection(6)"><span class="nav-emoji">🏷️</span><span class="nav-label">Genus</span></div>
+    <div class="nav-btn" onclick="showSection(7)"><span class="nav-emoji">🔠</span><span class="nav-label">Wortschatz</span></div>
+    <div class="nav-btn" onclick="showSection(8)"><span class="nav-emoji">📨</span><span class="nav-label">Schreiben</span></div>
   </div>
 
   <div class="section active" id="sec-0">
@@ -258,6 +364,53 @@ Wir lieben <span class="hl">uns</span> sehr.</div>
   </div>
   </div>
 
+  <div class="section" id="sec-lesetext">
+  <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDIwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJzIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNWI1NGI4Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjOGE1Y2MwIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSJ1cmwoI3MpIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ0MCwxMDApIj48Y2lyY2xlIHI9IjM0IiBmaWxsPSIjZmZmNGNmIi8+PC9nPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3NjAsMTAwKSI+PGNpcmNsZSByPSIzNCIgZmlsbD0iI2Q3ZjBkOSIvPjwvZz4KPHBhdGggZD0iTTQ4MiA4NiBDIDU2MCA2MCA2NDAgNjAgNzE4IDg2IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNSIvPjxwb2x5Z29uIHBvaW50cz0iNzE4LDg2IDcwNCw4MiA3MDksOTUiIGZpbGw9IiNmZmZmZmYiLz4KPHBhdGggZD0iTTcxOCAxMTQgQyA2NDAgMTQwIDU2MCAxNDAgNDgyIDExNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjUiLz48cG9seWdvbiBwb2ludHM9IjQ4MiwxMTQgNDk2LDExOCA0OTEsMTA1IiBmaWxsPSIjZmZmZmZmIi8+Cjx0ZXh0IHg9IjYwMCIgeT0iMTgwIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgb3BhY2l0eT0iMC45MiI+ZWluYW5kZXI8L3RleHQ+PC9zdmc+" alt="Reziprokpronomen: einander">
+  <div class="section-content">
+<div class="section-title">📄 Karim und sein Team</div>
+<div class="section-sub">Neue Wörter zum Text — sie kommen unten gelb markiert wieder vor.</div>
+<div id="vorentlastungGrid" class="vocab-grid"></div>
+<div class="story-text" style="margin-top:18px;">
+<p>Karim mochte seine Arbeit, aber am meisten mochte er sein Team. „Wir verstehen einander“, sagte er einmal zu Stefan. „Auch wenn wir aus ganz verschiedenen Ländern kommen.“</p>
+<p class="dialog">Stefan nickte. „Genau. Wir helfen einander, wenn es schwierig wird. Und wir können uns aufeinander verlassen.“</p>
+<p>Es stimmte. Im Büro arbeiteten Menschen aus vielen Ländern miteinander. Elena kam aus Bulgarien, Hiroshi aus Japan, Stefan aus einem Dorf bei Köln. Sie waren sehr verschieden — und trotzdem respektierten sie einander.</p>
+<figure style="margin:18px 0;text-align:center;">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgMzIwIj48cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iI2Y0ZjJmZiIvPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxNzAsMTUwKSI+PGNpcmNsZSByPSI0NiIgZmlsbD0iI2ZmZjRjZiIgc3Ryb2tlPSIjZTBjNDZhIiBzdHJva2Utd2lkdGg9IjMiLz48L2c+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ3MCwxNTApIj48Y2lyY2xlIHI9IjQ2IiBmaWxsPSIjZDdmMGQ5IiBzdHJva2U9IiM5YWQwYTAiIHN0cm9rZS13aWR0aD0iMyIvPjwvZz4KPHBhdGggZD0iTTIyMiAxMjAgQyAzMDAgOTAgMzQwIDkwIDQxOCAxMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzhhNWNjMCIgc3Ryb2tlLXdpZHRoPSI2Ii8+PHBvbHlnb24gcG9pbnRzPSI0MTgsMTIwIDQwMiwxMTYgNDA4LDEzMSIgZmlsbD0iIzhhNWNjMCIvPgo8cGF0aCBkPSJNNDE4IDE4MCBDIDM0MCAyMTAgMzAwIDIxMCAyMjIgMTgwIiBmaWxsPSJub25lIiBzdHJva2U9IiM2NjdlZWEiIHN0cm9rZS13aWR0aD0iNiIvPjxwb2x5Z29uIHBvaW50cz0iMjIyLDE4MCAyMzgsMTg0IDIzMiwxNjkiIGZpbGw9IiM2NjdlZWEiLz4KPHRleHQgeD0iMzIwIiB5PSIxNTAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjIyIiBmaWxsPSIjNWEzZTllIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0iYm9sZCI+ZWluYW5kZXI8L3RleHQ+Cjx0ZXh0IHg9IjMyMCIgeT0iMjc4IiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIyMCIgZmlsbD0iIzY2N2VlYSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9ImJvbGQiPkVpbmUvciB0dXQgZXR3YXMgZsO8ciBkaWUvZGVuIGFuZGVyZS9uIOKAlCBnZWdlbnNlaXRpZzwvdGV4dD48L3N2Zz4=" alt="Zwei Kreise mit Pfeilen in beide Richtungen — einander" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+  <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">„einander“ zeigt eine gegenseitige Handlung.</figcaption>
+</figure>
+<p>„Weißt du, was ich schön finde?“, sagte Karim. „Wir lernen voneinander. Elena bringt mir bei, direkter zu sein. Hiroshi zeigt mir, wie man ruhig bleibt. Und du erklärst mir die deutsche Provinz.“</p>
+<p class="dialog">Stefan lachte. „Und du? Was bringst du uns bei?“</p>
+<p>„Vielleicht Geduld“, sagte Karim. „Ich höre gern zu.“</p>
+<p>In der Mittagspause saßen sie oft nebeneinander und redeten miteinander — über die Arbeit, über das Leben, über Gott und die Welt. Manchmal waren sie verschiedener Meinung. Aber sie stritten nie gegeneinander; sie suchten zusammen nach einer Lösung.</p>
+<figure style="margin:18px 0;text-align:center;">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgMzIwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InQiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNlZWYwZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmNmY5ZjQiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNjQwIiBoZWlnaHQ9IjMyMCIgZmlsbD0idXJsKCN0KSIvPgo8ZyBzdHJva2U9IiM5YThmZTAiIHN0cm9rZS13aWR0aD0iNCIgb3BhY2l0eT0iMC42Ij4KPGxpbmUgeDE9IjMyMCIgeTE9IjE1MCIgeDI9IjE4MCIgeTI9IjkwIi8+PGxpbmUgeDE9IjMyMCIgeTE9IjE1MCIgeDI9IjQ2MCIgeTI9IjkwIi8+PGxpbmUgeDE9IjMyMCIgeTE9IjE1MCIgeDI9IjE4MCIgeTI9IjIyMCIvPjxsaW5lIHgxPSIzMjAiIHkxPSIxNTAiIHgyPSI0NjAiIHkyPSIyMjAiLz48bGluZSB4MT0iMTgwIiB5MT0iOTAiIHgyPSI0NjAiIHkyPSI5MCIvPjxsaW5lIHgxPSIxODAiIHkxPSIyMjAiIHgyPSI0NjAiIHkyPSIyMjAiLz48L2c+CjxnIGZpbGw9IiM3YTRmYjAiPjxjaXJjbGUgY3g9IjMyMCIgY3k9IjE1MCIgcj0iMjAiLz48L2c+CjxnIGZpbGw9IiM2NjdlZWEiPjxjaXJjbGUgY3g9IjE4MCIgY3k9IjkwIiByPSIxNiIvPjxjaXJjbGUgY3g9IjQ2MCIgY3k9IjkwIiByPSIxNiIvPjxjaXJjbGUgY3g9IjE4MCIgY3k9IjIyMCIgcj0iMTYiLz48Y2lyY2xlIGN4PSI0NjAiIGN5PSIyMjAiIHI9IjE2Ii8+PC9nPgo8dGV4dCB4PSIzMjAiIHk9IjI5OCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM2NjdlZWEiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJib2xkIj5FaW4gVGVhbTogYWxsZSBzaW5kIG1pdGVpbmFuZGVyIHZlcmJ1bmRlbjwvdGV4dD48L3N2Zz4=" alt="Ein Team, dessen Mitglieder miteinander verbunden sind" style="width:100%;max-width:600px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+  <figcaption style="margin-top:6px;font-size:0.85em;color:#667eea;font-weight:600;">In einem guten Team sind alle miteinander verbunden.</figcaption>
+</figure>
+<p>„In einer guten Mannschaft“, dachte Karim, „geben und nehmen alle. Das ist echte Gegenseitigkeit.“</p>
+<p>Am Abend schrieb er seiner Familie in Casablanca. Auch mit ihr war er verbunden — über die große Entfernung hinweg. „Wir denken aneinander“, schrieb er, „auch wenn wir weit voneinander entfernt leben.“</p>
+<p>Dann schloss er den Laptop und lächelte. Ohne einander, dachte er, wären wir alle ärmer.</p>
+</div>
+<div class="story-source">Quelle: B1.3 – Lektion 3055G · Reziprokpronomen</div>
+  </div>
+  </div>
+
+  <div class="section" id="sec-quiz">
+  <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDIwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJxeiIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY2N2VlYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NGJhMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0idXJsKCNxeikiLz48ZyBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjE2IiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC13ZWlnaHQ9ImJvbGQiPjx0ZXh0IHg9IjEyMCIgeT0iOTAiIGZvbnQtc2l6ZT0iNzAiPj88L3RleHQ+PHRleHQgeD0iMzAwIiB5PSIxNjAiIGZvbnQtc2l6ZT0iNTAiPj88L3RleHQ+PHRleHQgeD0iOTgwIiB5PSI4MCIgZm9udC1zaXplPSI2MCI+PzwvdGV4dD48dGV4dCB4PSIxMDgwIiB5PSIxNzAiIGZvbnQtc2l6ZT0iNDQiPj88L3RleHQ+PHRleHQgeD0iNTIwIiB5PSI2MCIgZm9udC1zaXplPSI0MCI+PzwvdGV4dD48L2c+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAwLDEwMCkiPjxjaXJjbGUgcj0iNTgiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuOTUiLz48cGF0aCBkPSJNIC0yOCA0IEwgLTggMjYgTCAzMCAtMjIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzI3YWU2MCIgc3Ryb2tlLXdpZHRoPSIxNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQyMCwxMDApIiBvcGFjaXR5PSIwLjg1Ij48Y2lyY2xlIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNyIvPjx0ZXh0IHg9IjAiIHk9IjEzIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSI0MiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj88L3RleHQ+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc4MCwxMDApIiBvcGFjaXR5PSIwLjg1Ij48Y2lyY2xlIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNyIvPjx0ZXh0IHg9IjAiIHk9IjEzIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSI0MiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj88L3RleHQ+PC9nPjwvc3ZnPg==" alt="Quiz zum Lesetext">
+  <div class="section-content">
+<div class="timer-controls">
+  <div class="tc-buttons"><button onclick="quizSolution()">💡 Lösungen</button><button onclick="quizReset()">↺ Neustart</button></div>
+  <div class="tc-times">
+    <span>⏱ <span class="timer-display" id="timer-6">00:00</span></span>
+    <span>🏆 <span class="best-display" id="best-6">--:--</span></span>
+  </div>
+</div>
+<div class="section-title">☑️ Quiz zum Lesetext</div>
+<div class="hilfe-box"><strong>Aufgabe:</strong> Wähle für jede Frage die richtige Antwort. Pro Frage hast du einen Versuch.</div>
+<div id="quizContainer"></div>
+<div class="score-box" id="quizScore"></div>
+  </div>
+  </div>
+
   <div class="section" id="sec-2">
   <img class="tab-banner" style="object-position:top" src="data:image/jpeg;base64,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" alt="">
   <div class="section-content">
@@ -330,6 +483,63 @@ Wir lieben <span class="hl">uns</span> sehr.</div>
   </div>
   </div>
 
+
+  <div class="section" id="sec-schreib">
+      <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDIwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJzYiIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzViNTRiOCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdhNGZiMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0idXJsKCNzYikiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1NjAsNDApIj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTgwIiBoZWlnaHQ9IjEyMCIgcng9IjgiIGZpbGw9IiNmYmZhZmYiLz48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTgwIiBoZWlnaHQ9IjI2IiByeD0iOCIgZmlsbD0iI2U3ZTNmYiIvPjxnIHN0cm9rZT0iI2M3YmZmMCIgc3Ryb2tlLXdpZHRoPSIzIj48bGluZSB4MT0iMjAiIHkxPSI1MiIgeDI9IjE2MCIgeTI9IjUyIi8+PGxpbmUgeDE9IjIwIiB5MT0iNzIiIHgyPSIxNjAiIHkyPSI3MiIvPjxsaW5lIHgxPSIyMCIgeTE9IjkyIiB4Mj0iMTIwIiB5Mj0iOTIiLz48L2c+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc0MCw2MCkgcm90YXRlKDQwKSI+PHJlY3QgeD0iLTciIHk9Ii03MCIgd2lkdGg9IjE0IiBoZWlnaHQ9IjExMCIgZmlsbD0iI2YzYzE0YSIvPjxwb2x5Z29uIHBvaW50cz0iLTcsNDAgNyw0MCAwLDYwIiBmaWxsPSIjMzMzIi8+PHJlY3QgeD0iLTciIHk9Ii03MCIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiBmaWxsPSIjZDlhNTMxIi8+PC9nPjx0ZXh0IHg9IjM1MCIgeT0iMTE1IiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIzMCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgb3BhY2l0eT0iMC45Ij5TY2hyZWliZW4gYW4gRnJhbms8L3RleHQ+PC9zdmc+" alt="Notizbuch und Stift, bereit zum Schreiben">
+      <div class="section-title">📨 Schreibwerkstatt</div>
+      <div class="schreib-name-box">
+        <label class="schreib-label" for="sw-name">Dein Name (Pflicht — damit Frank weiß, wer geschrieben hat):</label>
+        <input type="text" id="sw-name" class="schreib-name" placeholder="z. B. Maria Lopez" required>
+      </div>
+
+      <div class="schreib-aufgabe-karte">
+        <span class="schreib-aufgabe-nr">1</span><span class="schreib-aufgabe-titel">Einander helfen</span>
+        <div class="schreib-aufgabe-frage">Wie helft ihr euch in deiner Familie oder deinem Team einander? Benutze „einander“. (3–5 Sätze)</div><textarea class="schreib-mini-textarea" data-aufgabe="1" data-titel="Einander helfen"></textarea>
+        <div class="schreib-mini-footer">
+          <span class="schreib-mini-meta">Wörter: <strong class="wc-1">0</strong> <span class="schreib-mini-status" id="sw-status-1"></span></span>
+          <button class="schreib-mini-btn" id="sw-send-1" onclick="schreibSendenEinzeln(1)">📨 An Frank senden</button>
+        </div>
+      </div>
+      <div class="schreib-aufgabe-karte">
+        <span class="schreib-aufgabe-nr">2</span><span class="schreib-aufgabe-titel">Voneinander lernen</span>
+        <div class="schreib-aufgabe-frage">Von wem hast du etwas Wichtiges gelernt? Benutze „voneinander lernen“. (3–4 Sätze)</div><textarea class="schreib-mini-textarea" data-aufgabe="2" data-titel="Voneinander lernen"></textarea>
+        <div class="schreib-mini-footer">
+          <span class="schreib-mini-meta">Wörter: <strong class="wc-2">0</strong> <span class="schreib-mini-status" id="sw-status-2"></span></span>
+          <button class="schreib-mini-btn" id="sw-send-2" onclick="schreibSendenEinzeln(2)">📨 An Frank senden</button>
+        </div>
+      </div>
+      <div class="schreib-aufgabe-karte">
+        <span class="schreib-aufgabe-nr">3</span><span class="schreib-aufgabe-titel">Miteinander oder gegeneinander?</span>
+        <div class="schreib-aufgabe-frage">Arbeitest du lieber mit anderen zusammen oder lieber allein? Warum? (3–4 Sätze)</div><textarea class="schreib-mini-textarea" data-aufgabe="3" data-titel="Miteinander oder gegeneinander?"></textarea>
+        <div class="schreib-mini-footer">
+          <span class="schreib-mini-meta">Wörter: <strong class="wc-3">0</strong> <span class="schreib-mini-status" id="sw-status-3"></span></span>
+          <button class="schreib-mini-btn" id="sw-send-3" onclick="schreibSendenEinzeln(3)">📨 An Frank senden</button>
+        </div>
+      </div>
+      <div class="schreib-aufgabe-karte">
+        <span class="schreib-aufgabe-nr">4</span><span class="schreib-aufgabe-titel">Sich aufeinander verlassen</span>
+        <div class="schreib-aufgabe-frage">Auf wen kannst du dich verlassen? Benutze „sich aufeinander verlassen“. (3–4 Sätze)</div><textarea class="schreib-mini-textarea" data-aufgabe="4" data-titel="Sich aufeinander verlassen"></textarea>
+        <div class="schreib-mini-footer">
+          <span class="schreib-mini-meta">Wörter: <strong class="wc-4">0</strong> <span class="schreib-mini-status" id="sw-status-4"></span></span>
+          <button class="schreib-mini-btn" id="sw-send-4" onclick="schreibSendenEinzeln(4)">📨 An Frank senden</button>
+        </div>
+      </div>
+      <div class="schreib-aufgabe-karte">
+        <span class="schreib-aufgabe-nr">5</span><span class="schreib-aufgabe-titel">Reziprokpronomen üben</span>
+        <div class="schreib-aufgabe-frage">Schreib vier Sätze mit verschiedenen Reziprokpronomen: einander, miteinander, voneinander, aufeinander. (4 Sätze)</div><textarea class="schreib-mini-textarea" data-aufgabe="5" data-titel="Reziprokpronomen üben"></textarea>
+        <div class="schreib-mini-footer">
+          <span class="schreib-mini-meta">Wörter: <strong class="wc-5">0</strong> <span class="schreib-mini-status" id="sw-status-5"></span></span>
+          <button class="schreib-mini-btn" id="sw-send-5" onclick="schreibSendenEinzeln(5)">📨 An Frank senden</button>
+        </div>
+      </div>
+
+      <div class="schreib-actions">
+        <button class="schreib-btn schreib-btn-primary" id="sw-btn-all" onclick="schreibSendenAlleNochOffenen()">📨 Alle noch nicht gesendeten Antworten schicken</button>
+        <button class="schreib-btn schreib-btn-ghost" onclick="schreibKopieren()">📋 In Zwischenablage</button>
+        <button class="schreib-btn schreib-btn-ghost" onclick="schreibLeeren()">🗑️ Alles zurücksetzen</button>
+      </div>
+      <div class="schreib-status" id="sw-status"></div>
+    </div>
 
   <div class="author-footer">
     <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
@@ -711,7 +921,7 @@ var WORTSCHATZ = [
   {type:'v', en:'to rely on each other', de:'sich aufeinander verlassen'},
   {type:'v', en:'to play together', de:'miteinander spielen'},
   {type:'n', en:'the sacrifice', art:'das', wort:'Opfer', plural:'Opfer'},
-  {type:'n', en:'the reciprocity', art:'die', wort:'Gegenseitigkeit', plural:'—'}
+  {type:'n', en:'the reciprocity', art:'die', wort:'Gegenseitigkeit', plural:'–'}
 ];
 
 
@@ -736,7 +946,7 @@ initSatzbau();
 initWortschatz();
 
 // INIT
-initTimers([2,3,4]);
+initTimers([2,3,4,6]);
 
 
 
@@ -762,7 +972,9 @@ function buildWordBank(containerEl) {
     bank.className = 'wort-bank';
     var lbl = document.createElement('div');
     lbl.className = 'wort-bank-label';
-    lbl.innerHTML = '🔤 Wortbank – die richtigen Wörter, in zufälliger Reihenfolge.<button> mehr — <span> ist nicht klickbar
+    lbl.innerHTML = '🔤 Wortbank – die richtigen Wörter, in zufälliger Reihenfolge.<br>Tipp sie selbst in die Lücken — achte auf Groß- und Kleinschreibung.';
+    bank.appendChild(lbl);
+    words.forEach(function(w) {
         var chip = document.createElement('span');
         chip.className = 'wort-chip';
         chip.textContent = w;
@@ -789,28 +1001,49 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 var wortschatzInited = false;
 
+function wsMakeInput(cls, answer, ph, isArt) {
+    var inp = document.createElement('input');
+    inp.type = 'text';
+    inp.className = 'blank ' + cls;
+    inp.dataset.answer = answer;
+    if (isArt) inp.dataset.art = '1';
+    inp.placeholder = ph;
+    inp.setAttribute('autocomplete', 'off');
+    inp.setAttribute('autocapitalize', 'off');
+    inp.setAttribute('spellcheck', 'false');
+    inp.addEventListener('input', function(){ wortschatzCheck(inp); });
+    return inp;
+}
+
 function initWortschatz() {
-    if (wortschatzInited) return;
     var cont = document.getElementById('wortschatzContainer');
     if (!cont) return;
     cont.innerHTML = '';
-    WORTSCHATZ.forEach(function(w, i) {
+    WORTSCHATZ.forEach(function(w) {
         var row = document.createElement('div');
         row.className = 'luecke-item';
-        var en = '<div class="ws-en">' + w.en + '</div>';
-        var inputs;
+        row.style.marginBottom = '0';
+        var en = document.createElement('div');
+        en.className = 'ws-en';
+        en.textContent = w.en;
+        var fields = document.createElement('div');
+        fields.className = 'ws-inputs';
         if (w.type === 'n') {
-            inputs = '<div class="ws-inputs">' +
-                '<input class="blank art"    data-id="' + i + '" data-field="artikel" placeholder="Artikel" oninput="wortschatzCheck(this)" autocomplete="off">' +
-                '<input class="blank wort"   data-id="' + i + '" data-field="de"      placeholder="Wort"    oninput="wortschatzCheck(this)" autocomplete="off">' +
-                '<input class="blank plural" data-id="' + i + '" data-field="plural"  placeholder="Plural"  oninput="wortschatzCheck(this)" autocomplete="off">' +
-                '</div>';
+            fields.appendChild(wsMakeInput('art', w.art, 'Artikel', true));
+            fields.appendChild(wsMakeInput('wort', w.wort, 'Wort', false));
+            var pl = wsMakeInput('plural', w.plural, 'Plural', false);
+            if (w.plural === '–') {
+                pl.value = '–';
+                pl.disabled = true;
+                pl.classList.add('correct');
+                pl.title = 'Dieses Wort hat keinen Plural.';
+            }
+            fields.appendChild(pl);
         } else {
-            inputs = '<div class="ws-inputs">' +
-                '<input class="blank verb" data-id="' + i + '" data-field="de" placeholder="Verb (Infinitiv)" oninput="wortschatzCheck(this)" autocomplete="off">' +
-                '</div>';
+            fields.appendChild(wsMakeInput('verb', w.de, 'Deutsch', false));
         }
-        row.innerHTML = en + inputs;
+        row.appendChild(en);
+        row.appendChild(fields);
         cont.appendChild(row);
     });
     wortschatzInited = true;
@@ -818,40 +1051,41 @@ function initWortschatz() {
 
 function wortschatzCheck(inp) {
     if (typeof timerAutoStart === 'function') timerAutoStart(4);
-    var id = parseInt(inp.dataset.id);
-    var field = inp.dataset.field;
-    var target = WORTSCHATZ[id][field];
-    var val = inp.value.trim();
-    inp.classList.remove('ok', 'wrong');
-    if (!val) return;
-    if (val === target) {
-        inp.classList.add('ok');
+    var answer = inp.dataset.answer || '';
+    var isArt = inp.dataset.art === '1';
+    var user = isArt ? inp.value.toLowerCase().trim() : inp.value.trim();
+    var ans  = isArt ? answer.toLowerCase() : answer;
+    inp.classList.remove('correct', 'wrong');
+    if (!inp.value) return;
+    if (user === ans) {
+        inp.classList.add('correct');
         checkWortschatzAllOk();
-    } else if (!target.toLowerCase().startsWith(val.toLowerCase())) {
+    } else if (ans.indexOf(user) !== 0) {
         inp.classList.add('wrong');
     }
 }
 
 function checkWortschatzAllOk() {
     var all = document.querySelectorAll('#wortschatzContainer input.blank');
-    var allOk = Array.from(all).every(function(i) { return i.classList.contains('ok'); });
-    if (allOk && typeof stopTimer === 'function') stopTimer(4);
+    var allOk = all.length > 0 && Array.prototype.every.call(all, function(i) {
+        return i.disabled || i.classList.contains('correct');
+    });
+    if (allOk && typeof timerStop === 'function') timerStop(4);
 }
 
 function resetWortschatz() {
     document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
-        inp.value = '';
-        inp.classList.remove('ok', 'wrong');
+        if (!inp.disabled) { inp.value = ''; inp.classList.remove('correct', 'wrong'); }
     });
+    if (typeof resetTimer === 'function') resetTimer(4);
 }
 
 function showLoesungWortschatz() {
+    if (typeof timerStop === 'function') timerStop(4);
     document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
-        var id = parseInt(inp.dataset.id);
-        var field = inp.dataset.field;
-        inp.value = WORTSCHATZ[id][field];
+        inp.value = inp.dataset.answer;
         inp.classList.remove('wrong');
-        inp.classList.add('ok');
+        inp.classList.add('correct');
     });
 }
 </script>
@@ -1164,6 +1398,482 @@ function resetGenus(){ initGenus(); genusTimerReset(); }
   window.addEventListener('resize', toggle);
   document.querySelectorAll('.nav-btn').forEach(function(b){ b.addEventListener('click', function(){ setTimeout(toggle, 60); }); });
   setTimeout(toggle, 80);
+})();
+</script>
+
+<script>
+/* ===== 3055G (G): Vorentlastung · Lesetext-Highlight · Quiz · Schreibwerkstatt ===== */
+var VORENTLASTUNG = [
+  { term:'einander', en:'each other / one another', def:'Gegenseitig: eine/r tut etwas für die/den andere/n.' },
+  { term:'miteinander', en:'with one another', def:'Zusammen, einer mit dem anderen.' },
+  { term:'voneinander', en:'from one another', def:'Einer vom anderen (z. B. voneinander lernen).' },
+  { term:'aufeinander', en:'on one another', def:'Einer auf den anderen (z. B. sich aufeinander verlassen).' },
+  { term:'nebeneinander', en:'next to one another', def:'Einer neben dem anderen.' },
+  { term:'sich verstehen', en:'to get along', def:'Gut miteinander auskommen.' },
+  { term:'sich respektieren', en:'to respect each other', def:'Einander achten und ernst nehmen.' },
+  { term:'sich aufeinander verlassen', en:'to rely on each other', def:'Einander vertrauen können.' },
+  { term:'voneinander lernen', en:'to learn from each other', def:'Der eine lernt vom anderen.' },
+  { term:'die Gegenseitigkeit', en:'reciprocity', def:'Das gegenseitige Geben und Nehmen.' }
+];
+function buildVorentlastung(){
+  var g = document.getElementById('vorentlastungGrid'); if(!g) return;
+  g.innerHTML = '';
+  VORENTLASTUNG.forEach(function(v){
+    var c = document.createElement('div'); c.className = 'vocab-card';
+    var t = document.createElement('div'); t.className = 'vocab-term'; t.textContent = v.term;
+    var e = document.createElement('div'); e.className = 'vocab-en'; e.textContent = v.en;
+    var d = document.createElement('div'); d.className = 'vocab-def'; d.textContent = v.def;
+    c.appendChild(t); c.appendChild(e); c.appendChild(d); g.appendChild(c);
+  });
+}
+
+var QUIZ_DATA = [
+  { q:'Was mag Karim an seiner Arbeit am meisten?', opts:['sein Team','das Gehalt','das große Büro','die langen Pausen'], correct:0 },
+  { q:'Was sagt Karim über das Team?', opts:['sie verstehen einander','sie streiten oft','sie kennen sich kaum','jeder arbeitet allein'], correct:0 },
+  { q:'Worauf können sich die Kollegen laut Stefan verlassen?', opts:['aufeinander','auf den Chef','auf das Glück','auf niemanden'], correct:0 },
+  { q:'Woher kommt Elena?', opts:['aus Bulgarien','aus Japan','aus Marokko','aus einem Dorf bei Köln'], correct:0 },
+  { q:'Was lernt Karim von Elena?', opts:['direkter zu sein','ruhig zu bleiben','Deutsch','Geduld'], correct:0 },
+  { q:'Was bringt Karim dem Team nach eigener Aussage bei?', opts:['Geduld','Direktheit','Pünktlichkeit','Humor'], correct:0 },
+  { q:'Wie verbringen die Kollegen oft die Mittagspause?', opts:['sie sitzen nebeneinander und reden miteinander','jeder isst allein','sie schweigen','sie streiten'], correct:0 },
+  { q:'Streiten die Kollegen gegeneinander?', opts:['Nein, sie suchen zusammen eine Lösung','Ja, fast jeden Tag','Ja, über die Arbeit','Das sagt der Text nicht'], correct:0 },
+  { q:'An wen denkt Karim am Abend?', opts:['an seine Familie in Casablanca','an seinen Chef','an einen alten Schulfreund','an niemanden'], correct:0 },
+  { q:'Was denkt Karim zum Schluss?', opts:['ohne einander wären alle ärmer','dass er müde ist','dass er kündigen will','dass er allein besser arbeitet'], correct:0 }
+];
+
+var QUIZ_TIMER = 6;
+function buildQuizQuestion(item){
+  var opts = item.opts.map(function(t,i){ return { t:t, ok:(i===item.correct) }; });
+  for(var i=opts.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var tmp=opts[i]; opts[i]=opts[j]; opts[j]=tmp; }
+  var q = document.createElement('div'); q.className = 'mc-q';
+  var qt = document.createElement('div'); qt.className = 'mc-question'; qt.textContent = item.q; q.appendChild(qt);
+  var wrap = document.createElement('div'); wrap.className = 'mc-opts';
+  opts.forEach(function(o){
+    var b = document.createElement('div'); b.className = 'mc-opt'; b.textContent = o.t; b.dataset.ok = o.ok ? '1' : '';
+    b.addEventListener('click', function(){
+      if(q.dataset.done) return;
+      timerAutoStart(QUIZ_TIMER);
+      q.dataset.done = '1';
+      Array.prototype.forEach.call(wrap.children, function(x){ x.classList.add('locked'); if(x.dataset.ok) x.classList.add('correct'); });
+      if(o.ok){ q.dataset.correct = '1'; } else { b.classList.add('wrong'); }
+      quizCheckDone();
+    });
+    wrap.appendChild(b);
+  });
+  q.appendChild(wrap);
+  return q;
+}
+function initQuiz(){
+  var box = document.getElementById('quizContainer'); if(!box) return;
+  box.innerHTML = '';
+  QUIZ_DATA.forEach(function(item){ box.appendChild(buildQuizQuestion(item)); });
+  var s = document.getElementById('quizScore'); if(s){ s.style.display='none'; s.textContent=''; }
+}
+function quizCheckDone(){
+  var all = document.querySelectorAll('#quizContainer .mc-q');
+  if(!all.length) return;
+  var done = Array.prototype.every.call(all, function(q){ return q.dataset.done; });
+  if(!done) return;
+  var correct = Array.prototype.filter.call(all, function(q){ return q.dataset.correct; }).length;
+  var s = document.getElementById('quizScore');
+  if(s){ s.style.display='block'; s.textContent = (correct===all.length ? '🎉 ' : '') + 'Ergebnis: ' + correct + ' von ' + all.length + ' richtig.'; }
+  if(correct===all.length) timerStop(QUIZ_TIMER);
+}
+function quizSolution(){
+  document.querySelectorAll('#quizContainer .mc-q').forEach(function(q){
+    q.dataset.done = '1';
+    q.querySelectorAll('.mc-opt').forEach(function(x){ x.classList.add('locked'); x.classList.remove('wrong'); if(x.dataset.ok) x.classList.add('correct'); });
+  });
+}
+function quizReset(){ initQuiz(); resetTimer(QUIZ_TIMER); }
+
+function highlightVocabInText(){
+  var storyText = document.querySelector('.story-text') || document.querySelector('.lese-text');
+  if(!storyText) return;
+  var words = [];
+  if(typeof VORENTLASTUNG !== 'undefined' && VORENTLASTUNG.length){
+    words = VORENTLASTUNG.map(function(item){
+      var term = item.term.replace(/^(der|die|das)\s+/i, '');
+      return term.split(',')[0].split('(')[0].trim();
+    });
+  }
+  words = words.filter(function(w){ return w && w.length > 3; });
+  if(words.length === 0) return;
+  function walk(node){
+    if(node.nodeType === 3){
+      var text = node.nodeValue, replaced = text;
+      words.forEach(function(word){
+        var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+        replaced = replaced.replace(regex, function(match){ return '\x01' + match + '\x02'; });
+      });
+      if(replaced !== text){
+        var span = document.createElement('span');
+        var parts = replaced.split(/\x01|\x02/);
+        var isHl = false;
+        parts.forEach(function(part){
+          if(!part){ isHl = !isHl; return; }
+          if(isHl){
+            var hl = document.createElement('span');
+            hl.className = 'vocab-hl';
+            hl.title = '📖 Vokabel aus der Vorentlastung';
+            hl.textContent = part;
+            span.appendChild(hl);
+          } else { span.appendChild(document.createTextNode(part)); }
+          isHl = !isHl;
+        });
+        node.parentNode.replaceChild(span, node);
+      }
+    } else if(node.nodeType === 1 && node.nodeName !== 'SCRIPT' && !(node.classList && node.classList.contains('vocab-hl'))){
+      Array.prototype.slice.call(node.childNodes).forEach(walk);
+    }
+  }
+  walk(storyText);
+}
+
+/* ===== SCHREIBWERKSTATT (B1) =================================== */
+var SCHREIB_NAME_KEY      = 'schreibwerkstatt_B1_3055G_name';
+var SCHREIB_KEY_PREFIX    = 'schreibwerkstatt_B1_3055G_';
+var SCHREIB_SENT_PREFIX   = 'schreibwerkstatt_B1_3055G_sent_';
+var FORMSUBMIT_ENDPOINT  = 'https://api.web3forms.com/submit';
+var FORMSUBMIT_ACCESS_KEY = 'e96ea83f-67e2-4fff-81df-76fee86a09ff';
+var FORMSUBMIT_MAILTO    = 'unterricht@frankburkert-daf.de';
+var SCHREIB_LEKTION       = 'B1 – Lektion 3055G · Reziprokpronomen';
+var SCHREIB_MIN_CHARS     = 12;
+
+function initSchreibwerkstatt() {
+  var nameInp = document.getElementById('sw-name');
+  if (nameInp) {
+    var savedName = localStorage.getItem(SCHREIB_NAME_KEY);
+    if (savedName) nameInp.value = savedName;
+    nameInp.addEventListener('input', function () {
+      localStorage.setItem(SCHREIB_NAME_KEY, nameInp.value);
+    });
+  }
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    var saved = localStorage.getItem(SCHREIB_KEY_PREFIX + nr);
+    if (saved) ta.value = saved;
+    schreibUpdateCount(ta);
+    var sentInfo = localStorage.getItem(SCHREIB_SENT_PREFIX + nr);
+    if (sentInfo) schreibKarteAlsGesendetMarkieren(nr, sentInfo, true);
+    ta.addEventListener('input', function () {
+      schreibUpdateCount(ta);
+      localStorage.setItem(SCHREIB_KEY_PREFIX + nr, ta.value);
+      var btn = document.getElementById('sw-send-' + nr);
+      if (btn && btn.classList.contains('gesendet')) {
+        btn.classList.remove('gesendet');
+        btn.innerHTML = '📨 Erneut senden';
+      }
+      var st = document.getElementById('sw-status-' + nr);
+      if (st && st.classList.contains('error')) {
+        st.classList.remove('error');
+        st.textContent = '';
+      }
+    });
+  });
+}
+
+function schreibUpdateCount(ta) {
+  var nr = ta.dataset.aufgabe;
+  var text = ta.value.trim();
+  var words = text ? text.split(/\s+/).filter(function (w) { return w.length > 0; }).length : 0;
+  var wc = document.querySelector('.wc-' + nr);
+  if (wc) wc.textContent = words;
+}
+
+function schreibKarteAlsGesendetMarkieren(nr, info, beimLaden) {
+  var ta = document.querySelector('.schreib-mini-textarea[data-aufgabe="' + nr + '"]');
+  var karte = ta && ta.closest('.schreib-aufgabe-karte');
+  if (karte) karte.classList.add('gesendet');
+  var btn = document.getElementById('sw-send-' + nr);
+  if (btn) {
+    btn.classList.add('gesendet');
+    btn.innerHTML = beimLaden ? '✓ schon gesendet · erneut senden' : '✓ gesendet · erneut senden';
+  }
+  var status = document.getElementById('sw-status-' + nr);
+  if (status) { status.classList.remove('error'); status.textContent = '✓ ' + info; }
+}
+
+function schreibStatusZeigen(typ, text) {
+  var box = document.getElementById('sw-status');
+  if (!box) return;
+  box.className = 'schreib-status ' + typ;
+  box.innerHTML = text;
+}
+
+function schreibAktuellerName() {
+  var nameInp = document.getElementById('sw-name');
+  return (nameInp && nameInp.value || '').trim();
+}
+
+function schreibNamePflicht() {
+  var name = schreibAktuellerName();
+  if (!name) {
+    var nameInp = document.getElementById('sw-name');
+    if (nameInp) {
+      nameInp.classList.add('schreib-name-error');
+      try { nameInp.focus(); nameInp.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      setTimeout(function () { nameInp.classList.remove('schreib-name-error'); }, 3000);
+    }
+    return false;
+  }
+  return true;
+}
+
+function schreibPostFormsubmit(subject, message, onOk, onErr) {
+  return fetch(FORMSUBMIT_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      access_key: FORMSUBMIT_ACCESS_KEY,
+      name: schreibAktuellerName(),
+      subject: subject,
+      from_name: 'fabDaF Schreibwerkstatt',
+      lektion: SCHREIB_LEKTION,
+      message: message
+    })
+  })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP_' + r.status); return r.json(); })
+    .then(function (data) {
+      var ok = data && (data.success === true || data.success === 'true');
+      if (!ok) {
+        var code = 'API_ERROR';
+        var apiMsg = (data && data.message) || '';
+        if (/[Aa]ctivat|domain|access[\s_-]?key/.test(apiMsg)) code = 'NOT_ACTIVATED';
+        var err = new Error(code);
+        err.apiMessage = apiMsg;
+        throw err;
+      }
+      onOk(data);
+    })
+    .catch(onErr);
+}
+
+function schreibFehlerErklaerung(err) {
+  var code = (err && err.message) || '';
+  if (code === 'NOT_ACTIVATED') {
+    return 'Der Versand-Endpunkt ist gerade nicht freigeschaltet (das passiert manchmal bei Adress-Wechsel auf Franks Seite).';
+  }
+  if (code.indexOf('HTTP_') === 0) {
+    return 'Der Server hat eine technische Antwort gegeben (' + code.replace('HTTP_', 'HTTP ') + '), die nicht „erfolgreich“ bedeutet.';
+  }
+  if (code === 'API_ERROR') {
+    return 'Der Versand-Dienst hat „nicht erfolgreich“ zurückgemeldet' + (err && err.apiMessage ? ' („' + err.apiMessage + '“)' : '') + '.';
+  }
+  return 'Es gab ein Netz- oder Browser-Problem beim Senden — keine Server-Antwort.';
+}
+
+function schreibKopierenEinzeln(nr) {
+  var ta = document.querySelector('.schreib-mini-textarea[data-aufgabe="' + nr + '"]');
+  if (!ta) return;
+  var titel = ta.dataset.titel || ('Aufgabe ' + nr);
+  var name = (typeof schreibAktuellerName === 'function' && schreibAktuellerName()) || '(kein Name eingetragen)';
+  var text = 'Lektion: ' + SCHREIB_LEKTION + '\nName: ' + name + '\n\n=== Aufgabe ' + nr + ': ' + titel + ' ===\n\n' + ta.value.trim();
+  var st = document.getElementById('sw-status-' + nr) || document.getElementById('status-' + nr);
+  function fertig(ok) {
+    if (!st) return;
+    if (ok) { st.classList.remove('error'); st.classList.add('success'); st.innerHTML = '✓ In die Zwischenablage kopiert. Jetzt in deine Mail oder deinen Chat einfügen und an Frank schicken.'; }
+    else { st.classList.add('error'); st.innerHTML = '✗ Kopieren ging nicht — markier den Text in der Box selbst und nutz „kopieren“ deines Browsers.'; }
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function () { fertig(true); }, function () { fertig(false); });
+  } else {
+    try {
+      var tmp = document.createElement('textarea'); tmp.value = text; document.body.appendChild(tmp);
+      tmp.select(); document.execCommand('copy'); document.body.removeChild(tmp); fertig(true);
+    } catch (e) { fertig(false); }
+  }
+}
+
+function schreibZeigeFehler(nr, err, subject, message) {
+  var st = document.getElementById('sw-status-' + nr) || document.getElementById('status-' + nr);
+  if (!st) return;
+  var subjectEnc = encodeURIComponent(subject);
+  var bodyEnc = encodeURIComponent('Name: ' + schreibAktuellerName() + '\n\n' + message);
+  var mailto = 'mailto:' + FORMSUBMIT_MAILTO + '?subject=' + subjectEnc + '&body=' + bodyEnc;
+  var erklaerung = schreibFehlerErklaerung(err);
+  st.classList.remove('success'); st.classList.add('error');
+  st.innerHTML =
+    '<div class="schreib-fb">' +
+      '<div class="schreib-fb-titel">⚠ Online-Versand hat nicht geklappt — dein Text ist sicher im Browser gespeichert.</div>' +
+      '<div class="schreib-fb-text"><strong>Was passiert ist:</strong> ' + erklaerung + ' Du verlierst nichts — wähle einen der drei Wege, damit Frank deine Antwort trotzdem bekommt:</div>' +
+      '<div class="schreib-fb-actions">' +
+        '<a class="schreib-fb-btn schreib-fb-btn-prim" href="' + mailto + '">📧 In Mail-Programm öffnen</a>' +
+        '<button type="button" class="schreib-fb-btn" onclick="schreibKopierenEinzeln(\'' + nr + '\')">📋 In Zwischenablage</button>' +
+        '<button type="button" class="schreib-fb-btn" onclick="schreibSendenEinzeln(\'' + nr + '\')">🔄 Nochmal versuchen</button>' +
+      '</div>' +
+      '<div class="schreib-fb-hilfe">Wenn nichts klappt: sag Frank im Unterricht Bescheid — er muss den Versand auf seiner Seite einmal aktivieren.</div>' +
+    '</div>';
+}
+
+function schreibZeigeFehlerSammel(err, subject, message) {
+  var subjectEnc = encodeURIComponent(subject);
+  var bodyEnc = encodeURIComponent('Name: ' + schreibAktuellerName() + '\n\n' + message);
+  var mailto = 'mailto:' + FORMSUBMIT_MAILTO + '?subject=' + subjectEnc + '&body=' + bodyEnc;
+  var erklaerung = schreibFehlerErklaerung(err);
+  var fnKopieren = (typeof schreibKopieren === 'function') ? 'schreibKopieren()' : 'schreibKopierenEinzeln(1)';
+  schreibStatusZeigen('error',
+    '<div class="schreib-fb">' +
+      '<div class="schreib-fb-titel">⚠ Sammel-Versand hat nicht geklappt — alle Antworten sind sicher im Browser gespeichert.</div>' +
+      '<div class="schreib-fb-text"><strong>Was passiert ist:</strong> ' + erklaerung + ' Wähle einen Weg:</div>' +
+      '<div class="schreib-fb-actions">' +
+        '<a class="schreib-fb-btn schreib-fb-btn-prim" href="' + mailto + '">📧 Alle als eine Mail öffnen</a>' +
+        '<button type="button" class="schreib-fb-btn" onclick="' + fnKopieren + '">📋 Alles in Zwischenablage</button>' +
+        '<button type="button" class="schreib-fb-btn" onclick="schreibSendenAlleNochOffenen()">🔄 Nochmal versuchen</button>' +
+      '</div>' +
+      '<div class="schreib-fb-hilfe">Tipp: einzelne Karten kannst du auch separat senden — jede hat eigene Buttons.</div>' +
+    '</div>');
+}
+
+function schreibSendenEinzeln(nr) {
+  var ta = document.querySelector('.schreib-mini-textarea[data-aufgabe="' + nr + '"]');
+  var btn = document.getElementById('sw-send-' + nr);
+  if (!ta || !btn) return;
+  if (!schreibNamePflicht()) {
+    var stN = document.getElementById('sw-status-' + nr);
+    if (stN) { stN.classList.add('error'); stN.textContent = 'Bitte zuerst deinen Namen oben eintragen.'; }
+    return;
+  }
+  var text = ta.value.trim();
+  if (text.length < SCHREIB_MIN_CHARS) {
+    var st = document.getElementById('sw-status-' + nr);
+    if (st) { st.classList.add('error'); st.textContent = 'noch zu kurz — schreib bitte etwas mehr'; }
+    return;
+  }
+  var titel = ta.dataset.titel || ('Aufgabe ' + nr);
+  var subject = 'B1 3057X · Aufgabe ' + nr + ' · ' + titel + ' · ' + schreibAktuellerName();
+  var message = '=== Aufgabe ' + nr + ': ' + titel + ' ===\n\n' + text;
+  btn.disabled = true;
+  var origLabel = btn.innerHTML;
+  btn.innerHTML = '⏳ Wird gesendet …';
+
+  schreibPostFormsubmit(subject, message,
+    function () {
+      btn.disabled = false;
+      var jetzt = new Date();
+      var info = 'gesendet um ' + String(jetzt.getHours()).padStart(2, '0') + ':' + String(jetzt.getMinutes()).padStart(2, '0');
+      localStorage.setItem(SCHREIB_SENT_PREFIX + nr, info);
+      schreibKarteAlsGesendetMarkieren(nr, info, false);
+    },
+    function (err) { btn.disabled = false; btn.innerHTML = origLabel; schreibZeigeFehler(nr, err, subject, message); });
+}
+
+function schreibSendenAlleNochOffenen() {
+  var btn = document.getElementById('sw-btn-all');
+  if (!schreibNamePflicht()) {
+    schreibStatusZeigen('error', '✗ Bitte zuerst deinen Namen oben eintragen.');
+    return;
+  }
+  var offene = [];
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    var text = ta.value.trim();
+    var sent = localStorage.getItem(SCHREIB_SENT_PREFIX + nr);
+    if (text.length >= SCHREIB_MIN_CHARS && !sent) offene.push({ nr: nr, ta: ta, text: text });
+  });
+  if (offene.length === 0) {
+    schreibStatusZeigen('info', 'ℹ Es gibt nichts Neues zu senden — alle Antworten sind entweder leer/sehr kurz oder bereits gesendet.');
+    return;
+  }
+  var teile = offene.map(function (o) {
+    var titel = o.ta.dataset.titel || ('Aufgabe ' + o.nr);
+    return '=== Aufgabe ' + o.nr + ': ' + titel + ' ===\n\n' + o.text;
+  });
+  var subject = 'B1 3057X · ' + offene.length + ' Antworten · ' + schreibAktuellerName();
+  var message = teile.join('\n\n');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Wird gesendet …';
+  schreibStatusZeigen('info', '⏳ ' + offene.length + ' Antworten werden übermittelt …');
+  schreibPostFormsubmit(subject, message,
+    function () {
+      btn.disabled = false;
+      btn.innerHTML = '📨 Alle noch nicht gesendeten Antworten schicken';
+      var jetzt = new Date();
+      var info = 'gesendet um ' + String(jetzt.getHours()).padStart(2, '0') + ':' + String(jetzt.getMinutes()).padStart(2, '0');
+      offene.forEach(function (o) {
+        localStorage.setItem(SCHREIB_SENT_PREFIX + o.nr, info);
+        schreibKarteAlsGesendetMarkieren(o.nr, info, false);
+      });
+      schreibStatusZeigen('success', '✓ <strong>' + offene.length + ' Antworten übermittelt.</strong> Frank meldet sich.');
+    },
+    function (err) { btn.disabled = false; btn.innerHTML = '📨 Alle noch nicht gesendeten Antworten schicken'; schreibZeigeFehlerSammel(err, subject, message); });
+}
+
+function schreibKopieren() {
+  var teile = [];
+  teile.push('Lektion: ' + SCHREIB_LEKTION);
+  teile.push('Name: ' + (schreibAktuellerName() || '(kein Name)'));
+  teile.push('');
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    var text = ta.value.trim();
+    if (text.length >= SCHREIB_MIN_CHARS) {
+      var titel = ta.dataset.titel || ('Aufgabe ' + nr);
+      teile.push('=== Aufgabe ' + nr + ': ' + titel + ' ===');
+      teile.push(text);
+      teile.push('');
+    }
+  });
+  if (teile.length <= 3) {
+    schreibStatusZeigen('info', 'ℹ Noch nichts zum Kopieren — schreib mindestens eine Antwort.');
+    return;
+  }
+  var alles = teile.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(alles).then(
+      function () { schreibStatusZeigen('success', '✓ In Zwischenablage kopiert. Du kannst es jetzt in deine Mail einfügen.'); },
+      function () { schreibStatusZeigen('error', '✗ Kopieren fehlgeschlagen. Bitte den Text manuell markieren.'); }
+    );
+  } else {
+    schreibStatusZeigen('error', '✗ Dein Browser unterstützt das automatische Kopieren nicht.');
+  }
+}
+
+function schreibLeeren() {
+  if (!confirm('Wirklich ALLE Antworten zurücksetzen? Auch die schon gesendeten Markierungen werden entfernt.')) return;
+  document.querySelectorAll('.schreib-mini-textarea').forEach(function (ta) {
+    var nr = ta.dataset.aufgabe;
+    ta.value = '';
+    localStorage.removeItem(SCHREIB_KEY_PREFIX + nr);
+    localStorage.removeItem(SCHREIB_SENT_PREFIX + nr);
+    schreibUpdateCount(ta);
+    var karte = ta.closest('.schreib-aufgabe-karte');
+    if (karte) karte.classList.remove('gesendet');
+    var btn = document.getElementById('sw-send-' + nr);
+    if (btn) { btn.classList.remove('gesendet'); btn.innerHTML = '📨 An Frank senden'; }
+    var st = document.getElementById('sw-status-' + nr);
+    if (st) { st.className = 'schreib-mini-status'; st.textContent = ''; }
+  });
+  schreibStatusZeigen('info', 'ℹ Alle Antworten zurückgesetzt.');
+}
+/* ===== Ende Schreibwerkstatt =================================== */
+
+
+
+// ── WORTKASTEN ──────────────────────────────────────────────────────────────
+var lkContainer = null, lkActiveInput = null;
+function syncWordBankChips() {
+    if (!lkContainer) return;
+    var bank = lkContainer.querySelector('.wort-bank');
+    if (!bank) return;
+    bank.querySelectorAll('.wort-chip').forEach(function(c){ c.classList.remove('used'); });
+    lkContainer.querySelectorAll('input.blank,input.l-inp,input.luecken-inp,input[data-ans],input[data-answer]').forEach(function(inp) {
+        var w = inp.value.trim();
+        if (w) { var c = bank.querySelector('.wort-chip[data-word="'+w+'"]'); if(c) c.classList.add('used'); }
+    });
+}
+// ────────────────────────────────────────────────────────────────────────────
+
+
+
+(function(){
+  function run(){
+    try { buildVorentlastung(); } catch(e){}
+    try { initQuiz(); } catch(e){}
+    try { highlightVocabInText(); } catch(e){}
+    try { initSchreibwerkstatt(); } catch(e){}
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
 })();
 </script>
 

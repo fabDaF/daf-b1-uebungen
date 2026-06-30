@@ -443,7 +443,7 @@ input.luecken-inp.no { border-color: #e74c3c; background: #ffebee; }
     <div class="section-title">🔠 Wortschatz</div>
     <div class="control-bar">
       <div class="btn-row">
-        <button class="btn" onclick="showWsLoesung()">Lösungen</button>
+        <button class="btn" onclick="showWortschatzLoesung()">Lösungen</button>
         <button class="btn" onclick="timerResetOne(4); resetWortschatz()">Neu starten</button>
       </div>
       <div class="timer-display">
@@ -451,7 +451,7 @@ input.luecken-inp.no { border-color: #e74c3c; background: #ffebee; }
         <span>&#127942; Best: <span id="best-4">--:--</span></span>
       </div>
     </div>
-    <div id="wsGrid" id="wsGrid"></div>
+    <div id="wortschatzContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
     <div class="author-footer">
       <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
       <a href="mailto:unterricht@frankburkert-daf.de">unterricht@frankburkert-daf.de</a><br>📅 Termin vereinbaren &middot; <a href="https://termin.frankburkert-daf.de">https://termin.frankburkert-daf.de</a>
@@ -1232,30 +1232,51 @@ var WORTSCHATZ = [
     { en: 'to dispose of / to get rid of', art: '', de: 'entsorgen', plural: '' }
 ];
 
-function initWortschatz() {
-    var grid = document.getElementById('wsGrid');
-    grid.innerHTML = '';
-    WORTSCHATZ.forEach(function(item) {
-        var card = document.createElement('div');
-        card.className = 'ws-card';
-        var isVerb = item.art === '';
-        var html = '<div class="ws-en">' + item.en + '</div>';
-        html += '<div class="ws-inputs">';
-        if (!isVerb) {
-            html += '<input class="ws-inp art" type="text" placeholder="Artikel" data-ans="' + item.art + '" oninput="liveCheckWs(this,4)">';
-            html += '<input class="ws-inp wort" type="text" placeholder="Nomen" data-ans="' + item.de + '" oninput="liveCheckWs(this,4)">';
-            if (item.plural) {
-                html += '<input class="ws-inp plural" type="text" placeholder="Plural" data-ans="' + item.plural + '" oninput="liveCheckWs(this,4)">';
-            }
-        } else {
-            html += '<span class="ws-label" style="margin-right:4px;">Verb:</span>';
-            html += '<input class="ws-inp wort" type="text" placeholder="Verb" data-ans="' + item.de + '" oninput="liveCheckWs(this,4)">';
-        }
-        html += '</div>';
-        card.innerHTML = html;
-        grid.appendChild(card);
-    });
+/* FB-WORTSCHATZ-KANON — deterministisch, schema-adaptiv (inject_wortschatz.py) */
+function initWortschatz(){
+  var c=document.getElementById("wortschatzContainer"); if(!c) return; c.innerHTML="";
+  WORTSCHATZ.forEach(function(item){
+    var artikel=(item.artikel!==undefined)?item.artikel:(item.art||"");
+    var de=(item.de!==undefined)?item.de:(item.wort||item.word||"");
+    var plural=(item.plural!==undefined)?item.plural:(item.pl||"");
+    var en=(item.en!==undefined)?item.en:(item.prompt||item.frage||"");
+    var type=item.type||(artikel?"n":"p");
+    var row=document.createElement("div"); row.className="luecken-item"; row.style.marginBottom="0";
+    var p=document.createElement("div"); p.style.cssText="font-weight:600;color:#667eea;margin-bottom:6px;font-size:1.05em;"; p.textContent=en; row.appendChild(p);
+    var fl=document.createElement("div"); fl.style.cssText="display:flex;gap:8px;flex-wrap:wrap;align-items:center;";
+    function mk(ph,w,ans,fld){var i=document.createElement("input");i.className="blank";i.type="text";i.placeholder=ph;i.style.width=w;i.dataset.answer=ans;i.dataset.field=fld;i.oninput=function(){wortschatzCheck(this);if(typeof timerAutoStart==="function")timerAutoStart(4);checkWortschatzAllOk();};return i;}
+    if(type==="n"){
+      fl.appendChild(mk("Artikel","70px",artikel,"art"));
+      fl.appendChild(mk("Wort","160px",de,"word"));
+      var pl=mk("Plural","140px",plural,"plural");
+      if(plural==="\u2013"||plural===""||plural==="-"){pl.value="\u2013";pl.disabled=true;pl.dataset.answer="\u2013";pl.classList.add("correct");pl.style.opacity="0.6";pl.title="Dieses Wort hat keinen Plural";pl.oninput=null;}
+      fl.appendChild(pl);
+    } else { fl.appendChild(mk("Deutsch","220px",de,"word")); }
+    row.appendChild(fl); c.appendChild(row);
+  });
 }
+function wortschatzCheck(inp){
+  var u=inp.value,a=inp.dataset.answer,f=inp.dataset.field; inp.classList.remove("correct","wrong"); if(!u) return;
+  var cu=(f==="art")?u.toLowerCase().trim():u.trim(); var ca=(f==="art")?(a||"").toLowerCase():a;
+  if(cu===ca) inp.classList.add("correct"); else if(ca.indexOf(cu)===0){} else inp.classList.add("wrong");
+}
+function checkWortschatzAllOk(){
+  var ins=document.querySelectorAll("#sec-4 input.blank");
+  var ok=ins.length>0 && Array.from(ins).every(function(i){return i.disabled||i.classList.contains("correct");});
+  if(ok && typeof stopTimer==="function") stopTimer(4);
+}
+function showWortschatzLoesung(){
+  if(typeof stopTimer==="function") stopTimer(4);
+  document.querySelectorAll("#sec-4 input.blank").forEach(function(inp){inp.value=inp.dataset.answer;inp.classList.add("correct");inp.classList.remove("wrong");});
+}
+function resetWortschatz(){
+  document.querySelectorAll("#sec-4 input.blank").forEach(function(inp){if(!inp.disabled){inp.value="";inp.classList.remove("correct","wrong");}});
+  if(typeof resetTimer==="function") resetTimer(4);
+}
+
+
+
+
 
 function liveCheckWs(inp, tabN) {
     timerAutoStart(tabN);
@@ -1275,13 +1296,8 @@ function checkWsAllOk(tabN) {
     if (allOk) timerStop(tabN);
 }
 
-function showWsLoesung() {
-    document.querySelectorAll('#sec-4 .ws-inp').forEach(function(inp) {
-        inp.value = inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no');
-    });
-}
-function resetWortschatz() { initWortschatz();
-initSchreibwerkstatt(); }
+
+
 
 // ===== INIT =====
 initZuord();

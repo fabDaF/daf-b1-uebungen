@@ -573,7 +573,7 @@ input.blank.wrong   { border-color: #e74c3c; background: #ffebee; }
     <div class="section-title">Wortschatz — Artikel und Plural tippen</div>
     <div class="control-bar">
       <div class="btn-row">
-        <button class="btn" onclick="showLoesungWortschatz()">Lösungen</button>
+        <button class="btn" onclick="showWortschatzLoesung()">Lösungen</button>
         <button class="btn" onclick="timerResetOne(4); resetWortschatz()">Neu starten</button>
       </div>
       <div class="timer-display">
@@ -1046,6 +1046,7 @@ function resetWortschatz(){
   document.querySelectorAll("#sec-4 input.blank").forEach(function(inp){if(!inp.disabled){inp.value="";inp.classList.remove("correct","wrong");}});
   if(typeof resetTimer==="function") resetTimer(4);
 }
+try{window.initWortschatz=initWortschatz;window.wortschatzCheck=wortschatzCheck;window.checkWortschatzAllOk=checkWortschatzAllOk;window.showWortschatzLoesung=showWortschatzLoesung;window.resetWortschatz=resetWortschatz;}catch(e){}
 
 
 
@@ -1480,15 +1481,7 @@ function wsNoPlural(p){ return (!p || p === '—' || p === '–' || p === '-'); 
 
 
 
-function showLoesungWortschatz() {
-    document.querySelectorAll('#wortschatzContainer input.blank').forEach(function(inp) {
-        if (inp.disabled) return;
-        var id = parseInt(inp.dataset.id); var field = inp.dataset.field;
-        var rec = wsData()[id]; var target = (rec && field) ? rec[field] : null;
-        if (target == null) return;
-        inp.value = target; inp.classList.remove('wrong'); inp.classList.add('ok');
-    });
-}
+
 </script>
 
 <script>

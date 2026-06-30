@@ -29,8 +29,8 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .hilfe-box strong { color: #5a3e9e; }
 .timer-controls { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:6px; }
 .tc-buttons { display:flex; gap:6px; }
-.tc-buttons button { background:#f5f7ff; border:1px solid #c5cff5; border-radius:8px; padding:6px 16px; font-size:0.85em; color:#667eea; cursor:pointer; transition:all 0.15s; font-weight:600; }
-.tc-buttons button:hover { background:#eaf0ff; border-color:#aab6f5; }
+.tc-buttons button { background:none; border:1px solid #ddd; border-radius:6px; padding:4px 12px; font-size:0.82em; color:#888; cursor:pointer; transition:all 0.15s; font-weight:500; }
+.tc-buttons button:hover { background:#f0f0f0; color:#555; }
 .tc-times { display:flex; gap:14px; font-size:0.82em; color:#bbb; font-variant-numeric:tabular-nums; }
 .timer-display { color:#667eea; font-weight:700; }
 .best-display  { color:#f39c12; font-weight:600; }
@@ -329,6 +329,53 @@ input.wrong{border-bottom:2px solid #e74c3c !important;background:#fdeaea !impor
   </div>
 </div>
 <div class="section-title">✏️ Lückentext</div>
+<div class="hilfe-box"><strong>Aufgabe:</strong> Fülle die Lücken mit den richtigen Wörtern aus.</div>
+
+    <div class="luecken-item">Der Erzähler <input class="luecken-inp" data-answer="schildert" oninput="liveCheck(this)" placeholder=""> die Ereignisse aus seiner Perspektive.</div>
+    <div class="luecken-item">Die Handlung <input class="luecken-inp" data-answer="entwickelt" oninput="liveCheck(this)" placeholder=""> sich langsam zum Höhepunkt hin.</div>
+    <div class="luecken-item">Die Spannung <input class="luecken-inp" data-answer="steigert" oninput="liveCheck(this)" placeholder=""> sich bis zur letzten Seite.</div>
+    <div class="luecken-item">Die Geschichte <input class="luecken-inp" data-answer="erreicht" oninput="liveCheck(this)" placeholder=""> ihren Höhepunkt im dritten Kapitel.</div>
+    <div class="luecken-item">Der Autor <input class="luecken-inp" data-answer="beschreibt" oninput="liveCheck(this)" placeholder=""> den Wendepunkt sehr dramatisch.</div>
+    <div class="luecken-item">Die Auflösung <input class="luecken-inp" data-answer="löst" oninput="liveCheck(this)" placeholder=""> alle offenen Fragen.</div>
+    <div class="luecken-item">Der Erzähler <input class="luecken-inp" data-answer="erzählt" oninput="liveCheck(this)" placeholder=""> die Geschichte in der ersten Person.</div>
+    <div class="luecken-item">Die Geschichte <input class="luecken-inp" data-answer="führt" oninput="liveCheck(this)" placeholder=""> den Leser durch verschiedene Epochen.</div>
+    <div class="luecken-item">Das Ende <input class="luecken-inp" data-answer="überrascht" oninput="liveCheck(this)" placeholder=""> den Leser vollständig.</div>
+    <div class="luecken-item">Die Pointe <input class="luecken-inp" data-answer="offenbart" oninput="liveCheck(this)" placeholder=""> die wahre Identität des Protagonisten.</div>
+    <div class="luecken-item">Der Konflikt <input class="luecken-inp" data-answer="entwickelt" oninput="liveCheck(this)" placeholder=""> sich zwischen den Hauptfiguren.</div>
+    <div class="luecken-item">Der Autor <input class="luecken-inp" data-answer="schildert" oninput="liveCheck(this)" placeholder=""> die innere Welt der Figuren.</div>
+
+<div class="score-box" id="lueckeScore"></div>
+  </div>
+  </div>
+
+  <div class="section" id="sec-quiz">
+  <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDIwMCI+CjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icXoiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM2NjdlZWEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3NjRiYTIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSJ1cmwoI3F6KSIvPgo8ZyBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjE2IiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC13ZWlnaHQ9ImJvbGQiPgo8dGV4dCB4PSIxMjAiIHk9IjkwIiBmb250LXNpemU9IjcwIj4/PC90ZXh0Pjx0ZXh0IHg9IjMwMCIgeT0iMTYwIiBmb250LXNpemU9IjUwIj4/PC90ZXh0Pgo8dGV4dCB4PSI5ODAiIHk9IjgwIiBmb250LXNpemU9IjYwIj4/PC90ZXh0Pjx0ZXh0IHg9IjEwODAiIHk9IjE3MCIgZm9udC1zaXplPSI0NCI+PzwvdGV4dD48dGV4dCB4PSI1MjAiIHk9IjYwIiBmb250LXNpemU9IjQwIj4/PC90ZXh0PjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAwLDEwMCkiPjxjaXJjbGUgcj0iNTgiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuOTUiLz4KPHBhdGggZD0iTSAtMjggNCBMIC04IDI2IEwgMzAgLTIyIiBmaWxsPSJub25lIiBzdHJva2U9IiMyN2FlNjAiIHN0cm9rZS13aWR0aD0iMTQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvZz4KPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDIwLDEwMCkiIG9wYWNpdHk9IjAuODUiPjxjaXJjbGUgcj0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSI3Ii8+PHRleHQgeD0iMCIgeT0iMTMiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjQyIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+PzwvdGV4dD48L2c+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDc4MCwxMDApIiBvcGFjaXR5PSIwLjg1Ij48Y2lyY2xlIHI9IjMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNyIvPjx0ZXh0IHg9IjAiIHk9IjEzIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSI0MiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj88L3RleHQ+PC9nPgo8L3N2Zz4=" alt="Quiz zum Lesetext">
+  <div class="section-content">
+<div class="timer-controls">
+  <div class="tc-buttons"><button onclick="quizSolution()">💡 Lösungen</button><button onclick="quizReset()">↺ Neustart</button></div>
+  <div class="tc-times">
+    <span>⏱ <span class="timer-display" id="timer-5">00:00</span></span>
+    <span>🏆 <span class="best-display" id="best-5">--:--</span></span>
+  </div>
+</div>
+<div class="section-title">☑️ Quiz zum Lesetext</div>
+<div class="hilfe-box"><strong>Aufgabe:</strong> Wähle für jede Frage die richtige Antwort. Pro Frage hast du einen Versuch.</div>
+<div id="quizContainer"></div>
+<div class="score-box" id="quizScore"></div>
+  </div>
+  </div>
+
+  <div class="section" id="sec-2">
+  <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDIwMCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzY2N2VlYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzc2NGJhMiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0idXJsKCNiZykiLz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2MDAsODIpIj4KPHBhdGggZD0iTSAtMTIwIC0zNCBoIDcwIHYgMTggYSAxMiAxMiAwIDAgMCAyNCAwIHYgLTE4IGggNzAgdiA3MCBoIC0xOCBhIDEyIDEyIDAgMCAwIDAgMjQgdiAxOCBoIC0xNDYgWiIgZmlsbD0iI2ZmZjRjZiIvPgo8cGF0aCBkPSJNIDYwIC0zNCBoIDcwIHYgMTQ2IGggLTcwIHYgLTE4IGEgMTIgMTIgMCAwIDEgMCAtMjQgdiAtMzQgYSAxMiAxMiAwIDAgMCAwIC0yNCBaIiBmaWxsPSIjZDdmMGQ5Ii8+PC9nPjwvc3ZnPg==" alt="">
+  <div class="section-content">
+<div class="timer-controls">
+  <div class="tc-buttons"><button onclick="resetSatzbau()">↺ Neustart</button></div>
+  <div class="tc-times">
+    <span>⏱ <span class="timer-display" id="timer-2">00:00</span></span>
+    <span>🏆 <span class="best-display" id="best-2">--:--</span></span>
+  </div>
+</div>
+<div class="section-title">🧩 Satzbau</div>
 <div id="satzbauContainer"></div>
   </div>
   </div>

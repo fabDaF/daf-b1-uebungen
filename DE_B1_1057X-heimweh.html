@@ -247,6 +247,14 @@ body {
     margin-right: 6px;
 }
 /* Lückentext */
+/* FB-LT-STORY — kanonischer Story-Lückentext: Serif-Fließtext + Inline-Lücken */
+.luecken-story { font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 2.1; color: #2c2c2c; text-align: justify; background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 18px 22px; }
+.luecken-story p { margin: 0 0 14px; }
+.luecken-story p:last-child { margin-bottom: 0; }
+.luecken-story input.blank { font-family: Georgia, 'Times New Roman', serif; border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-size: 1em; color: #2c2c2c; text-align: center; padding: 1px 4px; min-width: 4ch; transition: all .2s; }
+.luecken-story input.blank:focus { border-bottom-color: #667eea; }
+.luecken-story input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; color: #27ae60; font-weight: 700; }
+.luecken-story input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; color: #e74c3c; }
 .luecken-item {
     background: #f8f9ff;
     border-left: 4px solid #667eea;
@@ -606,9 +614,12 @@ body {
                     <span>&#127942; <span class="best-val" id="best-3">–</span></span>
                 </div>
             </div>
-            <div class="wortbank-label">📋 Wortbank</div>
     <div class="wortbank" id="wortbank-luecken"></div>
-    <div id="lueckenContainer"></div>
+    <div id="lueckenContainer" class="luecken-story">
+      <p>Seit ich im Ausland lebe, habe ich oft <input class="blank" data-answer="Heimweh">. Am Anfang fühlte ich mich in der großen Stadt ganz <input class="blank" data-answer="fremd">, weil ich niemanden kannte. Wenn ich abends nichts zu tun hatte, kam schnell <input class="blank" data-answer="Langeweile"> auf, und daraus wuchs eine schwere <input class="blank" data-answer="Einsamkeit">.</p>
+      <p>Ich <input class="blank" data-answer="vermisse"> meine Familie sehr, und manchmal spüre ich eine tiefe <input class="blank" data-answer="Sehnsucht"> nach meiner alten Heimat. Die große <input class="blank" data-answer="Entfernung"> macht es schwer, einfach nach Hause zu fahren.</p>
+      <p>Auch mein kleiner Bruder <input class="blank" data-answer="sehnt"> sich nach mir; wenn wir telefonieren, versuche ich, ihn zu <input class="blank" data-answer="trösten">. Trotzdem träume ich von fernen Ländern – dieses <input class="blank" data-answer="Fernweh"> lässt mich nicht los, und eines Tages will ich die ganze Welt sehen.</p>
+    </div>
         </div>
     </div>
 
@@ -1025,45 +1036,46 @@ var LUECKEN_DATA = [
     { pre: 'Nach einem Jahr im Ausland ', blank: 'sehnt', post: ' er sich nach dem Essen seiner Mutter.' }
 ];
 
+// FB-LT-STORY — Engine liest die Lücken aus dem Story-DOM (data-answer), case-sensitiv (daf-kern §7).
 function initLueckentext() {
     var cont = document.getElementById('lueckenContainer');
-    cont.innerHTML = '';
-    LUECKEN_DATA.forEach(function(item, idx) {
-        var div = document.createElement('div');
-        div.className = 'luecken-item';
-        var inp = document.createElement('input');
-        inp.className = 'luecken-inp'; inp.type='text'; inp.placeholder='';
-        inp.dataset.ans = item.blank; inp.id = 'linp-'+idx;
-        inp.addEventListener('input', function(){ liveCheckLuecke(inp); timerAutoStart(3); checkLueckenAllDone(); });
-        div.appendChild(document.createTextNode(item.pre+' '));
-        div.appendChild(inp);
-        div.appendChild(document.createTextNode(' '+item.post));
-        cont.appendChild(div);
+    if (!cont) return;
+    Array.prototype.slice.call(cont.querySelectorAll('input.blank')).forEach(function(inp){
+        var ans = inp.getAttribute('data-answer') || '';
+        inp.placeholder = '';
+        inp.style.width = (ans.length + 3) + 'ch';
+        if (!inp.__wired) {
+            inp.__wired = true;
+            inp.addEventListener('input', function(){ liveCheckLuecke(inp); timerAutoStart(3); checkLueckenAllDone(); });
+        }
     });
+    initWortbank();
 }
 function liveCheckLuecke(inp) {
-    var ans = inp.dataset.ans;
-    var val = inp.value.trim();
-    inp.classList.remove('ok','no');
-    if (!val) return;
-    if (val.toLowerCase() === ans.toLowerCase()) { inp.classList.add('ok'); return; }
-    if (ans.toLowerCase().indexOf(val.toLowerCase()) === 0) return;
-    inp.classList.add('no');
-  initWortbank();
+    var ans = inp.getAttribute('data-answer');
+    var val = inp.value;                       // case-sensitive, kein trim (daf-kern §7)
+    inp.classList.remove('correct','wrong');
+    if (!val) { updateWortbankChips(); return; }
+    if (val === ans) { inp.classList.add('correct'); }
+    else if (ans.indexOf(val) !== 0) { inp.classList.add('wrong'); }
+    updateWortbankChips();
 }
 function checkLueckenAllDone() {
-    var all = document.querySelectorAll('#lueckenContainer .luecken-inp');
-    if (all.length > 0 && Array.from(all).every(function(i){ return i.classList.contains('ok'); })) timerStop(3);
+    var all = document.querySelectorAll('#lueckenContainer input.blank');
+    if (all.length > 0 && Array.prototype.slice.call(all).every(function(i){ return i.classList.contains('correct'); })) timerStop(3);
 }
 function showLueckenLoesung() {
     timerStop(3);
-    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp){
-        inp.value=inp.dataset.ans; inp.classList.add('ok'); inp.classList.remove('no');
-    });}
-function resetLuecken() {
-    document.querySelectorAll('#lueckenContainer .luecken-inp').forEach(function(inp){
-        inp.value=''; inp.classList.remove('ok','no');
+    document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp){
+        inp.value = inp.getAttribute('data-answer'); inp.classList.add('correct'); inp.classList.remove('wrong');
     });
+    updateWortbankChips();
+}
+function resetLuecken() {
+    document.querySelectorAll('#lueckenContainer input.blank').forEach(function(inp){
+        inp.value = ''; inp.classList.remove('correct','wrong');
+    });
+    initWortbank();
 }
 
 // ===== TAB 4: SATZBAU =====
@@ -1644,12 +1656,26 @@ function initWortbank() {
   var bank = document.getElementById('wortbank-luecken');
   if (!bank) return;
   bank.innerHTML = '';
-  var words = LUECKEN_DATA.map(function(d){ return d.blank; });
-  words = words.filter(function(w){ return w && w.trim(); });
+  // Wortbank wird aus den Story-Lücken gebaut (eine Quelle der Wahrheit, kein separates Array).
+  var words = Array.prototype.slice.call(document.querySelectorAll('#lueckenContainer input.blank'))
+    .map(function(i){ return i.getAttribute('data-answer'); })
+    .filter(function(w){ return w && w.trim(); });
   for(var i=words.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=words[i];words[i]=words[j];words[j]=t;}
   words.forEach(function(w){
     var chip = document.createElement('span');
     chip.className = 'wortbank-chip'; chip.textContent = w;    bank.appendChild(chip);
+  });
+}
+function updateWortbankChips() {
+  var bank = document.getElementById('wortbank-luecken');
+  if (!bank) return;
+  var solved = Array.prototype.slice.call(document.querySelectorAll('#lueckenContainer input.blank.correct'))
+    .map(function(i){ return i.value; });
+  var rem = solved.slice();
+  Array.prototype.slice.call(bank.querySelectorAll('.wortbank-chip')).forEach(function(chip){
+    var idx = rem.indexOf(chip.textContent);
+    if (idx >= 0) { chip.classList.add('used'); rem.splice(idx, 1); }
+    else { chip.classList.remove('used'); }
   });
 }
 

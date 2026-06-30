@@ -171,6 +171,18 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 #wortschatzContainer input.blank.correct{border-bottom-color:#27ae60;background:#e8f8f0;}
 #wortschatzContainer input.blank.wrong{border-bottom-color:#e74c3c;background:#fdeaea;}
 @media(max-width:640px){#wortschatzContainer{grid-template-columns:1fr;}}
+
+/* FB-LT-STORY — kanonischer Story-Lückentext (Serif) + §7-Wortbank (Grundform-Variante G) */
+.luecken-story { font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 2.1; color: #2c2c2c; text-align: justify; background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 18px 22px; }
+.luecken-story p { margin: 0 0 14px; }
+.luecken-story p:last-child { margin-bottom: 0; }
+.luecken-story input.blank { font-family: Georgia, 'Times New Roman', serif; border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-size: 1em; color: #2c2c2c; text-align: center; padding: 1px 4px; min-width: 4ch; transition: all .2s; }
+.luecken-story input.blank:focus { border-bottom-color: #667eea; }
+.luecken-story input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; color: #27ae60; font-weight: 700; }
+.luecken-story input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; color: #e74c3c; }
+.wortbank { display:flex; flex-wrap:wrap; gap:8px; padding:14px; background:#f0f0f8; border-radius:10px; min-height:48px; margin-bottom:18px; border:1px dashed #bbb; }
+.wortbank-chip { background:white; border:2px solid #667eea; color:#667eea; padding:5px 12px; border-radius:14px; font-weight:500; font-size:0.9em; user-select:none; }
+.wortbank-chip.used { opacity:0.35; text-decoration:line-through; }
 </style>
 </head>
 <body>
@@ -302,18 +314,12 @@ Warum ändert sich die Endung des Adjektivs?</div>
   </div>
 </div>
 <div class="section-title">✏️ Lückentext</div>
-<div class="hilfe-box"><strong>Aufgabe:</strong> Fülle die Lücken mit der richtigen Form aus.</div>
-<div class="wortkasten"><strong>Wörter:</strong> schönen · elegantes · neue · modischen · weichen · auffälligen · lässige · klassischen · teuren · bunten</div>
-    <div class="luecken-item">Der <input class="luecken-inp" data-answer="schönen" oninput="liveCheck(this)" placeholder=""> Rock passt zum Hemd.</div>
-    <div class="luecken-item">Sie trägt ein <input class="luecken-inp" data-answer="elegantes" oninput="liveCheck(this)" placeholder=""> Abendkleid.</div>
-    <div class="luecken-item">Das <input class="luecken-inp" data-answer="neue" oninput="liveCheck(this)" placeholder=""> Modell ist sehr gefragt.</div>
-    <div class="luecken-item">Er folgt dem <input class="luecken-inp" data-answer="modischen" oninput="liveCheck(this)" placeholder=""> Trend.</div>
-    <div class="luecken-item">Der <input class="luecken-inp" data-answer="weichen" oninput="liveCheck(this)" placeholder=""> Stoff fühlt sich angenehm an.</div>
-    <div class="luecken-item">Sie trägt einen <input class="luecken-inp" data-answer="auffälligen" oninput="liveCheck(this)" placeholder=""> Hut.</div>
-    <div class="luecken-item">Er bevorzugt eine <input class="luecken-inp" data-answer="lässige" oninput="liveCheck(this)" placeholder=""> Jacke.</div>
-    <div class="luecken-item">Ich kaufe den <input class="luecken-inp" data-answer="klassischen" oninput="liveCheck(this)" placeholder=""> Anzug.</div>
-    <div class="luecken-item">Das ist ein sehr <input class="luecken-inp" data-answer="teuren" oninput="liveCheck(this)" placeholder=""> Mantel.</div>
-    <div class="luecken-item">Sie mag das <input class="luecken-inp" data-answer="bunten" oninput="liveCheck(this)" placeholder=""> Muster.</div>
+    <div class="wortbank" id="wortbank-luecken"></div>
+    <div id="lueckenContainer" class="luecken-story">
+      <p>Gestern bummelte ich durch die Stadt und suchte neue Kleidung. In einem kleinen Laden entdeckte ich einen <input class="blank" data-answer="schönen" data-base="schön" oninput="liveCheckG(this)"> Rock, der gut zu meinem Hemd passte. Daneben hing ein <input class="blank" data-answer="elegantes" data-base="elegant" oninput="liveCheckG(this)"> Abendkleid, das mich sofort an eine Hochzeit denken ließ.</p>
+      <p>Die Verkäuferin zeigte mir das <input class="blank" data-answer="neue" data-base="neu" oninput="liveCheckG(this)"> Modell, das gerade sehr gefragt war. Ich folge zwar nicht jedem <input class="blank" data-answer="modischen" data-base="modisch" oninput="liveCheckG(this)"> Trend, aber der <input class="blank" data-answer="weiche" data-base="weich" oninput="liveCheckG(this)"> Stoff der Jacke fühlte sich einfach angenehm an.</p>
+      <p>Meine Freundin probierte einen <input class="blank" data-answer="auffälligen" data-base="auffällig" oninput="liveCheckG(this)"> Hut, während ich lieber eine <input class="blank" data-answer="lässige" data-base="lässig" oninput="liveCheckG(this)"> Jacke wählte. Am Ende kaufte ich den <input class="blank" data-answer="klassischen" data-base="klassisch" oninput="liveCheckG(this)"> Anzug. Für den <input class="blank" data-answer="teuren" data-base="teuer" oninput="liveCheckG(this)"> Mantel reichte das Geld leider nicht, doch das <input class="blank" data-answer="bunte" data-base="bunt" oninput="liveCheckG(this)"> Muster eines Schals nahm ich noch mit.</p>
+    </div>
 
 <div class="score-box" id="lueckeScore"></div>
   </div>
@@ -856,7 +862,7 @@ function syncWordBankChips() {
 // ────────────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function(){
-  buildWordBank(document.getElementById('sec-2'));
+  buildWortbankG();
 });
 var wortschatzInited = false;
 function wsData(){ return (typeof VOCAB_DATA!=='undefined'&&VOCAB_DATA)||(typeof WS_DATA!=='undefined'&&WS_DATA)||(typeof WORTSCHATZ_DATA!=='undefined'&&WORTSCHATZ_DATA)||(typeof WORTSCHATZ!=='undefined'&&WORTSCHATZ)||[]; }
@@ -1182,5 +1188,51 @@ function resetGenus(){ initGenus(); genusTimerReset(); }
 })();
 </script>
 
+<script>
+/* FB-LT-STORY-G — Grammatik-Lueckentext: Wortbank zeigt GRUNDFORM (data-base),
+   Luecke verlangt die transformierte Zielform (data-answer), nie sichtbar. case-sensitiv. */
+function buildWortbankG(){
+  var bank=document.getElementById('wortbank-luecken'); if(!bank) return;
+  var gaps=Array.prototype.slice.call(document.querySelectorAll('#lueckenContainer input.blank'));
+  gaps.forEach(function(inp){ var a=inp.getAttribute('data-answer')||''; var b=inp.getAttribute('data-base')||''; inp.placeholder=''; inp.style.width=(Math.max(a.length,b.length)+3)+'ch'; });
+  var seen={}, words=[];
+  gaps.forEach(function(inp){ var b=inp.getAttribute('data-base')||''; if(b && !seen[b]){ seen[b]=true; words.push(b); } });
+  for(var i=words.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=words[i];words[i]=words[j];words[j]=t;}
+  bank.innerHTML='';
+  words.forEach(function(w){ var c=document.createElement('span'); c.className='wortbank-chip'; c.textContent=w; bank.appendChild(c); });
+  updateWortbankG();
+}
+function liveCheckG(inp){
+  if(typeof timerAutoStart==='function') timerAutoStart(2);
+  var ans=inp.getAttribute('data-answer'); var val=inp.value;
+  inp.classList.remove('correct','wrong');
+  if(!val){ updateWortbankG(); return; }
+  if(val===ans){ inp.classList.add('correct'); checkLueckeDoneG(); }
+  else if(ans.indexOf(val)!==0){ inp.classList.add('wrong'); }
+  updateWortbankG();
+}
+function updateWortbankG(){
+  var bank=document.getElementById('wortbank-luecken'); if(!bank) return;
+  var solved=Array.prototype.slice.call(document.querySelectorAll('#lueckenContainer input.blank.correct')).map(function(i){return i.getAttribute('data-base');});
+  var rem=solved.slice();
+  Array.prototype.slice.call(bank.querySelectorAll('.wortbank-chip')).forEach(function(chip){
+    var idx=rem.indexOf(chip.textContent); if(idx>=0){chip.classList.add('used'); rem.splice(idx,1);} else chip.classList.remove('used');
+  });
+}
+function checkLueckeDoneG(){
+  var all=document.querySelectorAll('#lueckenContainer input.blank');
+  if(all.length>0 && Array.prototype.slice.call(all).every(function(i){return i.classList.contains('correct');})){ if(typeof timerStop==='function') timerStop(2); var s=document.getElementById('lueckeScore'); if(s){ s.textContent='🎉 Alle Lücken korrekt!'; s.style.display='block'; } }
+}
+function showLueckeLoesung(){
+  document.querySelectorAll('#lueckenContainer input.blank').forEach(function(i){ i.value=i.getAttribute('data-answer'); i.classList.add('correct'); i.classList.remove('wrong'); });
+  updateWortbankG(); if(typeof timerStop==='function') timerStop(2);
+}
+function resetLuecke(){
+  document.querySelectorAll('#lueckenContainer input.blank').forEach(function(i){ i.value=''; i.classList.remove('correct','wrong'); });
+  var s=document.getElementById('lueckeScore'); if(s) s.style.display='none';
+  buildWortbankG(); if(typeof resetTimer==='function') resetTimer(2);
+}
+document.addEventListener('DOMContentLoaded', buildWortbankG);
+</script>
 </body>
 </html>

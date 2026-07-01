@@ -9,39 +9,40 @@
   body { font-family: Arial, sans-serif; background: #667eea; min-height: 100vh; padding: 20px; }
   .container { max-width: 860px; margin: 0 auto; background: #fff; border-radius: 12px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden; }
-  .nav { display: flex; flex-wrap: wrap; background: #f3e8ff; border-bottom: 2px solid #667eea; }
-  .nav button { flex: 1 1 auto; padding: 11px 16px; border: 1px solid #b388e8; background: #f3e8ff; cursor: pointer;
-    font-size: 0.88rem; font-weight: 600; color: #5a0090; text-align: center; transition: background 0.2s; }
-  .nav button:hover { background: #e1c6ff; }
-  .nav button.active { background: #667eea; color: #fff; border-color: #667eea; }
+  /* ===== NAV (Variante C: Aktiv-Pille) ===== */
+  .nav { display: flex; flex-wrap: wrap; gap: 4px; background: #eef0fb; padding: 6px; border-bottom: 2px solid #e9ecef; }
+  .nav-btn { flex: 1 1 auto; min-width: 64px; padding: 12px 8px; border: none; background: none; cursor: pointer;
+    font-weight: 500; color: #666; transition: all 0.2s; border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .nav-btn:hover { background: #e1e5fb; color: #667eea; }
+  .nav-btn.active { background: #fff; color: #667eea; font-weight: 700; box-shadow: 0 1px 4px rgba(102,126,234,.25); }
+  .nav-emoji { font-size: 1.3em; line-height: 1.2; }
+  .nav-label { font-size: 0.78em; margin-top: 2px; line-height: 1.2; }
+  /* ===== VORENTLASTUNG ===== */
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 4px; }
+  .vocab-card { background: #f8f9ff; border: 1px solid #dde3ff; border-radius: 10px; padding: 14px 16px; }
+  .vocab-term { font-weight: 700; color: #667eea; font-size: 1.05em; margin-bottom: 5px; }
+  .vocab-def  { color: #555; font-size: 0.92em; line-height: 1.5; }
+  /* ===== LESETEXT ===== */
+  .story-text { font-family: Georgia, 'Times New Roman', serif; font-size: 1rem; line-height: 1.9; max-width: 700px; margin: 0 auto; text-align: justify; }
+  .story-text p { margin-bottom: 12px; }
+  .story-text .dialog { font-style: italic; }
+  .vocab-hl { background: #fff3b0; padding: 1px 3px; border-radius: 3px; }
+  .story-source { margin-top: 14px; font-size: 0.78rem; color: #aaa; text-align: right; }
+  /* ===== MULTIPLE-CHOICE ===== */
+  .mc-q { background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 10px; padding: 14px 18px; margin-bottom: 14px; }
+  .mc-question { font-size: 1.05em; color: #333; margin-bottom: 10px; font-weight: 600; line-height: 1.5; }
+  .mc-opts { display: flex; flex-direction: column; gap: 8px; }
+  .mc-opt { padding: 9px 14px; border: 1.5px solid #c5cae9; border-radius: 10px; background: #fff; cursor: pointer; font-size: 0.93em; transition: all .2s; text-align: left; }
+  .mc-opt:hover { border-color: #667eea; background: #eef0ff; }
+  .mc-opt.correct { border-color: #27ae60; background: #e8f5e9; color: #2e7d32; font-weight: 700; }
+  .mc-opt.wrong { border-color: #e74c3c; background: #ffebee; color: #c62828; }
+  .mc-opt.locked { pointer-events: none; }
   .tab-content { display: none; padding: 28px 32px; }
   .tab-content.active { display: block; }
   h2 { color: #667eea; margin-bottom: 18px; font-size: 1.25rem; }
   h3 { color: #5a0090; margin: 18px 0 10px; font-size: 1.05rem; }
   .tab-banner { width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-top: 12px; margin-bottom: 20px; display: block; }
-  /* VOCAB */
-  .vocab-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
-  .vocab-card { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
-    padding: 12px 16px; min-width: 190px; flex: 1 1 190px; cursor: pointer; transition: background 0.2s; }
-  .vocab-card:hover { background: #e1c6ff; }
-  .vocab-card .word { font-weight: 700; color: #667eea; font-size: 1rem; }
-  .vocab-card .translation { font-size: 0.85rem; color: #555; margin-top: 4px; display: none; }
-  .vocab-card.revealed .translation { display: block; }
-  /* PROJEKT KARTEN */
-  .projekt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 14px; margin-top: 14px; }
-  .projekt-card { background: #f9f3ff; border: 2px solid #b388e8; border-radius: 10px; padding: 16px 18px; }
-  .projekt-card .emoji { font-size: 1.8rem; margin-bottom: 8px; }
-  .projekt-card .titel { font-weight: 700; color: #667eea; font-size: 0.97rem; margin-bottom: 6px; }
-  .projekt-card .info { font-size: 0.86rem; color: #555; line-height: 1.5; }
-  /* ZUORDNUNG */
-  .zuord-list { list-style: none; max-width: 680px; margin: 0 auto; }
-  .zuord-item { display: flex; align-items: center; gap: 12px; background: #f9f3ff;
-    border: 1px solid #d4b8f5; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; }
-  .zuord-item .satz { flex: 1; font-size: 0.95rem; }
-  .zuord-item select { border: 2px solid #b388e8; border-radius: 6px; padding: 6px 10px;
-    font-size: 0.9rem; background: #fff; cursor: pointer; }
-  .zuord-item select.ok { border-color: #3a9a36; background: #c8f7c5; }
-  .zuord-item select.err { border-color: #cc3333; background: #ffd5d5; }
   /* LÜCKENTEXT */
   .luecken-text { font-family: Georgia, 'Times New Roman', serif; font-size: 1rem; line-height: 2.1; max-width: 680px; }
   .luecken-text p { margin-bottom: 10px; }
@@ -74,12 +75,8 @@
     border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; }
   .check-btn:hover { background: #5a0090; }
   .result-msg { margin-top: 12px; font-weight: 700; font-size: 1rem; min-height: 1.4em; }
-  .sprech-card { background: #f3e8ff; border-left: 4px solid #667eea; border-radius: 8px;
-    padding: 14px 18px; margin-bottom: 12px; font-size: 0.97rem; }
   .footer { margin-top: 32px; padding-top: 14px; border-top: 1px solid #e0d0f5;
     font-size: 0.75rem; color: #aaa; text-align: center; }
-  .info-box { background: #f3e8ff; border: 1px solid #b388e8; border-radius: 8px;
-    padding: 14px 18px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.6; }
   /* WORTSCHATZ INTERACTIVE */
 
 /* ===== Schreibwerkstatt — Niveau-flexibel ===== */
@@ -250,128 +247,51 @@
 <div class="container">
   <div class="header">
     <h1>Mach es selbst!</h1>
-    <p>B1.1 – Lektion 2061X · Wortschatz</p>
+    <p>B1.1 – Lektion 2061X · Textarbeit</p>
     <div class="big-emoji">🔧</div>
   </div>
 
 
   <div class="nav" id="nav">
-    <button class="active" onclick="showTab(0)">🔨 DIY-Projekte</button>
-    <button onclick="showTab(1)">📚 Wortschatz</button>
-    <button onclick="showTab(2)">🔗 Zuordnung</button>
-    <button onclick="showTab(3)">❓ Diskussion</button>
-    <button onclick="showTab(4)">✏️ Lückentext</button>
-    <button onclick="showTab(5)">🧩 Satzbau</button>
-        <button onclick="showTab(6)">📨 Schreiben</button>
-        <button onclick="showTab(7)">🏷️ Genus</button>
-      </div>
+    <button class="nav-btn active" onclick="showTab(0)"><span class="nav-emoji">📖</span><span class="nav-label">Vorentlastung</span></button>
+    <button class="nav-btn" onclick="showTab(1)"><span class="nav-emoji">📄</span><span class="nav-label">Lesetext</span></button>
+    <button class="nav-btn" onclick="showTab(2)"><span class="nav-emoji">✏️</span><span class="nav-label">Lückentext</span></button>
+    <button class="nav-btn" onclick="showTab(3)"><span class="nav-emoji">☑️</span><span class="nav-label">Quiz</span></button>
+    <button class="nav-btn" onclick="showTab(4)"><span class="nav-emoji">🧩</span><span class="nav-label">Satzbau</span></button>
+    <button class="nav-btn" onclick="showTab(5)"><span class="nav-emoji">🏷️</span><span class="nav-label">Genus</span></button>
+    <button class="nav-btn" onclick="showTab(6)"><span class="nav-emoji">📚</span><span class="nav-label">Wortschatz</span></button>
+    <button class="nav-btn" onclick="showTab(7)"><span class="nav-emoji">📨</span><span class="nav-label">Schreiben</span></button>
+  </div>
 
-  <!-- TAB 0: DIY-PROJEKTE -->
-  <div class="tab-content active" id="tab0">
+  <!-- TAB 0: VORENTLASTUNG -->
+  <div class="tab-content active" id="tab-vorentlastung">
     <img src="https://images.pexels.com/photos/1249611/pexels-photo-1249611.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
          onerror="this.src='https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1'"
          alt="DIY" class="tab-banner">
-    <h2>Mach es selbst! — DIY &amp; Heimwerken</h2>
-    <div class="info-box">
-      „Do it yourself“ (DIY) bedeutet: selbst etwas bauen, reparieren oder herstellen —
-      ohne Fachmann oder Handwerker zu beauftragen. Es spart Geld, schützt die Umwelt und macht Spaß!
-    </div>
-
-    <h3>Beliebte DIY-Projekte</h3>
-    <div class="projekt-grid">
-      <div class="projekt-card">
-        <div class="emoji">🪑</div>
-        <div class="titel">Möbel restaurieren</div>
-        <div class="info">Alte Möbel schleifen, streichen und neu gestalten</div>
-      </div>
-      <div class="projekt-card">
-        <div class="emoji">🌱</div>
-        <div class="titel">Hochbeet bauen</div>
-        <div class="info">Aus Holzlatten ein Hochbeet für den Garten konstruieren</div>
-      </div>
-      <div class="projekt-card">
-        <div class="emoji">🔌</div>
-        <div class="titel">Reparieren statt wegwerfen</div>
-        <div class="info">Kaputte Geräte selbst reparieren mit Online-Tutorials</div>
-      </div>
-      <div class="projekt-card">
-        <div class="emoji">🎨</div>
-        <div class="titel">Wände streichen</div>
-        <div class="info">Zimmer selbst renovieren und frisch streichen</div>
-      </div>
-      <div class="projekt-card">
-        <div class="emoji">🪴</div>
-        <div class="titel">Upcycling</div>
-        <div class="info">Aus alten Materialien neue nützliche Gegenstände bauen</div>
-      </div>
-      <div class="projekt-card">
-        <div class="emoji">🔧</div>
-        <div class="titel">Kleines reparieren</div>
-        <div class="info">Wasserhahn, Türgriff oder Fahrrad selbst reparieren</div>
-      </div>
-    </div>
-
-    <h3>Sprechaufgaben</h3>
-    <div class="sprech-card"><strong>A)</strong> Hast du schon einmal etwas selbst gebaut oder repariert? Erzähle davon.</div>
-    <div class="sprech-card"><strong>B)</strong> Was sind die Vorteile von DIY? Nenne mindestens drei Argumente.</div>
-    <div class="sprech-card"><strong>C)</strong> Welches DIY-Projekt würdest du gerne ausprobieren? Warum?</div>
+    <h2>📖 Vorentlastung</h2>
+    <p style="margin-bottom:14px;color:#555;">Diese Begriffe kommen im Lesetext gelb markiert wieder vor.</p>
+    <div id="vorentlastungGrid" class="vocab-grid"></div>
   </div>
 
-  <!-- TAB 1: VOKABELN -->
-  <div class="tab-content" id="tab1">
-    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
-         alt="Vokabeln" class="tab-banner">
-    <h2>Wortschatz — Heimwerken &amp; DIY</h2>
-    <div id="wortschatzContainer"></div>
-    <div style="margin-top:16px;display:flex;gap:10px;">
-      <button onclick="showLoesungWortschatz()">💡 Lösung</button>
-      <button onclick="resetWortschatz()">↺ Neustart</button>
-    </div>
-  </div>
-
-  <!-- TAB 2: ZUORDNUNG -->
-  <div class="tab-content" id="tab2">
-    <img src="https://images.pexels.com/photos/5505122/pexels-photo-5505122.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
-         alt="Zuordnung" class="tab-banner">
-    <h2>Zuordnung — Werkzeug oder Material?</h2>
-    <p style="margin-bottom:16px;color:#555;">Ordne jeden Begriff der richtigen Kategorie zu.</p>
-    <ul class="zuord-list" id="zuordList"></ul>
-    <div class="result-msg" id="zuordResult"></div>
-  </div>
-
-  <!-- TAB 3: DISKUSSION -->
-  <div class="tab-content" id="tab3">
+  <!-- TAB 1: LESETEXT -->
+  <div class="tab-content" id="tab-lesetext">
     <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
-         alt="Diskussion" class="tab-banner">
-    <h2>Diskussion — DIY oder Handwerker?</h2>
-    <div class="info-box">
-      <strong>Lies die Situation und beantworte die Fragen.</strong>
+         alt="Lesetext" class="tab-banner">
+    <h2>📄 Der Wasserhahn</h2>
+    <div class="story-text">
+      <p>Karim stand an einem Samstagmorgen in seiner Küche und betrachtete den alten Wasserhahn, der seit Wochen tropfte. Einen Klempner zu beauftragen kostete allein für die Anfahrt fast achtzig Euro, hatte er am Vorabend im Internet gelesen. Also holte er sein Werkzeug aus dem Schrank: einen Schraubenzieher, eine Zange und die Bedienungsanleitung, die er sich heruntergeladen hatte.</p>
+      <p class="dialog">Stefan rief an, kurz bevor Karim die erste Schraube löste. „Was machst du am Wochenende?“</p>
+      <p>„Ich repariere meinen Wasserhahn“, sagte Karim. „Selbst.“</p>
+      <p class="dialog">Stefan lachte. „Vorsicht. Als mein Vater das letzte Mal einen Dichtungsring falsch eingebaut hat, stand das ganze Bad unter Wasser.“</p>
+      <p>„Ich habe mir ein Video angesehen“, antwortete Karim trocken. „Es sieht einfach aus.“</p>
+      <p>Zwei Stunden später lag der alte Dichtungsring auf dem Küchentisch, und der neue war eingebaut. Kein Tropfen mehr. Karim war überrascht, wie zufrieden ihn das machte — nicht wegen des gesparten Geldes, sondern weil er selbst verstanden hatte, wie das Ding funktionierte.</p>
+      <p class="dialog">Am Abend schickte er Stefan ein Foto vom reparierten Hahn. „Nächstes Mal helfe ich dir beim Streichen“, schrieb Stefan zurück. „Aber die Elektrik überlasse ich lieber dem Elektriker.“</p>
+      <p>„Da hast du recht“, tippte Karim. „Manche Dinge sollte man wirklich nicht selbst machen.“</p>
     </div>
-    <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:18px 20px;margin-bottom:20px;font-size:0.97rem;line-height:1.8;">
-      <p><strong>Tim:</strong> „Ich möchte meine Küche renovieren. Ich denke, ich mache alles selbst — neue Fliesen legen, die Wände streichen und einen neuen Wasseranschluss installieren.“</p>
-      <p><strong>Anna:</strong> „Ich finde das mutig! Aber für den Wasseranschluss würde ich doch lieber einen Klempner beauftragen. Das kann schnell teuer werden, wenn etwas schief geht.“</p>
-      <p><strong>Tim:</strong> „Stimmt. Aber beim Streichen und Fliesenlegen kann ich sicher viel Geld sparen, wenn ich es selbst mache.“</p>
-      <p><strong>Anna:</strong> „Das hängt davon ab, ob du die nötigen Werkzeuge hast. Werkzeuge kaufen oder mieten kann auch teuer sein.“</p>
-      <p><strong>Tim:</strong> „Da hast du recht. Ich werde zuerst im Internet recherchieren und dann entscheiden.“</p>
-    </div>
-    <h3>Fragen zum Text</h3>
-    <div style="max-width:650px;">
-      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
-        <strong>1.</strong> Was möchte Tim renovieren?
-      </div>
-      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
-        <strong>2.</strong> Welche Aufgabe soll laut Anna ein Fachmann übernehmen?
-      </div>
-      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
-        <strong>3.</strong> Welches Argument nennt Anna gegen das DIY?
-      </div>
-      <div style="background:#f9f3ff;border:1px solid #d4b8f5;border-radius:8px;padding:12px 16px;margin-bottom:10px;">
-        <strong>4.</strong> Was entscheidet Tim am Ende?
-      </div>
-    </div>
+    <div class="story-source">B1.1 – Lektion 2061X · Mach es selbst</div>
   </div>
 
-  <!-- TAB 4: LÜCKENTEXT -->
+  <!-- TAB 2: LÜCKENTEXT -->
   <div class="tab-content" id="tab4">
     <img src="https://images.pexels.com/photos/574283/pexels-photo-574283.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
          alt="Lückentext" class="tab-banner">
@@ -385,7 +305,26 @@
     <div class="result-msg" id="lueckenResult"></div>
   </div>
 
-  <!-- TAB 5: SATZBAU -->
+  <!-- TAB 3: QUIZ -->
+  <div class="tab-content" id="tab-quiz">
+    <img src="https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Quiz" class="tab-banner">
+    <h2>☑️ Quiz zum Lesetext</h2>
+    <p style="margin-bottom:16px;color:#555;">Wähle für jede Frage die richtige Antwort. Pro Frage hast du einen Versuch.</p>
+    <div class="timer-bar">
+      <span class="timer-display" id="timerQ">0:00</span>
+      <button class="timer-btn" id="timerQBtn" onclick="timerToggle('Q')">▶ Start</button>
+      <span class="timer-best" id="timerQBest"></span>
+    </div>
+    <div id="quizContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="quizSolution()">💡 Lösungen</button>
+      <button onclick="quizReset()">↺ Neustart</button>
+    </div>
+    <div class="result-msg" id="quizResult"></div>
+  </div>
+
+  <!-- TAB 4: SATZBAU -->
   <div class="tab-content" id="tab5">
     <img src="https://images.pexels.com/photos/1822568/pexels-photo-1822568.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
          alt="Satzbau" class="tab-banner">
@@ -396,6 +335,28 @@
       <span class="timer-best" id="timerSBest"></span>
     </div>
     <div id="satzbauContainer"></div>
+  </div>
+
+    <!-- ===== TAB: GENUS ===== -->
+    <div class="tab-content" id="sec-genus">
+        <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDIyMCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJHZW51cyDigJQgZGVyLCBkaWUsIGRhcyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzVkNmZjMiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2YTRhOTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8cmVjdCB3aWR0aD0iMTAwMCIgaGVpZ2h0PSIyMjAiIGZpbGw9InVybCgjYmcpIi8+CgoKICA8IS0tIEtpY2tlcjoga2xlaW5lLCBnZXNwZXJydGUgVmVyc2FsaWVuIC0tPgogIDx0ZXh0IHg9IjUwMCIgeT0iNzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSInU2Vnb2UgVUknLCBzeXN0ZW0tdWksIHNhbnMtc2VyaWYiCiAgICAgICAgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjYwMCIgbGV0dGVyLXNwYWNpbmc9IjciIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC43OCI+R0VOVVMmIzE2MDsmIzE2MDsmIzE4MzsmIzE2MDsmIzE2MDtBUlRJS0VMIEJFU1RJTU1FTjwvdGV4dD4KCiAgPCEtLSBIYXVwdHplaWxlOiBydWhpZ2UgU2VyaWYgLS0+CiAgPHRleHQgeD0iMzIwIiB5PSIxNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIGZvbnQtc2l6ZT0iNjYiIGZpbGw9IiNmZmZmZmYiPmRlcjwvdGV4dD4KICA8dGV4dCB4PSI1MDAiIHk9IjE0OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSI2NiIgZmlsbD0iI2ZmZmZmZiI+ZGllPC90ZXh0PgogIDx0ZXh0IHg9IjY4MCIgeT0iMTQ4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXNpemU9IjY2IiBmaWxsPSIjZmZmZmZmIj5kYXM8L3RleHQ+CgogIDwhLS0gZGV6ZW50ZSBGYXJiYWt6ZW50ZSB1bnRlciBqZWRlbSBBcnRpa2VsIC0tPgogIDxyZWN0IHg9IjI4OSIgeT0iMTY2IiB3aWR0aD0iNjIiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzdlYTJlNiIvPgogIDxyZWN0IHg9IjQ2OSIgeT0iMTY2IiB3aWR0aD0iNjIiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iI2Q5OGNhZSIvPgogIDxyZWN0IHg9IjY0OSIgeT0iMTY2IiB3aWR0aD0iNjIiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzg2Y2JhYiIvPgo8L3N2Zz4K" alt="Genus üben — der, die, das">
+        <h2>🏷️ Genus</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 18px;padding:6px 12px;background:#f8f9fa;border-radius:8px;"><div style="display:flex;gap:6px;"><button onclick="showGenusLoesung()" style="background:#f5f7ff;border:1px solid #c5cff5;border-radius:8px;padding:6px 16px;font-size:0.85em;color:#667eea;cursor:pointer;font-weight:600;">💡 Lösungen</button><button onclick="resetGenus()" style="background:#f5f7ff;border:1px solid #c5cff5;border-radius:8px;padding:6px 16px;font-size:0.85em;color:#667eea;cursor:pointer;font-weight:600;">↺ Neustart</button></div><div style="display:flex;gap:14px;align-items:center;font-size:0.82em;color:#888;font-variant-numeric:tabular-nums;"><span>⏱ <span id="timer-6">00:00</span></span><span>🏆 <span id="best-6">--:--</span></span></div></div>
+        <div class="genus-pool" id="genusPool"></div>
+        <div class="genus-kategorien"><div class="genus-kat kat-der"><div class="kat-title">der</div><div class="genus-drop" id="drop-der" data-cat="der"></div></div><div class="genus-kat kat-die"><div class="kat-title">die</div><div class="genus-drop" id="drop-die" data-cat="die"></div></div><div class="genus-kat kat-das"><div class="kat-title">das</div><div class="genus-drop" id="drop-das" data-cat="das"></div></div><div class="genus-kat kat-pl"><div class="kat-title">Plural</div><div class="genus-drop" id="drop-pl" data-cat="pl"></div></div></div>
+        <div id="genusFeedback" style="margin-top:14px;font-weight:600;"></div>
+    </div>
+
+  <!-- TAB 6: WORTSCHATZ -->
+  <div class="tab-content" id="tab1">
+    <img src="https://images.pexels.com/photos/4144923/pexels-photo-4144923.jpeg?auto=compress&cs=tinysrgb&w=800&h=180&dpr=1"
+         alt="Wortschatz" class="tab-banner">
+    <h2>📚 Wortschatz — Heimwerken &amp; DIY</h2>
+    <div id="wortschatzContainer"></div>
+    <div style="margin-top:16px;display:flex;gap:10px;">
+      <button onclick="showLoesungWortschatz()">💡 Lösung</button>
+      <button onclick="resetWortschatz()">↺ Neustart</button>
+    </div>
   </div>
 
         <div class="tab-content" id="sec-schreib">
@@ -454,15 +415,7 @@
       </div>
       <div class="schreib-status" id="sw-status"></div>
     </div>
-    <!-- ===== TAB: GENUS ===== -->
-    <div class="tab-content" id="sec-genus">
-        <img class="tab-banner" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDIyMCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJHZW51cyDigJQgZGVyLCBkaWUsIGRhcyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzVkNmZjMiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2YTRhOTIiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgoKICA8cmVjdCB3aWR0aD0iMTAwMCIgaGVpZ2h0PSIyMjAiIGZpbGw9InVybCgjYmcpIi8+CgoKICA8IS0tIEtpY2tlcjoga2xlaW5lLCBnZXNwZXJydGUgVmVyc2FsaWVuIC0tPgogIDx0ZXh0IHg9IjUwMCIgeT0iNzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSInU2Vnb2UgVUknLCBzeXN0ZW0tdWksIHNhbnMtc2VyaWYiCiAgICAgICAgZm9udC1zaXplPSIxNSIgZm9udC13ZWlnaHQ9IjYwMCIgbGV0dGVyLXNwYWNpbmc9IjciIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC43OCI+R0VOVVMmIzE2MDsmIzE2MDsmIzE4MzsmIzE2MDsmIzE2MDtBUlRJS0VMIEJFU1RJTU1FTjwvdGV4dD4KCiAgPCEtLSBIYXVwdHplaWxlOiBydWhpZ2UgU2VyaWYgLS0+CiAgPHRleHQgeD0iMzIwIiB5PSIxNDgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIGZvbnQtc2l6ZT0iNjYiIGZpbGw9IiNmZmZmZmYiPmRlcjwvdGV4dD4KICA8dGV4dCB4PSI1MDAiIHk9IjE0OCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsICdUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSI2NiIgZmlsbD0iI2ZmZmZmZiI+ZGllPC90ZXh0PgogIDx0ZXh0IHg9IjY4MCIgeT0iMTQ4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iR2VvcmdpYSwgJ1RpbWVzIE5ldyBSb21hbicsIHNlcmlmIiBmb250LXNpemU9IjY2IiBmaWxsPSIjZmZmZmZmIj5kYXM8L3RleHQ+CgogIDwhLS0gZGV6ZW50ZSBGYXJiYWt6ZW50ZSB1bnRlciBqZWRlbSBBcnRpa2VsIC0tPgogIDxyZWN0IHg9IjI4OSIgeT0iMTY2IiB3aWR0aD0iNjIiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzdlYTJlNiIvPgogIDxyZWN0IHg9IjQ2OSIgeT0iMTY2IiB3aWR0aD0iNjIiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iI2Q5OGNhZSIvPgogIDxyZWN0IHg9IjY0OSIgeT0iMTY2IiB3aWR0aD0iNjIiIGhlaWdodD0iMyIgcng9IjEuNSIgZmlsbD0iIzg2Y2JhYiIvPgo8L3N2Zz4K" alt="Genus üben — der, die, das">
-        <h2>🏷️ Genus</h2>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin:0 0 18px;padding:6px 12px;background:#f8f9fa;border-radius:8px;"><div style="display:flex;gap:6px;"><button onclick="showGenusLoesung()" style="background:#f5f7ff;border:1px solid #c5cff5;border-radius:8px;padding:6px 16px;font-size:0.85em;color:#667eea;cursor:pointer;font-weight:600;">💡 Lösungen</button><button onclick="resetGenus()" style="background:#f5f7ff;border:1px solid #c5cff5;border-radius:8px;padding:6px 16px;font-size:0.85em;color:#667eea;cursor:pointer;font-weight:600;">↺ Neustart</button></div><div style="display:flex;gap:14px;align-items:center;font-size:0.82em;color:#888;font-variant-numeric:tabular-nums;"><span>⏱ <span id="timer-6">00:00</span></span><span>🏆 <span id="best-6">--:--</span></span></div></div>
-        <div class="genus-pool" id="genusPool"></div>
-        <div class="genus-kategorien"><div class="genus-kat kat-der"><div class="kat-title">der</div><div class="genus-drop" id="drop-der" data-cat="der"></div></div><div class="genus-kat kat-die"><div class="kat-title">die</div><div class="genus-drop" id="drop-die" data-cat="die"></div></div><div class="genus-kat kat-das"><div class="kat-title">das</div><div class="genus-drop" id="drop-das" data-cat="das"></div></div><div class="genus-kat kat-pl"><div class="kat-title">Plural</div><div class="genus-drop" id="drop-pl" data-cat="pl"></div></div></div>
-        <div id="genusFeedback" style="margin-top:14px;font-weight:600;"></div>
-    </div>
+
 
 
 </div><!-- /container -->
@@ -470,35 +423,135 @@
 <script>
 const TIMER_PREFIX = 'best2061X';
 
-const VOCAB_LIST = [
-  { word: 'heimwerken', en: 'to do DIY / home improvement' },
-  { word: 'der Handwerker, -', en: 'craftsman / tradesman' },
-  { word: 'das Werkzeug, -e', en: 'tool' },
-  { word: 'renovieren', en: 'to renovate' },
-  { word: 'streichen (strich)', en: 'to paint (walls)' },
-  { word: 'schleifen (schliff)', en: 'to sand / grind' },
-  { word: 'der Klempner, -', en: 'plumber' },
-  { word: 'der Elektriker, -', en: 'electrician' },
-  { word: 'Fliesen legen', en: 'to lay tiles' },
-  { word: 'upcyclen', en: 'to upcycle' },
-  { word: 'das Upcycling', en: 'upcycling' },
-  { word: 'die Nachhaltigkeit', en: 'sustainability' },
-  { word: 'reparieren', en: 'to repair' },
-  { word: 'basteln', en: 'to do crafts / make things' },
-  { word: 'beauftragen', en: 'to commission / hire' },
-  { word: 'der Bohrer, -', en: 'drill' },
-];
 
-const ZUORDNUNG_ITEMS = [
-  { satz: 'der Hammer', cat: 'Werkzeug' },
-  { satz: 'das Holz', cat: 'Material' },
-  { satz: 'die Säge', cat: 'Werkzeug' },
-  { satz: 'die Farbe', cat: 'Material' },
-  { satz: 'der Schraubenzieher', cat: 'Werkzeug' },
-  { satz: 'der Nagel', cat: 'Material' },
-  { satz: 'der Bohrer', cat: 'Werkzeug' },
-  { satz: 'der Lack', cat: 'Material' },
+var VORENTLASTUNG = [
+  { term: 'der Wasserhahn, -¨e', def: 'Gerät am Waschbecken, aus dem Wasser kommt.' },
+  { term: 'tropfen', def: 'langsam, Tropfen für Tropfen, Wasser verlieren.' },
+  { term: 'der Klempner, -', def: 'Handwerker für Wasserleitungen.' },
+  { term: 'beauftragen', def: 'jemandem eine Arbeit geben und ihn dafür bezahlen.' },
+  { term: 'das Werkzeug, -e', def: 'Gegenstände, die man zum Bauen oder Reparieren braucht.' },
+  { term: 'der Schraubenzieher, -', def: 'Werkzeug zum Drehen von Schrauben.' },
+  { term: 'der Dichtungsring, -e', def: 'kleines Gummiteil, das Wasser am Auslaufen hindert.' },
+  { term: 'reparieren', def: 'etwas Kaputtes wieder in Ordnung bringen.' },
+  { term: 'der Elektriker, -', def: 'Fachmann für elektrische Geräte und Leitungen.' },
+  { term: 'die Elektrik', def: 'alles, was mit elektrischen Leitungen zu tun hat.' }
 ];
+function buildVorentlastung(){
+  var g = document.getElementById('vorentlastungGrid'); if(!g) return;
+  g.innerHTML = '';
+  VORENTLASTUNG.forEach(function(v){
+    var c = document.createElement('div'); c.className = 'vocab-card';
+    var t = document.createElement('div'); t.className = 'vocab-term'; t.textContent = v.term;
+    var d = document.createElement('div'); d.className = 'vocab-def'; d.textContent = v.def;
+    c.appendChild(t); c.appendChild(d); g.appendChild(c);
+  });
+}
+function highlightVocabInText(){
+  var storyText = document.querySelector('.story-text');
+  if(!storyText) return;
+  var words = VORENTLASTUNG.map(function(item){
+    var term = item.term.replace(/^(der|die|das)\s+/i, '');
+    return term.split(',')[0].split('(')[0].trim();
+  }).filter(function(w){ return w && w.length > 3; });
+  if(words.length === 0) return;
+  function walk(node){
+    if(node.nodeType === 3){
+      var text = node.nodeValue, replaced = text;
+      words.forEach(function(word){
+        var escaped = word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        var regex = new RegExp('(?<![a-zA-ZäöüÄÖÜß])(' + escaped + ')(?![a-zA-ZäöüÄÖÜß])', 'g');
+        replaced = replaced.replace(regex, function(match){ return '\x01' + match + '\x02'; });
+      });
+      if(replaced !== text){
+        var span = document.createElement('span');
+        var parts = replaced.split(/\x01|\x02/);
+        var isHl = false;
+        parts.forEach(function(part){
+          if(!part){ isHl = !isHl; return; }
+          if(isHl){
+            var hl = document.createElement('span');
+            hl.className = 'vocab-hl';
+            hl.title = '📖 Vokabel aus der Vorentlastung';
+            hl.textContent = part;
+            span.appendChild(hl);
+          } else {
+            span.appendChild(document.createTextNode(part));
+          }
+          isHl = !isHl;
+        });
+        node.parentNode.replaceChild(span, node);
+      }
+    } else if(node.nodeType === 1 && node.nodeName !== 'SCRIPT' && !(node.classList && node.classList.contains('vocab-hl'))){
+      Array.prototype.slice.call(node.childNodes).forEach(walk);
+    }
+  }
+  walk(storyText);
+}
+
+var QUIZ_DATA = [
+  { q: 'Was ist an Karims Wasserhahn kaputt?', opts: ['Er tropft.', 'Er ist verstopft.', 'Er ist abgebrochen.', 'Er ist zu laut.'], correct: 0 },
+  { q: 'Warum will Karim keinen Klempner beauftragen?', opts: ['Schon die Anfahrt kostet fast achtzig Euro.', 'Er kennt keinen Klempner.', 'Es ist Wochenende.', 'Er hat kein Telefon.'], correct: 0 },
+  { q: 'Woher hat Karim sein Wissen für die Reparatur?', opts: ['aus einem Video im Internet', 'von einem Handwerker', 'von seiner Familie', 'aus einem Buch'], correct: 0 },
+  { q: 'Wer ruft Karim an, bevor er anfängt?', opts: ['Stefan', 'Elena', 'sein Chef', 'der Klempner'], correct: 0 },
+  { q: 'Wovor warnt Stefan?', opts: ['Ein falsch eingebautes Ventil kann das Bad unter Wasser setzen.', 'Der Wasserhahn ist zu teuer.', 'Karim hat kein Werkzeug.', 'Der Klempner ist im Urlaub.'], correct: 0 },
+  { q: 'Was liegt nach der Reparatur auf dem Küchentisch?', opts: ['der alte Dichtungsring', 'der neue Wasserhahn', 'die Bedienungsanleitung', 'das Werkzeug des Klempners'], correct: 0 },
+  { q: 'Warum ist Karim am Ende zufrieden?', opts: ['Er hat selbst verstanden, wie es funktioniert.', 'Er hat viel Geld verdient.', 'Stefan hat ihm geholfen.', 'Der Klempner hat ihn gelobt.'], correct: 0 },
+  { q: 'Was schickt Karim Stefan am Abend?', opts: ['ein Foto vom reparierten Hahn', 'eine Rechnung', 'ein Video', 'eine Einladung'], correct: 0 },
+  { q: 'Wobei will Stefan das nächste Mal helfen?', opts: ['beim Streichen', 'beim Fliesenlegen', 'bei der Elektrik', 'beim Möbelbau'], correct: 0 },
+  { q: 'Was überlässt Stefan lieber dem Elektriker?', opts: ['die Elektrik', 'die Wasserleitungen', 'das Streichen', 'das Werkzeug'], correct: 0 }
+];
+function buildQuizQuestion(item){
+  var opts = item.opts.map(function(t,i){ return { t:t, ok:(i===item.correct) }; });
+  for(var i=opts.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var tmp=opts[i]; opts[i]=opts[j]; opts[j]=tmp; }
+  var q = document.createElement('div'); q.className = 'mc-q';
+  var qt = document.createElement('div'); qt.className = 'mc-question'; qt.textContent = item.q; q.appendChild(qt);
+  var wrap = document.createElement('div'); wrap.className = 'mc-opts';
+  opts.forEach(function(o){
+    var b = document.createElement('div'); b.className = 'mc-opt'; b.textContent = o.t; b.dataset.ok = o.ok ? '1' : '';
+    b.addEventListener('click', function(){
+      if(q.dataset.done) return;
+      if(typeof startTimer === 'function') startTimer('Q');
+      q.dataset.done = '1';
+      Array.prototype.forEach.call(wrap.children, function(x){ x.classList.add('locked'); if(x.dataset.ok) x.classList.add('correct'); });
+      if(o.ok){ q.dataset.correct = '1'; } else { b.classList.add('wrong'); }
+      quizCheckDone();
+    });
+    wrap.appendChild(b);
+  });
+  q.appendChild(wrap);
+  return q;
+}
+function initQuiz(){
+  var box = document.getElementById('quizContainer'); if(!box) return;
+  box.innerHTML = '';
+  QUIZ_DATA.forEach(function(item){ box.appendChild(buildQuizQuestion(item)); });
+  var s = document.getElementById('quizResult'); if(s){ s.textContent=''; }
+}
+function quizCheckDone(){
+  var all = document.querySelectorAll('#quizContainer .mc-q');
+  if(!all.length) return;
+  var done = Array.prototype.every.call(all, function(q){ return q.dataset.done; });
+  if(!done) return;
+  var correct = Array.prototype.filter.call(all, function(q){ return q.dataset.correct; }).length;
+  var s = document.getElementById('quizResult');
+  if(s){
+    s.textContent = (correct===all.length ? '✅ ' : '') + 'Ergebnis: ' + correct + ' von ' + all.length + ' richtig.';
+    s.style.color = (correct===all.length) ? '#1a5e17' : '#7a0000';
+  }
+  if(correct===all.length && typeof stopTimer === 'function'){ stopTimer('Q'); saveBest('Q'); }
+}
+function quizSolution(){
+  document.querySelectorAll('#quizContainer .mc-q').forEach(function(q){
+    q.dataset.done = '1';
+    q.querySelectorAll('.mc-opt').forEach(function(x){ x.classList.add('locked'); x.classList.remove('wrong'); if(x.dataset.ok) x.classList.add('correct'); });
+  });
+}
+function quizReset(){ initQuiz(); }
+document.addEventListener('DOMContentLoaded', function(){
+  buildVorentlastung();
+  initQuiz();
+  highlightVocabInText();
+});
 
 const LUECKEN = [
   { before: 'Ich möchte meine Küche selbst ', blank: 'renovieren', after: '.' },
@@ -525,46 +578,7 @@ const SATZBAU_SAETZE = [
 // TABS
 function showTab(n) {
   document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));
-  document.querySelectorAll('.nav button').forEach((b,i)=>b.classList.toggle('active',i===n));
-}
-
-// VOCAB
-(function() {
-  const g=document.getElementById('vocabGrid');
-  if (!g) return;
-  VOCAB_LIST.forEach(v=>{
-    const c=document.createElement('div'); c.className='vocab-card';
-    c.innerHTML=`<div class="word">${v.word}</div><div class="translation">${v.en}</div>`;
-    c.addEventListener('click',()=>c.classList.toggle('revealed')); g.appendChild(c);
-  });
-})();
-
-// ZUORDNUNG
-(function() {
-  const list=document.getElementById('zuordList');
-  const cats=['Werkzeug','Material'];
-  ZUORDNUNG_ITEMS.forEach((item,idx)=>{
-    const li=document.createElement('li'); li.className='zuord-item';
-    const opts=cats.map(c=>`<option value="${c}">${c}</option>`).join('');
-    li.innerHTML=`<div class="satz">${idx+1}. ${item.satz}</div>
-      <select id="zuord-${idx}" data-correct="${item.cat}" onchange="liveZuord(this)"><option value="">— wählen —</option>${opts}</select>`;
-    list.appendChild(li);
-  });
-})();
-
-function checkZuordnung() {
-  let correct=0;
-  ZUORDNUNG_ITEMS.forEach((item,idx)=>{
-    const sel=document.getElementById(`zuord-${idx}`);
-    sel.classList.remove('ok','err');
-    if(sel.value===item.cat){sel.classList.add('ok');correct++;}
-    else sel.classList.add('err');
-  });
-  const res=document.getElementById('zuordResult');
-  res.textContent=correct===ZUORDNUNG_ITEMS.length
-    ? `✅ Alle ${ZUORDNUNG_ITEMS.length} Zuordnungen richtig!`
-    : `${correct} von ${ZUORDNUNG_ITEMS.length} richtig.`;
-  res.style.color=correct===ZUORDNUNG_ITEMS.length?'#1a5e17':'#7a0000';
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
 }
 
 // LÜCKENTEXT
@@ -573,7 +587,7 @@ function checkZuordnung() {
   LUECKEN.forEach((item,idx)=>{
     const p=document.createElement('p'); p.style.marginBottom='10px';
     p.innerHTML=`${item.before}<input type="text" id="luecke-${idx}"
-      data-answer="${item.blank.toLowerCase()}" placeholder="..."
+      data-answer="${item.blank}" placeholder="..."
       oninput="liveCheck(this)" style="width:${Math.max(100,item.blank.length*11)}px"
     />${item.after}`;
     c.appendChild(p);
@@ -588,22 +602,12 @@ function liveCheck(inp){
   if(inp.value.trim()===inp.dataset.answer)inp.classList.add('ok');
   autoStopIfDone();
 }
-function liveZuord(sel){
-  sel.classList.remove('ok','err');
-  if(!sel.value) return;
-  sel.classList.add(sel.value===sel.dataset.correct?'ok':'err');
-  var sels=document.querySelectorAll('#zuordList select');
-  var done=0; sels.forEach(function(s){ if(s.value && s.value===s.dataset.correct) done++; });
-  var res=document.getElementById('zuordResult');
-  if(res && done===sels.length && sels.length){ res.textContent='✅ Alle '+sels.length+' Zuordnungen richtig!'; res.style.color='#1a5e17'; }
-  else if(res){ res.textContent=''; }
-}
 function checkLuecken(){
   let correct=0;
   LUECKEN.forEach((item,idx)=>{
     const inp=document.getElementById(`luecke-${idx}`);
     inp.classList.remove('ok','err');
-    if(inp.value.trim()===item.blank.toLowerCase()){inp.classList.add('ok');correct++;}
+    if(inp.value.trim()===item.blank){inp.classList.add('ok');correct++;}
     else inp.classList.add('err');
   });
   const res=document.getElementById('lueckenResult');
@@ -933,13 +937,13 @@ function resetAllSb() {
 
 
 // TIMER
-let timerIntervals={L:null,S:null},timerSeconds={L:0,S:0},timerRunning={L:false,S:false};
+let timerIntervals={L:null,S:null,Q:null},timerSeconds={L:0,S:0,Q:0},timerRunning={L:false,S:false,Q:false};
 function timerToggle(k){timerRunning[k]?stopTimer(k):startTimer(k);}
 function startTimer(k){if(timerRunning[k])return;timerRunning[k]=true;document.getElementById(`timer${k}Btn`).textContent='⏸ Pause';timerIntervals[k]=setInterval(()=>{timerSeconds[k]++;document.getElementById(`timer${k}`).textContent=formatTime(timerSeconds[k]);},1000);}
 function stopTimer(k){clearInterval(timerIntervals[k]);timerRunning[k]=false;document.getElementById(`timer${k}Btn`).textContent='▶ Weiter';}
 function saveBest(k){const sk=TIMER_PREFIX+'_'+k,prev=parseInt(localStorage.getItem(sk)||'999999');if(timerSeconds[k]<prev){localStorage.setItem(sk,timerSeconds[k]);document.getElementById(`timer${k}Best`).textContent='🏆 Neue Bestzeit: '+formatTime(timerSeconds[k]);}else{document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(prev);}}
 function formatTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
-(function(){['L','S'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
+(function(){['L','S','Q'].forEach(k=>{const v=localStorage.getItem(TIMER_PREFIX+'_'+k);if(v)document.getElementById(`timer${k}Best`).textContent='Bestzeit: '+formatTime(parseInt(v));});})();
 
 // ── WORTSCHATZ ──────────────────────────────────────────────
 var WORTSCHATZ = [
@@ -1836,30 +1840,30 @@ function showLoesungWortschatz() {
 <script>
 /* ========== TAB: GENUS (injiziert) ========== */
 var GENUS_DATA = [
-  { word: "Schrank", cat: "der" },
-  { word: "Tisch", cat: "der" },
-  { word: "Stuhl", cat: "der" },
-  { word: "Teppich", cat: "der" },
-  { word: "Spiegel", cat: "der" },
-  { word: "Sessel", cat: "der" },
-  { word: "Lampe", cat: "die" },
-  { word: "Couch", cat: "die" },
-  { word: "Tür", cat: "die" },
+  { word: "Hammer", cat: "der" },
+  { word: "Bohrer", cat: "der" },
+  { word: "Schraubenzieher", cat: "der" },
+  { word: "Klempner", cat: "der" },
+  { word: "Elektriker", cat: "der" },
+  { word: "Nagel", cat: "der" },
+  { word: "Säge", cat: "die" },
+  { word: "Schraube", cat: "die" },
+  { word: "Zange", cat: "die" },
+  { word: "Farbe", cat: "die" },
+  { word: "Dichtung", cat: "die" },
   { word: "Wand", cat: "die" },
-  { word: "Küche", cat: "die" },
-  { word: "Dusche", cat: "die" },
-  { word: "Bett", cat: "das" },
+  { word: "Werkzeug", cat: "das" },
   { word: "Regal", cat: "das" },
-  { word: "Sofa", cat: "das" },
-  { word: "Fenster", cat: "das" },
-  { word: "Bad", cat: "das" },
-  { word: "Zimmer", cat: "das" },
-  { word: "Stühle", cat: "pl" },
-  { word: "Schränke", cat: "pl" },
-  { word: "Lampen", cat: "pl" },
-  { word: "Betten", cat: "pl" },
-  { word: "Regale", cat: "pl" },
-  { word: "Türen", cat: "pl" }
+  { word: "Holz", cat: "das" },
+  { word: "Upcycling", cat: "das" },
+  { word: "Ventil", cat: "das" },
+  { word: "Fahrrad", cat: "das" },
+  { word: "Werkzeuge", cat: "pl" },
+  { word: "Schrauben", cat: "pl" },
+  { word: "Nägel", cat: "pl" },
+  { word: "Farben", cat: "pl" },
+  { word: "Fliesen", cat: "pl" },
+  { word: "Handwerker", cat: "pl" }
 ];
 var GENUS_TIMER = 6;
 var draggedGenus = null, selectedGenus = null;

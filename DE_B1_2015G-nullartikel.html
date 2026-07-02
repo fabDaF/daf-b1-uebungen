@@ -240,6 +240,9 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
 .satzbau-feedback.correct{color:#27ae60;}
 .satzbau-feedback.incorrect{color:#e74c3c;}
 .sb-label{font-weight:700;color:#444;margin:0 0 8px;}
+.author-footer { text-align: center; margin-top: 40px; max-width: 1000px; margin-left: auto; margin-right: auto; padding: 16px; font-size: 0.8rem; color: #aaa; }
+.author-footer a { color: #aaa; }
+.author-name { font-weight: 700; }
 </style>
 </head>
 <body>
@@ -418,16 +421,18 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
         <div class="genus-kategorien"><div class="genus-kat kat-der"><div class="kat-title">der</div><div class="genus-drop" id="drop-der" data-cat="der"></div></div><div class="genus-kat kat-die"><div class="kat-title">die</div><div class="genus-drop" id="drop-die" data-cat="die"></div></div><div class="genus-kat kat-das"><div class="kat-title">das</div><div class="genus-drop" id="drop-das" data-cat="das"></div></div><div class="genus-kat kat-pl"><div class="kat-title">Plural</div><div class="genus-drop" id="drop-pl" data-cat="pl"></div></div></div>
         <div id="genusFeedback" style="margin-top:14px;font-weight:600;"></div>
     </div>
-  </div>
+
+    <div class="author-footer">
+        <span class="author-name">&copy; Frank Burkert</span> &middot; DaF-Materialien &middot;
+        <a href="mailto:unterricht@frankburkert-daf.de">unterricht@frankburkert-daf.de</a>
+    </div>
+  </div><!-- /container -->
 
 <script>
 // ── TAB NAVIGATION ──────────────────────────────────────────────
 function showTab(n) {
   document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===n));
   document.querySelectorAll('.nav-btn').forEach((b,i) => b.classList.toggle('active', i===n));
-  if (n===2 && !timers[2].started) timerAutoStart(2);
-  if (n===3 && !timers[3].started) timerAutoStart(3);
-  if (n===4 && !timers[4].started) timerAutoStart(4);
 }
 
 // ── TIMER ────────────────────────────────────────────────────────
@@ -437,7 +442,7 @@ const timers = {};
 function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
 function startTimer(n){ if(timers[n].iv) return; timers[n].iv=setInterval(()=>{ timers[n].s++; document.getElementById('td'+n).textContent=fmtTime(timers[n].s); },1000); }
 function stopTimer(n){ clearInterval(timers[n].iv); timers[n].iv=null; const key=TIMER_PREFIX+'_t'+n; const best=parseInt(localStorage.getItem(key)||'99999'); if(timers[n].s>0&&timers[n].s<best){ localStorage.setItem(key,timers[n].s); showBest(n,timers[n].s); } else showBest(n,best); }
-function resetTimer(n){ clearInterval(timers[n].iv); timers[n].iv=null; timers[n].s=0; timers[n].started=false; document.getElementById('td'+n).textContent='0:00'; startTimer(n); timers[n].started=true; }
+function resetTimer(n){ clearInterval(timers[n].iv); timers[n].iv=null; timers[n].s=0; timers[n].started=false; document.getElementById('td'+n).textContent='0:00'; }
 function showBest(n,s){ const el=document.getElementById('bt'+n); if(el&&s<99999) el.textContent='Best: '+fmtTime(s); }
 function loadBestTimes(){ [2,3,4].forEach(n=>{ const v=localStorage.getItem(TIMER_PREFIX+'_t'+n); if(v) showBest(n,parseInt(v)); }); }
 function timerAutoStart(n){ startTimer(n); timers[n].started=true; }
@@ -456,38 +461,6 @@ const LUECKEN_DATA = [
   { pre:'Ich lese gerade ', blank:'ein', post:' interessantes Buch über Marketing. (erstmalig + Adjektiv-Attribut)' },
   { pre:'Der ', blank:'alte', post:' Goethe lebte in Weimar. (Adjektiv-Attribut beim Eigennamen)' },
 ];
-
-function buildLuecken(){
-  return; // FB-LT-STORY: ersetzt durch statische Story im Markup
-  const c=document.getElementById('luecken-container'); c.innerHTML='';
-  LUECKEN_DATA.forEach((d,i)=>{
-    const div=document.createElement('div'); div.className='luecke-item';
-    div.innerHTML=d.pre+'<input class="blank" id="lb'+i+'" type="text" autocomplete="off" oninput="liveCheck('+i+')" placeholder="…">'+d.post;
-    c.appendChild(div);
-  });
-}
-function liveCheck(i){
-  const inp=document.getElementById('lb'+i);
-  const ans=LUECKEN_DATA[i].blank;
-  const v=inp.value.trim();
-  if(!v){ inp.className='blank'; return; }
-  const ok=v.toLowerCase()===ans.toLowerCase()||v===ans;
-  if(ok){
-    inp.className='blank correct';
-    if(!document.getElementById('lh'+i)){
-      const sp=document.createElement('span'); sp.className='correction-hint'; sp.id='lh'+i; sp.textContent='✓';
-      inp.parentNode.insertBefore(sp,inp.nextSibling);
-    }
-    const allOk=[...document.querySelectorAll('.blank')].every(b=>b.classList.contains('correct'));
-    if(allOk) stopTimer(2);
-  } else {
-    const partMatch=ans.toLowerCase().startsWith(v.toLowerCase());
-    inp.className='blank'+(partMatch?'':' wrong');
-  }
-  initWortbank();
-}
-function resetLuecken(){ return; /* FB-LT-STORY: ersetzt durch fbLtReset() */
-  buildWordBank(document.getElementById('luecken-container')); }
 
 // ── SATZBAU ──────────────────────────────────────────────────────
 var satzbauData = [
@@ -576,7 +549,7 @@ function sbMakeChip(word) {
     if (word === ',' || word === ';') chip.classList.add('punct-chip');
     chip.addEventListener('dragstart', function(e) {
         sbDragged = chip;
-        if (typeof timerAutoStart === 'function') timerAutoStart(4);
+        if (typeof timerAutoStart === 'function') timerAutoStart(3);
         e.dataTransfer.setData('text/plain', '');
         setTimeout(function() { chip.style.opacity = '0.4'; }, 0);
     });
@@ -656,7 +629,7 @@ function sbCheckAuto(idx) {
         return;
     }
     setTimeout(function() {
-        if (typeof timerAutoStart === 'function') timerAutoStart(4);
+        if (typeof timerAutoStart === 'function') timerAutoStart(3);
         var ok = sbColorRow(idx);
         if (ok) {
             row.classList.add('correct');
@@ -678,7 +651,7 @@ function sbCheckAllDone() {
         var row = document.getElementById('sb-row-' + i);
         return row && row.classList.contains('correct');
     });
-    if (allOk) if (typeof stopTimer === 'function') stopTimer(4);
+    if (allOk) if (typeof stopTimer === 'function') stopTimer(3);
 }
 
 function sbShowSolution(idx) {
@@ -776,7 +749,7 @@ function initSatzbau() {
 }
 
 function showAllSbLoesung() {
-    if (typeof stopTimer === 'function') stopTimer(4);
+    if (typeof stopTimer === 'function') stopTimer(3);
     satzbauData.forEach(function(_, idx) {
         sbShowSolution(idx);
     });
@@ -786,7 +759,7 @@ function resetAllSb() {
     satzbauData.forEach(function(_, idx) {
         sbResetOne(idx);
     });
-    if (typeof resetTimer === 'function') resetTimer(4);
+    if (typeof resetTimer === 'function') resetTimer(3);
 }
 
 
@@ -860,76 +833,9 @@ function uebenReset(){
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
-buildLuecken();
 initSatzbau();
 buildUeben();
 loadBestTimes();
-function initVocab() { buildUeben(); }
-
-
-// ── WORTKASTEN ──────────────────────────────────────────────────────────────
-var lkContainer = null, lkActiveInput = null;
-function buildWordBank(containerEl) {
-    return; // FB-LT-STORY: ersetzt durch Shared-Engine-Wortbank
-    if (!containerEl) return;
-    lkContainer = containerEl;
-    var inputs = Array.from(containerEl.querySelectorAll(
-        'input[data-answer], input[data-ans], input.blank, input.l-inp'));
-    var seen = {}, words = [];
-    inputs.forEach(function(inp) {
-        var w = inp.dataset.answer || inp.dataset.ans || '';
-        if (w && !seen[w]) { seen[w] = true; words.push(w); }
-    });
-    if (!words.length) return;
-    // Fisher-Yates-Shuffle
-    for (var i = words.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var t = words[i]; words[i] = words[j]; words[j] = t;
-    }
-    var bank = document.createElement('div');
-    bank.className = 'wort-bank';
-    var lbl = document.createElement('div');
-    lbl.className = 'wort-bank-label';
-    lbl.innerHTML = '🔤 Wortbank – die richtigen Wörter, in zufälliger Reihenfolge.';
-    bank.appendChild(lbl);
-    words.forEach(function(w) {
-        var chip = document.createElement('span');
-        chip.className = 'wort-chip';
-        chip.textContent = w;
-        chip.dataset.word = w;
-        bank.appendChild(chip);
-    });
-    containerEl.insertBefore(bank, containerEl.firstChild);
-    // KEIN focusin-/click-Listener mehr — Wortbank ist rein visuell
-}
-function syncWordBankChips() {
-    if (!lkContainer) return;
-    var bank = lkContainer.querySelector('.wort-bank');
-    if (!bank) return;
-    bank.querySelectorAll('.wort-chip').forEach(function(c){ c.classList.remove('used'); });
-    lkContainer.querySelectorAll('input.blank,input[data-ans],input[data-answer]').forEach(function(inp) {
-        var w = inp.value.trim();
-        if (w) { var c = bank.querySelector('.wort-chip[data-word="'+w+'"]'); if(c) c.classList.add('used'); }
-    });
-}
-// ────────────────────────────────────────────────────────────────────────────
-/* ═══════════════════════════════════════════════════════
-   WORTBANK
-═══════════════════════════════════════════════════════ */
-function initWortbank() {
-  return; // FB-LT-STORY: ersetzt durch Shared-Engine-Wortbank
-  var bank = document.getElementById('wortbank-luecken');
-  if (!bank) return;
-  bank.innerHTML = '';
-  var words = LUECKEN_DATA.map(function(d){ return d.blank; });
-  words = words.filter(function(w){ return w && w.trim(); });
-  for(var i=words.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=words[i];words[i]=words[j];words[j]=t;}
-  words.forEach(function(w){
-    var chip = document.createElement('span');
-    chip.className = 'wortbank-chip'; chip.textContent = w;
-    bank.appendChild(chip);
-  });
-}
 
 
 </script>
@@ -940,7 +846,7 @@ function initWortbank() {
 /* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
    hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
 (function(){
-  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":4};
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":3};
   var SBGAP = [{"i":0,"row":["_","_","_","_","Sommer","_","_","_","_","die","_","lange","_"],"parts":["Kinder","essen","im","heißen","gerne",",","wenn","Sonne","scheint","Eis"]},{"i":1,"row":["_","_","_","die","_","_","die","_","Touristen","_","Schiff","_","_"],"parts":["durch","Berlin","fließt","Spree",",","viele","vom","aus","erleben"]},{"i":2,"row":["_","_","_","_","_","Beruf","_","_","_","als","_","_","_","_"],"parts":["mein","Vater","ist","von",",","obwohl","er","Kind","werden","wollte","Ingenieur","Pilot"]},{"i":3,"row":["_","_","_","man","_","_","während","_","in","_","_","_","_"],"parts":["in","Frankreich","spricht","Französisch",",","man","Österreich","sprechen","kann","Deutsch"]},{"i":4,"row":["_","_","_","Morgen","_","_","bevor","er","_","_","Arbeit","_","_"],"parts":["er","trinkt","jeden","Kaffee",",","mit","der","beginnen","kann"]},{"i":5,"row":["_","_","_","frisches","_","_","_","wenn","_","heute","_","Supermarkt","_"],"parts":["kannst","du","bitte","Brot","kaufen",",","du","am","vorbeikommst"]}];
   SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
     ex.row = g.row; ex.parts = g.parts;

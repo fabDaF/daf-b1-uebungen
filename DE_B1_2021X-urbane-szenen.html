@@ -587,6 +587,21 @@ input.blank.wrong {
 @media (max-width: 600px) { .fb-jumptop { bottom: 18px; right: 16px; padding: 12px 18px; font-size: 0.95em; } }
 /* FB-SCHREIB-LAST */
 .nav-btn.schreib-last{order:99;}
+
+/* FB-LT-STORY-CSS */
+/* FB-LT-STORY-CSS — kanonische CSS des Story-Lückentexts (EINE Quelle der Wahrheit).
+   Vom Produzenten scripts/inject_lt.py eingespielt. Nicht pro Datei von Hand kopieren. */
+.luecken-story { font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 2.1; color: #2c2c2c; text-align: justify; background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 18px 22px; }
+.luecken-story p { margin: 0 0 14px; }
+.luecken-story p:last-child { margin-bottom: 0; }
+.luecken-story input.blank { font-family: Georgia, 'Times New Roman', serif; border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-size: 1em; color: #2c2c2c; text-align: center; padding: 1px 4px; min-width: 4ch; transition: all .2s; }
+.luecken-story input.blank:focus { border-bottom-color: #667eea; }
+.luecken-story input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; color: #27ae60; font-weight: 700; }
+.luecken-story input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; color: #e74c3c; }
+.wortbank { display:flex; flex-wrap:wrap; gap:8px; padding:14px; background:#f0f0f8; border-radius:10px; min-height:48px; margin-bottom:18px; border:1px dashed #bbb; }
+.wortbank-chip { background:white; border:2px solid #667eea; color:#667eea; padding:5px 12px; border-radius:14px; font-weight:500; font-size:0.9em; user-select:none; }
+.wortbank-chip.used { opacity:0.35; text-decoration:line-through; }
+
 </style>
 </head>
 <body>
@@ -707,8 +722,8 @@ input.blank.wrong {
 
             <div class="control-bar">
                 <div class="btn-row">
-                    <button class="btn" onclick="showLueckeLoesung()">Lösungen</button>
-                    <button class="btn" onclick="resetLuecke(); resetTimer(3);">Neu starten</button>
+                    <button class="btn" onclick="fbLtShowLoesung()">Lösungen</button>
+                    <button class="btn" onclick="fbLtReset(); resetTimer(3);">Neu starten</button>
                 </div>
                 <div class="timer-display">
                     <span>⏱ <span id="timer-3">0:00</span></span>
@@ -716,8 +731,18 @@ input.blank.wrong {
                 </div>
             </div>
 
-            <div id="wordBank" class="word-bank"></div>
-    <div id="lueckeContainer"></div>
+            <div class="wortbank" id="wortbank-luecken"></div>
+            <div id="lueckenContainer" class="luecken-story">
+<p>Karim begleitet seinen Neffen Yusuf zum ersten Mal durch die urbanen <input class="blank" data-answer="Subkulturen"> seiner Stadt. „Schau mal“, sagt Yusuf und zeigt auf eine Gruppe mit bunten Haaren und zerrissenen Jeans, „das ist die <input class="blank" data-answer="Punk-Bewegung"> – die gibt es hier schon seit den Siebzigern.“</p>
+
+<p>Karim ist überrascht. „Ich dachte, das sei nur Geschichte.“ „Nein“, erklärt Yusuf, „die drücken ihre <input class="blank" data-answer="Rebellion"> immer noch durch Musik und Kleidung aus, genau wie damals.“ Sie gehen weiter zu einem Park, wo laute Beats aus Lautsprechern kommen. „Das ist eine <input class="blank" data-answer="Hip-Hop">-Gruppe“, sagt Yusuf, „die üben hier jeden Nachmittag.“</p>
+
+<p>Karim beobachtet fasziniert, wie ein paar Jugendliche akrobatische Bewegungen zur Musik machen. „Das nennt man <input class="blank" data-answer="Breakdance">“, erklärt Yusuf. Nebenan hört man das Rattern von Rollen auf Beton. „Und das ist der Skatepark – für die Jungs dort bedeutet <input class="blank" data-answer="Skateboarding"> vor allem eins: <input class="blank" data-answer="Unabhängigkeit">.“</p>
+
+<p>Ein Mädchen zeigt ihnen stolz ihr selbstbemaltes Board. „Hier kann jeder seine eigene <input class="blank" data-answer="Kreativität"> ausleben“, sagt sie lächelnd. Am Abend gehen Karim und Yusuf noch in ein Internetcafé, wo sich eine <input class="blank" data-answer="Gaming-Community"> zu einem Turnier trifft.</p>
+
+<p>„Was verbindet all diese Gruppen eigentlich?“, fragt Karim schließlich. Yusuf überlegt kurz. „Ich glaube, jeder sucht hier einfach ein Gefühl von <input class="blank" data-answer="Zugehörigkeit"> – einen Ort, an dem er dazugehört.“</p>
+            </div>
         </div>
     </div>
 
@@ -1343,6 +1368,7 @@ function resetGenus() {
 
 // ===== LÜCKENTEXT =====
 function buildWordBank() {
+  return; // FB-LT-STORY: ersetzt durch Shared-Engine-Wortbank
   var bank = document.getElementById('wordBank');
   if (!bank) return;
   var words = LUECKEN_DATA.map(function(item) { return item.ans; });
@@ -1381,6 +1407,7 @@ function updateWbChips() {
    WORTBANK
 ═══════════════════════════════════════════════════════ */
 function initWortbank() {
+  return; // FB-LT-STORY: ersetzt durch Shared-Engine-Wortbank
   var bank = document.getElementById('wortbank-luecken');
   if (!bank) return;
   bank.innerHTML = '';
@@ -1395,6 +1422,7 @@ function initWortbank() {
 }
 
 function initLuecke() {
+    return; // FB-LT-STORY: ersetzt durch statische Story im Markup
     var cont = document.getElementById('lueckeContainer');
     cont.innerHTML = '';
     LUECKEN_DATA.forEach(function(item, idx) {
@@ -1424,6 +1452,7 @@ function initLuecke() {
 }
 
 function liveCheck(inp) {
+    return; // FB-LT-STORY: ersetzt durch Shared-Engine
     var val = inp.value.trim();
     var ans = (inp.dataset.answer || '');
     inp.classList.remove('correct', 'wrong');
@@ -1446,6 +1475,7 @@ function checkLueckeAllOk() {
 }
 
 function showLueckeLoesung() {
+    return; // FB-LT-STORY: ersetzt durch fbLtShowLoesung
     stopTimer(3);
     document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
         inp.value = inp.dataset.answer;
@@ -1456,11 +1486,7 @@ function showLueckeLoesung() {
 }
 
 function resetLuecke() {
-    document.querySelectorAll('#sec-3 input.blank').forEach(function(inp) {
-        inp.value = '';
-        inp.classList.remove('correct', 'wrong');
-    });
-    resetTimer(3);
+    return; // FB-LT-STORY: ersetzt durch fbLtReset
 }
 
 // ===== MULTIPLE CHOICE =====
@@ -1552,7 +1578,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initVorentlastung();
     initGenus();
     initLuecke();
-  buildWordBank(document.getElementById('lueckeContainer'));
     initMc();
     initSatzbau();
     highlightVocabInText();
@@ -2434,5 +2459,158 @@ function syncWordBankChips() {
 })();
 </script>
 
+
+<!-- FB-LT-STORY-ENGINE -->
+<script>
+/* ============================================================================
+   FB-LT-STORY — kanonische Lückentext-Engine (EINE Quelle der Wahrheit)
+   ----------------------------------------------------------------------------
+   Mit Frank abgenommen 2026-06-30 (Piloten 1057X Heimweh, 3065G Adjektivdeklination).
+   Diese Datei ist die EINZIGE Quelle der mechanischen Lückentext-Logik. Der
+   Produzent scripts/inject_lt.py spielt sie (plus die CSS unten) in jede Lektion
+   ein — NIE von Hand pro Datei kopieren (sonst driften die Engines, genau der
+   Fehler, den wir abschaffen).
+
+   Kanonische Form:
+     · zusammenhängende STORY (Serif-Fließtext, Inline-Lücken), KEINE Nummern;
+     · GENAU 10 Lücken;  · §7-Wortbank (gemischt, nicht klickbar, .used);
+     · case-sensitiv, kein Prüfen-Button (nur Live-Feedback);
+     · Variante erkennt sich SELBST:
+         - hat eine Lücke data-base  → Grammatik (G): Wortbank zeigt die GRUNDFORM
+           (data-base), die Zielform (data-answer) ist nie sichtbar;
+         - sonst                     → Wortschatz (V/R/X): Wortbank zeigt die
+           Vollform (= data-answer).
+     · .used streicht den Chip der getroffenen Lücke durch (G: per data-base) —
+       Fortschrittsanzeige, verrät die Zielform nicht (Frank bestätigt 2026-06-30).
+
+   Markup-Vertrag (vom Produzenten erzeugt, vom Gate check_lueckentext.py geprüft):
+     <div class="wortbank" id="wortbank-luecken"></div>
+     <div id="lueckenContainer" class="luecken-story">
+       <p>… <input class="blank" data-answer="ZIELFORM" [data-base="GRUNDFORM"]> …</p>
+     </div>
+
+   Timer-Anbindung: die Engine ruft generische Hooks window.fbLtTimerStart()/
+   fbLtTimerStop(); der Produzent verdrahtet sie pro Datei auf den richtigen
+   Tab-Index (timerAutoStart(N)/timerStop(N)). Fehlen die Hooks, läuft die Engine
+   ohne Timer weiter.
+   ============================================================================ */
+
+/* ---- KANONISCHE CSS (vom Produzenten mit eingespielt) -----------------------
+.luecken-story { font-family: Georgia, 'Times New Roman', serif; font-size: 1.05em; line-height: 2.1; color: #2c2c2c; text-align: justify; background: #f8f9ff; border-left: 4px solid #667eea; border-radius: 0 10px 10px 0; padding: 18px 22px; }
+.luecken-story p { margin: 0 0 14px; }
+.luecken-story p:last-child { margin-bottom: 0; }
+.luecken-story input.blank { font-family: Georgia, 'Times New Roman', serif; border: none; border-bottom: 2px solid #c5cae9; background: transparent; outline: none; font-size: 1em; color: #2c2c2c; text-align: center; padding: 1px 4px; min-width: 4ch; transition: all .2s; }
+.luecken-story input.blank:focus { border-bottom-color: #667eea; }
+.luecken-story input.blank.correct { border-bottom-color: #27ae60; background: #e8f8f0; color: #27ae60; font-weight: 700; }
+.luecken-story input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; color: #e74c3c; }
+.wortbank { display:flex; flex-wrap:wrap; gap:8px; padding:14px; background:#f0f0f8; border-radius:10px; min-height:48px; margin-bottom:18px; border:1px dashed #bbb; }
+.wortbank-chip { background:white; border:2px solid #667eea; color:#667eea; padding:5px 12px; border-radius:14px; font-weight:500; font-size:0.9em; user-select:none; }
+.wortbank-chip.used { opacity:0.35; text-decoration:line-through; }
+---------------------------------------------------------------------------- */
+
+(function () {
+  "use strict";
+  if (window.__fbLtStory) return;
+  window.__fbLtStory = true;
+
+  function gaps() {
+    return Array.prototype.slice.call(
+      document.querySelectorAll('#lueckenContainer input.blank'));
+  }
+  // Wortbank-Wort einer Lücke: Grundform (G) falls vorhanden, sonst Vollform.
+  function wordOf(i) {
+    return i.getAttribute('data-base') || i.getAttribute('data-answer') || '';
+  }
+  function shuffle(a) {
+    for (var k = a.length - 1; k > 0; k--) {
+      var j = Math.floor(Math.random() * (k + 1));
+      var t = a[k]; a[k] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function update() {
+    var bank = document.getElementById('wortbank-luecken');
+    if (!bank) return;
+    var rem = gaps().filter(function (i) { return i.classList.contains('correct'); })
+                    .map(wordOf);
+    Array.prototype.slice.call(bank.querySelectorAll('.wortbank-chip')).forEach(function (c) {
+      var idx = rem.indexOf(c.textContent);
+      if (idx >= 0) { c.classList.add('used'); rem.splice(idx, 1); }
+      else { c.classList.remove('used'); }
+    });
+  }
+
+  function done() {
+    var gg = gaps();
+    if (gg.length && gg.every(function (i) { return i.classList.contains('correct'); })
+        && typeof window.fbLtTimerStop === 'function') window.fbLtTimerStop();
+  }
+
+  function live(i) {
+    var ans = i.getAttribute('data-answer'), val = i.value;   // case-sensitive, kein trim
+    i.classList.remove('correct', 'wrong');
+    if (val) {
+      if (val === ans) i.classList.add('correct');
+      else if (ans.indexOf(val) !== 0) i.classList.add('wrong');
+      if (typeof window.fbLtTimerStart === 'function') window.fbLtTimerStart();
+    }
+    update();
+    done();
+  }
+
+  function build() {
+    var bank = document.getElementById('wortbank-luecken');
+    if (!bank) return;
+    var gg = gaps();
+    if (!gg.length) return;
+    gg.forEach(function (i) {
+      var a = i.getAttribute('data-answer') || '', b = i.getAttribute('data-base') || '';
+      i.placeholder = '';
+      i.style.width = (Math.max(a.length, b.length) + 3) + 'ch';
+      if (!i.__fbWired) {
+        i.__fbWired = true;
+        i.addEventListener('input', function () { live(i); });
+      }
+    });
+    var seen = {}, words = [];
+    gg.forEach(function (i) { var w = wordOf(i); if (w && !seen[w]) { seen[w] = true; words.push(w); } });
+    bank.innerHTML = '';
+    shuffle(words).forEach(function (w) {
+      var c = document.createElement('span');
+      c.className = 'wortbank-chip';
+      c.textContent = w;
+      bank.appendChild(c);
+    });
+    update();
+  }
+
+  // Öffentliche Hooks für die Steuer-Buttons (Produzent verdrahtet onclick darauf).
+  window.fbLtBuild = build;
+  window.fbLtShowLoesung = function () {
+    gaps().forEach(function (i) {
+      i.value = i.getAttribute('data-answer');
+      i.classList.add('correct'); i.classList.remove('wrong');
+    });
+    update();
+    if (typeof window.fbLtTimerStop === 'function') window.fbLtTimerStop();
+  };
+  window.fbLtReset = function () {
+    gaps().forEach(function (i) { i.value = ''; i.classList.remove('correct', 'wrong'); });
+    build();
+  };
+
+  function run() { build(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+  // Beim Wechsel auf den Lückentext-Tab neu aufbauen (mischt die Wortbank).
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.closest && e.target.closest('.nav-btn')) setTimeout(build, 80);
+  });
+})();
+
+</script>
+
+<!-- FB-LT-STORY-HOOKS --><script>window.fbLtTimerStart=function(){if(typeof timerAutoStart==='function')timerAutoStart(3);};window.fbLtTimerStop=function(){if(typeof timerStop==='function')timerStop(3);};</script>
 </body>
 </html>

@@ -128,8 +128,16 @@ body {
 /* ===== HEADER ===== */
 .header {
   background: linear-gradient(135deg, var(--grad-head-a), var(--grad-head-b));
-  color: var(--tx-white); padding: 24px 32px; text-align: center;
+  color: var(--tx-white); padding: 24px 32px; text-align: center; position: relative;
 }
+.theme-toggle {
+  position: absolute; top: 14px; right: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.4);
+  color: white; font-size: 1.05em; cursor: pointer; line-height: 1;
+  transition: background 0.2s;
+}
+.theme-toggle:hover { background: rgba(255,255,255,0.3); }
 .header h1 { font-size: 2.2em; font-family: Georgia, 'Times New Roman', serif; color: var(--tx-white); margin-bottom: 8px; border: none; padding: 0; }
 .header p { font-size: 1.1em; font-family: Georgia, 'Times New Roman', serif; opacity: 0.95; color: rgba(255,255,255,0.9); margin: 0; }
 
@@ -469,9 +477,9 @@ input.blank.wrong   { border-color: var(--bd-e74c3c); background: var(--bg-ffebe
 .wortbank-chip.used { opacity:0.35; text-decoration:line-through; }
 
 
-/* ===== FB-DARK-MODE ===== */
+/* ===== FB-DARK-MODE (System-Default + manueller Schalter) ===== */
 @media (prefers-color-scheme: dark) {
-:root {
+:root:not([data-theme="light"]) {
   --grad-chip-a: #4a52a8;
   --grad-chip-b: #5c4585;
   --grad-head-a: #4a52a8;
@@ -569,12 +577,134 @@ input.blank.wrong   { border-color: var(--bd-e74c3c); background: var(--bg-ffebe
 .tab-banner { box-shadow: 0 2px 8px rgba(0,0,0,0.45); }
 body { color: #c6cade; }
 }
+:root[data-theme="dark"] {
+  --grad-chip-a: #4a52a8;
+  --grad-chip-b: #5c4585;
+  --grad-head-a: #4a52a8;
+  --grad-head-b: #5c4585;
+  --grad-page-a: #23263e;
+  --grad-page-b: #2f2440;
+  --sf-container: #23263a;
+  --sf-input: #1a1d2e;
+  --bg-c5cff5: #3a4166;
+  --bd-999: #4a4e6a;
+  --sf-pill: #343a5e;
+  --bd-2196f3: #3a86d1;
+  --bd-27ae60: #3f9d6d;
+  --bd-667eea: #7b88e8;
+  --bd-689f38: #6d9c47;
+  --bd-b9a7f0: #6b5a9e;
+  --bd-bbb: #4a4e6a;
+  --bd-c3c9f5: #4a5384;
+  --bd-c5cae9: #464b70;
+  --bd-c5cff5: #4a5384;
+  --bd-c62828: #a04a42;
+  --bd-ccc: #4a4e6a;
+  --bd-dde3ff: #383d5e;
+  --bd-e0e4ff: #383d5e;
+  --bd-e67e22: #c67f16;
+  --bd-e74c3c: #b0584d;
+  --bd-e8eaff: #383d5e;
+  --bd-e9ecef: #2e3250;
+  --bd-f39c12: #c67f16;
+  --bd-ffd699: #7a6335;
+  --bg-27ae60: #2f9c5f;
+  --bg-4f63c2: #5a66cc;
+  --bg-5568d3: #5a66cc;
+  --bg-667eea: #4a55b8;
+  --bg-689f38: #4e7a2c;
+  --bg-e1e5fb: #2e3350;
+  --bg-e3f2fd: #1e2a3f;
+  --bg-e74c3c: #b0453a;
+  --bg-e8eaf6: #262a44;
+  --bg-e8eaff: #30345a;
+  --bg-e8f4fd: #1e2a3f;
+  --bg-e8f5e9: #1e3328;
+  --bg-e8f8f0: #1e3328;
+  --bg-eef0fb: #1d2032;
+  --bg-eef0ff: #262a44;
+  --bg-eef1ff: #262a44;
+  --bg-f0f0f0: #2a2d42;
+  --bg-f0f0f8: #1d2032;
+  --bg-f0f2ff: #262a44;
+  --bg-f1f8e9: #22331e;
+  --bg-f5f7ff: #2a2e4a;
+  --bg-f8f9fa: #1d2032;
+  --bg-f8f9ff: #262a44;
+  --bg-faf8ff: #262a44;
+  --bg-fafaff: #262a44;
+  --bg-fafbff: #262a44;
+  --bg-fdeaea: #3a2228;
+  --bg-fefefe: #1a1d2e;
+  --bg-ffebee: #3a2228;
+  --bg-fff: #262a44;
+  --bg-fff5ec: #322c1c;
+  --bg-fffaf0: #322c1c;
+  --bg-white: #262a44;
+  --tx-0d47a1: #90bff9;
+  --tx-1565c0: #90bff9;
+  --tx-1a1a1a: #e2e4f0;
+  --tx-1a237e: #c3cafd;
+  --tx-1b5e20: #a5d6a7;
+  --tx-241048: #d9cef8;
+  --tx-27ae60: #58c98b;
+  --tx-2c2c2c: #d6d8e8;
+  --tx-2e7d32: #8fd7ae;
+  --tx-333: #d6d8e8;
+  --tx-33691e: #9ccc65;
+  --tx-34206b: #cbbcf6;
+  --tx-3949ab: #aab4f8;
+  --tx-4a148c: #c9b5f2;
+  --tx-4a4a4a: #c6cade;
+  --tx-555: #b6bad0;
+  --tx-5e35b1: #b39af0;
+  --tx-666: #9ba0bd;
+  --tx-667eea: #93a0f2;
+  --tx-689f38: #9ccc65;
+  --tx-6c6c6c: #979cb8;
+  --tx-888: #8e93b0;
+  --tx-999: #7d8199;
+  --tx-aaa: #6f7390;
+  --tx-ad1457: #e57ba1;
+  --tx-b15c00: #e0a860;
+  --tx-b71c1c: #f28b7d;
+  --tx-bbb: #63677f;
+  --tx-c62828: #ef7365;
+  --tx-e74c3c: #ef7365;
+}
+html[data-theme="dark"] .tab-banner { box-shadow: 0 2px 8px rgba(0,0,0,0.45); }
+html[data-theme="dark"] body { color: #c6cade; }
 </style>
+<script>
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('fb-theme'); } catch(e) {}
+  if (saved === 'dark' || saved === 'light') document.documentElement.dataset.theme = saved;
+  function effDark() {
+    var t = document.documentElement.dataset.theme;
+    if (t === 'dark') return true;
+    if (t === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function paint() {
+    var b = document.getElementById('themeToggle');
+    if (b) b.textContent = effDark() ? '☀️' : '🌙';
+  }
+  window.fbToggleTheme = function() {
+    var next = effDark() ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('fb-theme', next); } catch(e) {}
+    paint();
+  };
+  document.addEventListener('DOMContentLoaded', paint);
+})();
+</script>
 </head>
 <body>
 <div class="container">
 
   <div class="header">
+  <button class="theme-toggle" id="themeToggle" onclick="fbToggleTheme()" aria-label="Hell/Dunkel umschalten">🌙</button>
     <h1>Naturkatastrophen</h1>
     <p>B1.1 – Lektion 1027X · Extra-Übungen</p>
     <div class="big-emoji">🌪️</div>
@@ -932,7 +1062,15 @@ function initZuoChips() {
       draggedChip = chip;
       e.dataTransfer.setData('text/plain', '');
     });
-    chip.addEventListener('dragend', function() { colorAllZuoChips(); });  });
+    chip.addEventListener('dragend', function() { colorAllZuoChips(); });
+    chip.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (selectedZuoChip === chip) { chip.classList.remove('selected'); selectedZuoChip = null; return; }
+      if (selectedZuoChip) selectedZuoChip.classList.remove('selected');
+      selectedZuoChip = chip; chip.classList.add('selected');
+      timerAutoStart(1);
+    });
+  });
   // Click on zones
   document.querySelectorAll('.drop-zone').forEach(function(zone) {
     zone.addEventListener('click', function() {
@@ -944,6 +1082,15 @@ function initZuoChips() {
     });
   });
   // Click on bank to return chip
+  var zuoBank = document.getElementById('zuo-bank');
+  zuoBank.addEventListener('dragover', function(e) { e.preventDefault(); });
+  zuoBank.addEventListener('drop', function(e) {
+    e.preventDefault();
+    if (!draggedChip) return;
+    zuoBank.appendChild(draggedChip);
+    draggedChip.classList.remove('correct','wrong');
+    draggedChip = null; colorAllZuoChips();
+  });
   document.getElementById('zuo-bank').addEventListener('click', function() {
     if (selectedZuoChip) {
       document.getElementById('zuo-bank').appendChild(selectedZuoChip);
@@ -1302,6 +1449,7 @@ lueckeInit();
   document.addEventListener('DOMContentLoaded', function(){
     buildWordBank(document.getElementById('luecke-container'));
   });
+initZuoChips();
 initSatzbau();
 initWortschatz();
 initSchreibwerkstatt();

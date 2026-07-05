@@ -347,8 +347,8 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
       <h2>✏️ Lückentext</h2>
       <div class="control-bar">
         <div class="btn-row">
-          <button class="btn" onclick="showLoesung(3)">Lösungen</button>
-          <button class="btn" onclick="resetTab(3); resetTimer(3);">Neu starten</button>
+          <button onclick="fbLtShowLoesung()" style="background:#f5f7ff;border:1px solid #c5cff5;border-radius:8px;padding:6px 16px;font-size:0.85em;color:#667eea;cursor:pointer;font-weight:600;">💡 Lösungen</button>
+          <button onclick="fbLtReset(); resetTimer(3);" style="background:#f5f7ff;border:1px solid #c5cff5;border-radius:8px;padding:6px 16px;font-size:0.85em;color:#667eea;cursor:pointer;font-weight:600;">↺ Neustart</button>
         </div>
         <div class="timer-display">
           <span class="current-time">⏱ <span id="timer-3">00:00</span></span>
@@ -413,7 +413,7 @@ input.blank.wrong { border-bottom-color: #e74c3c; background: #fdeaea; }
           <span class="best-time">🏆 <span id="best-6">--:--</span></span>
         </div>
       </div>
-      <div id="wortschatzContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+      <div id="wortschatzContainer"></div>
     </div>
   </div>
 
@@ -1035,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /* ── Gerüst-Modus Add-on (B1+) — additiv generiert. Mischt row/parts zur Laufzeit in satzbauData,
    hüllt Init/Lösung/Reset. Original-Logik für Sätze ohne row bleibt unberührt. */
 (function(){
-  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":false,"tab":4};
+  var CFG = {"bank":"sb-bank-","row":"sb-row-","fb":"sb-fb-","caps":true,"click":true,"tab":4};
   var SBGAP = [{"i":0,"row":["_","_","_","System","_","_","Verwaltung","_","_","_","das","_","_","täglich","_"],"parts":["Kubernetes","ist","ein","für","die","von","Containern",",","große","Firmen","nutzen"]},{"i":1,"row":["_","_","_","Werkzeug","_","_","seinem","_","_","_","er","_","Cluster","_"],"parts":["Karim","installiert","das","kubectl","auf","Laptop",",","bevor","den","startet"]},{"i":2,"row":["_","_","_","man","_","_","_","_","_","wenn","_","Rechner","_","Speicher","_"],"parts":["mit","minikube","kann","einen","lokalen","Cluster","starten",",","der","genug","hat"]},{"i":3,"row":["_","_","Docker-Container","_","_","_","weil","_","_","besonders","_","_","leichtgewichtig","_"],"parts":["kind","benutzt","als","Knoten",",","diese","Lösung","schnell","und","ist"]},{"i":4,"row":["_","_","Karim","_","Möglichkeiten","_","_","_","eine","_","Lernumgebung","_","_"],"parts":["Hiroshi","zeigt","zwei",",","wie","er","lokale","aufbauen","kann"]},{"i":5,"row":["_","_","_","im","_","_","sodass","_","_","lokale","_","mehr","_"],"parts":["Online-Spielfelder","laufen","direkt","Browser",",","man","keine","Installation","braucht"]},{"i":6,"row":["_","_","_","_","Cluster","_","_","_","_","_","wenn","er","_","Erfahrung","_"],"parts":["Karim","möchte","später","einen","mit","mehreren","Knoten","einrichten",",","mehr","hat"]}];
   SBGAP.forEach(function(g){ var ex = satzbauData[g.i]; if (!ex) return;
     ex.row = g.row; ex.parts = g.parts;

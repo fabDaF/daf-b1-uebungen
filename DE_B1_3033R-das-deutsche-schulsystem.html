@@ -1117,6 +1117,15 @@ function resetTimer5() {
     document.getElementById('timer-5').textContent = '00:00';
 }
 
+function wsCheck(inp) {
+    var u = inp.value, a = inp.dataset.answer, f = inp.dataset.field;
+    inp.classList.remove('correct', 'wrong');
+    if (!u) return;
+    var cu = (f === 'art') ? u.toLowerCase().trim() : u.trim();
+    var ca = (f === 'art') ? (a || '').toLowerCase() : a;
+    if (cu === ca) inp.classList.add('correct'); else inp.classList.add('wrong');
+}
+
 function initWs() {
     var container = document.getElementById('wsContainer');
     WS_DATA.forEach(function(item) {
@@ -1190,7 +1199,6 @@ function resetWs() {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-initVorentlastung();
 initRF();
 initLuecken();
 initSatzbau();

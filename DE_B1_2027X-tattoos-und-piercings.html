@@ -1182,6 +1182,21 @@ function initLuecken() {
   
 
   var TIMER_PREFIX = 'b1-2027x-';
+  var timerStarted = [false, false, false, false, false, false];
+  var timerRunning = [false, false, false, false, false, false];
+  var timerSeconds = [0, 0, 0, 0, 0, 0];
+  var timerIntervals = [null, null, null, null, null, null];
+
+  function timerAutoStart(n) {
+    if (timerStarted[n]) return;
+    timerStarted[n] = true;
+    timerRunning[n] = true;
+    timerIntervals[n] = setInterval(function() {
+      timerSeconds[n]++;
+      var el = document.getElementById('timer-' + n);
+      if (el) el.textContent = fmtTime(timerSeconds[n]);
+    }, 1000);
+  }
 
   function timerStop(n) {
     if (!timerRunning[n]) return;
@@ -1379,7 +1394,7 @@ function sbCheckAuto(idx) {
         return;
     }
     setTimeout(function() {
-        timerAutoStart(4);
+        timerAutoStart(5);
         var ok = sbColorRow(idx);
         if (ok) {
             row.classList.add('correct');
@@ -1401,11 +1416,11 @@ function sbCheckAllDone() {
         var row = document.getElementById('sb-row-' + i);
         return row && row.classList.contains('correct');
     });
-    if (allOk) stopTimer(4);
+    if (allOk) timerStop(5);
 }
 
 function sbShowSolution(idx) {
-    stopTimer(4);
+    timerStop(5);
     var bank = document.getElementById('sb-bank-' + idx);
     var row  = document.getElementById('sb-row-' + idx);
     var fb   = document.getElementById('sb-fb-' + idx);
@@ -1446,6 +1461,14 @@ function sbResetOne(idx) {
         var tmp = parts[i]; parts[i] = parts[j]; parts[j] = tmp;
     }
     parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
+}
+
+function showSatzbauLoesungen() {
+    satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
+}
+
+function resetSatzbau() {
+    initSatzbau();
 }
 
 function initSatzbau() {

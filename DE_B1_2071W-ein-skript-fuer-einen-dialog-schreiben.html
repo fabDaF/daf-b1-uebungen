@@ -500,7 +500,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
             <div class="timer-controls">
                 <div class="tc-buttons">
                     <button onclick="showWortschatzLoesung()">💡 Lösungen</button>
-                    <button onclick="timerResetOne(5); resetWs()">↺ Neustart</button>
+                    <button onclick="timerResetOne(5); resetWortschatz()">↺ Neustart</button>
                 </div>
                 <div class="tc-times">
                     <span>⏱ <span class="timer-display" id="timer-5">0:00</span></span>
@@ -843,6 +843,14 @@ function sbResetOne(idx) {
     parts.forEach(function(word) { bank.appendChild(sbMakeChip(word)); });
 }
 
+function showAllSolutionsSb() {
+    satzbauData.forEach(function(_, idx) { sbShowSolution(idx); });
+}
+
+function resetSatzbau() {
+    initSatzbau();
+}
+
 function initSatzbau() {
     var container = document.getElementById('satzbauContainer');
     container.innerHTML = '';
@@ -1081,7 +1089,6 @@ document.addEventListener('DOMContentLoaded',function(){
     buildLuecken();
     initSatzbau();
     buildMatch();
-    buildWs();
     loadBestTimes();
 });
 function loadBestTimes(){

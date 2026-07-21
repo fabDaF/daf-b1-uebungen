@@ -3,53 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#667eea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#23263e" media="(prefers-color-scheme: dark)">
 <title>B1 Themenübersicht</title>
-<style>
+<style>/* ===== FB-DESIGN-TOKENS (auto) ===== */
+:root {
+  --bd-e0e0e0: #e0e0e0;
+  --bd-f0f0f0: #f0f0f0;
+  --bg-27ae60: #27ae60;
+  --bg-2e7d32: #2e7d32;
+  --bg-3949ab: #3949ab;
+  --bg-e3f2fd: #e3f2fd;
+  --bg-e65100: #e65100;
+  --bg-e8eaf6: #e8eaf6;
+  --bg-e8f5e9: #e8f5e9;
+  --bg-ede7f6: #ede7f6;
+  --bg-f0f2f5: #f0f2f5;
+  --bg-fafafa: #fafafa;
+  --bg-fce4ec: #fce4ec;
+  --bg-fff3e0: #fff3e0;
+  --bg-fff8e1: #fff8e1;
+  --bg-white: white;
+  --tx-1565c0: #1565c0;
+  --tx-1a237e: #1a237e;
+  --tx-241048: #241048;
+  --tx-2e7d32: #2e7d32;
+  --tx-333: #333;
+  --tx-34206b: #34206b;
+  --tx-3949ab: #3949ab;
+  --tx-4527a0: #4527a0;
+  --tx-555: #555;
+  --tx-666: #666;
+  --tx-888: #888;
+  --tx-aaa: #aaa;
+  --tx-ad1457: #ad1457;
+  --tx-e65100: #e65100;
+  --tx-f57f17: #f57f17;
+  --tx-white: white;
+}
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; padding: 20px; }
-  h1 { text-align: center; color: #1a237e; margin-bottom: 6px; font-size: 1.6em; }
-  .subtitle { text-align: center; color: #666; margin-bottom: 24px; font-size: 0.95em; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg-f0f2f5); color: var(--tx-333); padding: 20px; }
+  h1 { text-align: center; color: var(--tx-1a237e); margin-bottom: 6px; font-size: 1.6em; }
+  .subtitle { text-align: center; color: var(--tx-666); margin-bottom: 24px; font-size: 0.95em; }
 
   /* Band-Tabs */
   .band-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
   .band-tab { padding: 10px 28px; border-radius: 24px; border: none; cursor: pointer;
               font-size: 1em; font-weight: 600; transition: all 0.2s; }
-  .band-tab.b11 { background: #e8eaf6; color: #3949ab; }
-  .band-tab.b12 { background: #e8f5e9; color: #2e7d32; }
-  .band-tab.b13 { background: #fff3e0; color: #e65100; }
+  .band-tab.b11 { background: var(--bg-e8eaf6); color: var(--tx-3949ab); }
+  .band-tab.b12 { background: var(--bg-e8f5e9); color: var(--tx-2e7d32); }
+  .band-tab.b13 { background: var(--bg-fff3e0); color: var(--tx-e65100); }
   .band-tab.active { box-shadow: 0 4px 14px rgba(0,0,0,0.15); transform: scale(1.05); }
-  .band-tab.b11.active { background: #3949ab; color: white; }
-  .band-tab.b12.active { background: #2e7d32; color: white; }
-  .band-tab.b13.active { background: #e65100; color: white; }
+  .band-tab.b11.active { background: var(--bg-3949ab); color: var(--tx-white); }
+  .band-tab.b12.active { background: var(--bg-2e7d32); color: var(--tx-white); }
+  .band-tab.b13.active { background: var(--bg-e65100); color: var(--tx-white); }
 
   /* Band-Inhalt */
   .band-content { display: none; }
   .band-content.active { display: block; }
 
   /* Einheit-Block */
-  .einheit { background: white; border-radius: 14px; margin-bottom: 20px;
+  .einheit { background: var(--bg-white); border-radius: 14px; margin-bottom: 20px;
              box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
   .einheit-header { padding: 14px 20px; font-weight: 700; font-size: 1.05em;
                     display: flex; align-items: center; gap: 10px; }
-  .b11 .einheit-header { background: linear-gradient(135deg, #3949ab, #5c6bc0); color: white; }
-  .b12 .einheit-header { background: linear-gradient(135deg, #2e7d32, #43a047); color: white; }
-  .b13 .einheit-header { background: linear-gradient(135deg, #e65100, #ef6c00); color: white; }
+  .b11 .einheit-header { background: linear-gradient(135deg, #3949ab, #5c6bc0); color: var(--tx-white); }
+  .b12 .einheit-header { background: linear-gradient(135deg, #2e7d32, #43a047); color: var(--tx-white); }
+  .b13 .einheit-header { background: linear-gradient(135deg, #e65100, #ef6c00); color: var(--tx-white); }
 
   /* Lektions-Grid */
   .lektionen { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0; }
-  .lektion { padding: 11px 16px; border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0;
+  .lektion { padding: 11px 16px; border-bottom: 1px solid var(--bd-f0f0f0); border-right: 1px solid var(--bd-f0f0f0);
              display: flex; align-items: flex-start; gap: 10px; }
-  .lektion:hover { background: #fafafa; }
+  .lektion:hover { background: var(--bg-fafafa); }
   .lektion-code { font-size: 0.72em; font-weight: 700; padding: 3px 7px; border-radius: 8px;
                   white-space: nowrap; min-width: 52px; text-align: center; flex-shrink: 0; margin-top: 1px; }
-  .typ-X { background: #e3f2fd; color: #1565c0; }
-  .typ-G { background: #fce4ec; color: #ad1457; }
-  .typ-R { background: #e8f5e9; color: #2e7d32; }
-  .typ-S { background: #fff8e1; color: #f57f17; }
-  .typ-W { background: #ede7f6; color: #4527a0; }
+  .typ-X { background: var(--bg-e3f2fd); color: var(--tx-1565c0); }
+  .typ-G { background: var(--bg-fce4ec); color: var(--tx-ad1457); }
+  .typ-R { background: var(--bg-e8f5e9); color: var(--tx-2e7d32); }
+  .typ-S { background: var(--bg-fff8e1); color: var(--tx-f57f17); }
+  .typ-W { background: var(--bg-ede7f6); color: var(--tx-4527a0); }
   .lektion-thema { font-size: 0.9em; line-height: 1.4; }
-  .lektion-thema.done { color: #aaa; }
-  .done-badge { font-size: 0.7em; background: #27ae60; color: white;
+  .lektion-thema.done { color: var(--tx-aaa); }
+  .done-badge { font-size: 0.7em; background: var(--bg-27ae60); color: var(--tx-white);
                 padding: 1px 6px; border-radius: 8px; margin-left: 6px; vertical-align: middle; }
 
   /* Legende */
@@ -57,15 +94,50 @@
   .leg { padding: 4px 12px; border-radius: 12px; font-size: 0.82em; font-weight: 600; }
 
   /* Statistik */
-  .stats { text-align: center; color: #888; font-size: 0.85em; margin-bottom: 20px; }
+  .stats { text-align: center; color: var(--tx-888); font-size: 0.85em; margin-bottom: 20px; }
 
   @media (max-width: 600px) {
     .lektionen { grid-template-columns: 1fr; }
     .band-tab { padding: 8px 16px; font-size: 0.9em; }
   }
+
+/* FB-THEME-TOGGLE (fixiert, Datei ohne Header) */
+.theme-toggle {
+  position: fixed; top: 14px; right: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(102,126,234,0.45); border: 1px solid rgba(255,255,255,0.4);
+  color: white; font-size: 1.05em; cursor: pointer; line-height: 1;
+  transition: background 0.2s; z-index: 50;
+}
+.theme-toggle:hover { background: rgba(102,126,234,0.7); }
 </style>
+<script>/* FB-THEME-INIT */
+(function(){
+  var saved = null;
+  try { saved = localStorage.getItem('fb-theme'); } catch(e) {}
+  if (saved === 'dark' || saved === 'light') document.documentElement.dataset.theme = saved;
+  function effDark() {
+    var t = document.documentElement.dataset.theme;
+    if (t === 'dark') return true;
+    if (t === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function paint() {
+    var b = document.getElementById('themeToggle');
+    if (b) b.textContent = effDark() ? '☀️' : '🌙';
+  }
+  window.fbToggleTheme = function() {
+    var next = effDark() ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('fb-theme', next); } catch(e) {}
+    paint();
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint); else paint();
+})();
+</script>
 </head>
 <body>
+  <button class="theme-toggle" id="themeToggle" onclick="fbToggleTheme()" aria-label="Hell/Dunkel umschalten">🌙</button>
 
 <h1>📚 B1 Themenübersicht</h1>
 <p class="subtitle">B1.1 · B1.2 · B1.3 — alle Lektionen im Überblick</p>
@@ -409,9 +481,9 @@
 </div>
 
 <style>
-.author-footer { margin-top: 40px; padding: 16px 20px; text-align: center; font-size: 0.8em; color: #888; border-top: 1px solid #e0e0e0; }
-.author-footer a { color: #3949ab; text-decoration: none; font-weight: 500; }
-.author-footer .author-name { font-weight: 600; color: #555; }
+.author-footer { margin-top: 40px; padding: 16px 20px; text-align: center; font-size: 0.8em; color: var(--tx-888); border-top: 1px solid var(--bd-e0e0e0); }
+.author-footer a { color: var(--tx-3949ab); text-decoration: none; font-weight: 500; }
+.author-footer .author-name { font-weight: 600; color: var(--tx-555); }
 
 /* FB-JUMPTOP - Nach-oben-Button (Glas-Look) */
 .fb-jumptop {
@@ -420,7 +492,7 @@
   background: rgba(118, 75, 162, 0.26);
   -webkit-backdrop-filter: blur(14px) saturate(180%);
   backdrop-filter: blur(14px) saturate(180%);
-  color: #34206b; border: 1.5px solid rgba(255,255,255,0.75); border-radius: 28px;
+  color: var(--tx-34206b); border: 1.5px solid rgba(255,255,255,0.75); border-radius: 28px;
   padding: 15px 26px; font-size: 1.05em; font-weight: 800;
   letter-spacing: 0.2px;
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -432,8 +504,80 @@
   z-index: 9999; display: inline-flex; align-items: center; gap: 8px;
 }
 .fb-jumptop.show { opacity: 1; visibility: visible; transform: translateY(0); }
-.fb-jumptop:hover { background: rgba(118, 75, 162, 0.40); color: #241048; box-shadow: 0 10px 32px rgba(102,126,234,0.50), inset 0 1px 0 rgba(255,255,255,0.65); }
+.fb-jumptop:hover { background: rgba(118, 75, 162, 0.40); color: var(--tx-241048); box-shadow: 0 10px 32px rgba(102,126,234,0.50), inset 0 1px 0 rgba(255,255,255,0.65); }
 @media (max-width: 600px) { .fb-jumptop { bottom: 18px; right: 16px; padding: 12px 18px; font-size: 0.95em; } }
+
+/* ===== FB-DARK-MODE (System-Default + manueller Schalter) ===== */
+@media (prefers-color-scheme: dark) {
+:root:not([data-theme="light"]) {
+  --bd-e0e0e0: #3a3e58;
+  --bd-f0f0f0: #3a3e58;
+  --bg-27ae60: #2f9c5f;
+  --bg-e3f2fd: #1e2a3f;
+  --bg-e65100: #542b15;
+  --bg-e8eaf6: #262a44;
+  --bg-e8f5e9: #1e3328;
+  --bg-ede7f6: #2a2547;
+  --bg-f0f2f5: #20262f;
+  --bg-fafafa: #20202e;
+  --bg-fce4ec: #3a2233;
+  --bg-fff3e0: #322c1c;
+  --bg-fff8e1: #322c1c;
+  --bg-white: #262a44;
+  --tx-1565c0: #90bff9;
+  --tx-1a237e: #c3cafd;
+  --tx-241048: #d9cef8;
+  --tx-2e7d32: #8fd7ae;
+  --tx-333: #d6d8e8;
+  --tx-34206b: #cbbcf6;
+  --tx-3949ab: #aab4f8;
+  --tx-4527a0: #9f89e2;
+  --tx-555: #b6bad0;
+  --tx-666: #9ba0bd;
+  --tx-888: #8e93b0;
+  --tx-aaa: #6f7390;
+  --tx-ad1457: #e57ba1;
+  --tx-e65100: #eca077;
+  --tx-f57f17: #ebaa70;
+}
+:root:not([data-theme="light"]) .tab-banner { box-shadow: 0 2px 8px rgba(0,0,0,0.45); }
+:root:not([data-theme="light"]) body { color: #c6cade; }
+:root:not([data-theme="light"]) button, :root:not([data-theme="light"]) input, :root:not([data-theme="light"]) select, :root:not([data-theme="light"]) textarea { color: inherit; }
+}
+:root[data-theme="dark"] {
+  --bd-e0e0e0: #3a3e58;
+  --bd-f0f0f0: #3a3e58;
+  --bg-27ae60: #2f9c5f;
+  --bg-e3f2fd: #1e2a3f;
+  --bg-e65100: #542b15;
+  --bg-e8eaf6: #262a44;
+  --bg-e8f5e9: #1e3328;
+  --bg-ede7f6: #2a2547;
+  --bg-f0f2f5: #20262f;
+  --bg-fafafa: #20202e;
+  --bg-fce4ec: #3a2233;
+  --bg-fff3e0: #322c1c;
+  --bg-fff8e1: #322c1c;
+  --bg-white: #262a44;
+  --tx-1565c0: #90bff9;
+  --tx-1a237e: #c3cafd;
+  --tx-241048: #d9cef8;
+  --tx-2e7d32: #8fd7ae;
+  --tx-333: #d6d8e8;
+  --tx-34206b: #cbbcf6;
+  --tx-3949ab: #aab4f8;
+  --tx-4527a0: #9f89e2;
+  --tx-555: #b6bad0;
+  --tx-666: #9ba0bd;
+  --tx-888: #8e93b0;
+  --tx-aaa: #6f7390;
+  --tx-ad1457: #e57ba1;
+  --tx-e65100: #eca077;
+  --tx-f57f17: #ebaa70;
+}
+html[data-theme="dark"] .tab-banner { box-shadow: 0 2px 8px rgba(0,0,0,0.45); }
+html[data-theme="dark"] body { color: #c6cade; }
+html[data-theme="dark"] button, html[data-theme="dark"] input, html[data-theme="dark"] select, html[data-theme="dark"] textarea { color: inherit; }
 </style>
 
 <script>

@@ -1656,5 +1656,50 @@ function resetGenus(){ initGenus(); genusTimerReset(); }
 </script>
 
 <!-- FB-LT-STORY-HOOKS --><script>/* FB-LT-IDX-ENTKOPPELT */window.fbLtTimerStart=function(){if(typeof timerAutoStart==='function')timerAutoStart(7);};window.fbLtTimerStop=function(){if(typeof timerStop==='function')timerStop(7);};</script>
+
+<!-- FB-TIMER-ENGINE (2026-07-30): generische Timer-Engine. Die Aufrufstellen
+     (Satzbau, Wortschatz, Lückentext) waren vorhanden, aber guarded — ohne Engine
+     lief kein Timer und keine Bestzeit. -->
+<script>
+(function(){
+  if (typeof window.timerAutoStart === 'function') return;
+  var PREFIX = 'B1-3072W-best-';
+  var iv = {}, sec = {}, run = {};
+  function fmt(s){ var m = Math.floor(s/60), r = s % 60; return (m<10?'0':'')+m+':'+(r<10?'0':'')+r; }
+  window.timerAutoStart = function(n){
+    if (run[n]) return;
+    if (!document.getElementById('timer-'+n)) return;
+    run[n] = true; if (sec[n] == null) sec[n] = 0;
+    iv[n] = setInterval(function(){
+      sec[n]++;
+      var el = document.getElementById('timer-'+n);
+      if (el) el.textContent = fmt(sec[n]);
+    }, 1000);
+  };
+  window.timerStop = function(n){
+    if (!run[n]) return;
+    clearInterval(iv[n]); run[n] = false;
+    var key = PREFIX + n, prev = parseInt(localStorage.getItem(key) || '999999', 10);
+    if (sec[n] < prev) { localStorage.setItem(key, sec[n]); prev = sec[n]; }
+    var b = document.getElementById('best-'+n);
+    if (b) b.textContent = fmt(prev);
+  };
+  window.stopTimer = window.timerStop;
+  window.resetTimer = function(n){
+    clearInterval(iv[n]); run[n] = false; sec[n] = 0;
+    var el = document.getElementById('timer-'+n);
+    if (el) el.textContent = '00:00';
+  };
+  window.timerResetOne = window.resetTimer;
+  function loadBest(){
+    Array.prototype.forEach.call(document.querySelectorAll('[id^="best-"]'), function(b){
+      var n = b.id.slice(5), v = localStorage.getItem(PREFIX + n);
+      if (v) b.textContent = fmt(parseInt(v, 10));
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', loadBest);
+  else loadBest();
+})();
+</script>
 </body>
 </html>
